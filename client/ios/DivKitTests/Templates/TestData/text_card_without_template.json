@@ -1,0 +1,16 @@
+{
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "Lorem ipsum dolor sit amet",
+          "font_size": 14,
+          "font_weight": "bold"
+        }
+      }
+    ]
+  }
+}

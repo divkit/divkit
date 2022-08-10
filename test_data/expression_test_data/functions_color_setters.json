@@ -1,0 +1,242 @@
+{
+  "cases": [
+    {
+      "name": "setColorAlpha('#AA000000', 0.5) => #80000000",
+      "expression": "@{setColorAlpha('#AA000000', 0.5)}",
+      "deprecated": "Return type of setColorAlpha() become color",
+      "expected": {
+        "type": "string",
+        "value": "#80000000"
+      },
+      "variables": [],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorAlpha('#AA000000', 0.5) => #80000000",
+      "expression": "@{setColorAlpha('#AA000000', 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#80000000"
+      },
+      "variables": [],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setColorAlpha(color, 0.5) => #80000000",
+      "expression": "@{setColorAlpha(color, 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#80000000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#AA000000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorAlpha('#FF000000', 0.5) => #80000000",
+      "expression": "@{setColorAlpha('#FF000000', 0.5)}",
+      "deprecated": "Return type of setColorAlpha() become color",
+      "expected": {
+        "type": "string",
+        "value": "#80000000"
+      },
+      "variables": [],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorAlpha('#FF000000', 0.5) => #80000000",
+      "expression": "@{setColorAlpha('#FF000000', 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#80000000"
+      },
+      "variables": [],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setColorRed('#FF000000', 0.5) => #FF800000",
+      "expression": "@{setColorRed('#FF000000', 0.5)}",
+      "deprecated": "Return type of setColorRed() become color",
+      "expected": {
+        "type": "string",
+        "value": "#FF800000"
+      },
+      "variables": [],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorRed('#FF000000', 0.5) => #FF800000",
+      "expression": "@{setColorRed('#FF000000', 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF800000"
+      },
+      "variables": [],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setColorRed(color', 0.5) => #FF800000",
+      "expression": "@{setColorRed(color, 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF800000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#FF000000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorGreen('#FF000000', 0.5) => #FF008000",
+      "expression": "@{setColorGreen('#FF000000', 0.5)}",
+      "deprecated": "Return type of setColorGreen() become color",
+      "expected": {
+        "type": "string",
+        "value": "#FF008000"
+      },
+      "variables": [],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorGreen('#FF000000', 0.5) => #FF008000",
+      "expression": "@{setColorGreen('#FF000000', 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF008000"
+      },
+      "variables": [],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setColorGreen(color, 0.5) => #FF008000",
+      "expression": "@{setColorGreen(color, 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF008000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#FF000000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorBlue('#FF000000', 0.5) => #FF000080",
+      "expression": "@{setColorBlue('#FF000000', 0.5)}",
+      "deprecated": "Return type of setColorBlue() become color",
+      "expected": {
+        "type": "string",
+        "value": "#FF000080"
+      },
+      "variables": [],
+      "platforms": [
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorBlue('#FF000000', 0.5) => #FF000080",
+      "expression": "@{setColorBlue('#FF000000', 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000080"
+      },
+      "variables": [],
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setColorBlue(color, 0.5) => #FF000080",
+      "expression": "@{setColorBlue(color, 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000080"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#FF000000"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorAlpha('not_color_text', 0.5) => error",
+      "expression": "@{setColorAlpha('not_color_text', 0.5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setColorAlpha('not_color_text', 0.5)]. Unable to convert value to Color, expected format #AARRGGBB."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorBlue('#FF000000', 25.0) => error",
+      "expression": "@{setColorBlue('#FF000000', 25.5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setColorBlue('#FF000000', 25.5)]. Value out of range 0..1."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

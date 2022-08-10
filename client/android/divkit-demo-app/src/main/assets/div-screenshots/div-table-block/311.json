@@ -1,0 +1,74 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "rows": [
+                        {
+                            "cells": [
+                                {
+                                    "text": "right",
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "image_position": "right",
+                                    "image_size": "m"
+                                },
+                                {
+                                    "text": "left",
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "image_position": "left",
+                                    "image_size": "m"
+                                },
+                                {
+                                    "text": "right",
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "image_position": "right",
+                                    "image_size": "xxl"
+                                },
+                                {
+                                    "text": "no",
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "image_size": "xxl"
+                                }
+                            ],
+                            "type": "row_element"
+                        }
+                    ],
+                    "type": "div-table-block",
+                    "columns": [
+                        {
+                            "weight": 1
+                        },
+                        {
+                            "weight": 1
+                        },
+                        {
+                            "weight": 1
+                        },
+                        {
+                            "weight": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

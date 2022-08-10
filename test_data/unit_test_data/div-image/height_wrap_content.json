@@ -1,0 +1,7 @@
+{
+  "type": "image",
+  "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+  "height": {
+    "type": "wrap_content"
+  }
+}

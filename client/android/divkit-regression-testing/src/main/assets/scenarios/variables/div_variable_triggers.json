@@ -1,0 +1,254 @@
+{
+  "templates": {
+    "round": {
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 64
+      },
+      "height": {
+        "type": "fixed",
+        "value": 64
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#E74C3C"
+        }
+      ],
+      "border": {
+        "corner_radius": 32
+      },
+      "delimiter_style": {
+        "color": "#0000"
+      }
+    },
+    "button": {
+      "type": "text",
+      "border": {
+        "corner_radius": 8
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#34495E"
+    }
+  },
+  "card": {
+    "log_id": "blink_animation",
+    "variables": [
+      {
+        "name": "left_switched",
+        "type": "boolean",
+        "value": 0
+      },
+      {
+        "name": "right_switched",
+        "type": "boolean",
+        "value": 0
+      },
+      {
+        "name": "text",
+        "type": "string",
+        "value": "no buttons switched"
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{left_switched && !right_switched}",
+        "actions": [
+          {
+            "log_id": "left_switched_text",
+            "url": "div-action://set_variable?name=text&value=left%20switched"
+          }
+        ]
+      },
+      {
+        "condition": "@{!left_switched && right_switched}",
+        "actions": [
+          {
+            "log_id": "right_switched_text",
+            "url": "div-action://set_variable?name=text&value=right%20switched"
+          }
+        ]
+      },
+      {
+        "condition": "@{left_switched && right_switched}",
+        "actions": [
+          {
+            "log_id": "both_switched_text",
+            "url": "div-action://set_variable?name=text&value=both%20switched"
+          }
+        ]
+      },
+      {
+        "condition": "@{!left_switched && !right_switched}",
+        "actions": [
+          {
+            "log_id": "no_switched_text",
+            "url": "div-action://set_variable?name=text&value=no%20buttons%20switched"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 320
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "orientation": "overlap",
+          "items": [
+            {
+              "type": "text",
+              "font_size": 18,
+              "font_weight": "medium",
+              "height": {
+                "type": "fixed",
+                "value": 260
+              },
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#FFF",
+              "text": "@{text}"
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "alignment_vertical": "bottom",
+              "items": [
+                {
+                  "type": "state",
+                  "div_id": "left_button",
+                  "states": [
+                    {
+                      "state_id": "off",
+                      "div": {
+                        "type": "button",
+                        "text": "LEFT",
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#1ABC9C"
+                          }
+                        ],
+                        "actions": [
+                          {
+                            "log_id": "switch_left",
+                            "url": "div-action://set_variable?name=left_switched&value=1"
+                          },
+                          {
+                            "log_id": "switch_left_to_on",
+                            "url": "div-action://set_state?state_id=0/left_button/on"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "on",
+                      "div": {
+                        "type": "button",
+                        "text": "LEFT",
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#00BC00"
+                          }
+                        ],
+                        "actions": [
+                          {
+                            "log_id": "switch_left",
+                            "url": "div-action://set_variable?name=left_switched&value=0"
+                          },
+                          {
+                            "log_id": "switch_left_to_off",
+                            "url": "div-action://set_state?state_id=0/left_button/off"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "state",
+                  "div_id": "right_button",
+                  "states": [
+                    {
+                      "state_id": "off",
+                      "div": {
+                        "type": "button",
+                        "text": "RIGHT",
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#1ABC9C"
+                          }
+                        ],
+                        "actions": [
+                          {
+                            "log_id": "switch_right",
+                            "url": "div-action://set_variable?name=right_switched&value=1"
+                          },
+                          {
+                            "log_id": "switch_right_to_on",
+                            "url": "div-action://set_state?state_id=0/right_button/on"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "on",
+                      "div": {
+                        "type": "button",
+                        "text": "RIGHT",
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#00BC00"
+                          }
+                        ],
+                        "actions": [
+                          {
+                            "log_id": "switch_left",
+                            "url": "div-action://set_variable?name=right_switched&value=0"
+                          },
+                          {
+                            "log_id": "switch_right_to_off",
+                            "url": "div-action://set_state?state_id=0/right_button/off"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

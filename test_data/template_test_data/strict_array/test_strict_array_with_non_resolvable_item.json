@@ -1,0 +1,17 @@
+{
+  "description": "Parsing should fail",
+  "entity": {
+    "type": "entity_with_strict_array",
+    "array": [
+      {
+        "type": "entity_with_complex_property"
+      },
+      {
+        "type": "entity_with_complex_property",
+        "property": {
+          "value": "https://ya.ru"
+        }
+      }
+    ]
+  }
+}

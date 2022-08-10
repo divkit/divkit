@@ -1,0 +1,10 @@
+.DS_Store
+.gradle
+.idea
+.swiftpm
+.vscode
+build/
+XcodeBuild/
+xcuserdata/
+
+local.properties

@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_focus",
+  "platforms": [
+    "android"
+  ],
+  "properties": {
+    "background": {
+      "type": "array",
+      "items": {
+        "$ref": "div-background.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_focus_background"
+    },
+    "border": {
+      "$ref": "div-border.json",
+      "$description": "translations.json#/div_focus_border"
+    },
+    "on_focus": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_focus_on_focus"
+    },
+    "on_blur": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_focus_on_blur"
+    },
+    "next_focus_ids": {
+      "type": "object",
+      "$description": "translations.json#/div_focus_next_focus_ids",
+      "properties": {
+        "forward": {
+          "$ref": "common.json#/non_empty_string"
+        },
+        "right": {
+          "$ref": "common.json#/non_empty_string"
+        },
+        "down": {
+          "$ref": "common.json#/non_empty_string"
+        },
+        "left": {
+          "$ref": "common.json#/non_empty_string"
+        },
+        "up": {
+          "$ref": "common.json#/non_empty_string"
+        }
+      }
+    }
+  }
+}

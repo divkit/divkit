@@ -1,0 +1,20 @@
+{
+  "log_id": "text",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "font_size": 16,
+        "height": {
+          "type": "match_parent"
+        },
+        "line_height": 20,
+        "max_lines": 1,
+        "text": "найдётся всё",
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "type": "text"
+      }
+    }
+  ]
+}

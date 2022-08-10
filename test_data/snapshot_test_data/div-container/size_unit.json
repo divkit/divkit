@@ -1,0 +1,298 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "size_unit",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "margins": {
+                "left": 10,
+                "top": 10,
+                "right": 10,
+                "bottom": 10
+              },
+              "width": {
+                "type": "fixed",
+                "value": 100,
+                "unit": "px"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#ffffff"
+                }
+              ],
+              "items": [
+                {
+                  "type": "image",
+                  "id": "lenna",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "px"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "px"
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10,
+                    "unit": "px"
+                  },
+                  "border": {
+                    "corner_radius": 12,
+                    "unit": "px"
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+                  "placeholder_color": "#3498DB"
+                },
+                {
+                  "type": "text",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "px"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 48,
+                    "unit": "px"
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10,
+                    "unit": "px"
+                  },
+                  "border": {
+                    "corner_radius": 8,
+                    "stroke": {
+                      "color": "#000000",
+                      "unit": "px",
+                      "width": 2
+                    }
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#1ABC9C"
+                    }
+                  ],
+                  "alignment_vertical": "bottom",
+                  "alignment_horizontal": "center",
+                  "font_size": 11,
+                  "font_size_unit": "px",
+                  "font_weight": "medium",
+                  "text_alignment_vertical": "center",
+                  "text_alignment_horizontal": "center",
+                  "text_color": "#34495E",
+                  "text": "px"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "margins": {
+                "left": 10,
+                "top": 10,
+                "right": 10,
+                "bottom": 10
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#ffffff"
+                }
+              ],
+              "items": [
+                {
+                  "type": "image",
+                  "id": "lenna",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "dp"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "dp"
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10,
+                    "unit": "dp"
+                  },
+                  "border": {
+                    "corner_radius": 12,
+                    "unit": "dp"
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+                  "placeholder_color": "#3498DB"
+                },
+                {
+                  "type": "text",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "dp"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 48,
+                    "unit": "dp"
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10,
+                    "unit": "dp"
+                  },
+                  "border": {
+                    "corner_radius": 8,
+                    "stroke": {
+                      "color": "#000000",
+                      "unit": "dp",
+                      "width": 2
+                    }
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#1ABC9C"
+                    }
+                  ],
+                  "alignment_vertical": "bottom",
+                  "alignment_horizontal": "center",
+                  "font_size": 11,
+                  "font_size_unit": "dp",
+                  "font_weight": "medium",
+                  "text_alignment_vertical": "center",
+                  "text_alignment_horizontal": "center",
+                  "text_color": "#34495E",
+                  "text": "dp"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "margins": {
+                "left": 10,
+                "top": 10,
+                "right": 10,
+                "bottom": 10
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#ffffff"
+                }
+              ],
+              "items": [
+                {
+                  "type": "image",
+                  "id": "lenna",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "sp"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "sp"
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10,
+                    "unit": "sp"
+                  },
+                  "border": {
+                    "corner_radius": 12,
+                    "unit": "sp"
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+                  "placeholder_color": "#3498DB"
+                },
+                {
+                  "type": "text",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80,
+                    "unit": "sp"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 48,
+                    "unit": "sp"
+                  },
+                  "margins": {
+                    "left": 10,
+                    "top": 10,
+                    "right": 10,
+                    "bottom": 10,
+                    "unit": "sp"
+                  },
+                  "border": {
+                    "corner_radius": 8,
+                    "stroke": {
+                      "color": "#000000",
+                      "unit": "sp",
+                      "width": 2
+                    }
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#1ABC9C"
+                    }
+                  ],
+                  "alignment_vertical": "bottom",
+                  "alignment_horizontal": "center",
+                  "font_size": 11,
+                  "font_size_unit": "sp",
+                  "font_weight": "medium",
+                  "text_alignment_vertical": "center",
+                  "text_alignment_horizontal": "center",
+                  "text_color": "#34495E",
+                  "text": "sp"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

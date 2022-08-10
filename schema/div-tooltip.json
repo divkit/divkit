@@ -1,0 +1,55 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_tooltip",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "$description": "translations.json#/div_tooltip_id"
+    },
+    "div": {
+      "$ref": "div.json",
+      "$description": "translations.json#/div_tooltip_div"
+    },
+    "position": {
+      "type": "string",
+      "enum": [
+        "left",
+        "top-left",
+        "top",
+        "top-right",
+        "right",
+        "bottom-right",
+        "bottom",
+        "bottom-left"
+      ],
+      "$description": "translations.json#/div_tooltip_position"
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "5000",
+      "$description": "translations.json#/div_tooltip_duration"
+    },
+    "offset": {
+      "$ref": "div-point.json",
+      "$description": "translations.json#/div_tooltip_offset"
+    },
+    "animation_in" : {
+      "$ref": "div-animation.json",
+      "$description": "translations.json#/div_tooltip_animation_in"
+    },
+    "animation_out" : {
+      "$ref": "div-animation.json",
+      "$description": "translations.json#/div_tooltip_animation_out"
+    }
+  },
+  "required": [
+    "id",
+    "div",
+    "position"
+  ]
+}

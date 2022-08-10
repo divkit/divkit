@@ -1,0 +1,100 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_state",
+  "generate_swift_optional_arguments": false,
+  "definitions": {
+    "div_state": {
+      "type": "object",
+      "generate_swift_optional_arguments": false,
+      "properties": {
+        "state_id": {
+          "type": "string",
+          "supports_expressions": false,
+          "$description": "translations.json#/div_state_div_state_state_id"
+        },
+        "div": {
+          "$ref": "div.json",
+          "$description": "translations.json#/div_state_div_state_div"
+        },
+        "animation_in": {
+          "$ref": "div-animation.json",
+          "$description": "translations.json#/div_state_div_state_animation_in",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "deprecated": true
+        },
+        "animation_out": {
+          "$ref": "div-animation.json",
+          "$description": "translations.json#/div_state_div_state_animation_out",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "deprecated": true
+        },
+        "swipe_out_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_state_div_state_swipe_out_actions",
+          "platforms": [
+            "android"
+          ],
+          "deprecated": true
+        }
+      },
+      "required": [
+        "state_id"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "state"
+          ]
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/div_state"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_state_states"
+        },
+        "div_id": {
+          "type": "string",
+          "supports_expressions": false,
+          "$description": "translations.json#/div_state_div_id",
+          "deprecated": true
+        },
+        "default_state_id": {
+          "type": "string",
+          "$description": "translations.json#/div_state_default_state_id"
+        },
+        "transition_animation_selector": {
+          "$ref": "div-transition-selector.json",
+          "default_value": "state_change",
+          "$description": "translations.json#/div_state_transition_animation_selector",
+          "deprecated": true
+        }
+      },
+      "required": [
+        "type",
+        "states"
+      ]
+    }
+  ]
+}

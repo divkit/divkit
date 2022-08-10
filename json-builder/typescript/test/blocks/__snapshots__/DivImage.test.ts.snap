@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivImage tests should create card with templates 1`] = `
+{
+  "templates": {
+    "div": {
+      "type": "image",
+      "aspect": {
+        "$ratio": "aspect_ratio"
+      },
+      "image_url": "https://image.url",
+      "width": {
+        "type": "fixed",
+        "value": 44
+      }
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "div",
+          "aspect_ratio": 1
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`DivImage tests should create simple block 1`] = `
+{
+  "type": "image",
+  "aspect": {
+    "ratio": 0.75
+  },
+  "height": {
+    "type": "fixed",
+    "value": 44
+  },
+  "image_url": "https://image.url",
+  "preload_required": 1,
+  "width": {
+    "type": "fixed",
+    "value": 44
+  }
+}
+`;

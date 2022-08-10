@@ -1,0 +1,12 @@
+{
+  "templates": {
+  },
+  "entity": {
+    "type": "entity_with_array_with_transform",
+    "array": [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000"
+    ]
+  }
+}

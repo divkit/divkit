@@ -1,0 +1,253 @@
+{
+  "div_data": {
+    "templates": {
+      "div_base": {
+        "type": "gallery",
+
+        "orientation": "vertical",
+        "visibility": "@{visibility}",
+
+        "scroll_mode": "paging",
+        "restrict_parent_scroll": 1,
+
+        "alpha": "@{alpha}",
+        "alignment_horizontal": "@{alignment_horizontal}",
+        "alignment_vertical": "@{alignment_vertical}",
+        "background": [
+          {
+            "type": "solid",
+            "color": "@{background_color}"
+          }
+        ],
+        "border": {
+          "corner_radius": "@{border_corner_radius}",
+          "stroke": {
+            "color": "@{border_stroke_color}",
+            "width": "@{border_stroke_width}"
+          }
+        },
+        "paddings": {
+          "left": "@{paddings}",
+          "top": "@{paddings}",
+          "right": "@{paddings}",
+          "bottom": "@{paddings}"
+        },
+        "margins": {
+          "left": "@{margins}",
+          "top": "@{margins}",
+          "right": "@{margins}",
+          "bottom": "@{margins}"
+        },
+        "width": {
+          "type": "fixed",
+          "value": "@{width_value}"
+        },
+        "height": {
+          "type": "match_parent"
+        }
+      },
+      "test_container": {
+        "type": "container",
+        "orientation": "overlap",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#db7272"
+          }
+        ],
+        "border": {
+          "stroke": {
+            "color": "#000000"
+          }
+        }
+      },
+      "item": {
+        "type": "text",
+        "text": "      ",
+        "font_size": 14,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "alignment_horizontal": "center",
+        "text_color": "#1ABC9C",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "width": {
+          "type": "fixed",
+          "value": 120
+        },
+        "height": {
+          "type": "fixed",
+          "value": 120
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#34495E"
+          }
+        ],
+        "border": {
+          "corner_radius": 6
+        }
+      }
+    },
+    "card": {
+      "type": "div2",
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "visibility",
+          "type": "string",
+          "value": "visible"
+        },
+        {
+          "name": "alpha",
+          "type": "number",
+          "value": 1.0
+        },
+        {
+          "name": "background_color",
+          "type": "color",
+          "value": "#0000FF"
+        },
+        {
+          "name": "border_corner_radius",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "border_stroke_color",
+          "type": "color",
+          "value": "#FFFF00"
+        },
+        {
+          "name": "border_stroke_width",
+          "type": "number",
+          "value": 1
+        },
+        {
+          "name": "margins",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "paddings",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "height_value",
+          "type": "integer",
+          "value": 250
+        },
+        {
+          "name": "width_value",
+          "type": "integer",
+          "value": 360
+        },
+        {
+          "name": "alignment_horizontal",
+          "type": "string",
+          "value": "left"
+        },
+        {
+          "name": "alignment_vertical",
+          "type": "string",
+          "value": "top"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "test_container",
+            "items": [
+              {
+                "type": "div_base",
+                "items": [
+                  {
+                    "type": "item",
+                    "item_log_id": "item/01",
+                    "background": [
+                      {
+                        "color": "#49a5a5",
+                        "type": "solid"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "item_log_id": "item/02",
+                    "background": [
+                      {
+                        "color": "#49a5a5",
+                        "type": "solid"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "item_log_id": "item/03",
+                    "background": [
+                      {
+                        "color": "#49a5a5",
+                        "type": "solid"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "item",
+                    "item_log_id": "item/04",
+                    "background": [
+                      {
+                        "color": "#49a5a5",
+                        "type": "solid"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility&value=invisible",
+          "log_id": "invisible"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility&value=gone",
+          "log_id": "gone"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility&value=visible",
+          "log_id": "restore: visible"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+native_ad|Ads unknown|{
+		"topic": "native_ad_1_card",
+		"menu": {
+			"menu_list": [{
+				"text": "Настройки ленты",
+				"action": "opensettings://?screen=feed"
+			}, {
+				"action": "hidecard://?topic_card_ids=native_ad_1_card&undo_snackbar_text=%D0%92%D1%8B%20%D1%81%D0%BA%D1%80%D1%8B%D0%BB%D0%B8%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D1%83",
+				"text": "Скрыть карточку"
+			}]
+		},
+		"id": "native_ad_1",
+		"ttl": 1199,
+		"utime": 1548324248,
+		"ttv": 1200,
+		"data": {
+			"fake_data": 1
+		},
+		"type": "native_ad",
+		"title": "Яндекс.Директ"
+	}

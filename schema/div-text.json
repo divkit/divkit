@@ -1,0 +1,305 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_text",
+  "definitions": {
+    "range": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_range_start"
+        },
+        "end": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_text_range_end"
+        },
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_font_size"
+        },
+        "font_family": {
+          "$ref": "div-font-family.json",
+          "$description": "translations.json#/div_font_family"
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "$description": "translations.json#/div_font_size_unit",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "letter_spacing": {
+          "type": "number",
+          "$description": "translations.json#/div_text_range_letter_spacing"
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "$description": "translations.json#/div_font_weight"
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_text_color"
+        },
+        "underline": {
+          "$ref": "div-line-style.json",
+          "$description": "translations.json#/div_text_range_underline"
+        },
+        "strike": {
+          "$ref": "div-line-style.json",
+          "$description": "translations.json#/div_text_range_strike"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_text_range_actions"
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_range_line_height"
+        },
+        "top_offset": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_range_top_offset"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "$description": "translations.json#/div_text_range"
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_image_start"
+        },
+        "url": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_text_image_url"
+        },
+        "width": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":20}",
+          "$description": "translations.json#/div_text_image_width"
+        },
+        "height": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":20}",
+          "$description": "translations.json#/div_text_image_height"
+        },
+        "tint_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_text_image_tint_color"
+        }
+      },
+      "required": [
+        "url",
+        "start"
+      ],
+      "$description": "translations.json#/div_text_image"
+    },
+    "ellipsis":  {
+      "type": "object",
+      "properties": {
+        "text": {
+          "$ref": "common.json#/non_empty_string",
+          "$description": "translations.json#/div_text_ellipsis_text"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_text_ellipsis_actions"
+        },
+        "ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/range"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_text_ellipsis_ranges"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/image"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_text_ellipsis_images"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "$description": "translations.json#/div_text_ellipsis",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text"
+          ]
+        },
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "12",
+          "$description": "translations.json#/div_font_size"
+        },
+        "font_family": {
+          "$ref": "div-font-family.json",
+          "default_value": "text",
+          "$description": "translations.json#/div_font_family"
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_line_height"
+        },
+        "max_lines": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_max_lines"
+        },
+        "min_hidden_lines": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_text_min_hidden_lines",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "auto_ellipsize": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_text_auto_ellipsize",
+          "platforms": [
+            "android"
+          ]
+        },
+        "letter_spacing": {
+          "type": "number",
+          "default_value": "0",
+          "$description": "translations.json#/div_text_letter_spacing"
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "default_value": "regular",
+          "$description": "translations.json#/div_font_weight"
+        },
+        "text_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "left",
+          "$description": "translations.json#/div_text_text_alignment_horizontal"
+        },
+        "text_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "top",
+          "$description": "translations.json#/div_text_text_alignment_vertical"
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#FF000000",
+          "$description": "translations.json#/div_text_text_color"
+        },
+        "focused_text_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_text_focused_text_color",
+          "platforms": [
+            "android"
+          ]
+        },
+        "text_gradient": {
+          "$ref": "div-gradient-background.json",
+          "$description": "translations.json#/div_text_text_gradient"
+        },
+        "text": {
+          "$ref": "common.json#/non_empty_string",
+          "client_optimized": true,
+          "$description": "translations.json#/div_text_text"
+        },
+        "underline": {
+          "$ref": "div-line-style.json",
+          "default_value": "none",
+          "$description": "translations.json#/div_text_underline"
+        },
+        "strike": {
+          "$ref": "div-line-style.json",
+          "default_value": "none",
+          "$description": "translations.json#/div_text_strike"
+        },
+        "ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/range"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_text_ranges"
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/image"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_text_images"
+        },
+        "ellipsis": {
+          "$ref": "#/definitions/ellipsis"
+        },
+        "selectable": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_text_selectable"
+        },
+        "truncate": {
+          "type": "string",
+          "enum": [
+            "none", "start", "end", "middle"
+          ],
+          "default_value": "end",
+          "$description": "translations.json#/div_text_truncate",
+          "deprecated": true,
+          "code_generation_disabled_kotlin": true,
+          "code_generation_disabled_swift": true
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "text"
+  ]
+}

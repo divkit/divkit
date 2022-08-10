@@ -1,0 +1,81 @@
+{
+  "type": "container",
+  "orientation": "vertical",
+  "items": [
+    {
+      "type": "text",
+      "text": "Line 11",
+      "font_size": 10,
+      "line_height": 11,
+      "font_weight": "medium",
+      "text_color": "#cc000000",
+      "paddings": {
+        "left": 8,
+        "right": 8
+      },
+      "width": {
+        "type": "fixed",
+        "value": 50
+      },
+      "action": {
+        "url": "div-action://set_state?state_id=1/more/collapsed",
+        "log_id": "district_title"
+      }
+    },
+    {
+      "type": "text",
+      "text": "Line 22",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "medium",
+      "text_color": "#cc000000",
+      "paddings": {
+        "left": 8,
+        "right": 8
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "action": {
+        "url": "div-action://set_state?state_id=1/more/collapsed",
+        "log_id": "district_title"
+      }
+    },
+    {
+      "type": "text",
+      "text": "Line 33",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "medium",
+      "text_color": "#cc000000",
+      "paddings": {
+        "top": 13,
+        "left": 16,
+        "right": 16
+      },
+      "action": {
+        "url": "div-action://set_state?state_id=1/more/collapsed",
+        "log_id": "district_title"
+      }
+    },
+    {
+      "type": "text",
+      "text": "Line 44",
+      "font_size": 10,
+      "line_height": 14,
+      "font_weight": "regular",
+      "text_color": "#cc000000",
+      "paddings": {
+        "top": 0,
+        "left": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "action": {
+        "url": "div-action://set_state?state_id=1/alert2/shown",
+        "log_id": "district_title"
+      }
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "definitions": {
+    "complex_property": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "$ref": "common.json#/url"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    }
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_optional_complex_property"
+      ]
+    },
+    "property": {
+      "$ref": "#/definitions/complex_property"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "lang": "kotlin",
+  "imports": [
+    "android.graphics.Color",
+    "android.net.Uri",
+    "androidx.annotation.ColorInt",
+    "com.yandex.div.json.*",
+    "com.yandex.div.json.expressions.Expression",
+    "com.yandex.div.json.expressions.ExpressionsList",
+    "com.yandex.div.json.schema.*",
+    "com.yandex.div.core.annotations.Mockable",
+    "java.io.IOException",
+    "java.util.BitSet",
+    "org.json.JSONObject",
+    "com.yandex.div.data.*"
+  ],
+  "java": {
+    "package": "com.yandex.div2",
+    "annotations": [
+      "@Mockable"
+    ]
+  },
+  "errorsCollectors": [
+    "div-data"
+  ],
+  "generateExpressions": true,
+  "generateUnresolvedEntities": true
+}

@@ -1,0 +1,13 @@
+{
+  "$description": "translations.json#/div_change_transition",
+  "anyOf": [
+    {
+      "$ref": "div-change-set-transition.json",
+      "$description": "translations.json#/div_change_transition_set"
+    },
+    {
+      "$ref": "div-change-bounds-transition.json",
+      "$description": "translations.json#/div_change_transition_bounds"
+    }
+  ]
+}

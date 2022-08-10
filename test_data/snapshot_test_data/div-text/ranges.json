@@ -1,0 +1,258 @@
+{
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFF"
+            }
+          ],
+          "items": [
+            {
+              "description": "Different fonts",
+              "type": "text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "text": "Default; red 18 pt light with spacing 0.5; blue 8 pt bold with spacing 1.5.",
+              "font_size": 12,
+              "ranges": [
+                {
+                  "start": 9,
+                  "end": 43,
+                  "font_size": 18,
+                  "font_weight": "light",
+                  "letter_spacing": 0.5,
+                  "text_color": "#F00"
+                },
+                {
+                  "start": 43,
+                  "end": 75,
+                  "font_size": 8,
+                  "font_weight": "bold",
+                  "letter_spacing": 1.5,
+                  "text_color": "#00F"
+                }
+              ]
+            },
+            {
+              "description": "Overlapping ranges: latter has priority",
+              "type": "text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "text": "First style; overlapped (should be same as second); second style",
+              "font_size": 12,
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 51,
+                  "font_size": 18,
+                  "font_weight": "light",
+                  "letter_spacing": 0.5,
+                  "text_color": "#F00"
+                },
+                {
+                  "start": 13,
+                  "end": 64,
+                  "font_size": 8,
+                  "font_weight": "bold",
+                  "letter_spacing": 1.5,
+                  "text_color": "#00F"
+                }
+              ]
+            },
+            {
+              "description": "Partially overlapping ranges: non-conflicting values should stack",
+              "type": "text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "text": "First style; overlapped (font from first, spacing and color from second); second style",
+              "font_size": 12,
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 73,
+                  "font_size": 18,
+                  "font_weight": "light"
+                },
+                {
+                  "start": 13,
+                  "end": 86,
+                  "letter_spacing": 1.5,
+                  "text_color": "#00F"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "text": "Range that ends beyond text length",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 100,
+                  "font_size": 18,
+                  "font_weight": "light",
+                  "letter_spacing": 0.5,
+                  "text_color": "#F00"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "text": "Range that starts and ends beyond text length",
+              "ranges": [
+                {
+                  "start": 100,
+                  "end": 500,
+                  "font_size": 18,
+                  "font_weight": "light",
+                  "letter_spacing": 0.5,
+                  "text_color": "#F00"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "text": "Range with start after end",
+              "ranges": [
+                {
+                  "start": 10,
+                  "end": 5,
+                  "font_size": 18,
+                  "font_weight": "light",
+                  "letter_spacing": 0.5,
+                  "text_color": "#F00"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "fixed",
+                "value": 120
+              },
+              "text": "Text with different sizes: small, big, small, big.",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 1,
+                  "font_size": 6
+                },
+                {
+                  "start": 1,
+                  "end": 2,
+                  "font_size": 7
+                },
+                {
+                  "start": 2,
+                  "end": 3,
+                  "font_size": 8
+                },
+                {
+                  "start": 3,
+                  "end": 4,
+                  "font_size": 9
+                },
+                {
+                  "start": 4,
+                  "end": 5,
+                  "font_size": 10
+                },
+                {
+                  "start": 5,
+                  "end": 6,
+                  "font_size": 11
+                },
+                {
+                  "start": 6,
+                  "end": 7,
+                  "font_size": 12
+                },
+                {
+                  "start": 7,
+                  "end": 8,
+                  "font_size": 13
+                },
+                {
+                  "start": 8,
+                  "end": 9,
+                  "font_size": 14
+                },
+                {
+                  "start": 9,
+                  "end": 10,
+                  "font_size": 15
+                },
+                {
+                  "start": 10,
+                  "end": 11,
+                  "font_size": 16
+                },
+                {
+                  "start": 11,
+                  "end": 12,
+                  "font_size": 17
+                },
+                {
+                  "start": 12,
+                  "end": 13,
+                  "font_size": 18
+                },
+                {
+                  "start": 13,
+                  "end": 14,
+                  "font_size": 19
+                },
+                {
+                  "start": 14,
+                  "end": 25,
+                  "font_size": 20
+                },
+                {
+                  "start": 27,
+                  "end": 33,
+                  "font_size": 9
+                },
+                {
+                  "start": 39,
+                  "end": 45,
+                  "font_size": 9
+                },
+                {
+                  "start": 34,
+                  "end": 38,
+                  "font_size": 25
+                },
+                {
+                  "start": 46,
+                  "end": 50,
+                  "font_size": 25
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {}
+}

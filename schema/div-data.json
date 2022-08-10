@@ -1,0 +1,78 @@
+{
+  "$description": "translations.json#/div_data",
+  "typescript_templatable": false,
+  "generate_swift_optional_arguments": false,
+  "root_entity": true,
+  "definitions": {
+    "div_state": {
+      "type": "object",
+      "typescript_templatable": false,
+      "generate_swift_optional_arguments": false,
+      "properties": {
+        "state_id": {
+          "type": "integer",
+          "supports_expressions": false,
+          "$description": "translations.json#/div_data_div_state_state_id"
+        },
+        "div": {
+           "$ref": "div.json",
+           "$description": "translations.json#/div_data_div_state_div"
+        }
+      },
+      "required": [
+        "state_id",
+        "div"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "states": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/div_state"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "strictParsing": true,
+      "$description": "translations.json#/div_data_states"
+    },
+    "log_id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "$description": "translations.json#/div_data_log_id"
+    },
+    "transition_animation_selector": {
+      "$ref": "div-transition-selector.json",
+      "default_value": "none",
+      "$description": "translations.json#/div_data_transition_animation_selector",
+      "deprecated": true,
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "div-variable.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_data_variables"
+    },
+    "variable_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-trigger.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_data_variable_triggers"
+    }
+  },
+  "required": [
+    "states",
+    "log_id"
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#000000",
+      "paddings": {
+        "top": 16,
+        "bottom": 16,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "margins": {
+        "top": 2
+      }
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Vertical container"
+            },
+            {
+              "type": "subtitle",
+              "text": "If you want an element to take up all free space, set its width to match_parent. If there are multiple elements like this, they will divide the space equally or distribute it according to the weight value, if specified.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "height": {
+                "type": "fixed",
+                "value": 240
+              },
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "wrap_content"
+                },
+                {
+                  "type": "text_block",
+                  "text": "weight = 1",
+                  "height": {
+                    "type": "match_parent",
+                    "weight": 1
+                  }
+                },
+                {
+                  "type": "text_block",
+                  "text": "wrap_content"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

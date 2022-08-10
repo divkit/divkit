@@ -1,0 +1,2962 @@
+{
+  "templates": {
+    "tpl-title_with_subtitle": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "$text": "title",
+          "paddings": {
+            "bottom": 2
+          },
+          "font_size": 20,
+          "$text_color": "title_color",
+          "font_weight": "bold",
+          "line_height": 24
+        },
+        {
+          "type": "text",
+          "$text": "subtitle",
+          "font_size": 13,
+          "$text_color": "subtitle_color",
+          "line_height": 16
+        }
+      ],
+      "height": {
+        "type": "wrap_content"
+      },
+      "$paddings": "paddings",
+      "content_alignment_vertical": "center"
+    },
+    "eddl_market_discount_badge": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_height"
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top",
+        "$left": "eddl_badge_margin_left"
+      },
+      "background": [
+        {
+          "type": "image",
+          "scale": "fit",
+          "$image_url": "eddl_item_discount_badge_url",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center"
+        }
+      ],
+      "$font_size": "eddl_badge_discount_font_size",
+      "$line_height": "eddl_badge_discount_line_height",
+      "max_lines": 1,
+      "$text_color": "eddl_discount_badge_text_color",
+      "$text": "eddl_discount_badge_text"
+    },
+    "eddl_market_image_container": {
+      "type": "container",
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_image_height"
+      },
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_item_image_url",
+          "scale": "fit",
+          "border": {
+            "corner_radius": 8
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          }
+        }
+      ]
+    },
+    "eddl_market_promo_badge_image": {
+      "type": "image",
+      "$image_url": "eddl_item_promo_badge_url",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      }
+    },
+    "eddl_market_promo_badge_label": {
+      "type": "text",
+      "$text": "eddl_promo_label",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "font_size": 16,
+      "font_weight": "bold",
+      "line_height": 20,
+      "$text_color": "eddl_promo_label_color",
+      "alignment_vertical": "center",
+      "alignment_horizontal": "center"
+    },
+    "eddl_market_promo_badge": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "fixed",
+        "value": 42
+      },
+      "height": {
+        "type": "fixed",
+        "value": 42,
+        "unit": "sp"
+      },
+      "margins": {
+        "$left": "eddl_item_promo_badge_margin_left"
+      },
+      "$items": "eddl_item_promo_badge_items"
+    },
+    "eddl_market_new_price": {
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_market_text_alignment_horizontal",
+      "$font_size": "eddl_new_price_font_size",
+      "font_weight": "medium",
+      "$line_height": "eddl_new_price_line_height",
+      "width": {
+        "type": "wrap_content"
+      },
+      "max_lines": 1,
+      "$text_color": "eddl_new_price_color",
+      "$text": "eddl_new_price"
+    },
+    "eddl_market_old_price": {
+      "width": {
+        "type": "wrap_content"
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_market_text_alignment_horizontal",
+      "$font_size": "eddl_old_price_font_size",
+      "$line_height": "eddl_old_price_line_height",
+      "max_lines": 1,
+      "$text_color": "eddl_old_price_color",
+      "$text": "eddl_old_price",
+      "strike": "single"
+    },
+    "eddl_market_item_price_container": {
+      "type": "container",
+      "$orientation": "eddl_price_orientation",
+      "$content_alignment_horizontal": "eddl_market_text_alignment_horizontal",
+      "alignment_vertical": "top",
+      "margins": {
+        "$top": "eddl_prices_margin_top"
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "$items": "eddl_price_items"
+    },
+    "eddl_market_item_description": {
+      "type": "text",
+      "margins": {
+        "top": 4
+      },
+      "$text_alignment_horizontal": "eddl_market_text_alignment_horizontal",
+      "$font_size": "eddl_description_font_size",
+      "$line_height": "eddl_description_line_height",
+      "$max_lines": "title_max_lines",
+      "$text_color": "eddl_primary_text_color",
+      "$text": "eddl_title"
+    },
+    "eddl_market_item_button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_item_button_height",
+        "unit": "sp"
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "eddl_item_button_background_color"
+        }
+      ],
+      "$text": "eddl_item_button_text",
+      "$text_color": "eddl_item_button_text_color",
+      "$font_size": "eddl_item_button_font_size",
+      "$line_height": "eddl_item_button_line_height",
+      "$margins": "eddl_item_button_margins",
+      "$actions": "eddl_item_button_actions",
+      "$visibility_actions": "eddl_item_button_visibility_actions",
+      "border": {
+        "$corner_radius": "eddl_item_button_corner_radius",
+        "$corners_radius": "eddl_item_button_corners_radius"
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    },
+    "eddl_market_item_content_container": {
+      "type": "container",
+      "$paddings": "eddl_market_content_paddings",
+      "$content_alignment_horizontal": "eddl_market_content_alignment_horizontal",
+      "$items": "eddl_item_content_items"
+    },
+    "eddl_market_item": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_height",
+        "unit": "sp"
+      },
+      "$paddings": "eddl_paddings",
+      "margins": {
+        "$top": "eddl_margin_top",
+        "$left": "eddl_margin_left"
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "eddl_item_background_color"
+        }
+      ],
+      "$items": "eddl_offer_items",
+      "content_alignment_horizontal": "center"
+    },
+    "eddl_market_show_all_item": {
+      "type": "container",
+      "orientation": "vertical",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_height",
+        "unit": "sp"
+      },
+      "$paddings": "eddl_paddings",
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#4D4D4D",
+          "width": 2
+        }
+      },
+      "$actions": "eddl_item_actions",
+      "$visibility_actions": "eddl_item_visibility_actions",
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_item_show_all_arrow_url",
+          "width": {
+            "type": "fixed",
+            "value": 40
+          },
+          "height": {
+            "type": "fixed",
+            "value": 40
+          }
+        },
+        {
+          "type": "text",
+          "$text": "eddl_item_show_all_text",
+          "letter_spacing": -1,
+          "font_size": 13,
+          "font_weight": "medium",
+          "line_height": 16,
+          "text_alignment_horizontal": "center",
+          "max_lines": 2,
+          "text_color": "#4D4D4D",
+          "margins": {
+            "top": 12
+          }
+        }
+      ]
+    },
+    "eddl_market_show_all_item_container": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "items": [
+        {
+          "margins": {
+            "$top": "eddl_margin_top"
+          },
+          "type": "eddl_market_show_all_item"
+        }
+      ]
+    },
+    "eddl_market_item_container": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "$items": "eddl_item_content",
+      "$actions": "eddl_item_actions",
+      "$visibility_actions": "eddl_item_visibility_actions"
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 12,
+            "bottom": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F4F4F4"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockAppear&hash=d3bbc1f2f7959f2df5f4a5a7c4bd30af",
+              "payload": {
+                "BlockId": "141",
+                "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1112"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            },
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockView&hash=a063ffb30109b55bb6ea72329bf9f516",
+              "payload": {
+                "BlockId": "141",
+                "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1112"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1000,
+              "visibility_percentage": 50
+            }
+          ],
+          "items": [
+            {
+              "type": "tpl-title_with_subtitle",
+              "title": "Всё для быта",
+              "paddings": {
+                "left": 16,
+                "right": 16,
+                "bottom": 14
+              },
+              "subtitle": "На Яндекс Маркете",
+              "title_color": "#ff09141f",
+              "subtitle_color": "#ff999999"
+            },
+            {
+              "type": "gallery",
+              "paddings": {
+                "left": 8,
+                "right": 12
+              },
+              "item_spacing": 2,
+              "items": [
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "3990 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "9065 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Набор Samura Harakiri SHR-0250, 5 ножей",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-56%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=23ed281bca504e40ada7ead67361815f",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "1",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор Samura Harakiri SHR-0250, 5 ножей",
+                        "ProductPrice": "3990",
+                        "BlockContentId": "GXWYr_WP2Ei87Z3KBTuLFA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "56"
+                      },
+                      "url": "https://nquw.adj.st/product/100353441070?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F41265380%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D100353441070&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F41265380%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D100353441070"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=23ed281bca504e40ada7ead67361815f",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "1",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор Samura Harakiri SHR-0250, 5 ножей",
+                        "ProductPrice": "3990",
+                        "BlockContentId": "GXWYr_WP2Ei87Z3KBTuLFA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "56"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=e42d1c063ba2ff813821c2653919b308",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "1",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор Samura Harakiri SHR-0250, 5 ножей",
+                        "ProductPrice": "3990",
+                        "BlockContentId": "GXWYr_WP2Ei87Z3KBTuLFA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "56"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "350 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "430 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Квест копилка с полем для закрашивания на 50500 рублей из дерева",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-19%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=88264ba15e9f3b3c5842eb8d0b931486",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "2",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Квест копилка с полем для закрашивания на 50500 рублей из дерева",
+                        "ProductPrice": "350",
+                        "BlockContentId": "Wv7inNn9Uqc9Qe1tQiR6jA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "19"
+                      },
+                      "url": "https://nquw.adj.st/product/101453550120?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1443535052%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101453550120&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1443535052%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101453550120"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=88264ba15e9f3b3c5842eb8d0b931486",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "2",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Квест копилка с полем для закрашивания на 50500 рублей из дерева",
+                        "ProductPrice": "350",
+                        "BlockContentId": "Wv7inNn9Uqc9Qe1tQiR6jA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "19"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=27714fde1192fcc76cd25e688da2a003",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "2",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Квест копилка с полем для закрашивания на 50500 рублей из дерева",
+                        "ProductPrice": "350",
+                        "BlockContentId": "Wv7inNn9Uqc9Qe1tQiR6jA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "19"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "17 490 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Компьютерное кресло Bloody GC-990 игровое, обивка: искусственная кожа, цвет: черный/красный",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-13%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=bd73e99a34e6ec5b40e9d1c60db40e6d",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "3",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Компьютерное кресло Bloody GC-990 игровое, обивка: искусственная кожа, цвет: черный/красный",
+                        "ProductPrice": "17490",
+                        "BlockContentId": "_9-BhAXSz46YhMr-ZRSfWg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "13"
+                      },
+                      "url": "https://nquw.adj.st/product/101505438021?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1482552914%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101505438021&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1482552914%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101505438021"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=bd73e99a34e6ec5b40e9d1c60db40e6d",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "3",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Компьютерное кресло Bloody GC-990 игровое, обивка: искусственная кожа, цвет: черный/красный",
+                        "ProductPrice": "17490",
+                        "BlockContentId": "_9-BhAXSz46YhMr-ZRSfWg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "13"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=56e1dfb833066bc6a425b2e4940a0860",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "3",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Компьютерное кресло Bloody GC-990 игровое, обивка: искусственная кожа, цвет: черный/красный",
+                        "ProductPrice": "17490",
+                        "BlockContentId": "_9-BhAXSz46YhMr-ZRSfWg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "13"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "3299 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "6640 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Люстра светодиодная Ritter Malta 52019 1, 108 Вт, цвет арматуры: белый, цвет плафона: белый",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-50%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=ad8807e69902532ca4fc6ea017c4f913",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Люстра светодиодная Ritter Malta 52019 1, 108 Вт, цвет арматуры: белый, цвет плафона: белый",
+                        "ProductPrice": "3299",
+                        "BlockContentId": "I_q1fTkaCnBilcbuoF0iTQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "50"
+                      },
+                      "url": "https://nquw.adj.st/product/101588570812?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F925019002%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101588570812&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F925019002%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101588570812"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=ad8807e69902532ca4fc6ea017c4f913",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Люстра светодиодная Ritter Malta 52019 1, 108 Вт, цвет арматуры: белый, цвет плафона: белый",
+                        "ProductPrice": "3299",
+                        "BlockContentId": "I_q1fTkaCnBilcbuoF0iTQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "50"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=e3da4a8760904c4ca658365f1e6071bb",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Люстра светодиодная Ritter Malta 52019 1, 108 Вт, цвет арматуры: белый, цвет плафона: белый",
+                        "ProductPrice": "3299",
+                        "BlockContentId": "I_q1fTkaCnBilcbuoF0iTQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "50"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "12 802 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Профессиональный металлоискатель «COBRA T350» Охотник за золотом детектор экскаватора Сканер высокая чувствительность металлоискатель Золотой металлоискатель Высокая чувствительность подземный металлоискатель сокровище",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-68%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=67b6f6fd02071b1b303daf123e6b872c",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "5",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Профессиональный металлоискатель «COBRA T350» Охотник за золотом детектор экскаватора Сканер высокая чувствительность металлоискатель Золотой металлоискатель Высокая чувствительность подземный металлоискатель сокровище",
+                        "ProductPrice": "12802",
+                        "BlockContentId": "yUlxVWY7rdzi-x0WQkohow",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "68"
+                      },
+                      "url": "https://nquw.adj.st/product/101262702794?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F902909890%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101262702794&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F902909890%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101262702794"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=67b6f6fd02071b1b303daf123e6b872c",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "5",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Профессиональный металлоискатель «COBRA T350» Охотник за золотом детектор экскаватора Сканер высокая чувствительность металлоискатель Золотой металлоискатель Высокая чувствительность подземный металлоискатель сокровище",
+                        "ProductPrice": "12802",
+                        "BlockContentId": "yUlxVWY7rdzi-x0WQkohow",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "68"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f6765c6fed0958ee88f09e1fa848656b",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "5",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Профессиональный металлоискатель «COBRA T350» Охотник за золотом детектор экскаватора Сканер высокая чувствительность металлоискатель Золотой металлоискатель Высокая чувствительность подземный металлоискатель сокровище",
+                        "ProductPrice": "12802",
+                        "BlockContentId": "yUlxVWY7rdzi-x0WQkohow",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "68"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "2290 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "4183 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Гранд Шеф-нож Samura Mo-V 24 см SM-0087/K",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-45%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=5476887f42750365ed694a8d8a73e9d3",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "6",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Гранд Шеф-нож Samura Mo-V 24 см SM-0087/K",
+                        "ProductPrice": "2290",
+                        "BlockContentId": "ZpiqcD4FiNvuK1JwPcNG8Q",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "45"
+                      },
+                      "url": "https://nquw.adj.st/product/101302271668?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F942679302%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101302271668&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F942679302%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101302271668"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=5476887f42750365ed694a8d8a73e9d3",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "6",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Гранд Шеф-нож Samura Mo-V 24 см SM-0087/K",
+                        "ProductPrice": "2290",
+                        "BlockContentId": "ZpiqcD4FiNvuK1JwPcNG8Q",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "45"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=0be8842b7104ebcc80b208e87058ee0a",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "6",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Гранд Шеф-нож Samura Mo-V 24 см SM-0087/K",
+                        "ProductPrice": "2290",
+                        "BlockContentId": "ZpiqcD4FiNvuK1JwPcNG8Q",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "45"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "325 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "512 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Адаптер (переходник-насадка) для бит угловой VertexTools 1/4 61мм",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-37%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=a3b084f170186ac64d0676180ffee138",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "7",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Адаптер (переходник-насадка) для бит угловой VertexTools 1/4 61мм",
+                        "ProductPrice": "325",
+                        "BlockContentId": "dpDG9ZWqcDgstOJwcnKBsQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "37"
+                      },
+                      "url": "https://nquw.adj.st/product/101454292699?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1444269205%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101454292699&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1444269205%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101454292699"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=a3b084f170186ac64d0676180ffee138",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "7",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Адаптер (переходник-насадка) для бит угловой VertexTools 1/4 61мм",
+                        "ProductPrice": "325",
+                        "BlockContentId": "dpDG9ZWqcDgstOJwcnKBsQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "37"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=adbb0da61ca743be9e41c058fdd94c97",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "7",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Адаптер (переходник-насадка) для бит угловой VertexTools 1/4 61мм",
+                        "ProductPrice": "325",
+                        "BlockContentId": "dpDG9ZWqcDgstOJwcnKBsQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "37"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "289 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "558 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Чеснокодавка / пресс для чеснока, имбиря, ягод, орехов и других продуктов / чеснокодавилка / чесноковыжималка",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-48%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=46de22a8a4f2269a997370fbd5fd13be",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "8",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чеснокодавка / пресс для чеснока, имбиря, ягод, орехов и других продуктов / чеснокодавилка / чесноковыжималка",
+                        "ProductPrice": "289",
+                        "BlockContentId": "3ppEEM_7pc55WDHoJFyXbA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "48"
+                      },
+                      "url": "https://nquw.adj.st/product/101379082148?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1014066633%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101379082148&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1014066633%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101379082148"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=46de22a8a4f2269a997370fbd5fd13be",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "8",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чеснокодавка / пресс для чеснока, имбиря, ягод, орехов и других продуктов / чеснокодавилка / чесноковыжималка",
+                        "ProductPrice": "289",
+                        "BlockContentId": "3ppEEM_7pc55WDHoJFyXbA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "48"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=54e20de2d17cf254884b2711b71fc939",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "8",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чеснокодавка / пресс для чеснока, имбиря, ягод, орехов и других продуктов / чеснокодавилка / чесноковыжималка",
+                        "ProductPrice": "289",
+                        "BlockContentId": "3ppEEM_7pc55WDHoJFyXbA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "48"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "1690 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "2684 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Одеяло Darwin Orto 1.0 зимнее, 140 х 205 см (белый)",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-37%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=2b0b1ebdcf8b5e42a87c72df573403de",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "9",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Одеяло Darwin Orto 1.0 зимнее, 140 х 205 см (белый)",
+                        "ProductPrice": "1690",
+                        "BlockContentId": "j9H9KVpg5--SDYE8oICYjA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "37"
+                      },
+                      "url": "https://nquw.adj.st/product/101305437742?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F946781006%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101305437742&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F946781006%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101305437742"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=2b0b1ebdcf8b5e42a87c72df573403de",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "9",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Одеяло Darwin Orto 1.0 зимнее, 140 х 205 см (белый)",
+                        "ProductPrice": "1690",
+                        "BlockContentId": "j9H9KVpg5--SDYE8oICYjA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "37"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=928d32993ffc136790e8382f79eaab2b",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "9",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Одеяло Darwin Orto 1.0 зимнее, 140 х 205 см (белый)",
+                        "ProductPrice": "1690",
+                        "BlockContentId": "j9H9KVpg5--SDYE8oICYjA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "37"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "3390 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "5100 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Ортопедическая подушка с охлаждающим эффектом 40х60х13 см \"Просто Подушка\" №10 гелевая классической формы мягкая",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-34%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=aca253783b8077b131e9afe894edb400",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "10",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ортопедическая подушка с охлаждающим эффектом 40х60х13 см \"Просто Подушка\" №10 гелевая классической формы мягкая",
+                        "ProductPrice": "3390",
+                        "BlockContentId": "NSYg8Gel1nzKheXgtArjCA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "34"
+                      },
+                      "url": "https://nquw.adj.st/product/101381855990?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1395642435%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101381855990&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1395642435%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101381855990"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=aca253783b8077b131e9afe894edb400",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "10",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ортопедическая подушка с охлаждающим эффектом 40х60х13 см \"Просто Подушка\" №10 гелевая классической формы мягкая",
+                        "ProductPrice": "3390",
+                        "BlockContentId": "NSYg8Gel1nzKheXgtArjCA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "34"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=331a21032192365d902b26066669bbf7",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "10",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ортопедическая подушка с охлаждающим эффектом 40х60х13 см \"Просто Подушка\" №10 гелевая классической формы мягкая",
+                        "ProductPrice": "3390",
+                        "BlockContentId": "NSYg8Gel1nzKheXgtArjCA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "34"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "419 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "469 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Блок питания (сетевой адаптер) универсальный 12V 2A (5.5x2.5 мм)",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-11%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=edad2579acf442f2a4374b554707213b",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "11",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Блок питания (сетевой адаптер) универсальный 12V 2A (5.5x2.5 мм)",
+                        "ProductPrice": "419",
+                        "BlockContentId": "rIGd9gOcZuXtNMQ1hCbrPQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "11"
+                      },
+                      "url": "https://nquw.adj.st/product/101221536130?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F867324251%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101221536130&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F867324251%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101221536130"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=edad2579acf442f2a4374b554707213b",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "11",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Блок питания (сетевой адаптер) универсальный 12V 2A (5.5x2.5 мм)",
+                        "ProductPrice": "419",
+                        "BlockContentId": "rIGd9gOcZuXtNMQ1hCbrPQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "11"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=d1fa7e9d13a8d4931a4b2e9e020ea2f4",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "11",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Блок питания (сетевой адаптер) универсальный 12V 2A (5.5x2.5 мм)",
+                        "ProductPrice": "419",
+                        "BlockContentId": "rIGd9gOcZuXtNMQ1hCbrPQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "11"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "2440 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "2700 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Терморегулятор с сенсорным экраном для теплого пола BixonHeat",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-10%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=66f58df6583d4866298795b4a50a6d15",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "12",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Терморегулятор с сенсорным экраном для теплого пола BixonHeat",
+                        "ProductPrice": "2440",
+                        "BlockContentId": "w8CjLR8efdBjXkLCtbEqKw",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "10"
+                      },
+                      "url": "https://nquw.adj.st/product/101416992725?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1414460866%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101416992725&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1414460866%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101416992725"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=66f58df6583d4866298795b4a50a6d15",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "12",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Терморегулятор с сенсорным экраном для теплого пола BixonHeat",
+                        "ProductPrice": "2440",
+                        "BlockContentId": "w8CjLR8efdBjXkLCtbEqKw",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "10"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=c05a4f94040b72e1885b607565b70f2c",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "12",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Терморегулятор с сенсорным экраном для теплого пола BixonHeat",
+                        "ProductPrice": "2440",
+                        "BlockContentId": "w8CjLR8efdBjXkLCtbEqKw",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "10"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "530 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "663 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Труба гофрированная ПВХ d 20 с зондом (25 м) легкая \"ЭКО\" (бук) TDM",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-20%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=a285f83cc25f7677bbd7dc6f966316eb",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "13",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Труба гофрированная ПВХ d 20 с зондом (25 м) легкая \"ЭКО\" (бук) TDM",
+                        "ProductPrice": "530",
+                        "BlockContentId": "SpwblMvZ-pEw4ngux_bRRQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "20"
+                      },
+                      "url": "https://nquw.adj.st/product/101308567043?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F949279064%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101308567043&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F949279064%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101308567043"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=a285f83cc25f7677bbd7dc6f966316eb",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "13",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Труба гофрированная ПВХ d 20 с зондом (25 м) легкая \"ЭКО\" (бук) TDM",
+                        "ProductPrice": "530",
+                        "BlockContentId": "SpwblMvZ-pEw4ngux_bRRQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "20"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=48b76bff5bae11a7177821d9e8516374",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "13",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Труба гофрированная ПВХ d 20 с зондом (25 м) легкая \"ЭКО\" (бук) TDM",
+                        "ProductPrice": "530",
+                        "BlockContentId": "SpwblMvZ-pEw4ngux_bRRQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "20"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "420 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "599 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Трос сантехнический Cleaning Hook с захватом для чистки канализационных труб, 90 см",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-30%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=89cc59e11ba99bac8b96fbf5d2c7e7a9",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "14",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Трос сантехнический Cleaning Hook с захватом для чистки канализационных труб, 90 см",
+                        "ProductPrice": "420",
+                        "BlockContentId": "1APRrSSqgR90bA427Rzdcg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "30"
+                      },
+                      "url": "https://nquw.adj.st/product/101451968147?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1442189554%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101451968147&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F1442189554%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101451968147"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=89cc59e11ba99bac8b96fbf5d2c7e7a9",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "14",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Трос сантехнический Cleaning Hook с захватом для чистки канализационных труб, 90 см",
+                        "ProductPrice": "420",
+                        "BlockContentId": "1APRrSSqgR90bA427Rzdcg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "30"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=cf243c8b9c2d4c4d9474c67a99b5e191",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "14",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Трос сантехнический Cleaning Hook с захватом для чистки канализационных труб, 90 см",
+                        "ProductPrice": "420",
+                        "BlockContentId": "1APRrSSqgR90bA427Rzdcg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "30"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "864 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "960 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Японская пила STANLEY FatMax 0-20-331 120 мм",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-10%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=1b886e5261d2389adbbcaf20f8c2f5a5",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "15",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Японская пила STANLEY FatMax 0-20-331 120 мм",
+                        "ProductPrice": "864",
+                        "BlockContentId": "ua4vg0G3YKF11nXJcKYvXA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "10"
+                      },
+                      "url": "https://nquw.adj.st/product/458455131?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F458455131%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D458455131&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F458455131%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D458455131"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=1b886e5261d2389adbbcaf20f8c2f5a5",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "15",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Японская пила STANLEY FatMax 0-20-331 120 мм",
+                        "ProductPrice": "864",
+                        "BlockContentId": "ua4vg0G3YKF11nXJcKYvXA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "10"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f4b1362dfdc8631f2f6f4613a9689179",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "15",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Японская пила STANLEY FatMax 0-20-331 120 мм",
+                        "ProductPrice": "864",
+                        "BlockContentId": "ua4vg0G3YKF11nXJcKYvXA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "10"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "870 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "1033 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Пирометр (бесконтактный термометр) BENETECH GM320",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-16%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=dce13aa45d8301abb4d5131e3824c439",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "16",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пирометр (бесконтактный термометр) BENETECH GM320",
+                        "ProductPrice": "870",
+                        "BlockContentId": "1o7WNS0rfxUcbYJRi61ecg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "16"
+                      },
+                      "url": "https://nquw.adj.st/product/857397023?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F857397023%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D857397023&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F857397023%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D857397023"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=dce13aa45d8301abb4d5131e3824c439",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "16",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пирометр (бесконтактный термометр) BENETECH GM320",
+                        "ProductPrice": "870",
+                        "BlockContentId": "1o7WNS0rfxUcbYJRi61ecg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "16"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=25cac97c023864734dace77b45e850d3",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "16",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пирометр (бесконтактный термометр) BENETECH GM320",
+                        "ProductPrice": "870",
+                        "BlockContentId": "1o7WNS0rfxUcbYJRi61ecg",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "16"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "129 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "150 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Шпажки-шампуры для шашлыка \"Континент\" бамбуковые, 30 см (100 шт)",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-14%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=c999c12c98468a0fb2e0361e16291a42",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "17",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шпажки-шампуры для шашлыка \"Континент\" бамбуковые, 30 см (100 шт)",
+                        "ProductPrice": "129",
+                        "BlockContentId": "FptnR0Y1e1gQIhAW_mJqMQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "14"
+                      },
+                      "url": "https://nquw.adj.st/product/101278358040?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F918001286%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101278358040&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F918001286%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101278358040"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=c999c12c98468a0fb2e0361e16291a42",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "17",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шпажки-шампуры для шашлыка \"Континент\" бамбуковые, 30 см (100 шт)",
+                        "ProductPrice": "129",
+                        "BlockContentId": "FptnR0Y1e1gQIhAW_mJqMQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "14"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=a5043fd658840426a739aa5f986c0f1f",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "17",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шпажки-шампуры для шашлыка \"Континент\" бамбуковые, 30 см (100 шт)",
+                        "ProductPrice": "129",
+                        "BlockContentId": "FptnR0Y1e1gQIhAW_mJqMQ",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "14"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_item_container",
+                  "eddl_item_content": [
+                    {
+                      "type": "eddl_market_item",
+                      "eddl_item_background_color": "#FFFFFF",
+                      "eddl_width": 132,
+                      "eddl_height": 207,
+                      "eddl_paddings": {
+                        "top": 8,
+                        "bottom": 8,
+                        "left": 8,
+                        "right": 8
+                      },
+                      "eddl_margin_top": 2,
+                      "eddl_margin_left": 8,
+                      "eddl_offer_items": [
+                        {
+                          "type": "eddl_market_image_container",
+                          "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_market_item_content_container",
+                          "eddl_market_content_paddings": {},
+                          "eddl_market_content_alignment_horizontal": "left",
+                          "eddl_item_content_items": [
+                            {
+                              "type": "eddl_market_item_price_container",
+                              "eddl_price_orientation": "horizontal",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_price_items": [
+                                {
+                                  "type": "eddl_market_new_price",
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_new_price_font_size": 16,
+                                  "eddl_primary_text_color": "#09141F",
+                                  "eddl_new_price_line_height": 20,
+                                  "eddl_new_price_color": "#09141F",
+                                  "eddl_new_price": "999 ₽"
+                                },
+                                {
+                                  "type": "eddl_market_old_price",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_market_text_alignment_horizontal": "left",
+                                  "eddl_old_price_font_size": 13,
+                                  "eddl_secondary_text_color": "#999999",
+                                  "eddl_old_price_line_height": 16,
+                                  "eddl_old_price_color": "#999999",
+                                  "eddl_old_price": "2100 ₽"
+                                }
+                              ],
+                              "eddl_prices_margin_top": 1
+                            },
+                            {
+                              "type": "eddl_market_item_description",
+                              "eddl_market_text_alignment_horizontal": "left",
+                              "eddl_title": "Мини HD камера SQ-11",
+                              "title_max_lines": 2,
+                              "eddl_primary_text_color": "#09141F",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "type": "eddl_market_discount_badge",
+                      "eddl_badge_discount_width": 50,
+                      "eddl_badge_discount_height": 24,
+                      "eddl_badge_margin_top": 110,
+                      "eddl_badge_margin_left": 0,
+                      "eddl_badge_discount_font_size": 13,
+                      "eddl_badge_discount_line_height": 24,
+                      "eddl_item_discount_badge_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                      "eddl_discount_badge_text": "-52%",
+                      "eddl_discount_badge_text_color": "#09141F"
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=e0f68efba9786c31bbba0e2187b92625",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "18",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мини HD камера SQ-11",
+                        "ProductPrice": "999",
+                        "BlockContentId": "i40hC3ghaJtc7bZuEpsDyA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "52"
+                      },
+                      "url": "https://nquw.adj.st/product/101241150209?adj_t=fcnlz7d&adj_adgroup=2445750&adj_campaign=edadeal_home_block&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F883163501%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101241150209&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fproduct%2F883163501%3Fclid%3D2445750%26utm_source%3Dedadeal%26utm_medium%3Dcpm%26utm_campaign%3Dedadeal_home_block%26utm_term%3D%26utm_content%3D%26sku%3D101241150209"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=e0f68efba9786c31bbba0e2187b92625",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "18",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мини HD камера SQ-11",
+                        "ProductPrice": "999",
+                        "BlockContentId": "i40hC3ghaJtc7bZuEpsDyA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "52"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=8d39d3da320fb158d9582845a2be8f71",
+                      "payload": {
+                        "Promos": "",
+                        "BlockId": "141",
+                        "ItemType": "YaMarketOffer",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "18",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мини HD камера SQ-11",
+                        "ProductPrice": "999",
+                        "BlockContentId": "i40hC3ghaJtc7bZuEpsDyA",
+                        "BlockVersionId": "1112",
+                        "ProductDiscount": "52"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_market_show_all_item_container",
+                  "eddl_width": 132,
+                  "eddl_height": 207,
+                  "eddl_paddings": {
+                    "top": 8,
+                    "bottom": 8,
+                    "left": 8,
+                    "right": 8
+                  },
+                  "eddl_margin_top": 2,
+                  "eddl_item_show_all_arrow_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "eddl_item_show_all_text": "Больше выгоды на Яндекс.Маркете",
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=efdc0bf5b6669bf6df9d329bccb679fb",
+                      "payload": {
+                        "slug": "ShowAll",
+                        "BlockId": "141",
+                        "ItemType": "Button",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "19",
+                        "BlockLayout": "Carousel",
+                        "BlockVersionId": "1112"
+                      },
+                      "url": "https://nquw.adj.st/special/newusers-benefit?adj_t=fcnlz7d&adj_campaign=edadeal_home_block&adj_adgroup=2445750&adj_fallback=https%3A%2F%2Fmarket.yandex.ru%2Fspecial%2Fnewusers-benefit%3Fclid%3D2445750&utm_source=edadeal&utm_medium=cpm&utm_campaign=edadeal_home_block&adj_redirect_macos=https%3A%2F%2Fmarket.yandex.ru%2Fspecial%2Fnewusers-benefit%3Fclid%3D2445750&utm_source=edadeal&utm_medium=cpm&utm_campaign=edadeal_home_block"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=efdc0bf5b6669bf6df9d329bccb679fb",
+                      "payload": {
+                        "slug": "ShowAll",
+                        "BlockId": "141",
+                        "ItemType": "Button",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "19",
+                        "BlockLayout": "Carousel",
+                        "BlockVersionId": "1112"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=3936b719c917cea03fa71fe00a090f59",
+                      "payload": {
+                        "slug": "ShowAll",
+                        "BlockId": "141",
+                        "ItemType": "Button",
+                        "BlockSlug": "YaMarketDiscountsHomeAndDacha",
+                        "XPosition": "19",
+                        "BlockLayout": "Carousel",
+                        "BlockVersionId": "1112"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

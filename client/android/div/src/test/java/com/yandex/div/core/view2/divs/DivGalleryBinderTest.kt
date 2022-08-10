@@ -1,0 +1,130 @@
+package com.yandex.div.core.view2.divs
+
+import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.state.DivViewState
+import com.yandex.div.core.state.GalleryState
+import com.yandex.div.core.view2.DivBinder
+import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
+import com.yandex.div.core.view2.divs.gallery.DivLinearLayoutManager
+import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.Div
+import com.yandex.div2.DivGallery
+import org.junit.Assert
+import org.junit.Before
+import org.junit.Test
+import org.junit.runner.RunWith
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.spy
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.Implementation
+import org.robolectric.annotation.Implements
+import org.robolectric.shadow.api.Shadow
+
+@RunWith(RobolectricTestRunner::class)
+@Config(shadows = [DivGalleryBinderTest.ShadowDivLinearLayoutManager::class])
+class DivGalleryBinderTest : DivBinderTest() {
+
+    private val divViewState = mock<DivViewState>()
+    private val divBinder = mock<DivBinder>()
+
+    private val underTest = DivGalleryBinder(
+        baseBinder = baseBinder(),
+        viewCreator = viewCreator,
+        divBinder = { divBinder },
+        divPatchCache = mock()
+    )
+
+    private val div = div()
+    private val divGallery = divGallery(div)
+    private val recyclerView = recyclerView(div).apply {
+        layoutParams = defaultLayoutParams()
+    }
+
+    @Before
+    fun `init current state`() {
+        whenever(divView.currentState).thenReturn(divViewState)
+    }
+
+    @Test
+    fun `scroll to default item`() {
+        underTest.bindView(recyclerView, divGallery, divView, rootPath())
+
+        Assert.assertEquals(DEFAULT_ITEM, recyclerView.layoutManager.shadow().position)
+    }
+
+    @Test
+    fun `keep scroll position on rebind`() {
+        underTest.bindView(recyclerView, divGallery, divView, rootPath())
+
+        (recyclerView.layoutManager as? DivLinearLayoutManager)!!.instantScrollToPosition(DEFAULT_ITEM + 1)
+        underTest.bindView(recyclerView, divGallery, divView, rootPath())
+
+        Assert.assertEquals(DEFAULT_ITEM + 1, recyclerView.layoutManager.shadow().position)
+    }
+
+    @Test
+    fun `set default item when has current state without visible item index`() {
+        underTest.bindView(recyclerView, divGallery, divView, rootPath())
+
+        Assert.assertEquals(DEFAULT_ITEM, recyclerView.layoutManager.shadow().position)
+    }
+
+    @Test
+    fun `restore previous position`() {
+        whenever(divViewState.getBlockState<GalleryState>(any())).thenReturn(GalleryState(DEFAULT_ITEM + 1, 0))
+
+        underTest.bindView(recyclerView, divGallery, divView, rootPath())
+
+        Assert.assertEquals(DEFAULT_ITEM + 1, recyclerView.layoutManager.shadow().position)
+    }
+
+    @Test
+    fun `do not snap on first position`() {
+        val galleryJson = divGallery.writeToJSON()
+        galleryJson.remove("default_item")
+        val divGallery = DivGallery(DivParsingEnvironment(ParsingErrorLogger.ASSERT), galleryJson)
+
+        underTest.bindView(recyclerView, divGallery, divView, rootPath())
+
+        Assert.assertEquals(0, recyclerView.layoutManager.shadow().position)
+        verify(recyclerView, never()).scrollToPosition(any())
+    }
+
+    private fun div() = UnitTestData(GALLERY_DIR, "gallery_default_item.json").div
+
+    private fun divGallery(div: Div) = div.value() as DivGallery
+
+    private fun recyclerView(div: Div) = spy(viewCreator.create(div, ExpressionResolver.EMPTY) as RecyclerView)
+
+    private fun RecyclerView.LayoutManager?.shadow(): ShadowDivLinearLayoutManager {
+        return Shadow.extract(this) as ShadowDivLinearLayoutManager
+    }
+
+    @Implements(DivLinearLayoutManager::class)
+    class ShadowDivLinearLayoutManager {
+
+        var position: Int = RecyclerView.NO_POSITION
+
+        @Implementation
+        fun instantScrollToPosition(position: Int) {
+            this.position = position
+        }
+
+        @Implementation
+        fun instantScrollToPositionWithOffset(position: Int, offset: Int) {
+            this.position = position
+        }
+    }
+
+    private companion object {
+        private const val GALLERY_DIR = "div-gallery"
+        private const val DEFAULT_ITEM = 2
+    }
+}

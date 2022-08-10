@@ -1,0 +1,128 @@
+.gallery {}
+
+.gallery_orientation_horizontal {}
+
+.gallery_orientation_vertical {}
+
+.gallery__scroller {
+    width: 100%;
+    height: 100%;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.gallery__scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.gallery_orientation_horizontal > .gallery__scroller {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.gallery_orientation_vertical > .gallery__scroller {
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.gallery_scroll-snap > .gallery__scroller {
+    scroll-snap-type: mandatory;
+    scroll-snap-type: both mandatory;
+}
+
+.gallery_scroll-snap > .gallery__scroller > .gallery__items-grid {
+    scroll-snap-align: start;
+}
+
+.gallery__items-grid {
+    box-sizing: border-box;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.gallery_orientation_horizontal > .gallery__scroller > .gallery__items-grid {
+    flex-direction: column;
+}
+
+.gallery_orientation_vertical > .gallery__scroller > .gallery__items-grid {
+    flex-direction: row;
+}
+
+.gallery__items {
+    box-sizing: border-box;
+    display: inline-grid;
+}
+
+.gallery_orientation_horizontal > .gallery__scroller > .gallery__items-grid > .gallery__items {
+    justify-content: start;
+    grid-template-rows: 100%;
+    grid-auto-flow: column;
+    height: 100%;
+    min-height: 0;
+}
+
+.gallery_orientation_vertical > .gallery__scroller > .gallery__items-grid > .gallery__items {
+    align-content: start;
+    grid-template-columns: 100%;
+    grid-auto-flow: row;
+    width: 100%;
+    min-width: 0;
+}
+
+.gallery__arrow {
+    position: absolute;
+    top: 50%;
+    width: 4.4em;
+    height: 4.4em;
+    margin-top: -2.2em;
+    cursor: pointer;
+}
+
+.gallery__arrow:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    content: '';
+    border-radius: 100%;
+    background: var(--divkit-gallery-arrow-bg, #fff);
+    box-shadow: 0 .2em .4em 0 var(--divkit-gallery-arrow-shadow, rgba(0, 0, 0, .1));
+    transition: .15s ease-out;
+    transition-property: transform,box-shadow;
+}
+
+.gallery__arrow:hover:before {
+    transform: scale(1.1);
+    box-shadow: 0 .2em .8em 0 var(--divkit-gallery-arrow-shadow, rgba(0, 0, 0, .1));
+}
+
+.gallery__arrow:active:before {
+    transform: scale(1.05);
+    box-shadow: 0 .1em .4em 0 var(--divkit-gallery-arrow-shadow, rgba(0, 0, 0, .1));
+}
+
+.gallery__arrow-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 3.2em;
+    height: 3.2em;
+    margin: auto;
+}
+
+.gallery__arrow_left {
+    left: .6em;
+}
+
+.gallery__arrow_right {
+    right: .6em;
+}
+
+.gallery__arrow-icon-path {
+    fill: var(--divkit-gallery-arrow-fg, #000);
+}

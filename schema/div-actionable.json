@@ -1,0 +1,48 @@
+{
+  "properties": {
+    "action": {
+      "$ref": "div-action.json",
+      "$description": "translations.json#/div_actionable_action"
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_actionable_actions"
+    },
+    "longtap_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_actionable_longtap_actions",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "doubletap_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_actionable_doubletap_actions",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "action_animation": {
+      "$ref": "div-animation.json",
+      "default_value": "{\"name\": \"fade\", \"start_value\": 1, \"end_value\": 0.6, \"duration\": 100 }",
+      "$description": "translations.json#/div_actionable_action_animation"
+    }
+  }
+}

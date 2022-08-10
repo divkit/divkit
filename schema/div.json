@@ -1,0 +1,66 @@
+{
+  "generate_case_for_templates_kotlinDsl": true,
+  "generate_case_for_templates_typescript": true,
+  "anyOf": [
+    {
+      "$ref": "div-image.json",
+      "$description": "translations.json#/div_image_short"
+    },
+    {
+      "$ref": "div-gif-image.json",
+      "$description": "translations.json#/div_gif_image_short"
+    },
+    {
+      "$ref": "div-text.json",
+      "$description": "translations.json#/div_text_short"
+    },
+    {
+      "$ref": "div-separator.json",
+      "$description": "translations.json#/div_separator_short"
+    },
+    {
+      "$ref": "div-container.json",
+      "$description": "translations.json#/div_container_short"
+    },
+    {
+      "$ref": "div-grid.json",
+      "$description": "translations.json#/div_grid_short"
+    },
+    {
+      "$ref": "div-gallery.json",
+      "$description": "translations.json#/div_gallery_short"
+    },
+    {
+      "$ref": "div-pager.json",
+      "$description": "translations.json#/div_pager_short"
+    },
+    {
+      "$ref": "div-tabs.json",
+      "$description": "translations.json#/div_tabs_short"
+    },
+    {
+      "$ref": "div-state.json",
+      "$description": "translations.json#/div_state_short"
+    },
+    {
+      "$ref": "div-custom.json",
+      "$description": "translations.json#/div_custom_short",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "$ref": "div-indicator.json",
+      "$description": "translations.json#/div_indicator_short"
+    },
+    {
+      "$ref": "div-slider.json",
+      "$description": "translations.json#/div_slider_short"
+    },
+    {
+      "$ref": "div-input.json",
+      "$description": "translations.json#/div_input_short"
+    }
+  ]
+}

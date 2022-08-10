@@ -1,0 +1,32 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+              "alpha": 0.3,
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "text",
+              "text": "We learned to talk",
+              "font_size": 12,
+              "font_weight": "medium"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "side_element": {
+                        "position": "right",
+                        "size": "s",
+                        "element": {
+                            "date_month": "\u0410\u0412\u0413",
+                            "date_day": "10",
+                            "type": "date_element"
+                        }
+                    },
+                    "type": "div-universal-block"
+                }
+            ]
+        }
+    ],
+    "url": "http://yandex.ru",
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

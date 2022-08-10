@@ -1,0 +1,38 @@
+.image {
+    min-width: 0;
+    min-height: 0;
+}
+
+.image_is-width-content {
+    min-width: max-content;
+}
+
+.image_is-height-content {
+    min-height: max-content;
+}
+
+.image__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* Placeholder styling */
+    background-size: cover;
+    background-position: 50% 50%;
+}
+
+.image_error .image__image {
+    visibility: hidden;
+}
+
+.image__aspect-wrapper {
+    position: relative;
+    display: block;
+}
+
+.image_aspect .image__image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}

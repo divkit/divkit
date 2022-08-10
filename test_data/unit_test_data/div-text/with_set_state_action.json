@@ -1,0 +1,9 @@
+{
+  "type": "text",
+  "text": "It is a dark time for the Rebellion",
+  "font_size": 12,
+  "action": {
+    "url": "div-action://set_state?state_id=42",
+    "log_id": "test_log_id"
+  }
+}

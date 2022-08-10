@@ -1,0 +1,162 @@
+{
+  "protocol_name": "div-base",
+  "swift_super_protocol": "DivBlockModeling",
+  "type": "object",
+  "include_in_documentation_toc": true,
+  "properties": {
+    "id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "$description": "translations.json#/div_base_id"
+    },
+    "border": {
+      "$ref": "div-border.json",
+      "$description": "translations.json#/div_base_border"
+    },
+    "width": {
+      "$ref": "div-size.json",
+      "default_value": "{\"type\": \"match_parent\"}",
+      "$description": "translations.json#/div_base_width"
+    },
+    "height": {
+      "$ref": "div-size.json",
+      "default_value": "{\"type\": \"wrap_content\"}",
+      "$description": "translations.json#/div_base_height"
+    },
+    "background": {
+      "type": "array",
+      "items": {
+        "$ref": "div-background.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_base_background"
+    },
+    "paddings": {
+      "$ref": "div-edge-insets.json",
+      "$description": "translations.json#/div_base_paddings"
+    },
+    "margins": {
+      "$ref": "div-edge-insets.json",
+      "$description": "translations.json#/div_base_margins"
+    },
+    "alpha": {
+      "type": "number",
+      "default_value": "1.0",
+      "constraint": "number >= 0.0 && number <= 1.0",
+      "$description": "translations.json#/div_base_alpha"
+    },
+    "alignment_vertical": {
+      "$ref": "div-alignment-vertical.json",
+      "$description": "translations.json#/div_base_alignment_vertical"
+    },
+    "alignment_horizontal": {
+      "$ref": "div-alignment-horizontal.json",
+      "$description": "translations.json#/div_base_alignment_horizontal"
+    },
+    "row_span": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_base_row_span"
+    },
+    "column_span": {
+      "$ref": "common.json#/non_negative_integer",
+      "$description": "translations.json#/div_base_column_span"
+    },
+    "visibility_action": {
+      "$ref": "div-visibility-action.json",
+      "$description": "translations.json#/div_base_visibility_action"
+    },
+    "visibility_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-visibility-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_base_visibility_actions"
+    },
+    "tooltips": {
+      "type": "array",
+      "items": {
+        "$ref": "div-tooltip.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_base_tooltips",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "accessibility": {
+      "$ref": "div-accessibility.json",
+      "$description": "translations.json#/div_base_accessibility"
+    },
+    "extensions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-extension.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_base_extensions",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "transition_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-transition-trigger.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "supports_expressions": false,
+      "$description": "translations.json#/div_base_transition_triggers"
+    },
+    "transition_in": {
+      "$ref": "div-appearance-transition.json",
+      "$description": "translations.json#/div_base_transition_in"
+    },
+    "transition_change": {
+      "$ref": "div-change-transition.json",
+      "$description": "translations.json#/div_base_transition_change"
+    },
+    "transition_out": {
+      "$ref": "div-appearance-transition.json",
+      "$description": "translations.json#/div_base_transition_out"
+    },
+    "selected_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_base_selected_actions",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "focus": {
+      "$ref": "div-focus.json",
+      "$description": "translations.json#/div_base_focus",
+      "platforms": [
+        "android"
+      ]
+    },
+    "visibility": {
+      "$ref": "div-visibility.json",
+      "$description": "translations.json#/div_base_visibility",
+      "default_value": "visible"
+    },
+    "transform": {
+      "$ref": "div-transform.json",
+      "$description": "translations.json#/div_base_transform",
+      "platforms": [
+      ]
+    }
+  }
+}

@@ -1,0 +1,129 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 14,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#1ABC9C",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "margins": {
+        "left": 8,
+        "right": 8
+      },
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#34495E"
+        }
+      ],
+      "border": {
+        "corner_radius": 6
+      }
+    },
+    "tabs_preset": {
+      "type": "tabs",
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "right": 16
+      },
+      "tab_title_style": {
+        "animation_type": "none",
+        "item_spacing": 5
+      },
+      "margins": {
+        "bottom": 50
+      },
+      "items": [
+        {
+          "title": "Tab 1",
+          "div": {
+            "type": "text_block",
+            "text": "Item0",
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        },
+        {
+          "title": "Tab 2",
+          "div": {
+            "type": "text_block",
+            "text": "Item1",
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        },
+        {
+          "title": "Tab 3",
+          "div": {
+            "type": "text_block",
+            "text": "Item3",
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        },
+        {
+          "title": "Tab 4",
+          "div": {
+            "type": "text_block",
+            "text": "Item4",
+            "width": {
+              "type": "match_parent"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "tabs_preset",
+              "tab_title_style": {
+                "animation_type": "slide",
+                "item_spacing": 5
+              }
+            },
+            {
+              "type": "tabs_preset",
+              "tab_title_style": {
+                "animation_type": "fade",
+                "item_spacing": 5
+              }
+            },
+            {
+              "type": "tabs_preset"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

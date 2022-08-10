@@ -1,0 +1,59 @@
+{
+  "templates": {
+    "label_text": {
+      "type": "text",
+      "font_size": 16,
+      "font_weight": "bold",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "height": {
+        "type": "match_parent"
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "paddings": {
+        "top": 8,
+        "left": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "action_animation": {
+        "name": "set",
+        "items": [
+          {
+            "name": "fade",
+            "start_value": 1,
+            "duration": 500,
+            "end_value": 0.2
+          },
+          {
+            "name": "scale",
+            "start_value": 1,
+            "duration": 500,
+            "end_value": 0.6
+          }
+        ],
+        "interpolator": "ease"
+      }
+    }
+  },
+  "card": {
+    "log_id": "action_animation",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "label_text",
+          "text": "Set, interpolator: ease, duration: 500",
+          "actions": [
+            {
+              "log_id": "animation_ease_set",
+              "url": "fake"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

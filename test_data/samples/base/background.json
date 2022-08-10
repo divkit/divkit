@@ -1,0 +1,152 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "text_color": "#ffffff",
+      "height": {
+        "type": "fixed",
+        "value": 184
+      },
+      "paddings": {
+        "left": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24,
+        "bottom": 16
+      },
+      "text_alignment_vertical": "bottom",
+      "font_size": 15,
+      "line_height": 20
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div":{
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Background"
+            },
+            {
+              "type": "subtitle",
+              "text": "It can be a solid color, gradient, or an image. You can also overlay multiple backgrounds on top of each other.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 150
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#C4C4C4",
+                      "angle": 270
+                    }
+                  ],
+                  "text_alignment_vertical": "bottom",
+                  "text": "Solid background"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 150
+                  },
+                  "background": [
+                    {
+                      "type": "gradient",
+                      "colors": [
+                        "#0fff",
+                        "#000"
+                      ],
+                      "angle": 270
+                    }
+                  ],
+                  "text_alignment_vertical": "bottom",
+                  "text": "Gradient"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 150
+                  },
+                  "background": [
+                    {
+                      "type": "image",
+                      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
+                    }
+                  ],
+                  "text_alignment_vertical": "bottom",
+                  "text": "Image"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 150
+                  },
+                  "background": [
+                    {
+                      "type": "image",
+                      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
+                    },
+                    {
+                      "type": "gradient",
+                      "colors": [
+                        "#0fff",
+                        "#000"
+                      ],
+                      "angle": 270
+                    }
+                  ],
+                  "text_alignment_vertical": "bottom",
+                  "text": "Gradient and image"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

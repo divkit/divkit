@@ -1,0 +1,138 @@
+{
+  "templates": {
+    "text_base": {
+      "type": "text",
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 12,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "grid",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Table"
+            },
+            {
+              "type": "subtitle",
+              "text": "Elements are arranged in rows and columns.\n\nCells in rows and columns can be merged: in the example, element 1 merges 2 cells vertically and element 4 merges 2 cells horizontally. There are 2 columns total in the table.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "grid",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "alignment_horizontal": "center",
+              "column_count": 2,
+              "items": [
+                {
+                  "type": "text_base",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 124
+                  },
+                  "margins": {
+                    "right": 4,
+                    "bottom": 4
+                  },
+                  "row_span": 2,
+                  "text": "1"
+                },
+                {
+                  "type": "text_base",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "margins": {
+                    "bottom": 4
+                  },
+                  "text": "2"
+                },
+                {
+                  "type": "text_base",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "margins": {
+                    "bottom": 4
+                  },
+                  "text": "3"
+                },
+                {
+                  "type": "text_base",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1
+                  },
+                  "column_span": 2,
+                  "text": "4"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

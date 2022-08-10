@@ -1,0 +1,98 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "tabs",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "title": "test1",
+              "div": {
+                "type": "container",
+                "height": {
+                  "type": "match_parent"
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#ffffff"
+                      }
+                    ],
+                    "text": "top"
+                  },
+                  {
+                    "type": "separator",
+                    "delimiter_style": {
+                      "color": "#00000000"
+                    },
+                    "height": {
+                      "type": "match_parent"
+                    }
+                  },
+                  {
+                    "type": "text",
+                    "width": {
+                      "type": "wrap_content"
+                    },
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#ffffff"
+                      }
+                    ],
+                    "text": "bottom"
+                  }
+                ]
+              }
+            },
+            {
+              "title": "test2",
+              "div": {
+                "type": "container",
+                "width": {
+                  "type": "fixed",
+                  "value": 100
+                },
+                "height": {
+                  "type": "match_parent"
+                },
+                "items": [
+                  {
+                    "type": "separator",
+                    "height": {
+                      "type": "fixed",
+                      "value": 100
+                    },
+                    "delimiter_style": {
+                      "color": "#00000000"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

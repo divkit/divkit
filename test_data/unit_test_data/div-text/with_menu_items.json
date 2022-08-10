@@ -1,0 +1,49 @@
+{
+  "type": "text",
+  "width": {
+    "type": "match_parent"
+  },
+  "height": {
+    "type": "wrap_content"
+  },
+  "margins": {
+    "left": 16,
+    "top": 16,
+    "right": 16,
+    "bottom": 16
+  },
+  "action": {
+    "log_id": "multi_menu",
+    "menu_items": [
+      {
+        "text": "Single action",
+        "action": {
+          "url": "http://ya.ru?q=single",
+          "log_id": "single"
+        }
+      },
+      {
+        "text": "Multiple actions",
+        "actions": [
+          {
+            "url": "custom-menu://first",
+            "log_id": "first"
+          },
+          {
+            "url": "custom-menu://second",
+            "log_id": "second"
+          }
+        ]
+      },
+      {
+        "text": "No actions"
+      }
+    ]
+  },
+  "font_size": 20,
+  "font_weight": "medium",
+  "text_alignment_horizontal": "center",
+  "text_alignment_vertical": "center",
+  "text_color": "#1ABC9C",
+  "text": "Open menu"
+}

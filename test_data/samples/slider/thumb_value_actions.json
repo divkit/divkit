@@ -1,0 +1,156 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "text_alpha",
+        "type": "number",
+        "value": 0.5
+      },
+      {
+        "name": "my_thumb_value",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{my_thumb_value >= 0}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "change_text_alpha",
+            "url": "div-action://set_variable?name=text_alpha&value=@{my_thumb_value}"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Actions when changing the slider value."
+            },
+            {
+              "type": "subtitle",
+              "text": "The slider lets you track changes in the selected value.\n\nIn the example, the slider is used to set text transparency: a number in the range from 0 to 1 is selected and when the value changes, the 'alpha' field of the text is updated.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "items": [
+                {
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/oldbg.png",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "alpha": "@{div(text_alpha, 255.0)}"
+                },
+                {
+                  "type": "slider",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "margins": {
+                    "top": 16,
+                    "left": 12,
+                    "right": 12
+                  },
+                  "max_value": 255,
+                  "min_value": 0,
+                  "thumb_value_variable": "my_thumb_value",
+                  "thumb_style": {
+                    "type": "shape_drawable",
+                    "color": "#FFCC00",
+                    "stroke": {
+                      "color": "#ffffff",
+                      "width": 3
+                    },
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 32
+                      },
+                      "item_width": {
+                        "type": "fixed",
+                        "value": 32
+                      },
+                      "corner_radius": {
+                        "type": "fixed",
+                        "value": 100
+                      }
+                    }
+                  },
+                  "track_active_style": {
+                    "type": "shape_drawable",
+                    "color": "#FFCC00",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 6
+                      }
+                    }
+                  },
+                  "track_inactive_style": {
+                    "type": "shape_drawable",
+                    "color": "#20000000",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 6
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "subtitle",
+                  "text": "Slider with one pointer",
+                  "margins": {
+                    "top": 16
+                  },
+                  "text_alignment_horizontal": "center"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

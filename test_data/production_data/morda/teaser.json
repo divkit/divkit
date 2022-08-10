@@ -1,0 +1,149 @@
+{
+    "templates": {
+        "teaser_card": {
+            "type": "container",
+            "height": {
+                "type": "wrap_content"
+            },
+            "width": {
+                "type": "match_parent"
+            },
+            "background": [{
+                "$color": "background_color",
+                "type": "solid"
+            }],
+            "orientation": "overlap",
+            "items": [{
+                "type": "grid",
+                "column_count": 3,
+                "height": {
+                    "type": "wrap_content"
+                },
+                "width": {
+                    "type": "match_parent"
+                },
+                "paddings": {
+                    "left": 12,
+                    "top": 12,
+                    "bottom": 12
+                },
+                "orientation": "vertical",
+                "items": [{
+                    "type": "text",
+                    "max_lines": 2,
+                    "font_size": 18,
+                    "line_height": 20,
+                    "margins": {
+                        "bottom": 7
+                    },
+                    "font_weight": "medium",
+                    "$text": "teaser_title",
+                    "column_span": 2,
+                    "width": {
+                        "type": "match_parent",
+                        "weight": 5
+                    }
+                }, {
+                    "type": "image",
+                    "width": {
+                        "type": "match_parent",
+                        "weight": 3
+                    },
+                    "height": {
+                        "type": "match_parent"
+                    },
+                    "row_span": 3,
+                    "scale": "fit",
+                    "alignment_vertical": "center",
+                    "content_alignment_horizontal": "left",
+                    "$image_url": "teaser_image"
+
+                }, {
+                    "type": "text",
+                    "max_lines": 4,
+                    "font_size": 14,
+                    "line_height": 20,
+                    "margins": {
+                        "bottom": 9
+                    },
+                    "$text": "teaser_text",
+                    "column_span": 2,
+                    "width": {
+                        "type": "match_parent",
+                        "weight": 5
+                    }
+                }, {
+                    "type": "text",
+                    "$text": "login_button_text",
+                    "text_color": "#CC000000",
+                    "font_size": 13,
+                    "line_height": 16,
+                    "paddings": {
+                        "right": 12,
+                        "left": 12,
+                        "bottom": 8,
+                        "top": 8
+                    },
+                    "width": {
+                        "type": "wrap_content"
+                    },
+                    "background": [{
+                        "type": "solid",
+                        "color": "#ffdc60"
+                    }],
+                    "border": {
+                        "corner_radius": 4
+                    }
+                }, {
+                    "type": "text",
+                    "max_lines": 1,
+                    "font_size": 14,
+                    "line_height": 20,
+                    "text_color": "#65686B",
+                    "alignment_vertical": "center",
+                    "margins": {
+                        "left": 12
+                    },
+                    "width": {
+                        "type": "wrap_content"
+                    },
+                    "$text": "teaser_age"
+
+                }]
+            }, {
+                "type": "image",
+                "width": {
+                    "type": "fixed",
+                    "value": 20
+                },
+                "alignment_horizontal": "right",
+                "height": {
+                    "type": "fixed",
+                    "value": 20
+                },
+                "margins": {
+                    "top": 12,
+                    "right": 7,
+                    "left": 7
+                },
+                "image_url": "https://yastatic.net/s3/home/yandex-app/services_div/redesign/zen_menu_dark.3.png"
+            }]
+        }
+    },
+    "card": {
+        "type": "div2",
+        "log_id": "teasers_gallerty",
+        "states": [{
+            "state_id": 0,
+            "div": {
+                "type": "teaser_card",
+                "background_color": "#BEDAFA",
+                "teaser_image": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                "teaser_text": "Закрытие участка Сокольнической линии метро",
+                "teaser_title": "Закрытие участка Сокольнической линии метроЗакрытие участка Сокольнической линии метроЗакрытие участка Сокольнической линии метро",
+                "teaser_age": "16+",
+                "login_button_text": "Войти в Яндекс"
+            }
+        }]
+    }
+}

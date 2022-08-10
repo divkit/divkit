@@ -1,0 +1,24 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_array",
+      "array": [
+        {
+          "type": "entity_with_complex_property",
+          "property": {
+            "value": "https://ya.ru"
+          }
+        },
+        {
+          "type": "entity_with_complex_property",
+          "property": {
+            "value": "https://ya.ru"
+          }
+        }
+      ]
+    }
+  },
+  "entity": {
+    "type": "t_0"
+  }
+}

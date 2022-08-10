@@ -1,0 +1,40 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "action": {
+                        "url": "https://alicekit.s3.yandex.net/images_for_divs/rabbit.jpg"
+                    },
+                    "image": {
+                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/rabbit.jpg",
+                        "type": "div-image-element",
+                        "ratio": 2
+                    },
+                    "type": "div-image-block"
+                },
+                {
+                    "type": "div-separator-block"
+                },
+                {
+                    "action": {
+                        "url": "https://alicekit.s3.yandex.net/images_for_divs/rabbit.jpg"
+                    },
+                    "image": {
+                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/rabbit.jpg",
+                        "type": "div-image-element",
+                        "ratio": 0.5
+                    },
+                    "type": "div-image-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

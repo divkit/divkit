@@ -1,0 +1,28 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_download_callbacks",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "properties": {
+    "on_fail_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_download_callbacks_on_fail_actions"
+    },
+    "on_success_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_download_callbacks_on_success_actions"
+    }
+  }
+}

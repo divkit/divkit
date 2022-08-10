@@ -1,0 +1,80 @@
+{
+  "states": [
+    {
+      "state_id": 1,
+      "blocks": [
+        {
+          "type": "div-buttons-block",
+          "items":[
+            {
+              "text": "кнопка 1",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 2",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 3",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 4",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 5",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 6",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 7",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 8",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 9",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            },
+            {
+              "text": "кнопка 10",
+              "action": {
+                "url": "http://ya.ru"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "background": [
+    {
+      "color": "#DDA0DD",
+      "type": "div-solid-background"
+    }
+  ]
+}

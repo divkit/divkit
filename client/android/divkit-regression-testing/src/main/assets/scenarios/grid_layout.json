@@ -1,0 +1,153 @@
+{
+  "templates": {
+    "grid_element": {
+      "type": "separator",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "height": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "margins": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      }
+    },
+    "button": {
+      "type": "text",
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ],
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#34495E"
+    }
+  },
+  "card": {
+    "log_id": "grid_layout",
+    "variables": [
+      {
+        "type": "integer",
+        "name": "row_span_left",
+        "value": 2
+      },
+      {
+        "type": "integer",
+        "name": "row_span_right",
+        "value": 1
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "grid",
+              "width": {
+                "type": "fixed",
+                "value": 288
+              },
+              "height": {
+                "type": "fixed",
+                "value": 192
+              },
+              "margins": {
+                "top": 16
+              },
+              "paddings": {
+                "left": 8,
+                "top": 8,
+                "right": 8,
+                "bottom": 8
+              },
+              "alignment_horizontal": "center",
+              "column_count": 3,
+              "items": [
+                {
+                  "type": "grid_element",
+                  "row_span": "@{row_span_left}",
+                  "background_color": "#3498DB"
+                },
+                {
+                  "type": "grid_element",
+                  "background_color": "#F1C40F"
+                },
+                {
+                  "type": "grid_element",
+                  "row_span": "@{row_span_right}",
+                  "background_color": "#E67E22"
+                },
+                {
+                  "type": "grid_element",
+                  "column_span": 2,
+                  "background_color": "#E74C3C"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "alignment_vertical": "bottom",
+              "text": "UPDATE LAYOUT",
+              "actions": [
+                {
+                  "log_id": "update_row_span_left",
+                  "url": "div-action://set_variable?name=row_span_left&value=1"
+                },
+                {
+                  "log_id": "update_row_span_right",
+                  "url": "div-action://set_variable?name=row_span_right&value=2"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

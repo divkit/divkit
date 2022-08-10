@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_match_parent_size",
+  "properties": {
+    "weight": {
+      "$ref": "common.json#/positive_number",
+      "$description": "translations.json#/div_match_parent_size_weight"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "match_parent"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

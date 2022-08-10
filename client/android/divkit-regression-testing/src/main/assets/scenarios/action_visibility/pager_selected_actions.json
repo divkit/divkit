@@ -1,0 +1,77 @@
+{
+  "templates": {
+    "item": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 80
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFB347"
+        }
+      ],
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_color": "#FFF"
+    }
+  },
+  "card": {
+    "log_id": "pager_selected_actions",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "layout_mode": {
+            "neighbour_page_width": {
+              "type": "fixed",
+              "value": 10
+            },
+            "type": "fixed"
+          },
+          "items": [
+            {
+              "type": "item",
+              "text": "0",
+              "selected_actions": [
+                {
+                  "log_id": "0",
+                  "url": "div-action://set_state?state_id=0/description/0"
+                }
+              ]
+            },
+            {
+              "type": "item",
+              "text": "1",
+              "selected_actions": [
+                {
+                  "log_id": "1",
+                  "url": "div-action://set_state?state_id=0/description/1"
+                },
+                {
+                  "log_id": "log",
+                  "url": "some-action://authority"
+                }
+              ]
+            },
+            {
+              "type": "item",
+              "text": "2",
+              "selected_actions": [
+                {
+                  "log_id": "2",
+                  "url": "div-action://set_state?state_id=0/description/2"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

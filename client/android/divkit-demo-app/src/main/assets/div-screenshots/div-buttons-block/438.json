@@ -1,0 +1,33 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "action": {
+                        "url": "https://pogoda.yandex.ru"
+                    },
+                    "items": [
+                        {
+                            "action": {
+                                "url": "http://ya.ru"
+                            },
+                            "text": "<font color=\"#7CFC00\">button with html in text</font>",
+                            "image": {
+                                "image_url": "https://alicekit.s3.yandex.net/images_for_divs/fox.jpg"
+                            },
+                            "background_color": "#0000FF"
+                        }
+                    ],
+                    "type": "div-buttons-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

@@ -1,0 +1,329 @@
+{
+  "templates": {
+    "text_13_16_regular": {
+      "type": "text",
+      "font_size": 13,
+      "line_height": 16,
+      "$text_color": "text_13_16_regular__text_color",
+      "$text": "text_13_16_regular__text"
+    },
+    "mute_strip": {
+      "type": "separator",
+      "$width": "mute_strip__width",
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "mute_strip__background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 4
+      },
+      "delimiter_style": {
+        "color": "#0000"
+      }
+    },
+    "mute_icon_24": {
+      "type": "image",
+      "width": {
+        "type": "fixed",
+        "value": 24
+      },
+      "height": {
+        "type": "fixed",
+        "value": 24
+      },
+      "placeholder_color": "#0000",
+      "preload_required": 1,
+      "$image_url": "mute_icon_24__image_url",
+      "action_animation": {
+        "name": "no_animation"
+      }
+    },
+    "card_image": {
+      "type": "text",
+      "text":"  ",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 150
+      },
+      "border": {
+        "$corner_radius": "card_image__border__corner_radius"
+      },
+      "aspect": {
+        "ratio": 1.78
+      },
+      "background": [
+        {
+          "color": "#ff7518",
+          "type": "solid"
+        }
+      ]
+    },
+    "spacer_4": {
+      "type": "separator",
+      "delimiter_style": {
+        "color": "#0000",
+        "orientation": "horizontal"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 4
+      },
+      "width": {
+        "type": "match_parent"
+      }
+    },
+    "mute_container": {
+      "type": "container",
+      "id": "mute_notification_container",
+      "width": {
+        "type": "wrap_content"
+      },
+      "orientation": "overlap",
+      "content_alignment_vertical": "center",
+      "transition_change": {
+        "type": "change_bounds",
+        "duration": 0,
+        "$start_delay": "mute_container__change_bounds_delay"
+      }
+    },
+    "card_container": {
+      "type": "container",
+      "margins": {
+        "left": 4,
+        "right": 4
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffffff"
+        }
+      ],
+      "border": {
+        "corner_radius": 20
+      }
+    }
+  },
+  "card": {
+    "log_id": "mute_notification",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "border": {
+            "corner_radius": 24,
+            "has_shadow": 1
+          },
+          "items": [
+            {
+              "type": "card_container",
+              "items": [
+                {
+                  "type": "container",
+                  "orientation": "overlap",
+                  "items": [
+                    {
+                      "type": "card_image",
+                      "transition_change": {
+                        "type": "change_bounds",
+                        "duration": 300,
+                        "interpolator": "ease_out"
+                      }
+                    },
+                    {
+                      "type": "state",
+                      "div_id": "mute",
+                      "margins": {
+                        "left": 16,
+                        "top": 16,
+                        "right": 16,
+                        "bottom": 16
+                      },
+                      "alignment_vertical": "bottom",
+                      "alignment_horizontal": "left",
+                      "states": [
+                        {
+                          "state_id": "muted",
+                          "div": {
+                            "type": "mute_container",
+                            "mute_container__change_bounds_delay": 0,
+                            "items": [
+                              {
+                                "type": "mute_strip",
+                                "id": "mute_notification_strip",
+                                "mute_strip__width": {
+                                  "type": "fixed",
+                                  "value": 0
+                                },
+                                "mute_strip__background_color": "#80000000",
+                                "transition_change": {
+                                  "type": "change_bounds",
+                                  "duration": 150,
+                                  "interpolator": "ease_out"
+                                }
+                              },
+                              {
+                                "type": "mute_icon_24",
+                                "margins": {
+                                  "left": 8,
+                                  "right": 8
+                                },
+                                "mute_icon_24__image_url": "https://yastatic.net/s3/zen-misc/div/dark/24/sound_off.png",
+                                "actions": [
+                                  {
+                                    "log_id": "unmute",
+                                    "url": "div-action://set_state?state_id=0/mute/unmuted"
+                                  }
+                                ],
+                                "visibility_actions": [
+                                  {
+                                    "log_id": "show_unmute_notification",
+                                    "url": "div-action://set_state?state_id=0/mute/unmute_notification",
+                                    "visibility_duration": 4000,
+                                    "visibility_percentage": 1
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "state_id": "unmute_notification",
+                          "div": {
+                            "type": "mute_container",
+                            "mute_container__change_bounds_delay": 300,
+                            "items": [
+                              {
+                                "type": "mute_strip",
+                                "id": "mute_notification_strip",
+                                "mute_strip__width": {
+                                  "type": "match_parent"
+                                },
+                                "mute_strip__background_color": "#80000000",
+                                "transition_change": {
+                                  "type": "change_bounds",
+                                  "duration": 150,
+                                  "start_delay": 150,
+                                  "interpolator": "ease_in"
+                                }
+                              },
+                              {
+                                "type": "mute_icon_24",
+                                "margins": {
+                                  "left": 8,
+                                  "right": 8
+                                },
+                                "mute_icon_24__image_url": "https://yastatic.net/s3/zen-misc/div/dark/24/sound_on.png"
+                              },
+                              {
+                                "type": "text_13_16_regular",
+                                "id": "notification_text",
+                                "width": {
+                                  "type": "wrap_content"
+                                },
+                                "margins": {
+                                  "left": 40,
+                                  "right": 8
+                                },
+                                "text_13_16_regular__text_color": "#FFFF",
+                                "text_13_16_regular__text": "Click to watching with the volume turned on",
+                                "visibility_actions": [
+                                  {
+                                    "log_id": "hide_unmute_notification",
+                                    "url": "div-action://set_state?state_id=0/mute/muted",
+                                    "log_limit": 0,
+                                    "visibility_duration": 4000,
+                                    "visibility_percentage": 1
+                                  }
+                                ],
+                                "transition_in": {
+                                  "type": "scale",
+                                  "pivot_x": 0.0,
+                                  "duration": 200,
+                                  "start_delay": 50,
+                                  "interpolator": "ease_in"
+                                },
+                                "transition_out": {
+                                  "type": "scale",
+                                  "pivot_x": 0.0,
+                                  "duration": 200,
+                                  "interpolator": "ease_out"
+                                }
+                              }
+                            ],
+                            "action_animation": {
+                              "name": "no_animation"
+                            },
+                            "actions": [
+                              {
+                                "log_id": "unmute",
+                                "url": "div-action://set_state?state_id=0/mute/unmuted"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "state_id": "unmuted",
+                          "div": {
+                            "type": "mute_container",
+                            "mute_container__change_bounds_delay": 0,
+                            "items": [
+                              {
+                                "type": "mute_strip",
+                                "id": "mute_notification_strip",
+                                "mute_strip__width": {
+                                  "type": "fixed",
+                                  "value": 0
+                                },
+                                "mute_strip__background_color": "#80000000"
+                              },
+                              {
+                                "type": "mute_icon_24",
+                                "margins": {
+                                  "left": 8,
+                                  "right": 8
+                                },
+                                "mute_icon_24__image_url": "https://yastatic.net/s3/zen-misc/div/dark/24/sound_on.png",
+                                "actions": [
+                                  {
+                                    "log_id": "mute",
+                                    "url": "div-action://set_state?state_id=0/mute/muted"
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

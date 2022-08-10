@@ -1,0 +1,184 @@
+{
+  "div_data": {
+    "type": "div2",
+    "log_id": "tests",
+    "variables": [
+      {
+        "name": "max_value",
+        "type": "integer",
+        "value": 100
+      },
+      {
+        "name": "min_value",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "thumb_value",
+        "type": "integer",
+        "value": 30
+      },
+      {
+        "name": "thumb_secondary_value",
+        "type": "integer",
+        "value": 70
+      }
+    ],
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "slider",
+          "max_value": "@{max_value}",
+          "min_value": "@{min_value}",
+          "thumb_value_variable": "thumb_value",
+          "thumb_secondary_value_variable": "thumb_secondary_value",
+          "paddings": {
+            "bottom": 10,
+            "left": 10,
+            "right": 10,
+            "top": 10
+          },
+          "margins": {
+            "bottom": 5,
+            "left": 5,
+            "right": 5,
+            "top": 5
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "thumb_style": {
+            "type": "shape_drawable",
+            "color": "#ff0000",
+            "stroke": {
+              "color": "#ffffff",
+              "width": 3
+            },
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_height": {
+                "type": "fixed",
+                "value": 32
+              },
+              "item_width": {
+                "type": "fixed",
+                "value": 32
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 100
+              }
+            }
+          },
+          "thumb_secondary_style": {
+            "type": "shape_drawable",
+            "color": "#00ff00",
+            "stroke": {
+              "color": "#ffffff",
+              "width": 3
+            },
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_height": {
+                "type": "fixed",
+                "value": 32
+              },
+              "item_width": {
+                "type": "fixed",
+                "value": 32
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 100
+              }
+            }
+          },
+          "track_active_style": {
+            "type": "shape_drawable",
+            "color": "#ff0000",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_height": {
+                "type": "fixed",
+                "value": 6
+              }
+            }
+          },
+          "track_inactive_style": {
+            "type": "shape_drawable",
+            "color": "#20000000",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_height": {
+                "type": "fixed",
+                "value": 6
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=min_value&value=17",
+          "log_id": "min_value"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=max_value&value=168",
+          "log_id": "max_value"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=thumb_value&value=51",
+          "log_id": "thumb_value"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=thumb_secondary_value&value=123",
+          "log_id": "thumb_secondary_value"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=min_value&value=0",
+          "log_id": "restore: min_value"
+        },
+        {
+          "url": "div-action://set_variable?name=max_value&value=100",
+          "log_id": "restore: max_value"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_value&value=30",
+          "log_id": "restore: thumb_value"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_secondary_value&value=70",
+          "log_id": "restore: thumb_secondary_value"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

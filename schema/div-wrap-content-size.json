@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_wrap_content_size",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "wrap_content"
+      ]
+    },
+    "constrained": {
+      "$ref": "common.json#/boolean_int",
+      "$description": "translations.json#/div_wrap_content_size_constrained"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

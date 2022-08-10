@@ -1,0 +1,101 @@
+{
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    },
+    "text_cell": {
+      "type": "text_with_background",
+      "text_alignment_horizontal": "center",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    },
+    "cell_with_one_pixel_margin": {
+      "type": "text_cell",
+      "margins": {
+        "top": 1,
+        "left": 1,
+        "right": 1,
+        "bottom": 1
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 3,
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "f:100",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "column_span": 2
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "w:1",
+              "width": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "w:1",
+              "width": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "f:100",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "column_span": 2
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "w:3",
+              "width": {
+                "type": "match_parent",
+                "weight": 3
+              }
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "w:2",
+              "width": {
+                "type": "match_parent",
+                "weight": 2
+              }
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "w:1",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

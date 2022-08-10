@@ -1,0 +1,107 @@
+{
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "top_input",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "middle_input",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "bottom_input",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "id": "top_input",
+              "type": "test_input",
+              "text_variable": "top_input",
+              "focus": {
+                "on_blur": [
+                  {
+                    "log_id": "on_top_blur",
+                    "url": "div-action://set_variable?name=top_input&value=blurred"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "middle_input",
+              "type": "test_input",
+              "text_variable": "middle_input",
+              "focus": {
+                "on_focus": [
+                  {
+                    "log_id": "on_middle_focus",
+                    "url": "div-action://set_variable?name=middle_input&value=focused"
+                  }
+                ]
+              }
+            },
+            {
+              "id": "bottom_input",
+              "type": "test_input",
+              "text_variable": "bottom_input",
+              "focus": {
+                "on_focus": [
+                  {
+                    "log_id": "on_bottom_focus",
+                    "url": "div-action://set_variable?name=bottom_input&value=focused"
+                  }
+                ],
+                "on_blur": [
+                  {
+                    "log_id": "on_bottom_blur",
+                    "url": "div-action://set_variable?name=bottom_input&value=blurred"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "test_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#00FFFF"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,121 @@
+{
+    "templates": {
+        "reviewSummaryStar/5bb0825919b4948d08a709c877aa889a": {
+            "type": "image",
+            "height": {
+                "type": "fixed",
+                "value": 20
+            },
+            "image_url": "https://yastatic.net/s3/home/div_market/review/star.png",
+            "width": {
+                "type": "fixed",
+                "value": 20
+            },
+            "$tint_color": "star_color"
+        },
+        "reviewsSummaryTitle/8320a36fa2a372b3ca5fd6c6d1c977a3": {
+            "type": "text",
+            "font_size": 18,
+            "font_weight": "bold",
+            "paddings": {
+                "bottom": 16
+            },
+            "$text": "title"
+        },
+        "reviewSummaryStarsBlock/ad9d7f933e7b51f767fa05249963a91c": {
+            "type": "container",
+            "items": [
+                {
+                    "type": "container",
+                    "content_alignment_horizontal": "left",
+                    "content_alignment_vertical": "center",
+                    "items": [
+                        {
+                            "type": "container",
+                            "orientation": "horizontal",
+                            "width": {
+                                "type": "wrap_content"
+                            },
+                            "$items": "stars"
+                        },
+                        {
+                            "type": "text",
+                            "font_size": 22,
+                            "font_weight": "bold",
+                            "margins": {
+                                "left": 9
+                            },
+                            "text_color": "#FD8949",
+                            "width": {
+                                "type": "wrap_content"
+                            },
+                            "$text": "stars_rate"
+                        },
+                        {
+                            "type": "text",
+                            "font_size": 14,
+                            "margins": {
+                                "left": 8
+                            },
+                            "paddings": {
+                                "top": 2
+                            },
+                            "text_color": "#898F97",
+                            "$text": "rates_count"
+                        }
+                    ],
+                    "orientation": "horizontal"
+                }
+            ]
+        }
+    },
+    "card": {
+        "log_id": "722974019productReviewsSummaryRenderer",
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "container",
+                    "items": [
+                        {
+                            "type": "reviewsSummaryTitle/8320a36fa2a372b3ca5fd6c6d1c977a3",
+                            "title": "Все отзывы о товаре"
+                        },
+                        {
+                            "type": "reviewSummaryStarsBlock/ad9d7f933e7b51f767fa05249963a91c",
+                            "stars": [
+                                {
+                                    "type": "reviewSummaryStar/5bb0825919b4948d08a709c877aa889a",
+                                    "star_color": "#FD8949"
+                                },
+                                {
+                                    "type": "reviewSummaryStar/5bb0825919b4948d08a709c877aa889a",
+                                    "star_color": "#FD8949"
+                                },
+                                {
+                                    "type": "reviewSummaryStar/5bb0825919b4948d08a709c877aa889a",
+                                    "star_color": "#FD8949"
+                                },
+                                {
+                                    "type": "reviewSummaryStar/5bb0825919b4948d08a709c877aa889a",
+                                    "star_color": "#FD8949"
+                                },
+                                {
+                                    "type": "reviewSummaryStar/5bb0825919b4948d08a709c877aa889a",
+                                    "star_color": "#D1D1D1"
+                                }
+                            ],
+                            "stars_rate": "4.3",
+                            "rates_count": "28 отзывов  71 оценка"
+                        }
+                    ],
+                    "paddings": {
+                        "top": 24,
+                        "right": 21,
+                        "left": 21
+                    }
+                }
+            }
+        ]
+    }
+}

@@ -1,0 +1,272 @@
+{
+  "templates": {
+    "tpl-coupon": {
+      "type": "image",
+      "width": {
+        "type": "fixed",
+        "value": 112
+      },
+      "height": {
+        "type": "fixed",
+        "value": 180
+      },
+      "actions": [
+        {
+          "$url": "deeplink",
+          "$log_id": "donotchange3",
+          "$payload": "analytics_data"
+        }
+      ],
+      "$image_url": "image",
+      "visibility_actions": [
+        {
+          "$log_id": "donotchange1",
+          "$payload": "analytics_data",
+          "log_limit": 0,
+          "visibility_duration": 1,
+          "visibility_percentage": 50
+        },
+        {
+          "$log_id": "donotchange2",
+          "$payload": "analytics_data",
+          "log_limit": 0,
+          "visibility_duration": 1000,
+          "visibility_percentage": 50
+        }
+      ]
+    },
+    "tpl-image-button-2": {
+      "type": "image",
+      "$width": "var_width",
+      "border": {
+        "corner_radius": 12
+      },
+      "$height": "var_height",
+      "actions": [
+        {
+          "$url": "link",
+          "$log_id": "do_not_change__",
+          "$payload": "analytics_data"
+        }
+      ],
+      "$image_url": "image_link",
+      "$placeholder_color": "placeholder_color",
+      "visibility_actions": [
+        {
+          "$log_id": "do_not_change",
+          "$payload": "analytics_data",
+          "log_limit": 0,
+          "visibility_duration": 1,
+          "visibility_percentage": 50
+        },
+        {
+          "$log_id": "do_not_change_",
+          "$payload": "analytics_data",
+          "log_limit": 0,
+          "visibility_duration": 1000,
+          "visibility_percentage": 50
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "top": 12,
+            "bottom": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F4F4F4"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockAppear&hash=5ac5541c2571bf805f51359c4f866517",
+              "payload": {
+                "BlockId": "146",
+                "BlockSlug": "CouponsStatic",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1115"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            },
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockView&hash=c8b6ad6d80262a604c61086473b9eb32",
+              "payload": {
+                "BlockId": "146",
+                "BlockSlug": "CouponsStatic",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1115"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1000,
+              "visibility_percentage": 50
+            }
+          ],
+          "items": [
+            {
+              "text": "Подборка купонов",
+              "type": "text",
+              "paddings": {
+                "left": 16,
+                "right": 16,
+                "bottom": 14
+              },
+              "font_size": 22,
+              "text_color": "#09141F",
+              "font_weight": "bold",
+              "line_height": 24
+            },
+            {
+              "type": "gallery",
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "item_spacing": 12,
+              "items": [
+                {
+                  "type": "tpl-coupon",
+                  "image": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "deeplink": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fcoupons%22%2C%22params%22%3A%7B%22raiseCompilation%22%3A%2201a11d19-a8f0-4f6c-8789-d89d6cf2cb5d%22%7D%2C%22section%22%3A%22index%22%7D",
+                  "donotchange1": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=9ee82aa4aae8d71ff1b738e7d79482ea",
+                  "donotchange2": "#!edadeal/metrics/send?eventName=BlockItemView&hash=9ee82aa4aae8d71ff1b738e7d79482ea",
+                  "donotchange3": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=9ee82aa4aae8d71ff1b738e7d79482ea",
+                  "analytics_data": {
+                    "BlockId": "146",
+                    "ItemType": "Coupon",
+                    "BlockSlug": "CouponsStatic",
+                    "XPosition": "1",
+                    "BlockLayout": "Carousel",
+                    "PartnerName": "Бургер Кинг",
+                    "BlockVersionId": "1115"
+                  }
+                },
+                {
+                  "type": "tpl-coupon",
+                  "image": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "deeplink": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fcoupons%22%2C%22params%22%3A%7B%22raiseCompilation%22%3A%22ffc223b1-da3d-49aa-87fa-15c5c20424fd%22%7D%2C%22section%22%3A%22index%22%7D",
+                  "donotchange1": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=051615da76032def2451360f85220779",
+                  "donotchange2": "#!edadeal/metrics/send?eventName=BlockItemView&hash=051615da76032def2451360f85220779",
+                  "donotchange3": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=051615da76032def2451360f85220779",
+                  "analytics_data": {
+                    "BlockId": "146",
+                    "ItemType": "Coupon",
+                    "BlockSlug": "CouponsStatic",
+                    "XPosition": "2",
+                    "BlockLayout": "Carousel",
+                    "PartnerName": "Перекресток",
+                    "BlockVersionId": "1115"
+                  }
+                },
+                {
+                  "type": "tpl-coupon",
+                  "image": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "deeplink": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fcoupons%22%2C%22params%22%3A%7B%22raiseCompilation%22%3A%225775726c-6a6f-4cda-ac3f-6b98b78afe39%22%7D%2C%22section%22%3A%22index%22%7D",
+                  "donotchange1": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=69e7f3a753a89263838ae1fa9a61016a",
+                  "donotchange2": "#!edadeal/metrics/send?eventName=BlockItemView&hash=69e7f3a753a89263838ae1fa9a61016a",
+                  "donotchange3": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=69e7f3a753a89263838ae1fa9a61016a",
+                  "analytics_data": {
+                    "BlockId": "146",
+                    "ItemType": "Coupon",
+                    "BlockSlug": "CouponsStatic",
+                    "XPosition": "3",
+                    "BlockLayout": "Carousel",
+                    "PartnerName": "Яндекс Маркет",
+                    "BlockVersionId": "1115"
+                  }
+                },
+                {
+                  "type": "tpl-coupon",
+                  "image": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "deeplink": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fcoupons%22%2C%22params%22%3A%7B%22raiseCompilation%22%3A%22cc603ed1-7811-4016-a6fe-85b0751abc05%22%7D%2C%22section%22%3A%22index%22%7D",
+                  "donotchange1": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=00bd80ec74ec310fa9cf16c3d5c87e66",
+                  "donotchange2": "#!edadeal/metrics/send?eventName=BlockItemView&hash=00bd80ec74ec310fa9cf16c3d5c87e66",
+                  "donotchange3": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=00bd80ec74ec310fa9cf16c3d5c87e66",
+                  "analytics_data": {
+                    "BlockId": "146",
+                    "ItemType": "Coupon",
+                    "BlockSlug": "CouponsStatic",
+                    "XPosition": "4",
+                    "BlockLayout": "Carousel",
+                    "PartnerName": "Метро",
+                    "BlockVersionId": "1115"
+                  }
+                },
+                {
+                  "type": "tpl-coupon",
+                  "image": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "deeplink": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fcoupons%22%2C%22params%22%3A%7B%22raiseCompilation%22%3A%22524ea217-d183-42e5-96d4-4560b9613a41%22%7D%2C%22section%22%3A%22index%22%7D",
+                  "donotchange1": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=0a3a7b9194b453b4b381c8b88472fef1",
+                  "donotchange2": "#!edadeal/metrics/send?eventName=BlockItemView&hash=0a3a7b9194b453b4b381c8b88472fef1",
+                  "donotchange3": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=0a3a7b9194b453b4b381c8b88472fef1",
+                  "analytics_data": {
+                    "BlockId": "146",
+                    "ItemType": "Coupon",
+                    "BlockSlug": "CouponsStatic",
+                    "XPosition": "5",
+                    "BlockLayout": "Carousel",
+                    "PartnerName": "Карусель",
+                    "BlockVersionId": "1115"
+                  }
+                },
+                {
+                  "type": "tpl-coupon",
+                  "image": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "deeplink": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fcoupons%22%2C%22params%22%3A%7B%22raiseCompilation%22%3A%220b25c5dd-7c7b-43d9-8998-43e0f694bc83%22%7D%2C%22section%22%3A%22index%22%7D",
+                  "donotchange1": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=073efd5336e0e63bd36c273a50cc4098",
+                  "donotchange2": "#!edadeal/metrics/send?eventName=BlockItemView&hash=073efd5336e0e63bd36c273a50cc4098",
+                  "donotchange3": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=073efd5336e0e63bd36c273a50cc4098",
+                  "analytics_data": {
+                    "BlockId": "146",
+                    "ItemType": "Coupon",
+                    "BlockSlug": "CouponsStatic",
+                    "XPosition": "6",
+                    "BlockLayout": "Carousel",
+                    "PartnerName": "MyAcuvue",
+                    "BlockVersionId": "1115"
+                  }
+                },
+                {
+                  "link": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fcoupons%22%2C%22section%22%3A%22compilation%22%7D",
+                  "type": "tpl-image-button-2",
+                  "var_width": {
+                    "type": "fixed",
+                    "value": 112
+                  },
+                  "image_link": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "var_height": {
+                    "type": "fixed",
+                    "value": 180
+                  },
+                  "do_not_change": "#!edadeal/metrics/send?eventName=BlockItemView&hash=50097e647a5f3dfb1d6e7179bc54974b",
+                  "analytics_data": {
+                    "slug": "УКАЖИТЕ СЛАГ КНОПКИ",
+                    "BlockId": "146",
+                    "ItemType": "Button",
+                    "BlockSlug": "CouponsStatic",
+                    "XPosition": "7",
+                    "BlockLayout": "Carousel",
+                    "BlockVersionId": "1115"
+                  },
+                  "do_not_change_": "#!edadeal/metrics/send?eventName=BlockItemView&hash=50097e647a5f3dfb1d6e7179bc54974b",
+                  "do_not_change__": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=50097e647a5f3dfb1d6e7179bc54974b",
+                  "placeholder_color": "#ffededed"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

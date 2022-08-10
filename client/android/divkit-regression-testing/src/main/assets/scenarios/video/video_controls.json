@@ -1,0 +1,148 @@
+{
+    "templates": {
+        "control_button": {
+            "type": "text",
+            "width": {
+                "type": "wrap_content"
+            },
+            "height": {
+                "type": "wrap_content"
+            },
+            "font_size": 18,
+            "line_height": 22,
+            "font_weight": "medium",
+            "text_color": "#ffffff",
+            "paddings": {
+                "bottom": 12,
+                "top": 12,
+                "left": 12,
+                "right": 12
+            },
+            "margins": {
+                "left": 12,
+                "right": 12
+            },
+            "border": {
+                "corner_radius": 22
+            },
+            "background": [
+                {
+                    "color": "#bf000000",
+                    "type": "solid"
+                }
+            ]
+        }
+    },
+    "card": {
+        "log_id": "div2_sample_card",
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "container",
+                    "width": {
+                        "type": "match_parent"
+                    },
+                    "height": {
+                        "type": "match_parent"
+                    },
+                    "content_alignment_horizontal": "center",
+                    "background": [
+                        {
+                            "type": "solid",
+                            "color": "#faefe5"
+                        }
+                    ],
+                    "items": [
+                        {
+                            "type": "separator",
+                            "alpha": 0,
+                            "height": {
+                                "type": "match_parent",
+                                "weight": 3
+                            }
+                        },
+                        {
+                            "type": "custom",
+                            "custom_type": "custom_video",
+                            "id": "demo_video",
+                            "custom_props": {
+                                "stub_image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/divkit-stub-image.png",
+                                "url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/video/city.mp4",
+                                "start_mode": "when_ready",
+                                "repeat": true
+                            },
+                            "width": {
+                                "type": "fixed",
+                                "value": 288
+                            },
+                            "height": {
+                                "type": "fixed",
+                                "value": 162
+                            }
+                        },
+                        {
+                            "type": "separator",
+                            "alpha": 0,
+                            "height": {
+                                "type": "match_parent",
+                                "weight": 1
+                            }
+                        },
+                        {
+                            "type": "container",
+                            "orientation": "horizontal",
+                            "content_alignment_horizontal": "center",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "items": [
+                                {
+                                    "type": "control_button",
+                                    "text": "play ▶",
+                                    "actions": [
+                                        {
+                                            "log_id": "play video",
+                                            "url": "custom_video://play?id=demo_video"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "control_button",
+                                    "text": "pause ⏸",
+                                    "actions": [
+                                        {
+                                            "log_id": "pause video",
+                                            "url": "custom_video://pause?id=demo_video"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "control_button",
+                                    "text": "reset \uD83D\uDD04",
+                                    "actions": [
+                                        {
+                                            "log_id": "reset video",
+                                            "url": "custom_video://reset?id=demo_video"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "separator",
+                            "alpha": 0,
+                            "height": {
+                                "type": "match_parent",
+                                "weight": 3
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

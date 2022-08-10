@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_dimension",
+  "properties": {
+    "value": {
+      "type": "number",
+      "$description": "translations.json#/div_dimension_value"
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "default_value": "dp"
+    }
+  },
+  "required": [
+    "value"
+  ]
+}

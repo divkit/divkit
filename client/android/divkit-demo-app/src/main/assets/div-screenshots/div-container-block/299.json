@@ -1,0 +1,54 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "direction": "vertical",
+                    "frame": {
+                        "style": "only_round_corners"
+                    },
+                    "height": {
+                        "type": "numeric",
+                        "value": 200
+                    },
+                    "width": {
+                        "type": "numeric",
+                        "value": 300
+                    },
+                    "background": [
+                        {
+                            "color": "#00FF00",
+                            "type": "div-solid-background"
+                        }
+                    ],
+                    "action": {
+                        "url": "https://news.yandex.ru/hockey.html"
+                    },
+                    "type": "div-container-block",
+                    "children": [
+                        {
+                            "delimiter_color": "#111FFF",
+                            "padding_modifier": {
+                                "position": "right",
+                                "size": "s"
+                            },
+                            "has_delimiter": 1,
+                            "action": {
+                                "url": "https://yandex.ru"
+                            },
+                            "type": "div-separator-block",
+                            "size": "xl"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#00FFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

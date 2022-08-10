@@ -1,0 +1,50 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "text_color": "#1ABC9C",
+      "font_size": 18,
+      "paddings": {
+        "top": 8
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "paddings": {
+            "top": 16,
+            "bottom": 16,
+            "left": 16,
+            "right": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#34495E"
+            }
+          ],
+          "items": [
+            {
+              "type": "text_block",
+              "text": "This text is selectable and can be copied.",
+              "selectable": 1
+            },
+            {
+              "type": "text_block",
+              "text": "This text is not selectable."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_gif_image",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "$ref": "div-image-base.json"
+    },
+    {
+      "properties": {
+        "gif_url": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_gif_image_gif_url"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "gif"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "gif_url",
+    "type"
+  ]
+}

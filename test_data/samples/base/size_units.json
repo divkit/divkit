@@ -1,0 +1,138 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "$text": "visible_text",
+      "id": "visible_id",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "top": 8,
+        "right": 24,
+        "left": 24
+      },
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "text_color": "#000000",
+      "font_size": 14,
+      "alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Size units"
+            },
+            {
+              "type": "subtitle",
+              "text": "dp (density-independent pixels) are units that are used by default and do not depend on the screen density. Converts to pt on IOS, dp on Android, and px in the web interface\n\nsp (scale-independent pixels) are units that depend on the font size factor of a mobile device. Only used on Android.\n\npx are pixels. They don't scale to the screen density, so an element whose size is defined in pixels will look different on screens with different densities. Not supported in the web interface.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 30
+                  },
+                  "text": "Height in dp, text in sp"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 30,
+                    "unit": "sp"
+                  },
+                  "text": "Height and text in sp"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 30,
+                    "unit": "sp"
+                  },
+                  "font_size_unit": "dp",
+                  "text": "Height in sp, text in dp"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 30
+                  },
+                  "font_size_unit": "dp",
+                  "text": "Height and text in dp"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 100,
+                    "unit": "px"
+                  },
+                  "font_size": 40,
+                  "font_size_unit": "px",
+                  "text": "Height is 100 px, text is 40 px"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

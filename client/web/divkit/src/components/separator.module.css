@@ -1,0 +1,17 @@
+.separator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.separator_orientation_horizontal {
+    min-height: .1em;
+}
+
+.separator_orientation_vertical {
+    min-width: .1em;
+}
+
+.separator__inner {
+    display: block;
+}

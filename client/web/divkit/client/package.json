@@ -1,0 +1,6 @@
+{
+    "internal": true,
+    "main": "../dist/client.js",
+    "module": "../dist/esm/client.mjs",
+    "types": "../typings/client.d.ts"
+}

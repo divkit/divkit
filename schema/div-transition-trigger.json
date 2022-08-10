@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "enum": [
+    "data_change",
+    "state_change",
+    "visibility_change"
+  ],
+  "$description": "translations.json#/div_transition_trigger"
+}

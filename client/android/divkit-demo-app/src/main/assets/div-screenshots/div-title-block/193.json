@@ -1,0 +1,18 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "type": "div-title-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

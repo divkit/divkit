@@ -1,0 +1,74 @@
+{
+    "cases": [
+        {
+            "name": "string literal",
+            "expression": "@{'abcd'}",
+            "expected": {
+                "type": "string",
+                "value": "abcd"
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "string literal with escaping symbol",
+            "expression": "@{'This\\'s a string'}",
+            "expected": {
+                "type": "string",
+                "value": "This's a string"
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "string literal without escaping symbol",
+            "expression": "@{'This's a string'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "string literal without ending symbol",
+            "expression": "@{'This is a string}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "string literal without ending symbol",
+            "expression": "@{This is a string'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        }
+    ]
+}

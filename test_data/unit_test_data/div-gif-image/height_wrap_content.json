@@ -1,0 +1,7 @@
+{
+  "type": "gif",
+  "gif_url": "https://alicekit.s3.yandex.net/images_for_divs/sheep.gif",
+  "height": {
+    "type": "wrap_content"
+  }
+}

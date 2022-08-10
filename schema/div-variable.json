@@ -1,0 +1,177 @@
+{
+  "definitions": {
+    "string_variable": {
+      "alias_kotlin": "str_variable",
+      "type": "object",
+      "$description": "translations.json#/div_variable_string",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "type": "string",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "integer_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_integer",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "integer"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "type": "integer",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "number_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_number",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "number"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "type": "number",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "boolean_variable": {
+      "alias_kotlin": "bool_variable",
+      "type": "object",
+      "$description": "translations.json#/div_variable_boolean",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "boolean"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "color_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_color",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "supports_expressions": false,
+          "type": "string",
+          "enum": [
+            "color"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "url_variable": {
+      "type": "object",
+      "$description": "translations.json#/div_variable_url",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_variable_name"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "url"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_variable_value"
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/definitions/string_variable"
+    },
+    {
+      "$ref": "#/definitions/number_variable"
+    },
+    {
+      "$ref": "#/definitions/integer_variable"
+    },
+    {
+      "$ref": "#/definitions/boolean_variable"
+    },
+    {
+      "$ref": "#/definitions/color_variable"
+    },
+    {
+      "$ref": "#/definitions/url_variable"
+    }
+  ]
+}

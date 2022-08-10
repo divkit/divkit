@@ -1,0 +1,51 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "delimiter_color": "#111FFF",
+                    "has_delimiter": 1,
+                    "type": "div-separator-block",
+                    "size": "xxs"
+                },
+                {
+                    "delimiter_color": "#111FFF",
+                    "has_delimiter": 1,
+                    "type": "div-separator-block",
+                    "size": "xs"
+                },
+                {
+                    "delimiter_color": "#111FFF",
+                    "has_delimiter": 1,
+                    "type": "div-separator-block",
+                    "size": "s"
+                },
+                {
+                    "delimiter_color": "#111FFF",
+                    "has_delimiter": 1,
+                    "type": "div-separator-block",
+                    "size": "m"
+                },
+                {
+                    "delimiter_color": "#111FFF",
+                    "has_delimiter": 1,
+                    "type": "div-separator-block",
+                    "size": "l"
+                },
+                {
+                    "delimiter_color": "#111FFF",
+                    "has_delimiter": 1,
+                    "type": "div-separator-block",
+                    "size": "xl"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

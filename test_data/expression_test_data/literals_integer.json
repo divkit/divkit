@@ -1,0 +1,158 @@
+{
+    "cases": [
+        {
+            "name": "unsigned integer literal",
+            "expression": "@{3}",
+            "expected": {
+                "type": "integer",
+                "value": 3
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive integer literal",
+            "expression": "@{+3}",
+            "expected": {
+                "type": "integer",
+                "value": 3
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative integer literal",
+            "expression": "@{-3}",
+            "expected": {
+                "type": "integer",
+                "value": -3
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned max integer literal",
+            "expression": "@{2147483647}",
+            "expected": {
+                "type": "integer",
+                "value": 2147483647
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive max integer literal",
+            "expression": "@{+2147483647}",
+            "expected": {
+                "type": "integer",
+                "value": 2147483647
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative min integer literal",
+            "expression": "@{-2147483648}",
+            "expected": {
+                "type": "integer",
+                "value": -2147483648
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "value in brackets is overflowed",
+            "expression": "@{-(2147483648)}",
+            "expected": {
+                "type": "error",
+                "value": "Value 2147483648 can't be converted to Integer type."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned overflow integer literal",
+            "expression": "@{2147483648}",
+            "expected": {
+                "type": "error",
+                "value": "Value 2147483648 can't be converted to Integer type."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive overflow integer literal",
+            "expression": "@{+2147483648}",
+            "expected": {
+                "type": "error",
+                "value": "Value 2147483648 can't be converted to Integer type."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative overflow integer literal",
+            "expression": "@{-2147483649}",
+            "expected": {
+                "type": "error",
+                "value": "Value -2147483649 can't be converted to Integer type."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "underscore symbol unsupported in integer literals",
+            "expression": "@{2_147}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        }
+    ]
+}

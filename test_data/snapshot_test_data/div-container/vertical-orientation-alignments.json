@@ -1,0 +1,119 @@
+{
+  "templates": {
+    "testcase_name": {
+      "type": "text",
+      "paddings": {
+        "top": 10,
+        "bottom": 10
+      },
+      "font_size": 16,
+      "background": [
+        {
+          "color": "#DDD",
+          "type": "solid"
+        }
+      ]
+    },
+    "text_white_bg_50x50": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "color": "#FFF",
+          "type": "solid"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "value": 50
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      }
+    },
+    "vertical_fixed_w150_container_black": {
+      "type": "container",
+      "width": { "type": "fixed", "value": 150 },
+      "background": [
+        {
+          "color": "#000",
+          "type": "solid"
+        }
+      ]
+    },
+    "vertical_orientation_alignments_testcase": {
+      "type": "vertical_fixed_w150_container_black",
+      "items": [
+        {
+          "type": "text_white_bg_50x50",
+          "text": "<",
+          "alignment_horizontal": "left"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "text": "*",
+          "alignment_horizontal": "center"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "text": ">",
+          "alignment_horizontal": "right"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "text": "default"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "testcase_name",
+              "text": "Different horizontal children alignments with some default on container level\n"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default left:"
+            },
+            {
+              "type": "vertical_orientation_alignments_testcase",
+              "content_alignment_horizontal": "left"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default center:"
+            },
+            {
+              "type": "vertical_orientation_alignments_testcase",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default right:"
+            },
+            {
+              "type": "vertical_orientation_alignments_testcase",
+              "content_alignment_horizontal": "right"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

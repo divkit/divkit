@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <color name="colorPrimary">#6839cf</color>
+    <color name="colorAccent">#6839cf</color>
+    <color name="colorControlNormal">#6839cf</color>
+    <color name="colorPrimaryDark">#6839cf</color>
+    <color name="colorPrimaryHighlighted">#8d59ff</color>
+
+    <color name="white">#ffffff</color>
+    <color name="purple">#A09DE5</color>
+    <color name="demo_orange">#FFDCAE</color>
+    <color name="setting_background">#1E1E1E</color>
+</resources>

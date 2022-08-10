@@ -1,0 +1,190 @@
+{
+  "templates": {
+    "picture": {
+      "type": "image",
+      "placeholder_color": "#bdc3c7"
+    },
+    "title": {
+      "type": "text",
+      "margins": {
+        "left": 24,
+        "top": 24,
+        "right": 24,
+        "bottom": 24
+      },
+      "font_size": 24,
+      "font_weight": "medium",
+      "text_color": "#ecf0f1"
+    },
+    "button": {
+      "type": "state",
+      "$div_id": "button_id",
+      "margins": {
+        "left": 24,
+        "top": 24,
+        "right": 24,
+        "bottom": 24
+      },
+      "states": [
+        {
+          "state_id": "inactive",
+          "div": {
+            "type": "image",
+            "$id": "inactive_state_id",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "preload_required": 1,
+            "$image_url": "inactive_icon_url",
+            "$actions": "inactive_actions",
+            "action_animation": {
+              "name": "no_animation"
+            },
+            "transition_in": {
+              "type": "scale",
+              "scale": 0.8,
+              "duration": 150,
+              "start_delay": 150,
+              "interpolator": "ease_in_out"
+            },
+            "transition_out": {
+              "type": "scale",
+              "scale": 0.8,
+              "duration": 150,
+              "interpolator": "ease_in_out"
+            }
+          }
+        },
+        {
+          "state_id": "active",
+          "div": {
+            "type": "image",
+            "$id": "active_state_id",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "preload_required": 1,
+            "$image_url": "active_icon_url",
+            "$actions": "active_actions",
+            "action_animation": {
+              "name": "no_animation"
+            },
+            "transition_in": {
+              "type": "scale",
+              "scale": 0.8,
+              "duration": 150,
+              "start_delay": 150,
+              "interpolator": "ease_in_out"
+            },
+            "transition_out": {
+              "type": "scale",
+              "scale": 0.8,
+              "duration": 150,
+              "interpolator": "ease_in_out"
+            }
+          }
+        }
+      ]
+    },
+    "card": {
+      "type": "container",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ECF0F1"
+        }
+      ],
+      "orientation": "overlap"
+    }
+  },
+  "card": {
+    "log_id": "transition/state_transition_state_change",
+    "transition_animation_selector": "data_change",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "card",
+          "height": {
+            "type": "fixed",
+            "value": 320
+          },
+          "items": [
+            {
+              "type": "picture",
+              "id": "picture",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "preview": "data:image/png;base64,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",
+              "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+              "transition_in": {
+                "type": "fade",
+                "duration": 500,
+                "interpolator": "ease_out"
+              }
+            },
+            {
+              "type": "title",
+              "id": "title",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "alignment_horizontal": "left",
+              "alignment_vertical": "bottom",
+              "text": "Lorem ipsum",
+              "transition_in": {
+                "type": "slide",
+                "edge": "right",
+                "duration": 500,
+                "interpolator": "ease_out"
+              }
+            },
+            {
+              "type": "button",
+              "button_id": "button",
+              "inactive_state_id": "button_inactive",
+              "active_state_id": "button_active",
+              "width": {
+                "type": "fixed",
+                "value": 48
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "alignment_horizontal": "right",
+              "alignment_vertical": "top",
+              "inactive_icon_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/icons/star_outline.png",
+              "active_icon_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/icons/star_fill.png",
+              "inactive_actions": [
+                {
+                  "log_id": "press_inactive_button",
+                  "url": "div-action://set_state?state_id=0/button/active"
+                }
+              ],
+              "active_actions": [
+                {
+                  "log_id": "press_active_button",
+                  "url": "div-action://set_state?state_id=0/button/inactive"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+
+    <color name="div_separator_color">#33919cb5</color>
+    <color name="div_button_color">#edf0f2</color>
+    <color name="div_traffic_item_stroke_color">#edf0f2</color>
+    <color name="div_text_dark_disabled_80">#CC000000</color>
+    <color name="div_text_dark_disabled_50">#80000000</color>
+    <color name="div_text_dark_disabled_40">#66000000</color>
+    <color name="div_title_menu_color">#66000000</color>
+
+    <color name="div_tab_indicator">#ffdc60</color>
+
+    <color name="div_indicator_default_color">@color/div_separator_color</color>
+    <color name="div_indicator_selected_color">@color/div_tab_indicator</color>
+</resources>

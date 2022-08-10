@@ -1,0 +1,12 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div-evaluable')
+    implementation project(path: ':logging')
+    implementation project(path: ':utils')
+
+    api "androidx.core:core:$versions.androidx.core"
+}

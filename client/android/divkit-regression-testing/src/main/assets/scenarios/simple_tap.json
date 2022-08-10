@@ -1,0 +1,67 @@
+{
+  "templates": {
+    "label_text": {
+      "type": "text",
+      "font_size": 24,
+      "font_weight": "bold",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "height": {
+        "type": "match_parent"
+      },
+      "width": {
+        "type": "match_parent"
+      }
+    }
+  },
+  "card": {
+    "log_id": "simple_tap",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "state",
+          "div_id": "label",
+          "alignment_vertical": "center",
+          "height": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#9000ff00"
+            }
+          ],
+          "states": [
+            {
+              "state_id": "not_tapped",
+              "div": {
+                "type": "label_text",
+                "text": "Click on me",
+                "actions": [
+                  {
+                    "log_id": "not_tapped",
+                    "url": "div-action://set_state?state_id=0/label/tapped"
+                  }
+                ]
+              }
+            },
+            {
+              "state_id": "tapped",
+              "div": {
+                "type": "label_text",
+                "text": "You clicked on me :)",
+                "actions": [
+                  {
+                    "log_id": "tapped",
+                    "url": "div-action://set_state?state_id=0/label/not_tapped"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,933 @@
+title: Simple tap
+tags: [ 'DivAction' ]
+steps:
+  - Tap on text "Click on me"
+expect:
+  - Text "Click on me" changed to "You clicked on me"
+  - Second click chande text to "Click on me"
+paths:
+  - 'scenarios/simple_tap.json'
+---
+title: Long tap
+tags: [ 'DivAction' ]
+steps:
+  - Long tap on button "Long tap menu"
+expect:
+  - Menu with butons "show" and "hide" is appearing
+  - longtap_actions logged
+paths:
+  - 'scenarios/long_tap.json'
+---
+title: Tab swipe
+tags: [ 'DivTabs', 'swipe' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Tab changes depending on the swipe direction
+  - Tabs changes is logged
+paths:
+  - 'scenarios/tabs_max_height.json'
+---
+title: Tab swipe restricted
+tags: [ 'DivTabs', 'swipe' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Tab not changed
+  - Tab changes on header click
+paths:
+  - 'scenarios/tabs_disabled_switch_tabs_by_swipe.json'
+---
+title: Gallery scroll
+tags: [ 'DivGallery', 'scroll' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Content is changes depending on scroll direction
+  - Gallery scroll is logged
+paths:
+  - 'scenarios/gallery/gallery_swipe.json'
+---
+title: Paged gallery scroll
+tags: [ 'DivGallery', 'scroll' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Content is changes page by page
+  - Gallery scroll is logged
+paths:
+  - 'scenarios/gallery/gallery_swipe_paged.json'
+---
+title: Gallery columns
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-columns.json'
+---
+title: Gallery item actions
+tags: [ 'DivGallery']
+paths:
+  - 'scenarios/gallery/gallery-item-actions.json'
+---
+title: Gallery default item states
+tags: [ 'DivGallery']
+paths:
+  - 'scenarios/gallery/gallery_default_item_states.json'
+---
+title: Gallery paging default item states
+tags: [ 'DivGallery']
+paths:
+  - 'scenarios/gallery/gallery_paging_default_item_states.json'
+---
+title: Zoomable gallery
+tags: [ 'DivGallery']
+paths:
+  - 'scenarios/gallery/zoomable-gallery.json'
+---
+title: Gallery bottom multiline
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-bottom-multiline.json'
+---
+title: Gallery bottom multiline selected actions
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-bottom-multiline-selected-action.json'
+---
+title: Gallery bottom singleline
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-bottom-singleline.json'
+---
+title: Gallery top multiline
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-top-multiline.json'
+---
+title: Pager scroll
+tags: [ 'DivPager', 'scroll' ]
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+expect:
+  - Content is changes page by page
+  - Page change is logged
+paths:
+  - 'scenarios/pager/pager.json'
+---
+title: Pager item actions
+tags: [ 'DivPager']
+paths:
+  - 'scenarios/pager/pager-item-actions.json'
+---
+title: Pager selected actions
+tags: [ 'DivPager']
+paths:
+  - 'scenarios/pager/pager-selected-actions.json'
+---
+title: Pager default item states
+tags: [ 'DivPager']
+paths:
+  - 'scenarios/pager/pager_default_item_states.json'
+---
+title: Action animations
+tags: [ 'DivAnimation' ]
+steps:
+  - Click on each button with animations
+expect:
+  - The animation written on the button appears
+  - Animation finished on long click finish
+paths:
+  - 'scenarios/action_animation/interpolator_linear/scale.json'
+  - 'scenarios/action_animation/interpolator_linear/fade.json'
+  - 'scenarios/action_animation/interpolator_linear/set.json'
+  - 'scenarios/action_animation/interpolator_ease/scale.json'
+  - 'scenarios/action_animation/interpolator_ease/fade.json'
+  - 'scenarios/action_animation/interpolator_ease/set.json'
+  - 'scenarios/action_animation/interpolator_ease_in/scale.json'
+  - 'scenarios/action_animation/interpolator_ease_in/fade.json'
+  - 'scenarios/action_animation/interpolator_ease_in/set.json'
+  - 'scenarios/action_animation/interpolator_ease_out/scale.json'
+  - 'scenarios/action_animation/interpolator_ease_out/fade.json'
+  - 'scenarios/action_animation/interpolator_ease_out/set.json'
+  - 'scenarios/action_animation/interpolator_ease_in_out/scale.json'
+  - 'scenarios/action_animation/interpolator_ease_in_out/fade.json'
+  - 'scenarios/action_animation/interpolator_ease_in_out/set.json'
+  - 'scenarios/action_animation/interpolator_spring/scale.json'
+  - 'scenarios/action_animation/interpolator_spring/fade.json'
+  - 'scenarios/action_animation/interpolator_spring/set.json'
+  - 'scenarios/action_animation/no_animation.json'
+---
+title: Recomendation slider
+tags: [ 'Slider' ]
+priority: blocker
+steps:
+  - Interact with the slider
+expect:
+  - Pointer position is changes and change button text
+paths:
+  - 'scenarios/slider_nps.json'
+---
+title: Clider with two pointers
+tags: [ 'Slider' ]
+priority: critical
+steps:
+  - Interact with the slider
+expect:
+  - Pointer position is changes and change button text
+paths:
+  - 'scenarios/double_slider.json'
+---
+title: Slider preferences
+tags: [ 'Slider' ]
+steps:
+  - Interact with slider
+expect:
+  - Slider poiner shange it's position
+paths:
+  - 'scenarios/slider_presets.json'
+---
+title: Root state switching
+paths:
+  - 'scenarios/root_state_switching.json'
+steps:
+  - Press "CHANGE STATE (TEMPORARY)"
+  - Restart the app
+  - Turn back to this scenario
+  - Press "CHANGE STATE"
+  - Restart the app
+  - Turn back to this scenario
+expect:
+  - button "CHANGE STATE (TEMPORARY)" change state and save it between app restart
+  - button "CHANGE STATE" change state, but state resets after app restart
+---
+title: Focus
+steps:
+  - Switch focus
+expect:
+  - Elements focus changes in order to switch
+paths:
+  - 'scenarios/focus.json'
+---
+title: Focus events
+steps:
+  - Switch focus to handler
+  - Switch focus to idle
+expect:
+  - Start state of the right evement is "init"
+  - When handler gets focus, state of the right element is "focus"
+  - When handler lost focus, state of the right element is "blur"
+paths:
+  - 'scenarios/focus_actions.json'
+---
+title: "Accessibility descriptions"
+tags: [ 'Accessibility' ]
+steps:
+  - Set russian language on device
+  - Turn on TalkBack and set order of elements description to "Состояние,название,тип"
+  - Set focus on "Элемент 1"
+  - Listen to TalkBack
+  - Double tap on screen
+  - Set focus on "Элемент 2"
+  - Listen to TalkBack
+  - Set focus on "Элемент 3"
+expect:
+  - On "Элемент 1" TalkBack should say "Cейчас в состоянии 0; Элемент 1; Кнопка; Коснитесь дважды, чтобы активировать"
+  - After double tap TalkBack should say "Сейчас в состоянии 1"
+  - On "Элемент 2" TalkBack should say "Элемент 2; Кнопка; Нажмите на кнопку, чтобы что-то произошло"
+  - On "Элемент 3" TalkBack should say "Элемент 3; Кнопка"
+paths:
+  - 'scenarios/accessibility/descriptions.json'
+---
+title: "Accessibility types"
+tags: [ 'Accessibility' ]
+steps:
+  - Set russian language on device
+  - Turn on TalkBack and set order of elements description to "Состояние,название,тип"
+  - Focus on top button
+  - Move focuse rom one button to another
+expect:
+  - On each elements will be text "Тип - X", you should hear "Тип - X; X"; For example "Тип - кнопка; кнопка"
+  - For "Тип - текст" and "Без типа" you will hear "Тип - текст" and "Без типа".
+paths:
+  - 'scenarios/accessibility/types.json'
+---
+title: "Default Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Turn on TalkBack
+  - Focus on items from top to bottom
+expect:
+  - When focusing on 1 item you'll hear "Это Элемент 1"
+  - When focusing on group of 2 and 3 items you will hear "Это Элемент 2, Это Элемент 3"
+  - Can't focus 4 element
+paths:
+  - 'scenarios/accessibility/mode/default.json'
+---
+title: "Merge Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Turn on TalkBack
+  - Focus on items from top to bottom
+expect:
+  - Focusing on all card
+  - You will hear "Это Элемент 1, Это Элемент 2, Это Элемент 3"
+  - On activation menu with text "Элемент 1, Элемент 2, Элемент 3" appears
+  - On focus TalkBack should not say "Коснитесь дважды и удерживайте"
+paths:
+  - 'scenarios/accessibility/mode/merge.json'
+---
+title: "Exclude Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Turn on TalkBack
+  - Focus on items from top to bottom
+expect:
+  - Focuse on 5-th item
+  - Услышим "Это Элемент 5"
+  - При выключенном TalkBack на каждой кнопке при тапе должно появляться меню с названием этой кнопки
+paths:
+  - 'scenarios/accessibility/mode/exclude.json'
+---
+title: 1299 Actions on tap
+steps:
+  - Tap on top button
+  - Double tap on top button
+  - Long click on top button
+  - Tap on middle button
+  - Double tap on middle button
+  - Long click on middle button
+  - Tap on image on he bottom button
+  - Long click between buttons
+expect:
+  - Menu with text "Single tap" appears with delay
+  - Menu with text "Double tap" appears
+  - Menu with text "Long tap" appears
+  - Menu with text "Single tap" appears without delay
+  - Menu with text "Single tap" appears and than desappears
+  - Menu with text "Long tap on container" appears for container
+  - Menu with text "Single tap on child" appears
+  - Menu with text "Long tap on container" appears for container
+paths:
+  - 'scenarios/button_actions.json'
+---
+title: Longtap actions
+paths:
+  - 'scenarios/pinch-to-zoom-longtap-actions.json'
+---
+title: Div errors visualization
+priority: critical
+expect:
+  - The card displays a red button with the number 1
+  - Click on red button shows error INVALID_VALUE
+  - Click on the cross hide screen with error details
+  - Click on save button copy json with errors
+  - Click on text 'Generate error!' add errors 'Value 'wrong_value' for key 'alignment_horizontal' at path '@{alignment}' is not valid'
+paths:
+  - 'scenarios/error_visual_monitor.json'
+---
+title: 1256-1
+tags: [ 'Animations' ]
+steps:
+ - Press button with text "GO"
+ - After image appears press "GO BACK"
+expect:
+ - Image should appears and desapears changing the transparency
+paths:
+  - 'scenarios/animations/transition/fade_full_src.json'
+---
+title: 1256-2
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears changing the transparency starting or ending with transparency = 0.5
+paths:
+  - 'scenarios/animations/transition/fade_part_src.json'
+---
+title: 1256-3
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears changing the scale
+paths:
+  - 'scenarios/animations/transition/scale_full_src.json'
+---
+title: 1256-4
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears changing the scale starting or ending with scale = 0.75
+paths:
+  - 'scenarios/animations/transition/scale_part_src.json'
+---
+title: 1256-5
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears sliding from under the top edge of the card
+paths:
+  - 'scenarios/animations/transition/slide_full_src.json'
+---
+title: 1256-6
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears sliding from under the top edge of the card, but not reaching it
+paths:
+  - 'scenarios/animations/transition/slide_part_src.json'
+---
+title: 1256-7
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears and desapears changing trancparency and sliding from center to edge
+paths:
+  - 'scenarios/animations/transition/set_src.json'
+---
+title: 1256-8
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should appears from diffrent edges of card
+paths:
+  - 'scenarios/animations/transition/change_bounds_diff_ids_src.json'
+---
+title: 1256-9
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should change it's size
+paths:
+  - 'scenarios/animations/transition/change_bounds_diff_sizes_src.json'
+---
+title: 1256-10
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should change text moving across the screen
+paths:
+  - 'scenarios/animations/transition/change_bounds_diff_types_src.json'
+---
+title: 1256-11
+tags: [ 'Animations' ]
+steps:
+  - Press button with text "GO"
+  - After image appears press "GO BACK"
+expect:
+  - Image should move horizontally across the screen
+paths:
+  - 'scenarios/animations/transition/change_bounds_same_ids_src.json'
+---
+title: 1256-12
+tags: [ 'Animations' ]
+steps:
+ - Click on "EXPAND"
+ - Click on "SHOW COMMENTS"
+ - After expanding of elements click on "COLLAPSE"
+expect:
+ - Expanding end collapsing the elements shoud be with animation
+paths:
+  - 'scenarios/animations/article.json'
+---
+title: 1256-13
+tags: [ 'Animations' ]
+steps:
+ - Click on "EXPAND"
+ - Click on "SHOW COMMENTS"
+ - After expanding of elements click on "COLLAPSE"
+expect:
+ - Expanding end collapsing the elements shoud be with animation
+paths:
+  - 'scenarios/animations/article_with_transitions.json'
+---
+title: 1256-14
+tags: [ 'Animations' ]
+steps:
+ - Click on "BLINK"
+expect:
+ - Red sircle should appear and disappear
+paths:
+  - 'scenarios/animations/blink.json'
+---
+title: 1262 example of tooltip animation
+tags: [ 'Animations' ]
+steps:
+ - A few seconds after the card is shown, a tooltip should appear
+expect:
+ - Toolip hides a few seconds later
+paths:
+  - 'scenarios/animations/mute_notification.json'
+---
+title: 1264 Scale transition ignore pivot_x/pivot_y
+tags: [ 'Animations' ]
+steps:
+ - Press on "GO"
+expect:
+ - Image should scale from left edge to right one
+paths:
+  - 'scenarios/animations/scale_pivot_src.json'
+---
+title: 1265
+tags: [ 'Animations' ]
+steps:
+ - Click on notificattion
+expect:
+ - The text should disappear first, and the background after a short delay
+paths:
+  - 'scenarios/animations/mute_notification.json'
+---
+title: 1269-1
+paths:
+  - 'scenarios/animations/transition/state_transition_any_change.json'
+---
+title: 1269-2
+paths:
+  - 'scenarios/animations/transition/state_transition_data_change.json'
+---
+title: 1269-3
+paths:
+  - 'scenarios/animations/transition/state_transition_state_change.json'
+---
+title: 1269-4
+paths:
+  - 'scenarios/animations/transition/inner_state_transition_any_change.json'
+---
+title: 1269-5
+paths:
+  - 'scenarios/animations/transition/inner_state_transition_data_change.json'
+---
+title: 1269-6
+paths:
+  - 'scenarios/animations/transition/inner_state_transition_state_change.json'
+---
+title: 1271
+tags: [ 'Animations', 'lottie' ]
+steps:
+ - Spinner animation will continue 5 times and then stop
+ - Press RESET
+expect:
+ - Spinner animation will continue 5 times and then stop
+paths:
+ - 'scenarios/animations/lottie/spinner_restart_repeat_mode.json'
+---
+title: 1272
+tags: [ 'Animations', 'lottie' ]
+steps:
+ - Spinner change spin dirrection 3 times and then stops
+ - Нажать RESET
+expect:
+ - Spinner change spin dirrection 3 times and then stops
+paths:
+ - 'scenarios/animations/lottie/spinner_reverse_repeat_mode.json'
+---
+title: 1260
+tags: [ 'Animations', 'lottie' ]
+expect:
+  - Появляется анимация спинера, которая не прерывается.
+paths:
+  - 'scenarios/animations/lottie/spinner.json'
+---
+title: 1270
+tags: [ 'Animations' ]
+paths:
+  - 'scenarios/action_animation/button_press_action_animations.json'
+---
+title: 1234 visibility_actions in gallery
+tags: [ 'Visibility_actions' ]
+steps:
+  - Scroll the gallery
+  - Check logs
+expect:
+  - Gallery data was opened
+  - items visibility logged, for example "logViewShown(cardId = ..., id = ...item_changed0)"
+paths:
+  - 'scenarios/gallery/gallery_swipe.json'
+---
+title: 1235 visibility_actions in pager
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Scroll the pager
+  - Check logs
+expect:
+  - Pager data was opened
+  - items visibility logged, for example "logViewShown(cardId = ..., id = content_item_show:1)"
+paths:
+  - 'scenarios/action_visibility/pager.json'
+---
+title: 1250 visibility_actions on change page in pager
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Swipe cards
+  - Check logs
+expect:
+  - Pager data is logged
+  - items visibility logged, for example "logViewShown(cardId = ..., id = content_item_show:1)"
+paths:
+  - 'scenarios/action_visibility/swipe_div_pager.json'
+---
+title: 1251 Visibility actions performed and logged in pager
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Swipe cards
+  - Check logs
+expect:
+  - Logged evens
+    logViewShown(cardId = ..., id = content_item_show0)
+    logViewShown(cardId = ..., id = container)
+  - Cards description was changed
+paths:
+  - 'scenarios/action_visibility/swipe_div_pager.json'
+---
+title: 1254-1 Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Check logs
+expect:
+  - First element logged, example
+    logViewShown(cardId = ..., id = content_item_show:0)
+    logViewShown(cardId = ..., id = goose_shown)
+paths:
+  - 'scenarios/action_visibility/pager.json'
+---
+title: 1254-2 Send select Pager using Div2View.tryLogVisibility
+tags: [ 'Visibility_actions', 'DivPager' ]
+steps:
+  - Check first item visibility logged
+  - Swipe to the next item
+  - Check second ittem visibility logged
+expect:
+  - First element logged, example
+    Ya:PagerSelectedActionsTracker onPageSelected(0)
+    Ya:PagerSelectedActionsTracker dispatch selected actions for page 0
+  - Second element logged, exapmle logViewShown(cardId = ..., currentPageIndex = 1)
+    Logcat
+    Ya:PagerSelectedActionsTracker onPageSelected(1)
+    DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next)
+    Ya:PagerSelectedActionsTracker dispatch selected actions for page 1
+paths:
+  - 'scenarios/action_visibility/pager_selected_actions.json'
+---
+title: 1258 Grouped bulkActions logged in "dispatchActions:"
+tags: [ 'Visibility_actions' ]
+steps:
+  - Swipe to change tab
+  - Check logs
+expect:
+  - Tabs changes on swipe
+  - Logged item's visibility, exaple
+    logViewShown(cardId = ..., id = content_item_show)
+    logViewShown(cardId = ..., id = container)
+paths:
+  - 'scenarios/action_visibility/swipe_div_pager.json'
+---
+title: 1267 visibility_actions for default_item
+tags: [ 'Visibility_actions' ]
+steps:
+  - Check logs
+expect:
+  - Card is opened
+  - Card visibility logged, example
+    logViewShown(cardId = ..., id = comments_counter_show:4)
+paths:
+  - 'scenarios/action_visibility/default_item.json'
+---
+title: 1288 nested visibility actions
+tags: [ 'Visibility_actions' ]
+steps:
+  - Click on items
+  - Check logs
+expect:
+  - Card article.json is opened
+  - Elements are expanded
+  - Visibility actions logged, example
+    logViewShown(cardId = ..., id = separator)
+    logViewShown(cardId = ..., id = text)
+    logViewShown(cardId = ..., id = text2)
+    logViewShown(cardId = ..., id = comment_state)
+    logViewShown(cardId = ..., id = comment_01)
+    logViewShown(cardId = ..., id = comment_02)
+    logViewShown(cardId = ..., id = comment_03)
+    logViewShown(cardId = ..., id = comment_04)
+paths:
+  - 'scenarios/action_visibility/article.json'
+---
+title: 'Variables in tabs'
+tags: [ 'DivTabs' ]
+steps:
+  - Check different combinations of tabs properties
+expect:
+  - '"dynamic_height=DYNAMIC" - each tab has height equals content height'
+  - '"dynamic_height=MAX_HEIGHT(for non-first-page)" - from the second tab each tab has height equals max tabs content height'
+  - '"tab.line_height=10" - line spacing of tabs text equals 10'
+  - '"tab.line_height=30" - line spacing of tabs text equals 30'
+  - '"tab.theme=GREEN" - tabs become green'
+  - '"tab.theme=RED" - tabs become red'
+  - '"selected_tab=0" - set first tab'
+  - '"selected_tab=1" - set second tab'
+  - '"selected_tab=6" - set "Page index 6" tab'
+  - '"has_separator=0" - turn off horizontal delimiter'
+  - '"has_separator=1" - turn on horizontal delimiter'
+  - '"separator.color=RED" - set red delimiter color'
+  - '"separator.color=BLUE" - set blue delimiter color'
+  - '"separator_paddings.top=0" - padding of horizontal delimiter: top - 0'
+  - '"separator_paddings.top=50" - padding of horizontal delimiter: top - 50'
+  - '"separator_paddings.bottom=0" - padding of horizontal delimiter: bottom - 0'
+  - '"separator_paddings.bottom=50" - padding of horizontal delimiter: bottom - 50'
+  - '"separator_paddings.left=0" - padding of horizontal delimiter: left - 0'
+  - '"separator_paddings.left=50" - padding of horizontal delimiter: left - 50'
+  - '"separator_paddings.right=0" - padding of horizontal delimiter: right - 0'
+  - '"separator_paddings.right=50" - padding of horizontal delimiter: right - 50'
+  - '"title_paddings.top=0" - padding of tabs container: top - 0'
+  - '"title_paddings.top=50" - padding of tabs container: top - 50'
+  - '"title_paddings.bottom=0" - padding of tabs container: bottom - 0'
+  - '"title_paddings.bottom=50" - padding of tabs container: bottom - 50'
+  - '"title_paddings.left=0" - padding of tabs container: left - 0'
+  - '"title_paddings.left=50" - padding of tabs container: left - 50'
+  - '"title_paddings.right=0" - padding of tabs container: right - 0'
+  - '"title_paddings.right=50" - padding of tabs container: right - 50'
+paths:
+  - 'scenarios/variables/div_tabs.json'
+---
+title: 1315 Visibility in div-base
+steps:
+  - Check different combinations of visibility properties
+expect:
+  - On click on test button text field set correct visibility.
+  - Showing text field is logged.
+paths:
+  - 'scenarios/action_visibility/set_visibility.json'
+---
+title: 1317 showing animation on image loaded
+tags: [ 'Animations' ]
+expect:
+  - Image appeares with described animation
+paths:
+  - 'scenarios/action_animation/image_loading_animation.json'
+---
+title: Variables in DivIndicator
+steps:
+  - Click on buttons, check the indicator appearance and animation
+  - Click on last button to reset
+  - Scroll pager to the center, click on buttons, check the indicator
+  - Click on last button to reset
+  - Scroll pager to the end, click on buttons, check the indicator
+expect:
+  - Indicator appearence changes and it changes according to the clicked buttin description
+paths:
+  - 'scenarios/variables/div_indicator.json'
+---
+title: Variables triggers
+tags: [ 'Triggers' ]
+steps:
+  - When only left button clicked, text changes to "left switched"
+  - When only right button clicked, text changes to "right switched"
+  - When both button clicked, text changes to "both switched"
+  - When both buttons is inactive text state changes to initial
+expect:
+  - Text changes according to the button description
+paths:
+  - 'scenarios/variables/div_variable_triggers.json'
+---
+title: Variable triggers (modes)
+tags: [ 'Triggers' ]
+steps:
+  - '"Thumb value" show current thumb position'
+  - '"First selected positive position" show first selected positive thumb value'
+  - '"Last selected positive position" show last selected positive value or move with thumb, if value > 0'
+expect:
+  - The layout corresponds to switching buttons
+paths:
+  - 'scenarios/variables/div_variable_trigger_modes.json'
+---
+title: Variable triggers (замыкания)
+tags: [ 'DivInput', 'DivSlider', 'Triggers', 'Functions' ]
+expect:
+  - Slider and input values should be synchronized
+  - When entering an incorrect value in text input - error shows
+paths:
+  - 'scenarios/variables/div_variable_trigger_loops.json'
+---
+title: Sequential animations
+steps:
+  - Click on image
+expect:
+  - Heart will increase by 2 times in 2 seconds, then will increase by 4 times in 2 seconds
+paths:
+  - 'scenarios/animations/transition/transition_set.json'
+---
+title: 'Animations of switching tabs headers'
+tags: [ 'DivTabs', 'Animations' ]
+steps:
+  - Switch items on each tab by clicking on the tab headers
+  - Slowly swipe each tab
+expect:
+  - Look at the headers animation
+  - 1 tab has slide animation
+  - 2 tab has fade animation
+  - 3 tab has no animation
+paths:
+  - 'scenarios/animations/tab_titles_animations.json'
+---
+title: Text copying
+tags: [ 'DivText' ]
+steps:
+  - Double tap or long click on first text
+  - Double tap or long click on second text
+expect:
+  - First text has a system highlighting, you can copy it. Second text has no highlighting.
+paths:
+  - 'scenarios/selectable_text.json'
+---
+title: DivText
+tags: [ 'DivText' ]
+paths:
+  - 'scenarios/div-text.json'
+---
+title: 'Nested change bounds transitions'
+steps:
+  - Click "PRESS HERE"
+  - Click "PRESS AGAIN"
+expect:
+  - After first click image appers with animation, the container extendes with animation.
+  - After second click extendes buton, text changes, container extendes again.
+paths:
+  - 'scenarios/action_animation/nested_change_bounds.json'
+---
+title: Text input
+tags: [ 'DivInput' ]
+steps:
+  - Tap on input field
+  - Change text
+expect:
+  - Text under the input should be equal to text in input and change on input changes.
+paths:
+  - 'scenarios/input.json'
+---
+title: Text input (single line)
+tags: [ 'DivInput' ]
+steps:
+  - Tap on input field
+  - Change text
+expect:
+  - Text under the input should be equal to text in input and change on input changes.
+  - Max lines = 1. Line break is unavailable.
+paths:
+  - 'scenarios/single_line_input.json'
+---
+title: Manage VideoCustom
+tags: [ 'VideoCustom' ]
+steps:
+  - Tap on 'play', 'pause', 'reset'
+expect:
+  - On tap on 'play' video continue
+  - On tap on 'pause' video pause
+  - On tap on 'reset' video starts from the beginning
+  - If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused
+  - If video wasn't paused, on tap on 'reset' the video starts playing from beginnging
+paths:
+  - 'scenarios/video/video_controls.json'
+---
+title: 'State transition trigger'
+steps:
+  - Press "To liked"
+expect:
+  - First - there should be animation, there are only old triggers
+  - Second - there should be no animation, the old "state_change" is rubbed with an empty list of new ones
+  - Third - there should be animation, old and new are allowed by default
+paths:
+  - 'scenarios/animations/transition/transition_triggers_state_change.json'
+---
+title: 'Data transition trigger'
+steps:
+  - Press "Change data"
+expect:
+  - First - there should be animation, there are only old triggers
+  - Second - there should be no animation, the old "state_change" is rubbed with an empty list of new ones
+  - Third - there should be an animation, the old "none" is rubbed by the new "state_change"
+paths:
+  - 'scenarios/animations/transition/transition_triggers_data_change_src.json'
+---
+title: 'Actions logging'
+steps:
+  - Click on Test button
+  - Double click Test button
+  - Long click on Test button
+  - Check logs
+expect:
+  - Click logged 2 times
+  - Double click logged 2 times
+  - Long click logged 2 times
+paths:
+  - 'scenarios/logging.json'
+
+---
+title: 'Shortcuts'
+paths:
+  - 'scenarios/shortcuts.json'
+---
+title: 'Auto ellipsize'
+paths:
+  - 'scenarios/auto-ellipsize.json'
+---
+title: 'Expand cutout 1'
+paths:
+  - 'scenarios/expand-cutout-1.json'
+---
+title: 'Expand cutout 2'
+paths:
+  - 'scenarios/expand-cutout-2.json'
+---
+title: 'Lottie animations'
+paths:
+  - 'scenarios/lottie_animations.json'
+---
+title: 'Lottie cycled animations'
+expect:
+  - Red circle appears with animation, then blink
+paths:
+  - 'scenarios/lottie_cycled_animations.json'
+---
+title: 'States default state'
+paths:
+  - 'scenarios/states_default_state.json'
+---
+title: 'Tabs item actions'
+paths:
+  - 'scenarios/tabs-item-actions.json'
+---
+title: 'Grid layout'
+paths:
+  - 'scenarios/grid_layout.json'
+---
+title: 'Grid with weights'
+paths:
+  - 'scenarios/grid-with-weights.json'
+---
+title: 'Custom container'
+paths:
+  - 'scenarios/custom-container.json'
+---
+title: 'Custom card'
+paths:
+  - 'scenarios/custom-card.json'

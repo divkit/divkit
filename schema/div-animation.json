@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_animation",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": [
+        "fade",
+        "translate",
+        "scale",
+        "native",
+        "set",
+        "no_animation"
+      ],
+      "$description": "translations.json#/div_animation_name"
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "300",
+      "$description": "translations.json#/div_animation_duration"
+    },
+    "start_delay": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_animation_start_delay"
+    },
+    "start_value": {
+      "type": "number",
+      "$description": "translations.json#/div_animation_start_value"
+    },
+    "end_value": {
+      "type": "number",
+      "$description": "translations.json#/div_animation_end_value"
+    },
+    "repeat": {
+      "alias_swift": "repeat_count",
+      "$ref": "div-count.json",
+      "default_value": "{ \"type\": \"infinity\" }",
+      "$description": "translations.json#/div_animation_repeat"
+    },
+    "interpolator": {
+      "$ref": "div-animation-interpolator.json",
+      "default_value": "spring",
+      "$description": "translations.json#/div_animation_interpolator"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "div-animation.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_animation_items"
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

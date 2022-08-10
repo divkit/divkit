@@ -1,0 +1,56 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_container",
+  "generate_swift_optional_arguments": false,
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "container"
+          ]
+        },
+        "content_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "top",
+          "$description": "translations.json#/div_container_content_alignment_vertical"
+        },
+        "content_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "left",
+          "$description": "translations.json#/div_container_content_alignment_horizontal"
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "vertical",
+            "horizontal",
+            "overlap"
+          ],
+          "default_value": "vertical",
+          "$description": "translations.json#/div_container_orientation"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_container_items"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "items"
+  ]
+}

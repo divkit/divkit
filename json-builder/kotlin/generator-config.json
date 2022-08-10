@@ -1,0 +1,14 @@
+{
+  "lang": "kotlinDsl",
+  "imports": [
+    "java.net.URI",
+    "com.fasterxml.jackson.annotation.*",
+    "com.yandex.div.dsl.*",
+    "com.yandex.div.dsl.context.*",
+    "com.yandex.div.dsl.type.*",
+    "com.yandex.div.dsl.util.*"
+  ],
+  "java": {
+    "package": "com.yandex.div.dsl.model"
+  }
+}

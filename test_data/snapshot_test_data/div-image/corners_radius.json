@@ -1,0 +1,37 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+          "border": {
+            "stroke": {
+              "color": "#BB0000FF"
+            },
+            "corner_radius": 4,
+            "corners_radius": {
+              "top-left": 10,
+              "bottom-right": 15,
+              "bottom-left": 0
+            }
+          },
+          "background": [
+            {
+              "color": "#FFAAAAAA",
+              "type": "solid"
+            }
+          ],
+          "height": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      }
+    ]
+  }
+}
+

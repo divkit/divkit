@@ -1,0 +1,36 @@
+{
+  "$description": "translations.json#/div_slide_transition",
+  "allOf": [
+    {
+      "$ref": "div-transition-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "slide"
+          ]
+        },
+        "edge": {
+          "type": "string",
+          "enum": [
+            "left",
+            "top",
+            "right",
+            "bottom"
+          ],
+          "default_value": "bottom",
+          "$description": "translations.json#/div_slide_transition_edge"
+        },
+        "distance":{
+          "$ref": "div-dimension.json",
+          "$description": "translations.json#/div_slide_transition_distance"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

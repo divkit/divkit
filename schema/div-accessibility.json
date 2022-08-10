@@ -1,0 +1,64 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_accessibility",
+  "properties": {
+    "description": {
+      "$ref": "common.json#/non_empty_string",
+      "$description": "translations.json#/div_accessibility_description"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "none",
+        "button",
+        "image",
+        "text",
+        "edit_text",
+        "header",
+        "tab_bar"
+      ],
+      "supports_expressions": false,
+      "$description": "translations.json#/div_accessibility_type",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "state_description": {
+      "$ref": "common.json#/non_empty_string",
+      "$description": "translations.json#/div_accessibility_state_description",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "hint": {
+      "$ref": "common.json#/non_empty_string",
+      "$description": "translations.json#/div_accessibility_hint",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "default",
+        "merge",
+        "exclude"
+      ],
+      "default_value": "default",
+      "$description": "translations.json#/div_accessibility_mode",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "mute_after_action": {
+      "$ref": "common.json#/boolean_int",
+      "default_value": "false",
+      "$description": "translations.json#/div_accessibility_mute_after_action",
+      "platforms": [ "ios" ]
+    }
+  }
+}

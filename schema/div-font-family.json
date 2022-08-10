@@ -1,0 +1,7 @@
+{
+  "type": "string",
+  "enum": [
+    "text", "display"
+  ],
+  "$description": "translations.json#/div_font_family"
+}

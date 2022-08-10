@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_rounded_rectangle_shape",
+  "properties": {
+    "item_width": {
+      "$ref": "div-fixed-size.json",
+      "default_value": "{\"type\":\"fixed\",\"value\":10}",
+      "$description": "translations.json#/div_rounded_rectangle_shape_item_width"
+    },
+    "item_height": {
+      "$ref": "div-fixed-size.json",
+      "default_value": "{\"type\":\"fixed\",\"value\":10}",
+      "$description": "translations.json#/div_rounded_rectangle_shape_item_height"
+    },
+    "corner_radius": {
+      "$ref": "div-fixed-size.json",
+      "default_value": "{\"type\":\"fixed\",\"value\":5}",
+      "$description": "translations.json#/div_rounded_rectangle_shape_corner_radius"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "rounded_rectangle"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

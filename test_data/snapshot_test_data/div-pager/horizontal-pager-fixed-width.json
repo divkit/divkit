@@ -1,0 +1,60 @@
+{
+  "templates": {
+    "text_page_fixed_height": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "layout_mode": {
+            "type": "fixed",
+            "neighbour_page_width": {
+              "type": "fixed",
+              "value": 0
+            }
+          },
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            },
+            "corner_radius": 10
+          },
+          "items": [
+            {
+              "type": "text_page_fixed_height",
+              "text": "For millions of years mankind lived just like animals"
+            },
+            {
+              "type": "text_page_fixed_height",
+              "text": "Then something happened which unleashed the power of our imagination"
+            },
+            {
+              "type": "text_page_fixed_height",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

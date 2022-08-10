@@ -1,0 +1,11 @@
+{
+  "type": "string",
+  "enum": [
+    "none",
+    "data_change",
+    "state_change",
+    "any_change"
+  ],
+  "$description": "translations.json#/div_transition_selector",
+  "deprecated": true
+}

@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "log_id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "$description": "translations.json#/div_action_base_log_id"
+    },
+    "url": {
+      "$ref": "common.json#/url",
+      "$description": "translations.json#/div_action_base_url"
+    },
+    "referer": {
+      "$ref": "common.json#/url",
+      "$description": "translations.json#/div_action_base_referer"
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "$description": "translations.json#/div_action_base_payload"
+    },
+    "download_callbacks": {
+      "$ref": "div-download-callbacks.json",
+      "$description": "translations.json#/div_action_base_download_callbacks",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  }
+}

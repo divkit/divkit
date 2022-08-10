@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "enum": [
+    "light",
+    "medium",
+    "regular",
+    "bold"
+  ]
+}

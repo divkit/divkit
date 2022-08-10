@@ -1,0 +1,134 @@
+{
+  "type": "state",
+  "div_id": "state_container",
+  "states": [
+    {
+      "state_id": "first",
+      "div": {
+        "type": "container",
+        "id": "root_container",
+        "orientation": "vertical",
+        "items": [
+          {
+            "type": "container",
+            "orientation": "overlap",
+            "items": [
+              {
+                "type": "state",
+                "div_id": "container_item_one",
+                "id": "container_item_one",
+                "states": [
+                  {
+                    "state_id": "one",
+                    "div": {
+                      "type": "text",
+                      "text": "one"
+                    }
+                  },
+                  {
+                    "state_id": "two",
+                    "div": {
+                      "type": "text",
+                      "text": "two"
+                    }
+                  },
+                  {
+                    "state_id": "three",
+                    "div": {
+                      "type": "text",
+                      "text": "three"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "state",
+                "div_id": "container_item_two",
+                "states": [
+                  {
+                    "state_id": "one",
+                    "div": {
+                      "type": "text",
+                      "text": "one"
+                    }
+                  },
+                  {
+                    "state_id": "two",
+                    "div": {
+                      "type": "text",
+                      "text": "two"
+                    }
+                  },
+                  {
+                    "state_id": "three",
+                    "div": {
+                      "type": "text",
+                      "text": "three"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "state",
+                "div_id": "container_item_three",
+                "states": [
+                  {
+                    "state_id": "one",
+                    "div": {
+                      "type": "text",
+                      "text": "one"
+                    }
+                  },
+                  {
+                    "state_id": "two",
+                    "div": {
+                      "type": "text",
+                      "text": "two"
+                    }
+                  },
+                  {
+                    "state_id": "three",
+                    "div": {
+                      "type": "text",
+                      "text": "three"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "state_id": "second",
+      "div": {
+        "type": "state",
+        "div_id": "second_state",
+        "states": [
+          {
+            "state_id": "hidden",
+            "div": {
+              "type": "text",
+              "text": "hidden"
+            }
+          },
+          {
+            "state_id": "shown",
+            "div": {
+              "type": "text",
+              "text": "shown"
+            }
+          },
+          {
+            "state_id": "clicked",
+            "div": {
+              "type": "text",
+              "text": "clicked"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

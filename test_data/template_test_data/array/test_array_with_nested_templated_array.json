@@ -1,0 +1,36 @@
+{
+  "templates": {
+    "gallery_item": {
+      "type": "entity_with_complex_property",
+      "property": {
+        "$value": "item_link"
+      }
+    },
+    "gallery": {
+      "type": "entity_with_array",
+      "$array": "gallery_items_link"
+    },
+    "tabs": {
+      "type": "entity_with_array",
+      "$array": "tabs_items_link"
+    }
+  },
+  "entity": {
+    "type": "tabs",
+    "tabs_items_link": [
+      {
+        "type": "gallery",
+        "gallery_items_link": [
+          {
+            "type": "gallery_item",
+            "item_link": "https://ya.ru"
+          },
+          {
+            "type": "gallery_item",
+            "item_link": "https://ya.ru"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,1800 @@
+{
+    "cases": [
+        {
+            "name": "4 + 7 => error",
+            "expression": "@{4 + 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4 - 7 => error",
+            "expression": "@{4 - 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4 * 7 => error",
+            "expression": "@{4 * 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4 / 7 => error",
+            "expression": "@{4 / 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4 % 7 => error",
+            "expression": "@{4 % 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4 ^ 7 => error",
+            "expression": "@{4 ^ 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4 & 7 => error",
+            "expression": "@{4 & 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4 | 7 => error",
+            "expression": "@{4 | 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4 && 7 => error",
+            "expression": "@{4 && 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4 || 7 => error",
+            "expression": "@{4 || 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4.0 + 7.0 => error",
+            "expression": "@{4.0 + 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4.0 - 7.0 => error",
+            "expression": "@{4.0 - 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4.0 * 7.0 => error",
+            "expression": "@{4.0 * 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4.0 / 7.0 => error",
+            "expression": "@{4.0 / 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "4.0 % 7.0 => error",
+            "expression": "@{4.0 % 7.0}",
+            "expected": {
+                "type": "number",
+                "value": 4.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4.0 ^ 7.0 => error",
+            "expression": "@{4.0 ^ 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4.0 & 7.0 => error",
+            "expression": "@{4.0 & 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4.0 | 7.0 => error",
+            "expression": "@{4.0 | 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4.0 && 7.0 => error",
+            "expression": "@{4.0 && 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "4.0 || 7.0 => error",
+            "expression": "@{4.0 || 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' - 'abc' => error",
+            "expression": "@{'abc' - 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' - 'abc']. Operator '-' cannot be applied to String type."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' * 'abc' => error",
+            "expression": "@{'abc' * 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' * 'abc']. Operator '*' cannot be applied to String type."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' / 'abc' => error",
+            "expression": "@{'abc' / 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' / 'abc']. Operator '/' cannot be applied to String type."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' % 'abc' => error",
+            "expression": "@{'abc' % 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' % 'abc']. Operator '%' cannot be applied to String type."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' ^ 'abc' => error",
+            "expression": "@{'abc' ^ 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' & 'abc' => error",
+            "expression": "@{'abc' & 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' | 'abc' => error",
+            "expression": "@{'abc' | 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' && 'abc' => error",
+            "expression": "@{'abc' && 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' || 'abc' => error",
+            "expression": "@{'abc' || 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a + b => error",
+            "expression": "@{a + b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "a - b => error",
+            "expression": "@{a - b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "a * b => error",
+            "expression": "@{a * b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "a / b => error",
+            "expression": "@{a / b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "a % b => error",
+            "expression": "@{a % b}",
+            "expected": {
+                "type": "integer",
+                "value": 0
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a ^ b => error",
+            "expression": "@{a ^ b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a & b => error",
+            "expression": "@{a & b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a | b => error",
+            "expression": "@{a | b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a && b => error",
+            "expression": "@{a && b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a || b => error",
+            "expression": "@{a || b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "a"
+                },
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a + b => error",
+            "expression": "@{a + b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 && 7.0]. Operator '&&' cannot be applied to Number type."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "a - b => error",
+            "expression": "@{a - b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "a * b => error",
+            "expression": "@{a * b}",
+            "expected": {
+                "type": "error",
+                "value": "Operator is not supported for Number type, operator '*', expression '7.0 * 7.0]."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "a / b => error",
+            "expression": "@{a / b}",
+            "expected": {
+                "type": "error",
+                "value": "Operator is not supported for Number type, operator '/', expression '7.0 / 7.0]."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
+            "name": "a % b => error",
+            "expression": "@{a % b}",
+            "expected": {
+                "type": "number",
+                "value": 0.0
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a ^ b => error",
+            "expression": "@{a ^ b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a & b => error",
+            "expression": "@{a & b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a | b => error",
+            "expression": "@{a | b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a && b => error",
+            "expression": "@{a && b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a || b => error",
+            "expression": "@{a || b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a - b => error",
+            "expression": "@{a - b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' - 'abc']. Operator '-' cannot be applied to String type."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a * b => error",
+            "expression": "@{a * b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' * 'abc']. Operator '*' cannot be applied to String type."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a / b => error",
+            "expression": "@{a / b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' / 'abc']. Operator '/' cannot be applied to String type."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a % b => error",
+            "expression": "@{a % b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' % 'abc']. Operator '%' cannot be applied to String type."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a ^ b => error",
+            "expression": "@{a ^ b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a & b => error",
+            "expression": "@{a & b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a | b => error",
+            "expression": "@{a | b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a && b => error",
+            "expression": "@{a && b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a || b => error",
+            "expression": "@{a || b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a + b => error",
+            "expression": "@{a + b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true + false]. Operator '+' cannot be applied to Boolean type."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                },
+                {
+                    "type": "boolean",
+                    "value": 0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a - b => error",
+            "expression": "@{a - b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true - false]. Operator '-' cannot be applied to Boolean type."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                },
+                {
+                    "type": "boolean",
+                    "value": 0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a * b => error",
+            "expression": "@{a * b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true * false]. Operator '*' cannot be applied to Boolean type."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                },
+                {
+                    "type": "boolean",
+                    "value": 0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a / b => error",
+            "expression": "@{a / b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true / false]. Operator '/' cannot be applied to Boolean type."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                },
+                {
+                    "type": "boolean",
+                    "value": 0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a % b => error",
+            "expression": "@{a % b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true % false]. Operator '%' cannot be applied to Boolean type."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                },
+                {
+                    "type": "boolean",
+                    "value": 0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a ^ b => error",
+            "expression": "@{a ^ b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                },
+                {
+                    "type": "boolean",
+                    "value": 0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a & b => error",
+            "expression": "@{a & b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                },
+                {
+                    "type": "boolean",
+                    "value": 0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a | b => error",
+            "expression": "@{a | b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                },
+                {
+                    "type": "boolean",
+                    "value": 0,
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a + b => error",
+            "expression": "@{a + b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a - b => error",
+            "expression": "@{a - b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a * b => error",
+            "expression": "@{a * b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a / b => error",
+            "expression": "@{a / b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a % b => error",
+            "expression": "@{a % b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a ^ b => error",
+            "expression": "@{a ^ b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a & b => error",
+            "expression": "@{a & b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a | b => error",
+            "expression": "@{a | b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a && b => error",
+            "expression": "@{a && b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a || b => error",
+            "expression": "@{a || b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#FFFFFF",
+                    "name": "a"
+                },
+                {
+                    "type": "color",
+                    "value": "#FFFF00",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a + b => error",
+            "expression": "@{a + b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a - b => error",
+            "expression": "@{a - b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a * b => error",
+            "expression": "@{a * b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a / b => error",
+            "expression": "@{a / b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a % b => error",
+            "expression": "@{a % b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a ^ b => error",
+            "expression": "@{a ^ b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a & b => error",
+            "expression": "@{a & b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a | b => error",
+            "expression": "@{a | b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a && b => error",
+            "expression": "@{a && b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a || b => error",
+            "expression": "@{a || b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "a"
+                },
+                {
+                    "type": "url",
+                    "value": "ya.ru",
+                    "name": "b"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,52 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_grid",
+  "generate_swift_optional_arguments": false,
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "properties": {
+        "content_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "top",
+          "$description": "translations.json#/div_grid_content_alignment_vertical"
+        },
+        "content_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "left",
+          "$description": "translations.json#/div_grid_content_alignment_horizontal"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "strictParsing": true,
+          "$description": "translations.json#/div_grid_items"
+        },
+        "column_count": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_grid_column_count"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "grid"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "items",
+    "column_count",
+    "type"
+  ]
+}

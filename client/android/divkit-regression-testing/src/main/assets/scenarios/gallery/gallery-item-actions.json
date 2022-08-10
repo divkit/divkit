@@ -1,0 +1,348 @@
+
+{
+  "log_id": "card",
+  "states": [
+    {
+      "div": {
+        "items": [
+          {
+            "font_size": 24,
+            "paddings": {
+              "bottom": 8,
+              "left": 8,
+              "right": 0,
+              "top": 8
+            },
+            "text": "My Gallery",
+            "text_color": "#A0000000",
+            "type": "text"
+          },
+          {
+            "id": "my_gallery",
+            "items": [
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "0",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "1",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "2",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "3",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "4",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "5",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "6",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "7",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "8",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              },
+              {
+                "background": [
+                  {
+                    "color": "#80ff0000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 150
+                },
+                "text": "9",
+                "text_alignment_horizontal": "center",
+                "text_alignment_vertical": "center",
+                "text_color": "#ffffff",
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 320
+                }
+              }
+            ],
+            "scroll_mode": "default",
+            "type": "gallery"
+          },
+          {
+            "items": [
+              {
+                "actions": [
+                  {
+                    "log_id": "prev",
+                    "url": "div-action://set_current_item?id=my_gallery&item=0"
+                  }
+                ],
+                "background": [
+                  {
+                    "color": "#50000000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 80
+                },
+                "text": "<<",
+                "text_alignment_horizontal": "center",
+                "type": "text"
+              },
+              {
+                "actions": [
+                  {
+                    "log_id": "prev",
+                    "url": "div-action://set_previous_item?id=my_gallery"
+                  }
+                ],
+                "background": [
+                  {
+                    "color": "#50000000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 80
+                },
+                "text": "<",
+                "text_alignment_horizontal": "center",
+                "type": "text"
+              },
+              {
+                "actions": [
+                  {
+                    "log_id": "next",
+                    "url": "div-action://set_next_item?id=my_gallery"
+                  }
+                ],
+                "background": [
+                  {
+                    "color": "#50000000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 80
+                },
+                "text": ">",
+                "text_alignment_horizontal": "center",
+                "type": "text"
+              },
+              {
+                "actions": [
+                  {
+                    "log_id": "next",
+                    "url": "div-action://set_current_item?id=my_gallery&item=9"
+                  }
+                ],
+                "background": [
+                  {
+                    "color": "#50000000",
+                    "type": "solid"
+                  }
+                ],
+                "font_size": 24,
+                "height": {
+                  "type": "fixed",
+                  "value": 80
+                },
+                "text": ">>",
+                "text_alignment_horizontal": "center",
+                "type": "text"
+              }
+            ],
+            "orientation": "horizontal",
+            "type": "container"
+          }
+        ],
+        "orientation": "vertical",
+        "type": "container"
+      },
+      "state_id": 0
+    }
+  ]
+}

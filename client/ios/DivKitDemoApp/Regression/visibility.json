@@ -1,0 +1,144 @@
+{
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "visibility",
+        "type": "string",
+        "value": "visible"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "paddings": {
+            "bottom": 6,
+            "top": 6
+          },
+          "items": [
+            {
+              "type": "button",
+              "text": "set VISIBLE",
+              "actions": [
+                {
+                  "log_id": "button/visible",
+                  "url": "div-action://set_variable?name=visibility&value=visible"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "set INVISIBLE",
+              "actions": [
+                {
+                  "log_id": "button/invisible",
+                  "url": "div-action://set_variable?name=visibility&value=invisible"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "set GONE",
+              "actions": [
+                {
+                  "log_id": "button/gone",
+                  "url": "div-action://set_variable?name=visibility&value=gone"
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "div_id": "inner",
+              "states": [
+                {
+                  "state_id": "state0",
+                  "div": {
+                    "type": "block",
+                    "id": "block",
+                    "text": "Visible in state",
+                    "visibility": "@{visibility}"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "block",
+              "id": "block",
+              "text": "Visible",
+              "visibility": "@{visibility}"
+            },
+            {
+              "type": "block",
+              "text": "Invisible",
+              "visibility": "invisible"
+            },
+            {
+              "type": "block",
+              "text": "Gone",
+              "visibility": "gone"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "base_block": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "medium",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "bottom": 6,
+        "left": 12,
+        "right": 12,
+        "top": 6
+      },
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    },
+    "block": {
+      "type": "base_block",
+      "text_color": "#FFAFAF",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A05050"
+        }
+      ],
+      "transition_in": {
+        "type": "fade",
+        "duration": 500,
+        "start_delay": 500
+      },
+      "transition_out": {
+        "type": "fade",
+        "duration": 500
+      }
+    },
+    "button": {
+      "type": "base_block",
+      "text_color": "#34495E",
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ]
+    }
+  }
+}

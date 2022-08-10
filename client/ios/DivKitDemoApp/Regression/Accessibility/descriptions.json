@@ -1,0 +1,180 @@
+{
+  "card": {
+    "log_id": "accessibility/descriptions",
+    "transition_animation_selector": "data_change",
+    "variables": [
+      {
+        "name": "button_1_active",
+        "type": "boolean",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Элемент 1",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "accessibility": {
+                "type": "button",
+                "description": "Элемент 1",
+                "state_description": "Сейчас в состоянии @{button_1_active}"
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "change_button_1_state",
+                  "url": "div-action://set_variable?name=button_1_active&value=1"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Элемент 2",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "accessibility": {
+                "type": "button",
+                "description": "Элемент 2",
+                "hint": "Нажмите на кнопку, чтобы что-то произошло"
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Элемент 3",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "accessibility": {
+                "type": "button",
+                "description": "Элемент 3"
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            },
+                        {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Элемент 4",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "accessibility": {
+                "type": "button",
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "tabs",
+          "selected_tab": 1,
+          "items": [
+            {
+              "title": "test1",
+              "div": {
+                "type": "text",
+                "width": {
+                  "type": "fixed",
+                  "value": 100
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 100
+                },
+                "paddings": {
+                  "left": 16,
+                  "right": 16
+                },
+                "border": {
+                  "corner_radius": 6
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#ffffff"
+                  }
+                ],
+                "text": "Ул. Льва Толстого, 16"
+              }
+            },
+            {
+              "title": "test2",
+              "div": {
+                "type": "wrong"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

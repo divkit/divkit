@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_page_size",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "percentage"
+      ]
+    },
+    "page_width": {
+      "$ref": "div-percentage-size.json",
+      "$description": "translations.json#/div_page_size_page_width"
+    }
+  },
+  "required": [
+    "type",
+    "page_width"
+  ]
+}

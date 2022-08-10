@@ -1,0 +1,364 @@
+{
+    "cases": [
+        {
+            "name": "all lowercase variable name characters",
+            "expression": "@{abcdefghijklmnopqrstuvwxyz}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "abcdefghijklmnopqrstuvwxyz"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "all uppercase variable name",
+            "expression": "@{ABCDEFGHIJKLMNOPQRSTUVWXYZ}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "camelcase variable name",
+            "expression": "@{isAtEnd}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "isAtEnd"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with numbers",
+            "expression": "@{st1t2}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "st1t2"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with underscore symbol",
+            "expression": "@{st1_t2}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "st1_t2"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with several underscore symbols",
+            "expression": "@{st1____t2}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "st1____t2"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with first underscore symbols",
+            "expression": "@{_t2}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "_t2"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with last underscore symbols",
+            "expression": "@{t2__}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "t2__"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with just underscore symbol",
+            "expression": "@{_}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "_"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with dot symbol",
+            "expression": "@{st1.t2}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "st1.t2"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with last dot symbol",
+            "expression": "@{st1t2.}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "st1t2."
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with several dot symbols",
+            "expression": "@{st1...t2}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "st1...t2"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with several dot and underscore symbols",
+            "expression": "@{_a.a..__..b_b.}",
+            "expected": {
+                "type": "string",
+                "value": "ok"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "_a.a..__..b_b."
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with only dot symbol",
+            "expression": "@{.}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "."
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with first dot symbol",
+            "expression": "@{.t2}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": ".t2"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name with first number",
+            "expression": "@{3st1t2}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "3st1t2"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name is boolean literal 'true'",
+            "expression": "@{true}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "true"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "variable name is boolean literal 'false'",
+            "expression": "@{false}",
+            "expected": {
+                "type": "boolean",
+                "value": false
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "ok",
+                    "name": "false"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        }
+    ]
+}

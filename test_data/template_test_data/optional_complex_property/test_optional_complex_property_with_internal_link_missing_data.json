@@ -1,0 +1,13 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_optional_complex_property",
+      "property": {
+        "$value": "link"
+      }
+    }
+  },
+  "entity": {
+    "type": "t_0"
+  }
+}

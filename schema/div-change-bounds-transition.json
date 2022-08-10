@@ -1,0 +1,21 @@
+{
+  "$description": "translations.json#/div_change_bounds_transition",
+  "allOf": [
+    {
+      "$ref": "div-transition-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "change_bounds"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

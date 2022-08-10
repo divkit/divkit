@@ -1,0 +1,15 @@
+{
+  "description": "impossible to wrap match_parent content",
+  "type": "grid",
+  "column_count": 1,
+  "items": [
+    {
+      "type": "text",
+      "text": "1",
+      "height": {
+        "type": "match_parent",
+        "weight": 1
+      }
+    }
+  ]
+}

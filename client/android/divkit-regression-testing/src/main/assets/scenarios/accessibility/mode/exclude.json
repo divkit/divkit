@@ -1,0 +1,311 @@
+{
+  "log_id": "accessibility/mode/exclude",
+  "transition_animation_selector": "data_change",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "height": {
+          "type": "wrap_content"
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#2C3E50"
+          }
+        ],
+        "orientation": "vertical",
+        "items": [
+          {
+            "type": "container",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#cc0605"
+              }
+            ],
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "border": {
+              "corner_radius": 8
+            },
+            "accessibility": {
+              "mode": "exclude"
+            },
+            "items": [
+              {
+                "type": "text",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 48
+                },
+                "font_size": 18,
+                "font_weight": "medium",
+                "text_alignment_vertical": "center",
+                "text_alignment_horizontal": "center",
+                "text_color": "#34495E",
+                "text": "Элемент 1",
+                "margins": {
+                  "left": 16,
+                  "top": 16,
+                  "right": 16,
+                  "bottom": 16
+                },
+                "accessibility": {
+                  "description": "Это Элемент 1"
+                },
+                "border": {
+                  "corner_radius": 8
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#1ABC9C"
+                  }
+                ],
+                "actions": [
+                  {
+                    "menu_items": [
+                      {
+                        "text": "Элемент 1",
+                        "action": {
+                          "url": "custom-menu://singleTap",
+                          "log_id": "custom/menu/singleTap"
+                        }
+                      }
+                    ],
+                    "log_id": "tap_actions"
+                  }
+                ]
+              },
+              {
+                "type": "container",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#1959d1"
+                  }
+                ],
+                "margins": {
+                  "left": 16,
+                  "top": 16,
+                  "right": 16,
+                  "bottom": 16
+                },
+                "border": {
+                  "corner_radius": 8
+                },
+                "accessibility": {
+                  "mode": "merge"
+                },
+                "items": [
+                  {
+                    "type": "text",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 48
+                    },
+                    "font_size": 18,
+                    "font_weight": "medium",
+                    "text_alignment_vertical": "center",
+                    "text_alignment_horizontal": "center",
+                    "text_color": "#34495E",
+                    "text": "Элемент 2",
+                    "margins": {
+                      "left": 16,
+                      "top": 16,
+                      "right": 16,
+                      "bottom": 16
+                    },
+                    "accessibility": {
+                      "description": "Это Элемент 2"
+                    },
+                    "border": {
+                      "corner_radius": 8
+                    },
+                    "actions": [
+                      {
+                        "menu_items": [
+                          {
+                            "text": "Элемент 2",
+                            "action": {
+                              "url": "custom-menu://singleTap",
+                              "log_id": "custom/menu/singleTap"
+                            }
+                          }
+                        ],
+                        "log_id": "tap_actions"
+                      }
+                    ],
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#1ABC9C"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "text",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "height": {
+                      "type": "fixed",
+                      "value": 48
+                    },
+                    "font_size": 18,
+                    "font_weight": "medium",
+                    "text_alignment_vertical": "center",
+                    "text_alignment_horizontal": "center",
+                    "text_color": "#34495E",
+                    "text": "Элемент 3",
+                    "margins": {
+                      "left": 16,
+                      "top": 16,
+                      "right": 16,
+                      "bottom": 16
+                    },
+                    "accessibility": {
+                      "description": "Это Элемент 3"
+                    },
+                    "actions": [
+                      {
+                        "menu_items": [
+                          {
+                            "text": "Элемент 3",
+                            "action": {
+                              "url": "custom-menu://singleTap",
+                              "log_id": "custom/menu/singleTap"
+                            }
+                          }
+                        ],
+                        "log_id": "tap_actions"
+                      }
+                    ],
+                    "border": {
+                      "corner_radius": 8
+                    },
+                    "background": [
+                      {
+                        "type": "solid",
+                        "color": "#1ABC9C"
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "type": "text",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "fixed",
+                  "value": 48
+                },
+                "font_size": 18,
+                "font_weight": "medium",
+                "text_alignment_vertical": "center",
+                "text_alignment_horizontal": "center",
+                "text_color": "#FFFFFF",
+                "text": "Элемент 4",
+                "margins": {
+                  "left": 16,
+                  "top": 16,
+                  "right": 16,
+                  "bottom": 16
+                },
+                "accessibility": {
+                  "mode": "exclude",
+                  "description": "Это Элемент 4"
+                },
+                "actions": [
+                  {
+                    "menu_items": [
+                      {
+                        "text": "Элемент 4",
+                        "action": {
+                          "url": "custom-menu://singleTap",
+                          "log_id": "custom/menu/singleTap"
+                        }
+                      }
+                    ],
+                    "log_id": "tap_actions"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 8
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#690202"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "fixed",
+              "value": 48
+            },
+            "font_size": 18,
+            "font_weight": "medium",
+            "text_alignment_vertical": "center",
+            "text_alignment_horizontal": "center",
+            "text_color": "#34495E",
+            "text": "Элемент 5",
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "accessibility": {
+              "description": "Это Элемент 5"
+            },
+            "border": {
+              "corner_radius": 8
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#1ABC9C"
+              }
+            ],
+            "actions": [
+              {
+                "menu_items": [
+                  {
+                    "text": "Элемент 5",
+                    "action": {
+                      "url": "custom-menu://singleTap",
+                      "log_id": "custom/menu/singleTap"
+                    }
+                  }
+                ],
+                "log_id": "tap_actions"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

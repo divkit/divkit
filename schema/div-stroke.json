@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_stroke",
+  "properties": {
+    "width": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "1",
+      "$description": "translations.json#/div_stroke_width"
+    },
+    "color": {
+      "$ref": "common.json#/color",
+      "$description": "translations.json#/div_stroke_color"
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "default_value": "dp"
+    }
+  },
+  "required": [
+    "color"
+  ]
+}

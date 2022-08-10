@@ -1,0 +1,271 @@
+{
+  "card": {
+    "log_id": "accessibility/types",
+    "transition_animation_selector": "data_change",
+    "variables": [
+      {
+        "name": "button_1_active",
+        "type": "boolean",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text",
+              "accessibility": {
+                "type": "button"
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Тип - кнопка",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "accessibility": {
+                "type": "image"
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Тип - изображение",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "accessibility": {
+                "type": "text"
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Тип - текст",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "accessibility": {
+                "type": "edit_text"
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Тип - окно редактирования",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "accessibility": {
+                "type": "header"
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Тип - заголовок",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "accessibility": {
+                "type": "tab_bar"
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Тип - панель вкладок",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "accessibility": {
+                "type": "none"
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "font_size": 18,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#34495E",
+              "text": "Без типа",
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

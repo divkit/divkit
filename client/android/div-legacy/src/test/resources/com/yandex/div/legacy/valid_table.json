@@ -1,0 +1,49 @@
+{
+  "states": [
+    {
+      "state_id": 1,
+      "blocks": [
+        {
+          "rows": [
+            {
+              "cells": [
+                {
+                  "text": "<font color=\"#4398d4\">OSL<\/font>",
+                  "text_style": "numbers_l",
+                  "horizontal_alignment": "left"
+                },
+                {
+                  "image": {
+                    "image_url": "https://pp.userapi.com/c836527/v836527128/50e5e/LqD_aSLzARQ.jpg",
+                    "ratio": 4.22,
+                    "type": "div-image-element"
+                  },
+                  "image_size": "xl",
+                  "horizontal_alignment": "center"
+                },
+                {
+                  "text": "<font color=\"#4398d4\">LGW<\/font>",
+                  "text_style": "numbers_l",
+                  "horizontal_alignment": "left"
+                }
+              ],
+              "type": "row_element"
+            }
+          ],
+          "columns": [
+            {
+              "right_padding": "l"
+            },
+            {
+              "right_padding": "l"
+            },
+            {
+              "weight": 0
+            }
+          ],
+          "type": "div-table-block"
+        }
+      ]
+    }
+  ]
+}

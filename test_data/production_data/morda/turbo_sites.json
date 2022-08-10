@@ -1,0 +1,193 @@
+{
+    "templates": {
+        "turbo_sites_card": {
+            "orientation": "vertical",
+            "background": [{
+                "color": "#ffffff",
+                "type": "solid"
+            }],
+            "items": [{
+                "type": "title"
+            }, {
+                "type": "grid",
+                "$items": "turbo_sites_items",
+                "column_count": 4,
+                "paddings": {
+                    "left": 16,
+                    "right": 16,
+                    "bottom": 16
+                }
+            }],
+            "height": {
+                "type": "wrap_content"
+            },
+            "type": "container"
+        },
+        "turbo_site_block": {
+            "margins": {
+                "top": 4
+            },
+            "width": {
+                "type": "match_parent",
+                "weight": 1
+            },
+            "height": {
+                "type": "wrap_content"
+            },
+            "items": [{
+                "type": "container",
+                "border": {
+                    "corner_radius": 13
+                },
+                "height": {
+                    "type": "fixed",
+                    "value": 48
+                },
+                "width": {
+                    "type": "fixed",
+                    "value": 48
+                },
+                "content_alignment_horizontal": "center",
+                "content_alignment_vertical": "center",
+                "items": [{
+                    "type": "image",
+                    "border": {
+                        "corner_radius": 7
+                    },
+                    "$image_url": "image",
+                    "height": {
+                        "type": "fixed",
+                        "value": 34
+                    },
+                    "width": {
+                        "type": "fixed",
+                        "value": 34
+                    }
+                }],
+                "background": [{
+                    "type": "solid",
+                    "$color": "background_color"
+                }]
+            }, {
+                "margins": {
+                    "top": 7
+                },
+                "width": {
+                    "type": "wrap_content"
+                },
+                "$text": "name",
+                "font_size": 13,
+                "line_height": 16,
+                "type": "text",
+                "max_lines": 2,
+                "text_alignment_horizontal": "center",
+                "text_color": "#D9000000"
+            }],
+            "orientation": "vertical",
+            "content_alignment_horizontal": "center",
+            "type": "container"
+        },
+        "title": {
+            "type": "container",
+            "orientation": "horizontal",
+            "$items": "title_items"
+        },
+        "title_menu": {
+            "width": {
+                "type": "fixed",
+                "value": 44
+            },
+            "placeholder_color": "#00ffffff",
+            "type": "image",
+            "height": {
+                "type": "fixed",
+                "value": 44
+            }
+        },
+        "title_text": {
+            "paddings": {
+                "top": 12,
+                "left": 16,
+                "right": 16
+            },
+            "text_color": "#cc000000",
+            "type": "text",
+            "font_size": 18,
+            "line_height": 24,
+            "font_weight": "medium"
+        }
+    },
+    "card": {
+        "log_id": "turbo_sites_card",
+        "states": [{
+            "state_id": 0,
+            "div": {
+                "type": "turbo_sites_card",
+                "title_items": [{
+                    "type": "title_text",
+                    "text": "Сайты для вас",
+                    "action": {
+                        "url": "tbd",
+                        "log_id": "title"
+                    }
+                }, {
+                    "type": "title_menu",
+                    "action": {
+                        "menu_items": [{
+                            "text": "Настройки ленты",
+                            "action": {
+                                "log_id": "turbo_sites_card/menu/item/0",
+                                "url": "opensettings://?screen=feed"
+                            }
+                        }, {
+                            "action": {
+                                "url": "hidecard://?topic_card_ids=turbo_sites_card&undo_snackbar_text=%D0%92%D1%8B%20%D1%81%D0%BA%D1%80%D1%8B%D0%BB%D0%B8%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D1%83",
+                                "log_id": "turbo_sites_card/menu/item/1"
+                            },
+                            "text": "Скрыть карточку"
+                        }],
+                        "log_id": "turbo_sites_card/menu"
+                    },
+                    "image_url": "https://yastatic.net/s3/home/yandex-app/services_div/general/2menu_points.2.png"
+                }],
+                "turbo_sites_items": [{
+                    "type": "turbo_site_block",
+                    "name": "Ведомости",
+                    "image": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/vedomosti.png",
+                    "background_color": "#F2E4D9",
+                    "action": {
+                        "url": "tbd",
+                        "log_id": "tbd"
+                    }
+                }, {
+                    "type": "turbo_site_block",
+                    "name": "Пикабу",
+                    "image": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/pikabu.jpg",
+                    "background_color": "#E8F2D9",
+                    "action": {
+                        "url": "tbd",
+                        "log_id": "tbd"
+                    }
+                }, {
+                    "type": "turbo_site_block",
+                    "name": "Ведомости",
+                    "image": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/wave_1col.4.png",
+                    "background_color": "#F2E4D9",
+                    "action": {
+                        "url": "tbd",
+                        "log_id": "tbd"
+                    }
+                }, {
+                    "type": "turbo_site_block",
+                    "name": "РИА А Новости",
+                    "image": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/wave_1col.4.png",
+                    "background_color": "#F2E4D9",
+                    "action": {
+                        "url": "tbd",
+                        "log_id": "tbd"
+                    }
+                }]
+            }
+        }]
+    }
+}

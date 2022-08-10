@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "enum": [
+    "linear",
+    "ease",
+    "ease_in",
+    "ease_out",
+    "ease_in_out",
+    "spring"
+  ],
+  "$description": "translations.json#/div_animation_interpolator"
+}

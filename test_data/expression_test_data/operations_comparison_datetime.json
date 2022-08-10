@@ -1,0 +1,56 @@
+{
+  "cases": [
+    {
+      "name": "date_a < date_a => false",
+      "expression": "@{parseUnixTime(0) < parseUnixTime(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a <= date_a => true",
+      "expression": "@{parseUnixTime(0) <= parseUnixTime(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a > date_a => false",
+      "expression": "@{parseUnixTime(0) > parseUnixTime(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a >= date_a => true",
+      "expression": "@{parseUnixTime(0) >= parseUnixTime(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,223 @@
+{
+  "div_data": {
+    "type": "div2",
+    "log_id": "tests",
+    "variables": [
+      {
+        "name": "thumb_style_color",
+        "type": "color",
+        "value": "#FF0000"
+      },
+      {
+        "name": "thumb_style_stroke_color",
+        "type": "color",
+        "value": "#000000"
+      },
+      {
+        "name": "thumb_style_stroke_width",
+        "type": "integer",
+        "value": 3
+      },
+      {
+        "name": "thumb_style_shape_height",
+        "type": "integer",
+        "value": 32
+      },
+      {
+        "name": "thumb_style_shape_width",
+        "type": "integer",
+        "value": 32
+      },
+      {
+        "name": "thumb_style_shape_radius",
+        "type": "integer",
+        "value": 100
+      },
+      {
+        "name": "thumb_text_style_font_size",
+        "type": "integer",
+        "value": 15
+      },
+      {
+        "name": "thumb_text_style_font_weight",
+        "type": "string",
+        "value": "regular"
+      },
+      {
+        "name": "thumb_text_style_text_color",
+        "type": "color",
+        "value": "#000000"
+      },
+      {
+        "name": "my_thumb_value",
+        "type": "integer",
+        "value": 40
+      }
+    ],
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "slider",
+          "thumb_style": {
+            "type": "shape_drawable",
+            "color": "@{thumb_style_color}",
+            "stroke": {
+              "color": "@{thumb_style_stroke_color}",
+              "width": "@{thumb_style_stroke_width}"
+            },
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_height": {
+                "type": "fixed",
+                "value": "@{thumb_style_shape_height}"
+              },
+              "item_width": {
+                "type": "fixed",
+                "value": "@{thumb_style_shape_width}"
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": "@{thumb_style_shape_radius}"
+              }
+            }
+          },
+          "thumb_text_style": {
+            "font_size": "@{thumb_text_style_font_size}",
+            "font_weight": "@{thumb_text_style_font_weight}",
+            "text_color": "@{thumb_text_style_text_color}"
+          },
+          "paddings": {
+            "bottom": 10,
+            "left": 10,
+            "right": 10,
+            "top": 10
+          },
+          "margins": {
+            "bottom": 5,
+            "left": 5,
+            "right": 5,
+            "top": 5
+          },
+          "thumb_value_variable": "my_thumb_value",
+          "track_active_style": {
+            "type": "shape_drawable",
+            "color": "#ff0000",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_height": {
+                "type": "fixed",
+                "value": 6
+              }
+            }
+          },
+          "track_inactive_style": {
+            "type": "shape_drawable",
+            "color": "#20000000",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_height": {
+                "type": "fixed",
+                "value": 6
+              }
+            }
+          }
+        }
+      }
+    ]
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=thumb_style_color&value=%237000FF00",
+          "log_id": "thumb_style_color"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_stroke_color&value=%23FFFF00",
+          "log_id": "thumb_style_stroke_color"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_stroke_width&value=5",
+          "log_id": "thumb_style_stroke_width"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=thumb_style_shape_height&value=20",
+          "log_id": "thumb_style_shape_height"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_shape_width&value=40",
+          "log_id": "thumb_style_shape_width"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_shape_radius&value=10",
+          "log_id": "thumb_style_shape_radius"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=thumb_text_style_font_size&value=20",
+          "log_id": "thumb_text_style_font_size"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_text_style_font_weight&value=bold",
+          "log_id": "thumb_text_style_font_weight"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_text_style_text_color&value=%2300FFFF",
+          "log_id": "thumb_text_style_text_color"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=thumb_style_color&value=%23FF0000",
+          "log_id": "restore: thumb_style_color"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_stroke_color&value=%23000000",
+          "log_id": "restore: thumb_style_stroke_color"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_stroke_width&value=3",
+          "log_id": "restore: thumb_style_stroke_width"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_shape_height&value=32",
+          "log_id": "restore: thumb_style_shape_height"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_shape_width&value=32",
+          "log_id": "restore: thumb_style_shape_width"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_style_shape_radius&value=100",
+          "log_id": "restore: thumb_style_shape_radius"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_text_style_font_size&value=15",
+          "log_id": "restore: thumb_text_style_font_size"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_text_style_font_weight&value=regular",
+          "log_id": "restore: thumb_text_style_font_weight"
+        },
+        {
+          "url": "div-action://set_variable?name=thumb_text_style_text_color&value=%23000000",
+          "log_id": "restore: thumb_text_style_text_color"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

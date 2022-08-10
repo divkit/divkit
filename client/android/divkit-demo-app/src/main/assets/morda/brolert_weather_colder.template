@@ -1,0 +1,13 @@
+brolert|Резкое похолодание до +12|{
+	"ttv":1200,
+	"utime":1508351555,
+	"ttl":1200,
+	"data": {
+		"title":"Погода",
+		"description":"Вечером резкое похолодание до +12°",
+		"icon":"https://kpvk.kz/wp-content/uploads/2017/10/Cloud.png",
+		"url":"https://yandex.ru/pogoda/"
+	},
+	"type":"brolert",
+	"id":"weather226"
+}

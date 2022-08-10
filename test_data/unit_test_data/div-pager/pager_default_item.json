@@ -1,0 +1,25 @@
+{
+  "type": "pager",
+  "default_item": 1,
+  "layout_mode": {
+    "type": "percentage",
+    "page_width": {
+      "type": "percentage",
+      "value": 95
+    }
+  },
+  "items": [
+    {
+      "type": "text",
+      "text": "0"
+    },
+    {
+      "type": "text",
+      "text": "1"
+    },
+    {
+      "type": "text",
+      "text": "2"
+    }
+  ]
+}

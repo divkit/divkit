@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_edge_insets",
+  "properties": {
+    "left": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_edge_insets_left"
+    },
+    "right": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_edge_insets_right"
+    },
+    "top": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_edge_insets_top"
+    },
+    "bottom": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_edge_insets_bottom"
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "default_value": "dp"
+    }
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "templates": {
+    "item": {
+      "type": "text",
+      "margins": {
+        "$left": "margin",
+        "$top": "margin",
+        "$right": "margin",
+        "$bottom": "margin"
+      },
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "font_size": 16,
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "text_color": "#FFFFFF"
+    }
+  },
+  "card": {
+    "log_id": "tests",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "grid",
+          "width": {
+            "type": "fixed",
+            "value": 240
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "column_count": 2,
+          "border": {
+            "stroke": {
+              "width": 2,
+              "color": "#000000"
+            }
+          },
+          "items": [
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent",
+                "weight": 2
+              },
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "margin": 10,
+              "background_color": "#FF0000",
+              "text": "1"
+            },
+            {
+              "type": "item",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "margin": 20,
+              "background_color": "#0000FF",
+              "text": "2"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

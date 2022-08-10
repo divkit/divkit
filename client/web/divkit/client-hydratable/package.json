@@ -1,0 +1,6 @@
+{
+    "internal": true,
+    "main": "../dist/client-hydratable.js",
+    "module": "../dist/esm/client-hydratable.mjs",
+    "types": "../typings/client-hydratable.d.ts"
+}

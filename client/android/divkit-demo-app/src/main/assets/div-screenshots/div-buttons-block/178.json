@@ -1,0 +1,63 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "padding_modifier": {
+                        "position": "right",
+                        "size": "l"
+                    },
+                    "type": "div-buttons-block",
+                    "alignment": "right",
+                    "items": [
+                        {
+                            "action": {
+                                "url": "http://ya.ru"
+                            },
+                            "text": "button"
+                        }
+                    ]
+                },
+                {
+                    "padding_modifier": {
+                        "position": "right",
+                        "size": "m"
+                    },
+                    "type": "div-buttons-block",
+                    "alignment": "right",
+                    "items": [
+                        {
+                            "action": {
+                                "url": "http://ya.ru"
+                            },
+                            "text": "button"
+                        }
+                    ]
+                },
+                {
+                    "padding_modifier": {
+                        "position": "right",
+                        "size": "s"
+                    },
+                    "type": "div-buttons-block",
+                    "alignment": "right",
+                    "items": [
+                        {
+                            "action": {
+                                "url": "http://ya.ru"
+                            },
+                            "text": "button"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

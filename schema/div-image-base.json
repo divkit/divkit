@@ -1,0 +1,39 @@
+{
+  "properties": {
+    "placeholder_color": {
+      "$ref": "common.json#/color",
+      "default_value": "#14000000",
+      "$description": "translations.json#/div_image_base_placeholder_color"
+    },
+    "scale": {
+      "$ref": "div-image-scale.json",
+      "default_value": "fill",
+      "$description": "translations.json#/div_image_base_scale"
+    },
+    "content_alignment_vertical": {
+      "$ref": "div-alignment-vertical.json",
+      "default_value": "center",
+      "$description": "translations.json#/div_image_base_content_alignment_vertical"
+    },
+    "content_alignment_horizontal": {
+      "$ref": "div-alignment-horizontal.json",
+      "default_value": "center",
+      "$description": "translations.json#/div_image_base_content_alignment_horizontal"
+    },
+    "preview": {
+      "$ref": "common.json#/non_empty_string",
+      "$description": "translations.json#/div_image_base_preview"
+    },
+    "preload_required": {
+      "$ref": "common.json#/boolean_int",
+      "default_value": "false",
+      "$description": "translations.json#/div_image_base_preload_required",
+      "platforms": [
+        "android"
+      ]
+    },
+    "aspect": {
+      "$ref": "div-aspect.json"
+    }
+  }
+}

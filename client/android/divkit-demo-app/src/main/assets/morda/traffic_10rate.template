@@ -1,0 +1,26 @@
+traffic|10 баллов в Москве с двумя forecast-ами|{
+	"ttv":1200,
+	"utime":1508351555,
+	"ttl":1200,
+	"data": {
+		"icon":"green",
+		"description":"Продай машину, купи телепорт",
+		"rate":10,
+		"forecast": [
+			{
+				"icon":"green",
+				"rate":9,
+				"hour":"22"
+			},
+			{
+				"icon":"green",
+				"rate":9,
+				"hour":"23"
+			}
+		],
+		"map_url":"https://static-maps.yandex.ru/1.x/?lang=ru_RU&l=map,trf&lg=0&key=ANVHaFUBAAAA84PDWwMAzGn1Akz7gJRXZen_EbH562iphb4AAAAAAAAAAABGKan36_-dpqiPwDcDI6OMc7T7BA==&ll=37.620393,55.75396&z=10&no_size=1",
+		"url":"http://ya.ru/"
+	},
+	"type":"traffic",
+	"id":"traffic"
+}

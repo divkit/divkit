@@ -1,0 +1,73 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_indicator",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "indicator"
+          ]
+        },
+        "pager_id": {
+          "type": "string",
+          "supports_expressions": false,
+          "$description": "translations.json#/div_indicator_pager_id"
+        },
+        "space_between_centers": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":15}",
+          "$description": "translations.json#/div_indicator_space_between_centers"
+        },
+        "inactive_item_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#33919cb5",
+          "$description": "translations.json#/div_indicator_inactive_item_color"
+        },
+        "active_item_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#ffdc60",
+          "$description": "translations.json#/div_indicator_active_item_color"
+        },
+        "shape": {
+          "$ref": "div-shape.json",
+          "default_value": "{\"type\":\"rounded_rectangle\"}",
+          "$description": "translations.json#/div_indicator_shape"
+        },
+        "active_item_size": {
+          "$ref": "common.json#/positive_number",
+          "default_value": "1.3",
+          "$description": "translations.json#/div_indicator_active_item_size"
+        },
+        "minimum_item_size": {
+          "$ref": "common.json#/positive_number",
+          "default_value": "0.5",
+          "$description": "translations.json#/div_indicator_minimum_item_size",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "animation": {
+          "type": "string",
+          "enum": [
+            "scale", "worm", "slider"
+          ],
+          "default_value": "scale",
+          "$description": "translations.json#/div_indicator_animation",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

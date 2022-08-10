@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Legacy"/>
+
+    <style name="Legacy.Layout">
+        <item name="android:paddingLeft">@dimen/div_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/div_horizontal_padding</item>
+    </style>
+
+    <style name="Legacy.Text">
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="Legacy.Title" parent="Legacy.Text">
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ya_medium</item>
+        <item name="android:letterSpacing">0.03</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/div_text_size_s</item>
+        <item name="android:paddingLeft">@dimen/div_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/div_horizontal_padding</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:textColor">@color/div_text_dark_disabled_40</item>
+    </style>
+
+    <style name="Legacy.Traffic.Layout" parent="Legacy.Layout">
+        <item name="android:clipToPadding">false</item>
+        <item name="android:overScrollMode">never</item>
+        <item name="android:paddingTop">1dp</item>
+    </style>
+
+    <style name="Legacy.Traffic.Score" parent="Legacy.Text">
+        <item name="android:layout_width">24sp</item>
+        <item name="android:layout_height">24sp</item>
+        <item name="android:background">@drawable/div_traffic_item_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">@dimen/div_text_size_m</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Legacy.Traffic.Text" parent="Legacy.Text">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:textColor">#7f000000</item>
+        <item name="android:textSize">@dimen/div_text_size_s</item>
+    </style>
+
+    <style name="Legacy.Footer" parent="Legacy.Text">
+        <item name="android:ellipsize">end</item>
+        <item name="android:fontFamily">@font/ya_medium</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/div_text_size_m</item>
+        <item name="android:paddingLeft">@dimen/div_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/div_horizontal_padding</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
+        <item name="android:textColor">#7f000000</item>
+        <item name="android:lineSpacingExtra">7dp</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="Legacy.Universal.Title" parent="Legacy.Text">
+        <item name="android:fontFamily">@font/ya_medium</item>
+        <item name="android:lineSpacingExtra">2sp</item>
+        <item name="android:textColor">@color/div_text_dark_disabled_80</item>
+        <item name="android:textSize">@dimen/div_style_text_size_title_m</item>
+    </style>
+
+    <style name="Legacy.Universal.Text" parent="Legacy.Text">
+        <item name="android:paddingBottom">0dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:textColor">#80000000</item>
+        <item name="android:textSize">@dimen/div_text_size_m</item>
+        <item name="android:lineSpacingExtra">3sp</item>
+    </style>
+
+    <style name="Legacy.RatioImage">
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:cropToPadding">true</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
+
+    <style name="Legacy.Universal.Image" parent="Legacy.RatioImage">
+        <item name="customScaleType">topCrop</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="Legacy.Universal.Day" parent="Legacy.Text">
+        <item name="android:fontFamily">@font/ya_light</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">#cc000000</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize">@dimen/div_universal_day_text_size</item>
+    </style>
+
+    <style name="Legacy.Universal.Month" parent="Legacy.Text">
+        <item name="android:fontFamily">@font/ya_medium</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textColor">#ee4549</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:textSize" tools:ignore="SpUsage">14dp</item>
+    </style>
+
+    <style name="Legacy.Button">
+        <item name="android:background">@drawable/div_button_background</item>
+        <item name="android:gravity">center</item>
+        <item name="android:minWidth">68dp</item>
+    </style>
+
+    <style name="Legacy.Button.Text" parent="Legacy.Button">
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:ellipsize">end</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:drawablePadding">@dimen/div_button_text_horizontal_image_padding</item>
+        <item name="android:paddingLeft">@dimen/div_button_text_horizontal_padding</item>
+        <item name="android:paddingRight">@dimen/div_button_text_horizontal_padding</item>
+        <item name="android:paddingTop">9dp</item>
+        <item name="android:paddingBottom">9dp</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:textColor">@color/div_text_dark_disabled_80</item>
+    </style>
+
+    <style name="Legacy.Button.Image" parent="Legacy.Button">
+        <item name="android:paddingLeft">@dimen/div_button_text_horizontal_image_padding</item>
+        <item name="android:paddingRight">@dimen/div_button_text_horizontal_image_padding</item>
+        <item name="android:adjustViewBounds">true</item>
+        <item name="android:scaleType">centerCrop</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+    </style>
+
+    <style name="Legacy.Tabs" />
+    <style name="Legacy.Tabs.IndicatorTabLayout">
+        <item name="tabTextAppearance">@style/Legacy.Tabs.IndicatorTabLayout.Text</item>
+        <item name="tabIndicatorColor">@color/div_tab_indicator</item>
+        <item name="tabMinWidth">0dp</item>
+        <item name="tabPaddingStart">8dp</item>
+        <item name="tabPaddingEnd">8dp</item>
+        <item name="tabContentEnd">0dp</item>
+        <item name="tabContentStart">0dp</item>
+        <item name="tabPaddingBottom">1dp</item>
+        <item name="tabTextColor">@color/div_text_dark_disabled_50</item>
+        <item name="tabSelectedTextColor">@color/div_text_dark_disabled_80</item>
+        <item name="android:overScrollMode">never</item>
+    </style>
+
+    <style name="Legacy.Tabs.IndicatorTabLayout.Text" parent="TextAppearance.Design.Tab">
+        <item name="android:letterSpacing">0.06</item>
+        <item name="android:textColor">@null</item>
+        <item name="android:textSize">12sp</item>
+        <item name="textAllCaps">false</item>
+    </style>
+
+    <style name="Legacy.Theme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@android:color/black</item>
+        <item name="colorPrimaryDark">@android:color/black</item>
+        <item name="colorAccent">@android:color/black</item>
+        <item name="ratioImageViewStyle">@style/Legacy.RatioImage</item>
+        <item name="legacyButtonTextStyle">@style/Legacy.Button.Text</item>
+        <item name="legacyButtonImageStyle">@style/Legacy.Button.Image</item>
+        <item name="legacyFooterStyle">@style/Legacy.Footer</item>
+        <item name="legacyTabIndicatorLayoutStyle">@style/Legacy.Tabs.IndicatorTabLayout</item>
+        <item name="legacyTitleStyle">@style/Legacy.Title</item>
+        <item name="legacyTrafficLayoutStyle">@style/Legacy.Traffic.Layout</item>
+        <item name="legacyUniversalTitleStyle">@style/Legacy.Universal.Title</item>
+        <item name="legacyUniversalTextStyle">@style/Legacy.Universal.Text</item>
+        <item name="legacyUniversalImageStyle">@style/Legacy.Universal.Image</item>
+        <item name="legacyUniversalDayStyle">@style/Legacy.Universal.Day</item>
+        <item name="legacyUniversalMonthStyle">@style/Legacy.Universal.Month</item>
+    </style>
+</resources>

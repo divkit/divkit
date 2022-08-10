@@ -1,0 +1,1538 @@
+{
+  "templates": {
+    "alertEmpty/79f43e2b90cadac6ef5979d0bbfaae24": {
+      "type": "separator",
+      "width": {
+        "value": 0,
+        "type": "fixed"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 0
+      },
+      "delimiter_style": {
+        "orientation": "horizontal",
+        "color": "#0000"
+      }
+    },
+    "bonusCard/c8b8aa3ab2fd3e3156ea7752ee31b34d": {
+      "type": "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61",
+      "items": [
+        {
+          "type": "shortcutUpperBase/a715697596d1f5a1f3c4a77d197d57ee"
+        },
+        {
+          "content_alignment_vertical": "bottom",
+          "type": "container",
+          "$items": "bonusCardsIcons",
+          "height": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "bottom": 12,
+            "left": 12,
+            "right": 12
+          },
+          "orientation": "overlap"
+        }
+      ]
+    },
+    "bonuscardsAdd/cc2e466e5b19205a814043dbf00a35d0": {
+      "type": "container",
+      "content_alignment_vertical": "center",
+      "content_alignment_horizontal": "center",
+      "height": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 32
+      },
+      "margins": {
+        "left": 24
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#fff"
+        }
+      ],
+      "border": {
+        "corner_radius": 32
+      },
+      "width": {
+        "value": 32,
+        "unit": "sp",
+        "type": "fixed"
+      },
+      "items": [
+        {
+          "width": {
+            "type": "fixed",
+            "unit": "sp",
+            "value": 18
+          },
+          "height": {
+            "unit": "sp",
+            "value": 18,
+            "type": "fixed"
+          },
+          "type": "image",
+          "$image_url": "addPlusImage"
+        }
+      ]
+    },
+    "bonuscardsIcon/21ad9283d0f87f76d18dd0067654810c": {
+      "type": "image",
+      "height": {
+        "value": 32,
+        "unit": "sp",
+        "type": "fixed"
+      },
+      "width": {
+        "type": "fixed",
+        "value": 32,
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 32
+      }
+    },
+    "pedometerShortcutSubtitle/d60dd93d57b486ab5031366b7b70e404": {
+      "type": "text",
+      "extensions": [
+        {
+          "$params": "pedometerSubtitleParams",
+          "id": "pedometer-shortcut-subtitle"
+        }
+      ],
+      "line_height": 14,
+      "max_lines": 2,
+      "text_color": "#99000000",
+      "font_size": 12,
+      "$text": "subtitle"
+    },
+    "pedometerShortcut/8a7a0b178bac6b329686519f192e09ab": {
+      "type": "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61",
+      "items": [
+        {
+          "type": "container",
+          "items": [
+            {
+              "type": "shortcutTitle/52c70af2c289d43c9101d9b2355b42db"
+            },
+            {
+              "type": "pedometerShortcutSubtitle/d60dd93d57b486ab5031366b7b70e404"
+            }
+          ],
+          "paddings": {
+            "top": 8,
+            "right": 12,
+            "left": 12
+          }
+        },
+        {
+          "height": {
+            "type": "match_parent"
+          },
+          "type": "alertEmpty/79f43e2b90cadac6ef5979d0bbfaae24"
+        },
+        {
+          "margins": {
+            "right": 8,
+            "bottom": 8,
+            "left": 12
+          },
+          "text": "0",
+          "font_size": 26,
+          "text_color": "#000",
+          "type": "text",
+          "line_height": 28,
+          "extensions": [
+            {
+              "id": "pedometer-shortcut-steps-counter"
+            }
+          ],
+          "font_size_unit": "dp"
+        }
+      ]
+    },
+    "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61": {
+      "type": "container",
+      "border": {
+        "corner_radius": 16
+      },
+      "width": {
+        "$value": "shortcutSize",
+        "type": "fixed",
+        "unit": "sp"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "shortcutSize",
+        "unit": "sp"
+      },
+      "margins": {
+        "top": 8
+      },
+      "background": [
+        {
+          "$color": "whiteBackground",
+          "type": "solid"
+        },
+        {
+          "type": "solid",
+          "$color": "colorBackground"
+        },
+        {
+          "$image_url": "imageBackground",
+          "type": "image"
+        }
+      ]
+    },
+    "shortcutBadge/b6a7255ebd83863a8cad44ca84558fdf": {
+      "type": "container",
+      "alignment_horizontal": "right",
+      "background": [
+        {
+          "scale": "fit",
+          "type": "image",
+          "$image_url": "shadow"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 116
+      },
+      "height": {
+        "unit": "sp",
+        "value": 40,
+        "type": "fixed"
+      }
+    },
+    "shortcutBadgeSimple/11925057bf207a41a2d7effa23ae259b": {
+      "type": "text",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "color": "#ff3333",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 100
+      },
+      "line_height": 16,
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "right": 7,
+        "left": 7
+      },
+      "text_alignment_horizontal": "center",
+      "alignment_horizontal": "right",
+      "$text": "count",
+      "text_color": "#fff",
+      "font_size": 12,
+      "font_weight": "bold",
+      "height": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 18
+      },
+      "margins": {
+        "top": 4,
+        "right": 4
+      }
+    },
+    "shortcutHero/c99da7b3b30b25585ef90f5db4e2de46": {
+      "type": "container",
+      "height": {
+        "type": "match_parent"
+      },
+      "content_alignment_vertical": "bottom",
+      "items": [
+        {
+          "orientation": "horizontal",
+          "items": [
+            {
+              "height": {
+                "value": 1,
+                "type": "fixed"
+              },
+              "delimiter_style": {
+                "orientation": "vertical",
+                "color": "#0000"
+              },
+              "type": "separator",
+              "$width": "leftPadding"
+            },
+            {
+              "line_height": 28,
+              "text_color": "#de000000",
+              "font_size": 26,
+              "font_weight": "light",
+              "$text": "heroText",
+              "type": "text"
+            }
+          ],
+          "type": "container"
+        },
+        {
+          "width": {
+            "value": 1,
+            "type": "fixed"
+          },
+          "$height": "bottomPadding",
+          "type": "separator",
+          "delimiter_style": {
+            "color": "#0000",
+            "orientation": "horizontal"
+          }
+        }
+      ]
+    },
+    "shortcutGallery/8ee46e5f314baaa982d20f47590b6280": {
+      "type": "gallery",
+      "item_spacing": 0,
+      "paddings": {
+        "left": 16,
+        "bottom": 8,
+        "right": 16
+      }
+    },
+    "shortcutMarket/09df7614ffcd30e4a4a15bb45e0a0343": {
+      "type": "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61",
+      "items": [
+        {
+          "type": "shortcutUpperBase/a715697596d1f5a1f3c4a77d197d57ee"
+        },
+        {
+          "content_alignment_vertical": "bottom",
+          "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "margins": {
+            "right": 7,
+            "left": 12,
+            "bottom": 8
+          },
+          "orientation": "horizontal",
+          "items": [
+            {
+              "$text": "totalPrice",
+              "$font_size": "totalPriceFontSize",
+              "type": "text",
+              "font_weight": "light",
+              "max_lines": 1,
+              "text_color": "#de000000",
+              "$line_height": "totalPriceLineHeight",
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "line_height": 23,
+              "type": "text",
+              "$text": "currency",
+              "text_color": "#de000000",
+              "font_size": 20,
+              "max_lines": 1
+            }
+          ]
+        }
+      ]
+    },
+    "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015": {
+      "type": "container",
+      "width": {
+        "unit": "sp",
+        "value": 122,
+        "type": "fixed"
+      },
+      "items": [
+        {
+          "width": {
+            "type": "fixed",
+            "value": 114,
+            "unit": "sp"
+          },
+          "border": {
+            "corner_radius": 16
+          },
+          "margins": {
+            "top": 8
+          },
+          "items": [
+            {
+              "type": "image",
+              "placeholder_color": "#0000",
+              "$image_url": "icon",
+              "width": {
+                "type": "fixed",
+                "unit": "sp",
+                "value": 36
+              },
+              "margins": {
+                "bottom": 6,
+                "left": 10,
+                "top": 10
+              },
+              "height": {
+                "unit": "sp",
+                "value": 36,
+                "type": "fixed"
+              }
+            },
+            {
+              "items": [
+                {
+                  "type": "shortcutTitle/52c70af2c289d43c9101d9b2355b42db"
+                },
+                {
+                  "type": "shortcutSubtitle/0454acf3cbe420c0c7562e5ee9e4d3be"
+                }
+              ],
+              "margins": {
+                "right": 8,
+                "left": 12
+              },
+              "type": "container"
+            }
+          ],
+          "height": {
+            "unit": "sp",
+            "value": 114,
+            "type": "fixed"
+          },
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "$color": "whiteBackground"
+            },
+            {
+              "type": "solid",
+              "$color": "colorBackground"
+            }
+          ]
+        },
+        {
+          "$items": "badge",
+          "type": "container"
+        }
+      ],
+      "orientation": "overlap",
+      "height": {
+        "value": 122,
+        "unit": "sp",
+        "type": "fixed"
+      }
+    },
+    "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8": {
+      "type": "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61",
+      "margins": {
+        "top": 0
+      },
+      "items": [
+        {
+          "type": "shortcutUpperBase/a715697596d1f5a1f3c4a77d197d57ee"
+        }
+      ]
+    },
+    "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a": {
+      "type": "separator",
+      "width": {
+        "unit": "sp",
+        "value": 8,
+        "type": "fixed"
+      },
+      "delimiter_style": {
+        "orientation": "horizontal",
+        "color": "#0000"
+      }
+    },
+    "shortcutSubtitle/0454acf3cbe420c0c7562e5ee9e4d3be": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 14,
+      "$max_lines": "subtitleMaxLines",
+      "text_color": "#99000000",
+      "$text": "subtitle"
+    },
+    "shortcutTitle/52c70af2c289d43c9101d9b2355b42db": {
+      "type": "text",
+      "margins": {
+        "$bottom": "titleMarginsBottom"
+      },
+      "$text": "title",
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_color": "#000",
+      "line_height": 15,
+      "$max_lines": "titleMaxLines",
+      "width": {
+        "type": "fixed",
+        "value": 84,
+        "unit": "sp"
+      }
+    },
+    "shortcutUpperBase/a715697596d1f5a1f3c4a77d197d57ee": {
+      "type": "container",
+      "paddings": {
+        "right": 12,
+        "top": 8,
+        "left": 12
+      },
+      "items": [
+        {
+          "type": "shortcutTitle/52c70af2c289d43c9101d9b2355b42db"
+        },
+        {
+          "type": "shortcutSubtitle/0454acf3cbe420c0c7562e5ee9e4d3be"
+        }
+      ]
+    },
+    "stackShortcut/fdcfcf480de62d449616ece890876f5a": {
+      "type": "container",
+      "margins": {
+        "top": 8
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "orientation": "overlap"
+    },
+    "stackShortcutWrapper/52209add97686f43480a265a578ad09b": {
+      "type": "container",
+      "border": {
+        "corner_radius": 16
+      },
+      "orientation": "overlap"
+    },
+    "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8": {
+      "type": "slider",
+      "track_active_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_width": {
+            "value": 0,
+            "type": "fixed"
+          },
+          "corner_radius": {
+            "value": 0,
+            "type": "fixed"
+          },
+          "item_height": {
+            "unit": "sp",
+            "value": 3,
+            "type": "fixed"
+          }
+        },
+        "color": "#4d000000"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 3,
+        "unit": "sp"
+      },
+      "thumb_style": {
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_width": {
+            "type": "fixed",
+            "value": 0
+          },
+          "corner_radius": {
+            "value": 0,
+            "type": "fixed"
+          },
+          "item_height": {
+            "value": 0,
+            "type": "fixed"
+          }
+        },
+        "color": "#0000",
+        "type": "shape_drawable"
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "alignment_vertical": "bottom",
+      "track_inactive_style": {
+        "color": "#0000",
+        "shape": {
+          "item_height": {
+            "type": "fixed",
+            "value": 0
+          },
+          "corner_radius": {
+            "type": "fixed",
+            "value": 0
+          },
+          "type": "rounded_rectangle",
+          "item_width": {
+            "value": 0,
+            "type": "fixed"
+          }
+        },
+        "type": "shape_drawable"
+      },
+      "thumb_value_variable": "slider_value"
+    },
+    "weatherShortcut/c5e6176f2552a099522a2839c76de9ca": {
+      "type": "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61",
+      "items": [
+        {
+          "type": "shortcutUpperBase/a715697596d1f5a1f3c4a77d197d57ee"
+        },
+        {
+          "type": "shortcutHero/c99da7b3b30b25585ef90f5db4e2de46"
+        }
+      ]
+    },
+    "button/__debug__": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "action_animation": {
+        "name": "no_animation"
+      }
+    }
+  },
+  "card": {
+    "log_id": "informers",
+    "variables": [
+      {
+        "name": "slider_value",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "shortcutGallery/8ee46e5f314baaa982d20f47590b6280",
+              "items": [
+                {
+                  "type": "stackShortcut/fdcfcf480de62d449616ece890876f5a",
+                  "width": {
+                    "type": "fixed",
+                    "value": 114,
+                    "unit": "sp"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 114,
+                    "unit": "sp"
+                  },
+                  "items": [
+                    {
+                      "type": "state",
+                      "div_id": "shortcuts_stack",
+                      "width": {
+                        "type": "fixed",
+                        "value": 114,
+                        "unit": "sp"
+                      },
+                      "height": {
+                        "type": "fixed",
+                        "value": 114,
+                        "unit": "sp"
+                      },
+                      "states": [
+                        {
+                          "state_id": "stack_0_shortcut_0",
+                          "animation_in": {
+                            "duration": 300,
+                            "end_value": 1,
+                            "name": "fade",
+                            "start_delay": 0,
+                            "interpolator": "ease_out",
+                            "start_value": 0
+                          },
+                          "animation_out": {
+                            "start_value": 1,
+                            "interpolator": "ease_in",
+                            "duration": 300,
+                            "end_value": 0,
+                            "name": "fade"
+                          },
+                          "div": {
+                            "width": {
+                              "type": "fixed",
+                              "value": 114,
+                              "unit": "sp"
+                            },
+                            "items": [
+                              {
+                                "action": {
+                                  "log_id": "shortcut/0/stack/0/bonuscards",
+                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Fbonus_cards_id",
+                                  "log_url": "https://yabs.yandex.ru/count/WemejI_zO1y25HG0j296XomS6y2tm0K07mCGWY0ndgVXOG00000ulliXG0H80c2U6N2yxDg1pu3OaU41a068mRU3re20W0AO0OZ1juDMk068qxhD8y011jW1reh0eG7e0V81a0E0le5de0D4g0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O2Ujkt0fu3io739-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCbmBW3OA0WC20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__B_z6sEemc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7oB87wk5u50R03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut426DtIjcxke4gOYl85_-WR8q9eEAkTzmKbwTy3fIBKe_CM78kkbGNPICA~1"
+                                },
+                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_bc_2l.3.png",
+                                "title": "Бонусные карты",
+                                "titleMarginsBottom": 0,
+                                "subtitle": "храните тут",
+                                "subtitleMaxLines": 1,
+                                "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
+                                "titleMaxLines": 2,
+                                "visibility_action": {
+                                  "url": "https://yabs.yandex.ru/count/WOCejI_zODW0pGi051H6XomSE2MI2GK0s04GWY0ndgVXOG00000ulliXmGRTxXZltqtqiia6fJWonhPUAnsf1nlKU7R88rN-gWiG4xpTGXlK0039dETtZTM0m82G49WEfV78iUpMrvKT-13___y1g170X3tf4hA1iN4PQa-Sy1B__m684mUG4pBO5S6AzkoZZxpyO_395l0_WHUe5m62621bE6CvEJaqD3WvCcKqCJGnOJKpP6DXC6KvCsCtOpHaCPaOq1W2-1Y06RWPqXaIUM5YSrzpPN9sPN8lSZOnCYqnw1c0mWFm6O320y8Q96GuC6KvCpCpBJSpD3ajD34mP2rXOZ5XBJTYPc9ZOZWuCJDbDz8R93T4HKGsC34uBJCnCpSjD30vDIr2H44qBJWvGKKpEJGpH4OrEO8S3MvOGJffT5b2IbHALpVf780T_tyH01JB-B-C787P3Ke3GtcOYkWMaWs9WLssb5NcfrFPokfHJpZG4JaPosn2EsTP8gg78rIK3IS0~1=WNOejI_zOCC0PGi0P1DXluVJmm5014W2O9uPSBpise7FWDYHuG6G0OZ1juFMW8200fW1YC6tWrQu0OZJkiqZs07MYi2X0UW1yW6G0u2-WMUW0qIm0mAe1ge3i0U0W9Wqk0Uy2F47003u1m60dhRjmAU0xCXmoVWAWBKOsGiRr7Xso2DL_kWCbp-W3i24FO0GgyE88SWG2AWHm8Gzs1A7W1Zf4hA1iN4PQa-Sc1C8o1G2w1IC0jWLmOhsxAEFlFnZa1Rd0vWMhlU4ZmQWWHUO5w3rqIt05xGIe1W4i1Yxj8QF1lWOgkZJruI8az9xW1aP0Q0PgWEu6Vy1w1c0mWFm6O320u4Q__yl_qROwZ2O6lpmY0Br6W40002m6sIu6mNf703mFu0T_t-P7G3mFwWU0TWU_OqVe1-hmuWXi1yYo1-hXU1G4W10491Qe1NyoIG1oHLU0nMyGnWEJNIr0JfT1OtH742RUveWA9y3vMQeHzO6n41ht2oV0G00~1",
+                                  "log_id": "shortcut/0/stack/0/bonuscards"
+                                },
+                                "shortcutSize": 114,
+                                "colorBackground": "#33FFAA66",
+                                "whiteBackground": "#ffffff"
+                              },
+                              {
+                                "type": "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8",
+                                "extensions": [
+                                  {
+                                    "id": "state_switch_with_progress_bar",
+                                    "params": {
+                                      "action_uris": [
+                                        "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_1"
+                                      ],
+                                      "repeatable": 0,
+                                      "duration": 5000
+                                    }
+                                  }
+                                ]
+                              }
+                            ],
+                            "height": {
+                              "unit": "sp",
+                              "value": 114,
+                              "type": "fixed"
+                            },
+                            "type": "stackShortcutWrapper/52209add97686f43480a265a578ad09b"
+                          }
+                        },
+                        {
+                          "state_id": "stack_0_shortcut_1",
+                          "animation_in": {
+                            "start_delay": 0,
+                            "start_value": 0,
+                            "interpolator": "ease_out",
+                            "duration": 300,
+                            "name": "fade",
+                            "end_value": 1
+                          },
+                          "animation_out": {
+                            "interpolator": "ease_in",
+                            "start_value": 1,
+                            "duration": 300,
+                            "name": "fade",
+                            "end_value": 0
+                          },
+                          "div": {
+                            "width": {
+                              "value": 114,
+                              "unit": "sp",
+                              "type": "fixed"
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 114,
+                              "unit": "sp"
+                            },
+                            "items": [
+                              {
+                                "colorBackground": "#33a18aff",
+                                "shortcutSize": 114,
+                                "visibility_action": {
+                                  "log_id": "shortcut/0/stack/1/video_translate",
+                                  "url": "https://yabs.yandex.ru/count/WOCejI_zODW0pGi051H6XomSE2MI2GK0s04GWY0ndgVXOG00000ulliXmGRTxXZltqtqiia6fJWonhPUAnsf1nlKU7R88rN-gWiG4xpTGXlK0039dETtZTM0m82G49WEfV78iUpMrvKT-13___y1g170X3tf4hA1iN4PQa-Sy1B__m684mUG4pBO5S6AzkoZZxpyO_395l0_WHUe5m62621bE6CvEJaqD3WvCcKqCJGnOJKpP6DXC6KvCsCtOpHaCPaOq1W2-1Y06RWPqXaIUM5YSrzpPN9sPN8lSZOnCYqnw1c0mWFm6O320y8Q96GuC6KvCpCpBJSpD3ajD34mP2rXOZ5XBJTYPc9ZOZWuCJDbDz8R93T4HKGsC34uBJCnCpSjD30vDIr2H44qBJWvGKKpEJGpH4OrEO8S3MvOGJffT5b2IbHALpVf780T_tyH01JB-B-C787P3Ke3GtcOYkWMaWs9WLssb5NcfrFPokfHJpZG4JaPosn2EsTP8gg78rIK3IS0~1=WNOejI_zOCC0PGi0P1F9rJQ1mm5014W2O9uPSEB6-hhcqgUrkW6G0VAlsOFMW8200fW1yg_PWrQu0VZ7liqZs07MYi2X0UW1yW6G0v29kccW0qAm0mAe1ge3i0U0W9Wqk0Uy2F47003u1m60iQEzdRFfqvfToVWAWBKOsGiRr7Xso2DL_kWCbp-W3i24FO0GgyE88SWG2AWHm8Gzs1A7W1Zf4hA1iN4PQa-Sc1C8o1G2w1IC0jWLmOhsxAEFlFnZa1Rd0vWMhlU4ZmQWWHUO5w3rqIt05xGIe1W4i1Yxj8QF1lWOgkZJruI8az9xW1aP0Q0PgWEu6Vy1w1c0mWFm6O320u4Q___VS6Gu3swO6lpmY0Br6W40002m6sIu6mNf703mFu0T_t-P7G3mFwWU0TWU_OqVe1-hmuWXi1yXo1-hXU1G4W10491Qe1NyoIG1oHLU0nMyGnWEJNIr0JfT1OtH742RUveWA9y3vMQeHzO6n41ht2oV0G00~1"
+                                },
+                                "titleMaxLines": 1,
+                                "whiteBackground": "#ffffff",
+                                "subtitleMaxLines": 2,
+                                "subtitle": "перевод на 4 языка",
+                                "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
+                                "title": "Видео",
+                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/translate_video.3.png",
+                                "titleMarginsBottom": 1,
+                                "action": {
+                                  "log_id": "shortcut/0/stack/1/video_translate",
+                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Fvideotranslate_newlangs_shortcut",
+                                  "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0L296XomSyY1ofmK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N3YnlgwvjAdjRe1a07ohzc3re20W0AO0VAlsODMk07unxxD8y011jW1reh0eG7e0V81a0EGYRffe0D2g0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O2nexsTi-dJcbt9-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCby20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__tt1aE0zkc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7o787wk5u50S03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut426DtIjcxke4gOYl8bt-m4E-7HzM102hkUiTDSNdAvq2vAFN8Z2NdeajrKJQY~1"
+                                }
+                              },
+                              {
+                                "extensions": [
+                                  {
+                                    "params": {
+                                      "repeatable": 0,
+                                      "duration": 5000,
+                                      "action_uris": [
+                                        "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_2"
+                                      ]
+                                    },
+                                    "id": "state_switch_with_progress_bar"
+                                  }
+                                ],
+                                "type": "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8"
+                              }
+                            ],
+                            "type": "stackShortcutWrapper/52209add97686f43480a265a578ad09b"
+                          }
+                        },
+                        {
+                          "state_id": "stack_0_shortcut_2",
+                          "animation_in": {
+                            "start_value": 0,
+                            "interpolator": "ease_out",
+                            "start_delay": 0,
+                            "name": "fade",
+                            "end_value": 1,
+                            "duration": 300
+                          },
+                          "animation_out": {
+                            "start_value": 1,
+                            "interpolator": "ease_in",
+                            "end_value": 0,
+                            "name": "fade",
+                            "duration": 300
+                          },
+                          "div": {
+                            "type": "stackShortcutWrapper/52209add97686f43480a265a578ad09b",
+                            "items": [
+                              {
+                                "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
+                                "subtitle": "всегда под рукой",
+                                "subtitleMaxLines": 2,
+                                "whiteBackground": "#ffffff",
+                                "visibility_action": {
+                                  "url": "https://yabs.yandex.ru/count/WOCejI_zODW0pGi051H6XomSE2MI2GK0s04GWY0ndgVXOG00000ulliXmGRTxXZltqtqiia6fJWonhPUAnsf1nlKU7R88rN-gWiG4xpTGXlK0039dETtZTM0m82G49WEfV78iUpMrvKT-13___y1g170X3tf4hA1iN4PQa-Sy1B__m684mUG4pBO5S6AzkoZZxpyO_395l0_WHUe5m62621bE6CvEJaqD3WvCcKqCJGnOJKpP6DXC6KvCsCtOpHaCPaOq1W2-1Y06RWPqXaIUM5YSrzpPN9sPN8lSZOnCYqnw1c0mWFm6O320y8Q96GuC6KvCpCpBJSpD3ajD34mP2rXOZ5XBJTYPc9ZOZWuCJDbDz8R93T4HKGsC34uBJCnCpSjD30vDIr2H44qBJWvGKKpEJGpH4OrEO8S3MvOGJffT5b2IbHALpVf780T_tyH01JB-B-C787P3Ke3GtcOYkWMaWs9WLssb5NcfrFPokfHJpZG4JaPosn2EsTP8gg78rIK3IS0~1=WNKejI_zOCC0NGi0L1FubAPRmm5014W2O9uPSA3MfThaX_ppd06G0VQlsOFMW8200fW1zg_PWrQu0Vp7liqZs07MYi2X0UW1yW6G0x39v6gW0q2m0mAe1ge3i0U0W9Wqk0Uy2F47003u1m60aEkIhVA3_hd9-0g0jHZP2nlKU7R88rN-w0oNFw0Em8GzW12hmuWXo108g170X3tO4eU06EaIie6nSHbgJvoO4mZ850Be58m2s1N1YlRieu-y_6EG5kS3c1QkzuIF1g215vWNeFNHBS0Nj1AW60Im6BkqXey6-1YgwDFNX8YJqdk06Ha1e1cg0xWP_m7e6O320_0PWC83WHh__sT6-nqgMvWQ_F280lKQ0G000B0RPBWR1UaS0F0_W1t_VvaT0F0_g1u1s1xzZH-W7wl3Y26m7o387wk5u50I040Ga5gW5Vp990795Lu35Rn360vDTBK1Ebq5ZT4SG9jxcXZMr9A1PXdgaPy1CPerRfQZ~1",
+                                  "log_id": "shortcut/0/stack/2/qr_vaccinated"
+                                },
+                                "titleMaxLines": 1,
+                                "colorBackground": "#3399CCEE",
+                                "shortcutSize": 114,
+                                "action": {
+                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Falice_qr_id",
+                                  "log_id": "shortcut/0/stack/2/qr_vaccinated",
+                                  "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0H296XomSvie1mWK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N2WrgNQv8Vyyvm1a07shzc3re20W0AO0VQlsODMk07ynxxD8y011jW1reh0eG7e0V81a0EmoUHge0D0g0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O2GwvAjyeF-kSdu2e2r6AeB41EytK8Rr000oPpdTutLy0i3w0oNm82G43-bySYnxDRNbHsW3i24FO0GgyE88QWHm8Gzs1A7W1Zf4hA1iN4PQa-Sy1B__yWK0kWKZ0BO5S6AzkoZZxpyO_2G5kS3c1QkzuIF1g215vWNeFNHBQWN0S0Nj1A2621bE6CvEJaqD3WvCcKqCJGnOJKpP6DXC6KvCsCtOpHaCQ0O1B0OkxI6ZmRG60Bu6AheqzU4Y9FIUu0Pa1a1e1cg0xWP__y1qXaIUM5YSrzpPN9sPN8lSZOnCYqnw1c0mWFm6O320u4Q__zdHliTAbkO6lpmY0Am6h7MxfEiWiBCbW726YHaE31bEJCpCoqtCpGvBJGnC6GjOM8nOIqtOcPYOs8uE34pPJVr6W40002m6sIu6mNI6oGtH4L4DZ0nE2qpCJCtBJGmEJKjGaH1D2quEK55CpaqCqH6DJc270rkM44wQNHPGafKIbStwHo07Vz_cHse7W7O7lsD7w0VgyE88R0V8CWVguNWK1m0E8JmFcCLnX9PitnA7yLu36agWtRPJ7Cvpah964kRLGQRXiEd-6XlZSG8OtTAsRkwWIfYAyYNVx0GxuT7rO40AkvwnqrnzpMrPA1Pb7famP9pAQMwA1jH~1"
+                                },
+                                "titleMarginsBottom": 1,
+                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_light_qrcode.3.png",
+                                "title": "QR-код"
+                              },
+                              {
+                                "type": "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8",
+                                "extensions": [
+                                  {
+                                    "id": "state_switch_with_progress_bar",
+                                    "params": {
+                                      "repeatable": 0,
+                                      "duration": 5000,
+                                      "action_uris": [
+                                        "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_3"
+                                      ]
+                                    }
+                                  }
+                                ]
+                              }
+                            ],
+                            "height": {
+                              "type": "fixed",
+                              "value": 114,
+                              "unit": "sp"
+                            },
+                            "width": {
+                              "value": 114,
+                              "unit": "sp",
+                              "type": "fixed"
+                            }
+                          }
+                        },
+                        {
+                          "state_id": "stack_0_shortcut_3",
+                          "animation_in": {
+                            "end_value": 1,
+                            "name": "fade",
+                            "duration": 300,
+                            "interpolator": "ease_out",
+                            "start_value": 0,
+                            "start_delay": 0
+                          },
+                          "animation_out": {
+                            "name": "fade",
+                            "end_value": 0,
+                            "duration": 300,
+                            "interpolator": "ease_in",
+                            "start_value": 1
+                          },
+                          "div": {
+                            "width": {
+                              "type": "fixed",
+                              "unit": "sp",
+                              "value": 114
+                            },
+                            "items": [
+                              {
+                                "titleMarginsBottom": 1,
+                                "title": "Читалка",
+                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_light_chitalka.3.png",
+                                "action": {
+                                  "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0L296XomShMIYpWK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N2MiSJJYEdBvQq1a07whzc3re20W0AO0VglsODMk060oBxD8y011jW1reh0eG7e0V81a0EGj9rhe0C-g0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O3BcEAfnFJbybR9-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCby20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__4scxC9FVc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7n_87wk5u50S03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut426DtIjcxke4gOYl8bt-m4E-7HzM102hkUiTDSNdAvq2vAFN8Z2NdeajrKJQY~1",
+                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Freader_alice",
+                                  "log_id": "shortcut/0/stack/3/book_reader_alice"
+                                },
+                                "whiteBackground": "#ffffff",
+                                "shortcutSize": 114,
+                                "colorBackground": "#33EEDD66",
+                                "titleMaxLines": 1,
+                                "visibility_action": {
+                                  "url": "https://yabs.yandex.ru/count/WOCejI_zODW0pGi051H6XomSE2MI2GK0s04GWY0ndgVXOG00000ulliXmGRTxXZltqtqiia6fJWonhPUAnsf1nlKU7R88rN-gWiG4xpTGXlK0039dETtZTM0m82G49WEfV78iUpMrvKT-13___y1g170X3tf4hA1iN4PQa-Sy1B__m684mUG4pBO5S6AzkoZZxpyO_395l0_WHUe5m62621bE6CvEJaqD3WvCcKqCJGnOJKpP6DXC6KvCsCtOpHaCPaOq1W2-1Y06RWPqXaIUM5YSrzpPN9sPN8lSZOnCYqnw1c0mWFm6O320y8Q96GuC6KvCpCpBJSpD3ajD34mP2rXOZ5XBJTYPc9ZOZWuCJDbDz8R93T4HKGsC34uBJCnCpSjD30vDIr2H44qBJWvGKKpEJGpH4OrEO8S3MvOGJffT5b2IbHALpVf780T_tyH01JB-B-C787P3Ke3GtcOYkWMaWs9WLssb5NcfrFPokfHJpZG4JaPosn2EsTP8gg78rIK3IS0~1=WNOejI_zOCC0PGi0P1Dlyzc9mm5014W2O9uPS9QnnDE8wSlbhG6G0VglsOFMW8200fW1-g_PWrQu0O38liqZs07MYi2X0UW1yW6G0v2qdMkW0pwm0mAe1ge3i0U0W9Wqk0Uy2F47003u1m60ovZYgSJqvV9MoVWAWBKOsGiRr7Xso2DL_kWCbp-W3i24FO0GgyE88SWG2AWHm8Gzs1A7W1Zf4hA1iN4PQa-Sc1C8o1G2w1IC0jWLmOhsxAEFlFnZa1Rd0vWMhlU4ZmQWWHUO5w3rqIt05xGIe1W4i1Yxj8QF1lWOgkZJruI8az9xW1aP0Q0PgWEu6Vy1w1c0mWFm6O320u4Q__yJQRimaz-O6lpmY0Br6W40002m6sIu6mNf703mFu0T_t-P7G3mFwWU0TWU_OqVe1-hmuWXi1yVo1-hXU1G4W10491Qe1NyoIG1oHLU0nMyGnWEJNIr0JfT1OtH742RUveWA9y3vMQeHzO6n41ht2oV0G00~1",
+                                  "log_id": "shortcut/0/stack/3/book_reader_alice"
+                                },
+                                "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
+                                "subtitleMaxLines": 2,
+                                "subtitle": "читает Алиса, слушаете вы"
+                              },
+                              {
+                                "type": "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8",
+                                "extensions": [
+                                  {
+                                    "params": {
+                                      "action_uris": [
+                                        "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_4"
+                                      ],
+                                      "duration": 5000,
+                                      "repeatable": 0
+                                    },
+                                    "id": "state_switch_with_progress_bar"
+                                  }
+                                ]
+                              }
+                            ],
+                            "height": {
+                              "value": 114,
+                              "unit": "sp",
+                              "type": "fixed"
+                            },
+                            "type": "stackShortcutWrapper/52209add97686f43480a265a578ad09b"
+                          }
+                        },
+                        {
+                          "state_id": "stack_0_shortcut_4",
+                          "animation_in": {
+                            "name": "fade",
+                            "end_value": 1,
+                            "duration": 300,
+                            "start_value": 0,
+                            "interpolator": "ease_out",
+                            "start_delay": 0
+                          },
+                          "animation_out": {
+                            "interpolator": "ease_in",
+                            "start_value": 1,
+                            "duration": 300,
+                            "end_value": 0,
+                            "name": "fade"
+                          },
+                          "div": {
+                            "type": "stackShortcutWrapper/52209add97686f43480a265a578ad09b",
+                            "height": {
+                              "value": 114,
+                              "unit": "sp",
+                              "type": "fixed"
+                            },
+                            "items": [
+                              {
+                                "whiteBackground": "#ffffff",
+                                "visibility_action": {
+                                  "log_id": "shortcut/0/stack/4/keyboard",
+                                  "url": "https://yabs.yandex.ru/count/WOCejI_zODW0pGi051H6XomSE2MI2GK0s04GWY0ndgVXOG00000ulliXmGRTxXZltqtqiia6fJWonhPUAnsf1nlKU7R88rN-gWiG4xpTGXlK0039dETtZTM0m82G49WEfV78iUpMrvKT-13___y1g170X3tf4hA1iN4PQa-Sy1B__m684mUG4pBO5S6AzkoZZxpyO_395l0_WHUe5m62621bE6CvEJaqD3WvCcKqCJGnOJKpP6DXC6KvCsCtOpHaCPaOq1W2-1Y06RWPqXaIUM5YSrzpPN9sPN8lSZOnCYqnw1c0mWFm6O320y8Q96GuC6KvCpCpBJSpD3ajD34mP2rXOZ5XBJTYPc9ZOZWuCJDbDz8R93T4HKGsC34uBJCnCpSjD30vDIr2H44qBJWvGKKpEJGpH4OrEO8S3MvOGJffT5b2IbHALpVf780T_tyH01JB-B-C787P3Ke3GtcOYkWMaWs9WLssb5NcfrFPokfHJpZG4JaPosn2EsTP8gg78rIK3IS0~1=WNWejI_zOCC0TGi0n1CH6nuxmm5014W2O9uPS9By-hdTfUlWvm6G0OAmsOFMW8200fW1Wh3PWrQu0OZ8liqZs07MYi2X0UW1yW6G0w3KyckW0pom0mAe1ge3i0U0W9Wqk0Uy2F47003u1m60YRxztExIjV1poVWAWBKOsGiRr7Xso2DL_kWCbp-W3i24FO0GgyE88SWG2AWHm8GzY181a181s1A7W1Zf4hA1iN4PQa-Sc1C8o1G2w1IC0jWLmOhsxAEFlFnZa1Rd0vWMhlU4ZmQWWHUO5w3rqIt05xGIe1W4i1Yxj8QF1lWOgkZJruI8az9xW1aP0Q0PgWEu6Vy1w1c0mWFm6O320u4Q___B6vY1YBEO6lpmY0Br6W40002m6sIu6mNf703mFu0T_t-P7G3mFwWU0TWU_OqVe1-hmuWXi1yUo1-hXU1G4G10491Qe1NyoIG1oHLU8rHm9BhQ0PskWiPe3g3DFKqGbC-1SZFK8si3Og0rRfRF~1"
+                                },
+                                "titleMaxLines": 1,
+                                "colorBackground": "#33FFAA99",
+                                "shortcutSize": 114,
+                                "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
+                                "subtitle": "с умными подсказками",
+                                "subtitleMaxLines": 2,
+                                "titleMarginsBottom": 1,
+                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_keyboard_2l.3.png",
+                                "title": "Клавиатура",
+                                "action": {
+                                  "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0L296XomSm05TNWK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N2I_FgvtQNhuES1a062iDc3re20W0AO0OAmsODMk068oBxD8y011jW1reh0eG7e0V81a0EWrF9he0Cyg0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O29lltSxjAry7F9-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCby20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__onkOWOYpc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7nx87wk5u50S03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut42Do0fUnTtK0LiHNaopzOYFV3e-f001LtlUEck3pbSw1Sb7fanf9pqQMwA1jH~1",
+                                  "log_id": "shortcut/0/stack/4/keyboard",
+                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Fkeyboard_ios_mistake_new"
+                                }
+                              },
+                              {
+                                "extensions": [
+                                  {
+                                    "params": {
+                                      "action_uris": [
+                                        "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_5"
+                                      ],
+                                      "repeatable": 0,
+                                      "duration": 5000
+                                    },
+                                    "id": "state_switch_with_progress_bar"
+                                  }
+                                ],
+                                "type": "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8"
+                              }
+                            ],
+                            "width": {
+                              "type": "fixed",
+                              "unit": "sp",
+                              "value": 114
+                            }
+                          }
+                        },
+                        {
+                          "state_id": "stack_0_shortcut_5",
+                          "animation_in": {
+                            "duration": 300,
+                            "name": "fade",
+                            "end_value": 1,
+                            "start_delay": 0,
+                            "start_value": 0,
+                            "interpolator": "ease_out"
+                          },
+                          "animation_out": {
+                            "end_value": 0,
+                            "name": "fade",
+                            "duration": 300,
+                            "interpolator": "ease_in",
+                            "start_value": 1
+                          },
+                          "div": {
+                            "width": {
+                              "type": "fixed",
+                              "unit": "sp",
+                              "value": 114
+                            },
+                            "height": {
+                              "unit": "sp",
+                              "value": 114,
+                              "type": "fixed"
+                            },
+                            "items": [
+                              {
+                                "titleMarginsBottom": 1,
+                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_aon_2l.3.png",
+                                "title": "Кто звонит?",
+                                "action": {
+                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Falice_aon_block_2",
+                                  "log_id": "shortcut/0/stack/5/whocalls",
+                                  "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0L296XomSMTyp6mK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N3izTBQkApylOS1a07-hzc3re20W0AO0VwlsODMk064oBxD8y011jW1reh0eG7e0V81a0E8khbke0Cwg0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O3skgcjd9R-taF9-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCby20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__BvofrfDdc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7nt87wk5u50S03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut426DtIjcxke4gOYl8bt-m4E-7HzM102hkUiTDSNdAvq2vAFN8Z2NdeajrKJQY~1"
+                                },
+                                "whiteBackground": "#ffffff",
+                                "visibility_action": {
+                                  "log_id": "shortcut/0/stack/5/whocalls",
+                                  "url": "https://yabs.yandex.ru/count/WOCejI_zODW0pGi051H6XomSE2MI2GK0s04GWY0ndgVXOG00000ulliXmGRTxXZltqtqiia6fJWonhPUAnsf1nlKU7R88rN-gWiG4xpTGXlK0039dETtZTM0m82G49WEfV78iUpMrvKT-13___y1g170X3tf4hA1iN4PQa-Sy1B__m684mUG4pBO5S6AzkoZZxpyO_395l0_WHUe5m62621bE6CvEJaqD3WvCcKqCJGnOJKpP6DXC6KvCsCtOpHaCPaOq1W2-1Y06RWPqXaIUM5YSrzpPN9sPN8lSZOnCYqnw1c0mWFm6O320y8Q96GuC6KvCpCpBJSpD3ajD34mP2rXOZ5XBJTYPc9ZOZWuCJDbDz8R93T4HKGsC34uBJCnCpSjD30vDIr2H44qBJWvGKKpEJGpH4OrEO8S3MvOGJffT5b2IbHALpVf780T_tyH01JB-B-C787P3Ke3GtcOYkWMaWs9WLssb5NcfrFPokfHJpZG4JaPosn2EsTP8gg78rIK3IS0~1=WNKejI_zOCC0NGi0P1EU5Gdqmm5014W2O9uPSEprqjguhFozXm6G0VwlsOFMW8200fW1_g_PWrQu0OJ8liqZs07MYi2X0UW1yW6G0uYwkMwW0pgm0mAe1ge3i0U0W9Wqk0Uy2F47003u1m60zhgfhPoM_jv3oVWAWBKOsGiRr7Xso2DL_kWCbp-W3i24FO0GgyE88SWG2AWHm8Gzs1A7W1Zf4hA1iN4PQa-Sc1C8o1G2w1IC0jWLmOhsxAEFlFnZa1Rd0vWMhlU4ZmQWWHUO5w3rqIt05xGIe1W4i1Yxj8QF1lWOgkZJruI8az9xW1aP0Q0PgWEu6Vy1w1c0mWFm6O320u4Q__yldAdMasUO6lpmY0Br6W40002m6sIu6mNf703mFu0T_t-P7G3mFwWU0TWU_OqVe1-hmuWXi1yTo1-hXU1G4W10491Qe1NyoIG1oHLU0nMyGnWEJNIr0JfT1OtH742RUqsyp3bGRePwP6r03BJ6pV8P~1"
+                                },
+                                "titleMaxLines": 1,
+                                "colorBackground": "#33BBBBBB",
+                                "shortcutSize": 114,
+                                "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
+                                "subtitle": "определитель номера",
+                                "subtitleMaxLines": 2
+                              },
+                              {
+                                "type": "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8",
+                                "extensions": [
+                                  {
+                                    "params": {
+                                      "duration": 5000,
+                                      "repeatable": 0,
+                                      "action_uris": [
+                                        "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_0"
+                                      ]
+                                    },
+                                    "id": "state_switch_with_progress_bar"
+                                  }
+                                ]
+                              }
+                            ],
+                            "type": "stackShortcutWrapper/52209add97686f43480a265a578ad09b"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                },
+                {
+                  "subtitleMaxLines": 2,
+                  "subtitle": "ночью –2°\nутром –2°",
+                  "leftPadding": {
+                    "type": "fixed",
+                    "unit": "sp",
+                    "value": 53
+                  },
+                  "type": "weatherShortcut/c5e6176f2552a099522a2839c76de9ca",
+                  "shortcutSize": 114,
+                  "colorBackground": "#3388AAEE",
+                  "visibility_action": {
+                    "log_id": "shortcut/1/weather"
+                  },
+                  "titleMaxLines": 1,
+                  "whiteBackground": "#ffffff",
+                  "heroText": "-1°",
+                  "bottomPadding": {
+                    "value": 9,
+                    "unit": "sp",
+                    "type": "fixed"
+                  },
+                  "action": {
+                    "log_id": "shortcut/1/weather",
+                    "url": "https://yandex.ru/pogoda/213?utm_source=morda"
+                  },
+                  "title": "Погода",
+                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/weather/bkn_n_new.3.png",
+                  "titleMarginsBottom": 1
+                },
+                {
+                  "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                },
+                {
+                  "action": {
+                    "log_id": "shortcut/2/mail",
+                    "url": "https://mail.yandex.ru"
+                  },
+                  "titleMarginsBottom": 1,
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/mail1.3.png",
+                  "title": "Почта",
+                  "badge": [
+                    {
+                      "shadow": "https://yastatic.net/s3/home/div/geoblock_v2/badge/simple.3.png",
+                      "type": "shortcutBadge/b6a7255ebd83863a8cad44ca84558fdf",
+                      "items": [
+                        {
+                          "type": "shortcutBadgeSimple/11925057bf207a41a2d7effa23ae259b",
+                          "count": "99+"
+                        }
+                      ]
+                    }
+                  ],
+                  "type": "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015",
+                  "subtitleMaxLines": 2,
+                  "subtitle": "re:Store Apple Premium Reseller, 21vek.by, Лаборатория «Гемотест»",
+                  "whiteBackground": "#ffffff",
+                  "colorBackground": "#33EEDD66",
+                  "titleMaxLines": 1,
+                  "visibility_action": {
+                    "log_id": "shortcut/2/mail"
+                  }
+                },
+                {
+                  "title": "Помощь рядом",
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/help_nearby2.3.png",
+                  "titleMarginsBottom": 1,
+                  "action": {
+                    "url": "https://help.yandex.ru/?utm_source=ikonka-servisa-ppya&utm_campaign=persey_blago",
+                    "log_id": "shortcut/3/help_nearby"
+                  },
+                  "colorBackground": "#33DDBBFF",
+                  "visibility_action": {
+                    "log_id": "shortcut/3/help_nearby"
+                  },
+                  "titleMaxLines": 1,
+                  "whiteBackground": "#ffffff",
+                  "subtitleMaxLines": 2,
+                  "subtitle": "социальный проект",
+                  "type": "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015",
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ]
+                },
+                {
+                  "subtitle": "найдётся, что почитать",
+                  "subtitleMaxLines": 2,
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ],
+                  "type": "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015",
+                  "visibility_action": {
+                    "log_id": "shortcut/4/my_books"
+                  },
+                  "titleMaxLines": 1,
+                  "colorBackground": "#33EEDD66",
+                  "whiteBackground": "#ffffff",
+                  "action": {
+                    "log_id": "shortcut/4/my_books",
+                    "url": "books://library"
+                  },
+                  "title": "Читалка",
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/books_new_icon.3.png",
+                  "titleMarginsBottom": 1
+                },
+                {
+                  "subtitle": "добавьте свои",
+                  "subtitleMaxLines": 1,
+                  "type": "bonusCard/c8b8aa3ab2fd3e3156ea7752ee31b34d",
+                  "titleMaxLines": 2,
+                  "visibility_action": {
+                    "log_id": "shortcut/5/bonuscards"
+                  },
+                  "shortcutSize": 114,
+                  "colorBackground": "#33FFAA66",
+                  "whiteBackground": "#ffffff",
+                  "action": {
+                    "url": "bonuscards://cardlist?utm_source=nav_panel",
+                    "log_id": "shortcut/5/bonuscards"
+                  },
+                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/dummy.3.png",
+                  "bonusCardsIcons": [
+                    {
+                      "type": "bonuscardsIcon/21ad9283d0f87f76d18dd0067654810c",
+                      "image_url": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/bonuscards/bonuscards-icon.3.png"
+                    },
+                    {
+                      "addPlusImage": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/bonuscards/bonuscards-plus.3.png",
+                      "type": "bonuscardsAdd/cc2e466e5b19205a814043dbf00a35d0"
+                    }
+                  ],
+                  "title": "Бонусные карты",
+                  "titleMarginsBottom": 0
+                },
+                {
+                  "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                },
+                {
+                  "whiteBackground": "#ffffff",
+                  "colorBackground": "#33DDBBFF",
+                  "shortcutSize": 114,
+                  "titleMaxLines": 1,
+                  "visibility_action": {
+                    "log_id": "shortcut/6/pedometer"
+                  },
+                  "pedometerSubtitleParams": {
+                    "ask_permission_text": "сейчас шаги не считаются",
+                    "permission_granted_text": "сегодня шагов"
+                  },
+                  "type": "pedometerShortcut/8a7a0b178bac6b329686519f192e09ab",
+                  "subtitleMaxLines": 2,
+                  "subtitle": "сейчас шаги не считаются",
+                  "titleMarginsBottom": 1,
+                  "title": "Шагомер",
+                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/dummy.1.png",
+                  "action": {
+                    "url": "pedometer://home",
+                    "log_id": "shortcut/6/pedometer"
+                  }
+                },
+                {
+                  "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                },
+                {
+                  "titleMaxLines": 1,
+                  "visibility_action": {
+                    "log_id": "shortcut/7/covid_qr"
+                  },
+                  "colorBackground": "#3399CCEE",
+                  "whiteBackground": "#ffffff",
+                  "subtitle": "для общественных мест",
+                  "subtitleMaxLines": 2,
+                  "type": "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015",
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ],
+                  "title": "QR-код",
+                  "icon": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/recent/ic_qrcode.3.png",
+                  "titleMarginsBottom": 1,
+                  "action": {
+                    "log_id": "shortcut/7/covid_qr",
+                    "url": "covid-qr://show"
+                  }
+                },
+                {
+                  "title": "Диск",
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/disk1.3.png",
+                  "titleMarginsBottom": 1,
+                  "action": {
+                    "url": "https://disk.yandex.ru/",
+                    "log_id": "shortcut/8/disk"
+                  },
+                  "titleMaxLines": 1,
+                  "visibility_action": {
+                    "log_id": "shortcut/8/disk"
+                  },
+                  "colorBackground": "#3399CCEE",
+                  "whiteBackground": "#ffffff",
+                  "subtitle": "хранит ваши файлы",
+                  "subtitleMaxLines": 2,
+                  "type": "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015",
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ]
+                },
+                {
+                  "totalPrice": " ",
+                  "currency": " ",
+                  "whiteBackground": "#ffffff",
+                  "colorBackground": "#3399CCEE",
+                  "shortcutSize": 114,
+                  "action": {
+                    "log_id": "shortcut/9/market",
+                    "url": "https://m.market.yandex.ru/my/cart?clid=992&wprid=1642178462222555-1563868591800007175-sas2-0212-sas-l7-balancer-8080-BAL-4910&src_pof=992&icookie=cO6sJSS4nrv3vLaMkrtwEoo%2Fj8gJQo0bqwDQKjBJiLUGYB9YwwIsIR%2BvNQIfRizXblk9jh8i0qPGWMN%2FPB%2FNqj3fQ8o%3D&utm_source_service=morda"
+                  },
+                  "totalPriceLineHeight": 28,
+                  "type": "shortcutMarket/09df7614ffcd30e4a4a15bb45e0a0343",
+                  "subtitle": "нет товаров в корзине",
+                  "subtitleMaxLines": 2,
+                  "titleMaxLines": 1,
+                  "visibility_action": {
+                    "log_id": "shortcut/9/market"
+                  },
+                  "titleMarginsBottom": 1,
+                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/market/market_blackout2.3.png",
+                  "title": "Корзина",
+                  "totalPriceFontSize": 26
+                },
+                {
+                  "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                }
+              ]
+            },
+            {
+              "type": "state",
+              "div_id": "switch_button",
+              "states": [
+                {
+                  "state_id": "button_0",
+                  "animation_in": {
+                    "name": "fade",
+                    "start_value": 0,
+                    "end_value": 1,
+                    "duration": 300,
+                    "interpolator": "ease_out"
+                  },
+                  "animation_out": {
+                    "name": "fade",
+                    "start_value": 1,
+                    "end_value": 0,
+                    "duration": 300,
+                    "interpolator": "ease_in"
+                  },
+                  "div": {
+                    "type": "button/__debug__",
+                    "background_color": "#33FFAA66",
+                    "text": "NEXT SHORTCUT IN STACK",
+                    "actions": [
+                      {
+                        "log_id": "update_shortcuts_stack",
+                        "url": "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_1"
+                      },
+                      {
+                        "log_id": "update_button",
+                        "url": "div-action://set_state?state_id=0/switch_button/button_1"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "button_1",
+                  "animation_in": {
+                    "name": "fade",
+                    "start_value": 0,
+                    "end_value": 1,
+                    "duration": 300,
+                    "interpolator": "ease_out"
+                  },
+                  "animation_out": {
+                    "name": "fade",
+                    "start_value": 1,
+                    "end_value": 0,
+                    "duration": 300,
+                    "interpolator": "ease_in"
+                  },
+                  "div": {
+                    "type": "button/__debug__",
+                    "background_color": "#33A18AFF",
+                    "text": "NEXT SHORTCUT IN STACK",
+                    "actions": [
+                      {
+                        "log_id": "update_shortcuts_stack",
+                        "url": "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_2"
+                      },
+                      {
+                        "log_id": "update_button",
+                        "url": "div-action://set_state?state_id=0/switch_button/button_2"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "button_2",
+                  "animation_in": {
+                    "name": "fade",
+                    "start_value": 0,
+                    "end_value": 1,
+                    "duration": 300,
+                    "interpolator": "ease_out"
+                  },
+                  "animation_out": {
+                    "name": "fade",
+                    "start_value": 1,
+                    "end_value": 0,
+                    "duration": 300,
+                    "interpolator": "ease_in"
+                  },
+                  "div": {
+                    "type": "button/__debug__",
+                    "background_color": "#3399CCEE",
+                    "text": "NEXT SHORTCUT IN STACK",
+                    "actions": [
+                      {
+                        "log_id": "update_shortcuts_stack",
+                        "url": "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_3"
+                      },
+                      {
+                        "log_id": "update_button",
+                        "url": "div-action://set_state?state_id=0/switch_button/button_3"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "button_3",
+                  "animation_in": {
+                    "name": "fade",
+                    "start_value": 0,
+                    "end_value": 1,
+                    "duration": 300,
+                    "interpolator": "ease_out"
+                  },
+                  "animation_out": {
+                    "name": "fade",
+                    "start_value": 1,
+                    "end_value": 0,
+                    "duration": 300,
+                    "interpolator": "ease_in"
+                  },
+                  "div": {
+                    "type": "button/__debug__",
+                    "background_color": "#33EEDD66",
+                    "text": "NEXT SHORTCUT IN STACK",
+                    "actions": [
+                      {
+                        "log_id": "update_shortcuts_stack",
+                        "url": "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_4"
+                      },
+                      {
+                        "log_id": "update_button",
+                        "url": "div-action://set_state?state_id=0/switch_button/button_4"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "button_4",
+                  "animation_in": {
+                    "name": "fade",
+                    "start_value": 0,
+                    "end_value": 1,
+                    "duration": 300,
+                    "interpolator": "ease_out"
+                  },
+                  "animation_out": {
+                    "name": "fade",
+                    "start_value": 1,
+                    "end_value": 0,
+                    "duration": 300,
+                    "interpolator": "ease_in"
+                  },
+                  "div": {
+                    "type": "button/__debug__",
+                    "background_color": "#33FFAA99",
+                    "text": "NEXT SHORTCUT IN STACK",
+                    "actions": [
+                      {
+                        "log_id": "update_shortcuts_stack",
+                        "url": "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_5"
+                      },
+                      {
+                        "log_id": "update_button",
+                        "url": "div-action://set_state?state_id=0/switch_button/button_5"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "button_5",
+                  "animation_in": {
+                    "name": "fade",
+                    "start_value": 0,
+                    "end_value": 1,
+                    "duration": 300,
+                    "interpolator": "ease_out"
+                  },
+                  "animation_out": {
+                    "name": "fade",
+                    "start_value": 1,
+                    "end_value": 0,
+                    "duration": 300,
+                    "interpolator": "ease_in"
+                  },
+                  "div": {
+                    "type": "button/__debug__",
+                    "background_color": "#33BBBBBB",
+                    "text": "NEXT SHORTCUT IN STACK",
+                    "actions": [
+                      {
+                        "log_id": "update_shortcuts_stack",
+                        "url": "div-action://set_state?state_id=0/shortcuts_stack/stack_0_shortcut_0"
+                      },
+                      {
+                        "log_id": "update_button",
+                        "url": "div-action://set_state?state_id=0/switch_button/button_0"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

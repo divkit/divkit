@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_change_set_transition",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "set"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "div-change-transition.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_change_set_transition_items"
+    }
+  },
+  "required": [
+    "type",
+    "items"
+  ]
+}

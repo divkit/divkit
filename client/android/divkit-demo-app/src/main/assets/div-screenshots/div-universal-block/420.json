@@ -1,0 +1,45 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "side_element": {
+                        "size": "s",
+                        "element": {
+                            "image_url": "https://alicekit.s3.yandex.net/images_for_divs/astronaut.jpg",
+                            "type": "div-image-element"
+                        }
+                    },
+                    "type": "div-universal-block"
+                },
+                {
+                    "side_element": {
+                        "size": "m",
+                        "element": {
+                            "image_url": "https://alicekit.s3.yandex.net/images_for_divs/astronaut.jpg",
+                            "type": "div-image-element"
+                        }
+                    },
+                    "type": "div-universal-block"
+                },
+                {
+                    "side_element": {
+                        "size": "l",
+                        "element": {
+                            "image_url": "https://alicekit.s3.yandex.net/images_for_divs/astronaut.jpg",
+                            "type": "div-image-element"
+                        }
+                    },
+                    "type": "div-universal-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

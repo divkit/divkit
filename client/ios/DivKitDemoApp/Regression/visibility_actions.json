@@ -1,0 +1,93 @@
+{
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "paddings": {
+            "bottom": 20,
+            "left": 20,
+            "right": 20,
+            "top": 10
+          },
+          "items": [
+            {
+              "type": "state_with_text",
+              "state_div_id": "root1",
+              "state1_text": "log_limit = 0",
+              "state2_text": "log_limit = 3",
+              "state1_visibility_actions": [
+                {
+                  "log_id": "visibility",
+                  "url": "div-action://set_state?state_id=0/root1/state2",
+                  "visibility_duration": 2000,
+                  "log_limit": 0
+                }
+              ],
+              "state2_visibility_actions": [
+                {
+                  "log_id": "visibility",
+                  "url": "div-action://set_state?state_id=0/root1/state1",
+                  "visibility_duration": 2000,
+                  "log_limit": 3
+                }
+              ]
+            },
+            {
+              "type": "state_with_text",
+              "state_div_id": "root2",
+              "state1_text": "Multiple actions 1",
+              "state2_text": "Multiple actions 2",
+              "state1_visibility_actions": [
+                {
+                  "log_id": "visibility",
+                  "url": "div-action://set_variable?name=var1&value=test",
+                  "visibility_duration": 500,
+                  "log_limit": 1
+                },
+                {
+                  "log_id": "visibility",
+                  "url": "div-action://set_state?state_id=0/root2/state2",
+                  "visibility_duration": 1000,
+                  "log_limit": 1
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "state_with_text": {
+      "type": "state",
+      "$div_id": "state_div_id",
+      "paddings": {
+        "top": 20
+      },
+      "states": [
+        {
+          "state_id": "state1",
+          "div": {
+            "type": "text",
+            "font_size": 24,
+            "$text": "state1_text",
+            "$visibility_actions": "state1_visibility_actions"
+          }
+        },
+        {
+          "state_id": "state2",
+          "div": {
+            "type": "text",
+            "font_size": 24,
+            "$text": "state2_text",
+            "$visibility_actions": "state2_visibility_actions"
+          }
+        }
+      ]
+    }
+  }
+}

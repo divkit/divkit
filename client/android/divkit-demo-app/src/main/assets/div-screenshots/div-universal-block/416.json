@@ -1,0 +1,40 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "side_element": {
+                        "size": "s",
+                        "element": {
+                            "date_month": "<font color=\"#FF00FF\">\u0421\u0415\u041d</font>",
+                            "date_day": "10",
+                            "type": "date_element"
+                        }
+                    },
+                    "text": "color + ",
+                    "type": "div-universal-block"
+                },
+                {
+                    "side_element": {
+                        "position": "right",
+                        "size": "s",
+                        "element": {
+                            "date_month": "<i>\u0421\u0415\u041d</i>",
+                            "date_day": "10",
+                            "type": "date_element"
+                        }
+                    },
+                    "text": "italic + ",
+                    "type": "div-universal-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

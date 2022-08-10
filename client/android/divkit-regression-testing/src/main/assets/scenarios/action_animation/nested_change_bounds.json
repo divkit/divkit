@@ -1,0 +1,432 @@
+{
+  "templates": {
+    "outer_container": {
+      "type": "container",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#34495E"
+        }
+      ],
+      "border": {
+        "corner_radius": 12
+      },
+      "orientation": "vertical"
+    },
+    "inner_container": {
+      "type": "container",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ],
+      "border": {
+        "corner_radius": 12
+      },
+      "orientation": "horizontal"
+    },
+    "base_image": {
+      "type": "image",
+      "width": {
+        "type": "fixed",
+        "value": 120
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "border": {
+        "corner_radius": 12
+      },
+      "placeholder_color": "#3498DB"
+    },
+    "base_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ],
+      "border": {
+        "corner_radius": 12
+      },
+      "font_size": 14,
+      "text_alignment_vertical": "center",
+      "text_color": "#34495E"
+    },
+    "button": {
+      "type": "base_text",
+      "width": {
+        "type": "fixed",
+        "value": 88
+      },
+      "height": {
+        "type": "fixed",
+        "value": 88
+      },
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center"
+    },
+    "placeholder": {
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 1
+      },
+      "height": {
+        "type": "fixed",
+        "value": 1
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      }
+    }
+  },
+  "card": {
+    "log_id": "transition/complex_transitions",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "state",
+          "div_id": "card_state",
+          "height": {
+            "type": "fixed",
+            "value": 360
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ECF0F1"
+            }
+          ],
+          "states": [
+            {
+              "state_id": "alpha",
+              "div": {
+                "type": "outer_container",
+                "id": "container_01",
+                "alignment_horizontal": "center",
+                "alignment_vertical": "center",
+                "items": [
+                  {
+                    "type": "inner_container",
+                    "id": "container_02",
+                    "items": [
+                      {
+                        "type": "button",
+                        "id": "button_01",
+                        "width": {
+                          "type": "fixed",
+                          "value": 120
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 120
+                        },
+                        "text": "PRESS HERE",
+                        "transition_in": {
+                          "type": "fade",
+                          "duration": 250,
+                          "start_delay": 250
+                        },
+                        "transition_out": {
+                          "type": "fade",
+                          "duration": 250
+                        }
+                      }
+                    ]
+                  }
+                ],
+                "actions": [
+                  {
+                    "log_id": "go_to_beta",
+                    "url": "div-action://set_state?state_id=0/card_state/beta"
+                  }
+                ],
+                "transition_change": {
+                  "type": "change_bounds",
+                  "duration": 500
+                }
+              }
+            },
+            {
+              "state_id": "beta",
+              "div": {
+                "type": "outer_container",
+                "id": "container_01",
+                "alignment_horizontal": "center",
+                "alignment_vertical": "center",
+                "items": [
+                  {
+                    "type": "inner_container",
+                    "id": "container_02",
+                    "items": [
+                      {
+                        "type": "button",
+                        "id": "button_01",
+                        "width": {
+                          "type": "fixed",
+                          "value": 120
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 120
+                        },
+                        "text": "PRESS AGAIN",
+                        "transition_in": {
+                          "type": "fade",
+                          "duration": 250,
+                          "start_delay": 250
+                        },
+                        "transition_out": {
+                          "type": "fade",
+                          "duration": 250
+                        }
+                      }
+                    ],
+                    "transition_change": {
+                      "type": "change_bounds",
+                      "duration": 500
+                    }
+                  },
+                  {
+                    "type": "base_image",
+                    "id": "image_01",
+                    "margins": {
+                      "top": 16
+                    },
+                    "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+                    "transition_in": {
+                      "type": "set",
+                      "items": [
+                        {
+                          "type": "fade",
+                          "duration": 250,
+                          "start_delay": 300
+                        },
+                        {
+                          "type": "slide",
+                          "edge": "top",
+                          "distance": {
+                            "value": 20
+                          },
+                          "duration": 250,
+                          "start_delay": 300
+                        }
+                      ]
+                    },
+                    "transition_out": {
+                      "type": "set",
+                      "items": [
+                        {
+                          "type": "fade",
+                          "duration": 250
+                        },
+                        {
+                          "type": "slide",
+                          "edge": "top",
+                          "distance": {
+                            "value": 20
+                          },
+                          "duration": 250
+                        }
+                      ]
+                    },
+                    "transition_change": {
+                      "type": "change_bounds",
+                      "duration": 500
+                    }
+                  }
+                ],
+                "actions": [
+                  {
+                    "log_id": "go_to_gamma",
+                    "url": "div-action://set_state?state_id=0/card_state/gamma"
+                  }
+                ],
+                "transition_change": {
+                  "type": "change_bounds",
+                  "duration": 500
+                }
+              }
+            },
+            {
+              "state_id": "gamma",
+              "div": {
+                "type": "outer_container",
+                "id": "container_01",
+                "alignment_horizontal": "center",
+                "alignment_vertical": "center",
+                "items": [
+                  {
+                    "type": "inner_container",
+                    "id": "container_02",
+                    "items": [
+                      {
+                        "type": "placeholder",
+                        "width": {
+                          "type": "fixed",
+                          "value": 120
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 120
+                        }
+                      },
+                      {
+                        "type": "base_text",
+                        "id": "text_02",
+                        "width": {
+                          "type": "fixed",
+                          "value": 160
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 160
+                        },
+                        "font_size": 12,
+                        "text": "Transition framework allows you to animate all kinds of motion in your UI by simply providing the starting layout and the ending layout.",
+                        "transition_in": {
+                          "type": "set",
+                          "items": [
+                            {
+                              "type": "fade",
+                              "duration": 250,
+                              "start_delay": 300
+                            },
+                            {
+                              "type": "slide",
+                              "edge": "left",
+                              "distance": {
+                                "value": 20
+                              },
+                              "duration": 250,
+                              "start_delay": 300
+                            }
+                          ]
+                        },
+                        "transition_out": {
+                          "type": "set",
+                          "items": [
+                            {
+                              "type": "fade",
+                              "duration": 200
+                            },
+                            {
+                              "type": "slide",
+                              "edge": "left",
+                              "distance": {
+                                "value": 20
+                              },
+                              "duration": 200
+                            }
+                          ]
+                        }
+                      }
+                    ],
+                    "transition_change": {
+                      "type": "change_bounds",
+                      "duration": 500
+                    }
+                  },
+                  {
+                    "type": "base_image",
+                    "id": "image_01",
+                    "margins": {
+                      "top": 16
+                    },
+                    "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+                    "transition_in": {
+                      "type": "set",
+                      "items": [
+                        {
+                          "type": "fade",
+                          "duration": 250,
+                          "start_delay": 300
+                        },
+                        {
+                          "type": "slide",
+                          "edge": "top",
+                          "distance": {
+                            "value": 20
+                          },
+                          "duration": 250,
+                          "start_delay": 300
+                        }
+                      ]
+                    },
+                    "transition_out": {
+                      "type": "set",
+                      "items": [
+                        {
+                          "type": "fade",
+                          "duration": 250
+                        },
+                        {
+                          "type": "slide",
+                          "edge": "top",
+                          "distance": {
+                            "value": 20
+                          },
+                          "duration": 250
+                        }
+                      ]
+                    },
+                    "transition_change": {
+                      "type": "change_bounds",
+                      "duration": 500
+                    }
+                  }
+                ],
+                "actions": [
+                  {
+                    "log_id": "go_to_alpha",
+                    "url": "div-action://set_state?state_id=0/card_state/alpha"
+                  }
+                ],
+                "transition_change": {
+                  "type": "change_bounds",
+                  "duration": 500
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+def connectedTestTaskName = "connectedDebugAndroidTest" // encapsulating test variant
+
+task runUiTests {
+    if (!project.hasProperty("runsNumber")) {
+        dependsOn connectedTestTaskName
+    } else {
+        doLast { // couldn't make rerun task several times with gradle, use python
+            runsNumber = project.properties["runsNumber"] as Integer
+            def runScript = "$projectDir.parent/scripts/ui-tests/run-several-times.py"
+            executeWithTimeout("python $runScript $runsNumber ${getStartArgs()}", 60)
+        }
+    }
+}

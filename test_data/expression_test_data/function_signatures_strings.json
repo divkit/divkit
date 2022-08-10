@@ -1,0 +1,253 @@
+{
+  "signatures": [
+    {
+      "name": "len(string) integer",
+      "function_name": "len",
+      "doc": "Gets the length of string argument. Returns integer value.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to get length of."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "contains(string, string) boolean",
+      "function_name": "contains",
+      "doc": "Gets if second string argument contains in first string argument. Returns boolean value.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to find substring."
+        },
+        {
+          "type": "string",
+          "doc": "String value substring to find."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "substring(string, integer, integer) string",
+      "function_name": "substring",
+      "doc": "Gets substring of first argument in range of last arguments. Returns string value.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to get substring from."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, left index of substring."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, right index of substring."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "replaceAll(string, string, string) string",
+      "function_name": "replaceAll",
+      "doc": "Replaces all occurrences of the second argument in the first argument with the third argument. Returns string value of replaced string.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value, original string."
+        },
+        {
+          "type": "string",
+          "doc": "String value, string to find."
+        },
+        {
+          "type": "string",
+          "doc": "String value, string to replace."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "index(string, string) integer",
+      "function_name": "index",
+      "doc": "Gets first index of second argument in first argument. Returns integer value, index of occurrence or -1 if substring is not found.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value, original string."
+        },
+        {
+          "type": "string",
+          "doc": "String value, string to find."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "lastIndex(string, string) integer",
+      "function_name": "lastIndex",
+      "doc": "Gets last index of second argument in first argument. Returns integer value, index of occurrence or -1 if substring is not found.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value, original string."
+        },
+        {
+          "type": "string",
+          "doc": "String value, string to find."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "encodeUri(string) string",
+      "function_name": "encodeUri",
+      "doc": "Translates a string into application/x-www-form-urlencoded format using a specific encoding scheme. Returns string value, encoded string.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to translate."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "decodeUri(string) string",
+      "function_name": "decodeUri",
+      "doc": "Decodes a application/x-www-form-urlencoded string using a specific encoding scheme. Returns string value, decoded string.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to decode."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "trim(string) string",
+      "function_name": "trim",
+      "doc": "Returns a string having leading and trailing whitespace removed.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to trim."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "trimLeft(string) string",
+      "function_name": "trimLeft",
+      "doc": "Returns a string having leading whitespace removed.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to trim."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "trimRight(string) string",
+      "function_name": "trimRight",
+      "doc": "Returns a string having trailing whitespace removed.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to trim."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "toUpperCase(string) string",
+      "function_name": "toUpperCase",
+      "doc": "Returns converted to upper case string.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to transform."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "toLowerCase(string) string",
+      "function_name": "toLowerCase",
+      "doc": "Returns converted to lower case string.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to transform."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    }
+  ]
+}

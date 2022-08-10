@@ -1,0 +1,20 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "type": "div-universal-block",
+                    "title": "Only title"
+                }
+            ]
+        }
+    ],
+    "url": "http://yandex.ru",
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

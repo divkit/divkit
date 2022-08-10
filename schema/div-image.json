@@ -1,0 +1,52 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_image",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "$ref": "div-image-base.json"
+    },
+    {
+      "properties": {
+        "image_url": {
+          "$ref": "common.json#/url",
+          "$description": "translations.json#/div_image_image_url"
+        },
+        "high_priority_preview_show": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_image_high_priority_preview_show",
+          "platforms": [
+            "android"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "image"
+          ]
+        },
+        "tint_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_image_tint_color"
+        },
+        "appearance_animation": {
+          "$ref": "div-fade-transition.json",
+          "$description": "translations.json#/div_image_appearance_animation",
+          "platforms": [
+            "android"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "image_url",
+    "type"
+  ]
+}

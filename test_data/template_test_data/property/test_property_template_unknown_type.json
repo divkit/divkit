@@ -1,0 +1,12 @@
+{
+  "templates": {
+    "t_1": {
+      "type": "t_0",
+      "$property": "link"
+    }
+  },
+  "entity": {
+    "type": "t_1",
+    "link": "Some text"
+  }
+}

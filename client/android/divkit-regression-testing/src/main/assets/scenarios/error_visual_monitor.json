@@ -1,0 +1,58 @@
+{
+  "templates": {
+    "label_text": {
+      "type": "text",
+      "font_size": 24,
+      "font_weight": "bold",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "height": {
+        "type": "match_parent"
+      },
+      "width": {
+        "type": "match_parent"
+      }
+    }
+  },
+  "card": {
+    "log_id": "simple_tap",
+    "variables": [
+      {
+        "name": "alignment",
+        "type": "string",
+        "value": "center"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "div_id": "label",
+          "alignment_vertical": "center",
+          "height": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#fff"
+            }
+          ],
+          "alpha": 365,
+          "items": [
+            {
+              "type": "label_text",
+              "text": "Generate error!",
+              "alignment_horizontal": "@{alignment}",
+              "action": {
+                "log_id": "runtime_error",
+                "url": "div-action://set_variable?name=alignment&value=wrong_value"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

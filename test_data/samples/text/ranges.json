@@ -1,0 +1,106 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "top": 8,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Applying a property to part of text"
+            },
+            {
+              "type": "subtitle",
+              "text": "Text lets you insert an image in the specified position or change the text properties in a certain interval.\n\nIn the example, an image of a star was inserted into the text at position 71, the color of the characters of the first word was changed, the distance between the characters of the third word was increased, and a word was underlined.",
+              "margins": {
+                "bottom": 12
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "subtitle",
+                  "alignment_horizontal": "center",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "margins": {
+                    "left": 0,
+                    "right": 0
+                  },
+                  "paddings": {
+                    "left": 4,
+                    "right": 4,
+                    "top": 16,
+                    "bottom": 16
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#0E000000"
+                    }
+                  ],
+                  "max_lines": 5,
+                  "text_alignment_vertical": "center",
+                  "text_alignment_horizontal": "center",
+                  "ranges": [
+                    {
+                      "start": 0,
+                      "end": 5,
+                      "font_weight": "bold",
+                      "text_color": "#3F28C3"
+                    },
+                    {
+                      "start": 12,
+                      "end": 17,
+                      "underline": "single",
+                      "letter_spacing": 5
+                    }
+                  ],
+                  "images": [
+                    {
+                      "start": 71,
+                      "url": "https://avatars.mds.yandex.net/get-bass/787408/poi_48x48_ee9550bc195fdc5d7c1d281ea5d8d776320345e0a67b0663c4fdde14e194393b.png/orig"
+                    }
+                  ],
+                  "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodtempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

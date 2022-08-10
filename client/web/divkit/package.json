@@ -1,0 +1,127 @@
+{
+    "name": "@divkit/divkit",
+    "version": "1.12.0",
+    "description": "DivKit for web",
+    "keywords": [
+        "server-driven-ui",
+        "ssr",
+        "web",
+        "divkit",
+        "renderer"
+    ],
+    "author": "",
+    "homepage": "https://github.com/divkit/divkit",
+    "repository": "github:divkit/divkit",
+    "license": "Apache-2.0",
+    "files": [
+        "dist/*",
+        "typings/*",
+        "client/*",
+        "client-hydratable/*",
+        "client-devtool/*",
+        "server/*"
+    ],
+    "sideEffects": [
+        "dist/client.css"
+    ],
+    "main": "./dist/server.js",
+    "module": "./dist/esm/server.mjs",
+    "types": "./typings/server.d.ts",
+    "exports": {
+        ".": {
+            "types": "./typings/server.d.ts",
+            "require": "./dist/server.js",
+            "import": "./dist/esm/server.mjs"
+        },
+        "./client": {
+            "types": "./typings/client.d.ts",
+            "require": "./dist/client.js",
+            "import": "./dist/esm/client.mjs"
+        },
+        "./client-hydratable": {
+            "types": "./typings/client-hydratable.d.ts",
+            "require": "./dist/client-hydratable.js",
+            "import": "./dist/esm/client-hydratable.mjs"
+        },
+        "./client-devtool": {
+            "types": "./typings/client-devtool.d.ts",
+            "require": "./dist/client-devtool.js",
+            "import": "./dist/esm/client-devtool.mjs"
+        },
+        "./server": {
+            "types": "./typings/server.d.ts",
+            "require": "./dist/server.js",
+            "import": "./dist/esm/server.mjs"
+        },
+        "./dist/": "./dist/",
+        "./typings/": "./typings/",
+        "./client/": "./client/",
+        "./client-hydratable/": "./client-hydratable/",
+        "./client-devtool/": "./client-devtool/",
+        "./server/": "./server/"
+    },
+    "scripts": {
+        "test:unit": "jest",
+        "test:hermione": "cd ci && ./node_modules/.bin/hermione",
+        "test:hermione:gui": "cd ci && ./node_modules/.bin/hermione gui",
+        "test:hermione:update": "cd ci && ./node_modules/.bin/hermione --update-refs",
+        "check:ts": "tsc --noEmit",
+        "check:eslint": "eslint --quiet .",
+        "check:svelte": "svelte-check --threshold error",
+        "build": "npx webpack-cli",
+        "build:watch": "npm run build:peggy && webpack serve --config webpack-dev.config.js",
+        "build:peggy": "peggy src/expressions/expressions.peggy --allowed-start-rules start,JsonStringContents --format es",
+        "build:dev-prod": "npm run build:peggy && NODE_ENV=production webpack-cli --config webpack-dev.config.js",
+        "build:prod": "npm run build:peggy && rm -rf dist/ && NODE_ENV=production npx webpack-cli --progress",
+        "prepublishOnly": "cp ../../../LICENCE ./"
+    },
+    "browserslist": {
+        "production": [
+            "chrome >= 58",
+            "safari >= 11",
+            "firefox >= 67"
+        ],
+        "ssr": [
+            "node >= 8"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@babel/core": "7.18.10",
+        "@babel/preset-env": "7.18.10",
+        "@babel/preset-typescript": "7.18.6",
+        "@types/jest": "28.1.6",
+        "@typescript-eslint/eslint-plugin": "5.32.0",
+        "@typescript-eslint/parser": "5.32.0",
+        "autoprefixer": "10.4.8",
+        "babel-loader": "8.2.5",
+        "chai": "4.3.6",
+        "css-loader": "6.7.1",
+        "css-minimizer-webpack-plugin": "4.0.0",
+        "eslint": "7.32.0",
+        "eslint-plugin-ascii": "1.0.0",
+        "eslint-plugin-import": "2.26.0",
+        "eslint-plugin-mocha": "10.1.0",
+        "eslint-plugin-svelte3": "3.4.1",
+        "html-webpack-plugin": "5.5.0",
+        "jest": "28.1.3",
+        "jest-html-reporter": "3.6.0",
+        "mini-css-extract-plugin": "2.6.1",
+        "peggy": "2.0.1",
+        "postcss": "8.4.14",
+        "postcss-loader": "7.0.1",
+        "svelte": "3.49.0",
+        "svelte-as-markup-preprocessor": "0.3.0",
+        "svelte-check": "2.8.0",
+        "svelte-loader": "3.1.3",
+        "svelte-preprocess": "4.10.7",
+        "typescript": "4.7.4",
+        "webpack": "5.74.0",
+        "webpack-cli": "4.10.0",
+        "webpack-dev-server": "4.9.3"
+    }
+}

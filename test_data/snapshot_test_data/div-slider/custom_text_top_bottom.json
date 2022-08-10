@@ -1,0 +1,104 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 30
+      },
+      {
+        "name": "slider_variable_second",
+        "type": "integer",
+        "value": 90
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "slider",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "thumb_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#ff0000"
+          },
+          "thumb_value_variable": "slider_variable",
+          "thumb_secondary_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 28
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 28
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 14
+              }
+            },
+            "color": "#00ff00"
+          },
+          "thumb_secondary_value_variable": "slider_variable_second",
+          "thumb_text_style": {
+            "font_size": 16,
+            "text_color": "#00ff00",
+            "font_weight": "bold",
+            "offset": {
+              "y": {
+                "value": -30
+              },
+              "x": {
+                "value": 0
+              }
+            }
+          },
+          "thumb_secondary_text_style": {
+            "font_size": 16,
+            "text_color": "#00ff00",
+            "font_weight": "bold",
+            "offset": {
+              "y": {
+                "value": 35
+              },
+              "x": {
+                "value": 0
+              }
+            }
+          },
+          "track_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#000000"
+          },
+          "track_active_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#0000ff"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "$description": "translations.json#/div_line_style",
+  "enum": [
+    "none",
+    "single"
+  ]
+}

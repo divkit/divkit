@@ -1,0 +1,186 @@
+{
+  "cases": [
+    {
+      "name": "date_a + date_b => error",
+      "expression": "@{parseUnixTime(0) + parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 + 1970-01-01 00:00:01]. Operator '+' cannot be applied to DateTime type."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a - date_b => error",
+      "expression": "@{parseUnixTime(0) - parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 - 1970-01-01 00:00:01]. Operator '-' cannot be applied to DateTime type."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a * date_b => error",
+      "expression": "@{parseUnixTime(0) * parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 * 1970-01-01 00:00:01]. Operator '*' cannot be applied to DateTime type."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a / date_b => error",
+      "expression": "@{parseUnixTime(0) / parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 / 1970-01-01 00:00:01]. Operator '/' cannot be applied to DateTime type."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a % date_b => error",
+      "expression": "@{parseUnixTime(0) % parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 % 1970-01-01 00:00:01]. Operator '%' cannot be applied to DateTime type."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a ^ date_b => error",
+      "expression": "@{parseUnixTime(0) ^ parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a & date_b => error",
+      "expression": "@{parseUnixTime(0) & parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a | date_b => error",
+      "expression": "@{parseUnixTime(0) | parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": ""
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a && date_b => error",
+      "expression": "@{parseUnixTime(0) && parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 && ...]. '&&' must be called with boolean operands."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "date_a || date_b => error",
+      "expression": "@{parseUnixTime(0) || parseUnixTime(1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [1970-01-01 00:00:00 || ...]. '||' must be called with boolean operands."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-date => error",
+      "expression": "@{-parseUnixTime(0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [-1970-01-01 00:00:00]. A Number is expected after a unary minus."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "+date => error",
+      "expression": "@{+parseUnixTime(0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [+1970-01-01 00:00:00]. A Number is expected after a unary plus."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "!date => error",
+      "expression": "@{!parseUnixTime(0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [!1970-01-01 00:00:00]. A Boolean is expected after a unary not."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

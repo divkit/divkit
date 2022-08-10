@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`array_with_transform test_array_with_transform_invalid_items 1`] = `
+Object {
+  "json": Object {
+    "array": Array [
+      "",
+      "FF00",
+    ],
+    "link": Array [
+      "",
+      "FF00",
+    ],
+    "type": "entity_with_array_with_transform",
+  },
+  "templateContext": Object {
+    "link": Array [
+      "",
+      "FF00",
+    ],
+  },
+}
+`;
+
+exports[`array_with_transform test_array_with_transform_not_templated_invalid_items 1`] = `
+Object {
+  "json": Object {
+    "array": Array [
+      "FF00",
+      "",
+    ],
+    "type": "entity_with_array_with_transform",
+  },
+  "templateContext": Object {},
+}
+`;
+
+exports[`array_with_transform test_array_with_transform_not_templated_invalid_items 2`] = `
+Array [
+  Array [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_with_transform test_array_with_transform_not_templated_one_invalid_item 1`] = `
+Object {
+  "json": Object {
+    "array": Array [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000",
+    ],
+    "type": "entity_with_array_with_transform",
+  },
+  "templateContext": Object {},
+}
+`;
+
+exports[`array_with_transform test_array_with_transform_not_templated_one_invalid_item 2`] = `
+Array [
+  Array [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_with_transform test_array_with_transform_one_invalid_item 1`] = `
+Object {
+  "json": Object {
+    "array": Array [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000",
+    ],
+    "link": Array [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000",
+    ],
+    "type": "entity_with_array_with_transform",
+  },
+  "templateContext": Object {
+    "link": Array [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000",
+    ],
+  },
+}
+`;

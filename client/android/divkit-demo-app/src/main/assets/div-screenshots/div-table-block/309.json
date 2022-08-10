@@ -1,0 +1,54 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "rows": [
+                        {
+                            "cells": [
+                                {
+                                    "text": "Title_s",
+                                    "text_style": "title_s"
+                                },
+                                {
+                                    "text": "Title_m",
+                                    "text_style": "title_m"
+                                },
+                                {
+                                    "text": "Title_l",
+                                    "text_style": "title_l"
+                                }
+                            ],
+                            "type": "row_element"
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "text": "Text_s",
+                                    "text_style": "text_s"
+                                },
+                                {
+                                    "text": "Text_m",
+                                    "text_style": "text_m"
+                                },
+                                {
+                                    "text": "Text_l",
+                                    "text_style": "text_l"
+                                }
+                            ],
+                            "type": "row_element"
+                        }
+                    ],
+                    "type": "div-table-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

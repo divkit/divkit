@@ -1,0 +1,64 @@
+{
+  "log_id": "transition/set_src",
+  "transition_animation_selector": "data_change",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "height": {
+          "type": "fixed",
+          "value": 320
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#2C3E50"
+          }
+        ],
+        "orientation": "overlap",
+        "items": [
+          {
+            "type": "text",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "fixed",
+              "value": 48
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "border": {
+              "corner_radius": 8
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#1ABC9C"
+              }
+            ],
+            "alignment_vertical": "bottom",
+            "alignment_horizontal": "center",
+            "font_size": 18,
+            "font_weight": "medium",
+            "text_alignment_vertical": "center",
+            "text_alignment_horizontal": "center",
+            "text_color": "#34495E",
+            "text": "GO",
+            "actions": [
+              {
+                "log_id": "perform_forward_transition",
+                "url": "div-demo-action://set_data?path=scenarios/animations/transition/set_dst.json"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

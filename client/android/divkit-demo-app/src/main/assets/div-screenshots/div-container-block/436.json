@@ -1,0 +1,54 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "alignment_horizontal": "left",
+                    "frame": {
+                        "color": "#FF0000",
+                        "style": "border"
+                    },
+                    "direction": "vertical",
+                    "height": {
+                        "type": "numeric",
+                        "value": 200
+                    },
+                    "width": {
+                        "type": "numeric",
+                        "value": 300,
+                        "unit": "dp"
+                    },
+                    "background": [
+                        {
+                            "image_url": "https://alicekit.s3.yandex.net/images_for_divs/astronaut.jpg",
+                            "type": "div-image-background"
+                        },
+                        {
+                            "end_color": "#FF0000FF",
+                            "type": "div-gradient-background",
+                            "start_color": "#000000FF"
+                        }
+                    ],
+                    "action": {
+                        "url": "https://news.yandex.ru/hockey.html"
+                    },
+                    "type": "div-container-block",
+                    "children": [
+                        {
+                            "text": "image- \u0438 gradient- background",
+                            "type": "div-universal-block",
+                            "text_style": "title_s"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#BBAAFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

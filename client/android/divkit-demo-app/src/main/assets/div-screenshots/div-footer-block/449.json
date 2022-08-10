@@ -1,0 +1,58 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "text_style": "title_l",
+                    "text": "left padding s",
+                    "image": {
+                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/goal_in_hockey.jpg"
+                    },
+                    "padding_modifier": {
+                        "size": "s"
+                    },
+                    "action": {
+                        "url": "https://news.yandex.ru/hockey.html"
+                    },
+                    "type": "div-footer-block"
+                },
+                {
+                    "text_style": "title_l",
+                    "text": "left padding m",
+                    "image": {
+                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/goal_in_hockey.jpg"
+                    },
+                    "padding_modifier": {
+                        "position": "left",
+                        "size": "m"
+                    },
+                    "action": {
+                        "url": "https://news.yandex.ru/hockey.html"
+                    },
+                    "type": "div-footer-block"
+                },
+                {
+                    "text_style": "title_l",
+                    "text": "left padding l",
+                    "image": {
+                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/goal_in_hockey.jpg"
+                    },
+                    "padding_modifier": {
+                        "size": "l"
+                    },
+                    "action": {
+                        "url": "https://news.yandex.ru/hockey.html"
+                    },
+                    "type": "div-footer-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

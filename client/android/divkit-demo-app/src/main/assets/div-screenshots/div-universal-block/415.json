@@ -1,0 +1,38 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "side_element": {
+                        "size": "s",
+                        "element": {
+                            "date_day": "<font color=\"#FF00FF\">10</font>",
+                            "type": "date_element"
+                        }
+                    },
+                    "text": "color + ",
+                    "type": "div-universal-block"
+                },
+                {
+                    "side_element": {
+                        "position": "right",
+                        "size": "s",
+                        "element": {
+                            "date_day": "<i>10</i>",
+                            "type": "date_element"
+                        }
+                    },
+                    "text": "italic + ",
+                    "type": "div-universal-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

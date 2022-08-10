@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_neighbour_page_size",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "fixed"
+      ]
+    },
+    "neighbour_page_width": {
+      "$ref": "div-fixed-size.json",
+      "$description": "translations.json#/div_neighbour_page_size_neighbour_page_width"
+    }
+  },
+  "required": [
+    "type",
+    "neighbour_page_width"
+  ]
+}

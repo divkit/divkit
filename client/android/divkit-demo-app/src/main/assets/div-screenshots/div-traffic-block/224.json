@@ -1,0 +1,25 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "color": "#228B22",
+                            "text": "18:00",
+                            "score": "10"
+                        }
+                    ],
+                    "type": "div-traffic-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

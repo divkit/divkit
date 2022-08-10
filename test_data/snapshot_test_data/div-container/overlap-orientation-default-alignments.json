@@ -1,0 +1,163 @@
+{
+  "templates": {
+    "text_white_bg_50x50": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "color": "#FFF",
+          "type": "solid"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "value": 50
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      }
+    },
+    "testcase_name": {
+      "type": "text",
+      "paddings": {
+        "top": 10,
+        "bottom": 10
+      },
+      "font_size": 16,
+      "background": [
+        {
+          "color": "#DDD",
+          "type": "solid"
+        }
+      ]
+    },
+    "overlap_container_black": {
+      "type": "container",
+      "orientation": "overlap",
+      "background": [
+        {
+          "color": "#000",
+          "type": "solid"
+        }
+      ]
+    },
+    "overlap_orientation_default_alignment_testcase": {
+      "type": "overlap_container_black",
+      "width": { "type": "fixed", "value": 70 },
+      "height": { "type": "fixed", "value": 70 },
+      "items": [
+        {
+          "type": "text_white_bg_50x50",
+          "text": "default"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "testcase_name",
+              "text": "Container-defined alignment for single item\n"
+            },
+            {
+              "type": "testcase_name",
+              "text": "left-top:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "top",
+              "content_alignment_horizontal": "left"
+            },
+            {
+              "type": "testcase_name",
+              "text": "center-top:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "top",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default right-top:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "top",
+              "content_alignment_horizontal": "right"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default left-center:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "center",
+              "content_alignment_horizontal": "left"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default center:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "center",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default right-center:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "center",
+              "content_alignment_horizontal": "right"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default left-bottom:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "bottom",
+              "content_alignment_horizontal": "left"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default center-bottom:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "bottom",
+              "content_alignment_horizontal": "center"
+            },
+            {
+              "type": "testcase_name",
+              "text": "default right-bottom:"
+            },
+            {
+              "type": "overlap_orientation_default_alignment_testcase",
+              "content_alignment_vertical": "bottom",
+              "content_alignment_horizontal": "right"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

@@ -1,0 +1,331 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "state_id": 0,
+      "font_size": 24,
+      "font_weight": "bold",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000",
+      "focused_text_color": "#FFFFFF",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFFFF"
+        }
+      ],
+      "height": {
+        "type": "wrap_content"
+      },
+      "width": {
+        "type": "match_parent"
+      }
+    }
+  },
+  "card": {
+    "log_id": "focus",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "div_id": "container",
+          "paddings": {
+            "left": 8,
+            "right": 8,
+            "top": 4,
+            "bottom": 4
+          },
+          "border": {
+            "corner_radius": 24
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "text",
+              "text": "Button is inactive - background is red\n\nButton is active - background is blue\n\nFORWARD - enumeration UP - DOWN - LEFT - RIGHT (if button is active, it changes the directions)\nUP, DOWN, LEFT, RIGHT - set button",
+              "text_color": "#000000",
+              "margins": {
+                "top": 8,
+                "bottom": 8,
+                "left": 12,
+                "right": 12
+              },
+              "font_size": 16
+            },
+            {
+              "type": "container",
+              "div_id": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "state",
+                  "div_id": "up",
+                  "states": [
+                    {
+                      "state_id": "not_tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "up",
+                        "text": "up",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#ff7f50"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "down",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/up/tapped"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "up",
+                        "text": "*up*",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#4183d7"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "right",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/up/not_tapped"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "state",
+                  "div_id": "left",
+                  "states": [
+                    {
+                      "state_id": "not_tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "left",
+                        "text": "left",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#ff7f50"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "right",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/left/tapped"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "left",
+                        "text": "*left*",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#4183d7"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "down",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/left/not_tapped"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "state",
+                  "div_id": "down",
+                  "states": [
+                    {
+                      "state_id": "not_tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "down",
+                        "text": "down",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#ff7f50"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "left",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/down/tapped"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "down",
+                        "text": "*down*",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#4183d7"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "up",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/down/not_tapped"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "state",
+                  "div_id": "right",
+                  "states": [
+                    {
+                      "state_id": "not_tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "right",
+                        "text": "right",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#ff7f50"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "up",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/right/tapped"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "right",
+                        "text": "*right*",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#4183d7"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "left",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/right/not_tapped"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

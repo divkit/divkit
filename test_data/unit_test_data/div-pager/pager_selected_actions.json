@@ -1,0 +1,46 @@
+{
+  "type": "pager",
+  "layout_mode": {
+    "neighbour_page_width": {
+      "type": "fixed",
+      "value": 10
+    },
+    "type": "fixed"
+  },
+  "items": [
+    {
+      "type": "text",
+      "text": "0",
+      "selected_actions": [
+        {
+          "log_id": "0",
+          "url": "div-action://set_state?state_id=0/description/0"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "text": "1",
+      "selected_actions": [
+        {
+          "log_id": "1",
+          "url": "div-action://set_state?state_id=0/description/1"
+        },
+        {
+          "log_id": "log",
+          "url": "some-action://authority"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "text": "2",
+      "selected_actions": [
+        {
+          "log_id": "2",
+          "url": "div-action://set_state?state_id=0/description/2"
+        }
+      ]
+    }
+  ]
+}

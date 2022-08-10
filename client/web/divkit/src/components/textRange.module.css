@@ -1,0 +1,28 @@
+.text-range {
+    white-space: pre-wrap;
+    color: inherit;
+}
+
+.text-range_singleline {
+    white-space: nowrap;
+}
+
+.text-range__top-offset {
+    display: inline-block;
+}
+
+.text-range_decoration_both {
+    text-decoration: underline line-through;
+}
+
+.text-range_decoration_underline {
+    text-decoration: underline;
+}
+
+.text-range_decoration_strike {
+    text-decoration: line-through;
+}
+
+.text-range_decoration_none {
+    text-decoration: none;
+}

@@ -1,0 +1,32 @@
+{
+  "cases": [
+    {
+      "name": "true boolean literal",
+      "expression": "@{true}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "false boolean literal",
+      "expression": "@{false}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

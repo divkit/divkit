@@ -1,0 +1,149 @@
+{
+  "cases": [
+    {
+      "name": "3 * 2 => 6",
+      "expression": "@{3 * 2}",
+      "expected": {
+        "type": "integer",
+        "value": 6
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "3 * 2 * 4 => 24",
+      "expression": "@{3 * 2 * 4}",
+      "expected": {
+        "type": "integer",
+        "value": 24
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "1 * -1 => -1",
+      "expression": "@{1 * -1}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-1 * -1 => 1",
+      "expression": "@{-1 * -1}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "1 * 0 => 0",
+      "expression": "@{1 * 0}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a * b => 8",
+      "expression": "@{a * b}",
+      "expected": {
+        "type": "integer",
+        "value": 8
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 2,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 4,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a * b => -70",
+      "expression": "@{a * b}",
+      "expected": {
+        "type": "integer",
+        "value": -70
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -10,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 7,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a * -b => 50",
+      "expression": "@{a * -b}",
+      "expected": {
+        "type": "integer",
+        "value": 50
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 25,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

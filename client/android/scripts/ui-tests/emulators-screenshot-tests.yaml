@@ -1,0 +1,119 @@
+# https://wiki.yandex-team.ru/assistant/AliceKit/ui-tests/#dobavlenienovyxjemuljatorov
+# lookup syntax https://blog.daemonl.com/2016/02/yaml.html
+# upload to sandbox with 'ya upload emulators-screenshot-tests.yaml --owner ALICEKIT_ANDROID --ttl inf'
+# Sandbox resource ID: 2523425075
+# Used in template
+# https://teamcity.browser.yandex-team.ru/admin/editBuildParams.html?id=template:Mobile_AliceKitAndroid_UiTestsScreensots
+
+api28: &default
+  sdk_url: 'http://s3.mds.yandex.net/alicekit/emulator-android-cmdline-tools-28.tar.gz'
+  sdk_hash: '275ae338212afad886b2b6a48272ae70faf87fa1'
+  launching_config: &default-launching-config
+    package: 'system-images;android-28;default;x86_64'
+    adb_root: yes
+    adb_shell:
+      - "settings put global airplane_mode_on 0"
+      - "am broadcast -a android.intent.action.AIRPLANE_MODE"
+    boot_timeout: 600
+    stop_timeout: 60
+    config: &default-config
+      disk.dataPartition.size: '1024M'
+      hw.accelerometer: 'yes'
+      hw.audioInput: 'yes'
+      hw.battery: 'yes'
+      hw.camera.back: 'emulated'
+      hw.camera.front: 'emulated'
+      hw.cpu.ncore: '1'
+      hw.device.name: 'Galaxy Nexus'
+      hw.dPad: 'no'
+      hw.gps: 'yes'
+      hw.gpu.enabled: 'yes'
+      hw.gpu.mode: 'swiftshader_indirect'
+      hw.keyboard: 'yes'
+      hw.lcd.density: '320'
+      hw.lcd.width: '1080'
+      hw.lcd.height: '2160'
+      hw.mainKeys: 'no'
+      hw.ramSize: '1536'
+      hw.sdCard: 'yes'
+      hw.sensors.orientation: 'yes'
+      hw.sensors.proximity: 'yes'
+      hw.trackBall: 'no'
+      sdcard.size: '1024M'
+      showDeviceFrame: 'yes'
+      skin.dynamic: 'yes'
+      #skin.name: '720x1440'
+      skin.path: '_no_skin'
+      vm.heapSize: '256'
+    start_args:
+      #  - '-no-audio'
+      - '-no-boot-anim'
+      - '-no-snapshot-save'
+      - '-no-window'
+      - '-qemu'
+      - '-enable-kvm'
+
+api27:
+  <<: *default
+  sdk_url: 'http://s3.mds.yandex.net/alicekit/emulator-android-cmdline-tools-27.tar.gz'
+  sdk_hash: '26bad73f498ef55afb60259f63646623dd82670f'
+  launching_config:
+    <<: *default-launching-config
+    package: 'system-images;android-27;abro;x86'
+    config:
+      <<: *default-config
+      hw.lcd.density: '320'
+      hw.lcd.width: '720'
+      hw.lcd.height: '1440'
+
+api26:
+  <<: *default
+  sdk_url: 'http://s3.mds.yandex.net/alicekit/emulator-android-cmdline-tools-26.tar.gz'
+  sdk_hash: '7498d808d0fd4651300dcc6ff4a751f3991ec3cf'
+  launching_config:
+    <<: *default-launching-config
+    package: 'system-images;android-26;default;x86_64'
+    config:
+      <<: *default-config
+      hw.lcd.density: '640'
+      hw.lcd.width: '1440'
+      hw.lcd.height: '2560'
+
+api25:
+  <<: *default
+  sdk_url: 'http://s3.mds.yandex.net/alicekit/emulator-android-cmdline-tools-25.tar.gz'
+  sdk_hash: '6d79350d6d19e9911468949e4a8eda4ed8eacb23'
+  launching_config:
+    <<: *default-launching-config
+    package: 'system-images;android-25;default;x86_64'
+    config:
+      <<: *default-config
+      hw.lcd.density: '320'
+      hw.lcd.width: '720'
+      hw.lcd.height: '1280'
+
+api24:
+  <<: *default
+  sdk_url: 'http://s3.mds.yandex.net/alicekit/emulator-android-cmdline-tools-24.tar.gz'
+  sdk_hash: 'f76d410cb2adee12ed3cd1933db80e0944d8d07c'
+  launching_config:
+    <<: *default-launching-config
+    package: 'system-images;android-24;default;x86_64'
+    config:
+      <<: *default-config
+      hw.lcd.density: '480'
+      hw.lcd.width: '1080'
+      hw.lcd.height: '1920'
+
+api23:
+  <<: *default
+  sdk_url: 'http://s3.mds.yandex.net/alicekit/emulator-android-cmdline-tools-23.tar.gz'
+  sdk_hash: 'bcabf59d92420c1f5a2de59320265e834a16f570'
+  launching_config:
+    <<: *default-launching-config
+    package: 'system-images;android-23;default;x86_64'
+    config:
+      <<: *default-config
+      hw.lcd.density: '240'
+      hw.lcd.width: '480'
+      hw.lcd.height: '800'

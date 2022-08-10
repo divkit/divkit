@@ -1,0 +1,84 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_gallery",
+  "generate_swift_optional_arguments": false,
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "gallery"
+          ]
+        },
+        "cross_content_alignment": {
+          "$description": "translations.json#/div_gallery_cross_content_alignment",
+          "version": "2.1",
+          "type": "string",
+          "enum": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default_value": "start"
+        },
+        "column_count": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_gallery_column_count"
+        },
+        "item_spacing": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "8",
+          "$description": "translations.json#/div_gallery_item_spacing"
+        },
+        "scroll_mode": {
+          "type": "string",
+          "default_value": "default",
+          "enum": [
+            "paging",
+            "default"
+          ],
+          "$description": "translations.json#/div_gallery_scroll_mode"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_gallery_items"
+        },
+        "orientation": {
+          "type": "string",
+          "default_value": "horizontal",
+          "enum": [
+            "horizontal",
+            "vertical"
+          ],
+          "$description": "translations.json#/div_gallery_orientation"
+        },
+        "restrict_parent_scroll": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_gallery_restrict_parent_scroll",
+          "platforms": [
+            "android"
+          ]
+        },
+        "default_item": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
+          "$description": "translations.json#/div_gallery_default_item"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "items"
+  ]
+}

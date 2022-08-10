@@ -1,0 +1,46 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_custom",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "custom"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_custom_items"
+        },
+        "custom_type": {
+          "type": "string",
+          "supports_expressions": false,
+          "$description": "translations.json#/div_custom_custom_type"
+        },
+        "custom_props": {
+          "type": "object",
+          "additionalProperties": true,
+          "$description": "translations.json#/div_custom_custom_props"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "custom_type"
+  ]
+}

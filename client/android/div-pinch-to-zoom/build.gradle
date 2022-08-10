@@ -1,0 +1,17 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div')
+    implementation project(path: ':div-data')
+    implementation project(path: ':div-json')
+    implementation project(path: ':utils')
+
+    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation "androidx.core:core:$versions.androidx.core"
+    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
+
+    testImplementation "androidx.test:core:$versions.androidx.test"
+}

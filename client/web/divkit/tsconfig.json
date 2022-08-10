@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "target": "ES2017",
+        "strict": true,
+        "sourceMap": true,
+        "allowSyntheticDefaultImports": true,
+        "skipLibCheck": true,
+        "moduleResolution": "Node"
+    },
+    "exclude": [
+        "src/dev.ts"
+    ]
+}

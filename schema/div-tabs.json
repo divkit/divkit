@@ -1,0 +1,229 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_tabs",
+  "generate_swift_optional_arguments": false,
+  "definitions": {
+    "item": {
+      "type": "object",
+      "generate_swift_optional_arguments": false,
+      "properties": {
+        "title": {
+          "$ref": "common.json#/non_empty_string",
+          "$description": "translations.json#/div_tabs_item_title"
+        },
+        "title_click_action": {
+          "$ref": "div-action.json",
+          "$description": "translations.json#/div_tabs_item_title_click_action"
+        },
+        "div": {
+          "$ref": "div.json",
+          "$description": "translations.json#/div_tabs_item_div"
+        }
+      },
+      "required": [
+        "title",
+        "div"
+      ],
+      "$description": "translations.json#/div_tabs_item"
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "tabs"
+          ]
+        },
+        "title_paddings": {
+          "$ref": "div-edge-insets.json",
+          "default_value": "{\"left\": 12,\"right\": 12,\"top\": 0,\"bottom\": 8}",
+          "$description": "translations.json#/div_tabs_title_paddings"
+        },
+        "separator_paddings": {
+          "$ref": "div-edge-insets.json",
+          "default_value": "{\"left\": 12,\"right\": 12,\"top\": 0,\"bottom\": 0}",
+          "$description": "translations.json#/div_tabs_separator_paddings"
+        },
+        "tab_title_style": {
+          "type": "object",
+          "properties": {
+            "font_size": {
+              "$ref": "common.json#/non_negative_integer",
+              "default_value": "12",
+              "$description": "translations.json#/div_tabs_tab_title_style_font_size"
+            },
+            "font_size_unit": {
+              "$ref": "div-size-unit.json",
+              "default_value": "sp",
+              "$description": "translations.json#/div_tabs_tab_title_style_font_size_unit",
+              "platforms": [
+                "android"
+              ]
+            },
+            "paddings": {
+              "$ref": "div-edge-insets.json",
+              "default_value": "{\"left\": 8,\"right\": 8,\"top\": 6,\"bottom\": 6}",
+              "$description": "translations.json#/div_tabs_tab_title_style_paddings"
+            },
+            "item_spacing": {
+              "$ref": "common.json#/non_negative_integer",
+              "default_value": "0",
+              "$description": "translations.json#/div_tabs_tab_title_style_item_spacing"
+            },
+            "line_height": {
+              "$ref": "common.json#/non_negative_integer",
+              "$description": "translations.json#/div_tabs_tab_title_style_line_height"
+            },
+            "letter_spacing": {
+              "type": "number",
+              "default_value": "0",
+              "$description": "translations.json#/div_tabs_tab_title_style_letter_spacing"
+            },
+            "font_weight": {
+              "$ref": "div-font-weight.json",
+              "default_value": "regular",
+              "$description": "translations.json#/div_tabs_tab_title_style_font_weight",
+              "deprecated": true
+            },
+            "active_font_weight": {
+              "$ref": "div-font-weight.json",
+              "$description": "translations.json#/div_tabs_tab_title_style_active_font_weight",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "inactive_font_weight": {
+              "$ref": "div-font-weight.json",
+              "$description": "translations.json#/div_tabs_tab_title_style_inactive_font_weight",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "font_family": {
+              "$ref": "div-font-family.json",
+              "default_value": "text",
+              "$description": "translations.json#/div_font_family"
+            },
+            "active_text_color": {
+              "$ref": "common.json#/color",
+              "default_value": "#CC000000",
+              "$description": "translations.json#/div_tabs_tab_title_style_active_text_color"
+            },
+            "inactive_text_color": {
+              "$ref": "common.json#/color",
+              "default_value": "#80000000",
+              "$description": "translations.json#/div_tabs_tab_title_style_inactive_text_color"
+            },
+            "active_background_color": {
+              "$ref": "common.json#/color",
+              "default_value": "#FFFFDC60",
+              "$description": "translations.json#/div_tabs_tab_title_style_active_background_color"
+            },
+            "inactive_background_color": {
+              "$ref": "common.json#/color",
+              "$description": "translations.json#/div_tabs_tab_title_style_inactive_background_color",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "corner_radius": {
+              "$ref": "common.json#/non_negative_integer",
+              "$description": "translations.json#/div_tabs_tab_title_style_corner_radius",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "corners_radius": {
+              "$ref": "div-corners-radius.json",
+              "$description": "translations.json#/div_tabs_tab_title_style_corners_radius",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "animation_type": {
+              "type": "string",
+              "enum": [
+                "slide",
+                "fade",
+                "none"
+              ],
+              "default_value": "slide",
+              "$description": "translations.json#/div_tabs_tab_title_style_animation_type",
+              "platforms": [
+                "android",
+                "ios"
+              ]
+            },
+            "animation_duration": {
+              "$ref": "common.json#/non_negative_integer",
+              "default_value": "300",
+              "$description": "translations.json#/div_tabs_tab_title_style_animation_duration"
+            }
+          },
+          "$description": "translations.json#/div_tabs_tab_title_style"
+        },
+        "selected_tab": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
+          "$description": "translations.json#/div_tabs_selected_tab"
+        },
+        "has_separator": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_tabs_has_separator"
+        },
+        "switch_tabs_by_content_swipe_enabled": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "true",
+          "$description": "translations.json#/div_tabs_switch_tabs_by_content_swipe_enabled"
+        },
+        "separator_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#14000000",
+          "$description": "translations.json#/div_tabs_separator_color"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/item"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_tabs_items"
+        },
+        "dynamic_height": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_tabs_dynamic_height",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "restrict_parent_scroll": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_tabs_restrict_parent_scroll",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "items"
+  ]
+}

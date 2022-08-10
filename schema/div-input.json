@@ -1,0 +1,112 @@
+{
+  "java_extends": "DivBlockWithId",
+  "$description": "translations.json#/div_input",
+  "definitions": {
+    "native_interface": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_input_native_interface_color"
+        }
+      },
+      "required": [
+        "color"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "input"
+          ]
+        },
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "12",
+          "$description": "translations.json#/div_font_size"
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "$description": "translations.json#/div_font_size_unit"
+        },
+        "font_family": {
+          "$ref": "div-font-family.json",
+          "default_value": "text",
+          "$description": "translations.json#/div_font_family"
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "default_value": "regular",
+          "$description": "translations.json#/div_font_weight"
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#FF000000",
+          "$description": "translations.json#/div_text_color"
+        },
+        "text_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_input_text_variable"
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_input_line_height"
+        },
+        "max_visible_lines": {
+          "$ref": "common.json#/positive_integer",
+          "$description": "translations.json#/div_input_max_visible_lines"
+        },
+        "letter_spacing": {
+          "type": "number",
+          "default_value": "0",
+          "$description": "translations.json#/div_input_letter_spacing"
+        },
+        "hint_text": {
+          "$ref": "common.json#/non_empty_string",
+          "$description": "translations.json#/div_input_hint_text"
+        },
+        "hint_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#73000000",
+          "$description": "translations.json#/div_input_hint_color"
+        },
+        "highlight_color": {
+          "$ref": "common.json#/color",
+          "$description": "translations.json#/div_input_highlight_color"
+        },
+        "native_interface": {
+          "$ref": "#/definitions/native_interface",
+          "$description": "translations.json#/div_input_native_interface",
+          "platforms": [
+            "android"
+          ]
+        },
+        "keyboard_type": {
+          "type": "string",
+          "enum": [
+            "single_line_text", "multi_line_text", "phone", "number", "email", "uri"
+          ],
+          "default_value": "multi_line_text",
+          "$description": "translations.json#/div_input_keyboard_type"
+        },
+        "select_all_on_focus": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "$description": "translations.json#/div_input_select_all_on_focus"
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "text_variable"
+  ]
+}

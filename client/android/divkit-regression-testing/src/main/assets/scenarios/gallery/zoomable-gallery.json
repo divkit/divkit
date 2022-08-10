@@ -1,0 +1,138 @@
+{
+  "templates": {
+    "gallery_item": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 240
+      },
+      "height": {
+        "type": "fixed",
+        "value": 270
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#2C3E50"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "items": [
+        {
+          "type": "image",
+          "height": {
+            "type": "fixed",
+            "value": 180
+          },
+          "$image_url": "image_url",
+          "$actions": "image_actions",
+          "extensions": [
+            {
+              "id": "pinch-to-zoom"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "paddings": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          },
+          "font_size": 14,
+          "max_lines": 4,
+          "$text_color": "description_text_color",
+          "$text": "description_text"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "actions",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "margins": {
+            "left": 12,
+            "top": 12,
+            "right": 12,
+            "bottom": 12
+          },
+          "paddings": {
+            "left": 12,
+            "top": 12,
+            "right": 12,
+            "bottom": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#34495E"
+            }
+          ],
+          "border": {
+            "corner_radius": 12,
+            "has_shadow": 1
+          },
+          "item_spacing": 12,
+          "scroll_mode": "paging",
+          "items": [
+            {
+              "type": "gallery_item",
+              "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2417786/-6824982346708162009/smart_crop_540x405",
+              "description_text_color": "#E67E22",
+              "description_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+              "image_actions": [
+                {
+                  "log_id": "gallery_item_01_pressed",
+                  "url": "https://avatars.mds.yandex.net/get-zen_doc/2417786/-6824982346708162009/smart_crop_540x405"
+                }
+              ]
+            },
+            {
+              "type": "gallery_item",
+              "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
+              "description_text_color": "#3498DB",
+              "description_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+              "image_actions": [
+                {
+                  "log_id": "gallery_item_02_pressed",
+                  "url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290"
+                }
+              ]
+            },
+            {
+              "type": "gallery_item",
+              "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2458644/7063733708104094804/smart_crop_516x290",
+              "description_text_color": "#F1C40F",
+              "description_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+              "image_actions": [
+                {
+                  "log_id": "gallery_item_03_pressed",
+                  "url": "https://avatars.mds.yandex.net/get-zen_doc/2458644/7063733708104094804/smart_crop_516x290"
+                }
+              ]
+            },
+            {
+              "type": "gallery_item",
+              "image_url": "https://avatars.mds.yandex.net/get-zen_doc/1917356/-1151940982139903291/smart_crop_516x290",
+              "description_text_color": "#9B59B6",
+              "description_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+              "image_actions": [
+                {
+                  "log_id": "gallery_item_03_pressed",
+                  "url": "https://avatars.mds.yandex.net/get-zen_doc/1917356/-1151940982139903291/smart_crop_516x290"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

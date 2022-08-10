@@ -1,0 +1,338 @@
+{
+    "cases": [
+        {
+            "name": "unsigned integer variable with positive integer value",
+            "expression": "@{var}",
+            "expected": {
+                "type": "integer",
+                "value": 7
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive integer variable with positive integer value",
+            "expression": "@{+var}",
+            "expected": {
+                "type": "integer",
+                "value": 7
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative integer variable with positive integer value",
+            "expression": "@{-var}",
+            "expected": {
+                "type": "integer",
+                "value": -7
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned integer variable with negative integer value",
+            "expression": "@{var}",
+            "expected": {
+                "type": "integer",
+                "value": -7
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": -7,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive integer variable with negative integer value",
+            "expression": "@{+var}",
+            "expected": {
+                "type": "integer",
+                "value": -7
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": -7,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative integer variable with negative integer value",
+            "expression": "@{-var}",
+            "expected": {
+                "type": "integer",
+                "value": 7
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": -7,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned number variable with positive number value",
+            "expression": "@{var}",
+            "expected": {
+                "type": "number",
+                "value": 7.0
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive number variable with positive number value",
+            "expression": "@{+var}",
+            "expected": {
+                "type": "number",
+                "value": 7.0
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative number variable with positive number value",
+            "expression": "@{-var}",
+            "expected": {
+                "type": "number",
+                "value": -7.0
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned number variable with negative number value",
+            "expression": "@{var}",
+            "expected": {
+                "type": "number",
+                "value": -7.0
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": -7.0,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive number variable with negative number value",
+            "expression": "@{+var}",
+            "expected": {
+                "type": "number",
+                "value": -7.0
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": -7.0,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative number variable with negative number value",
+            "expression": "@{-var}",
+            "expected": {
+                "type": "number",
+                "value": 7.0
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": -7.0,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "string variable",
+            "expression": "@{var}",
+            "expected": {
+                "type": "string",
+                "value": "test"
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "test",
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "boolean variable",
+            "expression": "@{var}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "color variable",
+            "expression": "@{var}",
+            "expected": {
+                "type": "color",
+                "value": "#00FF00"
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "url variable",
+            "expression": "@{var}",
+            "expected": {
+                "type": "url",
+                "value": "https://yandex.ru"
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "undeclared variable",
+            "expression": "@{var}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        }
+    ]
+}

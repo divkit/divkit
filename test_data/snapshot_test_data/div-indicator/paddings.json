@@ -1,0 +1,120 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "indicator",
+              "pager_id": "pager_id",
+              "inactive_item_color": "#d0d1d9",
+              "active_item_color": "#000000",
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "top": 10,
+                "bottom": 10
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ],
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 2
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 2
+                }
+              }
+            },
+            {
+              "type": "pager",
+              "id": "pager_id",
+              "paddings": {
+                "right": 4,
+                "left": 4
+              },
+              "margins": {
+                "top": 8
+              },
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "type": "percentage",
+                  "value": 95
+                }
+              },
+              "item_spacing": {
+                "type": "fixed",
+                "value": 4
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "slide1",
+                  "border": {
+                    "corner_radius": 16,
+                    "stroke": {
+                      "color": "#1F000000",
+                      "width": 1
+                    }
+                  },
+                  "paddings": {
+                    "right": 4,
+                    "left": 4,
+                    "top": 4,
+                    "bottom": 4
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "width": {
+                    "type": "match_parent"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": "slide2",
+                  "paddings": {
+                    "right": 4,
+                    "left": 4,
+                    "top": 4,
+                    "bottom": 4
+                  },
+                  "border": {
+                    "corner_radius": 16,
+                    "stroke": {
+                      "color": "#1F000000",
+                      "width": 1
+                    }
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "width": {
+                    "type": "match_parent"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

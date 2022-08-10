@@ -1,0 +1,156 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "paddings": {
+        "top": 13,
+        "bottom": 13,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 16
+      }
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Alignment inside a container"
+            },
+            {
+              "type": "subtitle",
+              "text": "There are 2 containers here: vertical and horizontal. For horizontal alignment (in the first container), alignment_horizontal is used, and for vertical alignment (in the second container), alignment_vertical is used.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "text_block",
+                  "alignment_horizontal": "left",
+                  "text": "left"
+                },
+                {
+                  "type": "text_block",
+                  "alignment_horizontal": "center",
+                  "text": "center"
+                },
+                {
+                  "type": "text_block",
+                  "alignment_horizontal": "right",
+                  "text": "right"
+                },
+                {
+                  "type": "text_block",
+                  "alignment_horizontal": "left",
+                  "text": "left"
+                },
+                {
+                  "type": "text_block",
+                  "alignment_horizontal": "center",
+                  "text": "center"
+                },
+                {
+                  "type": "text_block",
+                  "alignment_horizontal": "right",
+                  "text": "right"
+                },
+                {
+                  "type": "container",
+                  "orientation": "horizontal",
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "items": [
+                    {
+                      "type": "text_block",
+                      "alignment_vertical": "top",
+                      "text": "top"
+                    },
+                    {
+                      "type": "text_block",
+                      "alignment_vertical": "center",
+                      "text": "center"
+                    },
+                    {
+                      "type": "text_block",
+                      "alignment_vertical": "bottom",
+                      "text": "bottom"
+                    },
+                    {
+                      "type": "text_block",
+                      "alignment_vertical": "top",
+                      "text": "top"
+                    },
+                    {
+                      "type": "text_block",
+                      "alignment_vertical": "center",
+                      "text": "center"
+                    },
+                    {
+                      "type": "text_block",
+                      "alignment_vertical": "bottom",
+                      "text": "bottom"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

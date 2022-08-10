@@ -1,0 +1,15 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+dependencies {
+    // Keep it clean!
+    implementation project(path: ':assertion')
+    implementation project(path: ':logging')
+    implementation project(path: ':utils')
+    implementation project(path: ':div-core')
+
+    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
+    implementation "androidx.recyclerview:recyclerview:$versions.androidx.recycler"
+}

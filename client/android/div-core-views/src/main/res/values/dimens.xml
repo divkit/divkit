@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="overflow_menu_margin_horizontal">8dp</dimen>
+    <dimen name="overflow_menu_margin_vertical">12dp</dimen>
+    <dimen name="overflow_menu_size">24dp</dimen>
+
+    <dimen name="tab_scrollable_min_width">72dp</dimen>
+    <dimen name="tab_max_width">72dp</dimen>
+    <dimen name="tab_text_size">14sp</dimen>
+</resources>

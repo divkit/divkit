@@ -1,0 +1,158 @@
+{
+    "cases": [
+        {
+            "name": "unsigned number literal without decimal part",
+            "expression": "@{3.0}",
+            "expected": {
+                "type": "number",
+                "value": 3.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive number literal wihtout decimal part",
+            "expression": "@{+3.0}",
+            "expected": {
+                "type": "number",
+                "value": 3.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative number literal without decimal part",
+            "expression": "@{-3.0}",
+            "expected": {
+                "type": "number",
+                "value": -3.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned number literal with decimal part",
+            "expression": "@{87.0000324}",
+            "expected": {
+                "type": "number",
+                "value": 87.0000324
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive number literal with decimal part",
+            "expression": "@{+87.0000324}",
+            "expected": {
+                "type": "number",
+                "value": 87.0000324
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative number literal with decimal part",
+            "expression": "@{-87.0000324}",
+            "expected": {
+                "type": "number",
+                "value": -87.0000324
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned number literal without leading zero",
+            "expression": "@{.0000324}",
+            "expected": {
+                "type": "number",
+                "value": 3.24e-05
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive number literal without leading zero",
+            "expression": "@{+.0000324}",
+            "expected": {
+                "type": "number",
+                "value": 3.24e-05
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative number literal without leading zero",
+            "expression": "@{-.0000324}",
+            "expected": {
+                "type": "number",
+                "value": -3.24e-05
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "underscore symbol unsupported in number literals in numeric part",
+            "expression": "@{2_147.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "underscore symbol unsupported in number literals in decimal part",
+            "expression": "@{2147.0_0093}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        }
+    ]
+}

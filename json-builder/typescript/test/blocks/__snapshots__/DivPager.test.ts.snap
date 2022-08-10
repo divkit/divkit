@@ -1,0 +1,70 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivPager tests should create card with templates 1`] = `
+{
+  "templates": {
+    "div": {
+      "type": "pager",
+      "items": [
+        {
+          "type": "text",
+          "$text": "page1_text"
+        },
+        {
+          "type": "text",
+          "$text": "page2_text"
+        }
+      ],
+      "$layout_mode": "mode"
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "div",
+          "page1_text": "Page 1",
+          "page2_text": "Page 2",
+          "mode": {
+            "type": "fixed",
+            "neighbour_page_width": {
+              "type": "fixed",
+              "value": 10
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`DivPager tests should create simple block 1`] = `
+{
+  "type": "pager",
+  "item_spacing": {
+    "type": "fixed",
+    "value": 10
+  },
+  "items": [
+    {
+      "type": "text",
+      "text": "Page 1"
+    },
+    {
+      "type": "text",
+      "text": "Page 2"
+    }
+  ],
+  "layout_mode": {
+    "type": "percentage",
+    "page_width": {
+      "type": "percentage",
+      "value": 90
+    }
+  },
+  "orientation": "horizontal"
+}
+`;

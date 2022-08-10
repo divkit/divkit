@@ -1,0 +1,141 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 12,
+        "top": 8,
+        "right": 12,
+        "bottom": 8
+      },
+      "margins": {
+        "left": 12,
+        "top": 8,
+        "right": 12,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFDC60"
+        }
+      ],
+      "border": {
+        "corner_radius": 4
+      },
+      "font_size": 14,
+      "max_lines": 1,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "actions": []
+    }
+  },
+  "card": {
+    "log_id": "gallery",
+    "variables": [
+      {
+        "name": "visibility",
+        "type": "string",
+        "value": "gone"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "button",
+              "text": "Test button",
+              "actions": [
+                {
+                  "log_id": "first_tap",
+                  "url": "first"
+                },
+                {
+                  "log_id": "second_tap",
+                  "url": "second"
+                }
+              ],
+              "longtap_actions": [
+                {
+                  "log_id": "first_longtap",
+                  "url": "first"
+                },
+                {
+                  "log_id": "second_longtap",
+                  "url": "second"
+                }
+              ],
+              "doubletap_actions": [
+                {
+                  "log_id": "first_doubletap",
+                  "url": "first"
+                },
+                {
+                  "log_id": "second_doubletap",
+                  "url": "second"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "button",
+                  "text": "show",
+                  "actions": [
+                    {
+                      "log_id": "show",
+                      "url": "div-action://set_variable?name=visibility&value=visible"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "hide",
+                  "actions": [
+                    {
+                      "log_id": "hide",
+                      "url": "div-action://set_variable?name=visibility&value=gone"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "visibility": "@{visibility}",
+              "margins": {
+                "left": 12,
+                "top": 8,
+                "right": 12,
+                "bottom": 8
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "text": "Shows with logs",
+              "visibility_actions": [
+                {
+                  "log_id": "shown_first",
+                  "url": "first",
+                  "visibility_duration": 0
+                },
+                {
+                  "log_id": "shown_second",
+                  "url": "second",
+                  "visibility_duration": 0
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

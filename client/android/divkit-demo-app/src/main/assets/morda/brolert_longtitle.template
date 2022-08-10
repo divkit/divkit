@@ -1,0 +1,13 @@
+brolert|Длинный тайтл|{
+	"ttv":1200,
+	"utime":1508351555,
+	"ttl":1200,
+	"data": {
+		"title":"Последний раз предупреждаем что",
+		"description":"Кликни по алерту или мы убьем этого котика!!!",
+		"icon":"https://yt3.ggpht.com/-kXOJqP9GxPM/AAAAAAAAAAI/AAAAAAAAAAA/HchmvgEUjkU/s900-c-k-no-mo-rj-c0xffffff/photo.jpg",
+		"url":"https://yt3.ggpht.com/-s0QFjFwLy30/AAAAAAAAAAI/AAAAAAAAAAA/60vUA5yTjCU/s900-c-k-no-mo-rj-c0xffffff/photo.jpg"
+	},
+	"type":"brolert",
+	"id":"longtitle"
+}

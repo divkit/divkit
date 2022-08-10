@@ -1,0 +1,3208 @@
+{
+  "templates": {
+    "eddl_offers_carousel_retailer_icon": {
+      "type": "container",
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "value": 30
+      },
+      "height": {
+        "type": "fixed",
+        "value": 30
+      },
+      "border": {
+        "corner_radius": 15,
+        "stroke": {
+          "color": "#FFF",
+          "width": 3
+        }
+      },
+      "margins": {
+        "top": 5,
+        "left": 5
+      },
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_retailer_image_url",
+          "border": {
+            "corner_radius": 12
+          },
+          "width": {
+            "type": "fixed",
+            "value": 24
+          },
+          "height": {
+            "type": "fixed",
+            "value": 24
+          }
+        }
+      ]
+    },
+    "eddl_offers_carousel_badge_simple": {
+      "type": "text",
+      "paddings": {
+        "left": 8,
+        "right": 8,
+        "top": 2,
+        "bottom": 2
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top"
+      },
+      "border": {
+        "corner_radius": 2
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#267AF2"
+        }
+      ],
+      "alignment_horizontal": "left",
+      "$font_size": "eddl_badge_font_size",
+      "$line_height": "eddl_badge_line_height",
+      "max_lines": 1,
+      "text_color": "#FFF",
+      "$text": "eddl_badge_text"
+    },
+    "eddl_offers_carousel_badge_discount": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_height"
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top",
+        "left": 0
+      },
+      "background": [
+        {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "scale": "fit"
+        }
+      ],
+      "$font_size": "eddl_badge_font_size",
+      "$line_height": "eddl_badge_line_height",
+      "max_lines": 1,
+      "text_color": "#09141F",
+      "$text": "eddl_badge_text"
+    },
+    "eddl_offers_carousel_image_container": {
+      "type": "container",
+      "border": {
+        "corner_radius": 12
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F4F4F4"
+        }
+      ],
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_item_image_url",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          }
+        }
+      ]
+    },
+    "eddl_offers_carousel_price_new": {
+      "type": "text",
+      "$font_size": "eddl_price_new_font_size",
+      "font_weight": "medium",
+      "$line_height": "eddl_price_new_line_height",
+      "width": {
+        "type": "wrap_content"
+      },
+      "max_lines": 1,
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$text_color": "eddl_price_new_text_color",
+      "$text": "eddl_price_new_text"
+    },
+    "eddl_offers_carousel_price_old": {
+      "width": {
+        "type": "wrap_content"
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$font_size": "eddl_price_old_font_size",
+      "$line_height": "eddl_price_old_line_height",
+      "max_lines": 1,
+      "$text_color": "eddl_price_old_text_color",
+      "$text": "eddl_price_old_text",
+      "strike": "single"
+    },
+    "eddl_offers_carousel_offer_content_image": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_image_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_image_height"
+      },
+      "$items": "eddl_offer_content_image_items"
+    },
+    "eddl_offers_carousel_offer_content_prices": {
+      "type": "container",
+      "$orientation": "eddl_content_prices_orientation",
+      "alignment_vertical": "top",
+      "width": {
+        "type": "match_parent"
+      },
+      "$content_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "margins": {
+        "top": 12
+      },
+      "$items": "eddl_content_prices_items"
+    },
+    "eddl_offers_carousel_offer_content_description": {
+      "margins": {
+        "top": 8
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$font_size": "eddl_description_font_size",
+      "$line_height": "eddl_description_line_height",
+      "$max_lines": "eddl_description_max_lines",
+      "$text_color": "eddl_description_text_color",
+      "$text": "eddl_description_text"
+    },
+    "eddl_offers_carousel_offer_text_container": {
+      "type": "container",
+      "$paddings": "eddl_offer_text_paddings",
+      "$content_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$items": "eddl_offer_text_container_items"
+    },
+    "eddl_offers_carousel_offer_content": {
+      "type": "container",
+      "$items": "eddl_offer_content_items",
+      "content_alignment_horizontal": "center"
+    },
+    "eddl_offers_carousel_item": {
+      "type": "container",
+      "orientation": "overlap",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "eddl_item_background_color"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_height",
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 12
+      },
+      "$items": "eddl_offer_items",
+      "$actions": "eddl_item_actions",
+      "$visibility_actions": "eddl_item_visibility_actions"
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F4F4F4"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockAppear&hash=d0f565e6656bdf3fbd60eb805cff5a31",
+              "payload": {
+                "BlockId": "136",
+                "BlockSlug": "OzonOffers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "916"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            },
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockView&hash=ad68337b98988d28bc061fbfb257eff5",
+              "payload": {
+                "BlockId": "136",
+                "BlockSlug": "OzonOffers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "916"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1000,
+              "visibility_percentage": 50
+            }
+          ],
+          "items": [
+            {
+              "type": "container",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "bottom": 14
+              },
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "orientation": "horizontal",
+              "content_alignment_vertical": "bottom",
+              "items": [
+                {
+                  "text": "Выгодно на OZON",
+                  "type": "text",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "font_size": 22,
+                  "text_color": "#09141F",
+                  "font_weight": "bold",
+                  "line_height": 24
+                },
+                {
+                  "text": "Все",
+                  "type": "text",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "actions": [
+                    {
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Finfo%2Factions%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Finfo%2Factions%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Finfo%2Factions%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Finfo%2Factions%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=edadeal_actions",
+                      "log_id": "#!edadeal/metrics/send?eventName=ButtonClick&button=OzonShowAll",
+                      "payload": {
+                        "slug": "ShowAll",
+                        "BlockId": "136",
+                        "BlockSlug": "OzonOffers",
+                        "BlockLayout": "Carousel"
+                      }
+                    }
+                  ],
+                  "font_size": 16,
+                  "text_color": "#27AE61",
+                  "line_height": 20
+                }
+              ]
+            },
+            {
+              "type": "gallery",
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "862₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "1042"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Сок мультифруктовый ФрутоНяня, с 3 лет, 15 шт х 500 мл",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=0f5eb409d7fe5a97e18ca5279bf4e26e",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "1fb98e46-2ef1-52bd-804d-f180d7364a76",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сок мультифруктовый ФрутоНяня, с 3 лет, 15 шт х 500 мл",
+                        "ProductPrice": "86200",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Детские соки, морсы, компоты",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348ea4-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F161268640%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fsok-multifruktovyy-frutonyanya-s-3-let-15-sht-h-500-ml-161268640%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fsok-multifruktovyy-frutonyanya-s-3-let-15-sht-h-500-ml-161268640%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fsok-multifruktovyy-frutonyanya-s-3-let-15-sht-h-500-ml-161268640%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=0f5eb409d7fe5a97e18ca5279bf4e26e",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "1fb98e46-2ef1-52bd-804d-f180d7364a76",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сок мультифруктовый ФрутоНяня, с 3 лет, 15 шт х 500 мл",
+                        "ProductPrice": "86200",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Детские соки, морсы, компоты",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348ea4-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=836697b5d43b9565d4c781c80d3ae218",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "1fb98e46-2ef1-52bd-804d-f180d7364a76",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сок мультифруктовый ФрутоНяня, с 3 лет, 15 шт х 500 мл",
+                        "ProductPrice": "86200",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Детские соки, морсы, компоты",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348ea4-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "272₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "421"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Набор конфет Merci \"Ассорти из шоколада с миндалем\", 250 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=e8eeee6fe1d4e0158fe0b2d3e9664d8a",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "c28570e3-681a-5053-b7c5-df09bad0c7a5",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "ad8a2f8b-8221-56b5-baca-e27bf6b9a917",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор конфет Merci \"Ассорти из шоколада с миндалем\", 250 г",
+                        "ProductPrice": "27200",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Конфеты",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3350f7-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F138484915%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fmerci-nabor-konfet-assorti-iz-shokolada-s-mindalem-250-g-138484915%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fmerci-nabor-konfet-assorti-iz-shokolada-s-mindalem-250-g-138484915%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fmerci-nabor-konfet-assorti-iz-shokolada-s-mindalem-250-g-138484915%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=e8eeee6fe1d4e0158fe0b2d3e9664d8a",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "c28570e3-681a-5053-b7c5-df09bad0c7a5",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "ad8a2f8b-8221-56b5-baca-e27bf6b9a917",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор конфет Merci \"Ассорти из шоколада с миндалем\", 250 г",
+                        "ProductPrice": "27200",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Конфеты",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3350f7-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=6c788992358cb61049ab60015fd22031",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "c28570e3-681a-5053-b7c5-df09bad0c7a5",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "ad8a2f8b-8221-56b5-baca-e27bf6b9a917",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор конфет Merci \"Ассорти из шоколада с миндалем\", 250 г",
+                        "ProductPrice": "27200",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Конфеты",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3350f7-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "389₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "500"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пищевые неактивные дрожжи, веган пармезан NOOCH, 80 гр",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=26b6d05f62a9b64d105bda23bdc7e0eb",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "81a9f039-bc5f-5368-9a04-87cd4cd0b092",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "6f76a6bd-348c-5b46-a7ad-fba2aa72ab88",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пищевые неактивные дрожжи, веган пармезан NOOCH, 80 гр",
+                        "ProductPrice": "38900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Бакалея",
+                        "SegmentName3": "Мука, смеси, компоненты для выпечки",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31cf9f-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3343d2-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F276755801%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fpishchevye-neaktivnye-drozhzhi-vegan-parmezan-nooch-80-gr-276755801%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fpishchevye-neaktivnye-drozhzhi-vegan-parmezan-nooch-80-gr-276755801%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fpishchevye-neaktivnye-drozhzhi-vegan-parmezan-nooch-80-gr-276755801%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=26b6d05f62a9b64d105bda23bdc7e0eb",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "81a9f039-bc5f-5368-9a04-87cd4cd0b092",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "6f76a6bd-348c-5b46-a7ad-fba2aa72ab88",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пищевые неактивные дрожжи, веган пармезан NOOCH, 80 гр",
+                        "ProductPrice": "38900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Бакалея",
+                        "SegmentName3": "Мука, смеси, компоненты для выпечки",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31cf9f-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3343d2-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=c157cadb6805f01069cb8504faf864a7",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "81a9f039-bc5f-5368-9a04-87cd4cd0b092",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "6f76a6bd-348c-5b46-a7ad-fba2aa72ab88",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пищевые неактивные дрожжи, веган пармезан NOOCH, 80 гр",
+                        "ProductPrice": "38900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Бакалея",
+                        "SegmentName3": "Мука, смеси, компоненты для выпечки",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31cf9f-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3343d2-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "218₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "379"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Черный чай в пакетиках Greenfield English Edition, 100 шт",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=1dc235a641bcdf3bd243866f8b5cca5d",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "fc7f27c9-4b88-569a-857f-3bf11cac6f26",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "ba537e82-6da6-5032-8727-9ea718ed4c81",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Черный чай в пакетиках Greenfield English Edition, 100 шт",
+                        "ProductPrice": "21800",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F144680284%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchernyy-chay-v-paketikah-greenfield-english-edition-100-sht-144680284%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchernyy-chay-v-paketikah-greenfield-english-edition-100-sht-144680284%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchernyy-chay-v-paketikah-greenfield-english-edition-100-sht-144680284%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=1dc235a641bcdf3bd243866f8b5cca5d",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "fc7f27c9-4b88-569a-857f-3bf11cac6f26",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "ba537e82-6da6-5032-8727-9ea718ed4c81",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Черный чай в пакетиках Greenfield English Edition, 100 шт",
+                        "ProductPrice": "21800",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=ba9b625aeb58a11dd576bfaec8533094",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "fc7f27c9-4b88-569a-857f-3bf11cac6f26",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "ba537e82-6da6-5032-8727-9ea718ed4c81",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Черный чай в пакетиках Greenfield English Edition, 100 шт",
+                        "ProductPrice": "21800",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "129₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "160"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "7DAYS Мини-круассаны с кремом Какао, 300 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=6fc24ec689d9934c0bef3d893d3ff3da",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "f6daf532-9723-5537-b917-c3bc919bf13a",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "b6af80ed-25a1-5023-b4a5-8298e75f485f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "7DAYS Мини-круассаны с кремом Какао, 300 г",
+                        "ProductPrice": "12900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Сладкая выпечка",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33551d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F139654823%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2F7days-mini-kruassany-s-kremom-kakao-300-g-139654823%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2F7days-mini-kruassany-s-kremom-kakao-300-g-139654823%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2F7days-mini-kruassany-s-kremom-kakao-300-g-139654823%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=6fc24ec689d9934c0bef3d893d3ff3da",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "f6daf532-9723-5537-b917-c3bc919bf13a",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "b6af80ed-25a1-5023-b4a5-8298e75f485f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "7DAYS Мини-круассаны с кремом Какао, 300 г",
+                        "ProductPrice": "12900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Сладкая выпечка",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33551d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=40041049c722236841e2878c3e87ae9a",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "f6daf532-9723-5537-b917-c3bc919bf13a",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "b6af80ed-25a1-5023-b4a5-8298e75f485f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "7DAYS Мини-круассаны с кремом Какао, 300 г",
+                        "ProductPrice": "12900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Сладкая выпечка",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33551d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "527₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "583"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Чайный напиток Nature’s own Factory Гречишный с манго, 100 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=4931124f0b8b6cb189fb8db78009edf2",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "fbf24c57-a198-5428-9c6a-04bb4572697e",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "0890c1e5-5fc6-5a22-a723-ae2380e57b8e",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чайный напиток Nature’s own Factory Гречишный с манго, 100 г",
+                        "ProductPrice": "52700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F181888517%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchaynyy-napitok-nature-s-own-factory-grechishnyy-s-mango-100-g-181888517%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchaynyy-napitok-nature-s-own-factory-grechishnyy-s-mango-100-g-181888517%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchaynyy-napitok-nature-s-own-factory-grechishnyy-s-mango-100-g-181888517%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=4931124f0b8b6cb189fb8db78009edf2",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "fbf24c57-a198-5428-9c6a-04bb4572697e",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "0890c1e5-5fc6-5a22-a723-ae2380e57b8e",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чайный напиток Nature’s own Factory Гречишный с манго, 100 г",
+                        "ProductPrice": "52700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=d4dba85129a2c267b45e0d0db4440268",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "fbf24c57-a198-5428-9c6a-04bb4572697e",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "0890c1e5-5fc6-5a22-a723-ae2380e57b8e",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чайный напиток Nature’s own Factory Гречишный с манго, 100 г",
+                        "ProductPrice": "52700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "145₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "182"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Зеленый чай в пакетиках Принцесса Ява Традиционный, 100 шт",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=ee4dc632d4799d46fd5e0dc6febc02a1",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "a18efeab-261e-5a91-bdfb-1df369981604",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "c514a702-8288-540c-b56b-d8112856ed3d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Зеленый чай в пакетиках Принцесса Ява Традиционный, 100 шт",
+                        "ProductPrice": "14500",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F33069346%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fzelenyy-chay-v-paketikah-printsessa-yava-traditsionnyy-100-sht-33069346%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fzelenyy-chay-v-paketikah-printsessa-yava-traditsionnyy-100-sht-33069346%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fzelenyy-chay-v-paketikah-printsessa-yava-traditsionnyy-100-sht-33069346%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=ee4dc632d4799d46fd5e0dc6febc02a1",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "a18efeab-261e-5a91-bdfb-1df369981604",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "c514a702-8288-540c-b56b-d8112856ed3d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Зеленый чай в пакетиках Принцесса Ява Традиционный, 100 шт",
+                        "ProductPrice": "14500",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=b2ba47324b42b87fc7a141b95c2ed487",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "a18efeab-261e-5a91-bdfb-1df369981604",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "c514a702-8288-540c-b56b-d8112856ed3d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Зеленый чай в пакетиках Принцесса Ява Традиционный, 100 шт",
+                        "ProductPrice": "14500",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "123₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "129"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Натуральный Тархун без сахара / Lemonardo Tarkhun, 330мл",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=347d49eb896c514bfc1f8251d6cb5728",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "41fdd787-5aaa-51b3-b193-60533ddf7f92",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "46e1fda4-f2d5-5c61-aa65-f2738c1c2460",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Натуральный Тархун без сахара / Lemonardo Tarkhun, 330мл",
+                        "ProductPrice": "12300",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Напитки",
+                        "SegmentName3": "Газированная вода",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b336f02-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b337323-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F286213461%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fnaturalnyy-tarhun-bez-sahara-lemonardo-tarkhun-330ml-286213461%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fnaturalnyy-tarhun-bez-sahara-lemonardo-tarkhun-330ml-286213461%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fnaturalnyy-tarhun-bez-sahara-lemonardo-tarkhun-330ml-286213461%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=347d49eb896c514bfc1f8251d6cb5728",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "41fdd787-5aaa-51b3-b193-60533ddf7f92",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "46e1fda4-f2d5-5c61-aa65-f2738c1c2460",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Натуральный Тархун без сахара / Lemonardo Tarkhun, 330мл",
+                        "ProductPrice": "12300",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Напитки",
+                        "SegmentName3": "Газированная вода",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b336f02-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b337323-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=351ad0ba6273e42eb283b9610a791fbd",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "41fdd787-5aaa-51b3-b193-60533ddf7f92",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "46e1fda4-f2d5-5c61-aa65-f2738c1c2460",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Натуральный Тархун без сахара / Lemonardo Tarkhun, 330мл",
+                        "ProductPrice": "12300",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Напитки",
+                        "SegmentName3": "Газированная вода",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b336f02-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b337323-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "466₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "604"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Каша зерновая HiPP Мультизлаки, с 6 месяцев, 2 шт по 200 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=358fc84b42f58a0e1137f57c4a8daf5d",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "e4fb0270-aa6f-5a4a-8aee-3ca47c395d6f",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "c2ef6ad9-498e-5ad4-bfe9-f6d931a82996",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Каша зерновая HiPP Мультизлаки, с 6 месяцев, 2 шт по 200 г",
+                        "ProductPrice": "46600",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Каши",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348f65-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F183452017%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fkasha-dlya-detey-hipp-multizlakovaya-bezmolochnaya-zernovaya-s-6-mesyatsev-200-g-h-2-sht-183452017%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fkasha-dlya-detey-hipp-multizlakovaya-bezmolochnaya-zernovaya-s-6-mesyatsev-200-g-h-2-sht-183452017%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fkasha-dlya-detey-hipp-multizlakovaya-bezmolochnaya-zernovaya-s-6-mesyatsev-200-g-h-2-sht-183452017%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=358fc84b42f58a0e1137f57c4a8daf5d",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "e4fb0270-aa6f-5a4a-8aee-3ca47c395d6f",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "c2ef6ad9-498e-5ad4-bfe9-f6d931a82996",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Каша зерновая HiPP Мультизлаки, с 6 месяцев, 2 шт по 200 г",
+                        "ProductPrice": "46600",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Каши",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348f65-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=d44de4e04d3ce5b9314ceb1e17d58c6d",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "e4fb0270-aa6f-5a4a-8aee-3ca47c395d6f",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "c2ef6ad9-498e-5ad4-bfe9-f6d931a82996",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Каша зерновая HiPP Мультизлаки, с 6 месяцев, 2 шт по 200 г",
+                        "ProductPrice": "46600",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Каши",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348f65-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "535₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "856"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Молочная смесь для новорожденных Nutrilak Premium 1, с рождения, 1050 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=8642c90a4c817be3f5ad2248981f7cd0",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "463c0e41-4f52-59a1-978b-75be33fcdffa",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "aa1bc96c-ff30-5543-a662-47305a99b2da",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Молочная смесь для новорожденных Nutrilak Premium 1, с рождения, 1050 г",
+                        "ProductPrice": "53500",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Смеси для кормления",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348f02-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F264406435%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fmolochnaya-smes-nutrilak-premium-1-0-6-mes-1050-g-264406435%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fmolochnaya-smes-nutrilak-premium-1-0-6-mes-1050-g-264406435%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fmolochnaya-smes-nutrilak-premium-1-0-6-mes-1050-g-264406435%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=8642c90a4c817be3f5ad2248981f7cd0",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "463c0e41-4f52-59a1-978b-75be33fcdffa",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "aa1bc96c-ff30-5543-a662-47305a99b2da",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Молочная смесь для новорожденных Nutrilak Premium 1, с рождения, 1050 г",
+                        "ProductPrice": "53500",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Смеси для кормления",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348f02-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=44f66b3cb598e5c541428b02902e3b97",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "463c0e41-4f52-59a1-978b-75be33fcdffa",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "aa1bc96c-ff30-5543-a662-47305a99b2da",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Молочная смесь для новорожденных Nutrilak Premium 1, с рождения, 1050 г",
+                        "ProductPrice": "53500",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Смеси для кормления",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348f02-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1344₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "1999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "MOONY Подгузники трусики для мальчиков 6 размер XXL (13-28 кг) 26 шт.",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=21111f7a92704e11d16d0c2812b6bf94",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "b4e71737-2ad0-5325-b00a-b61e06534117",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "4b24d728-8ea0-5854-9c23-ef1bb2d58c98",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "MOONY Подгузники трусики для мальчиков 6 размер XXL (13-28 кг) 26 шт.",
+                        "ProductPrice": "134400",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Подгузники, пеленки, салфетки",
+                        "SegmentName3": "Трусики-подгузники",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b349023-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3490de-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F147044672%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Ftrusiki-moony-dlya-malchikov-xxl-13-28-kg-26-sht-147044672%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Ftrusiki-moony-dlya-malchikov-xxl-13-28-kg-26-sht-147044672%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Ftrusiki-moony-dlya-malchikov-xxl-13-28-kg-26-sht-147044672%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=21111f7a92704e11d16d0c2812b6bf94",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "b4e71737-2ad0-5325-b00a-b61e06534117",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "4b24d728-8ea0-5854-9c23-ef1bb2d58c98",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "MOONY Подгузники трусики для мальчиков 6 размер XXL (13-28 кг) 26 шт.",
+                        "ProductPrice": "134400",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Подгузники, пеленки, салфетки",
+                        "SegmentName3": "Трусики-подгузники",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b349023-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3490de-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=634ab20acdc36f6c6b19544db91dc2a1",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "b4e71737-2ad0-5325-b00a-b61e06534117",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "4b24d728-8ea0-5854-9c23-ef1bb2d58c98",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "MOONY Подгузники трусики для мальчиков 6 размер XXL (13-28 кг) 26 шт.",
+                        "ProductPrice": "134400",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Подгузники, пеленки, салфетки",
+                        "SegmentName3": "Трусики-подгузники",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b349023-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3490de-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "471₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "666"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре для детей ФрутоНяня, из яблок, груш, бананов и персиков, с йогуртом, с 6 месяцев, 90 г х 12 шт",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=b98ff61c0b74a9bb66412019a18daefa",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "510b6962-b017-5732-8a0e-461ad6ae0dc1",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре для детей ФрутоНяня, из яблок, груш, бананов и персиков, с йогуртом, с 6 месяцев, 90 г х 12 шт",
+                        "ProductPrice": "47100",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F161268654%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fpyure-dlya-detey-frutonyanya-iz-yablok-grush-bananov-i-persikov-s-yogurtom-s-6-mesyatsev-90-g-h-161268654%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fpyure-dlya-detey-frutonyanya-iz-yablok-grush-bananov-i-persikov-s-yogurtom-s-6-mesyatsev-90-g-h-161268654%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fpyure-dlya-detey-frutonyanya-iz-yablok-grush-bananov-i-persikov-s-yogurtom-s-6-mesyatsev-90-g-h-161268654%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=b98ff61c0b74a9bb66412019a18daefa",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "510b6962-b017-5732-8a0e-461ad6ae0dc1",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре для детей ФрутоНяня, из яблок, груш, бананов и персиков, с йогуртом, с 6 месяцев, 90 г х 12 шт",
+                        "ProductPrice": "47100",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=ab9c05690cc7b9b2da389e516e1a3534",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "510b6962-b017-5732-8a0e-461ad6ae0dc1",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре для детей ФрутоНяня, из яблок, груш, бананов и персиков, с йогуртом, с 6 месяцев, 90 г х 12 шт",
+                        "ProductPrice": "47100",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "598₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "683"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Порошок стиральный Funs \"2 в 1\", концентрированный, с кондиционирующим эффектом, 900 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=60c27f0f62738caaca118f118ea8f115",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "4c80a7a1-5294-563d-83a6-a3e67b16946b",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "7eed2425-a466-5d7b-b499-85d92bb4927f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Порошок стиральный Funs \"2 в 1\", концентрированный, с кондиционирующим эффектом, 900 г",
+                        "ProductPrice": "59800",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для стирки",
+                        "SegmentName3": "Стиральный порошок",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35b6bc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35b8b3-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F145834812%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fporoshok-stiralnyy-funs-2-v-1-kontsentrirovannyy-s-konditsioniruyushchim-effektom-900-g-145834812%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fporoshok-stiralnyy-funs-2-v-1-kontsentrirovannyy-s-konditsioniruyushchim-effektom-900-g-145834812%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fporoshok-stiralnyy-funs-2-v-1-kontsentrirovannyy-s-konditsioniruyushchim-effektom-900-g-145834812%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=60c27f0f62738caaca118f118ea8f115",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "4c80a7a1-5294-563d-83a6-a3e67b16946b",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "7eed2425-a466-5d7b-b499-85d92bb4927f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Порошок стиральный Funs \"2 в 1\", концентрированный, с кондиционирующим эффектом, 900 г",
+                        "ProductPrice": "59800",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для стирки",
+                        "SegmentName3": "Стиральный порошок",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35b6bc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35b8b3-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=6602ea4789a47c829aa545822b3a0da3",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "4c80a7a1-5294-563d-83a6-a3e67b16946b",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "7eed2425-a466-5d7b-b499-85d92bb4927f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Порошок стиральный Funs \"2 в 1\", концентрированный, с кондиционирующим эффектом, 900 г",
+                        "ProductPrice": "59800",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для стирки",
+                        "SegmentName3": "Стиральный порошок",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35b6bc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35b8b3-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "131₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "155"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Жевательная резинка Orbit White Bubblemint, без сахара, банка, 68 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=2fb6ec766ee0bea76a3c6669372d76a9",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "41cf4128-5fdc-5764-b56b-0db937d13dc3",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "4afecd9f-c9e4-55a6-aebb-d0db882c09ac",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Жевательная резинка Orbit White Bubblemint, без сахара, банка, 68 г",
+                        "ProductPrice": "13100",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Жевательная резинка",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3354ba-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F154332584%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fzhevatelnaya-rezinka-orbit-bubblemint-68-g-154332584%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fzhevatelnaya-rezinka-orbit-bubblemint-68-g-154332584%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fzhevatelnaya-rezinka-orbit-bubblemint-68-g-154332584%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=2fb6ec766ee0bea76a3c6669372d76a9",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "41cf4128-5fdc-5764-b56b-0db937d13dc3",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "4afecd9f-c9e4-55a6-aebb-d0db882c09ac",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Жевательная резинка Orbit White Bubblemint, без сахара, банка, 68 г",
+                        "ProductPrice": "13100",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Жевательная резинка",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3354ba-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=df173773808f0900fecb4b0202a9d4af",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "41cf4128-5fdc-5764-b56b-0db937d13dc3",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "4afecd9f-c9e4-55a6-aebb-d0db882c09ac",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Жевательная резинка Orbit White Bubblemint, без сахара, банка, 68 г",
+                        "ProductPrice": "13100",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кондитерские изделия",
+                        "SegmentName3": "Жевательная резинка",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334edc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b3354ba-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "526₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "699"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Кофе растворимый Carte Noire, Арабика, 95г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=6a72835d39a4163f102bb06e6db2eb59",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "1ac6e07a-38bb-5498-bf3b-ea722428e476",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "7d58be84-df75-5245-a7f1-38df5f637b26",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофе растворимый Carte Noire, Арабика, 95г",
+                        "ProductPrice": "52600",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Кофе растворимый",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334cd9-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F33871154%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fcarte-noire-original-kofe-rastvorimyy-95-g-33871154%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fcarte-noire-original-kofe-rastvorimyy-95-g-33871154%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fcarte-noire-original-kofe-rastvorimyy-95-g-33871154%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=6a72835d39a4163f102bb06e6db2eb59",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "1ac6e07a-38bb-5498-bf3b-ea722428e476",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "7d58be84-df75-5245-a7f1-38df5f637b26",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофе растворимый Carte Noire, Арабика, 95г",
+                        "ProductPrice": "52600",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Кофе растворимый",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334cd9-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=bdc746a8421cf761049b85a1bb0ece11",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "1ac6e07a-38bb-5498-bf3b-ea722428e476",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "7d58be84-df75-5245-a7f1-38df5f637b26",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофе растворимый Carte Noire, Арабика, 95г",
+                        "ProductPrice": "52600",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Кофе растворимый",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334cd9-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "150₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "161"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Паста жемчужная Птитим Bravolli, 350 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=67e5800c480b0ef6db39f1ac8b2d5f07",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "7e0b38ad-d133-5731-99f9-029cae4c7a59",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "ed4d5e4b-4922-5f13-8f1a-967a945a6962",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Паста жемчужная Птитим Bravolli, 350 г",
+                        "ProductPrice": "15000",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Бакалея",
+                        "SegmentName3": "Макароны",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31cf9f-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31d049-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F136678407%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fbravolli-pasta-ptitim-350-g-136678407%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fbravolli-pasta-ptitim-350-g-136678407%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fbravolli-pasta-ptitim-350-g-136678407%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=67e5800c480b0ef6db39f1ac8b2d5f07",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "7e0b38ad-d133-5731-99f9-029cae4c7a59",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "ed4d5e4b-4922-5f13-8f1a-967a945a6962",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Паста жемчужная Птитим Bravolli, 350 г",
+                        "ProductPrice": "15000",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Бакалея",
+                        "SegmentName3": "Макароны",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31cf9f-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31d049-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=99a7b4f63e3d586007bc56fed12306be",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "7e0b38ad-d133-5731-99f9-029cae4c7a59",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "ed4d5e4b-4922-5f13-8f1a-967a945a6962",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Паста жемчужная Птитим Bravolli, 350 г",
+                        "ProductPrice": "15000",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Бакалея",
+                        "SegmentName3": "Макароны",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31cf9f-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31d049-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "209₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "233"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Чай листовой Mute Каркаде с малиной и мятой, 50 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=eb8516dc07406a84ee390d095300b34e",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "b522b2f6-acbb-5018-b9c1-cec601a2aacd",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "e892162b-6ccf-5d5e-82e8-321c4fae8f05",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чай листовой Mute Каркаде с малиной и мятой, 50 г",
+                        "ProductPrice": "20900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F203261601%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchay-listovoy-mute-karkade-s-malinoy-i-myatoy-50-g-203261601%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchay-listovoy-mute-karkade-s-malinoy-i-myatoy-50-g-203261601%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fchay-listovoy-mute-karkade-s-malinoy-i-myatoy-50-g-203261601%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=eb8516dc07406a84ee390d095300b34e",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "b522b2f6-acbb-5018-b9c1-cec601a2aacd",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "e892162b-6ccf-5d5e-82e8-321c4fae8f05",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чай листовой Mute Каркаде с малиной и мятой, 50 г",
+                        "ProductPrice": "20900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=8512b7d97ac67d542b75858cea5d29d4",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "b522b2f6-acbb-5018-b9c1-cec601a2aacd",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "e892162b-6ccf-5d5e-82e8-321c4fae8f05",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чай листовой Mute Каркаде с малиной и мятой, 50 г",
+                        "ProductPrice": "20900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Чай",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334b4d-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "137₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "155"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Clausthaler Premium Пиво безалкогольное, 0,33 л",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=a6621d09b7c2029c0190234599fd4d5f",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "900c5355-c9fa-57a5-8a77-735ca0288081",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "8ccaefe9-c013-5306-96cd-a927f7736b06",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Clausthaler Premium Пиво безалкогольное, 0,33 л",
+                        "ProductPrice": "13700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Напитки",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b336f02-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F146080748%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fclausthaler-premium-pivo-bezalkogolnoe-0-33-l-146080748%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fclausthaler-premium-pivo-bezalkogolnoe-0-33-l-146080748%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fclausthaler-premium-pivo-bezalkogolnoe-0-33-l-146080748%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=a6621d09b7c2029c0190234599fd4d5f",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "900c5355-c9fa-57a5-8a77-735ca0288081",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "8ccaefe9-c013-5306-96cd-a927f7736b06",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Clausthaler Premium Пиво безалкогольное, 0,33 л",
+                        "ProductPrice": "13700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Напитки",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b336f02-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=b9ccb31632e6aa8a7e228bb4fbc00c06",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "900c5355-c9fa-57a5-8a77-735ca0288081",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "8ccaefe9-c013-5306-96cd-a927f7736b06",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Clausthaler Premium Пиво безалкогольное, 0,33 л",
+                        "ProductPrice": "13700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Напитки",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b336f02-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "2849₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "4449"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Huggies Подгузники Elite Soft, 8-14 кг (размер 4), 132 шт",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=fd31dd3eed517ca106f7d6f812494942",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "51cec6f2-38a4-5402-b849-242ae5d6a9aa",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "195be312-359d-5be4-b1a3-45ae811ac660",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Huggies Подгузники Elite Soft, 8-14 кг (размер 4), 132 шт",
+                        "ProductPrice": "284900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Подгузники, пеленки, салфетки",
+                        "SegmentName3": "Подгузники",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b349023-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b349085-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F33784344%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fhuggies-podguzniki-elite-soft-8-14-kg-razmer-4-132-sht-33784344%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fhuggies-podguzniki-elite-soft-8-14-kg-razmer-4-132-sht-33784344%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fhuggies-podguzniki-elite-soft-8-14-kg-razmer-4-132-sht-33784344%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=fd31dd3eed517ca106f7d6f812494942",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "51cec6f2-38a4-5402-b849-242ae5d6a9aa",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "195be312-359d-5be4-b1a3-45ae811ac660",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Huggies Подгузники Elite Soft, 8-14 кг (размер 4), 132 шт",
+                        "ProductPrice": "284900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Подгузники, пеленки, салфетки",
+                        "SegmentName3": "Подгузники",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b349023-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b349085-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=4d35a635e07d3753a2e74dc675b21901",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "51cec6f2-38a4-5402-b849-242ae5d6a9aa",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "195be312-359d-5be4-b1a3-45ae811ac660",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Huggies Подгузники Elite Soft, 8-14 кг (размер 4), 132 шт",
+                        "ProductPrice": "284900",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Подгузники, пеленки, салфетки",
+                        "SegmentName3": "Подгузники",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b349023-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b349085-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "327₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "572"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Стиральный порошок Tide Автомат Альпийская свежесть 20 стирок 3 кг.",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=01417ed12809336aae7f8eb4d74ae3e6",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "63b35a7c-b8aa-5aec-afa9-e9540823de2a",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "86bab874-476f-5995-a039-a10311cc03d4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стиральный порошок Tide Автомат Альпийская свежесть 20 стирок 3 кг.",
+                        "ProductPrice": "32700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для стирки",
+                        "SegmentName3": "Стиральный порошок",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35b6bc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35b8b3-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "url": "https://ozon.onelink.me/SNMZ?pid=partner_pg&is_retargeting=true&af_dp=ozon%3A%2F%2Fproduct%2F5303249%2F&af_web_dp=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fstiralnyy-poroshok-tide-alpiyskaya-svezhest-avtomat-3-kg-5303249%2F&af_ios_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fstiralnyy-poroshok-tide-alpiyskaya-svezhest-avtomat-3-kg-5303249%2F&af_android_url=https%3A%2F%2Fwww.ozon.ru%2Fproduct%2Fstiralnyy-poroshok-tide-alpiyskaya-svezhest-avtomat-3-kg-5303249%2F&utm_source=edadeal_promo&utm_medium=social&utm_campaign=express_feed_217311"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=01417ed12809336aae7f8eb4d74ae3e6",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "63b35a7c-b8aa-5aec-afa9-e9540823de2a",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "86bab874-476f-5995-a039-a10311cc03d4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стиральный порошок Tide Автомат Альпийская свежесть 20 стирок 3 кг.",
+                        "ProductPrice": "32700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для стирки",
+                        "SegmentName3": "Стиральный порошок",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35b6bc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35b8b3-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=0edcec68151f77c813dbd4061485850b",
+                      "payload": {
+                        "BlockId": "136",
+                        "ItemType": "Product",
+                        "ItemUUID": "63b35a7c-b8aa-5aec-afa9-e9540823de2a",
+                        "BlockSlug": "OzonOffers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "86bab874-476f-5995-a039-a10311cc03d4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стиральный порошок Tide Автомат Альпийская свежесть 20 стирок 3 кг.",
+                        "ProductPrice": "32700",
+                        "RetailerName": "Ozon",
+                        "RetailerUUID": "4d86d1ce-783b-43e0-a39a-269ba65bd3b6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для стирки",
+                        "SegmentName3": "Стиральный порошок",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35b6bc-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35b8b3-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "916"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

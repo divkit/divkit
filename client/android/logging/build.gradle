@@ -1,0 +1,16 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    buildFeatures { buildConfig = true }
+
+    defaultConfig {
+        buildConfigField "boolean", "DISABLE_LOGS", "${project.property("disableLogsInBuild").toBoolean()}"
+    }
+}
+
+dependencies {
+    implementation project(path: ':div-core')
+    implementation "androidx.core:core:$versions.androidx.core"
+}

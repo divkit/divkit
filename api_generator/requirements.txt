@@ -1,0 +1,2 @@
+pydantic==1.9.1
+validators==0.20.0

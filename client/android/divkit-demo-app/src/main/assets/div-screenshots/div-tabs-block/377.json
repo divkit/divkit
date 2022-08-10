@@ -1,0 +1,50 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "content": {
+                                "direction": "vertical",
+                                "alignment_vertical": "top",
+                                "height": {
+                                    "type": "predefined",
+                                    "value": "wrap_content"
+                                },
+                                "width": {
+                                    "type": "predefined",
+                                    "value": "match_parent"
+                                },
+                                "type": "div-container-block",
+                                "children": [
+                                    {
+                                        "text": "Universal div text",
+                                        "type": "div-universal-block",
+                                        "title": "Universal div title"
+                                    },
+                                    {
+                                        "text": "Universal div text",
+                                        "type": "div-universal-block",
+                                        "title": "Universal div title"
+                                    }
+                                ]
+                            },
+                            "title": {
+                                "text": "text in title"
+                            }
+                        }
+                    ],
+                    "type": "div-tabs-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#BBAAFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

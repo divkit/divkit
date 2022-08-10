@@ -1,0 +1,143 @@
+{
+  "templates": {
+    "text_14_18_regular": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 18,
+      "$text": "text_14_18_regular__text",
+      "$text_color": "text_14_18_regular__text_color",
+      "margins": {
+        "$left": "margin",
+        "$top": "margin",
+        "$right": "margin",
+        "$bottom": "margin"
+      }
+    }
+  },
+  "card": {
+    "log_id": "brief",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "border": {
+            "corner_radius": 24
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "state",
+              "div_id": "body",
+              "states": [
+                {
+                  "state_id": "card",
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "state",
+                        "div_id": "text",
+                        "states": [
+                          {
+                            "state_id": "short",
+                            "div": {
+                              "type": "text_14_18_regular",
+                              "text_14_18_regular__text": "Hihihihihihihihiihihiiihihihihihihihhiihhihihihihihihihihihihihihhihihihih\n\nhttps://habr.com/ru/post/539208/\n\nwww.google.com/...f-8",
+                              "text_14_18_regular__text_color": "#333333",
+                              "ranges": [
+                                {
+                                  "start": 216,
+                                  "end": 237,
+                                  "text_color": "#0077ff"
+                                }
+                              ],
+                              "margin": 15,
+                              "max_lines": 5,
+                              "ellipsis": {
+                                "text": "… Expand",
+                                "ranges": [
+                                  {
+                                    "start": 2,
+                                    "end": 9,
+                                    "text_color": "#80000000"
+                                  }
+                                ]
+                              },
+                              "actions": [
+                                {
+                                  "log_id": "span",
+                                  "url": "div-action://set_state?state_id=0/body/card/text/long"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "long",
+                            "div": {
+                              "margin": 15,
+                              "type": "text_14_18_regular",
+                              "text_14_18_regular__text": "ПриветПриветПриветПриветПриветПриветПриветПриветПриветПриветПривет\n\nПриветПриветПриветПривет\n\nПриветПриветПриветПриветПриветПривет\n\nПриветПриветПриветПриветПриветПриветПриветПривет\n\nhttps://habr.com/ru/post/539208/\n\nwww.google.com/...f-8",
+                              "text_14_18_regular__text_color": "#333333",
+                              "ranges": [
+                                {
+                                  "start": 216,
+                                  "end": 237,
+                                  "text_color": "#0077ff"
+                                }
+                              ],
+                              "actions": [
+                                {
+                                  "log_id": "span",
+                                  "url": "div-action://set_state?state_id=0/body/card/text/short"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "margins": {
+                          "bottom": 8,
+                          "top": 10,
+                          "left": 15,
+                          "right": 15
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 200
+                        },
+                        "width": {
+                          "type": "match_parent"
+                        },
+                        "border": {
+                          "corner_radius": 12
+                        },
+                        "background": [
+                          {
+                            "type": "solid",
+                            "color": "#ddffee"
+                          }
+                        ],
+                        "visibility_action": {
+                          "log_id": "content_item_show"
+                        },
+                        "items": []
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

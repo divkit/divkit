@@ -1,0 +1,92 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "rows": [
+                        {
+                            "cells": [
+                                {
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "vertical_alignment": "bottom",
+                                    "image_size": "m"
+                                },
+                                {
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "vertical_alignment": "top",
+                                    "image_size": "m"
+                                },
+                                {
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "image_size": "xxl"
+                                }
+                            ],
+                            "type": "row_element"
+                        },
+                        {
+                            "color": "#FF00FF",
+                            "type": "separator_element"
+                        },
+                        {
+                            "cells": [
+                                {
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "vertical_alignment": "center",
+                                    "image_size": "m"
+                                },
+                                {
+                                    "text": "center",
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "horizontal_alignment": "right",
+                                    "image_size": "m"
+                                },
+                                {
+                                    "image": {
+                                        "type": "div-image-element",
+                                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.jpg"
+                                    },
+                                    "image_size": "xxl"
+                                }
+                            ],
+                            "type": "row_element"
+                        }
+                    ],
+                    "type": "div-table-block",
+                    "columns": [
+                        {
+                            "weight": 1
+                        },
+                        {
+                            "weight": 1
+                        },
+                        {
+                            "weight": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

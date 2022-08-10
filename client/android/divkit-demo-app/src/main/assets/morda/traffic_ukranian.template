@@ -1,0 +1,42 @@
+traffic|Украинська|{
+	"ttv":1200,
+	"utime":1508351555,
+	"ttl":1200,
+	"title":"ЗАТОРИ",
+	"data": {
+		"icon":"green",
+		"description":"Ы!",
+		"rate":3,
+		"forecast": [
+			{
+				"icon":"green",
+				"rate":4,
+				"hour":"18 год"
+			},
+			{
+				"icon":"green",
+				"rate":6,
+				"hour":"19"
+			},
+			{
+				"icon":"green",
+				"rate":3,
+				"hour":"20"
+			},
+			{
+				"icon":"green",
+				"rate":2,
+				"hour":"21"
+			},
+			{
+				"icon":"green",
+				"rate":1,
+				"hour":"22"
+			}
+		],
+		"map_url":"https://static-maps.yandex.ru/1.x/?lang=uk_UA&l=map,trf&lg=0&key=ANVHaFUBAAAA84PDWwMAzGn1Akz7gJRXZen_EbH562iphb4AAAAAAAAAAABGKan36_-dpqiPwDcDI6OMc7T7BA==&ll=30.548,50.449&z=10&no_size=1",
+		"url":"http://yandex.ua/"
+	},
+	"type":"traffic",
+	"id":"traffic"
+}

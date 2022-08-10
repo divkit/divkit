@@ -1,0 +1,23 @@
+{
+  "states": [
+    {
+      "state_id": 1,
+      "blocks": [
+        {
+          "items": [
+            {
+              "score": "3",
+              "text": "<font color=\"#edf0f2\">+25<\/font>"
+            },
+            {
+              "score": "3",
+              "text": "21",
+              "color": "#ffce55"
+            }
+          ],
+          "type": "div-traffic-block"
+        }
+      ]
+    }
+  ]
+}

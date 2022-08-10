@@ -1,0 +1,42 @@
+.indicator {}
+
+.indicator__scroller {
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.indicator__scroller::-webkit-scrollbar {
+    display: none;
+}
+
+.indicator__items {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.indicator__item {
+    flex-shrink: 0;
+    width: var(--divkit-indicator-width);
+    height: var(--divkit-indicator-height);
+    border-radius: var(--divkit-indicator-border-radius);
+    margin: var(--divkit-indicator-margin);
+    background-color: var(--divkit-indicator-inactive-color);
+}
+
+.indicator__item_active {
+    background-color: var(--divkit-indicator-active-color);
+    transform: scale(var(--divkit-indicator-active-scale));
+}
+
+.indicator__item:first-child {
+    margin-left: auto;
+}
+
+.indicator__item:last-child {
+    margin-right: auto;
+}

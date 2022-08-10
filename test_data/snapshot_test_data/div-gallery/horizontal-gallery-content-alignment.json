@@ -1,0 +1,150 @@
+{
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 350
+          },
+          "background": [
+            {
+              "color": "#FFFFFF",
+              "type": "solid"
+            }
+          ],
+          "items": [
+            {
+              "type": "testcase_name",
+              "text": "default (leading) cross alignment"
+            },
+            {
+              "type": "gallery",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "items": [
+                {
+                  "type": "text_default"
+                },
+                {
+                  "type": "text_top"
+                },
+                {
+                  "type": "text_center"
+                },
+                {
+                  "type": "text_bottom"
+                }
+              ]
+            },
+            {
+              "type": "testcase_name",
+              "text": "center cross alignment"
+            },
+            {
+              "type": "gallery",
+              "cross_content_alignment": "center",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "items": [
+                {
+                  "type": "text_default"
+                },
+                {
+                  "type": "text_top"
+                },
+                {
+                  "type": "text_center"
+                },
+                {
+                  "type": "text_bottom"
+                }
+              ]
+            },
+            {
+              "type": "testcase_name",
+              "text": "trailing cross alignment"
+            },
+            {
+              "type": "gallery",
+              "cross_content_alignment": "end",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "items": [
+                {
+                  "type": "text_default"
+                },
+                {
+                  "type": "text_top"
+                },
+                {
+                  "type": "text_center"
+                },
+                {
+                  "type": "text_bottom"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "testcase_name": {
+      "type": "text",
+      "paddings": {
+        "top": 10,
+        "bottom": 10
+      },
+      "font_size": 16,
+      "background": [
+        {
+          "color": "#DDD",
+          "type": "solid"
+        }
+      ]
+    },
+    "text_bottom": {
+      "type": "text_with_background",
+      "text": "bottom",
+      "alignment_vertical": "bottom"
+    },
+    "text_center": {
+      "type": "text_with_background",
+      "text": "center",
+      "alignment_vertical": "center"
+    },
+    "text_top": {
+      "type": "text_with_background",
+      "text": "top",
+      "alignment_vertical": "top"
+    },
+    "text_default": {
+      "type": "text_with_background",
+      "text": "default"
+    },
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAA",
+          "type": "solid"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "value": 80
+      }
+    }
+  }
+}

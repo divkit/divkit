@@ -1,0 +1,22 @@
+{
+  "templates": {
+    "bold_text": {
+      "type": "text",
+      "$text": "text_link",
+      "font_size": 14,
+      "font_weight": "bold"
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "bold_text",
+          "text_link": "Lorem ipsum dolor sit amet"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "type": "container",
+  "description": "Layout of this file's contents should be identical to that from horizontal_orientation_axial_alignments.json contents",
+  "items": [
+    {
+      "type": "container",
+      "orientation": "horizontal",
+      "content_alignment_horizontal": "left",
+      "items": [
+        {
+          "type": "text",
+          "text": "left"
+        },
+        {
+          "type": "text",
+          "text": "center"
+        },
+        {
+          "type": "text",
+          "text": "right"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "orientation": "horizontal",
+      "content_alignment_horizontal": "center",
+      "items": [
+        {
+          "type": "text",
+          "text": "left"
+        },
+        {
+          "type": "text",
+          "text": "center"
+        },
+        {
+          "type": "text",
+          "text": "right"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "orientation": "horizontal",
+      "content_alignment_horizontal": "right",
+      "items": [
+        {
+          "type": "text",
+          "text": "left"
+        },
+        {
+          "type": "text",
+          "text": "center"
+        },
+        {
+          "type": "text",
+          "text": "right"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    }
+  ]
+}

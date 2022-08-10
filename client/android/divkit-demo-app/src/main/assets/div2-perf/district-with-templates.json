@@ -1,0 +1,928 @@
+{
+  "templates": {
+    "header": {
+      "type": "container",
+      "orientation": "horizontal",
+      "items": [
+        {
+          "type": "text",
+          "height": {
+            "type": "fixed",
+            "value": 48
+          },
+          "paddings": {
+            "left": 16,
+            "right": 16
+          },
+          "font_size": 18,
+          "font_weight": "medium",
+          "line_height": 24,
+          "text_alignment_vertical": "center",
+          "text_color": "#CC000000",
+          "$text": "header_text"
+        },
+        {
+          "type": "image",
+          "width": {
+            "type": "fixed",
+            "value": 48
+          },
+          "height": {
+            "type": "fixed",
+            "value": 48
+          },
+          "paddings": {
+            "left": 16,
+            "top": 12,
+            "right": 8,
+            "bottom": 12
+          },
+          "placeholder_color": "#00000000",
+          "image_url": "file:///android_asset/images/district/menu.png",
+          "$action": "menu_action"
+        }
+      ]
+    },
+    "button": {
+      "type": "text",
+      "paddings": {
+        "left": 12,
+        "top": 8,
+        "right": 12,
+        "bottom": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFDC60"
+        }
+      ],
+      "border": {
+        "corner_radius": 4
+      },
+      "font_size": 14,
+      "max_lines": 1,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    },
+    "post_content_text": {
+      "type": "text",
+      "paddings": {
+        "right": 24
+      }
+    },
+    "post_title": {
+      "type": "post_content_text",
+      "font_size": 16,
+      "font_weight": "medium",
+      "line_height": 20,
+      "max_lines": 3
+    },
+    "post_item_header": {
+      "type": "container",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "orientation": "horizontal",
+      "content_alignment_vertical": "center",
+      "items": [
+        {
+          "type": "image",
+          "width": {
+            "type": "fixed",
+            "value": 24
+          },
+          "height": {
+            "type": "fixed",
+            "value": 24
+          },
+          "margins": {
+            "right": 8
+          },
+          "border": {
+            "corner_radius": 12
+          },
+          "$image_url": "userpic_url"
+        },
+        {
+          "type": "post_content_text",
+          "font_size": 14,
+          "line_height": 18,
+          "max_lines": 1,
+          "text_color": "#333333",
+          "$text": "author_and_location",
+          "$ranges": "location_spans"
+        }
+      ]
+    },
+    "post_item_footer": {
+      "type": "container",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "orientation": "horizontal",
+      "content_alignment_vertical": "center",
+      "items": [
+        {
+          "type": "image",
+          "width": {
+            "type": "fixed",
+            "value": 20
+          },
+          "height": {
+            "type": "fixed",
+            "value": 24
+          },
+          "margins": {
+            "right": 4
+          },
+          "image_url": "file:///android_asset/images/district/comment.png"
+        },
+        {
+          "type": "text",
+          "width": {
+            "type": "match_parent"
+          },
+          "margins": {
+            "right": 12
+          },
+          "font_size": 13,
+          "line_height": 16,
+          "text_color": "#999999",
+          "$text": "comment_count"
+        },
+        {
+          "type": "image",
+          "width": {
+            "type": "fixed",
+            "value": 20
+          },
+          "height": {
+            "type": "fixed",
+            "value": 24
+          },
+          "margins": {
+            "right": 4
+          },
+          "image_url": "file:///android_asset/images/district/like.png"
+        },
+        {
+          "type": "text",
+          "width": {
+            "type": "wrap_content"
+          },
+          "margins": {
+            "right": 12
+          },
+          "font_size": 13,
+          "line_height": 16,
+          "text_color": "#999999",
+          "$text": "like_count"
+        },
+        {
+          "type": "image",
+          "width": {
+            "type": "fixed",
+            "value": 20
+          },
+          "height": {
+            "type": "fixed",
+            "value": 24
+          },
+          "margins": {
+            "right": 4
+          },
+          "image_url": "file:///android_asset/images/district/dislike.png"
+        },
+        {
+          "type": "text",
+          "width": {
+            "type": "wrap_content"
+          },
+          "font_size": 13,
+          "line_height": 16,
+          "text_color": "#999999",
+          "$text": "dislike_count"
+        }
+      ]
+    },
+    "post_item": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 240
+      },
+      "height": {
+        "type": "fixed",
+        "value": 270
+      },
+      "orientation": "vertical",
+      "paddings": {
+        "left": 12,
+        "right": 12
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFFFF"
+        }
+      ],
+      "border": {
+        "corner_radius": 6,
+        "stroke": {
+          "color": "#E5E5E5",
+          "width": 1
+        }
+      },
+      "action": {
+        "log_id": "district/post_item",
+        "$url": "post_action_url"
+      }
+    },
+    "text_post_item": {
+      "type": "post_item",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFFFF"
+        },
+        {
+          "type": "image",
+          "$image_url": "background_url"
+        }
+      ],
+      "items": [
+        {
+          "type": "post_item_header"
+        },
+        {
+          "type": "post_title",
+          "height": {
+            "type": "wrap_content"
+          },
+          "margins": {
+            "bottom": 4
+          },
+          "$text": "post_title_text"
+        },
+        {
+          "type": "post_content_text",
+          "height": {
+            "type": "match_parent"
+          },
+          "font_size": 14,
+          "line_height": 18,
+          "max_lines": 6,
+          "text_color": "#333333",
+          "$text": "post_text"
+        },
+        {
+          "type": "post_item_footer"
+        }
+      ]
+    },
+    "image_post_item": {
+      "type": "post_item",
+      "items": [
+        {
+          "type": "post_item_header"
+        },
+        {
+          "type": "post_title",
+          "height": {
+            "type": "match_parent"
+          },
+          "margins": {
+            "bottom": 4
+          },
+          "$text": "post_title_text"
+        },
+        {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "orientation": "overlap",
+          "action": {
+            "log_id": "district/post_image",
+            "$url": "post_image_action_url"
+          },
+          "items": [
+            {
+              "type": "image",
+              "height": {
+                "type": "match_parent"
+              },
+              "border": {
+                "corner_radius": 6
+              },
+              "$image_url": "post_image_url"
+            },
+            {
+              "type": "container",
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 8,
+                "bottom": 8
+              },
+              "paddings": {
+                "left": 4,
+                "top": 4,
+                "right": 4,
+                "bottom": 4
+              },
+              "alignment_horizontal": "left",
+              "alignment_vertical": "bottom",
+              "orientation": "horizontal",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#80000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 4
+              },
+              "items": [
+                {
+                  "type": "image",
+                  "width": {
+                    "type": "fixed",
+                    "value": 16
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 16
+                  },
+                  "margins": {
+                    "right": 4
+                  },
+                  "image_url": "file:///android_asset/images/district/image.png"
+                },
+                {
+                  "type": "text",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "text_color": "#FFFFFF",
+                  "$text": "post_image_count"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "post_item_footer"
+        }
+      ]
+    },
+    "tail_item": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 108
+      },
+      "height": {
+        "type": "fixed",
+        "value": 270
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "action": {
+        "log_id": "district/more_posts",
+        "url": "action://none/"
+      },
+      "items": [
+        {
+          "type": "image",
+          "width": {
+            "type": "fixed",
+            "value": 40
+          },
+          "height": {
+            "type": "fixed",
+            "value": 40
+          },
+          "margins": {
+            "bottom": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F0F0F5"
+            }
+          ],
+          "border": {
+            "corner_radius": 20
+          },
+          "placeholder_color": "#00000000",
+          "image_url": "file:///android_asset/images/district/arrow.png"
+        },
+        {
+          "type": "text",
+          "height": {
+            "type": "wrap_content"
+          },
+          "font_size": 14,
+          "line_height": 16,
+          "text_alignment_horizontal": "center",
+          "text_color": "#6B7A80",
+          "text": "Все новости района"
+        }
+      ]
+    },
+    "district_card": {
+      "type": "container",
+      "orientation": "vertical",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFFFF"
+        },
+        {
+          "type": "image",
+          "content_alignment_horizontal": "right",
+          "content_alignment_vertical": "top",
+          "scale": "fit",
+          "image_url": "file:///android_asset/images/district/card_background.png"
+        }
+      ],
+      "items": [
+        {
+          "type": "header"
+        },
+        {
+          "type": "gallery",
+          "paddings": {
+           "left": 16,
+           "right": 16
+          },
+          "$items": "card_items"
+        },
+        {
+          "type": "button",
+          "height": {
+            "type": "fixed",
+            "value": 36
+          },
+          "margins": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "text": "  Спросить соседей",
+          "images": [
+            {
+              "width": {
+                "type": "fixed",
+                "value": 16
+              },
+              "height": {
+                "type": "fixed",
+                "value": 16
+              },
+              "start": 0,
+              "url": "file:///android_asset/images/district/create_post.png"
+            }
+          ],
+          "action": {
+            "log_id": "district/create_post",
+            "url": "action://none/"
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "district",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "district_card",
+          "header_text": "Район",
+          "menu_action": {
+            "log_id": "district/menu",
+            "menu_items": [
+              {
+                "text": "Настройки ленты",
+                "action": {
+                  "log_id": "district/menu/feed_settings",
+                  "url": "action://none/"
+                }
+              },
+              {
+                "text": "Скрыть карточку",
+                "action": {
+                  "log_id": "district/menu/hide_card",
+                  "url": "action://none/"
+                }
+              }
+            ]
+          },
+          "card_items": [
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "text_post_item",
+              "background_url": "file:///android_asset/images/district/item_background_1.png",
+              "userpic_url": "file:///android_asset/images/district/userpic_yellow.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "image_post_item",
+              "userpic_url": "file:///android_asset/images/district/userpic_purple.png",
+              "author_and_location": "Аркадий, Ул. Льва Толстого, 16",
+              "location_spans": [
+                {
+                  "start": 9,
+                  "end": 30,
+                  "text_color": "#999999"
+                }
+              ],
+              "comment_count": "16",
+              "like_count": "64",
+              "dislike_count": "0",
+              "post_title_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+              "post_image_url": "file:///android_asset/images/district/headquarter.jpg",
+              "post_image_count": "8",
+              "post_image_action_url": "action://none/",
+              "post_action_url": "action://none/"
+            },
+            {
+              "type": "tail_item"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

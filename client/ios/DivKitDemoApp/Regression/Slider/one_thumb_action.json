@@ -1,0 +1,63 @@
+{
+  "card": {
+    "log_id": "test/body",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "First thumb: @{slider_variable}"
+            },
+            {
+              "type": "slider",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#ffffff"
+                }
+              ],
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "thumb_value": 7,
+              "thumb_value_variable": "slider_variable",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "rounded_rectangle"
+                },
+                "color": "#ff0000"
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "rounded_rectangle"
+                },
+                "color": "#000000"
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "rounded_rectangle"
+                },
+                "color": "#0000ff"
+              },
+              "max_value": 10
+            }
+          ]
+        }
+      }
+    ],
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 3
+      }
+    ]
+  }
+}

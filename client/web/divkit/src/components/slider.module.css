@@ -1,0 +1,136 @@
+.slider {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+}
+
+.slider__input {
+    position: relative;
+    display: block;
+    width: calc(100% + var(--divkit-slider-thumb-width));
+    height: var(--divkit-slider-max-thumb-height);
+    margin: 0;
+    margin-right: calc(var(--divkit-slider-thumb-width) / -2);
+    margin-left: calc(var(--divkit-slider-thumb-width) / -2);
+    font: inherit;
+    background: none;
+    border: none;
+    appearance: none;
+    opacity: 0;
+}
+
+.slider__input + .slider__input {
+    margin-top: calc(0px - var(--divkit-slider-max-thumb-height));
+}
+
+.slider__input_secondary {
+    width: calc(100% + var(--divkit-slider-thumb-secondary-width));
+    margin-right: calc(var(--divkit-slider-thumb-secondary-width) / -2);
+    margin-left: calc(var(--divkit-slider-thumb-secondary-width) / -2);
+}
+
+.slider__thumb {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(100% * var(--divkit-slider-track-part));
+    width: var(--divkit-slider-thumb-width);
+    height: var(--divkit-slider-thumb-height);
+    margin: auto 0;
+    margin-left: calc(var(--divkit-slider-thumb-width) / -2);
+    border: none;
+}
+
+.slider__thumb_secondary {
+    left: calc(100% * var(--divkit-slider-track-secondary-part));
+    width: var(--divkit-slider-thumb-secondary-width);
+    height: var(--divkit-slider-thumb-secondary-height);
+    margin-left: calc(var(--divkit-slider-thumb-secondary-width) / -2);
+}
+
+.slider__tracks-wrapper {
+    position: relative;
+    margin-right: calc(var(--divkit-slider-max-thumb-width) / 2);
+    margin-left: calc(var(--divkit-slider-max-thumb-width) / 2);
+}
+
+.slider__tracks-inner {
+    position: relative;
+    margin-top: var(--divkit-slider-offset-top);
+    margin-bottom: var(--divkit-slider-offset-bottom);
+}
+
+.slider__track {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+
+.slider__active-track {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.slider__thumb-text-wrapper {
+    position: absolute;
+    z-index: 2;
+    left: calc(var(--divkit-slider-max-thumb-width) / -2);
+    width: calc(100% + var(--divkit-slider-max-thumb-width));
+    pointer-events: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+.slider__thumb-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--divkit-slider-thumb-width);
+    height: var(--divkit-slider-thumb-height);
+    margin-top: calc(var(--divkit-slider-text-offset-y, 0px) + var(--divkit-slider-offset-top) + calc(calc(var(--divkit-slider-max-height) - var(--divkit-slider-thumb-height)) / 2));
+    margin-left: calc(var(--divkit-slider-text-offset-x, 0px) + calc(calc(100% - var(--divkit-slider-max-thumb-width)) * var(--divkit-slider-track-part)) + calc(calc(var(--divkit-slider-max-thumb-width) - var(--divkit-slider-thumb-width)) / 2));
+}
+
+.slider__thumb-text_secondary {
+    width: var(--divkit-slider-thumb-secondary-width);
+    height: var(--divkit-slider-thumb-secondary-height);
+    margin-top: calc(var(--divkit-slider-text-secondary-offset-y, 0px) + var(--divkit-slider-offset-top) + calc(calc(var(--divkit-slider-max-height) - var(--divkit-slider-thumb-secondary-height)) / 2));
+    margin-left: calc(var(--divkit-slider-text-secondary-offset-x, 0px) + calc(calc(100% - var(--divkit-slider-max-thumb-width)) * var(--divkit-slider-track-secondary-part)) + calc(calc(var(--divkit-slider-max-thumb-width) - var(--divkit-slider-thumb-secondary-width)) / 2));
+}
+
+.slider__tick {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+}
+
+.slider__tick_active {
+    left: calc(100% * var(--divkit-slider-tick));
+    width: var(--divkit-slider-tick-active-width);
+    height: var(--divkit-slider-tick-active-height);
+    margin-left: calc(var(--divkit-slider-tick-active-width) / -2);
+    background: var(--divkit-slider-tick-active-background);
+    border-radius: var(--divkit-slider-tick-active-border-radius);
+    box-shadow: var(--divkit-slider-tick-active-box-shadow);
+}
+
+.slider__tick_inactive {
+    left: calc(100% * var(--divkit-slider-tick));
+    width: var(--divkit-slider-tick-inactive-width);
+    height: var(--divkit-slider-tick-inactive-height);
+    margin-left: calc(var(--divkit-slider-tick-inactive-width) / -2);
+    background: var(--divkit-slider-tick-inactive-background);
+    border-radius: var(--divkit-slider-tick-inactive-border-radius);
+    box-shadow: var(--divkit-slider-tick-inactive-box-shadow);
+}

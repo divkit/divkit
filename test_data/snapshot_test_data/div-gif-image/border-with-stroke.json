@@ -1,0 +1,26 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gif",
+          "gif_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 2
+            }
+          },
+          "height": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      }
+    ]
+  }
+}
+

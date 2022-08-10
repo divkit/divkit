@@ -1,0 +1,362 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template 1`] = `
+Object {
+  "json": Object {
+    "items": Array [
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": Object {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template 2`] = `
+Array [
+  Array [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template_without_data 1`] = `
+Object {
+  "json": Object {
+    "items": Array [
+      Object {
+        "entity": Object {
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": Object {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template_without_data 2`] = `
+Array [
+  Array [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template_without_item_required_property 1`] = `
+Object {
+  "json": Object {
+    "items": Array [
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+      },
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": Object {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_item_template_without_item_required_property 2`] = `
+Array [
+  Array [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_link_for_items 1`] = `
+Object {
+  "json": Object {
+    "items": Array [
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "items_link": Array [
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": Object {
+    "items_link": Array [
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_link_for_items 2`] = `Array []`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_link_for_items_with_item_template 1`] = `
+Object {
+  "json": Object {
+    "items": Array [
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "items_link": Array [
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": Object {
+    "items_link": Array [
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "link": "https://ya.ru",
+          "type": "item_entity_template",
+        },
+        "property": "Some text",
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_with_link_for_items_without_item_required_property 1`] = `
+Object {
+  "json": Object {
+    "items": Array [
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "items_link": Array [
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": Object {
+    "items_link": Array [
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+  },
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_without_item_required_property 1`] = `
+Object {
+  "json": Object {
+    "items": Array [
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": Object {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_without_item_required_property 2`] = `
+Array [
+  Array [
+    [Error: No such template],
+  ],
+]
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_without_templates 1`] = `
+Object {
+  "json": Object {
+    "items": Array [
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+      Object {
+        "entity": Object {
+          "property": Object {
+            "value": "https://ya.ru",
+          },
+          "type": "entity_with_complex_property",
+        },
+        "property": "Some text",
+      },
+    ],
+    "type": "entity_with_array_of_nested_items",
+  },
+  "templateContext": Object {},
+}
+`;
+
+exports[`array_of_nested_items test_array_of_nested_items_without_templates 2`] = `
+Array [
+  Array [
+    [Error: No such template],
+  ],
+]
+`;

@@ -1,0 +1,26 @@
+{
+  "templates": {},
+  "entity": {
+    "type": "entity_with_array_of_nested_items",
+    "items": [
+      {
+        "property": "Some text",
+        "entity": {
+          "type": "entity_with_complex_property",
+          "property": {
+            "value": "https://ya.ru"
+          }
+        }
+      },
+      {
+        "property": "Some text",
+        "entity": {
+          "type": "entity_with_complex_property",
+          "property": {
+            "value": "https://ya.ru"
+          }
+        }
+      }
+    ]
+  }
+}

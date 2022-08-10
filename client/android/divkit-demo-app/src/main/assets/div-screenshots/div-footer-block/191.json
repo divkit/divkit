@@ -1,0 +1,75 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "text": "text_s style",
+                    "type": "div-footer-block",
+                    "text_style": "text_s"
+                },
+                {
+                    "text": "text_m style",
+                    "type": "div-footer-block",
+                    "text_style": "text_m"
+                },
+                {
+                    "text": "text_m_medium style",
+                    "type": "div-footer-block",
+                    "text_style": "text_m_medium"
+                },
+                {
+                    "text": "text_l style",
+                    "type": "div-footer-block",
+                    "text_style": "text_l"
+                },
+                {
+                    "text": "title_s style",
+                    "type": "div-footer-block",
+                    "text_style": "title_s"
+                },
+                {
+                    "text": "title_m style",
+                    "type": "div-footer-block",
+                    "text_style": "title_m"
+                },
+                {
+                    "text": "title_l style",
+                    "type": "div-footer-block",
+                    "text_style": "title_l"
+                },
+                {
+                    "text": "numbers_s style",
+                    "type": "div-footer-block",
+                    "text_style": "numbers_s"
+                },
+                {
+                    "text": "numbers_m style",
+                    "type": "div-footer-block",
+                    "text_style": "numbers_m"
+                },
+                {
+                    "text": "numbers_l style",
+                    "type": "div-footer-block",
+                    "text_style": "numbers_l"
+                },
+                {
+                    "text": "card_header style",
+                    "type": "div-footer-block",
+                    "text_style": "card_header"
+                },
+                {
+                    "text": "button style",
+                    "type": "div-footer-block",
+                    "text_style": "button"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

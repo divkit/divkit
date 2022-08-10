@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_point",
+  "properties": {
+    "x": {
+      "$ref": "div-dimension.json",
+      "$description": "translations.json#/div_point_x"
+    },
+    "y": {
+      "$ref": "div-dimension.json",
+      "$description": "translations.json#/div_point_y"
+    }
+  },
+  "required": [
+    "x",
+    "y"
+  ]
+}

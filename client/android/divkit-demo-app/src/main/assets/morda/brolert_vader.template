@@ -1,0 +1,13 @@
+brolert|Возмущения в силе|{
+	"ttv":1200,
+	"utime":1508351555,
+	"ttl":1200,
+	"data": {
+		"title":"Баланс силы",
+		"description":"Серьезные возмущения в силе!",
+		"icon":"https://s1.thcdn.com/productimg/600/600/10857415-1074346962576761.jpg",
+		"url":"http://ru.starwars.wikia.com/wiki/Возмущение_в_Силе"
+	},
+	"type":"brolert",
+	"id":"vader666"
+}

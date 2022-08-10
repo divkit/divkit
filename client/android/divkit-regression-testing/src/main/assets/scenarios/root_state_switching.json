@@ -1,0 +1,182 @@
+{
+  "templates": {
+    "action_button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ],
+      "alignment_vertical": "bottom",
+      "alignment_horizontal": "center",
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#34495E",
+      "&text": "text",
+      "&actions": "actions"
+    }
+  },
+  "card": {
+    "log_id": "root_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent",
+            "weight": 1
+          },
+          "height": {
+            "type": "fixed",
+            "unit": "dp",
+            "value": 384
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "orientation": "vertical",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "bottom",
+          "items": [
+            {
+              "type": "text",
+              "text": "circle",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "border": {
+                "corner_radius": 50
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#6DD5FA"
+                }
+              ],
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "font_size": 20,
+              "font_weight": "bold"
+            },
+            {
+              "type": "action_button",
+              "text": "CHANGE STATE (TEMPORARY)",
+              "actions": [
+                {
+                  "log_id": "change_state",
+                  "url": "div-action://set_state?state_id=1&temporary=true"
+                }
+              ]
+            },
+            {
+              "type": "action_button",
+              "text": "CHANGE STATE",
+              "actions": [
+                {
+                  "log_id": "change_state",
+                  "url": "div-action://set_state?state_id=1&temporary=false"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent",
+            "weight": 1
+          },
+          "height": {
+            "type": "fixed",
+            "unit": "dp",
+            "value": 384
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "orientation": "vertical",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "bottom",
+          "items": [
+            {
+              "type": "text",
+              "text": "square",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#6DD5FA"
+                }
+              ],
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "font_weight": "bold",
+              "font_size": 20
+            },
+            {
+              "type": "action_button",
+              "text": "CHANGE STATE (TEMPORARY)",
+              "actions": [
+                {
+                  "log_id": "change_state",
+                  "url": "div-action://set_state?state_id=0&temporary=true"
+                }
+              ]
+            },
+            {
+              "type": "action_button",
+              "text": "CHANGE STATE",
+              "actions": [
+                {
+                  "log_id": "change_state",
+                  "url": "div-action://set_state?state_id=0&temporary=false"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

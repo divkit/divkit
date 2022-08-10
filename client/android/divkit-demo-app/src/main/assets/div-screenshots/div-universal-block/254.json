@@ -1,0 +1,43 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "padding_modifier": {
+                        "position": "right",
+                        "size": "s"
+                    },
+                    "type": "div-universal-block",
+                    "text_style": "text_s",
+                    "text": "Text_s with s padding on rightaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                },
+                {
+                    "padding_modifier": {
+                        "position": "right",
+                        "size": "m"
+                    },
+                    "type": "div-universal-block",
+                    "text_style": "text_s",
+                    "text": "Text_s with m padding on rightaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                },
+                {
+                    "padding_modifier": {
+                        "position": "right",
+                        "size": "l"
+                    },
+                    "type": "div-universal-block",
+                    "text_style": "text_s",
+                    "text": "Text_s with l padding on rightaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+                }
+            ]
+        }
+    ],
+    "url": "http://yandex.ru",
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

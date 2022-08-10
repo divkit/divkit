@@ -1,0 +1,29 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_array",
+      "$array": "link"
+    },
+    "t_1": {
+      "type": "t_0",
+      "$array": "link_override"
+    }
+  },
+  "entity": {
+    "type": "t_1",
+    "link_override": [
+      {
+        "type": "entity_with_complex_property",
+        "property": {
+          "value": "https://ya.ru"
+        }
+      },
+      {
+        "type": "entity_with_complex_property",
+        "property": {
+          "value": "https://ya.ru"
+        }
+      }
+    ]
+  }
+}

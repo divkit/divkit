@@ -1,0 +1,81 @@
+.tabs {
+}
+
+.tabs__list {
+    display: flex;
+    padding: 0 1.2em .8em;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.tabs__list::-webkit-scrollbar {
+    display: none;
+}
+
+.tabs__item {
+    display: inline-block;
+    flex: 0 0 auto;
+    padding: var(--divkit-tabs-paddings, .5em .6667em);
+    font-size: var(--divkit-tabs-font-size, 1.2em);
+    line-height: var(--divkit-tabs-line-height, 1.25);
+    letter-spacing: var(--divkit-tabs-letter-spacing, 0);
+    font-weight: var(--divkit-tabs-inactive-font-weight, 400);
+    border-radius: var(--divkit-tabs-border-radius, 100em);
+    cursor: pointer;
+    user-select: none;
+    color: var(--divkit-tabs-inactive-text-color, rgba(0, 0, 0, .5));
+    background: var(--divkit-tabs-inactive-background-color, none);
+    text-decoration: none;
+}
+
+.tabs__item_selected {
+    background: var(--divkit-tabs-active-background-color, #ffdc60);
+    color: var(--divkit-tabs-active-text-color, rgba(0, 0, 0, .8));
+    cursor: default;
+    font-weight: var(--divkit-tabs-active-font-weight, 400);
+}
+
+.tabs__item_selected.tabs__item_actionable {
+    cursor: pointer;
+}
+
+.tabs__panels {
+    transition: height .3s ease-out;
+    touch-action: pan-y;
+    overflow: hidden;
+}
+
+.tabs__swiper {
+    position: relative;
+    width: 100%;
+    will-change: transform;
+    transition-property: transform;
+    transition-timing-function: ease-out;
+    transition-duration: 0s;
+}
+
+.tabs__swiper_animated {
+    transition-duration: .3s;
+}
+
+.tabs__swiper_inited .tabs__panel {
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.tabs__panel {
+    display: none;
+}
+
+.tabs__panel_visible {
+    display: block;
+}
+
+.tabs__separator {
+    height: .1em;
+    margin: 0 1.2em;
+    background: rgba(0, 0, 0, .08);
+}

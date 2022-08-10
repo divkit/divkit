@@ -1,0 +1,54 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_patch",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "definitions": {
+    "change": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "supports_expressions": false,
+          "$description": "translations.json#/div_patch_change_id"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "$description": "translations.json#/div_patch_change_items"
+        }
+      },
+      "required": [
+        "id"
+      ]
+    }
+  },
+  "properties": {
+    "mode": {
+      "type": "string",
+      "enum": [
+        "transactional", "partial"
+      ],
+      "default_value": "partial",
+      "$description": "translations.json#/div_patch_mode"
+    },
+    "changes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/change"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_patch_changes"
+    }
+  },
+  "required": [
+    "changes"
+  ]
+}

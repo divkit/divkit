@@ -1,0 +1,27 @@
+{
+  "type": "state",
+  "div_id": "alert3",
+  "states": [
+    {
+      "state_id": "shown",
+      "swipe_out_actions": [
+        {
+          "url": "div-action://set_state?state_id=1/alert2/hidden",
+          "log_id": "district_title"
+        }
+      ],
+      "div": {
+        "visibility_actions": [
+          {
+            "url": "div-action://set_state?state_id=1/alert2/hidden",
+            "log_id": "district_title"
+          }
+        ],
+        "type": "separator"
+      }
+    },
+    {
+      "state_id": "hidden"
+    }
+  ]
+}

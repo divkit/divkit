@@ -1,0 +1,14 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_optional_complex_property",
+      "$property": "link"
+    }
+  },
+  "entity": {
+    "type": "t_0",
+    "link": {
+      "value": "https://ya.ru"
+    }
+  }
+}

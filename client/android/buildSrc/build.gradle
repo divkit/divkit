@@ -1,0 +1,36 @@
+apply plugin: 'groovy'
+apply plugin: 'kotlin'
+
+apply from: "${project.projectDir}/../dependencies.gradle"
+
+repositories {
+    maven { url 'https://artifactory.yandex.net/google-android' }
+    maven { url 'https://artifactory.yandex.net/central' }
+    google()
+    mavenCentral()
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+}
+
+buildscript {
+    apply from: "${project.projectDir}/../dependencies.gradle"
+
+    repositories {
+        maven { url 'https://artifactory.yandex.net/central' }
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+    }
+}
+
+wrapper {
+    gradleVersion "7.4.1"
+    distributionType = Wrapper.DistributionType.ALL
+    distributionUrl "https://artifactory.yandex.net/artifactory/gradle-distributions/distributions/gradle-$gradleVersion-all.zip"
+}

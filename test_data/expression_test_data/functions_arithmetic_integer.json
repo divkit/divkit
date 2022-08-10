@@ -1,0 +1,600 @@
+{
+  "cases": [
+    {
+      "name": "div(4, 2) => 2",
+      "expression": "@{div(4, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "div(0, 2) => 0",
+      "expression": "@{div(0, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "div(2, 0) => error",
+      "expression": "@{div(2, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [div(2, 0)]. Division by zero is not supported."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "div(1, 2) => 0",
+      "expression": "@{div(1, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "div(-1, 2) => 0",
+      "expression": "@{div(-1, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "div(-2, 2) => -1",
+      "expression": "@{div(-2, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "div(2, -2) => -1",
+      "expression": "@{div(2, -2)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mod(4, 2) => 0",
+      "expression": "@{mod(4, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mod(3, 2) => 1",
+      "expression": "@{mod(3, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mod(2, 0) => error",
+      "expression": "@{mod(2, 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [mod(2, 0)]. Division by zero is not supported."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mod(0, 2) => 0",
+      "expression": "@{mod(0, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mod(-3, 2) => -1",
+      "expression": "@{mod(-3, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mod(3, -2) => 1",
+      "expression": "@{mod(3, -2)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mod(-3, -2) => -1",
+      "expression": "@{mod(-3, -2)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mul(3, 2) => 6",
+      "expression": "@{mul(3, 2)}",
+      "expected": {
+        "type": "integer",
+        "value": 6
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mul(1, -1) => -1",
+      "expression": "@{mul(1, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mul(-1, -1) => 1",
+      "expression": "@{mul(-1, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "mul(1, 0) => 0",
+      "expression": "@{mul(1, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "sub(3, 1) => 2",
+      "expression": "@{sub(3, 1)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "sub(1, +1) => 0",
+      "expression": "@{sub(1, +1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "sub(1, -1) => 2",
+      "expression": "@{sub(1, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "sub(0, -0) => 0",
+      "expression": "@{sub(0, -0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "sum(1, 1) => 2",
+      "expression": "@{sum(1, 1)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "sum(1, +1) => 2",
+      "expression": "@{sum(1, +1)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "sum(1, -1) => 0",
+      "expression": "@{sum(1, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "maxInteger() => 2147483647",
+      "expression": "@{maxInteger()}",
+      "expected": {
+        "type": "integer",
+        "value": 2147483647
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "minInteger() => -2147483648",
+      "expression": "@{minInteger()}",
+      "expected": {
+        "type": "integer",
+        "value": -2147483648
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "abs(0) => 0",
+      "expression": "@{abs(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "abs(2147483647) => 2147483647",
+      "expression": "@{abs(2147483647)}",
+      "expected": {
+        "type": "integer",
+        "value": 2147483647
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "abs(-2147483647) => 2147483647",
+      "expression": "@{abs(-2147483647)}",
+      "expected": {
+        "type": "integer",
+        "value": 2147483647
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "abs(-2147483648) => error",
+      "expression": "@{abs(-2147483648)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [abs(-2147483648)]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": []
+    },
+    {
+      "name": "signum(0) => 0",
+      "expression": "@{signum(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "signum(5) => 1",
+      "expression": "@{signum(5)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "signum(-5) => -1",
+      "expression": "@{signum(-5)}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(7, -1) => -7",
+      "expression": "@{copySign(7, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": -7
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(7, 1) => 7",
+      "expression": "@{copySign(7, 1)}",
+      "expected": {
+        "type": "integer",
+        "value": 7
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(7, 0) => 7",
+      "expression": "@{copySign(7, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": 7
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(-7, 0) => -7",
+      "expression": "@{copySign(-7, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": -7
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(0, 0) => 0",
+      "expression": "@{copySign(0, 0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(0, 1) => 0",
+      "expression": "@{copySign(0, 1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(0, -1) => 0",
+      "expression": "@{copySign(0, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(-2147483648, 1) => error",
+      "expression": "@{copySign(-2147483648, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [copySign(-2147483648, 1)]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "copySign(-2147483648, -1) => -2147483648",
+      "expression": "@{copySign(-2147483648, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": -2147483648
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

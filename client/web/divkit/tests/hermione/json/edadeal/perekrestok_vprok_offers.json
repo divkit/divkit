@@ -1,0 +1,2988 @@
+{
+  "templates": {
+    "eddl_offers_carousel_retailer_icon": {
+      "type": "container",
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "value": 30
+      },
+      "height": {
+        "type": "fixed",
+        "value": 30
+      },
+      "border": {
+        "corner_radius": 15,
+        "stroke": {
+          "color": "#FFF",
+          "width": 3
+        }
+      },
+      "margins": {
+        "top": 5,
+        "left": 5
+      },
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_retailer_image_url",
+          "border": {
+            "corner_radius": 12
+          },
+          "width": {
+            "type": "fixed",
+            "value": 24
+          },
+          "height": {
+            "type": "fixed",
+            "value": 24
+          }
+        }
+      ]
+    },
+    "eddl_offers_carousel_badge_simple": {
+      "type": "text",
+      "paddings": {
+        "left": 8,
+        "right": 8,
+        "top": 2,
+        "bottom": 2
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top"
+      },
+      "border": {
+        "corner_radius": 2
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#267AF2"
+        }
+      ],
+      "alignment_horizontal": "left",
+      "$font_size": "eddl_badge_font_size",
+      "$line_height": "eddl_badge_line_height",
+      "max_lines": 1,
+      "text_color": "#FFF",
+      "$text": "eddl_badge_text"
+    },
+    "eddl_offers_carousel_badge_discount": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_height"
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top",
+        "left": 0
+      },
+      "background": [
+        {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "scale": "fit"
+        }
+      ],
+      "$font_size": "eddl_badge_font_size",
+      "$line_height": "eddl_badge_line_height",
+      "max_lines": 1,
+      "text_color": "#09141F",
+      "$text": "eddl_badge_text"
+    },
+    "eddl_offers_carousel_image_container": {
+      "type": "container",
+      "border": {
+        "corner_radius": 12
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F4F4F4"
+        }
+      ],
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_item_image_url",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          }
+        }
+      ]
+    },
+    "eddl_offers_carousel_price_new": {
+      "type": "text",
+      "$font_size": "eddl_price_new_font_size",
+      "font_weight": "medium",
+      "$line_height": "eddl_price_new_line_height",
+      "width": {
+        "type": "wrap_content"
+      },
+      "max_lines": 1,
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$text_color": "eddl_price_new_text_color",
+      "$text": "eddl_price_new_text"
+    },
+    "eddl_offers_carousel_price_old": {
+      "width": {
+        "type": "wrap_content"
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$font_size": "eddl_price_old_font_size",
+      "$line_height": "eddl_price_old_line_height",
+      "max_lines": 1,
+      "$text_color": "eddl_price_old_text_color",
+      "$text": "eddl_price_old_text",
+      "strike": "single"
+    },
+    "eddl_offers_carousel_offer_content_image": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_image_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_image_height"
+      },
+      "$items": "eddl_offer_content_image_items"
+    },
+    "eddl_offers_carousel_offer_content_prices": {
+      "type": "container",
+      "$orientation": "eddl_content_prices_orientation",
+      "alignment_vertical": "top",
+      "width": {
+        "type": "match_parent"
+      },
+      "$content_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "margins": {
+        "top": 12
+      },
+      "$items": "eddl_content_prices_items"
+    },
+    "eddl_offers_carousel_offer_content_description": {
+      "margins": {
+        "top": 8
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$font_size": "eddl_description_font_size",
+      "$line_height": "eddl_description_line_height",
+      "$max_lines": "eddl_description_max_lines",
+      "$text_color": "eddl_description_text_color",
+      "$text": "eddl_description_text"
+    },
+    "eddl_offers_carousel_offer_text_container": {
+      "type": "container",
+      "$paddings": "eddl_offer_text_paddings",
+      "$content_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$items": "eddl_offer_text_container_items"
+    },
+    "eddl_offers_carousel_offer_content": {
+      "type": "container",
+      "$items": "eddl_offer_content_items",
+      "content_alignment_horizontal": "center"
+    },
+    "eddl_offers_carousel_item": {
+      "type": "container",
+      "orientation": "overlap",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "eddl_item_background_color"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_height",
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 12
+      },
+      "$items": "eddl_offer_items",
+      "$actions": "eddl_item_actions",
+      "$visibility_actions": "eddl_item_visibility_actions"
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F4F4F4"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockAppear&hash=d0f565e6656bdf3fbd60eb805cff5a31",
+              "payload": {
+                "BlockId": "147",
+                "BlockSlug": "PerekrestokVprokOffers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "781"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            },
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockView&hash=26b596380d94340232e4c04f0957a705",
+              "payload": {
+                "BlockId": "147",
+                "BlockSlug": "PerekrestokVprokOffers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "781"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1000,
+              "visibility_percentage": 50
+            }
+          ],
+          "items": [
+            {
+              "type": "container",
+              "width": {
+                "type": "match_parent"
+              },
+              "margins": {
+                "bottom": 14
+              },
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "orientation": "horizontal",
+              "content_alignment_vertical": "bottom",
+              "items": [
+                {
+                  "text": "Перекрёсток Впрок",
+                  "type": "text",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "font_size": 22,
+                  "text_color": "#09141F",
+                  "font_weight": "bold",
+                  "line_height": 24
+                },
+                {
+                  "text": "Все",
+                  "type": "text",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "actions": [
+                    {
+                      "url": "https://darkstore.onelink.me/aH8K/2c9ba740?",
+                      "log_id": "#!edadeal/metrics/send?eventName=ButtonClick&button=PerekrestokVprokShowAll",
+                      "payload": {
+                        "slug": "ShowAll",
+                        "BlockId": "147",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "BlockLayout": "Carousel"
+                      }
+                    }
+                  ],
+                  "font_size": 16,
+                  "text_color": "#27AE61",
+                  "line_height": 20
+                }
+              ]
+            },
+            {
+              "type": "gallery",
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "46,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре Тема Цыпленок с кабачками морковью и рисом 100г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=b23824db568a28a66d922140459354d2",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "cdde1165-397a-58a6-bfd1-962b7dab1df2",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "cd33e932-911c-54a4-baa7-a4e0d4c717de",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Тема Цыпленок с кабачками морковью и рисом 100г",
+                        "ProductPrice": "4690",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре мясные",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348d33-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D310975&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Ftema-tema-kons-tsypl-s-kabmorkris-dd-p-100g--310975%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Ftema-tema-kons-tsypl-s-kabmorkris-dd-p-100g--310975%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=b23824db568a28a66d922140459354d2",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "cdde1165-397a-58a6-bfd1-962b7dab1df2",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "cd33e932-911c-54a4-baa7-a4e0d4c717de",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Тема Цыпленок с кабачками морковью и рисом 100г",
+                        "ProductPrice": "4690",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре мясные",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348d33-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=1c0bb33a0307d7c3dd63a540967f22f4",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "cdde1165-397a-58a6-bfd1-962b7dab1df2",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "cd33e932-911c-54a4-baa7-a4e0d4c717de",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Тема Цыпленок с кабачками морковью и рисом 100г",
+                        "ProductPrice": "4690",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре мясные",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348d33-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "44,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре Heinz Яблоко клубника и злаки 90г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=8d089e74078e64e2f911be2dfc5fbe3a",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "8a4236d4-1316-5678-afa0-c32af567085d",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "ec35c434-20e0-5288-a279-a5fcbd8f692f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Heinz Яблоко клубника и злаки 90г",
+                        "ProductPrice": "4490",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D396405&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fheinz-heinz-pyure-yablklubzlaki-90g--396405%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fheinz-heinz-pyure-yablklubzlaki-90g--396405%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=8d089e74078e64e2f911be2dfc5fbe3a",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "8a4236d4-1316-5678-afa0-c32af567085d",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "ec35c434-20e0-5288-a279-a5fcbd8f692f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Heinz Яблоко клубника и злаки 90г",
+                        "ProductPrice": "4490",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f4f4bc21c73d08ae3247681300596356",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "8a4236d4-1316-5678-afa0-c32af567085d",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "ec35c434-20e0-5288-a279-a5fcbd8f692f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Heinz Яблоко клубника и злаки 90г",
+                        "ProductPrice": "4490",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "87₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Мороженое Чистая Линия Веселый Кактус Рожок ванильный с малиной 12% 70г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=f2bdbf8493cd2785d6410d49fedf5b48",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "ab4cd628-437e-54ed-ab7f-f9134945858c",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "212728ef-6cf4-5b8d-823e-329482641ec0",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Чистая Линия Веселый Кактус Рожок ванильный с малиной 12% 70г",
+                        "ProductPrice": "8700",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D1055851&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fchistaya-liniya-ch-lin-mor-ves-kak-mal-n-vr-70g--1055851%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fchistaya-liniya-ch-lin-mor-ves-kak-mal-n-vr-70g--1055851%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=f2bdbf8493cd2785d6410d49fedf5b48",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "ab4cd628-437e-54ed-ab7f-f9134945858c",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "212728ef-6cf4-5b8d-823e-329482641ec0",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Чистая Линия Веселый Кактус Рожок ванильный с малиной 12% 70г",
+                        "ProductPrice": "8700",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f6718739f0fc1c61779884f0d8270484",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "ab4cd628-437e-54ed-ab7f-f9134945858c",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "212728ef-6cf4-5b8d-823e-329482641ec0",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Чистая Линия Веселый Кактус Рожок ванильный с малиной 12% 70г",
+                        "ProductPrice": "8700",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "329,40₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре Fleur Alpine Organic Груша с 4 месяцев 90г (упаковка 6 шт.)",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=d044a45dfbc2aef58e6a8e970f242020",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "d9347d58-88c2-5afe-90c0-83d6aa15e4a0",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "40a7405a-84f7-5468-99c5-94d91a2e0100",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Fleur Alpine Organic Груша с 4 месяцев 90г (упаковка 6 шт.)",
+                        "ProductPrice": "32940",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D508756pack&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Ffleur-alpine-fleur-alp-pyure-organ-grusha-fr-90g--508756%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Ffleur-alpine-fleur-alp-pyure-organ-grusha-fr-90g--508756%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=d044a45dfbc2aef58e6a8e970f242020",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "d9347d58-88c2-5afe-90c0-83d6aa15e4a0",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "40a7405a-84f7-5468-99c5-94d91a2e0100",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Fleur Alpine Organic Груша с 4 месяцев 90г (упаковка 6 шт.)",
+                        "ProductPrice": "32940",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=edc8a9d2c4bd18a569dcfd6a807a710c",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "d9347d58-88c2-5afe-90c0-83d6aa15e4a0",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "40a7405a-84f7-5468-99c5-94d91a2e0100",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Fleur Alpine Organic Груша с 4 месяцев 90г (упаковка 6 шт.)",
+                        "ProductPrice": "32940",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "299,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Сыр Частная Сыроварня Качотта с грецким орехом 50% 260г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=a6b1a661cc50f0a8fdde7579221263e0",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "ca09f7fe-15d9-592f-87fb-99db85f89a67",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "93d13237-bc70-5c32-827e-776048637dfd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сыр Частная Сыроварня Качотта с грецким орехом 50% 260г",
+                        "ProductPrice": "29990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Молочные продукты",
+                        "SegmentName3": "Сыр",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31b1a8-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31b30e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D965009&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fchastnaya-syrovarnya-bzmj-ch-syr-syr-kach-grets-or-260g--965009%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fchastnaya-syrovarnya-bzmj-ch-syr-syr-kach-grets-or-260g--965009%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=a6b1a661cc50f0a8fdde7579221263e0",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "ca09f7fe-15d9-592f-87fb-99db85f89a67",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "93d13237-bc70-5c32-827e-776048637dfd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сыр Частная Сыроварня Качотта с грецким орехом 50% 260г",
+                        "ProductPrice": "29990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Молочные продукты",
+                        "SegmentName3": "Сыр",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31b1a8-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31b30e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=5db31f9b585bc3202ce2df1ec0e0edcf",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "ca09f7fe-15d9-592f-87fb-99db85f89a67",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "93d13237-bc70-5c32-827e-776048637dfd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сыр Частная Сыроварня Качотта с грецким орехом 50% 260г",
+                        "ProductPrice": "29990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Молочные продукты",
+                        "SegmentName3": "Сыр",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31b1a8-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31b30e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "39₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Крем-самоблеск для обуви Sitil из гладкой кожи с черным намазком 60г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=16109f668ca5c114b0e4ef0a3003d9df",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "33a9dfb3-71c4-5809-a651-0d007a06a942",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "e04727cc-a99e-5bfc-aa3c-3747b06e6f5d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Крем-самоблеск для обуви Sitil из гладкой кожи с черным намазком 60г",
+                        "ProductPrice": "3900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Хозяйственные товары",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ccb1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D1179915&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fsitil-krem-dlya-obuvi-iz-gladkoy-koji-s-namazkom-chernyy-tm-sitil-60-g--1179915%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fsitil-krem-dlya-obuvi-iz-gladkoy-koji-s-namazkom-chernyy-tm-sitil-60-g--1179915%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=16109f668ca5c114b0e4ef0a3003d9df",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "33a9dfb3-71c4-5809-a651-0d007a06a942",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "e04727cc-a99e-5bfc-aa3c-3747b06e6f5d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Крем-самоблеск для обуви Sitil из гладкой кожи с черным намазком 60г",
+                        "ProductPrice": "3900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Хозяйственные товары",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ccb1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=66154c6f8d358a4664ea4e8304950e44",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "33a9dfb3-71c4-5809-a651-0d007a06a942",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "e04727cc-a99e-5bfc-aa3c-3747b06e6f5d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Крем-самоблеск для обуви Sitil из гладкой кожи с черным намазком 60г",
+                        "ProductPrice": "3900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Хозяйственные товары",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ccb1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "119,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Котлеты Морозко с индейкой 330г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=74da9be7e4ed9cc02aeaa565cdb4511d",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "dac0423a-ed7d-554e-a909-cf79acbe5b09",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "dce2a988-eadc-5908-90d1-61f15cfd656a",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Котлеты Морозко с индейкой 330г",
+                        "ProductPrice": "11990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Замороженные полуфабрикаты",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b336450-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D307200&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fmorozko-morozko-kotlety-s-indeykoy-330g--307200%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fmorozko-morozko-kotlety-s-indeykoy-330g--307200%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=74da9be7e4ed9cc02aeaa565cdb4511d",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "dac0423a-ed7d-554e-a909-cf79acbe5b09",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "dce2a988-eadc-5908-90d1-61f15cfd656a",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Котлеты Морозко с индейкой 330г",
+                        "ProductPrice": "11990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Замороженные полуфабрикаты",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b336450-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=cd05ae523cec925a4f3f4502d4439f18",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "dac0423a-ed7d-554e-a909-cf79acbe5b09",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "dce2a988-eadc-5908-90d1-61f15cfd656a",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Котлеты Морозко с индейкой 330г",
+                        "ProductPrice": "11990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Замороженные полуфабрикаты",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b336450-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "269,40₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре Heinz Яблоко клубника и злаки 90г (упаковка 6 шт.)",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=f918110c82a30d71e66b15ce8da95f32",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "89c2768c-193a-500e-a7c7-e0b922b932d5",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "ec35c434-20e0-5288-a279-a5fcbd8f692f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Heinz Яблоко клубника и злаки 90г (упаковка 6 шт.)",
+                        "ProductPrice": "26940",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D396405pack&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fheinz-heinz-pyure-yablklubzlaki-90g--396405%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fheinz-heinz-pyure-yablklubzlaki-90g--396405%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=f918110c82a30d71e66b15ce8da95f32",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "89c2768c-193a-500e-a7c7-e0b922b932d5",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "ec35c434-20e0-5288-a279-a5fcbd8f692f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Heinz Яблоко клубника и злаки 90г (упаковка 6 шт.)",
+                        "ProductPrice": "26940",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=2c79a0a13f73a6319c44b09a507a2441",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "89c2768c-193a-500e-a7c7-e0b922b932d5",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "ec35c434-20e0-5288-a279-a5fcbd8f692f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Heinz Яблоко клубника и злаки 90г (упаковка 6 шт.)",
+                        "ProductPrice": "26940",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "57,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Мороженое Свитлогорье Пломбир двухслойный Ванильно-шоколадный эскимо в сливочной глазури 15% 80г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=7123652b3dc4a5ac6caba85443b78220",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "f63d576e-c653-5a2a-9fcc-25e902a1a1f4",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "9289a9c2-6e2c-5012-8913-630fa5404d28",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Свитлогорье Пломбир двухслойный Ванильно-шоколадный эскимо в сливочной глазури 15% 80г",
+                        "ProductPrice": "5790",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D549994&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fsvitlogore-svitl-mor-esk-pl-2sl-vsh-gl-80g--549994%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fsvitlogore-svitl-mor-esk-pl-2sl-vsh-gl-80g--549994%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=7123652b3dc4a5ac6caba85443b78220",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "f63d576e-c653-5a2a-9fcc-25e902a1a1f4",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "9289a9c2-6e2c-5012-8913-630fa5404d28",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Свитлогорье Пломбир двухслойный Ванильно-шоколадный эскимо в сливочной глазури 15% 80г",
+                        "ProductPrice": "5790",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=2882946ab5b6a310c5772aa4a6556880",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "f63d576e-c653-5a2a-9fcc-25e902a1a1f4",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "9289a9c2-6e2c-5012-8913-630fa5404d28",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Свитлогорье Пломбир двухслойный Ванильно-шоколадный эскимо в сливочной глазури 15% 80г",
+                        "ProductPrice": "5790",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "6232₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Мультиварка Polaris IQ Home с Wi-Fi PMC 0521",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=8981ae741e8fe99f2dd713dce787ec85",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "3f8c5526-5ecb-5f53-bef9-1d2e50c1d3bb",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "b2490ecd-2ff1-5952-b5d3-53018eef6b93",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мультиварка Polaris IQ Home с Wi-Fi PMC 0521",
+                        "ProductPrice": "623200",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление блюд",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "91f6923b-8829-5652-8c2a-f423492fa157",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D1110630&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fpolaris-pol-multiv-pmc0521wi-fi--1110630%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fpolaris-pol-multiv-pmc0521wi-fi--1110630%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=8981ae741e8fe99f2dd713dce787ec85",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "3f8c5526-5ecb-5f53-bef9-1d2e50c1d3bb",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "b2490ecd-2ff1-5952-b5d3-53018eef6b93",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мультиварка Polaris IQ Home с Wi-Fi PMC 0521",
+                        "ProductPrice": "623200",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление блюд",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "91f6923b-8829-5652-8c2a-f423492fa157",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=8eb56eab84f58b4d6c7d465541739610",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "3f8c5526-5ecb-5f53-bef9-1d2e50c1d3bb",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "b2490ecd-2ff1-5952-b5d3-53018eef6b93",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мультиварка Polaris IQ Home с Wi-Fi PMC 0521",
+                        "ProductPrice": "623200",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление блюд",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "91f6923b-8829-5652-8c2a-f423492fa157",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "226,26₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре ФрутоНяня из кабачков 80г (упаковка 6 шт.)",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=0c3bfe13e3f304ce684e93a220bfa3ad",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "7212141a-f547-5cb2-9075-492a5666ed44",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре ФрутоНяня из кабачков 80г (упаковка 6 шт.)",
+                        "ProductPrice": "22626",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре овощные",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348d8a-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D441139pack&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Ffrutonyanya-fruton-pyure-iz-kabachkov-natur-80g--441139%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Ffrutonyanya-fruton-pyure-iz-kabachkov-natur-80g--441139%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=0c3bfe13e3f304ce684e93a220bfa3ad",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "7212141a-f547-5cb2-9075-492a5666ed44",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре ФрутоНяня из кабачков 80г (упаковка 6 шт.)",
+                        "ProductPrice": "22626",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре овощные",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348d8a-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=e16de040fd194a53b56cb2e5d4801b1a",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "7212141a-f547-5cb2-9075-492a5666ed44",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "0b3ab872-b44b-5174-b6e6-c6297c350c71",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре ФрутоНяня из кабачков 80г (упаковка 6 шт.)",
+                        "ProductPrice": "22626",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре овощные",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348d8a-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "219,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Сыр Cheese Gallery Пармезан 32% 175г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=ece4b13a2ae88b837312198eebff5d89",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "9e7be565-52a7-5089-ab60-b1a569bb9ec3",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "c031a9bd-465f-58d5-98c0-f2d53407e287",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сыр Cheese Gallery Пармезан 32% 175г",
+                        "ProductPrice": "21990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Молочные продукты",
+                        "SegmentName3": "Сыр",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31b1a8-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31b30e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D323591&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fcheese-gallery-syr-parmezan-32-175g-faschiz-g--323591%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fcheese-gallery-syr-parmezan-32-175g-faschiz-g--323591%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=ece4b13a2ae88b837312198eebff5d89",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "9e7be565-52a7-5089-ab60-b1a569bb9ec3",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "c031a9bd-465f-58d5-98c0-f2d53407e287",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сыр Cheese Gallery Пармезан 32% 175г",
+                        "ProductPrice": "21990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Молочные продукты",
+                        "SegmentName3": "Сыр",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31b1a8-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31b30e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f34ae555a1390dcb0caa75a361b000fa",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "9e7be565-52a7-5089-ab60-b1a569bb9ec3",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "c031a9bd-465f-58d5-98c0-f2d53407e287",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сыр Cheese Gallery Пармезан 32% 175г",
+                        "ProductPrice": "21990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Молочные продукты",
+                        "SegmentName3": "Сыр",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b31b1a8-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b31b30e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "109₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Губка Sitil чистящая для спортивной обуви 75мл",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=fbf9b11758780e64e41c48c432363125",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "f71a809f-9210-57ba-9198-3954aa64285f",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "e04727cc-a99e-5bfc-aa3c-3747b06e6f5d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Губка Sitil чистящая для спортивной обуви 75мл",
+                        "ProductPrice": "10900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Хозяйственные товары",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ccb1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D1179927&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fsitil-chistyaschaya-gubka-dlya-sportivnoy-obuvi-tm-sitil-75-ml--1179927%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fsitil-chistyaschaya-gubka-dlya-sportivnoy-obuvi-tm-sitil-75-ml--1179927%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=fbf9b11758780e64e41c48c432363125",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "f71a809f-9210-57ba-9198-3954aa64285f",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "e04727cc-a99e-5bfc-aa3c-3747b06e6f5d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Губка Sitil чистящая для спортивной обуви 75мл",
+                        "ProductPrice": "10900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Хозяйственные товары",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ccb1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=60b18d2a98843b4ec4186e9f0e5bf3e2",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "f71a809f-9210-57ba-9198-3954aa64285f",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "e04727cc-a99e-5bfc-aa3c-3747b06e6f5d",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Губка Sitil чистящая для спортивной обуви 75мл",
+                        "ProductPrice": "10900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Хозяйственные товары",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ccb1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "39,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре Агуша Яблоко-клубника-малина 90г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=a22bbbad48bbeb61ea04647216515799",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "0c306774-2b73-5479-b4c8-819759a0ee98",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко-клубника-малина 90г",
+                        "ProductPrice": "3990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D428199&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fagusha-agusha-pyure-frukt-yabl-kl-mal-90g--428199%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fagusha-agusha-pyure-frukt-yabl-kl-mal-90g--428199%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=a22bbbad48bbeb61ea04647216515799",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "0c306774-2b73-5479-b4c8-819759a0ee98",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко-клубника-малина 90г",
+                        "ProductPrice": "3990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=901e54d71fba9de09873449c8bb7d821",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "0c306774-2b73-5479-b4c8-819759a0ee98",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко-клубника-малина 90г",
+                        "ProductPrice": "3990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "107,73₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре Агуша Яблоко-Груша-Банан-Манго 90г (упаковка 3 шт.)",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=40ddba053f0b8f54eebe31e538ef028c",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "249cf9df-e9c2-5d6d-a9c2-214926950eb5",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко-Груша-Банан-Манго 90г (упаковка 3 шт.)",
+                        "ProductPrice": "10773",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D1028635pack&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fagusha-agusha-pyure-yabgrushibanman-90g--1028635%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fagusha-agusha-pyure-yabgrushibanman-90g--1028635%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=40ddba053f0b8f54eebe31e538ef028c",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "249cf9df-e9c2-5d6d-a9c2-214926950eb5",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко-Груша-Банан-Манго 90г (упаковка 3 шт.)",
+                        "ProductPrice": "10773",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=4e4f541fe94abe1f72cb661a2892302c",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "249cf9df-e9c2-5d6d-a9c2-214926950eb5",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко-Груша-Банан-Манго 90г (упаковка 3 шт.)",
+                        "ProductPrice": "10773",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "849₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Прибор по уходу за кожей и ногтями Scarlett SC-CA305M03",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=2b0da2b7b8703b600b6fd31095b6a2dd",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "97a0bf8e-6eed-5846-bd51-cc9f7dca2c3f",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "88dbd3a8-88a9-5985-9f08-bd57647ac011",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Прибор по уходу за кожей и ногтями Scarlett SC-CA305M03",
+                        "ProductPrice": "84900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для красоты",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "7fc6a35d-b495-5450-89cf-9d8ca8423231",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D946900&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fscarlett-pribor-scarlett-sc-ca305m03--946900%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fscarlett-pribor-scarlett-sc-ca305m03--946900%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=2b0da2b7b8703b600b6fd31095b6a2dd",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "97a0bf8e-6eed-5846-bd51-cc9f7dca2c3f",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "88dbd3a8-88a9-5985-9f08-bd57647ac011",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Прибор по уходу за кожей и ногтями Scarlett SC-CA305M03",
+                        "ProductPrice": "84900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для красоты",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "7fc6a35d-b495-5450-89cf-9d8ca8423231",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=deb1beec56096709f4cf7d34c3d4cf63",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "97a0bf8e-6eed-5846-bd51-cc9f7dca2c3f",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "88dbd3a8-88a9-5985-9f08-bd57647ac011",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Прибор по уходу за кожей и ногтями Scarlett SC-CA305M03",
+                        "ProductPrice": "84900",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для красоты",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "7fc6a35d-b495-5450-89cf-9d8ca8423231",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1104₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Соковыжималка цитрусовая Maxwell MW 1109",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=83b31da1025c8c3622c514dc1649825f",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "e5a69b18-4675-5fbc-b290-237ebe3c80b7",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "4a1ba937-41a6-5795-8f36-440a09256b60",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Соковыжималка цитрусовая Maxwell MW 1109",
+                        "ProductPrice": "110400",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D1131839&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fmaxwell-sokovyjimalka-maxwell-1109--1131839%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fmaxwell-sokovyjimalka-maxwell-1109--1131839%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=83b31da1025c8c3622c514dc1649825f",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "e5a69b18-4675-5fbc-b290-237ebe3c80b7",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "4a1ba937-41a6-5795-8f36-440a09256b60",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Соковыжималка цитрусовая Maxwell MW 1109",
+                        "ProductPrice": "110400",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=668a101384b6b6d211346ab1b992314c",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "e5a69b18-4675-5fbc-b290-237ebe3c80b7",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "4a1ba937-41a6-5795-8f36-440a09256b60",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Соковыжималка цитрусовая Maxwell MW 1109",
+                        "ProductPrice": "110400",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "39,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре Агуша Яблоко 90г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=86e4e155eda7978f4c15486984ddca9d",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "07429f03-2c52-59f9-b138-04adc6b77497",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко 90г",
+                        "ProductPrice": "3990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D313025&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fagusha-agusha-pyure-fruktovoe-yabloko-0-90g--313025%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fagusha-agusha-pyure-fruktovoe-yabloko-0-90g--313025%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=86e4e155eda7978f4c15486984ddca9d",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "07429f03-2c52-59f9-b138-04adc6b77497",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко 90г",
+                        "ProductPrice": "3990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=544d860ec7315f452c6ecc9b123e460f",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "07429f03-2c52-59f9-b138-04adc6b77497",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "5473d350-c8d8-5318-8d69-1b19d2a91f1f",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Агуша Яблоко 90г",
+                        "ProductPrice": "3990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "259,90₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Мороженое Петрохолод Пломбир на сливках Шоколадный 400г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=b1eb6faf8856e5f2e7b5d36ca4aab1d8",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "2201e100-7caf-5c56-96d3-c8b4a632da62",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "6a4c1b55-e1fb-5cd0-8314-924efbbd5897",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Петрохолод Пломбир на сливках Шоколадный 400г",
+                        "ProductPrice": "25990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D392620&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fpetroholod-petroh-mor-plomb-shok-kont400g--392620%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fpetroholod-petroh-mor-plomb-shok-kont400g--392620%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=b1eb6faf8856e5f2e7b5d36ca4aab1d8",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "2201e100-7caf-5c56-96d3-c8b4a632da62",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "6a4c1b55-e1fb-5cd0-8314-924efbbd5897",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Петрохолод Пломбир на сливках Шоколадный 400г",
+                        "ProductPrice": "25990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=ea3d0c39166fff063686f11898b4c5a9",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "2201e100-7caf-5c56-96d3-c8b4a632da62",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "6a4c1b55-e1fb-5cd0-8314-924efbbd5897",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Мороженое Петрохолод Пломбир на сливках Шоколадный 400г",
+                        "ProductPrice": "25990",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Замороженные продукты",
+                        "SegmentName3": "Мороженое",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b335ed0-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b33638e-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 224,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1187,46₽"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Пюре Kabrita с козьими сливками Манго с яблочным пюре 100г (упаковка 6 шт.)",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=d6bbd0b987f2741cee2dbd703d542696",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "c9c7941a-f5c8-54aa-99ec-ed946e48b400",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "898d237d-2ef1-5b48-8637-bad82bc3feb4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Kabrita с козьими сливками Манго с яблочным пюре 100г (упаковка 6 шт.)",
+                        "ProductPrice": "118746",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "url": "https://darkstore.onelink.me/aH8K?pid=edadeal&af_dp=ru.perekrestok.app.darkstore%3A%2F%2Fproduct%3Fid%3D448088pack&c=app&af_ios_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fkabrita-kabrita-pyure-s-koz-sl-mangoyabl-p-100g--448088%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_android_url=https%3A%2F%2Fwww.vprok.ru%2Fproduct%2Fkabrita-kabrita-pyure-s-koz-sl-mangoyabl-p-100g--448088%3Fis_package%3Futm_source%3Dedadeal&utm_medium=cpo&utm_campaign=app&af_click_lookback=7d&is_retargeting=true"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=d6bbd0b987f2741cee2dbd703d542696",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "c9c7941a-f5c8-54aa-99ec-ed946e48b400",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "898d237d-2ef1-5b48-8637-bad82bc3feb4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Kabrita с козьими сливками Манго с яблочным пюре 100г (упаковка 6 шт.)",
+                        "ProductPrice": "118746",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=3e1739a357cf976f3c80a4886ed22730",
+                      "payload": {
+                        "BlockId": "147",
+                        "ItemType": "Product",
+                        "ItemUUID": "c9c7941a-f5c8-54aa-99ec-ed946e48b400",
+                        "BlockSlug": "PerekrestokVprokOffers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "898d237d-2ef1-5b48-8637-bad82bc3feb4",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Пюре Kabrita с козьими сливками Манго с яблочным пюре 100г (упаковка 6 шт.)",
+                        "ProductPrice": "118746",
+                        "RetailerName": "Перекрёсток Впрок",
+                        "RetailerUUID": "e1b21dd7-2ab8-4175-b3cf-e551717e3ac6",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детское питание",
+                        "SegmentName3": "Пюре фруктовые",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b348bf6-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b348de5-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "781"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

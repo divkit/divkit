@@ -1,0 +1,3144 @@
+{
+    "cases": [
+        {
+            "name": "7 == 7.0 => error",
+            "expression": "@{7 == 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 == 7.0]. Operator '==' cannot be applied to different types: Integer and Number."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 == 7 => error",
+            "expression": "@{7.0 == 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 == 7]. Operator '==' cannot be applied to different types: Number and Integer."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != 7.0 => error",
+            "expression": "@{7 != 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 != 7.0]. Operator '!=' cannot be applied to different types: Integer and Number."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 != 7 => error",
+            "expression": "@{7.0 != 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 != 7]. Operator '!=' cannot be applied to different types: Number and Integer."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' == 7 => error",
+            "expression": "@{'abc' == 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' == 7]. Operator '==' cannot be applied to different types: String and Integer."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 == 'abc' => error",
+            "expression": "@{7 == 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 == 'abc']. Operator '==' cannot be applied to different types: Integer and String."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' != 7 => error",
+            "expression": "@{'abc' != 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' != 7]. Operator '!=' cannot be applied to different types: String and Integer."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != 'abc' => error",
+            "expression": "@{7 != 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 != 'abc']. Operator '!=' cannot be applied to different types: Integer and String."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 == true => error",
+            "expression": "@{7 == true}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 == true]. Operator '==' cannot be applied to different types: Integer and Boolean."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true == 7 => error",
+            "expression": "@{true == 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true == 7]. Operator '==' cannot be applied to different types: Boolean and Integer."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != true => error",
+            "expression": "@{7 != true}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 != true]. Operator '!=' cannot be applied to different types: Integer and Boolean."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true != 7 => error",
+            "expression": "@{true != 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true != 7]. Operator '!=' cannot be applied to different types: Boolean and Integer."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 == 'abc' => error",
+            "expression": "@{7.0 == 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 == 'abc']. Operator '==' cannot be applied to different types: Number and String."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' == 7.0 => error",
+            "expression": "@{'abc' == 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' == 7.0]. Operator '==' cannot be applied to different types: String and Number."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 != 'abc' => error",
+            "expression": "@{7.0 != 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 != 'abc']. Operator '!=' cannot be applied to different types: Number and String."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' != 7.0 => error",
+            "expression": "@{'abc' != 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' != 7.0]. Operator '!=' cannot be applied to different types: String and Number."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 == true => error",
+            "expression": "@{7.0 == true}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 == true]. Operator '==' cannot be applied to different types: Number and Boolean."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true == 7.0 => error",
+            "expression": "@{true == 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true == 7.0]. Operator '==' cannot be applied to different types: Boolean and Number."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 != true => error",
+            "expression": "@{7.0 != true}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 != true]. Operator '!=' cannot be applied to different types: Number and Boolean."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true != 7.0 => error",
+            "expression": "@{true != 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true != 7.0]. Operator '!=' cannot be applied to different types: Boolean and Number."
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 == a => error",
+            "expression": "@{7 == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 == 7.0]. Operator '==' cannot be applied to different types: Integer and Number."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7 => error",
+            "expression": "@{a == 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 == 7]. Operator '==' cannot be applied to different types: Number and Integer."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != a => error",
+            "expression": "@{7 != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 != 7.0]. Operator '!=' cannot be applied to different types: Integer and Number."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7 => error",
+            "expression": "@{a != 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 != 7]. Operator '!=' cannot be applied to different types: Number and Integer."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true == a => error",
+            "expression": "@{true == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true == 7.0]. Operator '==' cannot be applied to different types: Boolean and Number."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == true => error",
+            "expression": "@{a == true}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 == true]. Operator '==' cannot be applied to different types: Number and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true != a => error",
+            "expression": "@{true != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true != 7.0]. Operator '!=' cannot be applied to different types: Boolean and Number."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != true => error",
+            "expression": "@{a != true}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 != true]. Operator '!=' cannot be applied to different types: Number and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 == a => error",
+            "expression": "@{7 == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 == 'abc']. Operator '==' cannot be applied to different types: Integer and String."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7 => error",
+            "expression": "@{a == 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' == 7]. Operator '==' cannot be applied to different types: String and Integer."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != a => error",
+            "expression": "@{7 != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 != 'abc']. Operator '!=' cannot be applied to different types: Integer and String."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7 => error",
+            "expression": "@{a != 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' != 7]. Operator '!=' cannot be applied to different types: String and Integer."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true == a => error",
+            "expression": "@{true == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true == 'abc']. Operator '==' cannot be applied to different types: Boolean and String."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == true => error",
+            "expression": "@{a == true}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' == true]. Operator '==' cannot be applied to different types: String and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true != a => error",
+            "expression": "@{true != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true != 'abc']. Operator '!=' cannot be applied to different types: Boolean and String."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != true => error",
+            "expression": "@{a != true}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' != true]. Operator '!=' cannot be applied to different types: String and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 == a => error",
+            "expression": "@{7 == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 == true]. Operator '==' cannot be applied to different types: Integer and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7 => error",
+            "expression": "@{a == 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true == 7]. Operator '==' cannot be applied to different types: Boolean and Integer."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != a => error",
+            "expression": "@{7 != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 != true]. Operator '!=' cannot be applied to different types: Integer and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7 => error",
+            "expression": "@{a != 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true != 7]. Operator '!=' cannot be applied to different types: Boolean and Integer."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 == a => error",
+            "expression": "@{7 == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 == true]. Operator '==' cannot be applied to different types: Integer and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7 => error",
+            "expression": "@{a == 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true == 7]. Operator '==' cannot be applied to different types: Boolean and Integer."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != a => error",
+            "expression": "@{7 != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 != true]. Operator '!=' cannot be applied to different types: Integer and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7 => error",
+            "expression": "@{a != 7}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true != 7]. Operator '!=' cannot be applied to different types: Boolean and Integer."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 == a => error",
+            "expression": "@{7 == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7 => error",
+            "expression": "@{a == 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != a => error",
+            "expression": "@{7 != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7 => error",
+            "expression": "@{a != 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 == a => error",
+            "expression": "@{7 == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7 => error",
+            "expression": "@{a == 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7 != a => error",
+            "expression": "@{7 != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7 => error",
+            "expression": "@{a != 7}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 == a => error",
+            "expression": "@{7.0 == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 == 'abc']. Operator '==' cannot be applied to different types: Number and String."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7.0 => error",
+            "expression": "@{a == 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' == 7.0]. Operator '==' cannot be applied to different types: String and Number."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 != a => error",
+            "expression": "@{7.0 != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 != 'abc']. Operator '!=' cannot be applied to different types: Number and String."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7.0 => error",
+            "expression": "@{a != 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' != 7.0]. Operator '!=' cannot be applied to different types: String and Number."
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 == a => error",
+            "expression": "@{7.0 == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 == true]. Operator '==' cannot be applied to different types: Number and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7.0 => error",
+            "expression": "@{a == 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true == 7.0]. Operator '==' cannot be applied to different types: Boolean and Number."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 != a => error",
+            "expression": "@{7.0 != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 != true]. Operator '!=' cannot be applied to different types: Number and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7.0 => error",
+            "expression": "@{a != 7.0}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true != 7.0]. Operator '!=' cannot be applied to different types: Boolean and Number."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 == a => error",
+            "expression": "@{7.0 == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7.0 => error",
+            "expression": "@{a == 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 != a => error",
+            "expression": "@{7.0 != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7.0 => error",
+            "expression": "@{a != 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 == a => error",
+            "expression": "@{7.0 == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 7.0 => error",
+            "expression": "@{a == 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "7.0 != a => error",
+            "expression": "@{7.0 != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 7.0 => error",
+            "expression": "@{a != 7.0}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' == a => error",
+            "expression": "@{'abc' == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' == true]. Operator '==' cannot be applied to different types: String and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 'abc' => error",
+            "expression": "@{a == 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true == 'abc']. Operator '==' cannot be applied to different types: Boolean and String."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' != a => error",
+            "expression": "@{'abc' != a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' != true]. Operator '!=' cannot be applied to different types: String and Boolean."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 'abc' => error",
+            "expression": "@{a != 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [true != 'abc']. Operator '!=' cannot be applied to different types: Boolean and String."
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' == a => error",
+            "expression": "@{'abc' == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 'abc' => error",
+            "expression": "@{a == 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' != a => error",
+            "expression": "@{'abc' != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 'abc' => error",
+            "expression": "@{a != 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' == a => error",
+            "expression": "@{'abc' == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == 'abc' => error",
+            "expression": "@{a == 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "'abc' != a => error",
+            "expression": "@{'abc' != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != 'abc' => error",
+            "expression": "@{a != 'abc'}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true == a => error",
+            "expression": "@{true == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == true => error",
+            "expression": "@{a == true}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true != a => error",
+            "expression": "@{true != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != true => error",
+            "expression": "@{a != true}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true == a => error",
+            "expression": "@{true == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == true => error",
+            "expression": "@{a == true}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "true != a => error",
+            "expression": "@{true != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != true => error",
+            "expression": "@{a != true}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7 == 7.0]. Operator '==' cannot be applied to different types: Integer and Number."
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate [7.0 == 7]. Operator '==' cannot be applied to different types: Number and Integer."
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": "Failed to evaluate ['abc' != 7]. Operator '!=' cannot be applied to different types: String and Integer."
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "integer",
+                    "value": 7,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "number",
+                    "value": 7.0,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "string",
+                    "value": "abc",
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "b"
+                },
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "boolean",
+                    "value": 1,
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b == a => error",
+            "expression": "@{b == a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a == b => error",
+            "expression": "@{a == b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "b != a => error",
+            "expression": "@{b != a}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "a != b => error",
+            "expression": "@{a != b}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [
+                {
+                    "type": "color",
+                    "value": "#00FF00",
+                    "name": "b"
+                },
+                {
+                    "type": "url",
+                    "value": "https://yandex.ru",
+                    "name": "a"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        }
+    ]
+}

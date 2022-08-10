@@ -1,0 +1,177 @@
+{
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "gallery",
+              "id": "gallery1",
+              "scroll_mode": "paging",
+              "item_spacing": 12,
+              "default_item": 1,
+              "paddings": {
+                "left": 12,
+                "right": 12,
+                "top": 12,
+                "bottom": 12
+              },
+              "items": [
+                {
+                  "type": "item",
+                  "text": "Item 1"
+                },
+                {
+                  "type": "item",
+                  "text": "Item 2"
+                },
+                {
+                  "type": "item",
+                  "text": "Item 3"
+                },
+                {
+                  "type": "item",
+                  "text": "Item 4"
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "paddings": {
+                "left": 12,
+                "bottom": 12
+              },
+              "items": [
+                {
+                  "type": "button",
+                  "text": "<",
+                  "actions": [
+                    {
+                      "url": "div-action://set_previous_item?id=gallery1",
+                      "log_id": "button/previous"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": ">",
+                  "actions": [
+                    {
+                      "url": "div-action://set_next_item?id=gallery1",
+                      "log_id": "button/next"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "1",
+                  "actions": [
+                    {
+                      "url": "div-action://set_current_item?id=gallery1&item=0",
+                      "log_id": "button/set0"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "2",
+                  "actions": [
+                    {
+                      "url": "div-action://set_current_item?id=gallery1&item=1",
+                      "log_id": "button/set1"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "3",
+                  "actions": [
+                    {
+                      "url": "div-action://set_current_item?id=gallery1&item=2",
+                      "log_id": "button/set2"
+                    }
+                  ]
+                },
+                {
+                  "type": "button",
+                  "text": "4",
+                  "actions": [
+                    {
+                      "url": "div-action://set_current_item?id=gallery1&item=3",
+                      "log_id": "button/set3"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "item": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "medium",
+      "height": {
+        "type": "fixed",
+        "value": 100
+      },
+      "width": {
+        "type": "fixed",
+        "value": 200
+      },
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#ff0000",
+          "width": 2
+        }
+      }
+    },
+    "button": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "medium",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "right": 12
+      },
+      "paddings": {
+        "left": 18,
+        "right": 18
+      },
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#34495E",
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ]
+    }
+  }
+}

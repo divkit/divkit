@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_solid_background",
+  "properties": {
+    "color": {
+      "$ref": "common.json#/color",
+      "$description": "translations.json#/div_solid_background_color"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "solid"
+      ]
+    }
+  },
+  "required": [
+    "color",
+    "type"
+  ]
+}

@@ -1,0 +1,27 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "side_element": {
+                        "position": "left",
+                        "element": {
+                            "image_url": "https://alicekit.s3.yandex.net/images_for_divs/girl.png",
+                            "ratio": 1.5,
+                            "type": "div-image-element"
+                        }
+                    },
+                    "type": "div-universal-block"
+                }
+            ]
+        }
+    ],
+    "url": "http://yandex.ru",
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

@@ -1,0 +1,54 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "alignment_horizontal": "left",
+                    "direction": "vertical",
+                    "height": {
+                        "type": "numeric",
+                        "value": 400
+                    },
+                    "width": {
+                        "type": "numeric",
+                        "value": 300,
+                        "unit": "dp"
+                    },
+                    "action": {
+                        "url": "https://news.yandex.ru/hockey.html"
+                    },
+                    "type": "div-container-block",
+                    "children": [
+                        {
+                            "text": "\u0440\u0435\u0437\u0438\u043d\u043e\u0432\u044b\u0439 \u0441\u0435\u043f\u0430\u0440\u0430\u0442\u043e\u0440: 1-\u0430\u0439 \u0440\u0430\u0437\u043c\u0435\u0440\u043e\u043c xxs, \u0430 \u0432\u0442\u043e\u0440\u043e\u0439 \u0440\u0435\u0437\u0438\u043d\u043e\u0432\u044b\u0439",
+                            "type": "div-universal-block",
+                            "text_style": "title_s"
+                        },
+                        {
+                            "delimiter_color": "#0000FF",
+                            "has_delimiter": 1,
+                            "type": "div-separator-block",
+                            "size": "xxs"
+                        },
+                        {
+                            "delimiter_color": "#0000FF",
+                            "action": {
+                                "url": "http://ya.ru"
+                            },
+                            "has_delimiter": 1,
+                            "type": "div-separator-block",
+                            "size": "match_parent"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#BBAAFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

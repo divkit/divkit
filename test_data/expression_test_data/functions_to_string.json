@@ -1,0 +1,217 @@
+{
+  "cases": [
+    {
+      "name": "positive integer to string => string",
+      "expression": "@{toString(1)}",
+      "expected": {
+        "type": "string",
+        "value": "1"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative integer to string => string",
+      "expression": "@{toString(-1)}",
+      "expected": {
+        "type": "string",
+        "value": "-1"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "positive number to string => string",
+      "expression": "@{toString(3.1415)}",
+      "expected": {
+        "type": "string",
+        "value": "3.1415"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative number to string => string",
+      "expression": "@{toString(-3.1415)}",
+      "expected": {
+        "type": "string",
+        "value": "-3.1415"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "true boolean to string => string",
+      "expression": "@{toString(true)}",
+      "expected": {
+        "type": "string",
+        "value": "true"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "false boolean to string => string",
+      "expression": "@{toString(false)}",
+      "expected": {
+        "type": "string",
+        "value": "false"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "color with format #RGB to string => string",
+      "expression": "@{toString(color)}",
+      "expected": {
+          "type": "string",
+          "value": "#FFFFCCEE"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#fce"
+        }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "color with format #ARGB to string => string",
+      "expression": "@{toString(color)}",
+      "expected": {
+          "type": "string",
+          "value": "#DDFFCCEE"
+      },
+      "variables": [
+          {
+              "type": "color",
+              "name": "color",
+              "value": "#dfce"
+          }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "color with format #RRGGBB to string => string",
+      "expression": "@{toString(color)}",
+      "expected": {
+          "type": "string",
+          "value": "#FFFFCCEE"
+      },
+      "variables": [
+          {
+              "type": "color",
+              "name": "color",
+              "value": "#ffCCeE"
+          }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "color with format #AARRGGBB to string => string",
+      "expression": "@{toString(color)}",
+      "expected": {
+          "type": "string",
+          "value": "#DDFFCCEE"
+      },
+      "variables": [
+          {
+              "type": "color",
+              "name": "color",
+              "value": "#DdffCCeE"
+          }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "url to string => string",
+      "expression": "@{toString(url)}",
+      "expected": {
+          "type": "string",
+          "value": "https://ya.ru/?hello=1"
+      },
+      "variables": [
+          {
+              "type": "url",
+              "name": "url",
+              "value": "https://ya.ru/?hello=1"
+          }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "string to string => error",
+      "expression": "@{toString('abc')}",
+      "expected": {
+        "type": "error",
+        "value":  "Failed to evaluate [toString('abc')]. Function 'toString' has no matching override for given argument types: String."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "empty argument list => error",
+      "expression": "@{toString()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toString()]. Non empty argument list is required for function 'toString'."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "too many arguments => error",
+      "expression": "@{toString(1, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toString(1, 1)]. Function 'toString' has no matching override for given argument types: Integer, Integer."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "vertical_alignments_testcase",
+              "text": "top",
+              "text_alignment_vertical": "top"
+            },
+            {
+              "type": "vertical_alignments_testcase",
+              "text": "center",
+              "text_alignment_vertical": "center"
+            },
+            {
+              "type": "vertical_alignments_testcase",
+              "text": "bottom",
+              "text_alignment_vertical": "bottom"
+            }
+          ],
+          "background": [
+            {
+              "color": "#000",
+              "type": "solid"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "vertical_alignments_testcase": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
+      "width": {
+        "type": "fixed",
+        "value": 60
+      },
+      "background": [
+        {
+          "color": "#FFF",
+          "type": "solid"
+        }
+      ],
+      "margins": {
+        "top": 10,
+        "bottom": 10
+      }
+    }
+  }
+}
+
