@@ -1,0 +1,141 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "content": {
+                                "direction": "vertical",
+                                "alignment_vertical": "top",
+                                "height": {
+                                    "type": "predefined",
+                                    "value": "wrap_content"
+                                },
+                                "width": {
+                                    "type": "predefined",
+                                    "value": "match_parent"
+                                },
+                                "type": "div-container-block",
+                                "children": [
+                                    {
+                                        "action": {
+                                            "url": "https//afisha.yandex.ru"
+                                        },
+                                        "text": "Universal div text",
+                                        "type": "div-universal-block",
+                                        "title": "\u043a\u043e\u043d\u0442\u0435\u043d\u0442 1-\u0433\u043e \u0442\u0430\u0431\u0430"
+                                    },
+                                    {
+                                        "action": {
+                                            "url": "https//afisha.yandex.ru"
+                                        },
+                                        "text": "Universal div text",
+                                        "type": "div-universal-block",
+                                        "title": "Universal div title"
+                                    }
+                                ]
+                            },
+                            "title": {
+                                "action": {
+                                    "url": "http://ya.ru"
+                                },
+                                "text": "title 1"
+                            }
+                        },
+                        {
+                            "content": {
+                                "direction": "vertical",
+                                "alignment_vertical": "top",
+                                "height": {
+                                    "type": "predefined",
+                                    "value": "wrap_content"
+                                },
+                                "width": {
+                                    "type": "predefined",
+                                    "value": "match_parent"
+                                },
+                                "type": "div-container-block",
+                                "children": [
+                                    {
+                                        "action": {
+                                            "url": "https//afisha.yandex.ru"
+                                        },
+                                        "text": "Universal div text",
+                                        "type": "div-universal-block",
+                                        "title": "\u043a\u043e\u043d\u0442\u0435\u043d\u0442 2-\u0433\u043e \u0442\u0430\u0431\u0430"
+                                    },
+                                    {
+                                        "action": {
+                                            "url": "https//afisha.yandex.ru"
+                                        },
+                                        "text": "Universal div text",
+                                        "type": "div-universal-block",
+                                        "title": "Universal div title"
+                                    }
+                                ]
+                            },
+                            "title": {
+                                "action": {
+                                    "url": "http://ya.ru"
+                                },
+                                "text": "title 2"
+                            }
+                        },
+                        {
+                            "content": {
+                                "direction": "vertical",
+                                "alignment_vertical": "top",
+                                "height": {
+                                    "type": "predefined",
+                                    "value": "wrap_content"
+                                },
+                                "width": {
+                                    "type": "predefined",
+                                    "value": "match_parent"
+                                },
+                                "type": "div-container-block",
+                                "children": [
+                                    {
+                                        "action": {
+                                            "url": "https//afisha.yandex.ru"
+                                        },
+                                        "text": "Universal div text",
+                                        "type": "div-universal-block",
+                                        "title": "\u043a\u043e\u043d\u0442\u0435\u043d\u0442 3-\u0433\u043e \u0442\u0430\u0431\u0430"
+                                    },
+                                    {
+                                        "action": {
+                                            "url": "https//afisha.yandex.ru"
+                                        },
+                                        "text": "Universal div text",
+                                        "type": "div-universal-block",
+                                        "title": "Universal div title"
+                                    }
+                                ]
+                            },
+                            "title": {
+                                "action": {
+                                    "url": "http://ya.ru"
+                                },
+                                "text": "title 3"
+                            }
+                        }
+                    ],
+                    "active_tab_color": "#0000FF",
+                    "active_tab_bg_color": "#00FF00",
+                    "has_delimiter": 1,
+                    "inactive_tab_color": "#FF0000",
+                    "type": "div-tabs-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#BBAAFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

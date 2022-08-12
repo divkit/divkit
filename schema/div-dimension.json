@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "description": "Значение измерения элемента.",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "Значение."
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "default_value": "dp"
+    }
+  },
+  "required": [
+    "value"
+  ]
+}

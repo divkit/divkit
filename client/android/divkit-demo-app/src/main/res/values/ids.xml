@@ -1,0 +1,7 @@
+<resources>
+    <item name="gallery_feed" type="id" />
+    <item name="morda_recycler" type="id"/>
+    <item name="morda_screenshot_div" type="id"/>
+    <item name="settings_root_layout" type="id"/>
+    <item name="samples_recycler" type="id"/>
+</resources>

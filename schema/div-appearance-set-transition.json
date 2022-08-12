@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "description": "Набор анимаций, которые будут применяться одновременно.",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "set"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "div-appearance-transition.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Массив анимаций."
+    }
+  },
+  "required": [
+    "type",
+    "items"
+  ]
+}

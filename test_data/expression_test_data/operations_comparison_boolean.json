@@ -1,0 +1,104 @@
+{
+  "cases": [
+    {
+      "name": "a < b => error",
+      "expression": "@{a < b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false < true]. Operator '<' cannot be applied to Boolean type."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": 0,
+          "name": "a"
+        },
+        {
+          "type": "boolean",
+          "value": 1,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a <= b => error",
+      "expression": "@{a <= b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false <= true]. Operator '<=' cannot be applied to Boolean type."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": 0,
+          "name": "a"
+        },
+        {
+          "type": "boolean",
+          "value": 1,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a > b => error",
+      "expression": "@{a > b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false > true]. Operator '>' cannot be applied to Boolean type."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": 0,
+          "name": "a"
+        },
+        {
+          "type": "boolean",
+          "value": 1,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a >= b => error",
+      "expression": "@{a >= b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [false >= true]. Operator '>=' cannot be applied to Boolean type."
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "value": 0,
+          "name": "a"
+        },
+        {
+          "type": "boolean",
+          "value": 1,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

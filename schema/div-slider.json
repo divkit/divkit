@@ -1,0 +1,117 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Слайдер для выбора значения в диапазоне.",
+  "definitions": {
+    "text_style": {
+      "type": "object",
+      "properties": {
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Размер шрифта."
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "platforms": [
+            "android"
+          ]
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "default_value": "regular",
+          "description": "Начертание."
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#FF000000",
+          "description": "Цвет текста."
+        },
+        "offset": {
+          "$ref": "div-point.json",
+          "description": "Сдвиг относительно центра."
+        }
+      },
+      "required": [
+        "font_size"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "slider"
+          ]
+        },
+        "min_value": {
+          "type": "integer",
+          "default_value": "0",
+          "description": "Минимальное значение."
+        },
+        "max_value": {
+          "type": "integer",
+          "default_value": "100",
+          "description": "Максимальное значение. Должно быть больше минимального."
+        },
+        "thumb_value_variable": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной для хранения текущего значения указателя."
+        },
+        "thumb_secondary_value_variable": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной для хранения текущего значения второго указателя."
+        },
+        "thumb_style": {
+          "$ref": "div-drawable.json",
+          "description": "Стиль первого указателя."
+        },
+        "thumb_secondary_style": {
+          "$ref": "div-drawable.json",
+          "description": "Стиль второго указателя."
+        },
+        "thumb_text_style": {
+          "$ref": "#/definitions/text_style",
+          "description": "Стиль текста в первом указателе."
+        },
+        "thumb_secondary_text_style": {
+          "$ref": "#/definitions/text_style",
+          "description": "Стиль текста во втором указателе."
+        },
+        "track_active_style": {
+          "$ref": "div-drawable.json",
+          "description": "Стиль активной части шкалы."
+        },
+        "tick_mark_active_style": {
+          "$ref": "div-drawable.json",
+          "description": "Стиль активных засечек."
+        },
+        "track_inactive_style": {
+          "$ref": "div-drawable.json",
+          "description": "Стиль неактивной части шкалы."
+        },
+        "tick_mark_inactive_style": {
+          "$ref": "div-drawable.json",
+          "description": "Стиль неактивных засечек."
+        },
+        "secondary_value_accessibility": {
+          "$ref": "div-accessibility.json",
+          "description": "Доступность для второго указателя.",
+          "platforms": [
+            "web"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "thumb_style",
+    "track_active_style",
+    "track_inactive_style"
+  ]
+}

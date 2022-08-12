@@ -1,0 +1,138 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "$text": "visible_text",
+      "id": "visible_id",
+      "width": {
+        "type": "wrap_content"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "top": 8,
+        "right": 24,
+        "left": 24
+      },
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "text_color": "#000000",
+      "font_size": 14,
+      "alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Единицы измерения размера"
+            },
+            {
+              "type": "subtitle",
+              "text": "dp (density-independent pixels) — единица измерения, которая используется по умолчанию и не зависит от плотности экрана. Конвертируется в pt на IOS, в dp на Android, в px - в Вебе\n\nsp (scale-independent pixels) — единица измерения, которая зависит от коэффициента размера текста в телефоне. Используется только на Android.\n\npx - пиксели. Не подстраивается под плотность экрана, поэтому элемент с размером в пикселях будет выглядеть по-разному на экранах с разной плотностью. Не поддерживается в Вебе",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 30
+                  },
+                  "text": "Высота в dp, а текст в sp"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 30,
+                    "unit": "sp"
+                  },
+                  "text": "Высота в sp и текст в sp"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 30,
+                    "unit": "sp"
+                  },
+                  "font_size_unit": "dp",
+                  "text": "Высота в sp, а текст в dp"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 30
+                  },
+                  "font_size_unit": "dp",
+                  "text": "Высота в dp и текст в dp"
+                },
+                {
+                  "type": "text_block",
+                  "height": {
+                    "type": "fixed",
+                    "value": 100,
+                    "unit": "px"
+                  },
+                  "font_size": 40,
+                  "font_size_unit": "px",
+                  "text": "Высота 100 px, текст 40 px"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

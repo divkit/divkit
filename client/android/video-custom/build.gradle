@@ -1,0 +1,17 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+dependencies {
+    implementation project(path: ':div')
+    implementation project(path: ':assertion')
+    implementation project(path: ':logging')
+    implementation project(path: ':div-core')
+    implementation project(path: ':div-json')
+
+    implementation "com.google.android.exoplayer:exoplayer:$versions.exoPlayer"
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
+    implementation "javax.inject:javax.inject:$versions.javax"
+}

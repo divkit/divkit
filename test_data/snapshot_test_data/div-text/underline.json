@@ -1,0 +1,68 @@
+{
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "wrap_content_text",
+              "text": "Single underline",
+              "underline": "single"
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "No underline",
+              "underline": "none"
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "Partial underline",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 7,
+                  "underline": "single"
+                }
+              ]
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "Excluded underline",
+              "underline": "single",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 8,
+                  "underline": "none"
+                }
+              ]
+            },
+            {
+              "type": "wrap_content_text",
+              "text": "Unaffected underline",
+              "underline": "single",
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 8
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "wrap_content_text": {
+      "type": "text",
+      "width": { "type": "wrap_content" }
+    }
+  }
+}

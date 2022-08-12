@@ -1,0 +1,166 @@
+{
+  "templates": {
+    "testcase_name": {
+      "type": "text",
+      "paddings": {
+        "top": 10,
+        "bottom": 10
+      },
+      "font_size": 16,
+      "background": [
+        {
+          "color": "#FFF",
+          "type": "solid"
+        }
+      ]
+    },
+    "50x50_black": {
+      "type": "separator",
+      "background": [
+        {
+          "color": "#000",
+          "type": "solid"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 50
+      },
+      "width": {
+        "type": "fixed",
+        "value": 50
+      },
+      "delimiter_style": {
+        "color": "#000"
+      }
+    },
+    "50x50_black_with_margins": {
+      "type": "50x50_black",
+      "margins": {
+        "top": 1,
+        "left": 1,
+        "right": 1,
+        "bottom": 1
+      }
+    },
+    "fixed_grid_with_smaller_fixed_items": {
+      "type": "grid",
+      "column_count": 2,
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "fixed",
+        "value": 150
+      },
+      "items": [
+        { "type": "50x50_black_with_margins" },
+        { "type": "50x50_black_with_margins" },
+        { "type": "50x50_black_with_margins" },
+        { "type": "50x50_black_with_margins" }
+      ],
+      "background": [{
+        "color": "#AAA",
+        "type": "solid"
+      }]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "testcase_name",
+              "text": "left-top:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "left",
+              "content_alignment_vertical": "top"
+            },
+            {
+              "type": "testcase_name",
+              "text": "center-top:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "top"
+            },
+            {
+              "type": "testcase_name",
+              "text": "right-top:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "right",
+              "content_alignment_vertical": "top"
+            },
+            {
+              "type": "testcase_name",
+              "text": "left-center:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "left",
+              "content_alignment_vertical": "center"
+            },
+            {
+              "type": "testcase_name",
+              "text": "center:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "center"
+            },
+            {
+              "type": "testcase_name",
+              "text": "right-center:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "right",
+              "content_alignment_vertical": "center"
+            },
+            {
+              "type": "testcase_name",
+              "text": "left-bottom:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "left",
+              "content_alignment_vertical": "bottom"
+            },
+            {
+              "type": "testcase_name",
+              "text": "center-bottom:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "bottom"
+            },
+            {
+              "type": "testcase_name",
+              "text": "right-bottom:"
+            },
+            {
+              "type": "fixed_grid_with_smaller_fixed_items",
+              "content_alignment_horizontal": "right",
+              "content_alignment_vertical": "bottom"
+            }
+          ],
+          "width": {
+            "type": "wrap_content"
+          }
+        }
+      }
+    ]
+  }
+}

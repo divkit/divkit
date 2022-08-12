@@ -1,0 +1,452 @@
+{
+  "templates": {
+    "eddl_recipes_column": {
+      "type": "container",
+      "orientation": "vertical",
+      "width": {
+        "type": "match_parent",
+        "value": 0.5
+      },
+      "height": {
+        "type": "wrap_content"
+      }
+    },
+    "eddl_recipes_layout": {
+      "type": "container",
+      "orientation": "horizontal",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "items": [
+        {
+          "type": "eddl_recipes_column",
+          "paddings": {
+            "right": 6
+          },
+          "$items": "eddl_left_column_items"
+        },
+        {
+          "type": "eddl_recipes_column",
+          "paddings": {
+            "left": 6
+          },
+          "$items": "eddl_right_column_items"
+        }
+      ],
+      "margins": {
+        "top": 16
+      }
+    },
+    "eddl_recipes_item_title": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 16,
+      "max_lines": 2,
+      "text_color": "#09141F",
+      "paddings": {
+        "left": 12,
+        "right": 12,
+        "top": 8,
+        "bottom": 12
+      },
+      "$text": "eddl_item_title"
+    },
+    "eddl_recipes_item_small": {
+      "type": "container",
+      "border": {
+        "corner_radius": 16
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 141,
+        "unit": "sp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFF"
+        }
+      ],
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_item_image_url",
+          "height": {
+            "type": "fixed",
+            "value": 89
+          },
+          "width": {
+            "type": "match_parent"
+          }
+        },
+        {
+          "type": "eddl_recipes_item_title"
+        }
+      ],
+      "margins": {
+        "$top": "eddl_item_margin_top"
+      },
+      "content_alignment_horizontal": "center",
+      "$actions": "eddl_item_actions",
+      "$visibility_actions": "eddl_item_visibility_actions"
+    },
+    "eddl_recipes_item_big": {
+      "type": "container",
+      "border": {
+        "corner_radius": 16
+      },
+      "height": {
+        "type": "fixed",
+        "value": 210,
+        "unit": "sp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFF"
+        }
+      ],
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_item_image_url",
+          "height": {
+            "type": "fixed",
+            "value": 158
+          },
+          "width": {
+            "type": "match_parent"
+          }
+        },
+        {
+          "type": "eddl_recipes_item_title"
+        }
+      ],
+      "margins": {
+        "$top": "eddl_item_margin_top"
+      },
+      "content_alignment_horizontal": "center",
+      "$actions": "eddl_item_actions",
+      "$visibility_actions": "eddl_item_visibility_actions"
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 16,
+            "right": 16,
+            "bottom": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F4F4F4"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockAppear&hash=bf4209ca978ebac0ccfcf1ad525055b9",
+              "payload": {
+                "BlockId": "137",
+                "BlockSlug": "Recipes",
+                "BlockLayout": "Grid",
+                "BlockVersionId": "863"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            },
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockView&hash=9e9518f71116041f844894283a991685",
+              "payload": {
+                "BlockId": "137",
+                "BlockSlug": "Recipes",
+                "BlockLayout": "Grid",
+                "BlockVersionId": "863"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1000,
+              "visibility_percentage": 50
+            }
+          ],
+          "items": [
+            {
+              "type": "eddl_recipes_layout",
+              "eddl_left_column_items": [
+                {
+                  "type": "eddl_recipes_item_small",
+                  "eddl_item_title": "Самая вкусная квашеная капуста за одни сутки. Все квасят по-своему, а я только так.",
+                  "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "eddl_item_margin_top": 0,
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=17979759a52dc3c9d394d0c903de9916",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "1",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "1",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-4776062764281391889",
+                        "BlockVersionId": "863"
+                      },
+                      "url": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Frecipes%22%2C%22params%22%3A%7B%22id%22%3A%22-4776062764281391889%22%7D%2C%22fromScreen%22%3A%22%7B%7BD_FROM_SCREEN%7D%7D%22%2C%22fromElement%22%3A%22DivBlock_Recipes%22%7D"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=17979759a52dc3c9d394d0c903de9916",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "1",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "1",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-4776062764281391889",
+                        "BlockVersionId": "863"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f9d014748e44156344c8bcd54928d641",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "1",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "1",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-4776062764281391889",
+                        "BlockVersionId": "863"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_recipes_item_big",
+                  "eddl_item_title": "Салаты которые никогда не надоедают. Такие простые, легкие, быстрые и очень вкусные.",
+                  "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "eddl_item_margin_top": 12,
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=dbe3de09334ddd2cbc3cc69cae049a8d",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "2",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "1",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-8499008568820260238",
+                        "BlockVersionId": "863"
+                      },
+                      "url": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Frecipes%22%2C%22params%22%3A%7B%22id%22%3A%22-8499008568820260238%22%7D%2C%22fromScreen%22%3A%22%7B%7BD_FROM_SCREEN%7D%7D%22%2C%22fromElement%22%3A%22DivBlock_Recipes%22%7D"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=dbe3de09334ddd2cbc3cc69cae049a8d",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "2",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "1",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-8499008568820260238",
+                        "BlockVersionId": "863"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=65e7361cd268edf0df86e6aa6a0c18af",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "2",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "1",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-8499008568820260238",
+                        "BlockVersionId": "863"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                }
+              ],
+              "eddl_right_column_items": [
+                {
+                  "type": "eddl_recipes_item_big",
+                  "eddl_item_title": "Нашла новый салат на праздник. Всего 3 основных ингредиента, которые есть в каждом доме. Съедается моментально.",
+                  "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "eddl_item_margin_top": 0,
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=77fb2c3e3d3551d33f66adc28f96a0cb",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "1",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "2",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-6630910028329661158",
+                        "BlockVersionId": "863"
+                      },
+                      "url": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Frecipes%22%2C%22params%22%3A%7B%22id%22%3A%22-6630910028329661158%22%7D%2C%22fromScreen%22%3A%22%7B%7BD_FROM_SCREEN%7D%7D%22%2C%22fromElement%22%3A%22DivBlock_Recipes%22%7D"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=77fb2c3e3d3551d33f66adc28f96a0cb",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "1",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "2",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-6630910028329661158",
+                        "BlockVersionId": "863"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=0cfdea96c8f2a82138d1beeded7f6115",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "1",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "2",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-6630910028329661158",
+                        "BlockVersionId": "863"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_recipes_item_small",
+                  "eddl_item_title": "Заливной пирог по старому рецепту: выпечка на скорую руку (меняя начинки можно готовить хоть каждый день)",
+                  "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                  "eddl_item_margin_top": 12,
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=a7dc6f0043aceaa626bd7f71f66833cd",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "2",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "2",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-4336809185584010115",
+                        "BlockVersionId": "863"
+                      },
+                      "url": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Frecipes%22%2C%22params%22%3A%7B%22id%22%3A%22-4336809185584010115%22%7D%2C%22fromScreen%22%3A%22%7B%7BD_FROM_SCREEN%7D%7D%22%2C%22fromElement%22%3A%22DivBlock_Recipes%22%7D"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=a7dc6f0043aceaa626bd7f71f66833cd",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "2",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "2",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-4336809185584010115",
+                        "BlockVersionId": "863"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=3bb9f7e979bd746dd5833a7e9a75c302",
+                      "payload": {
+                        "BlockId": "137",
+                        "ItemType": "YaZenArticle",
+                        "Position": "2",
+                        "BlockSlug": "Recipes",
+                        "XPosition": "2",
+                        "BlockLayout": "Grid",
+                        "BlockContentId": "-4336809185584010115",
+                        "BlockVersionId": "863"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "text": "Открыть ещё рецепты",
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "action": {
+                "url": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Frecipes%22%7D",
+                "log_id": "#!edadeal/metrics/send?eventName=ButtonClick&hash=81ca5bd04f17c9fd754f89ac81d09c72",
+                "payload": {
+                  "slug": "AllArticles",
+                  "BlockId": "137",
+                  "BlockSlug": "Recipes",
+                  "BlockLayout": "Grid",
+                  "BlockVersionId": "863"
+                }
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "height": {
+                "type": "fixed",
+                "unit": "sp",
+                "value": 40
+              },
+              "margins": {
+                "top": 12
+              },
+              "font_size": 16,
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#27AE61"
+                }
+              ],
+              "text_color": "#FFFFFF",
+              "line_height": 20,
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

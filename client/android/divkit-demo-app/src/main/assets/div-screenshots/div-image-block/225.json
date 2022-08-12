@@ -1,0 +1,22 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "image": {
+                        "image_url": "https://alicekit.s3.yandex.net/images_for_divs/fox.jpg",
+                        "type": "div-image-element"
+                    },
+                    "type": "div-image-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

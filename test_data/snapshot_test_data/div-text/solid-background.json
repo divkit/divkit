@@ -1,0 +1,22 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "It is a dark time for the Rebellion.",
+          "font_size": 12,
+          "background": [
+            {
+              "color": "#AAAAAA",
+              "type": "solid"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

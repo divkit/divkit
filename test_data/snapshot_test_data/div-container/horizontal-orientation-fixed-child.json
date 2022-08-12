@@ -1,0 +1,37 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "items": [
+            {
+              "type": "text",
+              "text": "For millions of years mankind lived just like animals",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "Then something happened which unleashed the power of our imagination",
+              "font_size": 12
+            },
+            {
+              "type": "text",
+              "text": "We learned to talk",
+              "font_size": 12,
+              "width": {
+                "type": "fixed",
+                "value": 20
+              },
+              "font_weight": "medium"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

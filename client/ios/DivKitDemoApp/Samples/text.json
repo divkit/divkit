@@ -1,0 +1,160 @@
+{
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Text bold action",
+              "font_size": 22,
+              "actions": [
+                {
+                  "log_id": "test/body/2",
+                  "url": "action://text"
+                }
+              ],
+              "ranges": [
+                {
+                  "start": 5,
+                  "end": 9,
+                  "font_weight": "bold"
+                },
+                {
+                  "start": 10,
+                  "end": 16,
+                  "text_color": "#0000ff",
+                  "actions": [
+                    {
+                      "log_id": "test/body/0/text/range",
+                      "url": "action://range"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "text",
+              "text": "Very very very long text font family text",
+              "font_size": 22,
+              "font_family": "text",
+            },
+            {
+              "type": "text",
+              "text": "Very very very long text font family display",
+              "font_size": 22,
+              "font_family": "display",
+            },
+            {
+              "type": "text",
+              "text": "Very very very long text without ellipsis",
+              "font_size": 22
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "text",
+              "text": "Very very very long text with ellipsis",
+              "font_size": 22,
+              "max_lines": 1
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "text",
+              "text": "Text with\nmax_lines = 1\nmin_hidden_lines = 3",
+              "font_size": 22,
+              "max_lines": 1,
+              "min_hidden_lines": 3
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "text",
+              "text": "Text with new lines and ellipsis\n\nvery very long",
+              "font_size": 22,
+              "max_lines": 2
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "text",
+              "text": "Very very very very very long multiline text with custom ellipsis",
+              "font_size": 22,
+              "max_lines": 2,
+              "ellipsis": {
+                "text": "… READ MORE",
+                "actions": [
+                  {
+                    "log_id": "test/body/text/ellipsis",
+                    "url": "action://read_more"
+                  }
+                ],
+                "ranges": [
+                  {
+                    "start": 2,
+                    "end": 11,
+                    "text_color": "#0000ff"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "text",
+              "text": "alignment=center\nemoji=3️⃣ action text ◐\ntext",
+              "text_alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "font_size": 20,
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "ranges": [
+                {
+                  "start": 27,
+                  "end": 33,
+                  "text_color": "#0000ff",
+                  "actions": [
+                    {
+                      "log_id": "test/body/3/text/range",
+                      "url": "action://range"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "separator"
+            },
+            {
+              "type": "text",
+              "text": "Multiline text with ranges\nline 2\nline 3\nline 4",
+              "font_size": 22,
+              "ranges": [
+                {
+                  "start": 27,
+                  "end": 33,
+                  "text_color": "#0000ff",
+                  "line_height": 40
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "gallery",
+  "items": [
+    {
+      "type": "image",
+      "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+      "width": {
+        "type": "predefined",
+        "value": "wrap_content"
+      }
+    }
+  ]
+}
+

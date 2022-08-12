@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`templateHelper should create TemplateBlock with parameters 1`] = `
+{
+  "type": "template1",
+  "vText1": "test",
+  "vText2": "test",
+  "vMaxlines": 2,
+  "vPaddings": {
+    "left": 4
+  }
+}
+`;
+
+exports[`templateHelper should create TemplateBlock with parameters 2`] = `
+{
+  "type": "template2",
+  "action1": {
+    "log_id": "action",
+    "url": "url"
+  },
+  "text2": "text2"
+}
+`;
+
+exports[`templateHelper should create TemplateBlock with parameters 3`] = `
+{
+  "type": "template3",
+  "img": "img",
+  "imgScale": "fill",
+  "bgAngle": 90
+}
+`;
+
+exports[`templateHelper should create TemplateBlock with parameters 4`] = `
+{
+  "type": "template4",
+  "img": "img",
+  "imgScale": "fill",
+  "vText1": "1",
+  "vText2": "2",
+  "text2": "2",
+  "action1": {
+    "log_id": "action",
+    "url": "url"
+  },
+  "vMaxlines": 1,
+  "bgAngle": 90
+}
+`;

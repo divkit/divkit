@@ -1,0 +1,22 @@
+{
+  "patch": {
+    "changes": [
+      {
+        "id": "div_to_replace",
+        "items": [
+          {
+            "id": "div_to_replace",
+            "type": "header",
+            "title": "Replaced with templates!"
+          }
+        ]
+      }
+    ]
+  },
+  "templates": {
+    "header": {
+      "type": "text",
+      "$text": "title"
+    }
+  }
+}

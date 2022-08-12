@@ -1,0 +1,34 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "color": "#228B22",
+                            "text": "1",
+                            "score": "1"
+                        },
+                        {
+                            "color": "#111FFF",
+                            "text": "text in item 2",
+                            "score": "2"
+                        },
+                        {
+                            "text": "22:00",
+                            "score": "3"
+                        }
+                    ],
+                    "type": "div-traffic-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

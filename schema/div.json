@@ -1,0 +1,66 @@
+{
+  "generate_case_for_templates_kotlinDsl": true,
+  "generate_case_for_templates_typescript": true,
+  "anyOf": [
+    {
+      "$ref": "div-image.json",
+      "description": "Изображение."
+    },
+    {
+      "$ref": "div-gif-image.json",
+      "description": "Gif-изображение."
+    },
+    {
+      "$ref": "div-text.json",
+      "description": "Текст."
+    },
+    {
+      "$ref": "div-separator.json",
+      "description": "Разделитель."
+    },
+    {
+      "$ref": "div-container.json",
+      "description": "Контейнер."
+    },
+    {
+      "$ref": "div-grid.json",
+      "description": "Сетка."
+    },
+    {
+      "$ref": "div-gallery.json",
+      "description": "Галерея."
+    },
+    {
+      "$ref": "div-pager.json",
+      "description": "Пейджер."
+    },
+    {
+      "$ref": "div-tabs.json",
+      "description": "Табы."
+    },
+    {
+      "$ref": "div-state.json",
+      "description": "Состояние."
+    },
+    {
+      "$ref": "div-custom.json",
+      "description": "Хост-специфичный элемент.",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "$ref": "div-indicator.json",
+      "description": "Индикатор прогресса для пейджера."
+    },
+    {
+      "$ref": "div-slider.json",
+      "description": "Слайдер."
+    },
+    {
+      "$ref": "div-input.json",
+      "description": "Поле ввода текста."
+    }
+  ]
+}

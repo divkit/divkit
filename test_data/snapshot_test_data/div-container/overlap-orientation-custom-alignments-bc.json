@@ -1,0 +1,112 @@
+{
+  "templates": {
+    "text_white_bg_50x50": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "background": [
+        {
+          "color": "#FFF",
+          "type": "solid"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "value": 50
+      },
+      "height": {
+        "type": "fixed",
+        "value": 50
+      }
+    },
+    "overlap_container_black": {
+      "type": "container",
+      "orientation": "overlap",
+      "background": [
+        {
+          "color": "#000",
+          "type": "solid"
+        }
+      ]
+    },
+    "overlap_fixed_170x170_container_black": {
+      "type": "overlap_container_black",
+      "width": { "type": "fixed", "value": 170 },
+      "height": { "type": "fixed", "value": 170 }
+    },
+    "overlap_orientation_alignments_testcase": {
+      "type": "overlap_fixed_170x170_container_black",
+      "items": [
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "top",
+          "alignment_horizontal": "left",
+          "text": "⌜"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "top",
+          "alignment_horizontal": "center",
+          "text": "^"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "top",
+          "alignment_horizontal": "right",
+          "text": "⌝"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "center",
+          "alignment_horizontal": "left",
+          "text": "<"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "center",
+          "alignment_horizontal": "center",
+          "text": "*"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "center",
+          "alignment_horizontal": "right",
+          "text": ">"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "bottom",
+          "alignment_horizontal": "left",
+          "text": "⌞"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "bottom",
+          "alignment_horizontal": "center",
+          "text": "⌄"
+        },
+        {
+          "type": "text_white_bg_50x50",
+          "alignment_vertical": "bottom",
+          "alignment_horizontal": "right",
+          "text": "⌟"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "description": "Same image is expected across overlap-orientation-custom-alignments-*.json",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "overlap_orientation_alignments_testcase",
+          "content_alignment_vertical": "bottom",
+          "content_alignment_horizontal": "center"
+        }
+      }
+    ]
+  }
+}
+

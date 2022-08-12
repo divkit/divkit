@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "description": "Фиксированный размер элемента.",
+  "properties": {
+    "value": {
+      "$ref": "common.json#/non_negative_integer",
+      "description": "Размер элемента."
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "description": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.dita).",
+      "default_value": "dp"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "fixed"
+      ]
+    }
+  },
+  "required": [
+    "value",
+    "type"
+  ]
+}

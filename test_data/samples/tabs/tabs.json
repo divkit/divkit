@@ -1,0 +1,154 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 28,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 184
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 16
+      }
+    },
+    "tab_container": {
+      "type": "container",
+      "paddings": {
+        "left": 16,
+        "right": 16
+      }
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Табы"
+            },
+            {
+              "type": "subtitle",
+              "text": "Представляет собой набор вкладок и строку с ярлыками.\n\nОдномоментно видно только одну вкладку, остальные можно переключить по клику на ярлык соответствующей вкладки",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "tabs",
+              "height": {
+                "type": "wrap_content"
+              },
+              "tab_title_style": {
+                "animation_type": "slide"
+              },
+              "items": [
+                {
+                  "title": "wrap_content",
+                  "div": {
+                    "type": "tab_container",
+                    "items": [
+                      {
+                        "type": "text_block",
+                        "text": "Item 0",
+                        "width": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "wrap_content",
+                  "div": {
+                    "type": "tab_container",
+                    "items": [
+                      {
+                        "type": "text_block",
+                        "text": "Item 1",
+                        "width": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "wrap_content",
+                  "div": {
+                    "type": "tab_container",
+                    "items": [
+                      {
+                        "type": "text_block",
+                        "text": "Item 3",
+                        "width": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "wrap_content",
+                  "div": {
+                    "type": "tab_container",
+                    "items": [
+                      {
+                        "type": "text_block",
+                        "text": "Item 3",
+                        "width": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

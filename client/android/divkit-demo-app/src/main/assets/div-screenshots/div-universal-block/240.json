@@ -1,0 +1,22 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "text": "Title w/ overriden color, bold text, transfer to next paragraph, some Unicode chars",
+                    "title": "Title_s  <font color=\"#FF6347\">Aa Bb</font> <b>Cc Dd</b> <p>Ee Ff</p> -4&#176; &#183; &#8381; &#8364; &#36; &#36; &#36;",
+                    "type": "div-universal-block",
+                    "title_style": "title_s"
+                }
+            ]
+        }
+    ],
+    "url": "http://yandex.ru",
+    "background": [
+        {
+            "color": "#FFFFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

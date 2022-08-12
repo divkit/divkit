@@ -1,0 +1,26 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "action": {
+                                "url": "http://ya.ru"
+                            },
+                            "text": "tap on me"
+                        }
+                    ],
+                    "type": "div-buttons-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

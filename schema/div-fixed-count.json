@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "description": "Фиксированное число повторов.",
+  "properties": {
+    "value": {
+      "$ref": "common.json#/non_negative_integer",
+      "description": "Число повторов."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "fixed"
+      ]
+    }
+  },
+  "required": [
+    "value",
+    "type"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "description": "Расположение координаты оси вращения в процентах относительно элемента.",
+  "properties": {
+    "value": {
+      "type": "number",
+      "description": "Расположение элемента."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "pivot-percentage"
+      ]
+    }
+  },
+  "required": [
+    "type",
+    "value"
+  ]
+}
+

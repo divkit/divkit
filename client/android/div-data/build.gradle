@@ -1,0 +1,88 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+def generatedSrcDir = new File(buildDir, "generated/source")
+def generatedDivSrcDir = new File(generatedSrcDir, "div")
+
+allOpen {
+    annotation("com.yandex.div.core.annotations.Mockable")
+}
+
+android {
+
+    sourceSets {
+        main {
+            java.srcDirs += generatedDivSrcDir
+        }
+    }
+
+    libraryVariants.all { variant ->
+        variant.preBuildProvider.configure { dependsOn "generateHomePojoTask" }
+    }
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div-core')
+    implementation project(path: ':div-evaluable')
+    implementation project(path: ':div-json')
+    implementation project(path: ':utils')
+    testImplementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+}
+
+static def convertPathToUnixStyle(String path) {
+    return "/mnt/" + path.substring(0, 1).toLowerCase() + path.substring(2).replace("\\", "/")
+}
+
+// Allows to use the Mainframer with Windows client
+task setHomePojoGeneratorExecAttrOnMainframer(type: Exec) {
+    def binPath = new File(projectDir, '../../../../internal/homeapigenerator-binaries/linux/HomeAPIGenerator.sh').absolutePath
+    commandLine 'chmod', '755', binPath
+    println commandLine
+}
+
+setHomePojoGeneratorExecAttrOnMainframer.onlyIf { rootDir.toString().contains('mainframer') }
+
+def osName = System.getProperty('os.name').toLowerCase()
+def schemas = [
+        ["name" : "div2",
+         "scheme": new File(projectDir, "../../../schema"),
+         "generated": generatedDivSrcDir.absolutePath + '/com/yandex/div2',
+         "config": new File(projectDir, 'div2-generator-config.json')]
+]
+
+schemas.forEach{ item ->
+    tasks.create(name: "scheme_${item['name']}", type: Exec, dependsOn: setHomePojoGeneratorExecAttrOnMainframer) {
+        def schemasDirectory = item['scheme'].absolutePath
+        def generatedDir = item['generated']
+        def configPath = item['config'].absolutePath
+
+        println "Process schemas: $schemasDirectory"
+        def binPath = new File(projectDir, '../../../../internal/homeapigenerator-binaries/').absolutePath
+        if (osName.contains('windows')) {
+            binPath = binPath + '/linux/HomeAPIGenerator'
+            def bashCommand = 'start /w c:\\Windows\\System32\\bash.exe -c \"' +
+                    convertPathToUnixStyle(binPath) + ' ' +
+                    convertPathToUnixStyle(configPath) + ' ' +
+                    convertPathToUnixStyle(schemasDirectory) + ' ' +
+                    convertPathToUnixStyle(generatedDir) + '\"'
+            commandLine 'cmd', '/c', bashCommand
+
+        } else if (osName.contains('linux')) {
+            binPath = binPath + '/linux/HomeAPIGenerator.sh'
+            commandLine binPath, configPath, schemasDirectory, generatedDir
+        } else {
+            binPath = binPath + '/macosx/HomeAPIGenerator'
+            commandLine binPath, configPath, schemasDirectory, generatedDir
+        }
+
+        println commandLine
+
+        inputs.dir item['scheme']
+        inputs.file binPath
+        outputs.dir generatedDir
+    }
+}
+
+task generateHomePojoTask(dependsOn: tasks.findAll {task -> task.name.startsWith('scheme_')})

@@ -1,0 +1,154 @@
+{
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "slider",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "paddings": {
+            "top": 10,
+            "bottom": 10,
+            "left": 10,
+            "right": 10
+          },
+          "thumb_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 28
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 28
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 14
+              }
+            },
+            "color": "#ff0000"
+          },
+          "thumb_value_variable": "slider_variable",
+          "thumb_secondary_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 28
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 28
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 14
+              }
+            },
+            "color": "#00ff00"
+          },
+          "thumb_secondary_value_variable": "slider_variable_second",
+          "track_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 0
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 15
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 4
+              }
+            },
+            "color": "#000000"
+          },
+          "track_active_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 0
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 20
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 4
+              }
+            },
+            "color": "#0000ff"
+          },
+          "max_value": 10,
+          "tick_mark_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 15
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 15
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 7
+              }
+            },
+            "color": "#C0C0C0"
+          },
+          "tick_mark_active_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 20
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 20
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 10
+              }
+            },
+            "color": "#FFD700"
+          }
+        }
+      }
+    ],
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 7
+      },
+      {
+        "name": "slider_variable_second",
+        "type": "integer",
+        "value": 3
+      }
+    ]
+  }
+}

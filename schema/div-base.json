@@ -1,0 +1,162 @@
+{
+  "protocol_name": "div-base",
+  "swift_super_protocol": "DivBlockModeling",
+  "type": "object",
+  "include_in_documentation_toc": true,
+  "properties": {
+    "id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "description": "Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`."
+    },
+    "border": {
+      "$ref": "div-border.json",
+      "description": "Рамка элемента."
+    },
+    "width": {
+      "$ref": "div-size.json",
+      "default_value": "{\"type\": \"match_parent\"}",
+      "description": "Ширина элемента."
+    },
+    "height": {
+      "$ref": "div-size.json",
+      "default_value": "{\"type\": \"wrap_content\"}",
+      "description": "Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.dita)."
+    },
+    "background": {
+      "type": "array",
+      "items": {
+        "$ref": "div-background.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Фон элемента. Может содержать несколько слоев."
+    },
+    "paddings": {
+      "$ref": "div-edge-insets.json",
+      "description": "Внутренние отступы от рамки элемента."
+    },
+    "margins": {
+      "$ref": "div-edge-insets.json",
+      "description": "Внешние отступы от рамки элемента."
+    },
+    "alpha": {
+      "type": "number",
+      "default_value": "1.0",
+      "constraint": "number >= 0.0 && number <= 1.0",
+      "description": "Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный."
+    },
+    "alignment_vertical": {
+      "$ref": "div-alignment-vertical.json",
+      "description": "Вертикальное выравнивание элемента внутри родительского."
+    },
+    "alignment_horizontal": {
+      "$ref": "div-alignment-horizontal.json",
+      "description": "Горизонтальное выравнивание элемента внутри родительского."
+    },
+    "row_span": {
+      "$ref": "common.json#/non_negative_integer",
+      "description": "Объединяет ячейки в строке элемента [grid](div-grid.md)."
+    },
+    "column_span": {
+      "$ref": "common.json#/non_negative_integer",
+      "description": "Объединяет ячейки в столбце элемента [grid](div-grid.md)."
+    },
+    "visibility_action": {
+      "$ref": "div-visibility-action.json",
+      "description": "Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`."
+    },
+    "visibility_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-visibility-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Действия при появлении элемента на экране."
+    },
+    "tooltips": {
+      "type": "array",
+      "items": {
+        "$ref": "div-tooltip.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id подсказки.",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "accessibility": {
+      "$ref": "div-accessibility.json",
+      "description": "Доступность для людей с ограниченными возможностями."
+    },
+    "extensions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-extension.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Расширения для дополнительной обработки элемента. Список расширений см. в разделе [Кастомизация](../../extensions.dita).",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "transition_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-transition-trigger.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "supports_expressions": false,
+      "description": "Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`."
+    },
+    "transition_in": {
+      "$ref": "div-appearance-transition.json",
+      "description": "Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции переходов в разделе [Анимация перехода](../../interaction.dita#animation/transition-animation)."
+    },
+    "transition_change": {
+      "$ref": "div-change-transition.json",
+      "description": "Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой верстке."
+    },
+    "transition_out": {
+      "$ref": "div-appearance-transition.json",
+      "description": "Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке."
+    },
+    "selected_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Список [действий](div-action.md, которые будут выполнены при выборе элемента в [пейджере](div-pager.md).",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "focus": {
+      "$ref": "div-focus.json",
+      "description": "Параметры при фокусировке на элементе или потере фокуса.",
+      "platforms": [
+        "android"
+      ]
+    },
+    "visibility": {
+      "$ref": "div-visibility.json",
+      "description": "Видимость элемента.",
+      "default_value": "visible"
+    },
+    "transform": {
+      "$ref": "div-transform.json",
+      "description": "Преобразование элемента. Применяет к элементу переданный transform, тот контент, который не поместится в исходную вью, будет обрезан.",
+      "platforms": [
+      ]
+    }
+  }
+}

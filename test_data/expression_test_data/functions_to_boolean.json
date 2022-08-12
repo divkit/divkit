@@ -1,0 +1,169 @@
+{
+  "cases": [
+    {
+      "name": "1 to boolean => true boolean",
+      "expression": "@{toBoolean(1)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "0 to boolean => false boolean",
+      "expression": "@{toBoolean(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "positive integer greater than 1 to boolean => error",
+      "expression": "@{toBoolean(2)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(2)]. Unable to convert value to Boolean."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative integer to boolean => error",
+      "expression": "@{toBoolean(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(-1)]. Unable to convert value to Boolean."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "number to boolean => error",
+      "expression": "@{toBoolean(3.1415)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(3.1415)]. Function 'toBoolean' has no matching override for given argument types: Number."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "boolean to boolean => error",
+      "expression": "@{toBoolean(true)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(true)]. Function 'toBoolean' has no matching override for given argument types: Boolean."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "empty argument list => error",
+      "expression": "@{toBoolean()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean()]. Non empty argument list is required for function 'toBoolean'."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "too many arguments => error",
+      "expression": "@{toBoolean(1, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean(1, 1)]. Function 'toBoolean' has no matching override for given argument types: Integer, Integer."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "string 'true' to boolean => true boolean",
+      "expression": "@{toBoolean('true')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "string 'false' to boolean => false boolean",
+      "expression": "@{toBoolean('false')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "expression string to boolean => error",
+      "expression": "@{toBoolean('true&&false')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean('true&&false')]. Unable to convert value to Boolean."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "text string to boolean => error",
+      "expression": "@{toBoolean('hello')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toBoolean('hello')]. Unable to convert value to Boolean."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,84 @@
+{
+  "type": "container",
+  "description": "Layout of this file's contents should be identical to that from horizontal_orientation_no_alignments.json contents",
+  "items": [
+    {
+      "type": "container",
+      "orientation": "horizontal",
+      "content_alignment_horizontal": "left",
+      "items": [
+        {
+          "type": "text",
+          "text": "left",
+          "alignment_horizontal": "left"
+        },
+        {
+          "type": "text",
+          "text": "center",
+          "alignment_horizontal": "center"
+        },
+        {
+          "type": "text",
+          "text": "right",
+          "alignment_horizontal": "right"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "orientation": "horizontal",
+      "content_alignment_horizontal": "center",
+      "items": [
+        {
+          "type": "text",
+          "text": "left",
+          "alignment_horizontal": "left"
+        },
+        {
+          "type": "text",
+          "text": "center",
+          "alignment_horizontal": "center"
+        },
+        {
+          "type": "text",
+          "text": "right",
+          "alignment_horizontal": "right"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    },
+    {
+      "type": "container",
+      "orientation": "horizontal",
+      "content_alignment_horizontal": "right",
+      "items": [
+        {
+          "type": "text",
+          "text": "left",
+          "alignment_horizontal": "left"
+        },
+        {
+          "type": "text",
+          "text": "center",
+          "alignment_horizontal": "center"
+        },
+        {
+          "type": "text",
+          "text": "right",
+          "alignment_horizontal": "right"
+        },
+        {
+          "type": "text",
+          "text": "default"
+        }
+      ]
+    }
+  ]
+}

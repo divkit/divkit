@@ -1,0 +1,32 @@
+{
+  "allOf": [
+    {
+      "$ref": "div-action-base.json"
+    },
+    {
+      "type": "object",
+      "description": "Действия, которые выполняются, когда элемент становится видимым.",
+      "properties": {
+        "visibility_percentage": {
+          "type": "integer",
+          "constraint": "number > 0 && number <= 100",
+          "default_value": "50",
+          "description": "Процент видимой части элемента, при котором срабатывает `visibility-action`."
+        },
+        "visibility_duration": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "800",
+          "description": "Время в миллисекундах, в течение которого элемент должен быть виден, чтобы сработал `visibility-action`."
+        },
+        "log_limit": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "1",
+          "description": "Ограничение на количество логирований. При `0` ограничение снимается."
+        }
+      },
+      "required": [
+        "log_id"
+      ]
+    }
+  ]
+}

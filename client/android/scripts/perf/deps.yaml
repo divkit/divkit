@@ -1,0 +1,9 @@
+bro_catapult:
+  commit: 9bcf02d79e36621c5ee152d6391683f86015a040
+  relative: src/third_party/catapult
+  paths: [
+    common,
+    dependency_manager,
+    devil,
+    third_party/zipfile,
+  ]

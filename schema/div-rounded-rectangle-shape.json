@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "description": "Прямоугольник со скругленными углами.",
+  "properties": {
+    "item_width": {
+      "$ref": "div-fixed-size.json",
+      "default_value": "{\"type\":\"fixed\",\"value\":10}",
+      "description": "Ширина."
+    },
+    "item_height": {
+      "$ref": "div-fixed-size.json",
+      "default_value": "{\"type\":\"fixed\",\"value\":10}",
+      "description": "Высота."
+    },
+    "corner_radius": {
+      "$ref": "div-fixed-size.json",
+      "default_value": "{\"type\":\"fixed\",\"value\":5}",
+      "description": "Радиус скругления углов."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "rounded_rectangle"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

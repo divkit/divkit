@@ -1,0 +1,56 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Контейнер. Содержит в себе другие элементы и отвечает за их расположение. Позволяет располагать элементы по вертикали, горизонтали и с наложением в определенном порядке, имитируя третье измерение.",
+  "generate_swift_optional_arguments": false,
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "container"
+          ]
+        },
+        "content_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "top",
+          "description": "Выравнивание элементов по умолчанию. Не используется, если из поля элемента задан параметр `alignment_vertical`."
+        },
+        "content_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "left",
+          "description": "Выравнивание элементов по умолчанию. Не используется, если из поля элемента задан параметр `alignment_horizontal`."
+        },
+        "orientation": {
+          "type": "string",
+          "enum": [
+            "vertical",
+            "horizontal",
+            "overlap"
+          ],
+          "default_value": "vertical",
+          "description": "Расположение элементов. Значение `overlap` накладывает элементы друг на друга в порядке перечисления. Ниже всего — нулевой элемент массива."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Вложенные элементы."
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "items"
+  ]
+}

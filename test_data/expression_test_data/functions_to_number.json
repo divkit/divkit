@@ -1,0 +1,365 @@
+{
+  "cases": [
+    {
+      "name": "positive integer to number => number",
+      "expression": "@{toNumber(1)}",
+      "expected": {
+        "type": "number",
+        "value": 1.0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative integer to number => number",
+      "expression": "@{toNumber(-1)}",
+      "expected": {
+        "type": "number",
+        "value": -1.0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "integer string to number => number",
+      "expression": "@{toNumber('3')}",
+      "expected": {
+        "type": "number",
+        "value": 3.0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "positive integer string to number => number",
+      "expression": "@{toNumber('+3')}",
+      "expected": {
+        "type": "number",
+        "value": 3.0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative integer string to number => number",
+      "expression": "@{toNumber('-3')}",
+      "expected": {
+        "type": "number",
+        "value": -3.0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "decimal string to number => number",
+      "expression": "@{toNumber('3.1415')}",
+      "expected": {
+        "type": "number",
+        "value": 3.1415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "positive decimal string to number => number",
+      "expression": "@{toNumber('+3.1415')}",
+      "expected": {
+        "type": "number",
+        "value": 3.1415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative decimal string to number => number",
+      "expression": "@{toNumber('-3.1415')}",
+      "expected": {
+        "type": "number",
+        "value": -3.1415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "decimal string with long mantissa to number => number",
+      "expression": "@{toNumber('3.14159265358979323846264338327950288419716939937510582097494459230781640628620899')}",
+      "expected": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "positive decimal string with long mantissa to number => number",
+      "expression": "@{toNumber('+3.14159265358979323846264338327950288419716939937510582097494459230781640628620899')}",
+      "expected": {
+        "type": "number",
+        "value": 3.141592653589793
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative decimal string with long mantissa to number => number",
+      "expression": "@{toNumber('-3.14159265358979323846264338327950288419716939937510582097494459230781640628620899')}",
+      "expected": {
+        "type": "number",
+        "value": -3.141592653589793
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "scientific decimal string to number => number",
+      "expression": "@{toNumber('3.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": 31.415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "positive scientific decimal string to number => number",
+      "expression": "@{toNumber('+3.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": 31.415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative scientific decimal string to number => number",
+      "expression": "@{toNumber('-3.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": -31.415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "scientific decimal string without leading zero to number => number",
+      "expression": "@{toNumber('.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": 1.415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "positive scientific decimal string without leading zero to number => number",
+      "expression": "@{toNumber('+.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": 1.415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative scientific decimal string without leading zero to number => number",
+      "expression": "@{toNumber('-.1415e1')}",
+      "expected": {
+        "type": "number",
+        "value": -1.415
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "out-of-range decimal string to number => error",
+      "expression": "@{toNumber('3.141592653589793e2048')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber('3.141592653589793e2048')]. Unable to convert value to Number."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "negative out-of-range decimal string to number => error",
+      "expression": "@{toNumber('-3.141592653589793e2048')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber('-3.141592653589793e2048')]. Unable to convert value to Number."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "expression string to number => error",
+      "expression": "@{toNumber('2.7182+3.1415')}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber('2.7182+3.1415')]. Unable to convert value to Number."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "text string to number => error",
+      "expression": "@{toNumber('hello')}",
+      "expected": {
+        "type": "error",
+        "value":  "Failed to evaluate [toNumber('hello')]. Unable to convert value to Number."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "true boolean to number => error",
+      "expression": "@{toNumber(true)}",
+      "expected": {
+        "type": "error",
+        "value":  "Failed to evaluate [toNumber(true)]. Function 'toNumber' has no matching override for given argument types: Boolean."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "false boolean to number => error",
+      "expression": "@{toNumber(false)}",
+      "expected": {
+        "type": "error",
+        "value":  "Failed to evaluate [toNumber(false)]. Function 'toNumber' has no matching override for given argument types: Boolean."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "number to number => error",
+      "expression": "@{toNumber(1.0)}",
+      "expected": {
+        "type": "error",
+        "value":  "Failed to evaluate [toNumber(1.0)]. Function 'toNumber' has no matching override for given argument types: Number."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "empty argument list => error",
+      "expression": "@{toNumber()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber()]. Non empty argument list is required for function 'toNumber'."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    },
+    {
+      "name": "too many arguments => error",
+      "expression": "@{toNumber(1, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [toNumber(1, 1)]. Function 'toNumber' has no matching override for given argument types: Integer, Integer."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "web"
+      ]
+    }
+  ]
+}

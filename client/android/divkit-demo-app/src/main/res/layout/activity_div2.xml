@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    tools:ignore="HardcodedText,RtlHardcoded">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/div2UrlEdit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:hint="Input URL"
+            android:inputType="textUri"
+            android:text="http://collabedit.com/download?id="
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/div2RefreshButton"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+            android:id="@+id/div2RefreshButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginRight="8dp"
+            android:contentDescription="@null"
+            android:text="refresh"
+            app:layout_constraintBottom_toBottomOf="@id/div2UrlEdit"
+            app:layout_constraintRight_toLeftOf="@+id/scanQrCodeButton"
+            app:layout_constraintTop_toTopOf="@id/div2UrlEdit"/>
+
+        <ImageButton
+            android:id="@+id/scanQrCodeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginRight="8dp"
+            app:srcCompat="@drawable/qr_code_scanner"
+            android:contentDescription="you don't need dis if u r blind"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/div2UrlEdit"
+            app:layout_constraintBottom_toBottomOf="@id/div2UrlEdit"/>
+
+        <TextView
+            app:layout_constraintTop_toBottomOf="@id/div2UrlEdit"
+            android:id="@+id/div2Error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            tools:text="com.yandex.alicekit.core.json.ParsingException: Value for key 'end' is missing" />
+
+        <LinearLayout
+            android:id="@+id/div2Placeholder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/div2Error">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/div2Recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

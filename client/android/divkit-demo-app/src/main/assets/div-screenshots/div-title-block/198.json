@@ -1,0 +1,27 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "text": "text in title",
+                    "type": "div-title-block",
+                    "text_style": "title_s",
+                    "menu_items": [
+                        {
+                            "url": "http://ya.ru",
+                            "text": "ya.ru"
+                        }
+                    ],
+                    "menu_color": "#FFF111"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

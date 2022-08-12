@@ -1,0 +1,46 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Кастомный элемент. Делегируется хост-приложению для создания нативных элементов в зависимости от платформы.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "custom"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "div.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Вложенные элементы."
+        },
+        "custom_type": {
+          "type": "string",
+          "supports_expressions": false,
+          "description": "Подтип элемента для хост-приложения."
+        },
+        "custom_props": {
+          "type": "object",
+          "additionalProperties": true,
+          "description": "Данные элемента для хост-приложения."
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "custom_type"
+  ]
+}

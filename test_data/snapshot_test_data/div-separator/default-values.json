@@ -1,0 +1,14 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "separator"
+        }
+      }
+    ]
+  }
+}

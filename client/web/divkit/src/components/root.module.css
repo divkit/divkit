@@ -1,0 +1,44 @@
+.root {
+    display: grid;
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+    overflow: hidden;
+    font-size: 10px;
+    line-height: 1.25;
+    word-wrap: break-word;
+    word-break: break-word;
+    /*color: #000;
+    background: #fff;*/
+}
+
+@supports (overflow: clip) {
+    .root {
+        overflow: clip;
+    }
+}
+
+.root__clickable {
+    cursor: pointer;
+}
+
+.root__unselectable {
+    user-select: none;
+}
+
+.root_platform_desktop {}
+
+.root_platform_desktop .root__clickable {
+    transition: opacity .15s ease-out;
+}
+
+.root_platform_desktop .root__clickable:hover {
+    opacity: .7;
+}
+
+.root_platform_desktop .root__clickable:active {
+    opacity: .5;
+}
+
+.root:not(.root_platform_desktop) .root__only-desktop {
+    display: none;
+}

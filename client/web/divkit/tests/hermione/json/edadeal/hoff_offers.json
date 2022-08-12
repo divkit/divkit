@@ -1,0 +1,3232 @@
+{
+  "templates": {
+    "tpl-header-with-button": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "$text": "title_text",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "right": 16
+          },
+          "font_size": 22,
+          "max_lines": 2,
+          "$text_color": "title_color",
+          "font_weight": "bold",
+          "line_height": 26
+        },
+        {
+          "type": "text",
+          "$text": "button_text",
+          "width": {
+            "type": "wrap_content"
+          },
+          "actions": [
+            {
+              "$url": "button_link",
+              "log_id": "#!edadeal/metrics/send?eventName=ButtonClick&hash={hash}",
+              "$payload": "analytics_data"
+            }
+          ],
+          "font_size": 16,
+          "$text_color": "button_color",
+          "line_height": 20,
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=ButtonAppear&hash={hash}",
+              "$payload": "analytics_data",
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            }
+          ]
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "$paddings": "var_paddings",
+      "orientation": "horizontal",
+      "content_alignment_vertical": "bottom"
+    },
+    "eddl_offers_carousel_retailer_icon": {
+      "type": "container",
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "value": 30
+      },
+      "height": {
+        "type": "fixed",
+        "value": 30
+      },
+      "border": {
+        "corner_radius": 15,
+        "stroke": {
+          "color": "#FFF",
+          "width": 3
+        }
+      },
+      "margins": {
+        "top": 5,
+        "left": 5
+      },
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_retailer_image_url",
+          "border": {
+            "corner_radius": 12
+          },
+          "width": {
+            "type": "fixed",
+            "value": 24
+          },
+          "height": {
+            "type": "fixed",
+            "value": 24
+          }
+        }
+      ]
+    },
+    "eddl_offers_carousel_badge_simple": {
+      "type": "text",
+      "paddings": {
+        "left": 8,
+        "right": 8,
+        "top": 2,
+        "bottom": 2
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top"
+      },
+      "border": {
+        "corner_radius": 2
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#267AF2"
+        }
+      ],
+      "alignment_horizontal": "left",
+      "$font_size": "eddl_badge_font_size",
+      "$line_height": "eddl_badge_line_height",
+      "max_lines": 1,
+      "text_color": "#FFF",
+      "$text": "eddl_badge_text"
+    },
+    "eddl_offers_carousel_badge_discount": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_height"
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top",
+        "left": 0
+      },
+      "background": [
+        {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "scale": "fit"
+        }
+      ],
+      "$font_size": "eddl_badge_font_size",
+      "$line_height": "eddl_badge_line_height",
+      "max_lines": 1,
+      "text_color": "#09141F",
+      "$text": "eddl_badge_text"
+    },
+    "eddl_offers_carousel_image_container": {
+      "type": "container",
+      "border": {
+        "corner_radius": 12
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F4F4F4"
+        }
+      ],
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_item_image_url",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          }
+        }
+      ]
+    },
+    "eddl_offers_carousel_price_new": {
+      "type": "text",
+      "$font_size": "eddl_price_new_font_size",
+      "font_weight": "medium",
+      "$line_height": "eddl_price_new_line_height",
+      "width": {
+        "type": "wrap_content"
+      },
+      "max_lines": 1,
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$text_color": "eddl_price_new_text_color",
+      "$text": "eddl_price_new_text"
+    },
+    "eddl_offers_carousel_price_old": {
+      "width": {
+        "type": "wrap_content"
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$font_size": "eddl_price_old_font_size",
+      "$line_height": "eddl_price_old_line_height",
+      "max_lines": 1,
+      "$text_color": "eddl_price_old_text_color",
+      "$text": "eddl_price_old_text",
+      "strike": "single"
+    },
+    "eddl_offers_carousel_offer_content_image": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_image_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_image_height"
+      },
+      "$items": "eddl_offer_content_image_items"
+    },
+    "eddl_offers_carousel_offer_content_prices": {
+      "type": "container",
+      "$orientation": "eddl_content_prices_orientation",
+      "alignment_vertical": "top",
+      "width": {
+        "type": "match_parent"
+      },
+      "$content_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "margins": {
+        "top": 12
+      },
+      "$items": "eddl_content_prices_items"
+    },
+    "eddl_offers_carousel_offer_content_description": {
+      "margins": {
+        "top": 8
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$font_size": "eddl_description_font_size",
+      "$line_height": "eddl_description_line_height",
+      "$max_lines": "eddl_description_max_lines",
+      "$text_color": "eddl_description_text_color",
+      "$text": "eddl_description_text"
+    },
+    "eddl_offers_carousel_offer_text_container": {
+      "type": "container",
+      "$paddings": "eddl_offer_text_paddings",
+      "$content_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$items": "eddl_offer_text_container_items"
+    },
+    "eddl_offers_carousel_offer_content": {
+      "type": "container",
+      "$items": "eddl_offer_content_items",
+      "content_alignment_horizontal": "center"
+    },
+    "eddl_offers_carousel_item": {
+      "type": "container",
+      "orientation": "overlap",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "eddl_item_background_color"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_height",
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 12
+      },
+      "$items": "eddl_offer_items",
+      "$actions": "eddl_item_actions",
+      "$visibility_actions": "eddl_item_visibility_actions"
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F4F4F4"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockAppear&hash=d0f565e6656bdf3fbd60eb805cff5a31",
+              "payload": {
+                "BlockId": "449",
+                "BlockSlug": "hoff_offers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1073"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            },
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockView&hash=ae843dcb2c2af0053aeeefd5edea2e5e",
+              "payload": {
+                "BlockId": "449",
+                "BlockSlug": "hoff_offers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1073"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1000,
+              "visibility_percentage": 50
+            }
+          ],
+          "items": [
+            {
+              "type": "tpl-header-with-button",
+              "title_text": "Суперцены в Hoff",
+              "button_link": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fsearch%22%2C%22section%22%3A%22srch-retailer%22%2C%22params%22%3A%7B%22request%22%3A%7B%22retailerUuid%22%3A%228ae469fa-407c-4239-8b27-b1418bb2e509%22%7D%7D%2C%22meta%22%3A%7B%22headerTitle%22%3A%22HOFF%22%7D%7D",
+              "button_text": "См. все",
+              "title_color": "#ff09141f",
+              "button_color": "#ff27ae61",
+              "var_paddings": {
+                "left": 16,
+                "right": 16,
+                "bottom": 14
+              },
+              "analytics_data": {
+                "slug": "ShowAll",
+                "BlockId": "449",
+                "BlockSlug": "hoff_offers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1073"
+              }
+            },
+            {
+              "type": "gallery",
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "11999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "14499"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Шкаф 2-дверный Элана Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=214043773aa47a4063e71b0e0f45126c",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "d5c74dd6-bf96-58fd-a937-e9e31148803a",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф 2-дверный Элана Hoff",
+                        "ProductPrice": "1199900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/prihozhaya/shkafi_dlia_prihozhei/shkaf_2_dvernyy_elana_id7499674/?articul=80393490&utm_source=edadeal&utm_content=80393490&utm_medium=cpc&utm_campaign=catalog&utm_term=80393490"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=214043773aa47a4063e71b0e0f45126c",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "d5c74dd6-bf96-58fd-a937-e9e31148803a",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф 2-дверный Элана Hoff",
+                        "ProductPrice": "1199900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=23206d9126ac84a82e5cee34b020eaa1",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "d5c74dd6-bf96-58fd-a937-e9e31148803a",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф 2-дверный Элана Hoff",
+                        "ProductPrice": "1199900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "2599"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Набор стаканов для виски Oasis RCR",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=2c70fea4cff2a27d6d55630b368a0579",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "78e68578-1243-5c1d-82b2-0cdcd4cba1d2",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "caebe558-255b-500c-b2cd-c875d1573e4b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор стаканов для виски Oasis RCR",
+                        "ProductPrice": "199900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/posuda/servirovka_stola/bokaly_i_stakany/nabory_dlya_viski/nabor_stakanov_dlya_viski_oasis_id7978295/?articul=80432603&utm_source=edadeal&utm_content=80432603&utm_medium=cpc&utm_campaign=catalog&utm_term=80432603"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=2c70fea4cff2a27d6d55630b368a0579",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "78e68578-1243-5c1d-82b2-0cdcd4cba1d2",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "caebe558-255b-500c-b2cd-c875d1573e4b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор стаканов для виски Oasis RCR",
+                        "ProductPrice": "199900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=2ddc7b9f777e28313b3efa20db3602dd",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "78e68578-1243-5c1d-82b2-0cdcd4cba1d2",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "caebe558-255b-500c-b2cd-c875d1573e4b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор стаканов для виски Oasis RCR",
+                        "ProductPrice": "199900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "3490₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "4499"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Светильник подвесной Спенсер CITILUX",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=b7e545008e2f515c6c8b5cdfdb75930c",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "de700000-4a60-59dd-82d3-5335dd0ad065",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "0ad20cb2-7664-5b3d-b020-9adb0780b1f5",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Светильник подвесной Спенсер CITILUX",
+                        "ProductPrice": "349000",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/osveschenie/lustry_i_potolochnye_svetilniki/podvesnye_svetilniki/svetilnik_podvesnoy_spenser_id2790902/?articul=80309094&utm_source=edadeal&utm_content=80309094&utm_medium=cpc&utm_campaign=catalog&utm_term=80309094"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=b7e545008e2f515c6c8b5cdfdb75930c",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "de700000-4a60-59dd-82d3-5335dd0ad065",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "0ad20cb2-7664-5b3d-b020-9adb0780b1f5",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Светильник подвесной Спенсер CITILUX",
+                        "ProductPrice": "349000",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=d558974de9339a95f316c645ed82a744",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "de700000-4a60-59dd-82d3-5335dd0ad065",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "0ad20cb2-7664-5b3d-b020-9adb0780b1f5",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Светильник подвесной Спенсер CITILUX",
+                        "ProductPrice": "349000",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "13499₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "17999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Шкаф с ящиками Стокгольм Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=4b9d330d054bfac543cb10378123b6e2",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "31ef547a-2ad2-56ef-8291-2a04c105f2a7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф с ящиками Стокгольм Hoff",
+                        "ProductPrice": "1349900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/detskaya/detskie_shkafy_i_stellazhi/stellazhi/shkaf_s_yashchikami_stokgolm_id5089668/?articul=80334946&utm_source=edadeal&utm_content=80334946&utm_medium=cpc&utm_campaign=catalog&utm_term=80334946"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=4b9d330d054bfac543cb10378123b6e2",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "31ef547a-2ad2-56ef-8291-2a04c105f2a7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф с ящиками Стокгольм Hoff",
+                        "ProductPrice": "1349900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f5a8c9182531f9d76646f777c65cf371",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "31ef547a-2ad2-56ef-8291-2a04c105f2a7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф с ящиками Стокгольм Hoff",
+                        "ProductPrice": "1349900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "7999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "9899"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Письменный стол Фанк Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=023b433fca85ceaa67231ca61ef08cb2",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "53f9a013-2d86-5d6b-b9a0-0af7a6cf8575",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Письменный стол Фанк Hoff",
+                        "ProductPrice": "799900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/detskaya/detskie_stoly/pismennyy_stol_fank_id6872036/?articul=80368132&utm_source=edadeal&utm_content=80368132&utm_medium=cpc&utm_campaign=catalog&utm_term=80368132"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=023b433fca85ceaa67231ca61ef08cb2",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "53f9a013-2d86-5d6b-b9a0-0af7a6cf8575",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Письменный стол Фанк Hoff",
+                        "ProductPrice": "799900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=21857e441d4c24ba029e92a90f2cf448",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "53f9a013-2d86-5d6b-b9a0-0af7a6cf8575",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Письменный стол Фанк Hoff",
+                        "ProductPrice": "799900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "5299₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "6299"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Комод Diamond Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=25256bcef2e4e0122dfb380cc2c3c968",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "f4a79855-f1d3-59dd-bc40-5e3eca09c911",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Комод Diamond Hoff",
+                        "ProductPrice": "529900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/gostinaya/mebel_dlya_gostinykh/komody/komod_diamond_id7554450/?articul=80397611&utm_source=edadeal&utm_content=80397611&utm_medium=cpc&utm_campaign=catalog&utm_term=80397611"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=25256bcef2e4e0122dfb380cc2c3c968",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "f4a79855-f1d3-59dd-bc40-5e3eca09c911",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Комод Diamond Hoff",
+                        "ProductPrice": "529900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=062c46e3ceabc2f5b795cd3d291c1d63",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "f4a79855-f1d3-59dd-bc40-5e3eca09c911",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Комод Diamond Hoff",
+                        "ProductPrice": "529900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "2199₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "2799"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Набор стаканов для виски Marilyn RCR",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=b11d0aa702bb0646c14d4d994f6f8d21",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "a5da61c4-e000-535e-8f6c-e780f8b37854",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "8bc2ff99-8841-55c3-8d40-b04373369332",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор стаканов для виски Marilyn RCR",
+                        "ProductPrice": "219900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/posuda/servirovka_stola/bokaly_i_stakany/nabory_dlya_viski/nabor_stakanov_dlya_viski_marilyn_id7973592/?articul=80432517&utm_source=edadeal&utm_content=80432517&utm_medium=cpc&utm_campaign=catalog&utm_term=80432517"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=b11d0aa702bb0646c14d4d994f6f8d21",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "a5da61c4-e000-535e-8f6c-e780f8b37854",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "8bc2ff99-8841-55c3-8d40-b04373369332",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор стаканов для виски Marilyn RCR",
+                        "ProductPrice": "219900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=3761d7efcfd1d093ddfb9e54d119e190",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "a5da61c4-e000-535e-8f6c-e780f8b37854",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "8bc2ff99-8841-55c3-8d40-b04373369332",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор стаканов для виски Marilyn RCR",
+                        "ProductPrice": "219900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "2299₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "2799"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Сковорода-вок с крышкой Asia BERKRAFT",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=37fdd63623328c9763796b4d6715ef6d",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "823e3b07-9a62-5d30-b0cd-e8270b2f462d",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "831392cd-8e69-5eab-bdb9-3dfd1fb2ceea",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сковорода-вок с крышкой Asia BERKRAFT",
+                        "ProductPrice": "229900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/posuda/prigotovlenie_pischi/skovorody_i_soteyniki/skovorody_vok/skovoroda_vok_28_sm_s_kryshkoy_asia_id1340864/?articul=80289089&utm_source=edadeal&utm_content=80289089&utm_medium=cpc&utm_campaign=catalog&utm_term=80289089"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=37fdd63623328c9763796b4d6715ef6d",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "823e3b07-9a62-5d30-b0cd-e8270b2f462d",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "831392cd-8e69-5eab-bdb9-3dfd1fb2ceea",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сковорода-вок с крышкой Asia BERKRAFT",
+                        "ProductPrice": "229900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=c78cd2b8084415de5e1474d8b57bbb2a",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "823e3b07-9a62-5d30-b0cd-e8270b2f462d",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "831392cd-8e69-5eab-bdb9-3dfd1fb2ceea",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сковорода-вок с крышкой Asia BERKRAFT",
+                        "ProductPrice": "229900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "22699₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "32299"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Люстра Polaris Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=a040f1135273eb9e1a11450e9a42d697",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "fc61682a-3e81-525d-a76f-703c3db60eb7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Люстра Polaris Hoff",
+                        "ProductPrice": "2269900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/osveschenie/lustry_i_potolochnye_svetilniki/podvesnye_svetilniki/lyustra_polaris_id7806393/?articul=80391279&utm_source=edadeal&utm_content=80391279&utm_medium=cpc&utm_campaign=catalog&utm_term=80391279"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=a040f1135273eb9e1a11450e9a42d697",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "fc61682a-3e81-525d-a76f-703c3db60eb7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Люстра Polaris Hoff",
+                        "ProductPrice": "2269900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=500e98a6b930c771e88483f769cd744a",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "fc61682a-3e81-525d-a76f-703c3db60eb7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Люстра Polaris Hoff",
+                        "ProductPrice": "2269900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "2999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "3899"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Набор фужеров для вина Calice Aria Vini Bianchi RCR",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=8c5330c8c47dbad21c729903b8105209",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "4a3a6f6a-5795-55b3-9fc2-895f589a324e",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "8bc2ff99-8841-55c3-8d40-b04373369332",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор фужеров для вина Calice Aria Vini Bianchi RCR",
+                        "ProductPrice": "299900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/posuda/servirovka_stola/bokaly_i_stakany/bokaly/nabor_fuzherov_dlya_vina_calice_aria_vini_bianchi_id7971909/?articul=80432488&utm_source=edadeal&utm_content=80432488&utm_medium=cpc&utm_campaign=catalog&utm_term=80432488"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=8c5330c8c47dbad21c729903b8105209",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "4a3a6f6a-5795-55b3-9fc2-895f589a324e",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "8bc2ff99-8841-55c3-8d40-b04373369332",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор фужеров для вина Calice Aria Vini Bianchi RCR",
+                        "ProductPrice": "299900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=4c2787c8b95c800df559870ef89626d6",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "4a3a6f6a-5795-55b3-9fc2-895f589a324e",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "8bc2ff99-8841-55c3-8d40-b04373369332",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Набор фужеров для вина Calice Aria Vini Bianchi RCR",
+                        "ProductPrice": "299900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для сервировки стола",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cdc1-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "4599₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "6599"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Искусственное растение в кашпо Орхидея Фаленопсис Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=85f8cd08e89f33c67486ffdfac050302",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "dfb036f9-1cac-5b90-9f79-d6100189bd34",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Искусственное растение в кашпо Орхидея Фаленопсис Hoff",
+                        "ProductPrice": "459900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Декор интерьера",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cba4-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/dekor/vazy_i_tsvety/tsvety/iskusstvennoe_rastenie_v_kashpo_orkhideya_falenopsis_id7967367/?articul=80433504&utm_source=edadeal&utm_content=80433504&utm_medium=cpc&utm_campaign=catalog&utm_term=80433504"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=85f8cd08e89f33c67486ffdfac050302",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "dfb036f9-1cac-5b90-9f79-d6100189bd34",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Искусственное растение в кашпо Орхидея Фаленопсис Hoff",
+                        "ProductPrice": "459900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Декор интерьера",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cba4-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=50b25341b05b4e08af2df45bbbdbf9d5",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "dfb036f9-1cac-5b90-9f79-d6100189bd34",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Искусственное растение в кашпо Орхидея Фаленопсис Hoff",
+                        "ProductPrice": "459900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Декор интерьера",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cba4-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "7499₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "9399"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Шкаф для белья Paola Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=62ebce64f403a6328b4bdd5ef0e712d9",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "8d293dd4-361d-5a3a-b04c-ded042e4b16c",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф для белья Paola Hoff",
+                        "ProductPrice": "749900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/gostinaya/mebel_dlya_gostinykh/shkafy_dlya_gostinoy/shkaf_dlya_belya_paola_id3884890/?articul=80323822&utm_source=edadeal&utm_content=80323822&utm_medium=cpc&utm_campaign=catalog&utm_term=80323822"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=62ebce64f403a6328b4bdd5ef0e712d9",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "8d293dd4-361d-5a3a-b04c-ded042e4b16c",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф для белья Paola Hoff",
+                        "ProductPrice": "749900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=e1124f76d56480103e57a3d8f762ed4c",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "8d293dd4-361d-5a3a-b04c-ded042e4b16c",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Шкаф для белья Paola Hoff",
+                        "ProductPrice": "749900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "27999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "32999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Диван-кровать Лион Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=b6b6d9557f2009d092f517ffada3ef4a",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "e630622a-32a1-564f-9c24-e4e7b36a04a0",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Диван-кровать Лион Hoff",
+                        "ProductPrice": "2799900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/gostinaya/divany/pryamye_tkanevye/divan_krovat_lion_id7832391/?articul=80414697&utm_source=edadeal&utm_content=80414697&utm_medium=cpc&utm_campaign=catalog&utm_term=80414697"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=b6b6d9557f2009d092f517ffada3ef4a",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "e630622a-32a1-564f-9c24-e4e7b36a04a0",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Диван-кровать Лион Hoff",
+                        "ProductPrice": "2799900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=489ff95319483088290d20a60d38d07a",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "e630622a-32a1-564f-9c24-e4e7b36a04a0",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Диван-кровать Лион Hoff",
+                        "ProductPrice": "2799900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1299₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "1899"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Подставка для ножей Marshall WALMER",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=ec3c9723e7fa5df8e37bc4da106ce61e",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "6ba2b494-0c66-5400-bca1-0dbd4825ad86",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "f1174cd9-60fa-5483-afcb-5280712c391c",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Подставка для ножей Marshall WALMER",
+                        "ProductPrice": "129900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/posuda/kuhonnye_prinadlezhnosti/nozhi_i_aksessuary/podstavki_dlya_nozhey/podstavka_dlya_nozhey_marshall_id5468715/?articul=80336356&utm_source=edadeal&utm_content=80336356&utm_medium=cpc&utm_campaign=catalog&utm_term=80336356"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=ec3c9723e7fa5df8e37bc4da106ce61e",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "6ba2b494-0c66-5400-bca1-0dbd4825ad86",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "f1174cd9-60fa-5483-afcb-5280712c391c",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Подставка для ножей Marshall WALMER",
+                        "ProductPrice": "129900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=1ddc04f28d94154056599ae441047bc6",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "6ba2b494-0c66-5400-bca1-0dbd4825ad86",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "f1174cd9-60fa-5483-afcb-5280712c391c",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Подставка для ножей Marshall WALMER",
+                        "ProductPrice": "129900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "3848₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "5499"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Стеновая панель 3,05 м дуб Прованс Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=dd39b61d3dbe5c1bf499dc4b238cc8c5",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "60452636-a824-58b1-8a1b-76fdeadbc012",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стеновая панель 3,05 м дуб Прованс Hoff",
+                        "ProductPrice": "384800",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Строительство и ремонт",
+                        "SegmentName2": "Материалы",
+                        "SegmentName3": "Отделочные материалы",
+                        "SegmentUUID1": "25712009-20fb-554b-8567-e658c7329090",
+                        "SegmentUUID2": "2139e9da-1068-577f-b924-6434e4ad8eec",
+                        "SegmentUUID3": "c7355de1-008e-5cc8-bb3d-b3e15a31a313",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/kuhnya/stenovie_paneli/stenovaya_panel_3_05_m_dub_provans_id2735135/?articul=80308529&utm_source=edadeal&utm_content=80308529&utm_medium=cpc&utm_campaign=catalog&utm_term=80308529"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=dd39b61d3dbe5c1bf499dc4b238cc8c5",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "60452636-a824-58b1-8a1b-76fdeadbc012",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стеновая панель 3,05 м дуб Прованс Hoff",
+                        "ProductPrice": "384800",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Строительство и ремонт",
+                        "SegmentName2": "Материалы",
+                        "SegmentName3": "Отделочные материалы",
+                        "SegmentUUID1": "25712009-20fb-554b-8567-e658c7329090",
+                        "SegmentUUID2": "2139e9da-1068-577f-b924-6434e4ad8eec",
+                        "SegmentUUID3": "c7355de1-008e-5cc8-bb3d-b3e15a31a313",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=df89cf742d3558ddcc01e7f444908e4d",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "60452636-a824-58b1-8a1b-76fdeadbc012",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стеновая панель 3,05 м дуб Прованс Hoff",
+                        "ProductPrice": "384800",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Строительство и ремонт",
+                        "SegmentName2": "Материалы",
+                        "SegmentName3": "Отделочные материалы",
+                        "SegmentUUID1": "25712009-20fb-554b-8567-e658c7329090",
+                        "SegmentUUID2": "2139e9da-1068-577f-b924-6434e4ad8eec",
+                        "SegmentUUID3": "c7355de1-008e-5cc8-bb3d-b3e15a31a313",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "2599₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "3999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Ковёр Флора Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=e363c98a054517b9d3725eb89c532c7d",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "f2df9c1a-5bb8-5bea-afff-80a83b921831",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковёр Флора Hoff",
+                        "ProductPrice": "259900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/kovry/sovremennye_kovry/kovyer_flora_id7999181/?articul=80437958&utm_source=edadeal&utm_content=80437958&utm_medium=cpc&utm_campaign=catalog&utm_term=80437958"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=e363c98a054517b9d3725eb89c532c7d",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "f2df9c1a-5bb8-5bea-afff-80a83b921831",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковёр Флора Hoff",
+                        "ProductPrice": "259900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=076478c003402b5a6ed2cdb267d227f2",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "f2df9c1a-5bb8-5bea-afff-80a83b921831",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковёр Флора Hoff",
+                        "ProductPrice": "259900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "14499₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "24199"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Кровать детская Элис Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=b9d1838cc5428f4cf1d8aa2f8b283d73",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "8bdc7a07-df6d-5965-a3ce-2b67a44bbc2a",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кровать детская Элис Hoff",
+                        "ProductPrice": "1449900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детская комната",
+                        "SegmentName3": "Детская мебель",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b34a835-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b34a892-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/detskaya/detskie_krovati/krovati_odnoyarusnye/krovat_detskaya_elis_id7704229/?articul=80409622&utm_source=edadeal&utm_content=80409622&utm_medium=cpc&utm_campaign=catalog&utm_term=80409622"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=b9d1838cc5428f4cf1d8aa2f8b283d73",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "8bdc7a07-df6d-5965-a3ce-2b67a44bbc2a",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кровать детская Элис Hoff",
+                        "ProductPrice": "1449900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детская комната",
+                        "SegmentName3": "Детская мебель",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b34a835-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b34a892-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=b0ddf9a8a557a2d9de39d0484c73cabe",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "8bdc7a07-df6d-5965-a3ce-2b67a44bbc2a",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кровать детская Элис Hoff",
+                        "ProductPrice": "1449900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для детей",
+                        "SegmentName2": "Детская комната",
+                        "SegmentName3": "Детская мебель",
+                        "SegmentUUID1": "3b348b96-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b34a835-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b34a892-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "4799₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "6999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Плед Азурро ESTIA",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=6166e71f4b029113556a2ab985577f24",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "0c9a75cc-3315-5fb1-afdc-b0b9e898b649",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "3774cdf9-97b5-5b8e-8d5c-585383e17669",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Плед Азурро ESTIA",
+                        "ProductPrice": "479900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Домашний текстиль",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cb17-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/tekstil/pledy/pled_azurro_id7241505/?articul=80368340&utm_source=edadeal&utm_content=80368340&utm_medium=cpc&utm_campaign=catalog&utm_term=80368340"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=6166e71f4b029113556a2ab985577f24",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "0c9a75cc-3315-5fb1-afdc-b0b9e898b649",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "3774cdf9-97b5-5b8e-8d5c-585383e17669",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Плед Азурро ESTIA",
+                        "ProductPrice": "479900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Домашний текстиль",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cb17-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=1f6fd15f571d5d029965fcc96ee85913",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "0c9a75cc-3315-5fb1-afdc-b0b9e898b649",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "3774cdf9-97b5-5b8e-8d5c-585383e17669",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Плед Азурро ESTIA",
+                        "ProductPrice": "479900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Домашний текстиль",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35cb17-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "12599₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "15999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Тумба прикроватная Лучидо Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=432a053ea0daeede34e9b2a21d474463",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "273e2d2a-64c5-517c-9593-0fb2bb945e9f",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Тумба прикроватная Лучидо Hoff",
+                        "ProductPrice": "1259900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/spalnya/tumby_i_komody/tumby/tumba_prikrovatnaya_luchido_id1528604/?articul=80291423&utm_source=edadeal&utm_content=80291423&utm_medium=cpc&utm_campaign=catalog&utm_term=80291423"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=432a053ea0daeede34e9b2a21d474463",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "273e2d2a-64c5-517c-9593-0fb2bb945e9f",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Тумба прикроватная Лучидо Hoff",
+                        "ProductPrice": "1259900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=773f1f9d19b25375a412ed29f8f94577",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "273e2d2a-64c5-517c-9593-0fb2bb945e9f",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Тумба прикроватная Лучидо Hoff",
+                        "ProductPrice": "1259900",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "Мебель",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ca89-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "9298₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "15499"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Ковёр Cyrus Hoff",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=bcbf24824d20ee6afdafb4a016cd7277",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "e3d3b627-050a-522d-9928-7f2e2e9167a7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковёр Cyrus Hoff",
+                        "ProductPrice": "929800",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "url": "https://hoff.ru/catalog/tovary_dlya_doma/kovry/kovry_sheggi/kovyer_cyrus_id5796511/?articul=80337347&utm_source=edadeal&utm_content=80337347&utm_medium=cpc&utm_campaign=catalog&utm_term=80337347"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=bcbf24824d20ee6afdafb4a016cd7277",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "e3d3b627-050a-522d-9928-7f2e2e9167a7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковёр Cyrus Hoff",
+                        "ProductPrice": "929800",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=88db1b46c20c0007a7d0b91337c9d526",
+                      "payload": {
+                        "BlockId": "449",
+                        "ItemType": "Product",
+                        "ItemUUID": "e3d3b627-050a-522d-9928-7f2e2e9167a7",
+                        "BlockSlug": "hoff_offers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "f36405f1-a93f-5e0d-a8e7-05c602229dbd",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковёр Cyrus Hoff",
+                        "ProductPrice": "929800",
+                        "RetailerName": "HOFF",
+                        "RetailerUUID": "8ae469fa-407c-4239-8b27-b1418bb2e509",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Товары для дома",
+                        "SegmentName3": "",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c9d9-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "",
+                        "BlockVersionId": "1073"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`simpleCheckInput simple 1`] = `[Error: Missing card]`;
+
+exports[`simpleCheckInput simple 2`] = `[Error: Missing states]`;
+
+exports[`simpleCheckInput simple 3`] = `[Error: Missing states]`;
+
+exports[`simpleCheckInput simple 4`] = `[Error: Template name collision]`;
+
+exports[`simpleCheckInput simple 5`] = `[Error: Missing state div]`;
+
+exports[`simpleCheckInput simple 6`] = `null`;

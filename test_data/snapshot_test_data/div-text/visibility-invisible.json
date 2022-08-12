@@ -1,0 +1,63 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "test/body",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "bottom": 6,
+            "left": 6,
+            "right": 6,
+            "top": 6
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "visibility=invisible block below:",
+              "font_size": 18,
+              "text_color": "#FFFFFF"
+            },
+            {
+              "type": "text",
+              "text": "Invisible",
+              "font_size": 18,
+              "font_weight": "medium",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "text_color": "#34495E",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "margins": {
+                "bottom": 12,
+                "left": 12,
+                "right": 12,
+                "top": 12
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#1ABC9C"
+                }
+              ],
+              "visibility": "invisible"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

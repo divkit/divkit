@@ -1,0 +1,24 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_strict_array"
+      ]
+    },
+    "array": {
+      "type": "array",
+      "items": {
+        "$ref": "entity.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "strictParsing": true
+    }
+  },
+  "required": [
+    "type",
+    "array"
+  ]
+}

@@ -1,0 +1,158 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Div templates test should create card with template which has more than one base template block 1`] = `
+{
+  "templates": {
+    "card": {
+      "type": "A",
+      "$alpha": "opacity"
+    },
+    "A": {
+      "type": "B"
+    },
+    "B": {
+      "type": "C",
+      "$orientation": "orient"
+    },
+    "C": {
+      "type": "container",
+      "$items": "content"
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "card",
+          "opacity": 0.5,
+          "orient": "horizontal",
+          "content": [
+            {
+              "type": "text",
+              "text": "text"
+            }
+          ],
+          "margins": {
+            "top": 1
+          }
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`Div templates test should create nested template and card with new property 1`] = `
+{
+  "templates": {
+    "district2": {
+      "type": "container",
+      "column_span": 1,
+      "items": [
+        {
+          "type": "district2_foot_text",
+          "$text": "comments_cnt",
+          "$my_end": "my_first_end"
+        },
+        {
+          "type": "district2_foot_text",
+          "my_end": 5,
+          "$text": "likes_cnt"
+        }
+      ]
+    },
+    "district2_foot_text": {
+      "type": "text",
+      "alignment_horizontal": "right",
+      "font_size": 13,
+      "line_height": 16,
+      "paddings": {
+        "left": 5
+      },
+      "ranges": [
+        {
+          "start": 0,
+          "text_color": "#333",
+          "$end": "my_end"
+        }
+      ],
+      "text_color": "#999",
+      "width": {
+        "type": "wrap_content"
+      }
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "district2",
+          "comments_cnt": "some.comments.cnt",
+          "likes_cnt": "some.likes.cnt",
+          "my_first_end": 5
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`Div templates test should create simple template 1`] = `
+{
+  "title_text": {
+    "type": "text",
+    "$text": "title_text"
+  }
+}
+`;
+
+exports[`Div templates test should create template with title menu and footer 1`] = `
+{
+  "templates": {
+    "title_text": {
+      "type": "text",
+      "font_size": 18,
+      "font_weight": "medium",
+      "line_height": 24,
+      "paddings": {
+        "left": 16,
+        "top": 12,
+        "right": 16
+      },
+      "text_color": "#CC000000"
+    },
+    "title_menu": {
+      "type": "image",
+      "height": {
+        "type": "fixed",
+        "value": 44
+      },
+      "image_url": "https://i.imgur.com/qNJQKU8.png",
+      "width": {
+        "type": "fixed",
+        "value": 44
+      }
+    },
+    "footer": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 16,
+      "margins": {
+        "left": 16,
+        "right": 16
+      },
+      "paddings": {
+        "bottom": 12,
+        "top": 12
+      },
+      "text_color": "#80000000",
+      "$action": "footer_action_link",
+      "$text": "footer_text"
+    }
+  }
+}
+`;

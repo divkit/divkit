@@ -1,0 +1,11 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_optional_string_enum_property",
+      "$property": "link"
+    }
+  },
+  "entity": {
+    "type": "t_0"
+  }
+}

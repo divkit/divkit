@@ -1,0 +1,149 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "direction": "vertical",
+                    "frame": {
+                        "style": "only_round_corners"
+                    },
+                    "height": {
+                        "type": "numeric",
+                        "value": 200
+                    },
+                    "width": {
+                        "type": "numeric",
+                        "value": 300
+                    },
+                    "background": [
+                        {
+                            "color": "#00FF00",
+                            "type": "div-solid-background"
+                        }
+                    ],
+                    "action": {
+                        "url": "https://news.yandex.ru/hockey.html"
+                    },
+                    "type": "div-container-block",
+                    "children": [
+                        {
+                            "action": {
+                                "url": "https://yandex.ru/maps"
+                            },
+                            "items": [
+                                {
+                                    "direction": "horizontal",
+                                    "frame": {
+                                        "color": "#FF1000",
+                                        "style": "border"
+                                    },
+                                    "height": {
+                                        "type": "numeric",
+                                        "value": 100
+                                    },
+                                    "width": {
+                                        "type": "numeric",
+                                        "value": 120
+                                    },
+                                    "action": {
+                                        "url": "https://afisha.yandex.ru"
+                                    },
+                                    "type": "div-container-block",
+                                    "children": [
+                                        {
+                                            "action": {
+                                                "url": "http://ya.ru"
+                                            },
+                                            "ratio": 1.35,
+                                            "image": {
+                                                "image_url": "https://alicekit.s3.yandex.net/images_for_divs/slow_loris.jpg",
+                                                "type": "div-image-element"
+                                            },
+                                            "type": "div-image-block"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "direction": "horizontal",
+                                    "frame": {
+                                        "color": "#FF1000",
+                                        "style": "border"
+                                    },
+                                    "height": {
+                                        "type": "numeric",
+                                        "value": 100
+                                    },
+                                    "width": {
+                                        "type": "numeric",
+                                        "value": 120
+                                    },
+                                    "action": {
+                                        "url": "https://afisha.yandex.ru"
+                                    },
+                                    "type": "div-container-block",
+                                    "children": [
+                                        {
+                                            "action": {
+                                                "url": "http://ya.ru"
+                                            },
+                                            "ratio": 1.35,
+                                            "image": {
+                                                "image_url": "https://alicekit.s3.yandex.net/images_for_divs/slow_loris.jpg",
+                                                "type": "div-image-element"
+                                            },
+                                            "type": "div-image-block"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "direction": "horizontal",
+                                    "frame": {
+                                        "color": "#FF1000",
+                                        "style": "border"
+                                    },
+                                    "height": {
+                                        "type": "numeric",
+                                        "value": 100
+                                    },
+                                    "width": {
+                                        "type": "numeric",
+                                        "value": 120
+                                    },
+                                    "action": {
+                                        "url": "https://afisha.yandex.ru"
+                                    },
+                                    "type": "div-container-block",
+                                    "children": [
+                                        {
+                                            "action": {
+                                                "url": "http://ya.ru"
+                                            },
+                                            "ratio": 1.35,
+                                            "image": {
+                                                "image_url": "https://alicekit.s3.yandex.net/images_for_divs/slow_loris.jpg",
+                                                "type": "div-image-element"
+                                            },
+                                            "type": "div-image-block"
+                                        }
+                                    ]
+                                }
+                            ],
+                            "padding_between_items": {
+                                "type": "numeric",
+                                "value": 50
+                            },
+                            "type": "div-gallery-block"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#00FFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

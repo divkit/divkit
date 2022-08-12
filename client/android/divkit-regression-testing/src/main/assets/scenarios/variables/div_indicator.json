@@ -1,0 +1,390 @@
+{
+  "templates": {
+    "page": {
+      "type": "text",
+      "border": {
+        "corner_radius": 16,
+        "stroke": {
+          "color": "#1F000000",
+          "width": 1
+        }
+      },
+      "paddings": {
+        "right": 4,
+        "left": 4,
+        "top": 4,
+        "bottom": 4
+      },
+      "height": {
+        "type": "fixed",
+        "value": 42
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center"
+    },
+    "button": {
+      "type": "text",
+      "paddings": {
+        "right": 4,
+        "left": 4,
+        "top": 4,
+        "bottom": 4
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "font_size": 18,
+      "actions": [
+        {
+          "log_id": "button_log_id",
+          "$url": "click_action"
+        }
+      ]
+    }
+  },
+  "card": {
+    "type": "div2",
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "indicator",
+              "active_item_color": "@{active_item_color}",
+              "active_item_size": "@{active_item_size}",
+              "inactive_item_color": "@{inactive_item_color}",
+              "minimum_item_size": "@{minimum_item_size}",
+              "space_between_centers": {
+                "type": "fixed",
+                "value": "@{space_between_centers.value}",
+                "unit": "@{space_between_centers.unit}"
+              },
+              "animation": "@{indicator_animation}",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": "@{item_width.value}",
+                  "unit": "@{item_width.unit}"
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": "@{item_height.value}",
+                  "unit": "@{item_height.unit}"
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": "@{corner_radius.value}",
+                  "unit": "@{corner_radius.unit}"
+                }
+              },
+              "pager_id": "pager_id",
+              "alignment_horizontal": "center",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "width": {
+                "type": "fixed",
+                "value": "@{indicator_width}"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#95A5A6"
+                }
+              ],
+              "border": {
+                "corner_radius": 15
+              }
+            },
+            {
+              "type": "pager",
+              "id": "pager_id",
+              "paddings": {
+                "right": 4,
+                "left": 4
+              },
+              "margins": {
+                "top": 8
+              },
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "type": "percentage",
+                  "value": 95
+                }
+              },
+              "item_spacing": {
+                "type": "fixed",
+                "value": 4
+              },
+              "items": [
+                {
+                  "type": "page",
+                  "text": "Page 1"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 2"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 3"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 4"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 5"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 6"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 7"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 8"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 9"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 10"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 11"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 12"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Цвет активного айтема #ff00ff00",
+              "click_action": "div-action://set_variable?name=active_item_color&value=%23ff00ff00"
+            },
+            {
+              "type": "button",
+              "text": "Скейл активного айтема 2",
+              "click_action": "div-action://set_variable?name=active_item_size&value=2"
+            },
+            {
+              "type": "button",
+              "text": "Цвет неактивного айтема #ff005500",
+              "click_action": "div-action://set_variable?name=inactive_item_color&value=%23ff005500"
+            },
+            {
+              "type": "button",
+              "text": "Скейл крайних айтемов 0.3",
+              "click_action": "div-action://set_variable?name=minimum_item_size&value=0.3"
+            },
+            {
+              "type": "button",
+              "text": "Анимация переключения worm",
+              "click_action": "div-action://set_variable?name=indicator_animation&value=worm"
+            },
+            {
+              "type": "button",
+              "text": "Расстояние между айтемами 30",
+              "click_action": "div-action://set_variable?name=space_between_centers.value&value=30"
+            },
+            {
+              "type": "button",
+              "text": "Ширина айтема 15",
+              "click_action": "div-action://set_variable?name=item_width.value&value=15"
+            },
+            {
+              "type": "button",
+              "text": "Высота айтема 15",
+              "click_action": "div-action://set_variable?name=item_height.value&value=15"
+            },
+            {
+              "type": "button",
+              "text": "Радиус скругления айтема 8",
+              "click_action": "div-action://set_variable?name=corner_radius.value&value=8"
+            },
+            {
+              "type": "button",
+              "text": "Общая ширина индикатора 300",
+              "click_action": "div-action://set_variable?name=indicator_width&value=300"
+            },
+            {
+              "type": "button",
+              "text": "Все размеры в sp",
+              "actions": [
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=space_between_centers.unit&value=sp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_width.unit&value=sp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_height.unit&value=sp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=corner_radius.unit&value=sp"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "Сброс для проверки в разных положениях пейджера",
+              "actions": [
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=active_item_color&value=%23ffff0000"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=active_item_size&value=1.5"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=inactive_item_color&value=%23ff550000"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=minimum_item_size&value=0.6"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=indicator_animation&value=scale"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=space_between_centers.value&value=20"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_width.value&value=10"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_height.value&value=10"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=corner_radius.value&value=5"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=indicator_width&value=200"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=space_between_centers.unit&value=dp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_width.unit&value=dp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_height.unit&value=dp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=corner_radius.unit&value=dp"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ],
+    "variables": [
+      {
+        "name": "active_item_color",
+        "type": "color",
+        "value": "#ffff0000"
+      },
+      {
+        "name": "active_item_size",
+        "type": "number",
+        "value": 1.5
+      },
+      {
+        "name": "inactive_item_color",
+        "type": "color",
+        "value": "#ff550000"
+      },
+      {
+        "name": "minimum_item_size",
+        "type": "number",
+        "value": 0.6
+      },
+      {
+        "name": "indicator_animation",
+        "type": "string",
+        "value": "scale"
+      },
+      {
+        "name": "space_between_centers.value",
+        "type": "integer",
+        "value": 20
+      },
+      {
+        "name": "space_between_centers.unit",
+        "type": "string",
+        "value": "dp"
+      },
+      {
+        "name": "item_width.value",
+        "type": "integer",
+        "value": 10
+      },
+      {
+        "name": "item_width.unit",
+        "type": "string",
+        "value": "dp"
+      },
+      {
+        "name": "item_height.value",
+        "type": "integer",
+        "value": 10
+      },
+      {
+        "name": "item_height.unit",
+        "type": "string",
+        "value": "dp"
+      },
+      {
+        "name": "corner_radius.value",
+        "type": "integer",
+        "value": 5
+      },
+      {
+        "name": "corner_radius.unit",
+        "type": "string",
+        "value": "dp"
+      },
+      {
+        "name": "indicator_width",
+        "type": "integer",
+        "value": 200
+      }
+    ]
+  }
+}

@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivTransitions tests should create block with change transitions 1`] = `
+{
+  "type": "state",
+  "div_id": "id",
+  "states": [
+    {
+      "state_id": "state1",
+      "div": {
+        "type": "image",
+        "height": {
+          "type": "fixed",
+          "value": 50
+        },
+        "id": "state1/image",
+        "image_url": "https://image.url",
+        "transition_change": {
+          "type": "change_bounds",
+          "duration": 500,
+          "interpolator": "ease_in"
+        },
+        "transition_triggers": [
+          "state_change"
+        ],
+        "width": {
+          "type": "fixed",
+          "value": 100
+        }
+      }
+    },
+    {
+      "state_id": "state2",
+      "div": {
+        "type": "image",
+        "height": {
+          "type": "fixed",
+          "value": 100
+        },
+        "id": "state2/image",
+        "image_url": "https://image.url",
+        "transition_change": {
+          "type": "change_bounds",
+          "duration": 500,
+          "interpolator": "ease_out"
+        },
+        "transition_triggers": [
+          "state_change"
+        ],
+        "width": {
+          "type": "fixed",
+          "value": 50
+        }
+      }
+    }
+  ]
+}
+`;
+
+exports[`DivTransitions tests should create block with in/out transitions 1`] = `
+{
+  "type": "text",
+  "id": "id",
+  "text": "Text with transitions",
+  "transition_in": {
+    "type": "set",
+    "items": [
+      {
+        "type": "fade",
+        "alpha": 0,
+        "duration": 250,
+        "start_delay": 250
+      },
+      {
+        "type": "scale",
+        "duration": 500,
+        "interpolator": "ease_in_out",
+        "scale": 2
+      }
+    ]
+  },
+  "transition_out": {
+    "type": "scale",
+    "duration": 500,
+    "interpolator": "linear",
+    "scale": 0
+  },
+  "transition_triggers": [
+    "visibility_change"
+  ]
+}
+`;

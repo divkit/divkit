@@ -1,0 +1,16 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-fixed-size.json",
+      "description": "Фиксированный размер."
+    },
+    {
+      "$ref": "div-match-parent-size.json",
+      "description": "Размер, который подстраивается под ширину родительского элемента."
+    },
+    {
+      "$ref": "div-wrap-content-size.json",
+      "description": "Размер, который подстраивается под содержимое элемента."
+    }
+  ]
+}

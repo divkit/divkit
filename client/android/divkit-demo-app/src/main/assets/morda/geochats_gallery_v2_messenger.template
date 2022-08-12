@@ -1,0 +1,80 @@
+geochats_gallery|Геочатики-v3-msngr|{
+  "data": {
+    "action": {
+      "text": "ВСЕ ЧАТЫ РЯДОМ",
+      "url": "messenger://geochat/list?kind=nearby"
+    },
+    "url": "mordanavigate://?page=geochats",
+    "content_url": "messenger://geochat/open",
+    "list_action": {
+      "text": "Все чаты",
+      "url": "messenger://geochat/list?kind=nearby"
+    },
+
+    "action_text_color": "#ffffffff",
+    "page_action_text_color": "#ff1c70c4",
+    "preview_open_if_joined": 1,
+    "preview_action_type_not_joined": "join",
+    "pages": [
+      {
+        "name": "preview"
+      },
+      {
+        "name": "preview"
+      },
+      {
+        "name": "list"
+      },
+      {
+        "name": "preview"
+      },
+      {
+        "name": "preview"
+      },
+      {
+        "name": "list"
+      },
+      {
+        "name": "preview"
+      },
+      {
+        "name": "preview"
+      }
+    ]
+  },
+  "id": "geochats_gallery",
+  "type": "geochats_gallery",
+  "topic": "geochats_card",
+  "title": "Чаты рядом",
+  "ttl": 3600,
+  "ttv": 7200,
+  "utime": 1484135417,
+  "menu": {
+    "menu_list": [
+      {
+        "text": "Настройки ленты",
+        "action": "opensettings://?screen=feed"
+      },
+      {
+        "text": "Скрыть карточку",
+        "action": "hidecard://?topic_card_ids=geochats_card&undo_snackbar_text=%D0%92%D1%8B%20%D1%81%D0%BA%D1%80%D1%8B%D0%BB%D0%B8%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D1%83"
+      },
+      {
+        "text": "Все чаты рядом",
+        "action": "messenger://geochat/list?kind=nearby"
+      },
+      {
+        "text": "Все чаты по интересам",
+        "action": "messenger://geochat/list?kind=interests"
+      },
+      {
+        "text": "Карта",
+        "action": "messenger://geochat/map"
+      },
+      {
+        "text": "Создать",
+        "action": "messenger://geochat/create"
+      }
+    ]
+  }
+}

@@ -1,0 +1,201 @@
+{
+  "signatures": [
+    {
+      "name": "parseUnixTime(integer) datetime",
+      "function_name": "parseUnixTime",
+      "doc": "Creates datetime from integer value of unix time. Returns datetime value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Time in UTC seconds from the epoch."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "nowLocal() datetime",
+      "function_name": "nowLocal",
+      "doc": "Creates datetime from time of now. Returns datetime value.",
+      "arguments": [],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "addMillis(datetime, milliseconds: integer) datetime",
+      "function_name": "addMillis",
+      "doc": "Adds milliseconds to original date. Returns datetime with added time in milliseconds.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to add milliseconds."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, count of milliseconds to add."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setYear(datetime, year: integer) datetime",
+      "function_name": "setYear",
+      "doc": "Sets year number to original date. Returns datetime with year set.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to set year."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, year to set to date."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setMonth(datetime, month: integer) datetime",
+      "function_name": "setMonth",
+      "doc": "Sets month number to original date. Returns datetime with month set.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to set month."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, month to set to date. Expected values from 1 to 12."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setDay(datetime, monthDay: integer) datetime",
+      "function_name": "setDay",
+      "doc": "Sets day of month number to original date. Returns datetime with day of month set.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to set day of month."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, day of month to set to date."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setHours(datetime, hours: integer) datetime",
+      "function_name": "setHours",
+      "doc": "Sets hours number to original date. Returns datetime with hours set.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to set hours."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, hours to set to date."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setMinutes(datetime, minutes: integer) datetime",
+      "function_name": "setMinutes",
+      "doc": "Sets minutes number to original date. Returns datetime with minutes set.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to set minutes."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, minutes to set to date."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setSeconds(datetime, seconds: integer) datetime",
+      "function_name": "setSeconds",
+      "doc": "Sets seconds number to original date. Returns datetime with seconds set.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to set seconds."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, seconds to set to date."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setMillis(datetime, milliseconds: integer) datetime",
+      "function_name": "setMillis",
+      "doc": "Sets milliseconds number to original date. Returns datetime with milliseconds set.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to set milliseconds."
+        },
+        {
+          "type": "integer",
+          "doc": "Integer value, milliseconds to set to date."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android",
+        "web",
+        "ios"
+      ]
+    }
+  ]
+}

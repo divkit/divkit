@@ -1,0 +1,116 @@
+{
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "indicator",
+              "pager_id": "pager_id",
+              "inactive_item_color": "#d0d1d9",
+              "active_item_color": "#000000",
+              "active_item_size": 2,
+              "alignment_horizontal": "center",
+              "height": {
+                "type": "fixed",
+                "value": 30
+              },
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ],
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 4
+                }
+              }
+            },
+            {
+              "type": "pager",
+              "id": "pager_id",
+              "paddings": {
+                "right": 4,
+                "left": 4
+              },
+              "margins": {
+                "top": 8
+              },
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "type": "percentage",
+                  "value": 90
+                }
+              },
+              "item_spacing": {
+                "type": "fixed",
+                "value": 4
+              },
+              "items": [
+                {
+                  "type": "page",
+                  "text": "Page 1"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 2"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 3"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 4"
+                },
+                {
+                  "type": "page",
+                  "text": "Page 5"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "page": {
+      "type": "text",
+      "$text": "text",
+      "font_size": 24,
+      "paddings": {
+        "right": 8,
+        "left": 8,
+        "top": 8,
+        "bottom": 8
+      },
+      "border": {
+        "corner_radius": 16,
+        "stroke": {
+          "color": "#1F000000",
+          "width": 1
+        }
+      }
+    }
+  }
+}

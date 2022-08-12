@@ -1,0 +1,65 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 0
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "slider",
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "thumb_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#ff0000"
+          },
+          "thumb_value_variable": "slider_variable",
+          "track_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 0
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 15
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 4
+              }
+            },
+            "color": "#000000"
+          },
+          "track_active_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#0000ff"
+          }
+        }
+      }
+    ]
+  }
+}

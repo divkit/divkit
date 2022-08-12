@@ -1,0 +1,17 @@
+apply plugin: 'kotlin'
+
+sourceSets {
+    main {
+        java.srcDirs += 'src/generated/kotlin'
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
+    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2'
+
+    testImplementation 'junit:junit:4.12'
+}

@@ -1,0 +1,10 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_required_property"
+    }
+  },
+  "entity": {
+    "type": "t_0"
+  }
+}

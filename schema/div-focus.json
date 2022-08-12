@@ -1,0 +1,61 @@
+{
+  "type": "object",
+  "description": "Поведение элемента при фокусировке или потере фокуса.",
+  "platforms": [
+    "android"
+  ],
+  "properties": {
+    "background": {
+      "type": "array",
+      "items": {
+        "$ref": "div-background.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Фон элемента, когда он в фокусе. Может содержать несколько слоев."
+    },
+    "border": {
+      "$ref": "div-border.json",
+      "description": "Рамка элемента, когда он в фокусе."
+    },
+    "on_focus": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Действия, когда элемент получает фокус."
+    },
+    "on_blur": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Действия, когда элемент теряет фокус."
+    },
+    "next_focus_ids": {
+      "type": "object",
+      "description": "Идентификаторы элементов, которые следующими получат фокус.",
+      "properties": {
+        "forward": {
+          "$ref": "common.json#/non_empty_string"
+        },
+        "right": {
+          "$ref": "common.json#/non_empty_string"
+        },
+        "down": {
+          "$ref": "common.json#/non_empty_string"
+        },
+        "left": {
+          "$ref": "common.json#/non_empty_string"
+        },
+        "up": {
+          "$ref": "common.json#/non_empty_string"
+        }
+      }
+    }
+  }
+}

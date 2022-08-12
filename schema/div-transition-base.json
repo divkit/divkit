@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "protocol_name": "div-transition-base",
+  "include_in_documentation_toc": true,
+  "properties": {
+    "start_delay": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "description": "Задержка в миллисекундах перед началом анимации."
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "200",
+      "description": "Продолжительность анимации в миллисекундах."
+    },
+    "interpolator": {
+      "$ref": "div-animation-interpolator.json",
+      "default_value": "ease_in_out",
+      "description": "Характер скорости перехода."
+    }
+  }
+}

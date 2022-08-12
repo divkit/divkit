@@ -1,0 +1,35 @@
+{
+  "card": {
+    "log_id": "test/body",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "custom",
+              "custom_type": "unknown"
+            },
+            {
+              "type": "custom",
+              "custom_type": "generic",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#00af00"
+                }
+              ]
+            }
+          ],
+          "paddings": {
+            "bottom": 20,
+            "left": 20,
+            "right": 20,
+            "top": 20
+          }
+        }
+      }
+    ]
+  }
+}

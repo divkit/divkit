@@ -1,0 +1,71 @@
+{
+  "definitions": {
+    "menu_item": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "$ref": "common.json#/non_empty_string",
+          "description": "Заголовок пункта меню."
+        },
+        "action": {
+          "$ref": "div-action.json",
+          "description": "Одно действие при нажатии на пункт меню. Не используется, если задан параметр `actions`."
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Несколько действий при нажатии на пункт меню."
+        }
+      },
+      "required": [
+        "text"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-action-base.json"
+    },
+    {
+      "type": "object",
+      "description": "Определяет действие при нажатии на элемент.",
+      "properties": {
+        "menu_items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/menu_item"
+          },
+          "description": "Контекстное меню.",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "log_url": {
+          "$ref": "common.json#/url",
+          "description": "Ссылка для логирования."
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "_self",
+            "_blank"
+          ],
+          "force_enum_field": true,
+          "description": "Вкладка, в которой должна открыться ссылка.",
+          "platforms": [
+            "web"
+          ],
+          "code_generation_disabled_swift": true
+        }
+      },
+      "required": [
+        "log_id"
+      ]
+    }
+  ]
+}

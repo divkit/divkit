@@ -1,0 +1,177 @@
+{
+  "definitions": {
+    "string_variable": {
+      "alias_kotlin": "str_variable",
+      "type": "object",
+      "description": "Строковая переменная.",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "string"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "type": "string",
+          "description": "Значение."
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "integer_variable": {
+      "type": "object",
+      "description": "Целочисленная переменная.",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "integer"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "type": "integer",
+          "description": "Значение."
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "number_variable": {
+      "type": "object",
+      "description": "Переменная с плавающей точкой.",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "number"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "type": "number",
+          "description": "Значение."
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "boolean_variable": {
+      "alias_kotlin": "bool_variable",
+      "type": "object",
+      "description": "Логическая переменная.",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "boolean"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "$ref": "common.json#/boolean_int",
+          "description": "Значение."
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "color_variable": {
+      "type": "object",
+      "description": "Переменная — цвет в формате HEX, представленный в виде строки.",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной."
+        },
+        "type": {
+          "supports_expressions": false,
+          "type": "string",
+          "enum": [
+            "color"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "$ref": "common.json#/color",
+          "description": "Значение."
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "url_variable": {
+      "type": "object",
+      "description": "Переменная — URL в виде строки.",
+      "properties": {
+        "name": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "url"
+          ]
+        },
+        "value": {
+          "supports_expressions": false,
+          "$ref": "common.json#/url",
+          "description": "Значение."
+        }
+      },
+      "required": [
+        "name",
+        "value"
+      ]
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/definitions/string_variable"
+    },
+    {
+      "$ref": "#/definitions/number_variable"
+    },
+    {
+      "$ref": "#/definitions/integer_variable"
+    },
+    {
+      "$ref": "#/definitions/boolean_variable"
+    },
+    {
+      "$ref": "#/definitions/color_variable"
+    },
+    {
+      "$ref": "#/definitions/url_variable"
+    }
+  ]
+}

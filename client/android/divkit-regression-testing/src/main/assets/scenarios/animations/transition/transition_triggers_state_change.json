@@ -1,0 +1,342 @@
+{
+  "log_id": "state_trigger",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "margins": {
+          "top": 16,
+          "right": 16,
+          "bottom": 16,
+          "left": 16
+        },
+        "items": [
+          {
+            "type": "state",
+            "div_id": "first_case",
+            "transition_animation_selector": "state_change",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#8888FF"
+              }
+            ],
+            "height": {
+              "type": "fixed",
+              "value": 75
+            },
+            "margins": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "states": [
+              {
+                "state_id": "normal",
+                "div": {
+                  "type": "image",
+                  "id": "normal",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "alpha": 0.0,
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "preload_required": 1,
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png"
+                }
+              },
+              {
+                "state_id": "liked",
+                "div": {
+                  "type": "image",
+                  "id": "like",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "alpha": 0.0,
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "preload_required": 1,
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png",
+                  "transition_in": {
+                    "type": "fade",
+                    "alpha": 1.0,
+                    "duration": 1000,
+                    "interpolator": "ease_in"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "state",
+            "div_id": "second_case",
+            "transition_animation_selector": "state_change",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#8888FF"
+              }
+            ],
+            "height": {
+              "type": "fixed",
+              "value": 75
+            },
+            "margins": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "states": [
+              {
+                "state_id": "normal",
+                "div": {
+                  "type": "image",
+                  "id": "normal",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "alpha": 0.0,
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "preload_required": 1,
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png"
+                }
+              },
+              {
+                "state_id": "liked",
+                "div": {
+                  "type": "image",
+                  "id": "like",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "alpha": 0.0,
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "preload_required": 1,
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png",
+                  "transition_triggers": [],
+                  "transition_in": {
+                    "type": "fade",
+                    "alpha": 1.0,
+                    "duration": 1000,
+                    "interpolator": "ease_in"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "state",
+            "div_id": "third_case",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#8888FF"
+              }
+            ],
+            "height": {
+              "type": "fixed",
+              "value": 75
+            },
+            "margins": {
+              "top": 8,
+              "right": 8,
+              "bottom": 8,
+              "left": 8
+            },
+            "states": [
+              {
+                "state_id": "normal",
+                "id": "normal",
+                "div": {
+                  "type": "image",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "alpha": 0.0,
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "preload_required": 1,
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png"
+                }
+              },
+              {
+                "state_id": "liked",
+                "div": {
+                  "type": "image",
+                  "id": "like",
+                  "width": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 50
+                  },
+                  "alignment_vertical": "center",
+                  "alignment_horizontal": "center",
+                  "alpha": 0.0,
+                  "content_alignment_horizontal": "center",
+                  "content_alignment_vertical": "center",
+                  "preload_required": 1,
+                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/player/like_overlay.png",
+                  "transition_in": {
+                    "type": "fade",
+                    "alpha": 1.0,
+                    "duration": 1000,
+                    "interpolator": "ease_in"
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "state",
+            "div_id": "transition_button",
+            "states": [
+              {
+                "state_id": "normal",
+                "div": {
+                  "type": "text",
+                  "text": "To liked",
+                  "border": {
+                    "corner_radius": 8,
+                    "has_shadow": 1
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#ffdc60"
+                    }
+                  ],
+                  "margins": {
+                    "top": 8,
+                    "right": 8,
+                    "bottom": 8,
+                    "left": 8
+                  },
+                  "paddings": {
+                    "left": 16,
+                    "top": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center",
+                  "actions": [
+                    {
+                      "log_id": "transition_button",
+                      "url": "div-action://set_state?state_id=0/transition_button/liked"
+                    },
+                    {
+                      "log_id": "first_case",
+                      "url": "div-action://set_state?state_id=0/first_case/liked"
+                    },
+                    {
+                      "log_id": "second_case",
+                      "url": "div-action://set_state?state_id=0/second_case/liked"
+                    },
+                    {
+                      "log_id": "third_case",
+                      "url": "div-action://set_state?state_id=0/third_case/liked"
+                    }
+                  ]
+                }
+              },
+              {
+                "state_id": "liked",
+                "div": {
+                  "type": "text",
+                  "text": "To normal",
+                  "border": {
+                    "corner_radius": 8,
+                    "has_shadow": 1
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#ffdc60"
+                    }
+                  ],
+                  "margins": {
+                    "top": 8,
+                    "right": 8,
+                    "bottom": 8,
+                    "left": 8
+                  },
+                  "paddings": {
+                    "left": 16,
+                    "top": 16,
+                    "right": 16,
+                    "bottom": 16
+                  },
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center",
+                  "actions": [
+                    {
+                      "log_id": "transition_button",
+                      "url": "div-action://set_state?state_id=0/transition_button/normal"
+                    },
+                    {
+                      "log_id": "first_case",
+                      "url": "div-action://set_state?state_id=0/first_case/normal"
+                    },
+                    {
+                      "log_id": "second_case",
+                      "url": "div-action://set_state?state_id=0/second_case/normal"
+                    },
+                    {
+                      "log_id": "third_case",
+                      "url": "div-action://set_state?state_id=0/third_case/normal"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

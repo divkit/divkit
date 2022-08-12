@@ -1,0 +1,498 @@
+{
+  "cases": [
+    {
+      "name": "parseUnixTime(0) => 1970-01-01",
+      "expression": "@{parseUnixTime(0)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "parseUnixTime(1 second)",
+      "expression": "@{parseUnixTime(1)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:00:01"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "parseUnixTime(03h02m01s)",
+      "expression": "@{parseUnixTime(10921)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 03:02:01"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "nowLocal() > parseUnixTime(0) => true",
+      "expression": "@{nowLocal() > parseUnixTime(0)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "addMillis(parseUnixTime(0), 5000) => 1970-01-01 00:00:05",
+      "expression": "@{addMillis(parseUnixTime(0), 5000)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:00:05"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "addMillis(parseUnixTime(0), 1000) < addMillis(parseUnixTime(0), 1001) => true",
+      "expression": "@{addMillis(parseUnixTime(0), 1000) < addMillis(parseUnixTime(0), 1001) }",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setYear(parseUnixTime(0), 2022) => 2022-01-01 00:00:00",
+      "expression": "@{setYear(parseUnixTime(0), 2022)}",
+      "expected": {
+        "type": "datetime",
+        "value": "2022-01-01 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setMonth(parseUnixTime(0), 3) => 1970-10-01 00:00:00",
+      "expression": "@{setMonth(parseUnixTime(0), 3)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-03-01 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setMonth(parseUnixTime(0), 17) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setMonth(parseUnixTime(0), 17)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting months in [1..12], instead got 17"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setMonth(parseUnixTime(0), 17) => error",
+      "expression": "@{setMonth(parseUnixTime(0), 17)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMonth(1970-01-01 00:00:00, 17)]. Expecting month in [1..12], instead got 17."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setMonth(parseUnixTime(0), -5) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setMonth(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting months in [1..12], instead got -5"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setMonth(parseUnixTime(0), -5) => error",
+      "expression": "@{setMonth(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMonth(1970-01-01 00:00:00, -5)]. Expecting month in [1..12], instead got -5."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setDay(parseUnixTime(0), 10) => 1970-01-10 00:00:00",
+      "expression": "@{setDay(parseUnixTime(0), 10)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-10 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setDay(setMonth(parseUnixTime(0), 2), 29) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setDay(setMonth(parseUnixTime(0), 2), 29)}",
+      "expected": {
+        "type": "error",
+        "value": "Unable to set day 29 for date 1970-02-01 00:00:00"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setDay(setMonth(parseUnixTime(0), 2), 29) => error",
+      "expression": "@{setDay(setMonth(parseUnixTime(0), 2), 29)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setDay(1970-02-01 00:00:00, 29)]. Unable to set day 29 for date 1970-02-01 00:00:00."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setDay(parseUnixTime(0), 0) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setDay(parseUnixTime(0), 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Unable to set day 0 for date 1970-01-01 00:00:00"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setDay(parseUnixTime(0), 0) => error",
+      "expression": "@{setDay(parseUnixTime(0), 0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setDay(1970-01-01 00:00:00, 0)]. Unable to set day 0 for date 1970-01-01 00:00:00."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setDay(parseUnixTime(0), -5) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setDay(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Unable to set day -5 for date 1970-01-01 00:00:00"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setDay(parseUnixTime(0), -5) => error",
+      "expression": "@{setDay(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setDay(1970-01-01 00:00:00, -5)]. Unable to set day -5 for date 1970-01-01 00:00:00."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setDay(setMonth(parseUnixTime(0), 2), -1) => 1970-01-31 00:00:00",
+      "expression": "@{setDay(setMonth(parseUnixTime(0), 2), -1)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-31 00:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setHours(parseUnixTime(0), 10) => 1970-01-01 10:00:00",
+      "expression": "@{setHours(parseUnixTime(0), 10)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 10:00:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setHours(parseUnixTime(0), 77) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setHours(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting hour in [0..23], instead got 77"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setHours(parseUnixTime(0), 77) => error",
+      "expression": "@{setHours(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setHours(1970-01-01 00:00:00, 77)]. Expecting hours in [0..23], instead got 77."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setHours(parseUnixTime(0), -5) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setHours(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting hour in [0..23], instead got -5"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setHours(parseUnixTime(0), -5) => error",
+      "expression": "@{setHours(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setHours(1970-01-01 00:00:00, -5)]. Expecting hours in [0..23], instead got -5."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setMinutes(parseUnixTime(0), 10) => 1970-01-01 00:10:00",
+      "expression": "@{setMinutes(parseUnixTime(0), 10)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:10:00"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setMinutes(parseUnixTime(0), 77) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setMinutes(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting minute in [0..59], instead got 77"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setMinutes(parseUnixTime(0), 77) => error",
+      "expression": "@{setMinutes(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMinutes(1970-01-01 00:00:00, 77)]. Expecting minutes in [0..59], instead got 77."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setMinutes(parseUnixTime(0), -5) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setMinutes(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting minute in [0..59], instead got -5"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setMinutes(parseUnixTime(0), -5) => error",
+      "expression": "@{setMinutes(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMinutes(1970-01-01 00:00:00, -5)]. Expecting minutes in [0..59], instead got -5."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setSeconds(parseUnixTime(0), 10) => 1970-01-01 00:00:10",
+      "expression": "@{setSeconds(parseUnixTime(0), 10)}",
+      "expected": {
+        "type": "datetime",
+        "value": "1970-01-01 00:00:10"
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setSeconds(parseUnixTime(0), 77) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setSeconds(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting second in [0..59], instead got 77"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setSeconds(parseUnixTime(0), 77) => error",
+      "expression": "@{setSeconds(parseUnixTime(0), 77)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setSeconds(1970-01-01 00:00:00, 77)]. Expecting seconds in [0..59], instead got 77."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setSeconds(parseUnixTime(0), -10) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setSeconds(parseUnixTime(0), -10)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting second in [0..59], instead got -10"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setSeconds(parseUnixTime(0), -10) => error",
+      "expression": "@{setSeconds(parseUnixTime(0), -10)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setSeconds(1970-01-01 00:00:00, -10)]. Expecting seconds in [0..59], instead got -10."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setMillis(parseUnixTime(0), 2) > setMillis(parseUnixTime(0), 1) => true",
+      "expression": "@{setMillis(parseUnixTime(0), 2) > setMillis(parseUnixTime(0), 1)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setMillis(parseUnixTime(0), 80988) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setMillis(parseUnixTime(0), 80988)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting millis in [0..999], instead got 80988"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setMillis(parseUnixTime(0), 80988) => error",
+      "expression": "@{setMillis(parseUnixTime(0), 80988)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMillis(1970-01-01 00:00:00, 80988)]. Expecting millis in [0..999], instead got 80988."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "setMillis(parseUnixTime(0), -5) => error",
+      "deprecated": "Error message is outdated, see case below",
+      "expression": "@{setMillis(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Expecting millis in [0..999], instead got -5"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "setMillis(parseUnixTime(0), -5) => error",
+      "expression": "@{setMillis(parseUnixTime(0), -5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [setMillis(1970-01-01 00:00:00, -5)]. Expecting millis in [0..999], instead got -5."
+      },
+      "platforms": [
+        "web",
+        "ios"
+      ]
+    }
+  ]
+}

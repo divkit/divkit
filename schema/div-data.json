@@ -1,0 +1,78 @@
+{
+  "description": "Корневая структура.",
+  "typescript_templatable": false,
+  "generate_swift_optional_arguments": false,
+  "root_entity": true,
+  "definitions": {
+    "div_state": {
+      "type": "object",
+      "typescript_templatable": false,
+      "generate_swift_optional_arguments": false,
+      "properties": {
+        "state_id": {
+          "type": "integer",
+          "supports_expressions": false,
+          "description": "Идентификатор состояния."
+        },
+        "div": {
+           "$ref": "div.json",
+           "description": "Содержимое."
+        }
+      },
+      "required": [
+        "state_id",
+        "div"
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "states": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/div_state"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "strictParsing": true,
+      "description": "Набор состояний визуальных элементов. Каждый элемент может иметь несколько состояний с разной версткой. Состояния отображаются строго по одному, а переключаются с помощью [action](div-action.md)."
+    },
+    "log_id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "description": "Идентификатор для логирования."
+    },
+    "transition_animation_selector": {
+      "$ref": "div-transition-selector.json",
+      "default_value": "none",
+      "description": "События, при которых сработают анимации переходов. Вместо него используйте `transition_triggers`.",
+      "deprecated": true,
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "variables": {
+      "type": "array",
+      "items": {
+        "$ref": "div-variable.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Объявление переменных, которые могут быть использованы в элементе."
+    },
+    "variable_triggers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-trigger.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Триггеры изменения переменных."
+    }
+  },
+  "required": [
+    "states",
+    "log_id"
+  ]
+}

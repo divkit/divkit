@@ -1,0 +1,73 @@
+{
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "slider",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "thumb_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#ff0000"
+          },
+          "thumb_value_variable": "slider_variable",
+          "thumb_secondary_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#00ff00"
+          },
+          "thumb_secondary_value_variable": "slider_variable_second",
+          "track_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#000000"
+          },
+          "track_active_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#0000ff"
+          },
+          "max_value": 10,
+          "tick_mark_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#C0C0C0"
+          }
+        }
+      }
+    ],
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 7
+      },
+      {
+        "name": "slider_variable_second",
+        "type": "integer",
+        "value": 3
+      }
+    ]
+  }
+}

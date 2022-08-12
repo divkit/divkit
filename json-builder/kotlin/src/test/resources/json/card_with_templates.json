@@ -1,0 +1,91 @@
+{
+  "templates": {
+    "title_text": {
+      "type": "text",
+      "$text": "title",
+      "width": {
+        "type": "fixed",
+        "unit": "dp",
+        "value": 120
+      }
+    },
+    "header": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "height": {
+            "type": "fixed",
+            "value": 60
+          },
+          "$text": "title",
+          "width": {
+            "type": "wrap_content"
+          }
+        },
+        {
+          "type": "title_text",
+          "width": {
+            "value": {
+              "type": "wrap_content"
+            }
+          }
+        }
+      ],
+      "orientation": "vertical"
+    },
+    "subtitle_text": {
+      "type": "title_text",
+      "width": {
+        "value": {
+          "type": "wrap_content"
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "layout",
+    "states": [
+      {
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 320
+          },
+          "items": [
+            {
+              "type": "title_text",
+              "width": {
+                "type": "match_parent"
+              },
+              "title": "Good news, everyone!"
+            },
+            {
+              "type": "text",
+              "actions": [
+                {
+                  "log_id": "tap_action",
+                  "url": "https://yandex.ru"
+                }
+              ],
+              "height": {
+                "type": "wrap_content"
+              },
+              "text": "Hello, Everyone!",
+              "width": {
+                "type": "wrap_content"
+              }
+            }
+          ],
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 320
+          }
+        },
+        "state_id": 0
+      }
+    ]
+  }
+}

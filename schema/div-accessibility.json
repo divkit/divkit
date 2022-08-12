@@ -1,0 +1,64 @@
+{
+  "type": "object",
+  "description": "Доступность для людей с ограниченными возможностями.",
+  "properties": {
+    "description": {
+      "$ref": "common.json#/non_empty_string",
+      "description": "Описание элемента. Используется в качестве основного описания для программ экранного чтения."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "none",
+        "button",
+        "image",
+        "text",
+        "edit_text",
+        "header",
+        "tab_bar"
+      ],
+      "supports_expressions": false,
+      "description": "Роль элемента. Используется для правильной идентификации элемента accessibility-сервисом.",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "state_description": {
+      "$ref": "common.json#/non_empty_string",
+      "description": "Описание текущего состояния элемента. Например, в описании можно указать выбранную дату для элемента выбора даты, а для переключателя — состояние включен/выключен.",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "hint": {
+      "$ref": "common.json#/non_empty_string",
+      "description": "Подсказка, что произойдет при взаимодействии. Если на iOS в настройках VoiceOver включен Speak Hints, то подсказка воспроизводится после `description`.",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "default",
+        "merge",
+        "exclude"
+      ],
+      "default_value": "default",
+      "description": "Способ организации дерева accessibility. В режиме `merge` accessibility-сервис воспринимает элемент вместе с поддеревом как одно целое. В режиме `exclude` элемент вместе с поддеревом недоступен для accessibility.",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    },
+    "mute_after_action": {
+      "$ref": "common.json#/boolean_int",
+      "default_value": "false",
+      "description": "Заглушает звук чтения экрана после взаимодействия с элементом.",
+      "platforms": [ "ios" ]
+    }
+  }
+}

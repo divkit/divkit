@@ -1,0 +1,443 @@
+{
+  "templates": {
+    "text_14_18_regular": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 18,
+      "$text": "text_14_18_regular__text",
+      "text_color": "#333333"
+    },
+    "text_14_18_standard": {
+      "type": "text_14_18_regular",
+      "paddings": {
+        "top": 2,
+        "bottom": 2,
+        "left": 16,
+        "right": 16
+      }
+    }
+  },
+  "card": {
+    "log_id": "gallery",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "border": {
+            "corner_radius": 20
+          },
+          "items": [
+            {
+              "type": "state",
+              "div_id": "body",
+              "states": [
+                {
+                  "state_id": "card",
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "state",
+                        "div_id": "slider",
+                        "states": [
+                          {
+                            "state_id": "without_ad",
+                            "div": {
+                              "type": "container",
+                              "items": [
+                                {
+                                  "type": "indicator",
+                                  "active_item_color": "#000000",
+                                  "height": {
+                                    "type": "fixed",
+                                    "value": 2
+                                  },
+                                  "inactive_item_color": "#D0D1D9",
+                                  "margins": {
+                                    "bottom": 0,
+                                    "top": 15
+                                  },
+                                  "paddings": {
+                                    "bottom": 0
+                                  },
+                                  "pager_id": "gallery",
+                                  "shape": {
+                                    "type": "rounded_rectangle",
+                                    "corner_radius": {
+                                      "type": "fixed",
+                                      "value": 2
+                                    },
+                                    "item_height": {
+                                      "type": "fixed",
+                                      "value": 2
+                                    },
+                                    "item_width": {
+                                      "type": "fixed",
+                                      "value": 10
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "pager",
+                                  "id": "gallery",
+                                  "item_spacing": {
+                                    "type": "fixed",
+                                    "value": 4
+                                  },
+                                  "default_item": 4,
+                                  "items": [
+                                    {
+                                      "type": "image",
+                                      "aspect": {
+                                        "ratio": 1.7777777777777777
+                                      },
+                                      "border": {
+                                        "corner_radius": 16,
+                                        "stroke": {
+                                          "color": "#1F000000",
+                                          "width": 1
+                                        }
+                                      },
+                                      "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
+                                      "placeholder_color": "#406070",
+                                      "preload_required": 1,
+                                      "preview": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAASACADAREAAhEBAxEB/8QAGQABAAIDAAAAAAAAAAAAAAAABgQFAAID/8QAJBAAAgEDAwQDAQAAAAAAAAAAAQIAAwQFERIiEzFBUQYUIZH/xAAaAQADAQADAAAAAAAAAAAAAAACAwUEAAEG/8QAHREAAgICAwEAAAAAAAAAAAAAAAECAxEyBBIhIv/aAAwDAQACEQMRAD8ABvjqqfgUmVoyRLaNWs6itoUjOyFYMW1qbtAphJgnShTKNoxiLPRtZfYK/tbwgaqSZPla4myMOxMzNKlTKsqgDSBDmZeA5cbwqku7dHO7bN8bcoxOrDDGdzdKhXbaR3guYyMMET4PUfqrzbx5k/k6myjYdZdm+qvI9vck1P6KM9QVfO3Vbk39noK9SPPYGZ9m67cj39zh0j//2Q==",
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "6",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/0"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:0",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "0"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ],
+                                      "width": {
+                                        "type": "match_parent"
+                                      }
+                                    },
+                                    {
+                                      "type": "image",
+                                      "aspect": {
+                                        "ratio": 1.7777777777777777
+                                      },
+                                      "border": {
+                                        "corner_radius": 16,
+                                        "stroke": {
+                                          "color": "#1F000000",
+                                          "width": 1
+                                        }
+                                      },
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "106",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/1"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:1",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "1"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ],
+                                      "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+                                      "placeholder_color": "#384820",
+                                      "preload_required": 1,
+                                      "width": {
+                                        "type": "match_parent"
+                                      }
+                                    },
+                                    {
+                                      "type": "image",
+                                      "aspect": {
+                                        "ratio": 1.7777777777777777
+                                      },
+                                      "border": {
+                                        "corner_radius": 16,
+                                        "stroke": {
+                                          "color": "#1F000000",
+                                          "width": 1
+                                        }
+                                      },
+                                      "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
+                                      "placeholder_color": "#D8B888",
+                                      "preload_required": 1,
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "206",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/2"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:2",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "2"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ],
+                                      "width": {
+                                        "type": "match_parent"
+                                      }
+                                    },
+                                    {
+                                      "type": "image",
+                                      "aspect": {
+                                        "ratio": 1.7777777777777777
+                                      },
+                                      "border": {
+                                        "corner_radius": 16,
+                                        "stroke": {
+                                          "color": "#1F000000",
+                                          "width": 1
+                                        }
+                                      },
+                                      "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+                                      "placeholder_color": "#101820",
+                                      "preload_required": 1,
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "306",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/3"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:3",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "3"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ],
+                                      "width": {
+                                        "type": "match_parent"
+                                      }
+                                    },
+                                    {
+                                      "type": "image",
+                                      "aspect": {
+                                        "ratio": 1.7777777777777777
+                                      },
+                                      "border": {
+                                        "corner_radius": 16,
+                                        "stroke": {
+                                          "color": "#1F000000",
+                                          "width": 1
+                                        }
+                                      },
+                                      "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
+                                      "placeholder_color": "#F0E080",
+                                      "preload_required": 1,
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "406",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/4"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:4",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "4"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ],
+                                      "width": {
+                                        "type": "match_parent"
+                                      }
+                                    },
+                                    {
+                                      "type": "image",
+                                      "aspect": {
+                                        "ratio": 1.7777777777777777
+                                      },
+                                      "border": {
+                                        "corner_radius": 16,
+                                        "stroke": {
+                                          "color": "#1F000000",
+                                          "width": 1
+                                        }
+                                      },
+                                      "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+                                      "placeholder_color": "#202020",
+                                      "preload_required": 1,
+                                      "visibility_actions": [
+                                        {
+                                          "log_id": "506",
+                                          "log_limit": 0,
+                                          "url": "div-action://set_state?state_id=0/body/card/description/5"
+                                        },
+                                        {
+                                          "log_id": "content_item_show:5",
+                                          "payload": {
+                                            "placeholders": {
+                                              "__hpos__": "5"
+                                            }
+                                          },
+                                          "visibility_percentage": 80,
+                                          "visibility_duration": 0
+                                        }
+                                      ],
+                                      "width": {
+                                        "type": "match_parent"
+                                      }
+                                    }
+                                  ],
+                                  "layout_mode": {
+                                    "type": "fixed",
+                                    "neighbour_page_width": {
+                                      "type": "fixed",
+                                      "value": 10
+                                    }
+                                  },
+                                  "margins": {
+                                    "top": 8
+                                  },
+                                  "paddings": {
+                                    "right": 4,
+                                    "left": 4
+                                  },
+                                  "restrict_parent_scroll": 1
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "state",
+                        "div_id": "description",
+                        "states": [
+                          {
+                            "state_id": "0",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Page 0",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "1",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Page 1",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "2",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Page 2",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "3",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Page 3",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "4",
+                            "div": {
+                              "div_id": "text",
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Page 4",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          },
+                          {
+                            "state_id": "5",
+                            "div": {
+                              "type": "text_14_18_standard",
+                              "text_14_18_regular__text": "Page 5",
+                              "max_lines": 2,
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0,
+                                "left": 4,
+                                "right": 4
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "container",
+              "visibility_duration": 4000,
+              "visibility_percentage": 80
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

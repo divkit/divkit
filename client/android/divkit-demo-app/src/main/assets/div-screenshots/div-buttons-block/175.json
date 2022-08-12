@@ -1,0 +1,27 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "action": {
+                                "url": "http://ya.ru"
+                            },
+                            "text": "button is on left"
+                        }
+                    ],
+                    "type": "div-buttons-block",
+                    "alignment": "left"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

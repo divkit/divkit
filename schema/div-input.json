@@ -1,0 +1,112 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Элемент для ввода текста.",
+  "definitions": {
+    "native_interface": {
+      "type": "object",
+      "properties": {
+        "color": {
+          "$ref": "common.json#/color",
+          "description": "Цвет линии ввода текста."
+        }
+      },
+      "required": [
+        "color"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "input"
+          ]
+        },
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "12",
+          "description": "Размер шрифта."
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "description": "Единица измерения:<li>`px` — физический пиксель.</li><li>`dp` — логический пиксель, который не зависит от плотности экрана.</li><li>`sp` — логический пиксель, который зависит от размера шрифта на устройстве. Указывайте в `sp` высоту. Доступен только на Android.</li>"
+        },
+        "font_family": {
+          "$ref": "div-font-family.json",
+          "default_value": "text",
+          "description": "Семейство шрифта:<li>`text` — стандартный текстовый шрифт;</li><li>`display` — семейство для шрифтов с крупным кеглем.</li>"
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "default_value": "regular",
+          "description": "Начертание."
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#FF000000",
+          "description": "Цвет текста."
+        },
+        "text_variable": {
+          "$ref": "div-variable-name.json",
+          "description": "Название переменной для хранения текста."
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта. Измеряется в единицах, заданных в `font_size_unit`."
+        },
+        "max_lines": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Максимальное количество строк, которые не будут обрезаны при выходе за ограничения."
+        },
+        "letter_spacing": {
+          "type": "number",
+          "default_value": "0",
+          "description": "Интервал между символами."
+        },
+        "hint_text": {
+          "$ref": "common.json#/non_empty_string",
+          "description": "Текст подсказки."
+        },
+        "hint_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#73000000",
+          "description": "Цвет текста."
+        },
+        "highlight_color": {
+          "$ref": "common.json#/color",
+          "description": "Цвет выделения текста. Если значение не задано, будет использован цвет, установленный на клиенте."
+        },
+        "native_interface": {
+          "$ref": "#/definitions/native_interface",
+          "description": "Нативный внешний вид - линия ввода текста.",
+          "platforms": [
+            "android"
+          ]
+        },
+        "keyboard_type": {
+          "type": "string",
+          "enum": [
+            "text", "phone", "number","email", "uri", "date"
+          ],
+          "default_value": "text",
+          "description": "Тип клавиатуры."
+        },
+        "select_all_on_focus": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "description": "Выделение введенного текста при получении фокуса."
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "text_variable"
+  ]
+}

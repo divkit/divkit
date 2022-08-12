@@ -1,0 +1,21 @@
+{
+  "description": "Анимация изменения положения и размеров элемента.",
+  "allOf": [
+    {
+      "$ref": "div-transition-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "change_bounds"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

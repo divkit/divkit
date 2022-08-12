@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "description": "Расширение, которое влияет на элемент.",
+  "platforms": [
+    "android",
+    "ios"
+  ],
+  "properties": {
+    "id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "description": "Идентификатор расширения."
+    },
+    "params": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Дополнительные параметры расширения."
+    }
+  },
+  "required": [
+    "id"
+  ]
+}

@@ -1,0 +1,936 @@
+title: Простой тап
+tags: [ 'DivAction' ]
+steps:
+  - Тап по надписи "Нажми меня"
+expect:
+  - Надпись "Нажми меня" поменялась на "Вы нажали меня"
+  - Повторное нажатие вернет надпись "Нажми меня"
+paths:
+  - 'scenarios/simple_tap.json'
+---
+title: Долгий тап
+tags: [ 'DivAction' ]
+steps:
+  - Долгий тап по кнопке Long tap menu
+expect:
+  - Появляется меню с пунктами "Показать", "Скрыть"
+  - Логируется longtap_actions
+paths:
+  - 'scenarios/long_tap.json'
+---
+title: Свайп в табах
+tags: [ 'DivTabs', 'swipe' ]
+steps:
+  - Горизонтальный свайп влево
+  - Горизонтальный свайп вправо
+expect:
+  - Таб меняется на нужный в зависимости от направления
+  - Логируется события смены таба
+paths:
+  - 'scenarios/tabs_max_height.json'
+---
+title: Запрет свайпа в табах
+tags: [ 'DivTabs', 'swipe' ]
+steps:
+  - Горизонтальный свайп влево
+  - Горизонтальный свайп вправо
+expect:
+  - Смена таба не происходит
+  - Смена происходит при нажатии на заголовок
+paths:
+  - 'scenarios/tabs_disabled_switch_tabs_by_swipe.json'
+---
+title: Скролл галереи
+tags: [ 'DivGallery', 'scroll' ]
+steps:
+  - Горизонтальный скролл влево
+  - Горизонтальный скролл вправо
+expect:
+  - Происходит смена контента
+  - Логируется событие скролла галереи
+paths:
+  - 'scenarios/gallery/gallery_swipe.json'
+---
+title: Постраничный скролл галереи
+tags: [ 'DivGallery', 'scroll' ]
+steps:
+  - Горизонтальный скролл влево
+  - Горизонтальный скролл вправо
+expect:
+  - Происходит смена контента постранично
+  - Логируется событие скролла галереи
+paths:
+  - 'scenarios/gallery/gallery_swipe_paged.json'
+---
+title: Gallery columns
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-columns.json'
+---
+title: Gallery item actions
+tags: [ 'DivGallery']
+paths:
+  - 'scenarios/gallery/gallery-item-actions.json'
+---
+title: Gallery default item states
+tags: [ 'DivGallery']
+paths:
+  - 'scenarios/gallery/gallery_default_item_states.json'
+---
+title: Gallery paging default item states
+tags: [ 'DivGallery']
+paths:
+  - 'scenarios/gallery/gallery_paging_default_item_states.json'
+---
+title: Zoomable gallery
+tags: [ 'DivGallery']
+paths:
+  - 'scenarios/gallery/zoomable-gallery.json'
+---
+title: Gallery bottom multiline
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-bottom-multiline.json'
+---
+title: Gallery bottom multiline selected actions
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-bottom-multiline-selected-action.json'
+---
+title: Gallery bottom singleline
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-bottom-singleline.json'
+---
+title: Gallery top multiline
+tags: [ 'DivGallery' ]
+paths:
+  - 'scenarios/gallery/gallery-top-multiline.json'
+---
+title: Скролл пейджера
+tags: [ 'DivPager', 'scroll' ]
+steps:
+  - Горизонтальный скролл влево
+  - Горизонтальный скролл вправо
+expect:
+  - Происходит смена контента постранично
+  - Логируется событие смены страницы пейджера
+paths:
+  - 'scenarios/pager/pager.json'
+---
+title: Pager item actions
+tags: [ 'DivPager']
+paths:
+  - 'scenarios/pager/pager-item-actions.json'
+---
+title: Pager selected actions
+tags: [ 'DivPager']
+paths:
+  - 'scenarios/pager/pager-selected-actions.json'
+---
+title: Pager default item states
+tags: [ 'DivPager']
+paths:
+  - 'scenarios/pager/pager_default_item_states.json'
+---
+title: Анимации действий
+tags: [ 'DivAnimation' ]
+steps:
+  - Нажимать на каждый из пунктов с соответсвующим типом анимации
+expect:
+  - Происходит соответствующая анимация при нажатии
+  - При отпускании пальца состояние возвращается
+paths:
+  - 'scenarios/action_animation/interpolator_linear/scale.json'
+  - 'scenarios/action_animation/interpolator_linear/fade.json'
+  - 'scenarios/action_animation/interpolator_linear/set.json'
+  - 'scenarios/action_animation/interpolator_ease/scale.json'
+  - 'scenarios/action_animation/interpolator_ease/fade.json'
+  - 'scenarios/action_animation/interpolator_ease/set.json'
+  - 'scenarios/action_animation/interpolator_ease_in/scale.json'
+  - 'scenarios/action_animation/interpolator_ease_in/fade.json'
+  - 'scenarios/action_animation/interpolator_ease_in/set.json'
+  - 'scenarios/action_animation/interpolator_ease_out/scale.json'
+  - 'scenarios/action_animation/interpolator_ease_out/fade.json'
+  - 'scenarios/action_animation/interpolator_ease_out/set.json'
+  - 'scenarios/action_animation/interpolator_ease_in_out/scale.json'
+  - 'scenarios/action_animation/interpolator_ease_in_out/fade.json'
+  - 'scenarios/action_animation/interpolator_ease_in_out/set.json'
+  - 'scenarios/action_animation/interpolator_spring/scale.json'
+  - 'scenarios/action_animation/interpolator_spring/fade.json'
+  - 'scenarios/action_animation/interpolator_spring/set.json'
+  - 'scenarios/action_animation/no_animation.json'
+---
+title: Слайдер рекоммендации
+tags: [ 'Slider' ]
+priority: blocker
+steps:
+  - Произвести взаимодейсвия со слайдером
+expect:
+  - Слайдер переключается и меняет состояние в кнопке
+paths:
+  - 'scenarios/slider_nps.json'
+---
+title: Слайдер c двумя бегунками
+tags: [ 'Slider' ]
+priority: critical
+steps:
+  - Произвести взаимодейсвия с бегунками слайдера
+expect:
+  - Слайдер переключается и меняет состояние в кнопке
+paths:
+  - 'scenarios/double_slider.json'
+---
+title: Варианты настройки слайдера
+tags: [ 'Slider' ]
+steps:
+  - Произвести взаимодейсвия с бегунками слайдера
+expect:
+  - Слайдер переключается
+paths:
+  - 'scenarios/slider_presets.json'
+---
+title: Смена корневого стейта
+paths:
+  - 'scenarios/root_state_switching.json'
+steps:
+  - Нажать CHANGE STATE (TEMPORARY)
+  - Перезапустить приложение
+  - Вернуться обратно на страницу с тестом
+  - Нажать CHANGE STATE
+  - Перезапустить приложение
+  - Вернуться обратно на страницу с тестом
+expect:
+  - После первой перезагрузки и возврата на страницу останется та же фигура, которая была ДО нажатия CHANGE STATE (TEMPORARY)
+  - После второй перезагрузки и возврата на страницу останется фигура, которая появилась ПОСЛЕ нажатия CHANGE STATE
+---
+title: Фокус элементов
+steps:
+  - Переключить фокус по элементам
+expect:
+  - Фокус элементов меняется согласно переключению
+paths:
+  - 'scenarios/focus.json'
+---
+title: Эвенты фокуса
+steps:
+  - Перенести фокус на handler
+  - Перенести фокус на idle
+expect:
+  - Начальное значение правого элемента init
+  - Когда handler получает фокус, правый элемент меняет значение на focus
+  - Когда handler теряет фокус, правый элемент меняет значение на blur
+paths:
+  - 'scenarios/focus_actions.json'
+---
+title: "Accessibility descriptions"
+tags: [ 'Accessibility' ]
+steps:
+  - Установить русский язык на устройстве
+  - Включить TalkBack и установить порядок описания элементов как "Состояние,название,тип"
+  - Переместить фокус на кнопку "Элемент 1"
+  - Прослушать то, что проговорит TalkBack
+  - Сделать двойной тап (можно в любом месте экрана)
+  - Переместить фокус на кнопку "Элемент 2"
+  - Прослушать то, что говорит TalkBack
+  - Переместить фокус на кнопку "Элемент 3"
+expect:
+  - На кнопке "Элемент 1" должны услышать "Cейчас в состоянии 0; Элемент 1; Кнопка; Коснитесь дважды, чтобы активировать"
+  - После двойного тапа услышим "Сейчас в состоянии 1"
+  - На кнопке "Элемент 2" услышим "Элемент 2; Кнопка; Нажмите на кнопку, чтобы что-то произошло"
+  - На кнопке "Элемент 3" услышим "Элемент 3; Кнопка"
+paths:
+  - 'scenarios/accessibility/descriptions.json'
+---
+title: "Accessibility типы"
+tags: [ 'Accessibility' ]
+steps:
+  - Установить русский язык на устройстве
+  - Включить TalkBack и установить порядок описания элементов как "Состояние,название,тип"
+  - Cфокусироваться на верхней кнопке
+  - Перемещать фокус от одной кнопки к другой
+expect:
+  - На каждом элементе располагается надпись "Тип - X", должны услышать "Тип - X; X"; Например "Тип - кнопка; кнопка"
+  - Для "Тип - текст" и "Без типа" услышим только "Тип - текст" и "Без типа" соответственно
+paths:
+  - 'scenarios/accessibility/types.json'
+---
+title: "Default Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Включить TalkBack
+  - Перемещать фокус сверху вниз
+expect:
+  - При фокусе на 1-ом элементе услышим "Это Элемент 1"
+  - Сфокусируемся на группе из 1-го и 2-го элементов, услышим "Это Элемент 2, Это Элемент 3"
+  - На 4-ом элементе сфокусироваться не получится
+paths:
+  - 'scenarios/accessibility/mode/default.json'
+---
+title: "Merge Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Включить TalkBack
+  - Перемещать фокус сверху вниз
+expect:
+  - Сфокусирумся сразу на всей карточке
+  - услышим "Это Элемент 1, Это Элемент 2, Это Элемент 3"
+paths:
+  - 'scenarios/accessibility/mode/merge.json'
+---
+title: "Exclude Accessibility mode"
+tags: [ 'Accessibility' ]
+steps:
+  - Включить TalkBack
+  - Перемещать фокус сверху вниз
+expect:
+  - Сфокусирумся на 5-ом элементе
+  - Услышим "Это Элемент 5"
+paths:
+  - 'scenarios/accessibility/mode/exclude.json'
+---
+title: 1299 Экшены на тапы
+steps:
+  - Нажать один раз на верхнюю кнопку
+  - Нажать дважды на верхнюю кнопку
+  - Нажать и удерживать верхнюю кнопку
+  - Нажать один раз на среднюю кнопку
+  - Нажать дважды на среднюю кнопку
+  - Нажать и удерживать среднюю кнопку
+  - Нажать на изображение на нижней кнопке
+  - Нажать и удерживать пространство между кнопками
+expect:
+  - С задержкой появится меню с пунктом "Single tap"
+  - Появится меню с пунктом "Double tap"
+  - Появится меню с пунктом "Long tap"
+  - Без задержки появится меню с пунктом "Single tap"
+  - Появится пункт "Single tap" и пропадет
+  - Появится меню с пунктом "Long tap on container" для контейнера
+  - Появится пункт "Single tap on child"
+  - Появится меню с пунктом "Long tap on container" для контейнера
+paths:
+  - 'scenarios/button_actions.json'
+---
+title: Longtap actions
+paths:
+  - 'scenarios/pinch-to-zoom-longtap-actions.json'
+---
+title: Визуализация ошибок в диве
+priority: critical
+expect:
+  - В карточке отображается красная кнопка с цифрой 1
+  - Клик по кнопке показывает ошибку INVALID_VALUE
+  - Клик по крестику закрывает экран с деталями
+  - Клик по кнопке сохранения копирует в буфер json с ошибками
+  - Клик по тексту 'Generate error!' добавляет пару ошибок с текстом 'Value 'wrong_value' for key 'alignment_horizontal' at path '@{alignment}' is not valid'
+paths:
+  - 'scenarios/error_visual_monitor.json'
+---
+title: 1256-1
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно плавно появляться и исчезать, меняя свою полупрозрачность
+paths:
+  - 'scenarios/animations/transition/fade_full_src.json'
+---
+title: 1256-2
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно плавно появляться и исчезать, начиная с или достигнув значения полупрозрачности в 0.5
+paths:
+  - 'scenarios/animations/transition/fade_part_src.json'
+---
+title: 1256-3
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно плавно появляться и исчезать, меняя свой масштаб
+paths:
+  - 'scenarios/animations/transition/scale_full_src.json'
+---
+title: 1256-4
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно плавно появляться и исчезать, начиная с или достигнув значения масштаба в 0.75 от обычного
+paths:
+  - 'scenarios/animations/transition/scale_part_src.json'
+---
+title: 1256-5
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно плавно появляться и исчезать из-под или к верхнему краю карточки
+paths:
+  - 'scenarios/animations/transition/slide_full_src.json'
+---
+title: 1256-6
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно плавно появляться и исчезать из-под или к верхнему краю карточки, но не доходя до него
+paths:
+  - 'scenarios/animations/transition/slide_part_src.json'
+---
+title: 1256-7
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно плавно появляться и исчезать, меняя свою полупрозрачность и перемещаясь по экрану от или к краю
+paths:
+  - 'scenarios/animations/transition/set_src.json'
+---
+title: 1256-8
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно перемещаться по экрану по кривой
+paths:
+  - 'scenarios/animations/transition/change_bounds_diff_ids_src.json'
+---
+title: 1256-9
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно изменять свой размер
+paths:
+  - 'scenarios/animations/transition/change_bounds_diff_sizes_src.json'
+---
+title: 1256-10
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно заменяться на текст и перемещаться по экрану
+paths:
+  - 'scenarios/animations/transition/change_bounds_diff_types_src.json'
+---
+title: 1256-11
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+ - После появления изображения нажать "GO BACK"
+expect:
+ - Изображение должно перемещаться по экрану в горизонтальной плоскости
+paths:
+  - 'scenarios/animations/transition/change_bounds_same_ids_src.json'
+---
+title: 1256-12
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "EXPAND"
+ - Нажать кнопку "SHOW COMMENTS"
+ - После разворачивания элементов нажать "COLLAPSE"
+expect:
+ - Раскрытия и схлопывание элементов должно происходить с анимациями
+paths:
+  - 'scenarios/animations/article.json'
+---
+title: 1256-13
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "EXPAND"
+ - Нажать кнопку "SHOW COMMENTS"
+ - После разворачивания элементов нажать "COLLAPSE"
+expect:
+ - Раскрытия и схлопывание элементов должно происходить с анимациями
+paths:
+  - 'scenarios/animations/article_with_transitions.json'
+---
+title: 1256-14
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "BLINK"
+expect:
+ - На экране должен появиться и исчезнуть красный кружок
+paths:
+  - 'scenarios/animations/blink.json'
+---
+title: 1262 Пример анимации подсказки в видео Дзена
+tags: [ 'Animations' ]
+steps:
+ - Через несколько секунд после показа карточки должно появиться уведомление о включении звука
+expect:
+ - Уведомление о включении звука пропало через несколько секунд после отображения
+paths:
+  - 'scenarios/animations/mute_notification.json'
+---
+title: 1264 Scale transition игнорирует pivot_x/pivot_y
+tags: [ 'Animations' ]
+steps:
+ - Нажать кнопку "GO"
+expect:
+ - Картинка должна скейлиться из нижнего левого угла в нижний правый
+paths:
+  - 'scenarios/animations/scale_pivot_src.json'
+---
+title: 1265
+tags: [ 'Animations' ]
+steps:
+ - Нажать на уведомление плашки
+expect:
+ - При сворачивании плашки сперва должен исчезнуть текст, а фон после небольшой задержки
+paths:
+  - 'scenarios/animations/mute_notification.json'
+---
+title: 1269-1
+paths:
+  - 'scenarios/animations/transition/state_transition_any_change.json'
+---
+title: 1269-2
+paths:
+  - 'scenarios/animations/transition/state_transition_data_change.json'
+---
+title: 1269-3
+paths:
+  - 'scenarios/animations/transition/state_transition_state_change.json'
+---
+title: 1269-4
+paths:
+  - 'scenarios/animations/transition/inner_state_transition_any_change.json'
+---
+title: 1269-5
+paths:
+  - 'scenarios/animations/transition/inner_state_transition_data_change.json'
+---
+title: 1269-6
+paths:
+  - 'scenarios/animations/transition/inner_state_transition_state_change.json'
+---
+title: 1271
+tags: [ 'Animations', 'lottie' ]
+steps:
+ - Спиннер прокрутится 5 раз и остановится
+ - Нажать RESET
+expect:
+ - Спиннер прокрутится 5 раз и остановится
+paths:
+  - 'scenarios/animations/lottie/spinner_restart_repeat_mode.json'
+---
+title: 1272
+tags: [ 'Animations', 'lottie' ]
+steps:
+ - Спиннер 3 раза сменит направление движения и остановится
+ - Нажать RESET
+expect:
+ - Спиннер 3 раза сменит направление движения и остановится
+paths:
+  - 'scenarios/animations/lottie/spinner_reverse_repeat_mode.json'
+---
+title: 1260
+tags: [ 'Animations', 'lottie' ]
+expect:
+  - Появляется анимация спинера, которая не прерывается.
+paths:
+  - 'scenarios/animations/lottie/spinner.json'
+---
+title: 1270
+tags: [ 'Animations' ]
+paths:
+  - 'scenarios/action_animation/button_press_action_animations.json'
+---
+title: 1234 Cрабатывание visibility_actions в галереях
+tags: [ 'Visibility_actions' ]
+steps:
+  - Перейти внутри по элементам
+  - Проверить логирование
+expect:
+  - Открылись данные для галереи
+  - Логируется событие, пример logViewShown(cardId = ..., id = ...item_changed0)
+paths:
+  - 'scenarios/gallery/gallery_swipe.json'
+---
+title: 1235 Cрабатывание visibility_actions в пейджере
+tags: [ 'Visibility_actions' ]
+steps:
+  - Перейти внутри по элементам
+  - Проверить логирование
+expect:
+  - Открылись данные для пейджера
+  - Логируется событие, пример logViewShown(cardId = ..., id = content_item_show:1)
+paths:
+  - 'scenarios/action_visibility/pager.json'
+---
+title: 1250 Cрабатывание visibility_actions при смене страницы в div pager
+tags: [ 'Visibility_actions' ]
+steps:
+  - Сделать свайпы карточек
+  - Проверить логирование
+expect:
+  - Открылись данные для пейджера
+  - Логируется событие, пример logViewShown(cardId = ..., id = content_item_show:1)
+paths:
+  - 'scenarios/action_visibility/swipe_div_pager.json'
+---
+title: 1251 Visibility actions выполняются и логируются в пейджере
+tags: [ 'Visibility_actions' ]
+steps:
+  - Сделать свайпы в карточке
+  - Проверить логирование
+expect:
+  - Логирование согласно
+    logViewShown(cardId = ..., id = content_item_show0)
+    logViewShown(cardId = ..., id = container)
+  - Описание карточек меняется
+paths:
+  - 'scenarios/action_visibility/swipe_div_pager.json'
+---
+title: 1254-1 Отправлять visiblity_actions для первой страницы Pager по Div2View.tryLogVisibility
+tags: [ 'Visibility_actions' ]
+steps:
+  - Проверить логирование после открытия
+expect:
+  - Логирование первого элемента происходит, пример
+    logViewShown(cardId = ..., id = content_item_show:0)
+    logViewShown(cardId = ..., id = goose_shown)
+paths:
+  - 'scenarios/action_visibility/pager.json'
+---
+title: 1254-2 Отправлять select Pager по Div2View.tryLogVisibility
+tags: [ 'Visibility_actions' ]
+steps:
+  - Проверить логирование первого элемента после открытия в logcat
+  - Сделать свайп для перехода на следующий элемент
+  - Проверить логирование второго элемента после свайпа
+expect:
+  - Логирование первого элемента в logcat происходит, пример
+    Ya:PagerSelectedActionsTracker onPageSelected(0)
+    Ya:PagerSelectedActionsTracker dispatch selected actions for page 0
+  - Логирование второго элемента происходит, пример logViewShown(cardId = ..., currentPageIndex = 1)
+    Logcat
+    Ya:PagerSelectedActionsTracker onPageSelected(1)
+    DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next)
+    Ya:PagerSelectedActionsTracker dispatch selected actions for page 1
+paths:
+  - 'scenarios/action_visibility/pager_selected_actions.json'
+---
+title: 1258 Сгруппированные в один bulkActions перечислены в логе "dispatchActions:"
+tags: [ 'Visibility_actions' ]
+steps:
+  - Сделать свайп в карточке для переключения между табами
+  - Проверить логирование
+expect:
+  - Происходит переключение карточек(табов) при свайпе
+  - Логирование соответствует
+    logViewShown(cardId = ..., id = content_item_show)
+    logViewShown(cardId = ..., id = container)
+paths:
+  - 'scenarios/action_visibility/swipe_div_pager.json'
+---
+title: 1267 Cрабатывают visibility_actions для default_item
+tags: [ 'Visibility_actions' ]
+steps:
+  - Проверить логирование
+expect:
+  - Открылась карточка
+  - В логах присутствует logViewShown(cardId = ..., id = comments_counter_show:4)
+paths:
+  - 'scenarios/action_visibility/default_item.json'
+---
+title: 1288 Вложенные visibility action-ы
+tags: [ 'Visibility_actions' ]
+steps:
+  - Нажать элементы карточки
+  - Проверить логирование
+expect:
+  - Открылась карточка article.json
+  - Элементы раскрываются
+  - Логирование соответствует
+    logViewShown(cardId = ..., id = separator)
+    logViewShown(cardId = ..., id = text)
+    logViewShown(cardId = ..., id = text2)
+    logViewShown(cardId = ..., id = comment_state)
+    logViewShown(cardId = ..., id = comment_01)
+    logViewShown(cardId = ..., id = comment_02)
+    logViewShown(cardId = ..., id = comment_03)
+    logViewShown(cardId = ..., id = comment_04)
+paths:
+  - 'scenarios/action_visibility/article.json'
+---
+title: 'Переменные: Табы'
+tags: [ 'DivTabs' ]
+steps:
+  - прокликиаем разные комбинации изменения свойств табов
+expect:
+  - '"dynamic_height=DYNAMIC" - каждый таб начинает подстраиваться по свой контент'
+  - '"dynamic_height=MAX_HEIGHT(for non-first-page)" - все табы начиная со второго будут подстраиваться под таб с максимальной высотой'
+  - '"tab.line_height=10" - межстрочный интервал текста табов 10'
+  - '"tab.line_height=30" - межстрочный интервал текста табов 30'
+  - '"tab.theme=GREEN" - оттенки табов меняются на зеленые'
+  - '"tab.theme=RED" - оттенки табов меняются на красные'
+  - '"selected_tab=0" - смена активного таба на первый'
+  - '"selected_tab=1" - смена активного таба на второй'
+  - '"selected_tab=6" - смена активного таба на "Page index 6"'
+  - '"has_separator=0" - выключение горизонтального разделителя под табами'
+  - '"has_separator=1" - включение горизонтального разделителя под табами'
+  - '"separator.color=RED" - смена цвета горизонтального разделителя на красный'
+  - '"separator.color=BLUE" - смена цвета горизонтального разделителя на синий'
+  - '"separator_paddings.top=0" - отступ горизонтального разделителя: сверху - 0'
+  - '"separator_paddings.top=50" - отступ горизонтального разделителя: сверху - 50'
+  - '"separator_paddings.bottom=0" - отступ горизонтального разделителя: снизу - 0'
+  - '"separator_paddings.bottom=50" - отступ горизонтального разделителя: снизу - 50'
+  - '"separator_paddings.left=0" - отступ горизонтального разделителя: слева - 0'
+  - '"separator_paddings.left=50" - отступ горизонтального разделителя: слева - 50'
+  - '"separator_paddings.right=0" - отступ горизонтального разделителя: справа - 0'
+  - '"separator_paddings.right=50" - отступ горизонтального разделителя: справа - 50'
+  - '"title_paddings.top=0" - отступ котейнера табоы: сверху - 0'
+  - '"title_paddings.top=50" - отступ котейнера табоы: сверху - 50'
+  - '"title_paddings.bottom=0" - отступ котейнера табоы: снизу - 0'
+  - '"title_paddings.bottom=50" - отступ котейнера табоы: снизу - 50'
+  - '"title_paddings.left=0" - отступ котейнера табоы: слева - 0'
+  - '"title_paddings.left=50" - отступ котейнера табоы: слева - 50'
+  - '"title_paddings.right=0" - отступ котейнера табоы: справа - 0'
+  - '"title_paddings.right=50" - отступ котейнера табоы: справа - 50'
+paths:
+  - 'scenarios/variables/div_tabs.json'
+---
+title: 1315 Visibility в div-base
+steps:
+  - Прокликиваем разные комбинации изменения свойства visibility.
+expect:
+  - При клике на кнопку текстовое поле выставляет правильную visibility.
+  - В логах отображается, когда текстовое поле появляется на экране.
+paths:
+  - 'scenarios/action_visibility/set_visibility.json'
+---
+title: 1317 Появление картинки с анимацией
+tags: [ 'Animations' ]
+expect:
+  - Происходит соответствующая анимация картинки
+  - Если выйти из активити и вернуться - картинки должны отобразиться без анимации. Возможно, что только mini_image покажется без анимации, это нормально, остальные картинки очень большие, они могут не закешироваться.
+paths:
+  - 'scenarios/action_animation/image_loading_animation.json'
+---
+title: Переменные в DivIndicator
+steps:
+  - Прокликать кнопки, смотреть на индикатор и на анимации переключения
+  - Сбрасываем последним пунктом
+  - Проскроллить вьюпейджер в середину, снова прокликать кнопки, смотреть на индикатор
+  - Сбрасываем последним пунктом
+  - Проскроллить вьюпейджер в конец, снова прокликать кнопки, смотреть на индикатор
+expect:
+  - Верстка индикатора соответствует изменяется в соответствии с кнопкой
+paths:
+  - 'scenarios/variables/div_indicator.json'
+---
+title: Триггеры переменных
+tags: [ 'Triggers' ]
+steps:
+  - При переключении только левой кнопки текст меняется на соответствующий
+  - При переключении только правой кнопки текст меняется на соответствующий
+  - При переключении обоих кнопок текст меняется на соответствующий
+  - Выключении обоих кнопок приводит к первоначальному состоянию
+expect:
+  - Верстка соответствует переключению кнопок
+paths:
+  - 'scenarios/variables/div_variable_triggers.json'
+---
+title: Триггеры переменных (режимы)
+tags: [ 'Triggers' ]
+steps:
+  - '"Thumb value" отражает текущее положение ползунка'
+  - '"First selected positive position" запоминает первое значение после перехода от 0 или отрицательных значений к значениям > 0'
+  - '"Last selected positive position" меняется вместе с ползунком если его значение > 0'
+expect:
+  - Верстка соответствует переключению кнопок
+paths:
+  - 'scenarios/variables/div_variable_trigger_modes.json'
+---
+title: Триггеры переменных (замыкания)
+tags: [ 'DivInput', 'DivSlider', 'Triggers', 'Functions' ]
+expect:
+  - Значения в slider-ах должны быть синхронизированы со значениями в input-ах
+  - Если вбить в input значение выходящее за допустимые пределы, то должна отображаться ошибка
+paths:
+  - 'scenarios/variables/div_variable_trigger_loops.json'
+---
+title: Div input
+tags: [ 'DivInput']
+expect:
+  - Значения в slider-ах должны быть синхронизированы со значениями в input-ах
+  - Если вбить в input значение выходящее за допустимые пределы, то должна отображаться ошибка
+paths:
+  - 'scenarios/div-input.json'
+---
+title: Последовательные анимации в сете
+steps:
+  - Нажать на картинку
+expect:
+  - Сердце увеличится в 2 раза за 2 секунды, затем еще в 4 раза за 2 секунды
+paths:
+  - 'scenarios/animations/transition/transition_set.json'
+---
+title: 'Анимации переключения заголовков табов'
+tags: [ 'DivTabs', 'Animations' ]
+steps:
+  - Переключить заголовки в каждом элементе DivTabs нажатиями по заголовкам
+  - Переключить заголовки в каждом элементе с помощью медленного свайпа
+expect:
+  - На 1-ом элементе анимация переключения slide
+  - На 2-ом элементн анимация переключения fade
+  - На 3-ем элементе анимация переключения отсутствует
+paths:
+  - 'scenarios/animations/tab_titles_animations.json'
+---
+title: Копирование текста
+tags: [ 'DivText' ]
+steps:
+  - Двойной тап или долгое нажатие на первый текст
+  - Двойной тап или долгое нажатие на второй текст
+expect:
+  - В первом тексте должно появиться системное выделение, его можно скопировать, во втором - нет
+paths:
+  - 'scenarios/selectable_text.json'
+---
+title: DivText
+tags: [ 'DivText' ]
+paths:
+  - 'scenarios/div-text.json'
+---
+title: 'Nested change bounds transitions'
+steps:
+  - Жмем "PRESS HERE"
+  - Жмем "PRESS AGAIN"
+expect:
+  - После первого клика появляется картинка с анимацией в контейнере кнопки, контейнер растягивается с анимацией.
+  - После второго клика растягивается кнопка, меняется текст. Контейнер снова растягивается с анимацией.
+paths:
+  - 'scenarios/action_animation/nested_change_bounds.json'
+---
+title: Ввод текста
+tags: [ 'DivInput' ]
+steps:
+  - Тап в поле ввода
+  - Удаление, дополнение или ввод нового текста
+expect:
+  - Текст внизу под заголовком должен соответствовать изначальному верхнему тексту и изменяться вслед за ним
+paths:
+  - 'scenarios/input.json'
+---
+title: Ввод текста (single line)
+tags: [ 'DivInput' ]
+steps:
+  - Тап в поле ввода
+  - Удаление, дополнение или ввод нового текста
+expect:
+  - Текст внизу под заголовком должен соответствовать изначальному верхнему тексту и изменяться вслед за ним
+  - Максимальное число строк - 1, переносы строк перращаются в пробелы
+paths:
+  - 'scenarios/single_line_input.json'
+---
+title: Управление VideoCustom
+tags: [ 'VideoCustom' ]
+steps:
+  - Тап на кнопки управления 'play', 'pause', 'reset'
+expect:
+  - При тапе на 'play' видео продолжает вопроизведение
+  - При тапе на 'pause' воспроизведение останавливается
+  - При тапе на 'reset' воспроизведение переходит в начало.
+  - Если видео было остановлено нажатием 'pause', тап на 'reset' оставляет видео остановленным
+  - Если видео не было остановлено, после тапа на 'reset' воспроизведение не останавливается
+paths:
+  - 'scenarios/video/video_controls.json'
+---
+title: 'State transition trigger'
+steps:
+  - Жмем "To liked"
+expect:
+  - Первый - должна быть анимация, стоят только старые тригеры
+  - Второй - не должно быть анимации, старое "state_change" перетирается пустым списком новых
+  - Третий - должна быть анимация, старое и новое по-умолчанию разрешают
+paths:
+  - 'scenarios/animations/transition/transition_triggers_state_change.json'
+---
+title: 'Data transition trigger'
+steps:
+  - Жмем "Change data"
+expect:
+  - Первый - должна быть анимация, стоят только старые тригеры
+  - Второй - не должно быть анимации, старое "state_change" перетирается пустым списком новых
+  - Третий - должна быть анимация, старое "none" перетирается новым "state_change"
+paths:
+  - 'scenarios/animations/transition/transition_triggers_data_change_src.json'
+---
+title: 'Логирование экшенов'
+steps:
+  - Делаем клик на Test button
+  - Делаем двойной клик на Test button
+  - Делаем долгий клик на Test button
+expect:
+  - В логах появляется 2 лога про клик
+  - В логах появляется 2 лога про двойной клик
+  - В логах появляется 2 лога про долгий клик
+paths:
+  - 'scenarios/logging.json'
+
+---
+title: 'Shortcuts'
+paths:
+  - 'scenarios/shortcuts.json'
+---
+title: 'Auto ellipsize'
+paths:
+  - 'scenarios/auto-ellipsize.json'
+---
+title: 'Expand cutout 1'
+paths:
+  - 'scenarios/expand-cutout-1.json'
+---
+title: 'Expand cutout 2'
+paths:
+  - 'scenarios/expand-cutout-2.json'
+---
+title: 'Lottie animations'
+paths:
+  - 'scenarios/lottie_animations.json'
+---
+title: 'Lottie cycled animations'
+expect:
+  - Воспроизводится анимация появления, затем зацикливается блистающий значек
+paths:
+  - 'scenarios/lottie_cycled_animations.json'
+---
+title: 'States default state'
+paths:
+  - 'scenarios/states_default_state.json'
+---
+title: 'Tabs item actions'
+paths:
+  - 'scenarios/tabs-item-actions.json'
+---
+title: 'Grid layout'
+paths:
+  - 'scenarios/grid_layout.json'
+---
+title: 'Grid with weights'
+paths:
+  - 'scenarios/grid-with-weights.json'
+---
+title: 'Custom container'
+paths:
+  - 'scenarios/custom-container.json'
+---
+title: 'Custom card'
+paths:
+  - 'scenarios/custom-card.json'

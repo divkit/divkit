@@ -1,0 +1,302 @@
+{
+  "cases": [
+    {
+      "name": "4 % 2 => 0",
+      "expression": "@{4 % 2}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "3 % 2 => 1",
+      "expression": "@{3 % 2}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "2 % 0 => error",
+      "expression": "@{2 % 0}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [2 % 0]. Division by zero is not supported."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "0 % 2 => 0",
+      "expression": "@{0 % 2}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-3 % 2 => -1",
+      "expression": "@{-3 % 2}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "3 % -2 => 1",
+      "expression": "@{3 % -2}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-3 % -2 => -1",
+      "expression": "@{-3 % -2}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a % b => 0",
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 4,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a % b => 1",
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 3,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a % b => error",
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [2 % 0]. Division by zero is not supported."
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 2,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 0,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a % b => -1",
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -3,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "-a % b => 1",
+      "expression": "@{-a % b}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -3,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": 2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a % b => 1",
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 3,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a % -b => 1",
+      "expression": "@{a % -b}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": 3,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "a % b => -1",
+      "expression": "@{a % b}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "value": -3,
+          "name": "a"
+        },
+        {
+          "type": "integer",
+          "value": -2,
+          "name": "b"
+        }
+      ],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

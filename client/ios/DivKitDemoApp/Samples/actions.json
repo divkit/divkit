@@ -1,0 +1,107 @@
+{
+  "card": {
+    "log_id": "test/body",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "No action",
+              "font_size": 24
+            },
+            {
+              "type": "text",
+              "text": "Action",
+              "font_size": 24,
+              "actions": [
+                {
+                  "log_id": "tap/text",
+                  "url": "action://text"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Longtap action",
+              "font_size": 24,
+              "longtap_actions": [
+                {
+                  "log_id": "longtap/text",
+                  "url": "longtap-action://text"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Menu",
+              "font_size": 24,
+              "actions": [
+                {
+                  "log_id": "menu/text",
+                  "menu_items": [
+                    {
+                      "text": "With action",
+                      "action": {
+                        "log_id": "menu/action",
+                        "url": "action://menu"
+                      }
+                    },
+                    {
+                      "text": "With actions",
+                      "actions": [
+                        {
+                          "log_id": "menu/action1",
+                          "url": "action://menu1"
+                        },
+                        {
+                          "log_id": "menu/action2",
+                          "url": "action://menu2"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Log action",
+              "font_size": 24,
+              "actions": [
+                {
+                  "log_id": "longtap/text",
+                  "log_url": "https://yandex.ru",
+                  "payload": {
+                    "param1": "value1",
+                    "param2": 123
+                  }
+                }
+              ]
+            }
+          ],
+          "paddings": {
+            "bottom": 20,
+            "left": 20,
+            "right": 20,
+            "top": 20
+          },
+          "actions": [
+            {
+              "log_id": "tap/container",
+              "url": "action://container"
+            }
+          ],
+          "longtap_actions": [
+            {
+              "log_id": "longtap/container",
+              "url": "longtap-action://container"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,73 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "content": {
+                                "direction": "vertical",
+                                "frame": {
+                                    "color": "#FF0000",
+                                    "style": "border"
+                                },
+                                "alignment_horizontal": "left",
+                                "height": {
+                                    "type": "numeric",
+                                    "value": 400
+                                },
+                                "width": {
+                                    "type": "predefined",
+                                    "value": "match_parent"
+                                },
+                                "background": [
+                                    {
+                                        "color": "#00FF00",
+                                        "type": "div-solid-background"
+                                    }
+                                ],
+                                "action": {
+                                    "url": "https://news.yandex.ru"
+                                },
+                                "type": "div-container-block",
+                                "children": [
+                                    {
+                                        "delimiter_color": "#111FFF",
+                                        "padding_modifier": {
+                                            "position": "right",
+                                            "size": "l"
+                                        },
+                                        "has_delimiter": 1,
+                                        "action": {
+                                            "url": "https://yandex.ru"
+                                        },
+                                        "type": "div-separator-block",
+                                        "size": "xl"
+                                    }
+                                ]
+                            },
+                            "title": {
+                                "action": {
+                                    "url": "http://ya.ru"
+                                },
+                                "text": "separator"
+                            }
+                        }
+                    ],
+                    "active_tab_color": "#0000FF",
+                    "active_tab_bg_color": "#00FF00",
+                    "has_delimiter": 1,
+                    "inactive_tab_color": "#FF0000",
+                    "type": "div-tabs-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#BBAAFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

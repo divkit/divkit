@@ -1,0 +1,42 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "color": "#228B22",
+                            "text": "1",
+                            "score": "1"
+                        },
+                        {
+                            "color": "#228B22",
+                            "text": "2",
+                            "score": "2"
+                        }
+                    ],
+                    "type": "div-traffic-block",
+                    "alignment": "left"
+                },
+                {
+                    "items": [
+                        {
+                            "color": "#228B22",
+                            "text": "1",
+                            "score": "1"
+                        }
+                    ],
+                    "type": "div-traffic-block",
+                    "alignment": "left"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

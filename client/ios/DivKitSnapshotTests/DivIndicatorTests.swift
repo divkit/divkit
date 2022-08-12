@@ -1,0 +1,102 @@
+// Copyright 2021 Yandex LLC. All rights reserved.
+
+@testable import LayoutKit
+
+import XCTest
+
+import CommonCore
+import DivKit
+
+final class DivIndicatorTests: DivKitSnapshotTestCase {
+  override func setUp() {
+    super.setUp()
+    rootDirectory = "snapshot_test_data"
+    subdirectory = "div-indicator"
+
+    blocksState = [
+      pagerPath: PagerViewState(numberOfPages: 11, currentPage: 1),
+    ]
+  }
+
+  func test_ActiveSize() {
+    testDivs("active_size.json")
+  }
+
+  func test_CornersRadius() {
+    testDivs("corners_radius.json")
+  }
+
+  func test_FixedHeight() {
+    testDivs("fixed-height.json")
+  }
+
+  func test_FixedWidthMaxItemsCircle() {
+    testDivs("fixed-width-max_items_circle.json")
+  }
+
+  func test_FixedWidthMaxItemsRectangle() {
+    testDivsForDifferentStates("fixed-width-max_items_rectangle.json")
+  }
+
+  func test_FixedWidthMaxItemsRectangleWorm() {
+    testDivsForDifferentStates("fixed-width-max_items_rectangle_worm.json")
+  }
+
+  func test_FixedWidthMaxItemsRectangleSlider() {
+    testDivsForDifferentStates("fixed-width-max_items_rectangle_slider.json")
+  }
+
+  func test_Margins() {
+    testDivs("margins.json")
+  }
+
+  func test_ParentWidthMaxItems() {
+    testDivs("match_parent-width-max_items.json")
+  }
+
+  func test_MinimumSize() {
+    testDivs("minimum_size.json")
+  }
+
+  func test_Paddings() {
+    testDivs("paddings.json")
+  }
+
+  func test_WrapContentHeight() {
+    testDivs("wrap_content-height.json")
+  }
+
+  func test_WrapContentWidthMaxItems() {
+    testDivs("wrap_content-width-max_items.json")
+  }
+}
+
+extension DivIndicatorTests {
+  fileprivate func testDivsForDifferentStates(
+    _ fileName: String,
+    functionName: String = #function
+  ) {
+    for state in testPagerViewStates {
+      blocksState = [
+        pagerPath: state,
+      ]
+
+      var testName = functionName
+      testName.removeLast(2)
+      testName += "_\(state.currentPage)()"
+      testDivs(fileName, testName: testName)
+    }
+  }
+}
+
+private let pagerPath = UIElementPath(testCardId) + "pager_id"
+
+private let testPagerViewStates = [
+  PagerViewState(numberOfPages: 11, floatCurrentPage: 0),
+  PagerViewState(numberOfPages: 11, floatCurrentPage: 1.5),
+  PagerViewState(numberOfPages: 11, floatCurrentPage: 2),
+  PagerViewState(numberOfPages: 11, floatCurrentPage: 5.2),
+  PagerViewState(numberOfPages: 11, floatCurrentPage: 7.7),
+  PagerViewState(numberOfPages: 11, floatCurrentPage: 9.4),
+  PagerViewState(numberOfPages: 11, floatCurrentPage: 10),
+]

@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "description": "Размер элемента подстраивается под его содержимое.",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "wrap_content"
+      ]
+    },
+    "constrained": {
+      "$ref": "common.json#/boolean_int",
+      "description": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

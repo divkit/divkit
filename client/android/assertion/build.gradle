@@ -1,0 +1,16 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+android {
+    buildFeatures { buildConfig = true }
+
+    defaultConfig {
+        buildConfigField "boolean", "DISABLE_ASSERTS", "${project.property("disableAssertsInBuild").toBoolean()}"
+    }
+}
+
+dependencies {
+    implementation project(path: ':logging')
+    implementation "androidx.core:core:$versions.androidx.core"
+}

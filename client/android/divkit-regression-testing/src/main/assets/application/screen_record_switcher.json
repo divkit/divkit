@@ -1,0 +1,189 @@
+{
+  "templates": {
+    "switch_pointer": {
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 16
+      },
+      "height": {
+        "type": "fixed",
+        "value": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "margins": {
+        "left": 2,
+        "right": 2,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffffff"
+        }
+      ],
+      "transition_change": {
+        "type": "change_bounds",
+        "duration": 500
+      },
+      "delimiter_style": {
+        "color": "#00000000"
+      }
+    },
+    "setting_switch": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 34
+      },
+      "height": {
+        "type": "fixed",
+        "value": 20
+      },
+      "content_alignment_vertical": "center",
+      "border": {
+        "corner_radius": 16
+      }
+    },
+    "setting_switch_state": {
+      "type": "state",
+      "width": {
+        "type": "fixed",
+        "value": 34
+      },
+      "height": {
+        "type": "fixed",
+        "value": 20
+      },
+      "alignment_vertical": "center",
+      "states": [
+        {
+          "state_id": "active",
+          "div": {
+            "type": "setting_switch",
+            "content_alignment_horizontal": "right",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#5A43E3"
+              }
+            ],
+            "items": [
+              {
+                "type": "switch_pointer",
+                "div_id": "pointer"
+              }
+            ],
+            "actions": [
+              {
+                "$log_id": "active_click_log_id",
+                "$url": "active_click_div_action_url"
+              },
+              {
+                "$log_id": "active_click_log_id",
+                "$url": "active_click_change_state_url"
+              }
+            ]
+          }
+        },
+        {
+          "state_id": "inactive",
+          "div": {
+            "type": "setting_switch",
+            "background": [
+              {
+                "type": "solid",
+                "color": "#1D000000"
+              }
+            ],
+            "items": [
+              {
+                "type": "switch_pointer",
+                "div_id": "pointer"
+              }
+            ],
+            "content_alignment_horizontal": "left",
+            "actions": [
+              {
+                "$log_id": "inactive_click_log_id",
+                "$url": "inactive_click_div_action_url"
+              },
+              {
+                "$log_id": "inactive_click_log_id",
+                "$url": "inactive_click_change_state_url"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "switcher",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "paddings": {
+            "top": 22,
+            "bottom": 22,
+            "left": 20,
+            "right": 20
+          },
+          "margins": {
+            "top": 25,
+            "bottom": 10,
+            "left": 20,
+            "right": 20
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "color": "#ffffff",
+              "type": "solid"
+            }
+          ],
+          "border": {
+            "corner_radius": 22,
+            "stroke": {
+              "color": "#1D333333",
+              "width": 1
+            }
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Записывать экран",
+              "font_size": 18,
+              "font_weight": "regular",
+              "line_height": 24,
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              }
+            },
+            {
+              "type": "setting_switch_state",
+              "div_id": "switcher",
+              "active_click_log_id": "set_record_disabled",
+              "active_click_change_state_url": "div-action://set_state?state_id=0/switcher/inactive",
+              "active_click_div_action_url": "div-demo-action://record_screen?value=0",
+              "inactive_click_log_id": "set_record_enabled",
+              "inactive_click_div_action_url": "div-demo-action://record_screen?value=1",
+              "inactive_click_change_state_url": "div-action://set_state?state_id=0/switcher/active"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

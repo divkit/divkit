@@ -1,0 +1,62 @@
+{
+  "type":"container",
+  "items":[
+    {
+      "type":"text",
+      "text":"It is a dark time for the Rebellion",
+      "font_size":12
+    }
+  ],
+  "action":{
+    "url":"https://ya.ru",
+    "log_id":"test_log_id"
+  },
+  "actions":[
+    {
+      "log_id":"test_log_id_1",
+      "url":"https://lenta.ru"
+    },
+    {
+      "log_id":"test_log_id_2",
+      "menu_items":[
+        {
+          "text":"Have questions?",
+          "action":{
+            "url":"https://ya.ru",
+            "log_id":"test_log_id"
+          }
+        },
+        {
+          "text":"Definitely!",
+          "action":{
+            "url":"https://ya.ru",
+            "log_id":"test_log_id"
+          }
+        }
+      ]
+    },
+    {
+      "log_id":"test_log_id_5",
+      "url":"https://dtf.ru"
+    },
+    {
+      "log_id":"test_log_id_6",
+      "menu_items":[
+        {
+          "text":"Absolutely not!",
+          "action":{
+            "url":"https://ya.ru",
+            "log_id":"test_log_id_7"
+          }
+        },
+        {
+          "text":"Yes!",
+          "action":{
+            "url":"https://ya.ru",
+            "log_id":"test_log_id_8"
+          }
+        }
+      ]
+    }
+  ]
+}

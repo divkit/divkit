@@ -1,0 +1,4 @@
+{
+    "lang": "typescript",
+    "header": "{ TemplateBlock } from '../blocks'\n{ Exact, IntBoolean, NonEmptyArray } from '../helper'\n{ Type } from '../template'\n"
+}

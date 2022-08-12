@@ -1,0 +1,550 @@
+{
+  "templates": {
+    "text_14_18_regular": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 18,
+      "$text": "text_14_18_regular__text",
+      "$text_color": "text_14_18_regular__text_color",
+      "margins": {
+        "left": 12,
+        "right": 12
+      }
+    },
+    "placeholder": {
+      "type": "text",
+      "border": {
+        "corner_radius": 16,
+        "stroke": {
+          "color": "#1F000000",
+          "width": 1
+        }
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 300
+      },
+      "text": "               "
+    }
+  },
+  "card": {
+    "log_id": "gallery",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "top": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "heartbeat",
+              "visibility_duration": 4000,
+              "visibility_percentage": 80
+            }
+          ],
+          "items": [
+            {
+              "type": "state",
+              "div_id": "body",
+              "states": [
+                {
+                  "state_id": "card",
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "indicator",
+                        "paddings": {
+                          "bottom": 0
+                        },
+                        "margins": {
+                          "bottom": 0
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 2
+                        },
+                        "pager_id": "gallery",
+                        "inactive_item_color": "#D0D1D9",
+                        "active_item_color": "#000000",
+                        "shape": {
+                          "type": "rounded_rectangle",
+                          "item_width": {
+                            "type": "fixed",
+                            "value": 10
+                          },
+                          "item_height": {
+                            "type": "fixed",
+                            "value": 2
+                          },
+                          "corner_radius": {
+                            "type": "fixed",
+                            "value": 2
+                          }
+                        }
+                      },
+                      {
+                        "type": "pager",
+                        "id": "gallery",
+                        "paddings": {
+                          "right": 4,
+                          "left": 4
+                        },
+                        "margins": {
+                          "top": 8
+                        },
+                        "items": [
+                          {
+                            "type": "placeholder",
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#f1f1ff"
+                              }
+                            ],
+                            "visibility_actions": [
+                              {
+                                "log_id": "006",
+                                "log_limit": 0
+                              }
+                            ],
+                            "selected_actions": [
+                              {
+                                "log_id": "6",
+                                "log_limit": 0,
+                                "url": "div-action://set_state?state_id=0/body/card/description/0"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "placeholder",
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#f5f5ff"
+                              }
+                            ],
+                            "visibility_actions": [
+                              {
+                                "log_id": "106",
+                                "log_limit": 0
+                              }
+                            ],
+                            "selected_actions": [
+                              {
+                                "log_id": "6",
+                                "log_limit": 0,
+                                "url": "div-action://set_state?state_id=0/body/card/description/1"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "placeholder",
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#f9f9ff"
+                              }
+                            ],
+                            "visibility_actions": [
+                              {
+                                "log_id": "206",
+                                "log_limit": 0
+                              }
+                            ],
+                            "selected_actions": [
+                              {
+                                "log_id": "6",
+                                "log_limit": 0,
+                                "url": "div-action://set_state?state_id=0/body/card/description/2"
+                              }
+                            ]
+                          },
+                          {
+                            "type": "placeholder",
+                            "background": [
+                              {
+                                "type": "solid",
+                                "color": "#fcfcff"
+                              }
+                            ],
+                            "visibility_actions": [
+                              {
+                                "log_id": "306",
+                                "log_limit": 0
+                              }
+                            ],
+                            "selected_actions": [
+                              {
+                                "log_id": "6",
+                                "log_limit": 0,
+                                "url": "div-action://set_state?state_id=0/body/card/description/3"
+                              }
+                            ]
+                          }
+                        ],
+                        "layout_mode": {
+                          "type": "fixed",
+                          "neighbour_page_width": {
+                            "type": "fixed",
+                            "value": 10
+                          }
+                        },
+                        "item_spacing": {
+                          "type": "fixed",
+                          "value": 4
+                        },
+                        "restrict_parent_scroll": 1
+                      },
+                      {
+                        "div_id": "description",
+                        "type": "state",
+                        "states": [
+                          {
+                            "state_id": "0",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0
+                              },
+                              "items": [
+                                {
+                                  "type": "state",
+                                  "div_id": "text",
+                                  "states": [
+                                    {
+                                      "state_id": "short",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "В настоящее время в мире насчитывается около 600 млн домашних кошек, выведено около 200 пород, от длинношёрстных до лишённых шерсти, признанных и зарегистрированных различными фелинологическими организациями.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "max_lines": 2,
+                                        "ellipsis": {
+                                          "text": "… Развернуть",
+                                          "ranges": [
+                                            {
+                                              "start": 2,
+                                              "end": 13,
+                                              "text_color": "#80000000",
+                                              "actions": [
+                                                {
+                                                  "log_id": "0",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
+                                                },
+                                                {
+                                                  "log_id": "1",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
+                                                },
+                                                {
+                                                  "log_id": "2",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
+                                                },
+                                                {
+                                                  "log_id": "3",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "state_id": "long",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "В настоящее время в мире насчитывается около 600 млн домашних кошек, выведено около 200 пород, от длинношёрстных до лишённых шерсти, признанных и зарегистрированных различными фелинологическими организациями.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "actions": [
+                                          {
+                                            "log_id": "0",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
+                                          },
+                                          {
+                                            "log_id": "1",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
+                                          },
+                                          {
+                                            "log_id": "2",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
+                                          },
+                                          {
+                                            "log_id": "3",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "1",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0
+                              },
+                              "items": [
+                                {
+                                  "type": "state",
+                                  "div_id": "text",
+                                  "states": [
+                                    {
+                                      "state_id": "short",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Гуси — род водоплавающих птиц семейства утиных, отряда гусеобразных. Гуси отличаются клювом, имеющим при основании большую высоту, чем ширину, и оканчивающимся ноготком с острым краем.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "max_lines": 2,
+                                        "ellipsis": {
+                                          "text": "… Развернуть",
+                                          "ranges": [
+                                            {
+                                              "start": 2,
+                                              "end": 13,
+                                              "text_color": "#80000000",
+                                              "actions": [
+                                                {
+                                                  "log_id": "0",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
+                                                },
+                                                {
+                                                  "log_id": "1",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
+                                                },
+                                                {
+                                                  "log_id": "2",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
+                                                },
+                                                {
+                                                  "log_id": "3",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "state_id": "long",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Гуси — род водоплавающих птиц семейства утиных, отряда гусеобразных. Гуси отличаются клювом, имеющим при основании большую высоту, чем ширину, и оканчивающимся ноготком с острым краем.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "actions": [
+                                          {
+                                            "log_id": "0",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
+                                          },
+                                          {
+                                            "log_id": "1",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
+                                          },
+                                          {
+                                            "log_id": "2",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
+                                          },
+                                          {
+                                            "log_id": "3",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "2",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0
+                              },
+                              "items": [
+                                {
+                                  "type": "state",
+                                  "div_id": "text",
+                                  "states": [
+                                    {
+                                      "state_id": "short",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Тело змеи покрыто чешуйчатой кожей.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "max_lines": 2,
+                                        "ellipsis": {
+                                          "text": "… Развернуть",
+                                          "ranges": [
+                                            {
+                                              "start": 2,
+                                              "end": 13,
+                                              "text_color": "#80000000",
+                                              "actions": [
+                                                {
+                                                  "log_id": "0",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
+                                                },
+                                                {
+                                                  "log_id": "1",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
+                                                },
+                                                {
+                                                  "log_id": "2",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
+                                                },
+                                                {
+                                                  "log_id": "3",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "state_id": "long",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Тело змеи покрыто чешуйчатой кожей.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "actions": [
+                                          {
+                                            "log_id": "0",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
+                                          },
+                                          {
+                                            "log_id": "1",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
+                                          },
+                                          {
+                                            "log_id": "2",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
+                                          },
+                                          {
+                                            "log_id": "3",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "3",
+                            "div": {
+                              "type": "container",
+                              "margins": {
+                                "top": 8,
+                                "bottom": 0
+                              },
+                              "items": [
+                                {
+                                  "type": "state",
+                                  "div_id": "text",
+                                  "states": [
+                                    {
+                                      "state_id": "short",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Кра́бы, или короткохво́стые ра́ки, — инфраотряд десятиногих ракообразных, обитающих в солёной и пресной воде.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "max_lines": 2,
+                                        "ellipsis": {
+                                          "text": "… Развернуть",
+                                          "ranges": [
+                                            {
+                                              "start": 2,
+                                              "end": 13,
+                                              "text_color": "#80000000",
+                                              "actions": [
+                                                {
+                                                  "log_id": "0",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/0/text/long"
+                                                },
+                                                {
+                                                  "log_id": "1",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/1/text/long"
+                                                },
+                                                {
+                                                  "log_id": "2",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/2/text/long"
+                                                },
+                                                {
+                                                  "log_id": "3",
+                                                  "url": "div-action://set_state?state_id=0/body/card/description/3/text/long"
+                                                }
+                                              ]
+                                            }
+                                          ]
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "state_id": "long",
+                                      "div": {
+                                        "type": "text_14_18_regular",
+                                        "text_14_18_regular__text": "Кра́бы, или короткохво́стые ра́ки, — инфраотряд десятиногих ракообразных, обитающих в солёной и пресной воде.",
+                                        "text_14_18_regular__text_color": "#333333",
+                                        "actions": [
+                                          {
+                                            "log_id": "0",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/0/text/short"
+                                          },
+                                          {
+                                            "log_id": "1",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/1/text/short"
+                                          },
+                                          {
+                                            "log_id": "2",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/2/text/short"
+                                          },
+                                          {
+                                            "log_id": "3",
+                                            "url": "div-action://set_state?state_id=0/body/card/description/3/text/short"
+                                          }
+                                        ]
+                                      }
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_string_array_property"
+      ]
+    },
+    "array": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "clientMinItems": 1
+    }
+  },
+  "required": [
+    "type",
+    "array"
+  ]
+}

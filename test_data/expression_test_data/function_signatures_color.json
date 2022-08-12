@@ -1,0 +1,291 @@
+{
+  "signatures": [
+    {
+      "name": "getColorAlpha(string) number",
+      "function_name": "getColorAlpha",
+      "doc": "Gets alpha value of argument color. Returns number value in range 0.0 to 1.0 of alpha value of color.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "getColorAlpha(color) number",
+      "function_name": "getColorAlpha",
+      "doc": "Gets alpha value of argument color. Returns number value in range 0.0 to 1.0 of alpha value of color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color"
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["ios"]
+    },
+    {
+      "name": "getColorRed(string) number",
+      "function_name": "getColorRed",
+      "doc": "Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "getColorRed(color) number",
+      "function_name": "getColorRed",
+      "doc": "Gets red value of argument color. Returns number value in range 0.0 to 1.0 of red value of color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color"
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["ios"]
+    },
+    {
+      "name": "getColorGreen(string) number",
+      "function_name": "getColorGreen",
+      "doc": "Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "getColorGreen(color) number",
+      "function_name": "getColorGreen",
+      "doc": "Gets green value of argument color. Returns number value in range 0.0 to 1.0 of green value of color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color."
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["ios"]
+    },
+    {
+      "name": "getColorBlue(string) number",
+      "function_name": "getColorBlue",
+      "doc": "Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "getColorBlue(color) number",
+      "function_name": "getColorBlue",
+      "doc": "Gets blue value of argument color. Returns number value in range 0.0 to 1.0 of blue value of color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color."
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["ios"]
+    },
+    {
+      "name": "setColorAlpha(string, number) string",
+      "function_name": "setColorAlpha",
+      "doc": "Sets alpha value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of alpha in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "setColorAlpha(color, number) color",
+      "function_name": "setColorAlpha",
+      "doc": "Sets alpha value of argument color. Returns color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of alpha in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "color",
+      "platforms": ["ios"]
+    },
+    {
+      "name": "setColorRed(string, number) string",
+      "function_name": "setColorRed",
+      "doc": "Sets red value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of red in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "setColorRed(color, number) color",
+      "function_name": "setColorRed",
+      "doc": "Sets red value of argument color. Returns color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of red in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "color",
+      "platforms": ["ios"]
+    },
+    {
+      "name": "setColorGreen(string, number) string",
+      "function_name": "setColorGreen",
+      "doc": "Sets green value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of green in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "setColorGreen(color, number) color",
+      "function_name": "setColorGreen",
+      "doc": "Sets green value of argument color. Returns Color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of green in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "color",
+      "platforms": ["ios"]
+    },
+    {
+      "name": "setColorBlue(string, number) string",
+      "function_name": "setColorBlue",
+      "doc": "Sets blue value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of blue in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "setColorBlue(color, number) color",
+      "function_name": "setColorBlue",
+      "doc": "Sets blue value of argument color. Returns Color.",
+      "arguments": [
+        {
+          "type": "color",
+          "doc": "Color."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of blue in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "color",
+      "platforms": ["ios"]
+    },
+
+    {
+      "name": "argb(number, number, number, number) string",
+      "function_name": "argb",
+      "doc": "Creates color from values of alpha, red, green, blue values. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value of alpha in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of red in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of green in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of blue in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "rgb(number, number, number) string",
+      "function_name": "rgb",
+      "doc": "Creates color from values of red, green, blue values. Sets alpha value as 1.0. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value of red in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of green in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of blue in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    }
+  ]
+}

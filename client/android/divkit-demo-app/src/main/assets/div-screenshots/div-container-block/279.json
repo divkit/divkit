@@ -1,0 +1,60 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "direction": "vertical",
+                    "alignment_horizontal": "left",
+                    "height": {
+                        "type": "numeric",
+                        "value": 200
+                    },
+                    "width": {
+                        "type": "numeric",
+                        "value": 250
+                    },
+                    "type": "div-container-block",
+                    "children": [
+                        {
+                            "alignment_horizontal": "left",
+                            "frame": {
+                                "color": "#0000FF",
+                                "style": "shadow"
+                            },
+                            "direction": "vertical",
+                            "height": {
+                                "type": "numeric",
+                                "value": 190
+                            },
+                            "width": {
+                                "type": "numeric",
+                                "value": 200
+                            },
+                            "background": [
+                                {
+                                    "color": "#00FF00",
+                                    "type": "div-solid-background"
+                                }
+                            ],
+                            "type": "div-container-block",
+                            "children": [
+                                {
+                                    "text": "shadow \u0441 color",
+                                    "type": "div-universal-block",
+                                    "text_style": "title_m"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#00FFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

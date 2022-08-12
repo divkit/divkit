@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-page-size.json",
+      "description": "Ширина страницы."
+    },
+    {
+      "$ref": "div-neighbour-page-size.json",
+      "description": "Ширина видимой части соседней страницы."
+    }
+  ]
+}

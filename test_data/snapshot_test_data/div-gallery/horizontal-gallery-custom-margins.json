@@ -1,0 +1,85 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "paddings": {
+            "left": 8,
+            "top": 8,
+            "right": 8,
+            "bottom": 8
+          },
+          "margins": {
+            "left": 50,
+            "top": 5,
+            "right": 50,
+            "bottom": 10
+          },
+          "background": [
+            {
+              "color": "#FFFFFF",
+              "type": "solid"
+            }
+          ],
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 2
+            },
+            "corner_radius": 10
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "For millions of years mankind lived just like animals",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "Then something happened which unleashed the power of our imagination",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "We learned to talk",
+              "font_size": 12,
+              "font_weight": "medium",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              },
+              "background": [
+                {
+                  "color": "#AAAAAA",
+                  "type": "solid"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

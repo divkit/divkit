@@ -1,0 +1,11 @@
+{
+  "templates": {
+  },
+  "entity": {
+    "type": "entity_with_array_with_transform",
+    "array": [
+      "FF00",
+      ""
+    ]
+  }
+}

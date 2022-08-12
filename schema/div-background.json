@@ -1,0 +1,16 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-gradient-background.json",
+      "description": "Градиент."
+    },
+    {
+      "$ref": "div-image-background.json",
+      "description": "Изображение."
+    },
+    {
+      "$ref": "div-solid-background.json",
+      "description": "Сплошной цвет."
+    }
+  ]
+}

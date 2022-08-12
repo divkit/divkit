@@ -1,0 +1,206 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffdc60"
+        }
+      ],
+      "border": {
+        "corner_radius": 4,
+        "has_shadow": 1
+      },
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_color": "#000000",
+      "actions": [
+        {
+          "menu_items": [
+            {
+              "text": "Single tap",
+              "action": {
+                "url": "custom-menu://singleTap",
+                "log_id": "custom/menu/singleTap"
+              }
+            }
+          ],
+          "log_id": "tap_actions"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "action_button",
+    "type": "state",
+    "div_id": "action_button",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "longtap_actions": [
+            {
+              "menu_items": [
+                {
+                  "text": "Long tap on container",
+                  "action": {
+                    "url": "custom-menu://longTap",
+                    "log_id": "custom/menu/longTap"
+                  }
+                }
+              ],
+              "log_id": "longtap_actions"
+            }
+          ],
+          "items": [
+            {
+              "div_id": "with_double_and_long_taps",
+              "type": "button",
+              "text": "With double and long taps",
+              "doubletap_actions": [
+                {
+                  "menu_items": [
+                    {
+                      "text": "Double tap",
+                      "action": {
+                        "url": "custom-menu://doubleTap",
+                        "log_id": "custom/menu/doubleTap"
+                      }
+                    }
+                  ],
+                  "log_id": "doubletap_actions"
+                }
+              ],
+              "longtap_actions": [
+                {
+                  "menu_items": [
+                    {
+                      "text": "Long tap",
+                      "action": {
+                        "url": "custom-menu://longTap",
+                        "log_id": "custom/menu/longTap"
+                      }
+                    }
+                  ],
+                  "log_id": "longtap_actions"
+                }
+              ],
+              "actions": [
+                {
+                  "log_id": "single_tap",
+                  "url": "ui-test://click?type=click&description=With+double+and+long+taps"
+                }
+              ]
+            },
+            {
+              "div_id": "without_double_tap",
+              "type": "button",
+              "text": "Without double tap",
+              "actions": [
+                {
+                  "log_id": "single_tap",
+                  "url": "ui-test://click?type=click&description=Without+double+tap"
+                }
+              ]
+            },
+            {
+              "div_id": "with_child_view_inside",
+              "type": "container",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "paddings": {
+                "left": 64,
+                "top": 0,
+                "right": 64,
+                "bottom": 0
+              },
+              "alpha": 1.0,
+              "items": [
+                {
+                  "type": "image",
+                  "height": {
+                    "type": "fixed",
+                    "value": 48
+                  },
+                  "width": {
+                    "type": "fixed",
+                    "value": 48
+                  },
+                  "background": [
+                    {
+                      "type": "solid",
+                      "color": "#FFFFFF"
+                    }
+                  ],
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center",
+                  "image_url": "https://yastatic.net/s3/home/div/bottomsheet/bender/camera.2.png",
+                  "preview": "iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAMAAABg3Am1AAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAA8UExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAANAvJjAAAAAUdFJOUwANGRomM0BNWWZzf4CMmaays7/M1E1wdgAAAXZJREFUSMedVt16hSAMC6JAPchf3v9dd8Fx0+kOdblTmq9A0xTgDeslpupwgctpE2fPP41UkiT9leD7SvEHjmvkiECW70UhNQRSzn9ajnG+Eua4pX0HDgCmSpJNLD5gDj3K7AmywQAm75uqJMswHjCNZAUmkgxQQEjSwpHkrCFM/RqFZIMKjaRgI5l0hEwyIpHcdIQXyfSmqQkZznt/OfMSYpTlUj3vvbu7cHkroYgq8VR/1Fbss3gVo4tsDeFVqRGNkORqAGBaDz3wMcG6f6xjFSynfZtGchnu6FDGdajk1zkiDGXwmBCOZ+58GR66mVMRl3GTnK61qApnAcCoCme6IGIIa6MiwT/E91jeAHbvb3In1fsWlRjDHy1an5pA0hO6hXWaCt3CHlul756swNxn0KSp/7eSaXsXN6MsaNnlph1Zfu90lvBxqNhun10qbh+7absfuzG38xh/OtgBXzWEdrD6yQ8fJ/W3dCcnW8r3z58oP0+ZL7WYJ/pc4r6OAAAAAElFTkSuQmCC"
+                }
+              ],
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#ffdc60"
+                }
+              ],
+              "border": {
+                "corner_radius": 4,
+                "has_shadow": 1
+              },
+              "actions": [
+                {
+                  "menu_items": [
+                    {
+                      "text": "Single tap on child",
+                      "action": {
+                        "url": "custom-menu://singleTap",
+                        "log_id": "custom/menu/singleTap"
+                      }
+                    }
+                  ],
+                  "log_id": "tap_actions"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

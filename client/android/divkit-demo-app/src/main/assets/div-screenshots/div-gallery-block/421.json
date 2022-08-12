@@ -1,0 +1,186 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "items": [
+                        {
+                            "width": {
+                                "type": "numeric",
+                                "value": 272,
+                                "unit": "dp"
+                            },
+                            "frame": {
+                                "color": "#FF1000",
+                                "style": "border"
+                            },
+                            "type": "div-container-block",
+                            "children": [
+                                {
+                                    "text": "272dp x 236sp, 55 padding_between_items",
+                                    "type": "div-universal-block",
+                                    "title": "25 items"
+                                }
+                            ],
+                            "height": {
+                                "type": "numeric",
+                                "value": 236,
+                                "unit": "sp"
+                            }
+                        },
+                        {
+                            "width": {
+                                "type": "numeric",
+                                "value": 230,
+                                "unit": "dp"
+                            },
+                            "frame": {
+                                "color": "#FF1000",
+                                "style": "border"
+                            },
+                            "type": "div-container-block",
+                            "children": [
+                                {
+                                    "text": "230dp x 150sp",
+                                    "type": "div-universal-block"
+                                }
+                            ],
+                            "height": {
+                                "type": "numeric",
+                                "value": 150,
+                                "unit": "sp"
+                            }
+                        },
+                        {
+                            "width": {
+                                "type": "numeric",
+                                "value": 136,
+                                "unit": "dp"
+                            },
+                            "frame": {
+                                "color": "#FF1000",
+                                "style": "border"
+                            },
+                            "type": "div-container-block",
+                            "children": [
+                                {
+                                    "text": "136dp x 300sp",
+                                    "type": "div-universal-block"
+                                }
+                            ],
+                            "height": {
+                                "type": "numeric",
+                                "value": 300,
+                                "unit": "sp"
+                            }
+                        },
+                        {
+                            "width": {
+                                "type": "numeric",
+                                "value": 145,
+                                "unit": "dp"
+                            },
+                            "frame": {
+                                "color": "#FF1000",
+                                "style": "border"
+                            },
+                            "type": "div-container-block",
+                            "children": [
+                                {
+                                    "text": "145dp x 180sp",
+                                    "type": "div-universal-block"
+                                }
+                            ],
+                            "height": {
+                                "type": "numeric",
+                                "value": 180,
+                                "unit": "sp"
+                            }
+                        },
+                        {
+                            "width": {
+                                "type": "numeric",
+                                "value": 210,
+                                "unit": "dp"
+                            },
+                            "frame": {
+                                "color": "#FF1000",
+                                "style": "border"
+                            },
+                            "type": "div-container-block",
+                            "children": [
+                                {
+                                    "text": "210dp x 140sp",
+                                    "type": "div-universal-block"
+                                }
+                            ],
+                            "height": {
+                                "type": "numeric",
+                                "value": 140,
+                                "unit": "sp"
+                            }
+                        },
+                        {
+                            "width": {
+                                "type": "numeric",
+                                "value": 146,
+                                "unit": "dp"
+                            },
+                            "frame": {
+                                "color": "#FF1000",
+                                "style": "border"
+                            },
+                            "type": "div-container-block",
+                            "children": [
+                                {
+                                    "text": "146dp x 87sp",
+                                    "type": "div-universal-block"
+                                }
+                            ],
+                            "height": {
+                                "type": "numeric",
+                                "value": 87,
+                                "unit": "sp"
+                            }
+                        },
+                        {
+                            "width": {
+                                "type": "numeric",
+                                "value": 147,
+                                "unit": "dp"
+                            },
+                            "frame": {
+                                "color": "#FF1000",
+                                "style": "border"
+                            },
+                            "type": "div-container-block",
+                            "children": [
+                                {
+                                    "text": "147dp x 240sp",
+                                    "type": "div-universal-block"
+                                }
+                            ],
+                            "height": {
+                                "type": "numeric",
+                                "value": 240,
+                                "unit": "sp"
+                            }
+                        }
+                    ],
+                    "padding_between_items": {
+                        "value": 55,
+                        "unit": "dp"
+                    },
+                    "type": "div-gallery-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#ffffff",
+            "type": "div-solid-background"
+        }
+    ]
+}

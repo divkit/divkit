@@ -1,0 +1,492 @@
+{
+    "templates": {
+        "title_text": {
+            "type": "text",
+            "paddings": {
+                "left": 16,
+                "top": 12,
+                "right": 16
+            },
+            "font_size": 18,
+            "font_weight": "medium",
+            "line_height": 24,
+            "text_color": "#CC000000"
+        },
+        "title_menu": {
+            "type": "image",
+            "width": {
+                "type": "fixed",
+                "value": 44
+            },
+            "height": {
+                "type": "fixed",
+                "value": 44
+            },
+            "image_url": "https://yastatic.net/s3/home/yandex-app/services_div/redesign/zen_menu_dark.3.png"
+        },
+        "district_button": {
+            "type": "text",
+            "text": "Написать новость",
+            "font_size": 14,
+            "border": {
+                "corner_radius": 4
+            },
+            "margins": {
+                "left": 16,
+                "right": 16,
+                "top": 12
+            },
+            "paddings": {
+                "bottom": 8,
+                "top": 8
+            },
+            "action": {
+                "$url": "district_button_action_link",
+                "log_id": "new_post"
+            },
+            "text_alignment_horizontal": "center",
+            "background": [{
+                "type": "solid",
+                "color": "#ffdc60"
+            }]
+        },
+        "district_card": {
+            "type": "container",
+            "orientation": "vertical",
+            "paddings": {
+                "bottom": 16
+            },
+            "height": {
+                "type": "wrap_content"
+            },
+            "items": [{
+                "type": "container",
+                "orientation": "horizontal",
+                "$items": "title_items"
+            }, {
+                "type": "tabs",
+                "switch_tabs_by_content_swipe_enabled": 0,
+                "title_paddings": {
+                    "left": 12,
+                    "right": 12,
+                    "bottom": 8
+                },
+                "tab_title_style": {
+                    "font_weight": "medium"
+                },
+                "$items": "tab_items_link"
+            }, {
+                "type": "district_button"
+            }],
+            "background": [{
+                "type": "image",
+                "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/district_day.3.png"
+            }]
+        },
+        "district_gallery_item": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+                "type": "fixed",
+                "value": 272
+            },
+            "height": {
+                "type": "fixed",
+                "value": 204,
+                "unit": "sp"
+            },
+            "border": {
+                "corner_radius": 6
+            },
+            "paddings": {
+                "left": 12,
+                "right": 12,
+                "top": 0,
+                "bottom": 0
+            },
+            "background": [{
+                "type": "solid",
+                "color": "#ffffff"
+            }],
+            "action": {
+                "$url": "district_gallery_item_action_link",
+                "log_id": "district_item"
+            },
+            "items": [{
+                "type": "text",
+                "$text": "address",
+                "font_size": 13,
+                "text_color": "#80000000",
+                "line_height": 16,
+                "max_lines": 1,
+                "height": {
+                    "type": "wrap_content"
+                },
+                "paddings": {
+                    "left": 0,
+                    "right": 0,
+                    "top": 12,
+                    "bottom": 0
+                }
+            }, {
+                "type": "text",
+                "$text": "message",
+                "alignment_vertical": "top",
+                "font_size": 14,
+                "line_height": 20,
+                "max_lines": 6,
+                "height": {
+                    "type": "match_parent"
+                },
+                "paddings": {
+                    "top": 5,
+                    "bottom": 5
+                }
+            }, {
+                "type": "container",
+                "orientation": "horizontal",
+                "content_alignment_vertical": "center",
+                "paddings": {
+                    "bottom": 12
+                },
+                "items": [{
+                    "type": "image",
+                    "$image_url": "avatar_url",
+                    "width": {
+                        "type": "fixed",
+                        "value": 24
+                    },
+                    "height": {
+                        "type": "fixed",
+                        "value": 24
+                    },
+                    "border": {
+                        "corner_radius": 12
+                    },
+                    "alignment_vertical": "center"
+                }, {
+                    "type": "text",
+                    "$text": "username",
+                    "font_size": 13,
+                    "font_weight": "medium",
+                    "text_color": "#80000000",
+                    "line_height": 16,
+                    "max_lines": 1,
+                    "width": {
+                        "type": "fixed",
+                        "value": 126
+                    },
+                    "alignment_vertical": "center",
+                    "paddings": {
+                        "left": 8,
+                        "right": 8
+                    }
+                }, {
+                    "type": "image",
+                    "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                    "width": {
+                        "type": "fixed",
+                        "value": 24
+                    },
+                    "alignment_vertical": "center",
+                    "height": {
+                        "type": "fixed",
+                        "value": 24,
+                        "unit": "sp"
+                    },
+                    "placeholder_color": "#00ffffff"
+                }, {
+                    "type": "text",
+                    "$text": "image_count",
+                    "font_size": 13,
+                    "font_weight": "medium",
+                    "text_color": "#80000000",
+                    "line_height": 16,
+                    "alignment_vertical": "center",
+                    "max_lines": 1,
+                    "paddings": {
+                        "right": 10,
+                        "left": 4
+                    }
+                }, {
+                    "type": "image",
+                    "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/images_day.1.png",
+                    "width": {
+                        "type": "fixed",
+                        "value": 24
+                    },
+                    "alignment_vertical": "center",
+                    "height": {
+                        "type": "fixed",
+                        "value": 24
+                    },
+                    "placeholder_color": "#00ffffff"
+                }, {
+                    "type": "text",
+                    "$text": "comment_count",
+                    "font_size": 13,
+                    "alignment_vertical": "center",
+                    "font_weight": "medium",
+                    "text_color": "#80000000",
+                    "line_height": 16,
+                    "max_lines": 1,
+                    "paddings": {
+                        "left": 4
+                    }
+                }]
+            }]
+        },
+        "district_unauthorized_card": {
+            "type": "container",
+            "background": [{
+                "type": "solid",
+                "color": "#0057D3"
+            }, {
+                "type": "image",
+                "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/district.png",
+                "scale": "fit",
+                "content_alignment_vertical": "top"
+            }],
+            "border": {
+                "corner_radius": 6
+            },
+            "paddings": {
+                "right": 12,
+                "left": 12,
+                "bottom": 12,
+                "top": 12
+            },
+            "height": {
+                "type": "fixed",
+                "value": 204,
+                "unit": "sp"
+            },
+            "width": {
+                "type": "fixed",
+                "value": 272
+            },
+            "items": [{
+                "type": "text",
+                "$text": "unauthorized_text",
+                "height": {
+                    "type": "match_parent"
+                },
+                "text_alignment_vertical": "bottom",
+                "text_color": "#FFFFFF",
+                "font_weight": "medium",
+                "font_size": 14,
+                "line_height": 20
+            }, {
+                "type": "text",
+                "$text": "unauthorized_button_text",
+                "text_color": "#CC000000",
+                "font_size": 13,
+                "line_height": 16,
+                "margins": {
+                    "top": 10
+                },
+                "paddings": {
+                    "right": 12,
+                    "left": 12,
+                    "bottom": 8,
+                    "top": 8
+                },
+                "width": {
+                    "type": "wrap_content"
+                },
+                "background": [{
+                    "type": "solid",
+                    "color": "#ffdc60"
+                }],
+                "border": {
+                    "corner_radius": 4
+                }
+            }]
+        },
+        "gallery_tail": {
+            "type": "container",
+            "width": {
+                "type": "fixed",
+                "value": 104
+            },
+            "height": {
+                "type": "match_parent"
+            },
+            "$action": "gallery_tail_action_link",
+            "content_alignment_horizontal": "center",
+            "content_alignment_vertical": "center",
+            "items": [{
+                "type": "image",
+                "width": {
+                    "type": "fixed",
+                    "value": 40
+                },
+                "height": {
+                    "type": "fixed",
+                    "value": 40
+                },
+                "border": {
+                    "corner_radius": 20
+                },
+                "background": [{
+                    "type": "solid",
+                    "color": "#ffffff"
+                }],
+                "placeholder_color": "#00ffffff",
+                "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png"
+            }, {
+                "type": "text",
+                "$text": "tail_text_link",
+                "font_size": 14,
+                "text_color": "#6b7a80",
+                "line_height": 16,
+                "text_alignment_horizontal": "center",
+                "height": {
+                    "type": "wrap_content"
+                },
+                "paddings": {
+                    "left": 0,
+                    "right": 0,
+                    "top": 10,
+                    "bottom": 0
+                }
+            }]
+        }
+    },
+    "card": {
+        "log_id": "district_card",
+        "states": [{
+            "state_id": 1,
+            "div": {
+                "type": "district_card",
+                "title_items": [{
+                    "type": "title_text",
+                    "text": "Новости района"
+                }, {
+                    "type": "title_menu",
+                    "action": {
+                        "log_id": "menu",
+                        "menu_items": [{
+                            "text": "Настройки ленты",
+                            "action": {
+                                "url": "http://ya.ru",
+                                "log_id": "settings"
+                            }
+                        }, {
+                            "text": "Скрыть карточку",
+                            "action": {
+                                "url": "http://ya.ru",
+                                "log_id": "hide"
+                            }
+                        }]
+                    }
+                }],
+                "district_button_action_link": "http://ya.ru",
+                "tab_items_link": [{
+                    "title": "ПОПУЛЯРНОЕ",
+                    "div": {
+                        "type": "gallery",
+                        "width": {
+                            "type": "match_parent",
+                            "value": 40
+                        },
+                        "height": {
+                            "type": "fixed",
+                            "value": 204
+                        },
+                        "paddings": {
+                            "left": 16,
+                            "right": 16
+                        },
+                        "items": [{
+                            "type": "district_gallery_item",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо если",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1",
+                            "district_gallery_item_action_link": "http://ya.ru"
+                        }, {
+                            "type": "district_gallery_item",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1",
+                            "district_gallery_item_action_link": "http://ya.ru"
+                        }, {
+                            "type": "district_gallery_item",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1",
+                            "district_gallery_item_action_link": "http://ya.ru"
+                        }, {
+                            "type": "district_gallery_item",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1",
+                            "district_gallery_item_action_link": "http://ya.ru"
+                        }, {
+                            "type": "district_gallery_item",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1",
+                            "district_gallery_item_action_link": "http://ya.ru"
+                        }, {
+                            "type": "district_unauthorized_card",
+                            "zalogin_text": "Войдите в Яндекс и обсуждайте новости вашего района",
+                            "zalogin_button_text": "Войти в Яндекс",
+                            "unauthorized_text": "Войдите в Яндекс и обсуждайте новости вашего района",
+                            "unauthorized_button_text": "Войти в Яндекс"
+                        }, {
+                            "type": "gallery_tail",
+                            "tail_text_link": "Все новости района"
+                        }]
+                    }
+                }, {
+                    "title": "ВСЕ",
+                    "div": {
+                        "type": "gallery",
+                        "width": {
+                            "type": "match_parent",
+                            "value": 40
+                        },
+                        "height": {
+                            "type": "fixed",
+                            "value": 204
+                        },
+                        "paddings": {
+                            "left": 16,
+                            "right": 16
+                        },
+                        "items": [{
+                            "type": "district_gallery_item",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1",
+                            "district_gallery_item_action_link": "http://ya.ru"
+                        }, {
+                            "type": "gallery_tail",
+                            "tail_text_link": "Все новости района"
+                        }]
+                    }
+                }]
+            }
+        }]
+
+    }
+}

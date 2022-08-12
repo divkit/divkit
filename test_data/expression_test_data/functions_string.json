@@ -1,0 +1,536 @@
+{
+  "cases": [
+    {
+      "name": "len('Sentence with 4 words.') => 22",
+      "expression": "@{len('Sentence with 4 words.')}",
+      "expected": {
+        "type": "integer",
+        "value": 22
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "len('') => 0",
+      "expression": "@{len('')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "len('') => 0",
+      "expression": "@{len('')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "contains('abc', 'b') => true",
+      "expression": "@{contains('abc', 'b')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "contains('abc', 'z') => false",
+      "expression": "@{contains('abc', 'z')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "contains('abc', '') => true",
+      "expression": "@{contains('abc', '')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "contains('', '') => true",
+      "expression": "@{contains('', '')}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "contains('word', 'word123') => false",
+      "expression": "@{contains('word', 'word123')}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "substring('0123456789', 0, 5) => '01234'",
+      "expression": "@{substring('0123456789', 0, 5)}",
+      "expected": {
+        "type": "string",
+        "value": "01234"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "substring('0123456789', 0, 10) => '0123456789'",
+      "expression": "@{substring('0123456789', 0, 10)}",
+      "expected": {
+        "type": "string",
+        "value": "0123456789"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "substring('0123456789', 2, 2) => empty string",
+      "expression": "@{substring('0123456789', 2, 2)}",
+      "expected": {
+        "type": "string",
+        "value": ""
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "substring('0123456789', 6, 2) => error",
+      "expression": "@{substring('0123456789', 6, 2)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [substring('0123456789', 6, 2)]. Indexes should be in ascending order."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "substring('012', 2, 5) => error",
+      "expression": "@{substring('012', 2, 5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [substring('012', 2, 5)]. Indexes are out of bounds."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "substring('012', -2, 5) => error",
+      "expression": "@{substring('012', -2, 5)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [substring('012', -2, 5)]. Indexes are out of bounds."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "replaceAll('0000', '0', '11') => '11111111'",
+      "expression": "@{replaceAll('0000', '0', '11')}",
+      "expected": {
+        "type": "string",
+        "value": "11111111"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "replaceAll('0000', '00', '1') => '11'",
+      "expression": "@{replaceAll('0000', '00', '1')}",
+      "expected": {
+        "type": "string",
+        "value": "11"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "replaceAll('0000', 'ab', 'd') => '0000'",
+      "expression": "@{replaceAll('0000', 'ab', 'd')}",
+      "expected": {
+        "type": "string",
+        "value": "0000"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "replaceAll('abc 123 abc123', '123', '') => 'abc  abc'",
+      "expression": "@{replaceAll('abc 123 abc123', '123', '')}",
+      "expected": {
+        "type": "string",
+        "value": "abc  abc"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "replaceAll('123', '', '_') => '123'",
+      "expression": "@{replaceAll('123', '', '_')}",
+      "expected": {
+        "type": "string",
+        "value": "123"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "index('123123', '1') => 0",
+      "expression": "@{index('123123', '1')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "index('123', '') => 0",
+      "expression": "@{index('123', '')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "index('', '') => 0",
+      "expression": "@{index('', '')}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "index('123', 'a') => -1",
+      "expression": "@{index('123', 'a')}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "index('123123123', '23') => 1",
+      "expression": "@{index('123123123', '23')}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "lastIndex('1__1__1', '1') => 6",
+      "expression": "@{lastIndex('1__1__1', '1')}",
+      "expected": {
+        "type": "integer",
+        "value": 6
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "lastIndex('123', 'a') => -1",
+      "expression": "@{lastIndex('123', 'a')}",
+      "expected": {
+        "type": "integer",
+        "value": -1
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "encodeUri('AZaz09_.-* ;,/?:@&=+$!~\\'()[]{}#') => AZaz09_.-*%20%3B%2C%2F%3F%3A%40%26%3D%2B%24!~'()%5B%5D%7B%7D%23",
+      "expression": "@{encodeUri('AZaz09_.-* ;,/?:@&=+$!~\\'()[]{}#')}",
+      "expected": {
+        "type": "string",
+        "value": "AZaz09_.-*%20%3B%2C%2F%3F%3A%40%26%3D%2B%24!~'()%5B%5D%7B%7D%23"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "decodeUri('AZaz09_.-*%20%3B%2C%2F%3F%3A%40%26%3D%2B%24!~\\'()%5B%5D%7B%7D%23') => AZaz09_.-* ;,/?:@&=+$!~'()[]{}#",
+      "expression": "@{decodeUri('AZaz09_.-*%20%3B%2C%2F%3F%3A%40%26%3D%2B%24!~\\'()%5B%5D%7B%7D%23')}",
+      "expected": {
+        "type": "string",
+        "value": "AZaz09_.-* ;,/?:@&=+$!~'()[]{}#"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "trim('12 34') => '12 34'",
+      "expression": "@{trim('12 34')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "trim('   12 34   ') => '12 34'",
+      "expression": "@{trim('   12 34   ')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "trimLeft('12 34') => '12 34'",
+      "expression": "@{trimLeft('12 34')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "trimLeft('   12 34   ') => '12 34   '",
+      "expression": "@{trimLeft('   12 34   ')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34   "
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "trimRight('12 34') => '12 34'",
+      "expression": "@{trimRight('12 34')}",
+      "expected": {
+        "type": "string",
+        "value": "12 34"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "trimRight('   12 34   ') => '   12 34'",
+      "expression": "@{trimRight('   12 34   ')}",
+      "expected": {
+        "type": "string",
+        "value": "   12 34"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toUpperCase('abCDefG') => 'ABCDEFG'",
+      "expression": "@{toUpperCase('abCDefG')}",
+      "expected": {
+        "type": "string",
+        "value": "ABCDEFG"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toLowerCase('abCDefG') => 'abcdefg'",
+      "expression": "@{toLowerCase('abCDefG')}",
+      "expected": {
+        "type": "string",
+        "value": "abcdefg"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toUpperCase('аАбБвВ') => 'ААББВВ'",
+      "expression": "@{toUpperCase('аАбБвВ')}",
+      "expected": {
+        "type": "string",
+        "value": "ААББВВ"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "toLowerCase('аАбБвВ') => 'ааббвв'",
+      "expression": "@{toLowerCase('аАбБвВ')}",
+      "expected": {
+        "type": "string",
+        "value": "ааббвв"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

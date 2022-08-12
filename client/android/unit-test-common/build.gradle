@@ -1,0 +1,18 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+
+dependencies {
+    kapt "com.google.auto.service:auto-service:$versions.googleAutoService"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+
+    implementation "junit:junit:$versions.junit"
+    implementation "org.mockito:mockito-core:$versions.mockito"
+    implementation "org.mockito.kotlin:mockito-kotlin:$versions.mockitoKotlin"
+    implementation "org.robolectric:robolectric:$versions.robolectric"
+
+    implementation "com.google.auto.service:auto-service-annotations:$versions.googleAutoService"
+
+    implementation "io.strikt:strikt-core:$versions.strikt"
+}

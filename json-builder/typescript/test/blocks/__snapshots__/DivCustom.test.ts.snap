@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivCustom tests should create simple block 1`] = `
+{
+  "type": "custom",
+  "custom_props": {
+    "string_prop": "Custom string",
+    "integer_prop": 100
+  },
+  "custom_type": "test_type"
+}
+`;

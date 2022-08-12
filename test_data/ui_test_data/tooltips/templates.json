@@ -1,0 +1,76 @@
+{
+  "button": {
+    "type": "text",
+    "text_alignment_horizontal": "center",
+    "text_alignment_vertical": "center",
+    "background": [
+      {
+        "color": "#eee",
+        "type": "solid"
+      }
+    ],
+    "width": {
+      "type": "wrap_content"
+    },
+    "$text": "gravity",
+    "font_size": 18,
+    "action": {
+      "log_id": "show_tooltip",
+      "$url": "div_action"
+    },
+    "tooltips": [
+      {
+        "$id": "gravity",
+        "$position": "gravity",
+        "duration": 0,
+        "div": {
+          "type": "text",
+          "width": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#555555"
+            }
+          ],
+          "border": {
+            "corner_radius": 12
+          },
+          "font_size": 18,
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "text": "tooltip_text",
+          "actions": [
+            {
+              "log_id": "tooltip_action",
+              "url": "div-action://set_state?state_id=0/status/clicked"
+            },
+            {
+              "log_id": "tooltip_action",
+              "url": "div-action://hide_tooltip?id=top"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "tooltip_visibility_action",
+              "url": "div-action://set_state?state_id=0/status/showing",
+              "log_limit": 0,
+              "visibility_duration": 0,
+              "visibility_percentage": 100
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "status": {
+    "type": "text",
+    "text_alignment_horizontal": "center",
+    "font_size": 18
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "imports": [
+    "CommonCore",
+    "CoreFoundation",
+    "Foundation",
+    "Serialization",
+    "TemplatesSupport"
+  ],
+  "lang": "swift",
+  "generateUnresolvedEntities": true
+}

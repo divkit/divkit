@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="regression_label" translatable="false">Regression</string>
+    <string name="scenario_steps" translatable="false">Шаги:</string>
+    <string name="scenario_expectations" translatable="false">Ожидаемый результат:</string>
+    <string name="scenario_label" translatable="false">Сценарий</string>
+    <string name="show_toggle" translatable="false">Показать</string>
+    <string name="hide_toggle" translatable="false">Скрыть</string>
+    <string name="logging" translatable="false">Лог</string>
+    <string name="clear" translatable="false">Очистить</string>
+    <string name="prev_scenario" translatable="false">Назад</string>
+    <string name="next_scenario" translatable="false">Вперед</string>
+    <string name="screen_record_disabled" translatable="false">Запись экрана выключена</string>
+    <string name="screen_record_failed" translatable="false">Ошибка записи экрана</string>
+    <string name="loading_scenario" translatable="false">Загрузка сценария...</string>
+    <string name="record_screen" translatable="false">Записывать экран</string>
+</resources>

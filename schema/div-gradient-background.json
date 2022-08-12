@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "description": "Градиентный фон.",
+  "properties": {
+    "colors": {
+      "type": "array",
+      "items": {
+        "$ref": "common.json#/color"
+      },
+      "minItems": 2,
+      "clientMinItems": 2,
+      "description": "Цвета. Точки градиента будут расположены на равном расстоянии друг от друга."
+    },
+    "angle": {
+      "type": "integer",
+      "constraint": "number >= 0 && number <= 360",
+      "default_value": "0",
+      "description": "Угол направления градиента."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "gradient"
+      ]
+    }   
+  },
+  "required": [
+    "colors",
+    "type"
+  ]
+}

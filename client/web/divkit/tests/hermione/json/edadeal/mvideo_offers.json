@@ -1,0 +1,3232 @@
+{
+  "templates": {
+    "tpl-header-with-button": {
+      "type": "container",
+      "items": [
+        {
+          "type": "text",
+          "$text": "title_text",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "right": 16
+          },
+          "font_size": 22,
+          "max_lines": 2,
+          "$text_color": "title_color",
+          "font_weight": "bold",
+          "line_height": 26
+        },
+        {
+          "type": "text",
+          "$text": "button_text",
+          "width": {
+            "type": "wrap_content"
+          },
+          "actions": [
+            {
+              "$url": "button_link",
+              "log_id": "#!edadeal/metrics/send?eventName=ButtonClick&hash={hash}",
+              "$payload": "analytics_data"
+            }
+          ],
+          "font_size": 16,
+          "$text_color": "button_color",
+          "line_height": 20,
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=ButtonAppear&hash={hash}",
+              "$payload": "analytics_data",
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            }
+          ]
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "$paddings": "var_paddings",
+      "orientation": "horizontal",
+      "content_alignment_vertical": "bottom"
+    },
+    "eddl_offers_carousel_retailer_icon": {
+      "type": "container",
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "value": 30
+      },
+      "height": {
+        "type": "fixed",
+        "value": 30
+      },
+      "border": {
+        "corner_radius": 15,
+        "stroke": {
+          "color": "#FFF",
+          "width": 3
+        }
+      },
+      "margins": {
+        "top": 5,
+        "left": 5
+      },
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_retailer_image_url",
+          "border": {
+            "corner_radius": 12
+          },
+          "width": {
+            "type": "fixed",
+            "value": 24
+          },
+          "height": {
+            "type": "fixed",
+            "value": 24
+          }
+        }
+      ]
+    },
+    "eddl_offers_carousel_badge_simple": {
+      "type": "text",
+      "paddings": {
+        "left": 8,
+        "right": 8,
+        "top": 2,
+        "bottom": 2
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top"
+      },
+      "border": {
+        "corner_radius": 2
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#267AF2"
+        }
+      ],
+      "alignment_horizontal": "left",
+      "$font_size": "eddl_badge_font_size",
+      "$line_height": "eddl_badge_line_height",
+      "max_lines": 1,
+      "text_color": "#FFF",
+      "$text": "eddl_badge_text"
+    },
+    "eddl_offers_carousel_badge_discount": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_badge_discount_height"
+      },
+      "margins": {
+        "$top": "eddl_badge_margin_top",
+        "left": 0
+      },
+      "background": [
+        {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+          "content_alignment_horizontal": "center",
+          "content_alignment_vertical": "center",
+          "scale": "fit"
+        }
+      ],
+      "$font_size": "eddl_badge_font_size",
+      "$line_height": "eddl_badge_line_height",
+      "max_lines": 1,
+      "text_color": "#09141F",
+      "$text": "eddl_badge_text"
+    },
+    "eddl_offers_carousel_image_container": {
+      "type": "container",
+      "border": {
+        "corner_radius": 12
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F4F4F4"
+        }
+      ],
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center",
+      "items": [
+        {
+          "type": "image",
+          "$image_url": "eddl_item_image_url",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          }
+        }
+      ]
+    },
+    "eddl_offers_carousel_price_new": {
+      "type": "text",
+      "$font_size": "eddl_price_new_font_size",
+      "font_weight": "medium",
+      "$line_height": "eddl_price_new_line_height",
+      "width": {
+        "type": "wrap_content"
+      },
+      "max_lines": 1,
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$text_color": "eddl_price_new_text_color",
+      "$text": "eddl_price_new_text"
+    },
+    "eddl_offers_carousel_price_old": {
+      "width": {
+        "type": "wrap_content"
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$font_size": "eddl_price_old_font_size",
+      "$line_height": "eddl_price_old_line_height",
+      "max_lines": 1,
+      "$text_color": "eddl_price_old_text_color",
+      "$text": "eddl_price_old_text",
+      "strike": "single"
+    },
+    "eddl_offers_carousel_offer_content_image": {
+      "type": "container",
+      "orientation": "overlap",
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_image_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_image_height"
+      },
+      "$items": "eddl_offer_content_image_items"
+    },
+    "eddl_offers_carousel_offer_content_prices": {
+      "type": "container",
+      "$orientation": "eddl_content_prices_orientation",
+      "alignment_vertical": "top",
+      "width": {
+        "type": "match_parent"
+      },
+      "$content_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "margins": {
+        "top": 12
+      },
+      "$items": "eddl_content_prices_items"
+    },
+    "eddl_offers_carousel_offer_content_description": {
+      "margins": {
+        "top": 8
+      },
+      "type": "text",
+      "$text_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$font_size": "eddl_description_font_size",
+      "$line_height": "eddl_description_line_height",
+      "$max_lines": "eddl_description_max_lines",
+      "$text_color": "eddl_description_text_color",
+      "$text": "eddl_description_text"
+    },
+    "eddl_offers_carousel_offer_text_container": {
+      "type": "container",
+      "$paddings": "eddl_offer_text_paddings",
+      "$content_alignment_horizontal": "eddl_offer_text_alignment_horizontal",
+      "$items": "eddl_offer_text_container_items"
+    },
+    "eddl_offers_carousel_offer_content": {
+      "type": "container",
+      "$items": "eddl_offer_content_items",
+      "content_alignment_horizontal": "center"
+    },
+    "eddl_offers_carousel_item": {
+      "type": "container",
+      "orientation": "overlap",
+      "background": [
+        {
+          "type": "solid",
+          "$color": "eddl_item_background_color"
+        }
+      ],
+      "width": {
+        "type": "fixed",
+        "$value": "eddl_width"
+      },
+      "height": {
+        "type": "fixed",
+        "$value": "eddl_height",
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 12
+      },
+      "$items": "eddl_offer_items",
+      "$actions": "eddl_item_actions",
+      "$visibility_actions": "eddl_item_visibility_actions"
+    }
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "top": 12
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#F4F4F4"
+            }
+          ],
+          "visibility_actions": [
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockAppear&hash=d0f565e6656bdf3fbd60eb805cff5a31",
+              "payload": {
+                "BlockId": "451",
+                "BlockSlug": "mvideo_offers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1101"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1,
+              "visibility_percentage": 50
+            },
+            {
+              "log_id": "#!edadeal/metrics/send?eventName=BlockView&hash=85f9cbafabfce51d1b5f92ed5da2a64d",
+              "payload": {
+                "BlockId": "451",
+                "BlockSlug": "mvideo_offers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1101"
+              },
+              "log_limit": 0,
+              "visibility_duration": 1000,
+              "visibility_percentage": 50
+            }
+          ],
+          "items": [
+            {
+              "type": "tpl-header-with-button",
+              "title_text": "Скидки от М.Видео",
+              "button_link": "edadeal://webApp?json=%7B%22name%22%3A%22%40edadeal%2Fsearch%22%2C%22section%22%3A%22srch-retailer%22%2C%22params%22%3A%7B%22request%22%3A%7B%22retailerUuid%22%3A%22db466d9b-25e9-4d1e-8824-427e44155fb0%22%7D%7D%2C%22meta%22%3A%7B%22headerTitle%22%3A%22%D0%9C.%D0%92%D0%B8%D0%B4%D0%B5%D0%BE%22%7D%7D",
+              "button_text": "См. все",
+              "title_color": "#ff09141f",
+              "button_color": "#ff27ae61",
+              "var_paddings": {
+                "left": 16,
+                "right": 16,
+                "bottom": 14
+              },
+              "analytics_data": {
+                "slug": "ShowAll",
+                "BlockId": "451",
+                "BlockSlug": "mvideo_offers",
+                "BlockLayout": "Carousel",
+                "BlockVersionId": "1101"
+              }
+            },
+            {
+              "type": "gallery",
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "3999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "5499"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Синтезатор ON Advanced  (61 клавиша)",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=59acbcc8dfcdb92f3520bd9f24bab3f0",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "090eb87c-206b-5dcc-b698-4b9adfe237f5",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Синтезатор ON Advanced  (61 клавиша)",
+                        "ProductPrice": "399900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Досуг и развлечения",
+                        "SegmentName2": "Музыкальные инструменты",
+                        "SegmentName3": "Синтезаторы и MIDI-клавиатуры",
+                        "SegmentUUID1": "dc7bc201-e180-5b09-85d4-1bdc8de2e4b0",
+                        "SegmentUUID2": "756085ad-5eb7-57aa-8436-e8711a954f92",
+                        "SegmentUUID3": "8ac07092-0e41-538c-83d4-f58174e08ab0",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/sintezator-on-advanced-61-klavisha-10025659?utm_source=edadeal&utm_content=1154&utm_medium=cpc&utm_term=10025659&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD10_c10303_g306010301_m6318"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=59acbcc8dfcdb92f3520bd9f24bab3f0",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "090eb87c-206b-5dcc-b698-4b9adfe237f5",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Синтезатор ON Advanced  (61 клавиша)",
+                        "ProductPrice": "399900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Досуг и развлечения",
+                        "SegmentName2": "Музыкальные инструменты",
+                        "SegmentName3": "Синтезаторы и MIDI-клавиатуры",
+                        "SegmentUUID1": "dc7bc201-e180-5b09-85d4-1bdc8de2e4b0",
+                        "SegmentUUID2": "756085ad-5eb7-57aa-8436-e8711a954f92",
+                        "SegmentUUID3": "8ac07092-0e41-538c-83d4-f58174e08ab0",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f993cfb3a34cfc7a3c866a43ee02ee63",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "090eb87c-206b-5dcc-b698-4b9adfe237f5",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "1",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Синтезатор ON Advanced  (61 клавиша)",
+                        "ProductPrice": "399900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Досуг и развлечения",
+                        "SegmentName2": "Музыкальные инструменты",
+                        "SegmentName3": "Синтезаторы и MIDI-клавиатуры",
+                        "SegmentUUID1": "dc7bc201-e180-5b09-85d4-1bdc8de2e4b0",
+                        "SegmentUUID2": "756085ad-5eb7-57aa-8436-e8711a954f92",
+                        "SegmentUUID3": "8ac07092-0e41-538c-83d4-f58174e08ab0",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1799₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "2699"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Электрочайник Midea MK-8052",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=823e3885dabd076775d22bd0257c1293",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "9e052668-744f-5997-983e-e97bd42914b3",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "7ca35eb6-a7a3-5e8a-8551-37f6d3634c5b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Электрочайник Midea MK-8052",
+                        "ProductPrice": "179900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/elektrochainik-midea-mk-8052-20039741?utm_source=edadeal&utm_content=482&utm_medium=cpc&utm_term=20039741&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c40610_g406100103_m1062"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=823e3885dabd076775d22bd0257c1293",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "9e052668-744f-5997-983e-e97bd42914b3",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "7ca35eb6-a7a3-5e8a-8551-37f6d3634c5b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Электрочайник Midea MK-8052",
+                        "ProductPrice": "179900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=70c0ec45ccaca1fbc7805b353958ca7c",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "9e052668-744f-5997-983e-e97bd42914b3",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "2",
+                        "BrandUUIDs": "7ca35eb6-a7a3-5e8a-8551-37f6d3634c5b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Электрочайник Midea MK-8052",
+                        "ProductPrice": "179900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "339₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "449"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Кофе молотый Starbucks Caffe Verona тёмная обжарка, 200 г",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=bf7eceff3e1f54ade6a5a5bdafe5cd23",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "622ed30a-ba14-51c6-986e-4c552902d376",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "26329022-7a97-5960-9ddc-e0980844480e",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофе молотый Starbucks Caffe Verona тёмная обжарка, 200 г",
+                        "ProductPrice": "33900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Кофе молотый",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334ddb-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/kofe-molotyi-starbucks-caffe-verona-temnaya-obzharka-200-g-20065265?utm_source=edadeal&utm_content=5807&utm_medium=cpc&utm_term=20065265&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c41004_g410040107_m4481"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=bf7eceff3e1f54ade6a5a5bdafe5cd23",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "622ed30a-ba14-51c6-986e-4c552902d376",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "26329022-7a97-5960-9ddc-e0980844480e",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофе молотый Starbucks Caffe Verona тёмная обжарка, 200 г",
+                        "ProductPrice": "33900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Кофе молотый",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334ddb-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f818b836dc9fc799a3feae755e926c7f",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "622ed30a-ba14-51c6-986e-4c552902d376",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "3",
+                        "BrandUUIDs": "26329022-7a97-5960-9ddc-e0980844480e",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофе молотый Starbucks Caffe Verona тёмная обжарка, 200 г",
+                        "ProductPrice": "33900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Продукты",
+                        "SegmentName2": "Кофе и чай",
+                        "SegmentName3": "Кофе молотый",
+                        "SegmentUUID1": "3b31ab10-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b334c54-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b334ddb-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1499₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "1999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Xbox игра EA NHL 19",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=b3aa7cbdfca79b593bdd6514b7f7da7a",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "c3593e51-082c-5d65-9479-5ac7df1de3bc",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Xbox игра EA NHL 19",
+                        "ProductPrice": "149900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Электроника",
+                        "SegmentName2": "Игровые приставки",
+                        "SegmentName3": "Игры для приставок и ПК",
+                        "SegmentUUID1": "4034e4ee-db86-54ab-b0e5-2424261c26ae",
+                        "SegmentUUID2": "ae033959-4bef-5cd9-9b91-ef5049f1a753",
+                        "SegmentUUID3": "2c8d9489-cc3a-5af5-b6e2-7bcc4ef0d597",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/xbox-igra-ea-nhl-19-40069972?utm_source=edadeal&utm_content=1443&utm_medium=cpc&utm_term=40069972&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD30_c30307_g303070104_m263"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=b3aa7cbdfca79b593bdd6514b7f7da7a",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "c3593e51-082c-5d65-9479-5ac7df1de3bc",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Xbox игра EA NHL 19",
+                        "ProductPrice": "149900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Электроника",
+                        "SegmentName2": "Игровые приставки",
+                        "SegmentName3": "Игры для приставок и ПК",
+                        "SegmentUUID1": "4034e4ee-db86-54ab-b0e5-2424261c26ae",
+                        "SegmentUUID2": "ae033959-4bef-5cd9-9b91-ef5049f1a753",
+                        "SegmentUUID3": "2c8d9489-cc3a-5af5-b6e2-7bcc4ef0d597",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=5bda7132d6a9c42f351a6b973e838b4c",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "c3593e51-082c-5d65-9479-5ac7df1de3bc",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "4",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Xbox игра EA NHL 19",
+                        "ProductPrice": "149900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Электроника",
+                        "SegmentName2": "Игровые приставки",
+                        "SegmentName3": "Игры для приставок и ПК",
+                        "SegmentUUID1": "4034e4ee-db86-54ab-b0e5-2424261c26ae",
+                        "SegmentUUID2": "ae033959-4bef-5cd9-9b91-ef5049f1a753",
+                        "SegmentUUID3": "2c8d9489-cc3a-5af5-b6e2-7bcc4ef0d597",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "239₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "329"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Батарея Gp 24ax-2cr6",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=efb0233ef9a2d21f1de833ea1bc5e666",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "e5341520-35ea-56d6-a3d5-461152d3f309",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "5362971a-4307-5e8b-b2a3-6108226a1ab9",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Батарея Gp 24ax-2cr6",
+                        "ProductPrice": "23900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Компьютерная техника",
+                        "SegmentName2": "Аксессуары",
+                        "SegmentName3": "Аккумуляторные батареи",
+                        "SegmentUUID1": "67aef637-fa77-59fd-96bb-e7b091b39b30",
+                        "SegmentUUID2": "28c3411b-5aae-5e7c-9e39-dfeec4b98849",
+                        "SegmentUUID3": "fbb88234-efe9-50b2-b9c8-780347c1ca57",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/batareya-gp-24ax-2cr6-50048723?utm_source=edadeal&utm_content=405&utm_medium=cpc&utm_term=50048723&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD50_c51602_g516020103_m83"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=efb0233ef9a2d21f1de833ea1bc5e666",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "e5341520-35ea-56d6-a3d5-461152d3f309",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "5362971a-4307-5e8b-b2a3-6108226a1ab9",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Батарея Gp 24ax-2cr6",
+                        "ProductPrice": "23900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Компьютерная техника",
+                        "SegmentName2": "Аксессуары",
+                        "SegmentName3": "Аккумуляторные батареи",
+                        "SegmentUUID1": "67aef637-fa77-59fd-96bb-e7b091b39b30",
+                        "SegmentUUID2": "28c3411b-5aae-5e7c-9e39-dfeec4b98849",
+                        "SegmentUUID3": "fbb88234-efe9-50b2-b9c8-780347c1ca57",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f6bd0df987dc9b00b5b093bea26c46bc",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "e5341520-35ea-56d6-a3d5-461152d3f309",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "5",
+                        "BrandUUIDs": "5362971a-4307-5e8b-b2a3-6108226a1ab9",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Батарея Gp 24ax-2cr6",
+                        "ProductPrice": "23900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Компьютерная техника",
+                        "SegmentName2": "Аксессуары",
+                        "SegmentName3": "Аккумуляторные батареи",
+                        "SegmentUUID1": "67aef637-fa77-59fd-96bb-e7b091b39b30",
+                        "SegmentUUID2": "28c3411b-5aae-5e7c-9e39-dfeec4b98849",
+                        "SegmentUUID3": "fbb88234-efe9-50b2-b9c8-780347c1ca57",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1599₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "2299"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Электрочайник Hi EK-18D01",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=2c5838f718e35953e2a37ab94f9ebcc9",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "6cb9358f-6778-5e36-905b-3bca3b5c90a7",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Электрочайник Hi EK-18D01",
+                        "ProductPrice": "159900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/elektrochainik-hi-ek-18d01-20071018?utm_source=edadeal&utm_content=482&utm_medium=cpc&utm_term=20071018&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c40610_g406100103_m4317"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=2c5838f718e35953e2a37ab94f9ebcc9",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "6cb9358f-6778-5e36-905b-3bca3b5c90a7",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Электрочайник Hi EK-18D01",
+                        "ProductPrice": "159900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=2794705fed6017dd29df0f1b632afebf",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "6cb9358f-6778-5e36-905b-3bca3b5c90a7",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "6",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Электрочайник Hi EK-18D01",
+                        "ProductPrice": "159900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "1599₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "2299"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Ковш Rondell Strike RDS-811 0,9л",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=dda955e1f517eb8056a1d13aa8d641e3",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "5539a157-1aa5-5428-b92a-73d33a8397ec",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "72de5a4f-6c99-575c-a14f-6cff23748e54",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковш Rondell Strike RDS-811 0,9л",
+                        "ProductPrice": "159900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/kovsh-rondell-strike-rds-811-0-9l-50048629?utm_source=edadeal&utm_content=1142&utm_medium=cpc&utm_term=50048629&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD50_c52401_g524010201_m1051"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=dda955e1f517eb8056a1d13aa8d641e3",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "5539a157-1aa5-5428-b92a-73d33a8397ec",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "72de5a4f-6c99-575c-a14f-6cff23748e54",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковш Rondell Strike RDS-811 0,9л",
+                        "ProductPrice": "159900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=37c82311437f2d7147b4ae61258b631e",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "5539a157-1aa5-5428-b92a-73d33a8397ec",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "7",
+                        "BrandUUIDs": "72de5a4f-6c99-575c-a14f-6cff23748e54",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Ковш Rondell Strike RDS-811 0,9л",
+                        "ProductPrice": "159900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "14999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "15999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Воздухоочиститель Tefal Pure Air NanoCaptur PT3040F0",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=7001435163880f707fd4b3a3cfba2883",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "9817ba1d-3019-5797-9c4e-393f754a2a8f",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Воздухоочиститель Tefal Pure Air NanoCaptur PT3040F0",
+                        "ProductPrice": "1499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Климатическая техника",
+                        "SegmentName3": "Очистители и увлажнители воздуха",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "dbfa63df-49e3-5d63-ba2e-3507c52cb1f0",
+                        "SegmentUUID3": "956af3bb-9193-5591-ab50-639eecfb152e",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/vozduhoochistitel-tefal-pure-air-nanocaptur-pt3040f0-20063263?utm_source=edadeal&utm_content=538&utm_medium=cpc&utm_term=20063263&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c40402_g404020201_m76"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=7001435163880f707fd4b3a3cfba2883",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "9817ba1d-3019-5797-9c4e-393f754a2a8f",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Воздухоочиститель Tefal Pure Air NanoCaptur PT3040F0",
+                        "ProductPrice": "1499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Климатическая техника",
+                        "SegmentName3": "Очистители и увлажнители воздуха",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "dbfa63df-49e3-5d63-ba2e-3507c52cb1f0",
+                        "SegmentUUID3": "956af3bb-9193-5591-ab50-639eecfb152e",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=13d669f4f0eb7377181684c68f55f0e9",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "9817ba1d-3019-5797-9c4e-393f754a2a8f",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "8",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Воздухоочиститель Tefal Pure Air NanoCaptur PT3040F0",
+                        "ProductPrice": "1499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Климатическая техника",
+                        "SegmentName3": "Очистители и увлажнители воздуха",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "dbfa63df-49e3-5d63-ba2e-3507c52cb1f0",
+                        "SegmentUUID3": "956af3bb-9193-5591-ab50-639eecfb152e",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "4999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "7199"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Миксер Vitek VT-1418",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=710434a7a62cd8b97fa818ec1a61b1ef",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "67fb4c3e-4e17-5660-a396-159eb3b4b1cc",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "103e45c2-4d0d-548a-86f6-e1fb5675fc74",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Миксер Vitek VT-1418",
+                        "ProductPrice": "499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Измельчение и смешивание",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "19fb674e-af65-5575-9d87-47948bf64693",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/mikser-vitek-vt-1418-20038912?utm_source=edadeal&utm_content=485&utm_medium=cpc&utm_term=20038912&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c40602_g406020103_m759"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=710434a7a62cd8b97fa818ec1a61b1ef",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "67fb4c3e-4e17-5660-a396-159eb3b4b1cc",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "103e45c2-4d0d-548a-86f6-e1fb5675fc74",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Миксер Vitek VT-1418",
+                        "ProductPrice": "499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Измельчение и смешивание",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "19fb674e-af65-5575-9d87-47948bf64693",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f9f23319c48f54d03fd5103d4c1980bc",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "67fb4c3e-4e17-5660-a396-159eb3b4b1cc",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "9",
+                        "BrandUUIDs": "103e45c2-4d0d-548a-86f6-e1fb5675fc74",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Миксер Vitek VT-1418",
+                        "ProductPrice": "499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Измельчение и смешивание",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "19fb674e-af65-5575-9d87-47948bf64693",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "5999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "7499"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Привод DVD-RW Apple USB Superdrive-ZML MacBook (MD564ZM/A)",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=52c06b1bdae550239b625e22891596c0",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "e1050c98-96ba-509a-b1fe-4dbbc5411c56",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Привод DVD-RW Apple USB Superdrive-ZML MacBook (MD564ZM/A)",
+                        "ProductPrice": "599900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Компьютерная техника",
+                        "SegmentName2": "Комплектующие",
+                        "SegmentName3": "Оптические приводы",
+                        "SegmentUUID1": "67aef637-fa77-59fd-96bb-e7b091b39b30",
+                        "SegmentUUID2": "82705e32-49be-58b1-8382-18df66ebdfc2",
+                        "SegmentUUID3": "c9ca7625-c6fa-5c6c-92cb-147dd4fb465f",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/privod-dvd-rw-apple-usb-superdrive-zml-macbook-md564zm-a-30016513?utm_source=edadeal&utm_content=1087&utm_medium=cpc&utm_term=30016513&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD50_c52301_g523010209_m685"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=52c06b1bdae550239b625e22891596c0",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "e1050c98-96ba-509a-b1fe-4dbbc5411c56",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Привод DVD-RW Apple USB Superdrive-ZML MacBook (MD564ZM/A)",
+                        "ProductPrice": "599900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Компьютерная техника",
+                        "SegmentName2": "Комплектующие",
+                        "SegmentName3": "Оптические приводы",
+                        "SegmentUUID1": "67aef637-fa77-59fd-96bb-e7b091b39b30",
+                        "SegmentUUID2": "82705e32-49be-58b1-8382-18df66ebdfc2",
+                        "SegmentUUID3": "c9ca7625-c6fa-5c6c-92cb-147dd4fb465f",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=648c68a0264779bc29787addac425392",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "e1050c98-96ba-509a-b1fe-4dbbc5411c56",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "10",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Привод DVD-RW Apple USB Superdrive-ZML MacBook (MD564ZM/A)",
+                        "ProductPrice": "599900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Компьютерная техника",
+                        "SegmentName2": "Комплектующие",
+                        "SegmentName3": "Оптические приводы",
+                        "SegmentUUID1": "67aef637-fa77-59fd-96bb-e7b091b39b30",
+                        "SegmentUUID2": "82705e32-49be-58b1-8382-18df66ebdfc2",
+                        "SegmentUUID3": "c9ca7625-c6fa-5c6c-92cb-147dd4fb465f",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "499₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "599"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Чехол Vipe Soft для Samsung Galaxy A51, Dark Blue",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=9c3acd86e29cfe9a03ddc63f854fa6a2",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "18a3fae5-eee2-5a69-960d-23baa7bcd53a",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "59912511-1fd8-5800-84df-57b9b6f071da",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чехол Vipe Soft для Samsung Galaxy A51, Dark Blue",
+                        "ProductPrice": "49900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Электроника",
+                        "SegmentName2": "Телефоны",
+                        "SegmentName3": "Аксессуары для телефонов",
+                        "SegmentUUID1": "4034e4ee-db86-54ab-b0e5-2424261c26ae",
+                        "SegmentUUID2": "cb3e532c-c528-584c-b6f0-aae1f2acb0e8",
+                        "SegmentUUID3": "7088372b-d2e4-5849-bee9-699367c8ed23",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/chehol-vipe-soft-dlya-samsung-galaxy-a51-dark-blue-50132455?utm_source=edadeal&utm_content=1189&utm_medium=cpc&utm_term=50132455&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD50_c50801_g508010349_m2105"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=9c3acd86e29cfe9a03ddc63f854fa6a2",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "18a3fae5-eee2-5a69-960d-23baa7bcd53a",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "59912511-1fd8-5800-84df-57b9b6f071da",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чехол Vipe Soft для Samsung Galaxy A51, Dark Blue",
+                        "ProductPrice": "49900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Электроника",
+                        "SegmentName2": "Телефоны",
+                        "SegmentName3": "Аксессуары для телефонов",
+                        "SegmentUUID1": "4034e4ee-db86-54ab-b0e5-2424261c26ae",
+                        "SegmentUUID2": "cb3e532c-c528-584c-b6f0-aae1f2acb0e8",
+                        "SegmentUUID3": "7088372b-d2e4-5849-bee9-699367c8ed23",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=a6ffdf4440ebb85da060322420952dc9",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "18a3fae5-eee2-5a69-960d-23baa7bcd53a",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "11",
+                        "BrandUUIDs": "59912511-1fd8-5800-84df-57b9b6f071da",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Чехол Vipe Soft для Samsung Galaxy A51, Dark Blue",
+                        "ProductPrice": "49900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Электроника",
+                        "SegmentName2": "Телефоны",
+                        "SegmentName3": "Аксессуары для телефонов",
+                        "SegmentUUID1": "4034e4ee-db86-54ab-b0e5-2424261c26ae",
+                        "SegmentUUID2": "cb3e532c-c528-584c-b6f0-aae1f2acb0e8",
+                        "SegmentUUID3": "7088372b-d2e4-5849-bee9-699367c8ed23",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "3499₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "4999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Тепловентилятор керамический Vitek VT-2055",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=d5fb4bc8a9ad792adca21b535da72267",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "616db582-85e6-5fe6-a9ca-49922e98a621",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "103e45c2-4d0d-548a-86f6-e1fb5675fc74",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Тепловентилятор керамический Vitek VT-2055",
+                        "ProductPrice": "349900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Климатическая техника",
+                        "SegmentName3": "Обогреватели",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "dbfa63df-49e3-5d63-ba2e-3507c52cb1f0",
+                        "SegmentUUID3": "deb5abd8-842d-56b3-83a9-140b6b8c7a23",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/teploventilyator-keramicheskii-vitek-vt-2055-20064926?utm_source=edadeal&utm_content=534&utm_medium=cpc&utm_term=20064926&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c40401_g404010601_m759"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=d5fb4bc8a9ad792adca21b535da72267",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "616db582-85e6-5fe6-a9ca-49922e98a621",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "103e45c2-4d0d-548a-86f6-e1fb5675fc74",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Тепловентилятор керамический Vitek VT-2055",
+                        "ProductPrice": "349900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Климатическая техника",
+                        "SegmentName3": "Обогреватели",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "dbfa63df-49e3-5d63-ba2e-3507c52cb1f0",
+                        "SegmentUUID3": "deb5abd8-842d-56b3-83a9-140b6b8c7a23",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=756ee18a267fbe4bcbde3dd52176ff24",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "616db582-85e6-5fe6-a9ca-49922e98a621",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "12",
+                        "BrandUUIDs": "103e45c2-4d0d-548a-86f6-e1fb5675fc74",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Тепловентилятор керамический Vitek VT-2055",
+                        "ProductPrice": "349900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Климатическая техника",
+                        "SegmentName3": "Обогреватели",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "dbfa63df-49e3-5d63-ba2e-3507c52cb1f0",
+                        "SegmentUUID3": "deb5abd8-842d-56b3-83a9-140b6b8c7a23",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "399₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "519"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Моющее средство для посудомоечной машины Mayeri Sensitive ЭКО таблетки ALL in ONE 30 шт.",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=5365e17ff3e2a39a481443c0d8003108",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "458c8c02-6445-573c-b3d6-d0d2df9d4907",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "35765cf3-a0bf-50d8-9f9a-480d81913817",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Моющее средство для посудомоечной машины Mayeri Sensitive ЭКО таблетки ALL in ONE 30 шт.",
+                        "ProductPrice": "39900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для посудомойки",
+                        "SegmentName3": "Таблетки и капсулы для посудомойки",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c3c3-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35c42b-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/moushhee-sredstvo-dlya-posudomoechnoi-mashiny-mayeri-sensitive-eko-tabletki-all-in-one-30-sht-50138362?utm_source=edadeal&utm_content=1660&utm_medium=cpc&utm_term=50138362&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD50_c52601_g502010806_m5219"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=5365e17ff3e2a39a481443c0d8003108",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "458c8c02-6445-573c-b3d6-d0d2df9d4907",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "35765cf3-a0bf-50d8-9f9a-480d81913817",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Моющее средство для посудомоечной машины Mayeri Sensitive ЭКО таблетки ALL in ONE 30 шт.",
+                        "ProductPrice": "39900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для посудомойки",
+                        "SegmentName3": "Таблетки и капсулы для посудомойки",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c3c3-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35c42b-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=9caf359ff6fe6780b4d63548831b909a",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "458c8c02-6445-573c-b3d6-d0d2df9d4907",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "13",
+                        "BrandUUIDs": "35765cf3-a0bf-50d8-9f9a-480d81913817",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Моющее средство для посудомоечной машины Mayeri Sensitive ЭКО таблетки ALL in ONE 30 шт.",
+                        "ProductPrice": "39900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Средства для посудомойки",
+                        "SegmentName3": "Таблетки и капсулы для посудомойки",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35c3c3-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35c42b-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "10999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "16999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Робот-пылесос Supra VCS-4093",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=12d530d6c7e4e6a88dfe204829c3653c",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a1541d95-1216-58c6-9205-c02717dabaae",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "497b8b14-9691-5b2a-8254-4543fab92d56",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Робот-пылесос Supra VCS-4093",
+                        "ProductPrice": "1099900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для уборки",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "349af350-65af-51d9-8469-0df1abbefa49",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/robot-pylesos-supra-vcs-4093-20070966?utm_source=edadeal&utm_content=2457&utm_medium=cpc&utm_term=20070966&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c41101_g411010109_m18"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=12d530d6c7e4e6a88dfe204829c3653c",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a1541d95-1216-58c6-9205-c02717dabaae",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "497b8b14-9691-5b2a-8254-4543fab92d56",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Робот-пылесос Supra VCS-4093",
+                        "ProductPrice": "1099900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для уборки",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "349af350-65af-51d9-8469-0df1abbefa49",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=ffdb29c0a0292d50a824163895d945b4",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a1541d95-1216-58c6-9205-c02717dabaae",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "14",
+                        "BrandUUIDs": "497b8b14-9691-5b2a-8254-4543fab92d56",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Робот-пылесос Supra VCS-4093",
+                        "ProductPrice": "1099900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для уборки",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "349af350-65af-51d9-8469-0df1abbefa49",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "39999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "49999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Кофемашина Krups Quattro Force EA82F810",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=ff1436bd30f7b8034b5468acabe7790f",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "51252c65-4604-5c70-afb3-93854eacdc72",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "a859af02-44a9-506c-b449-6448e2856d7b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофемашина Krups Quattro Force EA82F810",
+                        "ProductPrice": "3999900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/kofemashina-krups-quattro-force-ea82f810-20040513?utm_source=edadeal&utm_content=569&utm_medium=cpc&utm_term=20040513&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c41002_g410020101_m60"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=ff1436bd30f7b8034b5468acabe7790f",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "51252c65-4604-5c70-afb3-93854eacdc72",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "a859af02-44a9-506c-b449-6448e2856d7b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофемашина Krups Quattro Force EA82F810",
+                        "ProductPrice": "3999900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=7d4315379c34fdb0ea85c40193cd885a",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "51252c65-4604-5c70-afb3-93854eacdc72",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "15",
+                        "BrandUUIDs": "a859af02-44a9-506c-b449-6448e2856d7b",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Кофемашина Krups Quattro Force EA82F810",
+                        "ProductPrice": "3999900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Мелкая техника для кухни",
+                        "SegmentName3": "Приготовление напитков",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "8903c83b-8001-5157-bb31-2e7e7e56d64e",
+                        "SegmentUUID3": "462d74af-b8a8-5cac-8f82-f679dc5e1074",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "2799₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "4999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Утюг Tefal EXPRESS STEAM FV2836E0",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=4e24eb76ec8b8fd5b631a25d45e89cc5",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a30eebf9-5fce-5c78-90cb-d2bee547db76",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Утюг Tefal EXPRESS STEAM FV2836E0",
+                        "ProductPrice": "279900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для ухода за одеждой",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "b90d3bb6-192d-5089-bb39-3d47283a15cf",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/utug-tefal-express-steam-fv2836e0-20073893?utm_source=edadeal&utm_content=469&utm_medium=cpc&utm_term=20073893&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c41201_g412010105_m76"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=4e24eb76ec8b8fd5b631a25d45e89cc5",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a30eebf9-5fce-5c78-90cb-d2bee547db76",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Утюг Tefal EXPRESS STEAM FV2836E0",
+                        "ProductPrice": "279900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для ухода за одеждой",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "b90d3bb6-192d-5089-bb39-3d47283a15cf",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=0ac8a6a26c806d052a2749770881bd06",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a30eebf9-5fce-5c78-90cb-d2bee547db76",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "16",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Утюг Tefal EXPRESS STEAM FV2836E0",
+                        "ProductPrice": "279900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для ухода за одеждой",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "b90d3bb6-192d-5089-bb39-3d47283a15cf",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "11999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "13599"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Вытяжка 60 см Jetair PRAGA 60/A/BL",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=375594fb5df9c8eba282fa68e7ce1eb0",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "405f30c9-70e8-5789-91dd-4fd4e5b78f61",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Вытяжка 60 см Jetair PRAGA 60/A/BL",
+                        "ProductPrice": "1199900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Крупная техника для кухни",
+                        "SegmentName3": "Вытяжки",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "2802cc32-f118-5618-a04c-b7a058d6bf17",
+                        "SegmentUUID3": "e95dee8e-baca-5676-9adc-181484c6a706",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/vytyazhka-60-sm-jetair-praga-60-a-bl-20047309?utm_source=edadeal&utm_content=2355&utm_medium=cpc&utm_term=20047309&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c40102_g401020102_m873"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=375594fb5df9c8eba282fa68e7ce1eb0",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "405f30c9-70e8-5789-91dd-4fd4e5b78f61",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Вытяжка 60 см Jetair PRAGA 60/A/BL",
+                        "ProductPrice": "1199900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Крупная техника для кухни",
+                        "SegmentName3": "Вытяжки",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "2802cc32-f118-5618-a04c-b7a058d6bf17",
+                        "SegmentUUID3": "e95dee8e-baca-5676-9adc-181484c6a706",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=f4b2335737059e8e41511d5e8651df87",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "405f30c9-70e8-5789-91dd-4fd4e5b78f61",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "17",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Вытяжка 60 см Jetair PRAGA 60/A/BL",
+                        "ProductPrice": "1199900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Крупная техника для кухни",
+                        "SegmentName3": "Вытяжки",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "2802cc32-f118-5618-a04c-b7a058d6bf17",
+                        "SegmentUUID3": "e95dee8e-baca-5676-9adc-181484c6a706",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "14999₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "15999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Стиральная машина узкая Novex WM6N10CM1W",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=3495de1241d5fe597c0e956118b9e593",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "705d2d18-96b9-5d5e-873a-7d945837c141",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "f4adf97b-85ac-5dcc-b594-f70f642c472c",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стиральная машина узкая Novex WM6N10CM1W",
+                        "ProductPrice": "1499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для ухода за одеждой",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "b90d3bb6-192d-5089-bb39-3d47283a15cf",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/stiralnaya-mashina-uzkaya-novex-wm6n10cm1w-20069831?utm_source=edadeal&utm_content=2446&utm_medium=cpc&utm_term=20069831&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c40301_g403010113_m973"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=3495de1241d5fe597c0e956118b9e593",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "705d2d18-96b9-5d5e-873a-7d945837c141",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "f4adf97b-85ac-5dcc-b594-f70f642c472c",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стиральная машина узкая Novex WM6N10CM1W",
+                        "ProductPrice": "1499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для ухода за одеждой",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "b90d3bb6-192d-5089-bb39-3d47283a15cf",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=89af33206fd09fb58d3b4ab20b41fdc2",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "705d2d18-96b9-5d5e-873a-7d945837c141",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "18",
+                        "BrandUUIDs": "f4adf97b-85ac-5dcc-b594-f70f642c472c",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Стиральная машина узкая Novex WM6N10CM1W",
+                        "ProductPrice": "1499900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для дома",
+                        "SegmentName3": "Техника для ухода за одеждой",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "1b8cfb50-a969-5916-aa1d-6bb95e64a19d",
+                        "SegmentUUID3": "b90d3bb6-192d-5089-bb39-3d47283a15cf",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "3499₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "5999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Выпрямитель волос Remington Sleek&Curl Expert S6700",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=50aea5916a78dcd1f9f6d70c49bc79e3",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a6ccdda6-4a43-5205-9530-b5f1a89c4898",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Выпрямитель волос Remington Sleek&Curl Expert S6700",
+                        "ProductPrice": "349900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для красоты",
+                        "SegmentName3": "Щипцы, плойки и выпрямители",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "7fc6a35d-b495-5450-89cf-9d8ca8423231",
+                        "SegmentUUID3": "6d3e2a8f-013c-5ee0-ae84-0b905d22253d",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/vypryamitel-volos-remington-sleek-curl-expert-s6700-20066358?utm_source=edadeal&utm_content=964&utm_medium=cpc&utm_term=20066358&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD40_c41304_g413040101_m1466"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=50aea5916a78dcd1f9f6d70c49bc79e3",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a6ccdda6-4a43-5205-9530-b5f1a89c4898",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Выпрямитель волос Remington Sleek&Curl Expert S6700",
+                        "ProductPrice": "349900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для красоты",
+                        "SegmentName3": "Щипцы, плойки и выпрямители",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "7fc6a35d-b495-5450-89cf-9d8ca8423231",
+                        "SegmentUUID3": "6d3e2a8f-013c-5ee0-ae84-0b905d22253d",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=d9d3fd0ab86dd18c8cab8e9ea8a9c971",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "a6ccdda6-4a43-5205-9530-b5f1a89c4898",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "19",
+                        "BrandUUIDs": "None",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Выпрямитель волос Remington Sleek&Curl Expert S6700",
+                        "ProductPrice": "349900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Бытовая техника",
+                        "SegmentName2": "Техника для красоты",
+                        "SegmentName3": "Щипцы, плойки и выпрямители",
+                        "SegmentUUID1": "267ffb0e-e147-50f8-8d4c-cd46a3324cd9",
+                        "SegmentUUID2": "7fc6a35d-b495-5450-89cf-9d8ca8423231",
+                        "SegmentUUID3": "6d3e2a8f-013c-5ee0-ae84-0b905d22253d",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                },
+                {
+                  "type": "eddl_offers_carousel_item",
+                  "eddl_item_background_color": "#00FFFFFF",
+                  "eddl_width": 132,
+                  "eddl_height": 214,
+                  "eddl_offer_items": [
+                    {
+                      "type": "eddl_offers_carousel_offer_content",
+                      "eddl_offer_content_items": [
+                        {
+                          "type": "eddl_offers_carousel_offer_content_image",
+                          "eddl_offer_content_image_items": [
+                            {
+                              "type": "eddl_offers_carousel_image_container",
+                              "eddl_item_image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg"
+                            }
+                          ],
+                          "eddl_image_width": 132,
+                          "eddl_image_height": 132
+                        },
+                        {
+                          "type": "eddl_offers_carousel_offer_text_container",
+                          "eddl_offer_text_alignment_horizontal": "left",
+                          "eddl_offer_text_container_items": [
+                            {
+                              "type": "eddl_offers_carousel_offer_content_prices",
+                              "eddl_content_prices_orientation": "horizontal",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_content_prices_items": [
+                                {
+                                  "type": "eddl_offers_carousel_price_new",
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_new_font_size": 16,
+                                  "eddl_price_new_line_height": 20,
+                                  "eddl_price_new_text_color": "#09141F",
+                                  "eddl_price_new_text": "2399₽"
+                                },
+                                {
+                                  "type": "eddl_offers_carousel_price_old",
+                                  "margins": {
+                                    "left": 8
+                                  },
+                                  "eddl_offer_text_alignment_horizontal": "left",
+                                  "eddl_price_old_font_size": 13,
+                                  "eddl_price_old_line_height": 16,
+                                  "eddl_price_old_text_color": "#999999",
+                                  "eddl_price_old_text": "2999"
+                                }
+                              ]
+                            },
+                            {
+                              "type": "eddl_offers_carousel_offer_content_description",
+                              "eddl_offer_text_alignment_horizontal": "left",
+                              "eddl_description_text_color": "#09141F",
+                              "eddl_description_text": "Сковорода Tefal Tendance Brownie 28см (04182128)",
+                              "eddl_description_font_size": 13,
+                              "eddl_description_line_height": 16,
+                              "eddl_description_max_lines": 2
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "eddl_item_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemClick&hash=0aebf464842e32faa25c023474cc9bc0",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "245baece-4170-5ed1-a369-2a46a3167692",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сковорода Tefal Tendance Brownie 28см (04182128)",
+                        "ProductPrice": "239900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "url": "https://www.mvideo.ru/products/skovoroda-tefal-tendance-brownie-28sm-04182128-50123429?utm_source=edadeal&utm_content=1134&utm_medium=cpc&utm_term=50123429&cityId=CityCZ_975&utm_campaign=ip-edadeal-msk-and-mo&amp%3Breff=yan_tov_dD50_c52401_g524010706_m76"
+                    }
+                  ],
+                  "eddl_item_visibility_actions": [
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemAppear&hash=0aebf464842e32faa25c023474cc9bc0",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "245baece-4170-5ed1-a369-2a46a3167692",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сковорода Tefal Tendance Brownie 28см (04182128)",
+                        "ProductPrice": "239900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1
+                    },
+                    {
+                      "log_id": "#!edadeal/metrics/send?eventName=BlockItemView&hash=58fc00353ce774ffc0e961ad548b6474",
+                      "payload": {
+                        "BlockId": "451",
+                        "ItemType": "Product",
+                        "ItemUUID": "245baece-4170-5ed1-a369-2a46a3167692",
+                        "BlockSlug": "mvideo_offers",
+                        "XPosition": "20",
+                        "BrandUUIDs": "2fe3d98b-a781-593f-bfc0-c6da07cdfcca",
+                        "BlockLayout": "Carousel",
+                        "ProductName": "Сковорода Tefal Tendance Brownie 28см (04182128)",
+                        "ProductPrice": "239900",
+                        "RetailerName": "М.Видео",
+                        "RetailerUUID": "db466d9b-25e9-4d1e-8824-427e44155fb0",
+                        "SegmentName1": "Для дома",
+                        "SegmentName2": "Посуда и принадлежности",
+                        "SegmentName3": "Посуда для приготовления пищи",
+                        "SegmentUUID1": "3b35b5d2-6311-11e6-849f-52540010b608",
+                        "SegmentUUID2": "3b35cd35-6311-11e6-849f-52540010b608",
+                        "SegmentUUID3": "3b35ce4c-6311-11e6-849f-52540010b608",
+                        "BlockVersionId": "1101"
+                      },
+                      "visibility_percentage": 50,
+                      "visibility_duration": 1000
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

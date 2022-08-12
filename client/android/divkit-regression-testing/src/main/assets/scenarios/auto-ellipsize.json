@@ -1,0 +1,75 @@
+{
+  "templates": {
+    "text_14_18_regular": {
+      "type": "text",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 16,
+        "right": 16
+      },
+      "font_size": 14,
+      "line_height": 18,
+      "$text": "text_14_18_regular__text",
+      "$text_color": "text_14_18_regular__text_color"
+    },
+    "text_16_20_bold": {
+      "type": "text",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 16,
+        "right": 16
+      },
+      "font_size": 16,
+      "font_weight": "bold",
+      "line_height": 20,
+      "$text": "text_16_20_bold__text",
+      "$text_color": "text_16_20_bold__text_color"
+    }
+  },
+  "card": {
+    "log_id": "onboarding_carousel",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 84
+          },
+          "width": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "text_16_20_bold",
+              "text_16_20_bold__text": "Как смотреть гравюры Дюрера",
+              "text_16_20_bold__text_color": "#000000",
+              "auto_ellipsize": 1,
+              "margins": {
+                "top": 8,
+                "bottom": 0
+              },
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1,
+                "end_value": 1
+              }
+            },
+            {
+              "type": "text_14_18_regular",
+              "text_14_18_regular__text": "Благодаря Альбрехту Дюреру гравюра стала одним из самых популярных искусств конца XV — начала XVI века. Рассказываем о том как было.",
+              "text_14_18_regular__text_color": "#333333",
+              "auto_ellipsize": 1,
+              "margins": {
+                "bottom": 0
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivContainer tests should create card with templates 1`] = `
+{
+  "templates": {
+    "product": {
+      "type": "container",
+      "items": [
+        {
+          "type": "image",
+          "height": {
+            "type": "fixed",
+            "value": 40
+          },
+          "$image_url": "top_image_url",
+          "$width": "top_image_width"
+        },
+        {
+          "type": "separator",
+          "delimiter_style": {
+            "orientation": "horizontal",
+            "$color": "gap_color"
+          },
+          "$height": "gap_height"
+        },
+        {
+          "type": "image",
+          "height": {
+            "type": "fixed",
+            "value": 40
+          },
+          "$image_url": "bottom_image_url",
+          "$width": "bottom_image_width"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "product",
+          "top_image_url": "https://image.url/top",
+          "top_image_width": {
+            "type": "fixed",
+            "value": 40
+          },
+          "bottom_image_url": "https://image.url/bottom",
+          "bottom_image_width": {
+            "type": "fixed",
+            "value": 40
+          },
+          "gap_height": {
+            "type": "fixed",
+            "value": 10
+          },
+          "gap_color": "#000",
+          "paddings": {
+            "left": 10,
+            "right": 10
+          }
+        }
+      }
+    ]
+  }
+}
+`;

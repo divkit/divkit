@@ -1,0 +1,73 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Индикатор прогресса для [пейджера](div-pager.md).",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "indicator"
+          ]
+        },
+        "pager_id": {
+          "type": "string",
+          "supports_expressions": false,
+          "description": "Идентификатор пейджера-источника данных для индикатора."
+        },
+        "space_between_centers": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":15}",
+          "description": "Расстояние между центрами индикаторов."
+        },
+        "inactive_item_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#33919cb5",
+          "description": "Цвет индикатора."
+        },
+        "active_item_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#ffdc60",
+          "description": "Цвет активного индикатора."
+        },
+        "shape": {
+          "$ref": "div-shape.json",
+          "default_value": "{\"type\":\"rounded_rectangle\"}",
+          "description": "Форма индикатора."
+        },
+        "active_item_size": {
+          "$ref": "common.json#/positive_number",
+          "default_value": "1.3",
+          "description": "Множитель размера для активного индикатора."
+        },
+        "minimum_item_size": {
+          "$ref": "common.json#/positive_number",
+          "default_value": "0.5",
+          "description": "Множитель размера для минимального индикатора. Используется, когда на экране не помещается нужное количество индикаторов.",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "animation": {
+          "type": "string",
+          "enum": [
+            "scale", "worm", "slider"
+          ],
+          "default_value": "scale",
+          "description": "Анимация переключения между индикаторами.",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "description": "Устанавливает скругление углов.",
+  "properties": {
+    "top-left": {
+      "$ref": "common.json#/non_negative_integer",
+      "description": "Радиус скругления верхнего левого угла. Если не указано, то используется `corner_radius`."
+    },
+    "top-right": {
+      "$ref": "common.json#/non_negative_integer",
+      "description": "Радиус скругления верхнего правого угла. Если не указано, то используется `corner_radius`."
+    },
+    "bottom-left": {
+      "$ref": "common.json#/non_negative_integer",
+      "description": "Радиус скругления нижнего левого угла. Если не указано, то используется `corner_radius`."
+    },
+    "bottom-right": {
+      "$ref": "common.json#/non_negative_integer",
+      "description": "Радиус скругления нижнего правого угла. Если не указано, то используется `corner_radius`."
+    }
+  }
+}

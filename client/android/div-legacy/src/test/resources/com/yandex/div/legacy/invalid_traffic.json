@@ -1,0 +1,40 @@
+{
+  "states": [
+    {
+      "blocks": [
+        {
+          "type": "div-universal-block"
+        },
+        {
+          "items": [
+            {
+              "text": "<font color=\"#edf0f2\">+25<\/font>"
+            },
+            {
+              "color": "#ffce55",
+              "score": "",
+              "text": "21"
+            },
+            {
+              "color": "#69a942",
+              "score": "",
+              "text": "22"
+            },
+            {
+              "color": "#69a942",
+              "score": "",
+              "text": "23"
+            },
+            {
+              "color": "#E45C57",
+              "score": "",
+              "text": "24"
+            }
+          ],
+          "type": "div-traffic-block"
+        }
+      ],
+      "state_id": 1
+    }
+  ]
+}

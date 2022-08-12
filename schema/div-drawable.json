@@ -1,0 +1,8 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-shape-drawable.json",
+      "description": "Drawable простой геометрической формы."
+    }
+  ]
+}

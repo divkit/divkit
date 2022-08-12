@@ -1,0 +1,7 @@
+{
+  "type": "separator",
+  "action": {
+    "url": "https://ya.ru",
+    "log_id": "test_log_id"
+  }
+}

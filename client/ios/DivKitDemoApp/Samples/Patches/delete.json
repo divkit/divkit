@@ -1,0 +1,9 @@
+{
+  "patch": {
+    "changes": [
+      {
+        "id": "div_to_delete"
+      }
+    ]
+   }
+}

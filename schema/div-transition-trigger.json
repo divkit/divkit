@@ -1,0 +1,9 @@
+{
+  "type": "string",
+  "enum": [
+    "data_change",
+    "state_change",
+    "visibility_change"
+  ],
+  "description": "Тип события, при котором запускается анимация."
+}

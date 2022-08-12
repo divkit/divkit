@@ -1,0 +1,75 @@
+{
+  "card": {
+    "log_id": "ui_test_card",
+    "variables": [
+      {
+        "name": "top_input",
+        "type": "string",
+        "value": ""
+      },
+      {
+        "name": "bottom_input",
+        "type": "string",
+        "value": ""
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "id": "top_input",
+              "type": "test_input",
+              "text_variable": "top_input"
+            },
+            {
+              "id": "bottom_input",
+              "type": "test_input",
+              "text_variable": "bottom_input"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "test_input": {
+      "type": "input",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#FFFF00"
+        }
+      ],
+      "focus": {
+        "background": [
+          {
+            "type": "solid",
+            "color": "#FF0000"
+          }
+        ]
+      }
+    }
+  }
+}

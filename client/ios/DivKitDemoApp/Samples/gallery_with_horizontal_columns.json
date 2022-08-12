@@ -1,0 +1,97 @@
+{
+  "card": {
+    "log_id": "test/body",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "column_count": 2,
+          "width": {
+            "type": "match_parent"
+          },
+          "item_spacing": 10,
+          "paddings": {
+            "left": 20,
+            "right": 20,
+            "top": 20,
+            "bottom": 20
+          },
+          "items": [
+            {
+              "type": "gallery_item",
+              "item_width": 200,
+              "item_text": "Item 1"
+            },
+            {
+              "type": "gallery_item",
+              "item_width": 50,
+              "item_text": "Item 2"
+            },
+            {
+              "type": "gallery_item",
+              "item_width": 180,
+              "item_text": "Item 3"
+            },
+            {
+              "type": "gallery_item",
+              "item_width": 200,
+              "item_text": "Item 4"
+            },
+            {
+              "type": "gallery_item",
+              "item_width": 200,
+              "item_text": "Item 5"
+            },
+            {
+              "type": "gallery_item",
+              "item_width": 200,
+              "item_text": "Item 6"
+            },
+            {
+              "type": "gallery_item",
+              "item_width": 200,
+              "item_text": "Item 7"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "gallery_item": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "$value": "item_width"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 120
+      },
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#000000",
+          "width": 1
+        }
+      },
+      "margins": {
+        "bottom": 10
+      },
+      "items": [
+        {
+          "type": "text",
+          "$text": "item_text",
+          "font_size": 16,
+          "paddings": {
+            "left": 10,
+            "right": 10,
+            "top": 10,
+            "bottom": 10
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "templates": {
+    "label": {
+      "type": "text",
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#1ABC9C"
+    },
+    "button": {
+      "type": "text",
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#1ABC9C"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "left": 16,
+        "top": 8,
+        "right": 16,
+        "bottom": 8
+      },
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#34495E"
+    }
+  },
+  "card": {
+    "log_id": "visibility",
+    "variables": [
+      {
+        "type": "string",
+        "name": "visibility",
+        "value": "visible"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "items": [
+            {
+              "type": "label",
+              "alignment_horizontal": "center",
+              "text": "Hi",
+
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#ffffff"
+                }
+              ],
+              "margins": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 150
+              },
+              "visibility": "@{visibility}",
+              "visibility_action":
+              {
+                "log_id": "text_view",
+                "visibility_percentage": 80,
+                "visibility_duration": 0,
+                "log_limit": 100
+              }
+            },
+            {
+              "type": "button",
+              "text": "visible",
+              "actions": [
+                {
+                  "log_id": "update_visibility_visible",
+                  "url": "div-action://set_variable?name=visibility&value=visible"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "invisible",
+              "actions": [
+                {
+                  "log_id": "update_visibility_invisible",
+                  "url": "div-action://set_variable?name=visibility&value=invisible"
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "text": "gone",
+              "actions": [
+                {
+                  "log_id": "update_visibility_gone",
+                  "url": "div-action://set_variable?name=visibility&value=gone"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

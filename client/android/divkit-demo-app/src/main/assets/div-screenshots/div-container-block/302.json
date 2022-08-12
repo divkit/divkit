@@ -1,0 +1,69 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "direction": "vertical",
+                    "frame": {
+                        "style": "only_round_corners"
+                    },
+                    "height": {
+                        "type": "numeric",
+                        "value": 200
+                    },
+                    "width": {
+                        "type": "predefined",
+                        "value": "wrap_content"
+                    },
+                    "background": [
+                        {
+                            "color": "#00FF00",
+                            "type": "div-solid-background"
+                        }
+                    ],
+                    "action": {
+                        "url": "https://news.yandex.ru/hockey.html"
+                    },
+                    "type": "div-container-block",
+                    "children": [
+                        {
+                            "action": {
+                                "url": "https://yandex.ru"
+                            },
+                            "padding_modifier": {
+                                "position": "right",
+                                "size": "s"
+                            },
+                            "type": "div-traffic-block",
+                            "alignment": "right",
+                            "items": [
+                                {
+                                    "color": "#228B22",
+                                    "text": "traffic",
+                                    "score": "1"
+                                },
+                                {
+                                    "color": "#0000FF",
+                                    "text": "\u0432",
+                                    "score": "2"
+                                },
+                                {
+                                    "color": "#FF000",
+                                    "text": "\u043a\u043e\u043d\u0442\u0435\u0439\u043d\u0435\u0440\u0435",
+                                    "score": "3"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#00FFFF",
+            "type": "div-solid-background"
+        }
+    ]
+}

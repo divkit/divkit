@@ -1,0 +1,26 @@
+{
+  "type": "object",
+  "definitions": {
+    "string_enum_property": {
+      "type": "string",
+      "enum": [
+        "first",
+        "second"
+      ]
+    }
+  },
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_optional_string_enum_property"
+      ]
+    },
+    "property": {
+      "$ref": "#/definitions/string_enum_property"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "description": "item with coord (1, 1) is not filled",
+  "type": "grid",
+  "column_count": 2,
+  "items": [
+    {
+      "type": "text",
+      "text": "1",
+      "row_span": 2
+    },
+    {
+      "type": "text",
+      "text": "1"
+    }
+  ]
+}

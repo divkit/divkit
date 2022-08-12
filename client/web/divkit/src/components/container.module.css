@@ -1,0 +1,90 @@
+.container {
+    display: grid;
+}
+
+.container_orientation_vertical {
+    grid-auto-flow: row;
+    grid-template-columns: 100%;
+}
+
+.container_orientation_vertical.container_valign_top {
+    align-content: start;
+}
+
+.container_orientation_vertical.container_valign_center {
+    align-content: center;
+}
+
+.container_orientation_vertical.container_valign_bottom {
+    align-content: end;
+}
+
+.container_orientation_vertical.container_halign_left {
+    justify-items: start;
+}
+
+.container_orientation_vertical.container_halign_center {
+    justify-items: center;
+}
+
+.container_orientation_vertical.container_halign_right {
+    justify-items: end;
+}
+
+.container_orientation_horizontal {
+    grid-auto-flow: column;
+    grid-template-rows: 100%;
+}
+
+.container_orientation_horizontal.container_valign_top {
+    align-items: start;
+}
+
+.container_orientation_horizontal.container_valign_center {
+    align-items: center;
+}
+
+.container_orientation_horizontal.container_valign_bottom {
+    align-items: end;
+}
+
+.container_orientation_horizontal.container_halign_left {
+    justify-content: start;
+}
+
+.container_orientation_horizontal.container_halign_center {
+    justify-content: center;
+}
+
+.container_orientation_horizontal.container_halign_right {
+    justify-content: end;
+}
+
+.container_orientation_overlap {
+    grid-template-rows: 100%;
+    grid-template-columns: 100%;
+}
+
+.container_orientation_overlap.container_valign_top {
+    align-items: start;
+}
+
+.container_orientation_overlap.container_valign_center {
+    align-items: center;
+}
+
+.container_orientation_overlap.container_valign_bottom {
+    align-items: end;
+}
+
+.container_orientation_overlap.container_halign_left {
+    justify-items: start;
+}
+
+.container_orientation_overlap.container_halign_center {
+    justify-items: center;
+}
+
+.container_orientation_overlap.container_halign_right {
+    justify-items: end;
+}

@@ -1,0 +1,16 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_array_with_transform",
+      "$array": "link"
+    }
+  },
+  "entity": {
+    "type": "t_0",
+    "link": [
+      "FF00",
+      "#FF00FF00",
+      "#AAFF0000"
+    ]
+  }
+}

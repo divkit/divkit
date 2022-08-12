@@ -1,0 +1,39 @@
+{
+  "description": "Анимация масштабирования.",
+  "allOf": [
+    {
+      "$ref": "div-transition-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "scale"
+          ]
+        },
+        "scale": {
+          "type": "number",
+          "constraint": "number >= 0.0",
+          "default_value": "0.0",
+          "description": "Значение масштаба, с которого начнется появление или на котором закончится исчезновение элемента."
+        },
+        "pivot_x": {
+          "type": "number",
+          "constraint": "number >= 0.0 && number <= 1.0",
+          "default_value": "0.5",
+          "description": "Относительная координата `X` точки, которая не изменит своего положения при масштабировании."
+        },
+        "pivot_y": {
+          "type": "number",
+          "constraint": "number >= 0.0 && number <= 1.0",
+          "default_value": "0.5",
+          "description": "Относительная координата `Y` точки, которая не изменит своего положения при масштабировании."
+        }
+      }
+    }
+  ],
+  "required": [
+    "type"
+  ]
+}

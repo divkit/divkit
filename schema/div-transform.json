@@ -1,0 +1,20 @@
+{
+    "type": "object",
+    "description": "Преобразование элемента.",
+    "properties": {
+        "rotation": {
+            "type": "number",
+            "description": "Количество градусов, на которое необходимо повернуть элемент. Положительное значение описывает поворот по часовой стрелке."
+        },
+        "pivot_x": {
+            "$ref": "div-pivot.json",
+            "default_value": "{\"type\": \"pivot-percentage\",\"value\":50}",
+            "description": "Координата Х оси вращения."
+        },
+        "pivot_y": {
+            "$ref": "div-pivot.json",
+            "default_value": "{\"type\": \"pivot-percentage\",\"value\":50}",
+            "description": "Координата Y оси вращения."
+        }
+    }
+}

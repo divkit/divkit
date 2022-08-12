@@ -1,0 +1,30 @@
+{
+  "non_empty_string": {
+    "type": "string",
+    "minLength": 1,
+    "clientMinLength": 1
+  },
+  "color": {
+    "type": "string",
+    "format": "color"
+  },
+  "url": {
+    "type": "string",
+    "format": "uri"
+  },
+  "positive_integer": {
+    "type": "integer",
+    "constraint": "number > 0"
+  },
+  "non_negative_integer": {
+    "type": "integer",
+    "constraint": "number >= 0"
+  },
+  "boolean_int": {
+    "type": "integer",
+    "enum": [
+      0, 1
+    ],
+    "format": "boolean"
+  }
+}

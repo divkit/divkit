@@ -1,0 +1,103 @@
+apply plugin: 'jacoco'
+apply plugin: 'kotlin-android'
+
+android {
+    defaultConfig {
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+    }
+
+    testOptions {
+        unitTests {
+            all {
+                jacoco {
+                    includeNoLocationClasses = true
+                    excludes = ['jdk.internal.*']
+                }
+
+                jvmArgs '-noverify'
+
+                testLogging {
+                    events 'passed', 'skipped', 'failed', 'standardOut', 'standardError'
+                }
+
+                // Keep it synced with DivKitGlobalConfigProvider.
+                systemProperty 'robolectric.looperMode', "LEGACY"
+            }
+            includeAndroidResources = true
+        }
+    }
+}
+
+dependencies {
+    testImplementation project(path: ':unit-test-common')
+    testImplementation "androidx.test:core:$versions.androidx.test"
+    testImplementation("junit:junit:$versions.junit") {
+        exclude group: "org.hamcrest", module: "hamcrest-core"
+    }
+    testImplementation "org.hamcrest:hamcrest-junit:$versions.hamcrestJUnit"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$versions.mockitoKotlin"
+    testImplementation "org.robolectric:robolectric:$versions.robolectric"
+    testImplementation "org.robolectric:shadows-supportv4:$versions.robolectric"
+    testImplementation "org.easytesting:fest-reflect:$versions.festReflect"
+    testImplementation("com.squareup:fest-android:$versions.festAndroid") {
+        exclude module: "support-v4"
+    }
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+}
+
+jacoco {
+    toolVersion = versions.jacoco
+}
+
+ext.readLinesFromFile = { filepath, skipSymbol ->
+    final BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)))
+    String line
+    List<String> linesAsList = new ArrayList<>()
+    while ((line = reader.readLine()) != null) {
+        if (line.trim().isEmpty() || line.startsWith(skipSymbol)) {
+            continue
+        }
+        linesAsList.add(line)
+    }
+    return linesAsList
+}
+
+def testVariant = project.property('testVariant')
+
+def coverageSourceDirs = [
+        'src/main/java',
+        'src/impl/java',
+        'src/gen'
+]
+
+task jacocoTestReport(type: JacocoReport, dependsOn: "test${testVariant.capitalize()}UnitTest") {
+    def excludes = readLinesFromFile("${project.projectDir}/jacoco.excludes", "#")
+
+    final classesDir = "$project.buildDir/intermediates/javac/${testVariant}"
+
+    group = "reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+        csv.enabled = true
+    }
+    classDirectories.from {
+        fileTree(dir: classesDir, excludes: excludes)
+    }
+    sourceDirectories.from {
+        files(coverageSourceDirs)
+    }
+    executionData.from {
+        files("build/jacoco/test${testVariant.capitalize()}UnitTest.exec")
+    }
+
+    doFirst {
+        new File(classesDir).eachFileRecurse { file ->
+            if (file.name.contains('$$')) {
+                file.renameTo(file.path.replace('$$', '$'))
+            }
+        }
+    }
+}

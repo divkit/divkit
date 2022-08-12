@@ -1,0 +1,4118 @@
+{
+  "templates": {
+  },
+  "card": {
+    "log_id": "news",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "text",
+                  "height": {
+                    "type": "fixed",
+                    "value": 48
+                  },
+                  "paddings": {
+                    "left": 16,
+                    "right": 16
+                  },
+                  "font_size": 18,
+                  "font_weight": "medium",
+                  "line_height": 24,
+                  "text_alignment_vertical": "center",
+                  "text_color": "#CC000000",
+                  "text": "Сейчас в СМИ"
+                },
+                {
+                  "type": "image",
+                  "width": {
+                    "type": "fixed",
+                    "value": 48
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 48
+                  },
+                  "paddings": {
+                    "left": 16,
+                    "top": 12,
+                    "right": 8,
+                    "bottom": 12
+                  },
+                  "placeholder_color": "#00000000",
+                  "image_url": "file:///android_asset/images/news/menu.png",
+                  "action": {
+                    "log_id": "news/menu",
+                    "menu_items": [
+                      {
+                        "text": "Настройки ленты",
+                        "action": {
+                          "log_id": "news/menu/feed_settings",
+                          "url": "action://none/"
+                        }
+                      },
+                      {
+                        "text": "Скрыть карточку",
+                        "action": {
+                          "log_id": "news/menu/hide_card",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "tabs",
+              "title_paddings": {
+                "left": 12,
+                "right": 12,
+                "bottom": 8
+              },
+              "tab_title_style": {
+                "font_weight": "medium"
+              },
+              "items": [
+                {
+                  "title": "ГЛАВНОЕ",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "РЕГИОН",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ РЕГИОНА",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "ПОЛИТИКА",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ ПОЛИТИКИ",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "ОБЩЕСТВО",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ ОБЩЕСТВА",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "ЭКОНОМИКА",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ ЭКОНОМИКИ",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "В МИРЕ",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ МИРОВЫЕ НОВОСТИ",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "СПОРТ",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ СПОРТА",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "ПРОИСШЕСТВИЯ",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ ПРОИСШЕСТВИЯ",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "КУЛЬТУРА",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ КУЛЬТУРЫ",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "HI-TECH",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ ТЕХНОЛОГИЙ",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "НАУКА",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ НАУКИ",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                },
+                {
+                  "title": "АВТО",
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "left": 16,
+                      "right": 16
+                    },
+                    "orientation": "vertical",
+                    "items": [
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "container",
+                        "paddings": {
+                          "top": 8
+                        },
+                        "orientation": "horizontal",
+                        "action": {
+                          "log_id": "news/topic",
+                          "url": "action://none/"
+                        },
+                        "items": [
+                          {
+                            "type": "image",
+                            "width": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 18
+                            },
+                            "margins": {
+                              "right": 16
+                            },
+                            "placeholder_color": "#00000000",
+                            "image_url": "file:///android_asset/images/news/media.png"
+                          },
+                          {
+                            "type": "container",
+                            "orientation": "vertical",
+                            "items": [
+                              {
+                                "type": "text",
+                                "margins": {
+                                  "bottom": 8
+                                },
+                                "font_size": 14,
+                                "line_height": 20,
+                                "max_lines": 3,
+                                "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+                              },
+                              {
+                                "type": "separator",
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 1
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#33919CB5"
+                                  }
+                                ],
+                                "delimiter_style": {
+                                  "color": "#00000000"
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "text",
+                        "height": {
+                          "type": "fixed",
+                          "value": 48
+                        },
+                        "font_size": 12,
+                        "font_weight": "medium",
+                        "max_lines": 1,
+                        "text_alignment_vertical": "center",
+                        "text_color": "#999999",
+                        "text": "ВСЕ НОВОСТИ АВТО",
+                        "action": {
+                          "log_id": "news/more",
+                          "url": "action://none/"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

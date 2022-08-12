@@ -1,0 +1,49 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`background escape 1`] = `
+Object {
+  "image": "url(\\"&quot;&lt;script&amp;\\")",
+  "position": "50% 50%",
+  "size": "cover",
+}
+`;
+
+exports[`background getBackground 1`] = `
+Object {
+  "color": "#ffcc00",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background getBackground 2`] = `
+Object {
+  "image": "linear-gradient(90deg,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background getBackground 3`] = `
+Object {
+  "image": "linear-gradient(-33deg,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background getBackground 4`] = `
+Object {
+  "image": "url(\\"https://ya.ru\\")",
+  "position": "50% 50%",
+  "size": "cover",
+}
+`;
+
+exports[`background getBackground 5`] = `
+Object {
+  "image": "url(\\"https://ya.ru\\")",
+  "position": "100% 100%",
+  "size": "contain",
+}
+`;

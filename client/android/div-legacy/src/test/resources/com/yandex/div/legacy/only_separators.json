@@ -1,0 +1,45 @@
+{
+  "states": [
+    {
+      "state_id": 1,
+      "blocks": [
+        {
+          "has_delimiter": 1,
+          "delimiter_color": "#FF00FF00",
+          "action": {
+            "url": "https://afisha.yandex.ru/",
+            "log_id": "super_div/separator"
+          },
+          "type": "div-separator-block"
+        },
+        {
+          "has_delimiter": 1,
+          "delimiter_color": "#FF00FF00",
+          "action": {
+            "url": "https://afisha.yandex.ru/",
+            "log_id": "super_div/separator"
+          },
+          "type": "div-separator-block"
+        },
+        {
+          "has_delimiter": 1,
+          "delimiter_color": "#FF00FF00",
+          "action": {
+            "url": "https://afisha.yandex.ru/",
+            "log_id": "super_div/separator"
+          },
+          "type": "div-separator-block"
+        },
+        {
+          "has_delimiter": 1,
+          "delimiter_color": "#FF00FF00",
+          "action": {
+            "url": "https://afisha.yandex.ru/",
+            "log_id": "super_div/separator"
+          },
+          "type": "div-separator-block"
+        }
+      ]
+    }
+  ]
+}

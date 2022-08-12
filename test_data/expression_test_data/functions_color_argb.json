@@ -1,0 +1,102 @@
+{
+  "cases": [
+    {
+      "name": "argb(1.0, 0.5, 0.0, 1.0) => #FF8000FF",
+      "expression": "@{argb(1.0, 0.5, 0.0, 1.0)}",
+      "expected": {
+        "type": "string",
+        "value": "#FF8000FF"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "argb(1.0, 1.0, 0.5, 1.0) => #FFFF80FF",
+      "expression": "@{argb(1.0, 1.0, 0.5, 1.0)}",
+      "expected": {
+        "type": "string",
+        "value": "#FFFF80FF"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "argb(0.5039, 0.5040, 0.9980, 0.9981) => #8081FEFF",
+      "expression": "@{argb(0.5039, 0.5040, 0.9980, 0.9981)}",
+      "expected": {
+        "type": "string",
+        "value": "#8081FEFF"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "rgb(0.5, 0.0, 1.0) => #FF8000FF",
+      "expression": "@{rgb(0.5, 0.0, 1.0)}",
+      "expected": {
+        "type": "string",
+        "value": "#FF8000FF"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "rgb(1.0, 0.5, 1.0) => #FFFF80FF",
+      "expression": "@{rgb(1.0, 0.5, 1.0)}",
+      "expected": {
+        "type": "string",
+        "value": "#FFFF80FF"
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "argb(15.0, 0.5, 0.0, 1.0) => error",
+      "expression": "@{argb(15.0, 0.5, 0.0, 1.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [argb(15.0, 0.5, 0.0, 1.0)]. Value out of range 0..1."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "rgb(0.5, 10.0, 1.0) => error",
+      "expression": "@{rgb(0.5, 10.0, 1.0)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [rgb(0.5, 10.0, 1.0)]. Value out of range 0..1."
+      },
+      "variables": [],
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    }
+  ]
+}

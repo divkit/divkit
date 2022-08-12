@@ -1,0 +1,12 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-infinity-count.json",
+      "description": "Бесконечное число повторов."
+    },
+    {
+      "$ref": "div-fixed-count.json",
+      "description": "Фиксированное число повторов."
+    }
+  ]
+}

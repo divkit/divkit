@@ -1,0 +1,7 @@
+// Copyright 2017 Yandex LLC. All rights reserved.
+
+import CoreGraphics
+
+public protocol TabbedPagesViewModelDelegate: AnyObject {
+  func onSelectedPageIndexChanged(_ index: CGFloat, inModel model: TabContentsViewModel)
+}

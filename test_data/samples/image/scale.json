@@ -1,0 +1,182 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 24
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "top": 26
+      }
+    },
+    "image_block": {
+      "type": "subtitle",
+      "paddings": {
+        "left": 0,
+        "right": 0,
+        "top": 0
+      },
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text": "Image Area",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#F9F9F9"
+        }
+      ],
+      "height": {
+        "type": "match_parent"
+      },
+      "width": {
+        "type": "match_parent"
+      }
+    },
+    "image_container": {
+      "type": "container",
+      "height": {
+        "type": "fixed",
+        "value": 212
+      },
+      "width": {
+        "type": "fixed",
+        "value": 180
+      },
+      "background": [
+        {
+          "type": "image",
+          "image_url": "https://yastatic.net/s3/home/divkit/pattern.png",
+          "scale": "fill"
+        }
+      ]
+    },
+    "scale_type_title": {
+      "type": "title",
+      "font_size": 10,
+      "line_height": 16,
+      "paddings": {
+        "left": 0,
+        "right": 0,
+        "bottom": 0
+      },
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "alignment_vertical": "center",
+      "alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "content_alignment_horizontal": "center",
+          "margins": {
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Масштаб изображения"
+            },
+            {
+              "type": "image_container",
+              "items": [
+                {
+                  "type": "image_block",
+                  "margins": {
+                    "top": 24,
+                    "left": 8,
+                    "right": 8,
+                    "bottom": 6
+                  }
+                },
+                {
+                  "type": "scale_type_title",
+                  "text": "CROP AREA",
+                  "margins": {
+                    "top": 0,
+                    "bottom": 2
+                  }
+                }
+              ]
+            },
+            {
+              "type": "subtitle",
+              "text": "fill — заполняет все доступное место, что не помещается — обрезается.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "image_container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "image_block",
+                  "margins": {
+                    "left": 40
+                  },
+                  "width": {
+                    "type":"fixed",
+                    "value": 100
+                  }
+                },
+                {
+                  "type": "scale_type_title",
+                  "text": "WRAPPER AREA",
+                  "font_size": 8,
+                  "line_height": 12
+                }
+              ]
+            },
+            {
+              "type": "subtitle",
+              "text": "fit — вписывается в границы, оставшееся место будет пустым.",
+              "margins": {
+                "bottom": 38
+              }
+            },
+            {
+              "type": "image_container",
+              "width": {
+                "type": "fixed",
+                "value": 165
+              },
+              "height": {
+                "type": "fixed",
+                "value": 110
+              },
+              "items": [
+                {
+                  "type": "image_block"
+                }
+              ]
+            },
+            {
+              "type": "subtitle",
+              "text": "fixed – фиксированный размер и пропорции изображения."
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

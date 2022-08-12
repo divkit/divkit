@@ -1,0 +1,59 @@
+{
+  "type": "object",
+  "description": "Параметры анимации элементов.",
+  "properties": {
+    "name": {
+      "type": "string",
+      "enum": [
+        "fade",
+        "translate",
+        "scale",
+        "native",
+        "set",
+        "no_animation"
+      ],
+      "description": "Тип анимации."
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "300",
+      "description": "Длительность анимации в миллисекундах."
+    },
+    "start_delay": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "description": "Задержка в миллисекундах перед стартом анимации."
+    },
+    "start_value": {
+      "type": "number",
+      "description": "Стартовое значение анимации."
+    },
+    "end_value": {
+      "type": "number",
+      "description": "Конечное значение анимации."
+    },
+    "repeat": {
+      "alias_swift": "repeat_count",
+      "$ref": "div-count.json",
+      "default_value": "{ \"type\": \"infinity\" }",
+      "description": "Число повторов анимации."
+    },
+    "interpolator": {
+      "$ref": "div-animation-interpolator.json",
+      "default_value": "spring",
+      "description": "Характер скорости анимации."
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "div-animation.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Элементы анимации."
+    }
+  },
+  "required": [
+    "name"
+  ]
+}

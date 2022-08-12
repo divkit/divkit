@@ -1,0 +1,34 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "It is a dark time for the Rebellion.",
+          "font_size": 12,
+          "border": {
+            "stroke": {
+              "color": "#BB0000FF"
+            },
+            "corner_radius": 4,
+            "corners_radius": {
+              "top-left": 10,
+              "bottom-right": 15,
+              "bottom-left": 0
+            }
+          },
+          "background": [
+            {
+              "color": "#FFAAAAAA",
+              "type": "solid"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

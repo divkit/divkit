@@ -1,0 +1,305 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Текст.",
+  "definitions": {
+    "range": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Порядковый номер символа, с которого начинается диапазон. Первый символ имеет номер `0`."
+        },
+        "end": {
+          "$ref": "common.json#/positive_integer",
+          "description": "Порядковый номер последнего символа, который будет включен в диапазон."
+        },
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Размер шрифта."
+        },
+        "font_family": {
+          "$ref": "div-font-family.json",
+          "description": "Семейство шрифтов"
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "description": "Единица измерения:<li>`px` — физический пиксель.</li><li>`dp` — логический пиксель, который не зависит от плотности экрана.</li><li>`sp` — логический пиксель, который зависит от размера шрифта на устройстве. Указывайте в `sp` высоту.</li>",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "letter_spacing": {
+          "type": "number",
+          "description": "Расстояние между символами."
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "description": "Начертание."
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "description": "Цвет текста."
+        },
+        "underline": {
+          "$ref": "div-line-style.json",
+          "description": "Подчеркивание."
+        },
+        "strike": {
+          "$ref": "div-line-style.json",
+          "description": "Зачеркивание."
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Действие при нажатии на текст."
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта. Измеряется в единицах, заданных в `font_size_unit`."
+        },
+        "top_offset": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Верхний отступ диапазона текста. Измеряется в единицах, заданных в `font_size_unit`."
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "description": "Дополнительные параметры диапазона символов."
+    },
+    "image": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Символ, перед которым нужно вставить изображение. Чтобы вставить изображение в конец текста, укажите номер последнего символа плюс один."
+        },
+        "url": {
+          "$ref": "common.json#/url",
+          "description": "Ссылка на изображение."
+        },
+        "width": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":20}",
+          "description": "Ширина изображения."
+        },
+        "height": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\": \"fixed\",\"value\":20}",
+          "description": "Высота изображения."
+        },
+        "tint_color": {
+          "$ref": "common.json#/color",
+          "description": "Новый цвет контурного изображения."
+        }
+      },
+      "required": [
+        "url",
+        "start"
+      ],
+      "description": "Изображение."
+    },
+    "ellipsis":  {
+      "type": "object",
+      "properties": {
+        "text": {
+          "$ref": "common.json#/non_empty_string",
+          "description": "Текст маркера."
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Действия при нажатии на маркер обрезки."
+        },
+        "ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/range"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Диапазоны символов внутри маркера обрезки с различными стилями текста."
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/image"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Изображения, встроенные в маркер обрезки."
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "description": "Маркер обрезки текста. Отображается, когда размер текста превышает ограничение по количеству строк.",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "text"
+          ]
+        },
+        "font_size": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "12",
+          "description": "Размер шрифта."
+        },
+        "font_family": {
+          "$ref": "div-font-family.json",
+          "default_value": "text",
+          "description": "Семейство шрифтов"
+        },
+        "font_size_unit": {
+          "$ref": "div-size-unit.json",
+          "default_value": "sp",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "line_height": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта."
+        },
+        "max_lines": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Максимальное количество строк, которые не будут обрезаны при выходе за ограничения."
+        },
+        "min_hidden_lines": {
+          "$ref": "common.json#/non_negative_integer",
+          "description": "Минимальное число обрезанных строк при выходе за ограничения.",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "auto_ellipsize": {
+          "$ref": "common.json#/boolean_int",
+          "description": "Автоматическая обрезка текста под размер контейнера.",
+          "platforms": [
+            "android"
+          ]
+        },
+        "letter_spacing": {
+          "type": "number",
+          "default_value": "0",
+          "description": "Интервал между символами."
+        },
+        "font_weight": {
+          "$ref": "div-font-weight.json",
+          "default_value": "regular",
+          "description": "Начертание."
+        },
+        "text_alignment_horizontal": {
+          "$ref": "div-alignment-horizontal.json",
+          "default_value": "left",
+          "description": "Горизонтальное выравнивание текста."
+        },
+        "text_alignment_vertical": {
+          "$ref": "div-alignment-vertical.json",
+          "default_value": "top",
+          "description": "Вертикальное выравнивание текста."
+        },
+        "text_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#FF000000",
+          "description": "Цвет текста. Не используется, если задан параметр `text_gradient`."
+        },
+        "focused_text_color": {
+          "$ref": "common.json#/color",
+          "description": "Цвет текста при фокусировке на элементе.",
+          "platforms": [
+            "android"
+          ]
+        },
+        "text_gradient": {
+          "$ref": "div-gradient-background.json",
+          "description": "Градиентный цвет текста."
+        },
+        "text": {
+          "$ref": "common.json#/non_empty_string",
+          "client_optimized": true,
+          "description": "Текст."
+        },
+        "underline": {
+          "$ref": "div-line-style.json",
+          "default_value": "none",
+          "description": "Подчеркивание."
+        },
+        "strike": {
+          "$ref": "div-line-style.json",
+          "default_value": "none",
+          "description": "Зачеркивание."
+        },
+        "ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/range"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Диапазон символов, в котором можно установить дополнительные параметры стиля. Определяется обязательными полями `start` и `end`."
+        },
+        "images": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/image"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Изображения, встроенные в текст."
+        },
+        "ellipsis": {
+          "$ref": "#/definitions/ellipsis"
+        },
+        "selectable": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "description": "Выделение и копирование текста."
+        },
+        "truncate": {
+          "type": "string",
+          "enum": [
+            "none", "start", "end", "middle"
+          ],
+          "default_value": "end",
+          "description": "Способ обрезания текста. Вместо него используйте `ellipsis`.",
+          "deprecated": true,
+          "code_generation_disabled_kotlin": true,
+          "code_generation_disabled_swift": true
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "text"
+  ]
+}

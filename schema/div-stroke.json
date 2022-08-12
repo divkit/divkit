@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "description": "Рамка.",
+  "properties": {
+    "width": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "1",
+      "description": "Толщина рамки."
+    },
+    "color": {
+      "$ref": "common.json#/color",
+      "description": "Цвет рамки."
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "default_value": "dp"
+    }
+  },
+  "required": [
+    "color"
+  ]
+}

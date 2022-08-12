@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "description": "Бесконечное число повторов.",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "infinity"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

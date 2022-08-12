@@ -1,0 +1,105 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 7
+      },
+      {
+        "name": "slider_variable_second",
+        "type": "integer",
+        "value": 3
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "slider",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#ffffff"
+            }
+          ],
+          "height": {
+            "type": "fixed",
+            "value": 100
+          },
+          "thumb_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#ff0000"
+          },
+          "thumb_value_variable": "slider_variable",
+          "thumb_secondary_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#00ff00"
+          },
+          "thumb_secondary_value_variable": "slider_variable_second",
+          "track_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#000000"
+          },
+          "track_active_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle"
+            },
+            "color": "#0000ff"
+          },
+          "max_value": 10,
+          "tick_mark_inactive_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 15
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 15
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 7
+              }
+            },
+            "color": "#C0C0C0"
+          },
+          "tick_mark_active_style": {
+            "type": "shape_drawable",
+            "shape": {
+              "type": "rounded_rectangle",
+              "item_width": {
+                "type": "fixed",
+                "value": 20
+              },
+              "item_height": {
+                "type": "fixed",
+                "value": 20
+              },
+              "corner_radius": {
+                "type": "fixed",
+                "value": 10
+              }
+            },
+            "color": "#FFD700"
+          }
+        }
+      }
+    ]
+  }
+}

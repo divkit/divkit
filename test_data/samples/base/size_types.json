@@ -1,0 +1,113 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "$text": "visible_text",
+      "id": "visible_id",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "top": 8,
+        "right": 24,
+        "left": 24
+      },
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "text_color": "#000000",
+      "font_size": 14,
+      "alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Типы определения размера"
+            },
+            {
+              "type": "subtitle",
+              "text": "match_parent - размер подстраивается под размер родительского блока\n\nwrap_content - размер подстраивается под содержимое\n\nfixed - фиксированный размер",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "items": [
+                {
+                  "type": "text_block",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "text": "Это wrap_content текст"
+                },
+                {
+                  "type": "text_block",
+                  "width": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "text": "Это fixed текст с шириной равной 100dp"
+                },
+                {
+                  "type": "text_block",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "text": "Это match_parent текст"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

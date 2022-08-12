@@ -1,0 +1,26 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "image",
+          "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "scale": "no_scale",
+          "content_alignment_horizontal": "left",
+          "content_alignment_vertical": "top"
+        }
+      }
+    ]
+  }
+}

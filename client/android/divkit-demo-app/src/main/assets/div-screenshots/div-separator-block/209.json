@@ -1,0 +1,20 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "delimiter_color": "#111FFF",
+                    "has_delimiter": 1,
+                    "type": "div-separator-block"
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#FFFFD1",
+            "type": "div-solid-background"
+        }
+    ]
+}

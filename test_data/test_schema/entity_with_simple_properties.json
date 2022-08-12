@@ -1,0 +1,62 @@
+{
+  "type": "object",
+  "description": "Объект с простыми свойствами.",
+  "swift_protocols": "EntityProtocol",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_simple_properties"
+      ]
+    },
+    "id": {
+      "type": "integer",
+      "supports_expressions": false,
+      "description": "Идентификатор. Не может содержать выражение."
+    },
+    "string": {
+      "$ref": "common.json#/non_empty_string",
+      "description": "Строка.",
+      "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    "integer": {
+      "type": "integer",
+      "description": "Целое число."
+    },
+    "double": {
+      "type": "number",
+      "description": "Число с плавающей точкой."
+    },
+    "boolean": {
+      "type": "boolean",
+      "description": "Логическое значение."
+    },
+    "boolean_int": {
+      "$ref": "common.json#/boolean_int",
+      "description": "Логическое значение в числовом формате.",
+      "deprecated": true,
+      "platforms": [
+        "android"
+      ]
+    },
+    "positive_integer": {
+      "$ref": "common.json#/positive_integer",
+      "description": "Положительное целое число.",
+      "platforms": []
+    },
+    "color": {
+      "$ref": "common.json#/color",
+      "description": "Цвет."
+    },
+    "url": {
+      "$ref": "common.json#/url"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

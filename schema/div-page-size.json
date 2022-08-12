@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "description": "Процентное значение ширины страницы.",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "percentage"
+      ]
+    },
+    "page_width": {
+      "$ref": "div-percentage-size.json",
+      "description": "Ширина страницы в процентах от ширины родительского элемента."
+    }
+  },
+  "required": [
+    "type",
+    "page_width"
+  ]
+}

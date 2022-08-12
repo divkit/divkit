@@ -1,0 +1,103 @@
+// Copyright 2018 Yandex LLC. All rights reserved.
+
+import XCTest
+
+import CommonCore
+import DivKit
+import LayoutKit
+import Networking
+import Serialization
+import TemplatesSupport
+
+final class DivKitTests: XCTestCase {
+  static let cardId = DivCardID(rawValue: cardLogId)
+  static let cardLogId = "test_card_id"
+}
+
+extension TemplateValue where
+  Self: TemplateDeserializable,
+  ResolvedValue: DivBlockModeling {
+  static func make(
+    fromFile filename: String,
+    subdirectory: String? = nil,
+    context: DivBlockModelingContext = .default
+  ) throws -> Block {
+    let dict = try jsonDictFromFile(
+      named: filename,
+      subdirectory: "unit_test_data/" + (subdirectory ?? "")
+    )
+    let templatesDict = (dict["templates"] as? [String: Any]) ?? [:]
+    let templates = DivTemplates(dictionary: templatesDict)
+    let div = templates.parseValue(type: Self.self, from: dict)
+    return try div.value!.makeBlock(context: context)
+  }
+}
+
+private func jsonDictFromFile(named name: String, subdirectory: String?) throws -> TemplateData {
+  let bundle = Bundle(for: DivKitTests.self)
+  let url = bundle.url(forResource: name, withExtension: "json", subdirectory: subdirectory)!
+  let data = try Data(contentsOf: url)
+  return try JSONSerialization.jsonObject(with: data, options: []) as! TemplateData
+}
+
+extension Deserializable {
+  init(file name: String) throws {
+    let bundle = Bundle(for: DivKitTests.self)
+    let url = bundle.url(forResource: name, withExtension: "json")!
+    let data = try Data(contentsOf: url)
+    try self.init(JSONData: data)
+  }
+}
+
+extension DivBlockModelingContext {
+  static let `default` = DivBlockModelingContext()
+
+  init(
+    blockStateStorage: DivBlockStateStorage = DivBlockStateStorage(),
+    galleryResizableInsets: InsetMode.Resizable? = nil
+  ) {
+    self.init(
+      cardId: DivKitTests.cardId,
+      cardLogId: DivKitTests.cardLogId,
+      stateManager: DivStateManager(),
+      blockStateStorage: blockStateStorage,
+      galleryResizableInsets: galleryResizableInsets,
+      imageHolderFactory: ImageHolderFactory(make: { _, _ in FakeImageHolder() })
+    )
+  }
+}
+
+private class FakeImageHolder: ImageHolder {
+  var image: Image? {
+    nil
+  }
+
+  var placeholder: ImagePlaceholder? {
+    nil
+  }
+
+  func requestImageWithCompletion(_: @escaping ((Image?) -> Void)) -> Cancellable? {
+    nil
+  }
+
+  func reused(with _: ImagePlaceholder?, remoteImageURL _: URL?) -> ImageHolder? {
+    nil
+  }
+
+  func equals(_: ImageHolder) -> Bool {
+    true
+  }
+
+  var debugDescription: String {
+    "FakeImageHolder"
+  }
+}
+
+public func XCTAssertThrowsError<T: Equatable & Error, U>(
+  _ expression: @autoclosure () throws -> U,
+  _ expectedError: T
+) {
+  XCTAssertThrowsError(try expression()) { error in
+    XCTAssertEqual(error as? T, expectedError)
+  }
+}

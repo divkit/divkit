@@ -1,0 +1,9 @@
+{
+  "type": "separator",
+  "delimiter_style": {
+    "orientation": "vertical"
+  },
+  "height": {
+    "type": "wrap_content"
+  }
+}

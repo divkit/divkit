@@ -1,0 +1,30 @@
+{
+  "type": "object",
+  "description": "Устанавливает отступы.",
+  "properties": {
+    "left": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "description": "Левый отступ."
+    },
+    "right": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "description": "Правый отступ."
+    },
+    "top": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "description": "Верхний отступ."
+    },
+    "bottom": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "description": "Нижний отступ."
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "default_value": "dp"
+    }
+  }
+}

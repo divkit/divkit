@@ -1,0 +1,472 @@
+tv|Зомбоящик|{
+  "id": "tv",
+  "type": "tv",
+  "title": "Прогноз зомбоящика",
+  "ttl": 900,
+  "utime": 1516282452,
+  "data": {
+    "geo": 213,
+    "url": "https://traditio.wiki/files/2/2a/ZomboYaschik_1.jpg",
+    "tab": [
+      {
+        "type": "now",
+        "url": "https://traditio.wiki/files/thumb/3/3c/Antitv_karikatura_2.jpg/500px-Antitv_karikatura_2.jpg",
+        "title": "Сейчас",
+        "program": [
+          {
+            "type": "serial",
+            "channel": "Первый канал",
+            "title": "Телезритель сожрёт всё",
+            "ttl": 1200,
+            "time": "16:05",
+            "icon": "http://lurkmore.so/images/4/47/TVpigs.jpg",
+            "url": "http://lurkmore.so/images/4/47/TVpigs.jpg"
+          },
+          {
+            "channel": "Россия 666",
+            "title": "Госпропаганда",
+            "ttl": 1200,
+            "time": "16:05",
+            "icon": "https://proua.com.ua/wp-content/uploads/2015/03/911.jpg",
+            "url": "https://proua.com.ua/wp-content/uploads/2015/03/911.jpg"
+          },
+          {
+            "ttl": 1200,
+            "url": "http://lurkmore.so/images/f/f5/Tvzombie.jpg",
+            "time": "16:30",
+            "channel": "НТВ",
+            "icon": "http://lurkmore.so/images/f/f5/Tvzombie.jpg",
+            "title": "СМОТРИ@ТУПЕЙ"
+          },
+          {
+            "time": "16:30",
+            "url": "https://limetur.nethouse.ru/static/doc/0000/0000/0309/309964.pmlw0y7oub.gif",
+            "ttl": 1200,
+            "title": "Реклама",
+            "icon": "https://limetur.nethouse.ru/static/doc/0000/0000/0309/309964.pmlw0y7oub.gif",
+            "channel": "РЕН ТВ"
+          },
+          {
+            "channel": "ТВ-3",
+            "title": "Лженаука и мракобесие",
+            "ttl": 1200,
+            "url": "http://lurkmore.so/images/4/42/Brains.jpg",
+            "icon": "http://lurkmore.so/images/4/42/Brains.jpg",
+            "time": "16:30"
+          },
+          {
+            "type": "serial",
+            "channel": "ТНТ",
+            "title": "Быдлосериал про бандюков",
+            "ttl": 1200,
+            "time": "16:30",
+            "icon": "https://www.miasskiy.ru/wp-content/uploads/2015/11/images__news_2015-11_Raz.jpg",
+            "url": "https://www.miasskiy.ru/wp-content/uploads/2015/11/images__news_2015-11_Raz.jpg"
+          }
+        ],
+        "full_list_button": {
+          "title": "Все передачи",
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%3Fappsearch_header%3D1"
+        }
+      },
+      {
+        "full_list_button": {
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2F%3Fperiod%3Devening%26appsearch_header%3D1",
+          "title": "Все отупления"
+        },
+        "title": "Вечером",
+        "program": [
+          {
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F213367%3FeventId%3D110935095%26appsearch_header%3D1",
+            "time": "18:40",
+            "ttl": 10548,
+            "title": "Дебилизирование",
+            "channel": "ТВ-3",
+            "type": "serial"
+          },
+          {
+            "channel": "ТВ Центр",
+            "title": "Петросян",
+            "type": "serial",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F289430%3FeventId%3D110799492%26appsearch_header%3D1",
+            "time": "18:44",
+            "ttl": 11148
+          },
+          {
+            "type": "serial",
+            "title": "Словоблудие",
+            "channel": "Пятый канал",
+            "ttl": 10548,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F5940%3FeventId%3D110881199%26appsearch_header%3D1",
+            "time": "18:45"
+          },
+          {
+            "type": "serial",
+            "channel": "ТВ666",
+            "title": "Лицемерие",
+            "ttl": 15348,
+            "time": "19:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1530863%3FeventId%3D110929643%26appsearch_header%3D1"
+          },
+          {
+            "time": "19:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F3087311%3FeventId%3D111013128%26appsearch_header%3D1",
+            "ttl": 10548,
+            "title": "Дом 2",
+            "channel": "ТНТ",
+            "type": "serial"
+          }
+        ],
+        "type": "evening",
+        "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2F%3Fperiod%3Devening%26appsearch_header%3D1"
+      },
+      {
+        "title": "Первый канал",
+        "program": [
+          {
+            "title": "Скандалы, Интриги, Расследования",
+            "ttl": 1548,
+            "time": "16:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1022050%3FeventId%3D111094462%26appsearch_header%3D1"
+          },
+          {
+            "ttl": 5148,
+            "time": "17:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F998000%3FeventId%3D110905596%26appsearch_header%3D1",
+            "title": "Субъективные новости"
+          },
+          {
+            "time": "18:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2196%3FeventId%3D110905597%26appsearch_header%3D1",
+            "ttl": 7848,
+            "title": "Вечерние новости с лицемерием"
+          },
+          {
+            "title": "очная ставка: мутные чуваки долго со вкусом ругаются на камеру",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2983759%3FeventId%3D111094749%26appsearch_header%3D1",
+            "time": "18:45",
+            "ttl": 11748
+          },
+          {
+            "ttl": 15948,
+            "time": "19:50",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2197%3FeventId%3D111094750%26appsearch_header%3D1",
+            "title": "Слово пластыря: чудеса накануне Крещения"
+          },
+          {
+            "ttl": 18048,
+            "time": "21:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2144%3FeventId%3D110905600%26appsearch_header%3D1",
+            "title": "Время отключать мозг"
+          }
+        ],
+        "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F146%3Fappsearch_header%3D1",
+        "type": "channel",
+        "full_list_button": {
+          "title": "Все передачи",
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F146%3Fappsearch_header%3D1"
+        }
+      },
+      {
+        "type": "channel",
+        "full_list_button": {
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F711%3Fappsearch_header%3D1",
+          "title": "Все передачи"
+        },
+        "program": [
+          {
+            "title": "Аналитическая передача: Не думай",
+            "type": "serial",
+            "time": "15:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2966687%3FeventId%3D111085489%26appsearch_header%3D1",
+            "ttl": 1548
+          },
+          {
+            "title": "И так схавают. Познавательная передача.",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F4715%3FeventId%3D110787743%26appsearch_header%3D1",
+            "time": "17:00",
+            "ttl": 3948
+          },
+          {
+            "ttl": 5148,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1861001%3FeventId%3D110787744%26appsearch_header%3D1",
+            "time": "17:40",
+            "title": "Вести. Киселениада"
+          },
+          {
+            "ttl": 8748,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F3035251%3FeventId%3D110787745%26appsearch_header%3D1",
+            "time": "18:00",
+            "title": "ПГМ"
+          },
+          {
+            "ttl": 12348,
+            "time": "19:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2405028%3FeventId%3D110787746%26appsearch_header%3D1",
+            "title": "Лизоблюдство"
+          },
+          {
+            "time": "20:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F4715%3FeventId%3D110787747%26appsearch_header%3D1",
+            "ttl": 15048,
+            "title": "Спокойной ночи, хомячки"
+          }
+        ],
+        "title": "Россия 666",
+        "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F711%3Fappsearch_header%3D1"
+      },
+      {
+        "title": "НТВ",
+        "program": [
+          {
+            "ttl": 1548,
+            "time": "16:30",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2065157%3FeventId%3D110806384%26appsearch_header%3D1",
+            "title": "Манипуляция сознанием"
+          },
+          {
+            "time": "17:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F258270%3FeventId%3D110806385%26appsearch_header%3D1",
+            "ttl": 8748,
+            "title": "Профессия — жополиз",
+            "type": "serial"
+          },
+          {
+            "title": "Ложь Сегодня",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F7030%3FeventId%3D110806386%26appsearch_header%3D1",
+            "time": "19:00",
+            "ttl": 11148
+          },
+          {
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F258270%3FeventId%3D110806387%26appsearch_header%3D1",
+            "time": "19:40",
+            "ttl": 18348,
+            "title": "Насилие, Тупость, Враньё.",
+            "type": "serial"
+          },
+          {
+            "time": "21:40",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F3271989%3FeventId%3D110806388%26appsearch_header%3D1",
+            "ttl": 25548,
+            "title": "Еще один говносериал про бандюков. 79678-я и 79679-я серии",
+            "type": "serial"
+          },
+          {
+            "ttl": 27348,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1994930%3FeventId%3D110806389%26appsearch_header%3D1",
+            "time": "23:40",
+            "title": "Деградация Сегодня"
+          }
+        ],
+        "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F162%3Fappsearch_header%3D1",
+        "type": "channel",
+        "full_list_button": {
+          "title": "Все передачи",
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F162%3Fappsearch_header%3D1"
+        }
+      },
+      {
+        "full_list_button": {
+          "title": "Все передачи",
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F649%3Fappsearch_header%3D1"
+        },
+        "type": "channel",
+        "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F649%3Fappsearch_header%3D1",
+        "title": "Зомбоцентр",
+        "program": [
+          {
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F537705%3FeventId%3D110799483%26appsearch_header%3D1",
+            "time": "15:05",
+            "ttl": 1548,
+            "title": "Отец Браун. «Дьявольская пыль». «Лицо смерти»",
+            "type": "serial"
+          },
+          {
+            "ttl": 4548,
+            "time": "17:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2446113%3FeventId%3D110799486%26appsearch_header%3D1",
+            "title": "Проплаченые куски произвольного видеоряда под монотонный текст"
+          },
+          {
+            "title": "Поют, пляшут и показывают голую жопу",
+            "type": "serial",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F289430%3FeventId%3D110799488%26appsearch_header%3D1",
+            "time": "17:50",
+            "ttl": 7788
+          },
+          {
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F289430%3FeventId%3D110799492%26appsearch_header%3D1",
+            "time": "18:44",
+            "ttl": 11148,
+            "title": "Выключи мозг. 8-я серия",
+            "type": "serial"
+          },
+          {
+            "title": "Вечные темы: про пожрать, про жизнь, про неизведанное",
+            "ttl": 12348,
+            "time": "19:40",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F5518%3FeventId%3D110799495%26appsearch_header%3D1"
+          },
+          {
+            "title": "Если по телевизору месяц показывать лошадиную жопу, то она тоже станет знаменитой.",
+            "time": "20:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F5519%3FeventId%3D110799498%26appsearch_header%3D1",
+            "ttl": 13548
+          }
+        ]
+      },
+      {
+        "type": "channel",
+        "full_list_button": {
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F18%3Fappsearch_header%3D1",
+          "title": "Все передачи"
+        },
+        "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F18%3Fappsearch_header%3D1",
+        "title": "РЕН ТВ",
+        "program": [
+          {
+            "ttl": 1548,
+            "time": "16:30",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F159307%3FeventId%3D110929999%26appsearch_header%3D1",
+            "title": "Лохотрон"
+          },
+          {
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1796111%3FeventId%3D110930002%26appsearch_header%3D1",
+            "time": "17:00",
+            "ttl": 5148,
+            "title": "Развод на диване"
+          },
+          {
+            "title": "Шок! Инопланетяне среди нас!",
+            "ttl": 8748,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1531546%3FeventId%3D110930006%26appsearch_header%3D1",
+            "time": "18:00"
+          },
+          {
+            "ttl": 10548,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F603560%3FeventId%3D110930008%26appsearch_header%3D1",
+            "time": "19:00",
+            "title": "Реклама"
+          },
+          {
+            "title": "Мозготрах",
+            "ttl": 12348,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F159307%3FeventId%3D110930009%26appsearch_header%3D1",
+            "time": "19:30"
+          },
+          {
+            "ttl": 18948,
+            "time": "20:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2920581%3FeventId%3D111033673%26appsearch_header%3D1",
+            "icon": "https://api.yastatic.net/morda-logo/i/yandex-app/tv/movie_black.1.png",
+            "type": "film",
+            "title": "Реклама"
+          }
+        ]
+      },
+      {
+        "type": "channel",
+        "full_list_button": {
+          "title": "Все передачи",
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F698%3Fappsearch_header%3D1"
+        },
+        "program": [
+          {
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1070841%3FeventId%3D110935091%26appsearch_header%3D1",
+            "time": "16:30",
+            "ttl": 1548,
+            "title": "Приглушая голос разума"
+          },
+          {
+            "title": "НЛО 2: зелёные человечки начали потихоньку вылезать",
+            "ttl": 3648,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1070841%3FeventId%3D110935092%26appsearch_header%3D1",
+            "time": "17:00"
+          },
+          {
+            "time": "17:35",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1070842%3FeventId%3D110935093%26appsearch_header%3D1",
+            "ttl": 5748,
+            "title": "Лженаука и мракобесие. РАН не пройдет!"
+          },
+          {
+            "title": "Битва Олигофренов: Чумак vs Кашпировский",
+            "ttl": 7548,
+            "time": "18:10",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F1070842%3FeventId%3D110935094%26appsearch_header%3D1"
+          },
+          {
+            "ttl": 10548,
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F213367%3FeventId%3D110935095%26appsearch_header%3D1",
+            "time": "18:40",
+            "type": "serial",
+            "title": "Вакханалия"
+          },
+          {
+            "ttl": 14148,
+            "time": "19:30",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F213367%3FeventId%3D110935096%26appsearch_header%3D1",
+            "type": "serial",
+            "title": "Касл. 136-я серия"
+          }
+        ],
+        "title": "ТВ-3",
+        "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F698%3Fappsearch_header%3D1"
+      },
+      {
+        "full_list_button": {
+          "title": "Все передачи",
+          "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F353%3Fappsearch_header%3D1"
+        },
+        "type": "channel",
+        "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fchannels%2F353%3Fappsearch_header%3D1",
+        "program": [
+          {
+            "ttl": 1548,
+            "time": "16:30",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2944305%3FeventId%3D110928101%26appsearch_header%3D1",
+            "type": "serial",
+            "title": "Дом 2"
+          },
+          {
+            "type": "serial",
+            "title": "Дом 2",
+            "ttl": 3348,
+            "time": "17:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2944305%3FeventId%3D110928102%26appsearch_header%3D1"
+          },
+          {
+            "ttl": 5148,
+            "time": "17:30",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2944305%3FeventId%3D110928103%26appsearch_header%3D1",
+            "type": "serial",
+            "title": "Дом 2"
+          },
+          {
+            "type": "serial",
+            "title": "Дом 2",
+            "ttl": 6948,
+            "time": "18:00",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2944305%3FeventId%3D110928104%26appsearch_header%3D1"
+          },
+          {
+            "type": "serial",
+            "title": "Дом 2",
+            "ttl": 8748,
+            "time": "18:30",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F2944305%3FeventId%3D110928105%26appsearch_header%3D1"
+          },
+          {
+            "title": "Дом 2",
+            "type": "serial",
+            "url": "yellowskin://?primary_color=%2342435e&secondary_color=%23ffffff&url=https%3A%2F%2Fm.tv.yandex.ru%2F213%2Fprogram%2F3087311%3FeventId%3D111013128%26appsearch_header%3D1",
+            "time": "19:00",
+            "ttl": 10548
+          }
+        ],
+        "title": "ТНТ"
+      }
+    ]
+  },
+  "ttv": 1200
+}

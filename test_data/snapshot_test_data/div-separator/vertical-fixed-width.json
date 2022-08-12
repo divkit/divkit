@@ -1,0 +1,43 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 64
+          },
+          "background": [
+            {
+              "color": "#FFFFFF",
+              "type": "solid"
+            }
+          ],
+          "items": [
+            {
+              "type": "separator",
+              "delimiter_style": {
+                "orientation": "vertical",
+                "color": "#FF0000"
+              },
+              "width": {
+                "type": "fixed",
+                "value": 64
+              },
+              "height": {
+                "type": "match_parent"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

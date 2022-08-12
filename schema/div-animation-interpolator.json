@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "enum": [
+    "linear",
+    "ease",
+    "ease_in",
+    "ease_out",
+    "ease_in_out",
+    "spring"
+  ],
+  "description": "Характер скорости анимации. При значении `spring` — обрезанная до 0.7 анимация затухающих колебаний с параметром `damping=1`. Остальные варианты соответствует кривой Безье:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>"
+}

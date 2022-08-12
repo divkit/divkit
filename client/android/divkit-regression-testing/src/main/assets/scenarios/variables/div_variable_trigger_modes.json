@@ -1,0 +1,239 @@
+{
+  "templates": {
+    "round": {
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 64
+      },
+      "height": {
+        "type": "fixed",
+        "value": 64
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#E74C3C"
+        }
+      ],
+      "border": {
+        "corner_radius": 32
+      },
+      "delimiter_style": {
+        "color": "#0000"
+      }
+    },
+    "button": {
+      "type": "text",
+      "border": {
+        "corner_radius": 8
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#34495E"
+    }
+  },
+  "card": {
+    "log_id": "blink_animation",
+    "variables": [
+      {
+        "name": "thumb_value",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "first_positive_number",
+        "type": "number",
+        "value": 0.0
+      },
+      {
+        "name": "last_positive_number",
+        "type": "number",
+        "value": 0.0
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{thumb_value > 0}",
+        "mode": "on_condition",
+        "actions": [
+          {
+            "log_id": "update: first_positive_number",
+            "url": "div-action://set_variable?name=first_positive_number&value=@{thumb_value}"
+          }
+        ]
+      },
+      {
+        "condition": "@{thumb_value > 0}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update: last_positive_number",
+            "url": "div-action://set_variable?name=last_positive_number&value=@{thumb_value}"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "height": {
+            "type": "match_parent"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "text",
+              "font_size": 18,
+              "font_weight": "medium",
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "bottom": 16
+              },
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#FFF",
+              "text": "Thumb value: @{thumb_value}\nFirst selected positive number: @{first_positive_number}\nLast selected positive number: @{last_positive_number}"
+            },
+            {
+              "type": "slider",
+              "width": {
+                "type": "match_parent"
+              },
+              "max_value": 5,
+              "min_value": -5,
+              "thumb_value_variable": "thumb_value",
+              "thumb_style": {
+                "type": "shape_drawable",
+                "color": "#1ABC9C",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 3
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 32
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                }
+              },
+              "tick_mark_active_style": {
+                "type": "shape_drawable",
+                "color": "#1ABC9C",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 2
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 8
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 8
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 5
+                  }
+                }
+              },
+              "tick_mark_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "stroke": {
+                  "color": "#ffffff",
+                  "width": 2
+                },
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 8
+                  },
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 8
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 5
+                  }
+                }
+              },
+              "track_active_style": {
+                "type": "shape_drawable",
+                "color": "#1ABC9C",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 6
+                  }
+                }
+              },
+              "track_inactive_style": {
+                "type": "shape_drawable",
+                "color": "#20000000",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 32
+                  }
+                }
+              },
+              "thumb_text_style": {
+                "font_size": 16,
+                "text_color": "#34495E",
+                "font_weight": "bold"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

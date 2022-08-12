@@ -1,0 +1,49 @@
+{
+  "type": "object",
+  "description": "Фоновое изображение.",
+  "properties": {
+    "image_url": {
+      "$ref": "common.json#/url",
+      "description": "Ссылка на изображение."
+    },
+    "content_alignment_vertical": {
+      "$ref": "div-alignment-vertical.json",
+      "default_value": "center",
+      "description": "Вертикальное выравнивание изображения."
+    },
+    "content_alignment_horizontal": {
+      "$ref": "div-alignment-horizontal.json",
+      "default_value": "center",
+      "description": "Горизонтальное выравнивание изображения."
+    },
+    "scale": {
+      "$ref": "div-image-scale.json",
+      "default_value": "fill",
+      "description": "Масштабирование изображения."
+    },
+    "alpha": {
+      "type": "number",
+      "default_value": "1.0",
+      "constraint": "number >= 0.0 && number <= 1.0",
+      "description": "Прозрачность изображения."
+    },
+    "preload_required": {
+      "$ref": "common.json#/boolean_int",
+      "default_value": "false",
+      "description": "До показа необходимо предварительно загрузить фоновое изображение.",
+      "platforms": [
+        "android"
+      ]
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "image"
+      ]
+    }
+  },
+  "required": [
+    "image_url",
+    "type"
+  ]
+}

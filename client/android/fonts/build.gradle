@@ -1,0 +1,14 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+dependencies {
+    implementation project(path: ':div-core-views')
+
+    implementation "com.yandex.android.uikit:fonts-ya-regular:$versions.uikit"
+    implementation "com.yandex.android.uikit:fonts-ya-medium:$versions.uikit"
+    implementation "com.yandex.android.uikit:fonts-ya-light:$versions.uikit"
+    implementation "com.yandex.android.uikit:fonts-ya-bold:$versions.uikit"
+
+    implementation "javax.inject:javax.inject:$versions.javax"
+}

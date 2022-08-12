@@ -1,0 +1,58 @@
+###########################
+# Android support classes #
+###########################
+android/support/compat/**
+android/support/constraint/**
+android/support/coreui/**
+android/support/coreutils/**
+android/support/design/**
+android/support/fragment/**
+android/support/graphics/drawable/**
+android/support/graphics/drawable/animated/**
+android/support/mediacompat/**
+android/support/transition/**
+android/support/v4/**
+android/support/v7/**
+
+###########################
+# Dagger
+###########################
+ru/yandex/searchplugin/**/*_MembersInjector.class
+
+#####################
+# Generated classes #
+#####################
+**/R.class
+**/R$*.class
+**/BuildConfig.*
+**/Manifest*.*
+
+###############################################################
+# Yandex components (authlib, speechkit, searchlib and so on) #
+###############################################################
+com/android/volley/**
+com/yandex/android/appanalytics/**
+com/yandex/android/uikit/**
+com/yandex/auth/**
+com/yandex/metricsexternal/**
+com/yandex/sslpinning/extended/**
+ru/yandex/common/session/**
+ru/yandex/lintlib/**
+ru/yandex/searchplugin/histograms/**
+
+###########################
+# Div
+###########################
+
+# POJO data classes
+ru/yandex/searchplugin/div/core/data/**
+
+ru/yandex/searchplugin/div/core/Alignment.class
+ru/yandex/searchplugin/div/core/BackgroundImageDrawable.class
+ru/yandex/searchplugin/div/core/EmptyDrawable.class
+ru/yandex/searchplugin/div/core/ImageLoader.class
+ru/yandex/searchplugin/div/core/Position.class
+ru/yandex/searchplugin/div/core/Size.class
+ru/yandex/searchplugin/div/core/view/BuilderSupport.class
+ru/yandex/searchplugin/div/core/view/DivTableView.class
+ru/yandex/searchplugin/div/core/view/FooterDivViewBuilder.class

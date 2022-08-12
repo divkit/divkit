@@ -1,0 +1,4 @@
+apply plugin: 'com.android.application'
+apply plugin: 'yandex-signer-android'
+
+apply from: "${buildscript.sourceFile.parent}/div-common.gradle"

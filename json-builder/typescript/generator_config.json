@@ -1,0 +1,9 @@
+{
+  "lang": "typescript",
+  "imports": [
+    "{ Exact, IntBoolean, NonEmptyArray } from '../helper'",
+    "{ TemplateBlock, Type } from '../template'",
+    "{ DivExpression } from '../expression'"
+  ],
+  "generateExpressions": true
+}

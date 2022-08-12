@@ -1,0 +1,16 @@
+{
+  "patch": {
+    "changes": [
+      {
+        "id": "div_to_replace",
+        "items": [
+          {
+            "id": "div_to_replace",
+            "type": "text",
+            "text": "Replaced!"
+          }
+        ]
+      }
+    ]
+  }
+}

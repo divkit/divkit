@@ -1,0 +1,103 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "$text": "visible_text",
+      "id": "visible_id",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 88
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#3F28C3"
+        }
+      ],
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "text_color": "#ffffff",
+      "font_size": 14,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Пустое состояние"
+            },
+            {
+              "type": "subtitle",
+              "text": "Можно указать пустое состояние в списке возможных состояний, и тогда при переключении на него блок будет исчезать.\n\nВ примере кнопка исчезает при клике на неё.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "state",
+              "div_id": "sample",
+              "states": [
+                {
+                  "state_id": "visible",
+                  "div": {
+                    "type": "text_block",
+                    "text": "Click to make this button invisible",
+                    "actions": [
+                      {
+                        "log_id": "switch_visible",
+                        "url": "div-action://set_state?state_id=0/sample/empty"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "state_id": "empty"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

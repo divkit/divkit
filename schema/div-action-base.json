@@ -1,0 +1,30 @@
+{
+  "properties": {
+    "log_id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "description": "Идентификатор для логирования."
+    },
+    "url": {
+      "$ref": "common.json#/url",
+      "description": "Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с элементами](../../interaction.dita)."
+    },
+    "referer": {
+      "$ref": "common.json#/url",
+      "description": "Referer-ссылка для логирования."
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Дополнительные параметры, передаются приложению-хосту."
+    },
+    "download_callbacks": {
+      "$ref": "div-download-callbacks.json",
+      "description": "Колбэки, которые вызываются после [дозагрузки данных](../../interaction.dita#loading-data).",
+      "platforms": [
+        "android",
+        "ios"
+      ]
+    }
+  }
+}

@@ -1,0 +1,140 @@
+.outer {
+    position: relative;
+    z-index: 0;
+    box-sizing: border-box;
+    /* test tabs/fixed-width */
+    /*max-width: 100%;*/
+    /*max-height: 100%;*/
+    overflow: hidden;
+    text-decoration: none;
+}
+
+@supports (overflow: clip) {
+    .outer {
+        overflow: clip;
+    }
+}
+
+.outer {
+    color: inherit;
+}
+
+.outer_hide-on-transition-in {
+    visibility: hidden;
+}
+
+.outer_valign-self_top,
+.outer_valign-self_default {
+    align-self: start;
+}
+
+.outer_valign-self_center {
+    align-self: center;
+}
+
+.outer_valign-self_bottom {
+    align-self: end;
+}
+
+.outer_halign-self_left,
+.outer_halign-self_default {
+    justify-self: start;
+}
+
+.outer_halign-self_center {
+    justify-self: center;
+}
+
+.outer_halign-self_right {
+    justify-self: end;
+}
+
+.outer_width_parent {
+    /*Не используем width: 100%, потому что ещё есть маржины*/
+    justify-self: stretch;
+}
+
+.outer_height_parent {
+    /*Не используем height: 100%, потому что ещё есть маржины*/
+    align-self: stretch;
+}
+
+.outer_width_content {
+    /*Для того, чтобы текст был в одну строку*/
+    min-width: max-content;
+}
+
+.outer_height_content {
+    min-height: max-content;
+}
+
+.outer_width-constrained {
+    width: stretch;
+    min-width: 0;
+}
+
+.outer_height-constrained {
+    height: stretch;
+    min-height: 0;
+}
+
+.outer_parent-halign_start {
+    justify-self: start;
+}
+
+.outer_parent-halign_center {
+    justify-self: center;
+}
+
+.outer_parent-halign_end {
+    justify-self: end;
+}
+
+.outer_parent-valign_start {
+    align-self: start;
+}
+
+.outer_parent-valign_center {
+    align-self: center;
+}
+
+.outer_parent-valign_end {
+    align-self: end;
+}
+
+.outer_parent-overlap {
+    grid-area: 1 / 1 / 2 / 2;
+}
+
+.outer_scroll-snap {
+    scroll-snap-align: center;
+}
+
+.outer__border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.outer_visibility_invisible {
+    visibility: hidden;
+}
+
+.outer_visibility_gone {
+    display: none !important;
+}
+
+.outer_has-action-animation {
+    opacity: var(--divkit-animation-opacity-start);
+    transform: scale(var(--divkit-animation-scale-start));
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+
+.outer_has-action-animation:active {
+    opacity: var(--divkit-animation-opacity-end);
+    transform: scale(var(--divkit-animation-scale-end));
+}

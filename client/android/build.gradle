@@ -1,0 +1,175 @@
+import com.yandex.div.gradle.PublicationType
+
+apply from: "$projectDir/version.gradle"
+apply from: "$projectDir/dependencies.gradle"
+
+def publicationType = PublicationType.fromString(project.findProperty("publicationType"))
+
+ext {
+    minSdkVersion = 21
+    compileSdkVersion = 33
+    targetSdkVersion = 31
+    buildToolsVersion = "33.0.0"
+
+    divkitVersionName = "${divkitVersion.versionName}${publicationType.getVersionSuffix(project.properties)}"
+}
+
+buildscript {
+
+    apply from: "$projectDir/dependencies.gradle"
+    apply from: "$projectDir/repositories.gradle", to: buildscript
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:$versions.gradlePlugin"
+        classpath "com.asarkar.gradle:build-time-tracker:3.0.1"
+        classpath "com.yandex.android:appmetrica-build-plugin:$versions.metricaCrashPlugin"
+        classpath "com.yandex.mobile.perftests:perftests-plugin:1.3.3"
+        classpath "com.yandex.mobile.tools:upload-beta:$versions.uploadBeta"
+        classpath "com.yandex.mobile.tools:yandex-signer:$versions.signer"
+        classpath "com.yandex.test:screenshot-test-plugin:1.0.0"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.kotlin"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$versions.kotlin"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:3.0.1'
+    }
+}
+
+allprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+        kotlinOptions {
+            freeCompilerArgs = ['-Xjvm-default=all']
+            languageVersion = "1.5"
+            apiVersion = "1.5"
+        }
+    }
+
+    repositories {
+        maven { url 'https://artifactory.yandex.net/alicekit' }
+        maven { url 'https://artifactory.yandex.net/google-android' }
+        maven { url 'https://artifactory.yandex.net/central' }
+        google()
+        mavenCentral()
+    }
+}
+
+subprojects {
+    tasks.withType(Test) {
+        // Do not use parallel forks, because profit from parallel execution is eaten by Robolectric initialization in every test process
+        maxParallelForks = 1
+        maxHeapSize = "4g"
+    }
+
+    configurations.all {
+        exclude group: 'com.intellij', module: 'annotations'
+    }
+
+    afterEvaluate {
+        if (plugins.hasPlugin("maven-publish")) {
+            project.tasks.withType(PublishToMavenRepository) { task ->
+                teamcityPublish.dependsOn(task)
+            }
+        }
+
+        if (plugins.hasPlugin("jacoco")) {
+            project.tasks.named('jacocoTestReport') { task ->
+                unitTests.dependsOn(task)
+            }
+        }
+
+        if (project.hasProperty('teamcity.version')) {
+            project.tasks.withType(PublishToMavenRepository) { task ->
+                task.finalizedBy(reportBuildNumberToTeamcity)
+            }
+        }
+
+        project.tasks.withType(PublishToMavenLocal) { task ->
+            task.finalizedBy(reportVersion)
+        }
+    }
+}
+
+apply plugin: 'com.asarkar.gradle.build-time-tracker'
+
+buildTimeTracker {
+    minTaskDuration = Duration.ofSeconds(1)
+    sort = true
+    showBars = false
+}
+
+wrapper {
+    gradleVersion "7.4.1"
+    distributionType = Wrapper.DistributionType.ALL
+    distributionUrl "https://artifactory.yandex.net/artifactory/gradle-distributions/distributions/gradle-$gradleVersion-all.zip"
+}
+
+task reportVersion {
+    doLast {
+        println "DivKit version ${rootProject.property('divkitVersionName')}"
+    }
+}
+
+task reportBuildNumberToTeamcity {
+    doLast {
+        println "##teamcity[buildNumber \'${rootProject.property('divkitVersionName')}\']"
+    }
+}
+
+task assembleDemoDebug {
+    dependsOn ':divkit-demo-app:assembleDebug'
+}
+
+task assembleDemoDebugBundle {
+    dependsOn ':divkit-demo-app:bundleDebug'
+}
+
+task assembleDemoRelease {
+    dependsOn ':divkit-demo-app:assembleRelease'
+}
+
+task assembleDemoReleaseBundle {
+    dependsOn ':divkit-demo-app:bundleRelease'
+}
+
+task uploadBeta {
+    dependsOn ':divkit-demo-app:uploadBeta'
+}
+
+task unitTests
+
+task finalVerification {
+    dependsOn unitTests
+}
+
+task teamcityPullRequests {
+    dependsOn assembleDemoDebug, assembleDemoRelease
+    finalizedBy finalVerification
+}
+
+task teamcityDev {
+    dependsOn assembleDemoDebug, assembleDemoRelease
+    finalizedBy finalVerification, uploadBeta
+}
+
+task teamcityPublish {
+    dependsOn assembleDemoRelease
+    finalizedBy finalVerification
+}
+
+task sandboxRelease {
+    dependsOn assembleDemoRelease, assembleDemoReleaseBundle
+    finalizedBy finalVerification, uploadBeta
+}
+
+apply plugin: 'perfTests'
+
+task assemblePerf {
+    dependsOn ':divkit-demo-app:assemblePerfTests', ':divkit-perftests:assemblePerfTests'
+}
+
+setupHPE {
+    perfRoot = file("${buildDir.absolutePath}/div/perf")
+}
+
+task teamcityPerf {
+    dependsOn assemblePerf
+}

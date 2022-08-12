@@ -1,0 +1,56 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivGifImage tests should create card with templates 1`] = `
+{
+  "templates": {
+    "gif": {
+      "type": "gif",
+      "aspect": {
+        "$ratio": "aspect_ratio"
+      },
+      "width": {
+        "type": "fixed",
+        "value": 100
+      },
+      "$gif_url": "url"
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "gif",
+          "url": "https://image.url",
+          "aspect_ratio": 2
+        }
+      }
+    ]
+  }
+}
+`;
+
+exports[`DivGifImage tests should create simple block 1`] = `
+{
+  "type": "gif",
+  "border": {
+    "corner_radius": 1,
+    "stroke": {
+      "width": 1,
+      "color": "#cc0"
+    }
+  },
+  "gif_url": "https://image.ru",
+  "height": {
+    "type": "fixed",
+    "value": 200
+  },
+  "preview": "BASE64PREVIEWDATA",
+  "scale": "fit",
+  "width": {
+    "type": "fixed",
+    "value": 100
+  }
+}
+`;

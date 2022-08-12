@@ -1,0 +1,229 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Табы. Высота первого таба определяется его содержимым, а высота остальных [зависит от платформы](../../location.dita#tabs).",
+  "generate_swift_optional_arguments": false,
+  "definitions": {
+    "item": {
+      "type": "object",
+      "generate_swift_optional_arguments": false,
+      "properties": {
+        "title": {
+          "$ref": "common.json#/non_empty_string",
+          "description": "Заголовок таба."
+        },
+        "title_click_action": {
+          "$ref": "div-action.json",
+          "description": "Действие при нажатии на заголовок активного таба."
+        },
+        "div": {
+          "$ref": "div.json",
+          "description": "Содержимое таба."
+        }
+      },
+      "required": [
+        "title",
+        "div"
+      ],
+      "description": "Таб."
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "tabs"
+          ]
+        },
+        "title_paddings": {
+          "$ref": "div-edge-insets.json",
+          "default_value": "{\"left\": 12,\"right\": 12,\"top\": 0,\"bottom\": 8}",
+          "description": "Отступы в названии таба."
+        },
+        "separator_paddings": {
+          "$ref": "div-edge-insets.json",
+          "default_value": "{\"left\": 12,\"right\": 12,\"top\": 0,\"bottom\": 0}",
+          "description": "Отступы от разделительной черты. Не используется, если `has_separator = false`."
+        },
+        "tab_title_style": {
+          "type": "object",
+          "properties": {
+            "font_size": {
+              "$ref": "common.json#/non_negative_integer",
+              "default_value": "12",
+              "description": "Размер шрифта заголовка."
+            },
+            "font_size_unit": {
+              "$ref": "div-size-unit.json",
+              "default_value": "sp",
+              "description": "Единицы измерения размера шрифта заголовка.",
+              "platforms": [
+                "android"
+              ]
+            },
+            "paddings": {
+              "$ref": "div-edge-insets.json",
+              "default_value": "{\"left\": 8,\"right\": 8,\"top\": 6,\"bottom\": 6}",
+              "description": "Отступы вокруг заголовка таба."
+            },
+            "item_spacing": {
+              "$ref": "common.json#/non_negative_integer",
+              "default_value": "0",
+              "description": "Интервал между соседними заголовками табов."
+            },
+            "line_height": {
+              "$ref": "common.json#/non_negative_integer",
+              "description": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта."
+            },
+            "letter_spacing": {
+              "type": "number",
+              "default_value": "0",
+              "description": "Интервал между символами заголовка."
+            },
+            "font_weight": {
+              "$ref": "div-font-weight.json",
+              "default_value": "regular",
+              "description": "Начертание. Вместо него используйте `active_font_weight` и `inactive_font_weight`.",
+              "deprecated": true
+            },
+            "active_font_weight": {
+              "$ref": "div-font-weight.json",
+              "description": "Начертание заголовка активного таба.",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "inactive_font_weight": {
+              "$ref": "div-font-weight.json",
+              "description": "Начертание заголовка неактивного таба.",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "font_family": {
+              "$ref": "div-font-family.json",
+              "default_value": "text",
+              "description": "Семейство шрифтов"
+            },
+            "active_text_color": {
+              "$ref": "common.json#/color",
+              "default_value": "#CC000000",
+              "description": "Цвет текста заголовка активного таба."
+            },
+            "inactive_text_color": {
+              "$ref": "common.json#/color",
+              "default_value": "#80000000",
+              "description": "Цвет текста заголовка неактивного таба."
+            },
+            "active_background_color": {
+              "$ref": "common.json#/color",
+              "default_value": "#FFFFDC60",
+              "description": "Цвет фона заголовка активного таба."
+            },
+            "inactive_background_color": {
+              "$ref": "common.json#/color",
+              "description": "Цвет фона заголовка неактивного таба.",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "corner_radius": {
+              "$ref": "common.json#/non_negative_integer",
+              "description": "Радиус скругления углов заголовка. Если параметр не задан, то максимальное скругление (половина от наименьшего размера). Не используется, если задан параметр `corners_radius`.",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "corners_radius": {
+              "$ref": "div-corners-radius.json",
+              "description": "Радиусы скругления углов нескольких заголовков. Пустые значения заменяются на `corner_radius`.",
+              "platforms": [
+                "android",
+                "web"
+              ]
+            },
+            "animation_type": {
+              "type": "string",
+              "enum": [
+                "slide",
+                "fade",
+                "none"
+              ],
+              "default_value": "slide",
+              "description": "Анимация смены активного заголовка.",
+              "platforms": [
+                "android",
+                "ios"
+              ]
+            },
+            "animation_duration": {
+              "$ref": "common.json#/non_negative_integer",
+              "default_value": "300",
+              "description": "Длительность анимации смены активного заголовка."
+            }
+          },
+          "description": "Стиль оформления заголовков табов."
+        },
+        "selected_tab": {
+          "$ref": "common.json#/non_negative_integer",
+          "default_value": "0",
+          "description": "Порядковый номер таба, который будет открываться по умолчанию."
+        },
+        "has_separator": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "description": "Разделительная черта между табами и содержимым."
+        },
+        "switch_tabs_by_content_swipe_enabled": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "true",
+          "description": "Переключение табов скроллом по содержимому."
+        },
+        "separator_color": {
+          "$ref": "common.json#/color",
+          "default_value": "#14000000",
+          "description": "Цвет разделителя."
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/item"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Табы. Переход между табами можно осуществить с помощью:<li>`div-action://set_current_item?id=&item=` — задать текущий таб с порядковым номером `item` внутри элемента, с заданным `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — перейти на следующий таб внутри элемента, с заданным `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — перейти на предыдущий таб внутри элемента, с заданным `id`.</li></p><p>Опциональный параметр `overflow` позволяет задать навигацию при достижении первого или последнего элемента:<li>`clamp` — переход остановится на пограничном элементе;</li><li>`ring` — переход в начало или конец, в зависимости от текущего элемента.</li></p><p>По умолчанию, `clamp`."
+        },
+        "dynamic_height": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "description": "Обновление высоты при смене активного элемента. В браузере значение всегда `true`.",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        },
+        "restrict_parent_scroll": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "description": "При включенном параметре табы не будут передавать жест скролла родительскому элементу.",
+          "platforms": [
+            "android",
+            "ios"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "type",
+    "items"
+  ]
+}

@@ -1,0 +1,13 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "${project.projectDir}/../publish-android.gradle"
+
+dependencies {
+    implementation project(path: ':assertion')
+
+    implementation "javax.inject:javax.inject:$versions.javax"
+    implementation "androidx.annotation:annotation:$versions.androidx.annotation"
+    implementation "androidx.collection:collection:$versions.androidx.collection"
+    implementation "androidx.core:core:$versions.androidx.core"
+    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+}

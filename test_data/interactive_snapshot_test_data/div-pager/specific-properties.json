@@ -1,0 +1,173 @@
+{
+  "div_data": {
+    "templates": {
+      "div_base": {
+        "type": "pager",
+        "width": {
+          "type": "fixed",
+          "value": 360
+        },
+        "height": {
+          "type": "fixed",
+          "value": 200
+        }
+      },
+      "test_container": {
+        "type": "container",
+        "orientation": "overlap",
+        "border": {
+          "stroke": {
+            "color": "#000000"
+          }
+        }
+      },
+      "text_block": {
+        "type": "text",
+        "font_size": 14,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "alignment_horizontal": "center",
+        "text_color": "#1ABC9C",
+        "paddings": {
+          "top": 4,
+          "bottom": 4,
+          "left": 8,
+          "right": 8
+        },
+        "margins": {
+          "left": 8,
+          "right": 8
+        },
+        "width": {
+          "type": "fixed",
+          "value": 40
+        },
+        "height": {
+          "type": "fixed",
+          "value": 50
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#34495E"
+          }
+        ],
+        "border": {
+          "corner_radius": 6
+        }
+      }
+    },
+    "card": {
+      "type": "div2",
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "page_width",
+          "type": "number",
+          "value": 20
+        },
+        {
+          "name": "item_spacing",
+          "type": "integer",
+          "value": 5
+        },
+        {
+          "name": "orientation",
+          "type": "string",
+          "value": "horizontal"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "test_container",
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "items": [
+              {
+                "type": "div_base",
+                "layout_mode": {
+                  "type": "percentage",
+                  "page_width": {
+                    "type": "percentage",
+                    "value": "@{page_width}"
+                  }
+                },
+                "orientation": "@{orientation}",
+                "item_spacing": {
+                  "type": "fixed",
+                  "value": "@{item_spacing}"
+                },
+                "items": [
+                  {
+                    "type": "text_block",
+                    "text": "Item0",
+                    "width": {
+                      "type": "match_parent"
+                    }
+                  },
+                  {
+                    "type": "text_block",
+                    "text": "Item1",
+                    "width": {
+                      "type": "match_parent"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=item_spacing&value=20",
+          "log_id": "item_spacing"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=page_width&value=10",
+          "log_id": "page_width"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=orientation&value=vertical",
+          "log_id": "orientation"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=item_spacing&value=5",
+          "log_id": "restore: item_spacing"
+        },
+        {
+          "url": "div-action://set_variable?name=page_width&value=20",
+          "log_id": "restore: page_width"
+        },
+        {
+          "url": "div-action://set_variable?name=orientation&value=horizontal",
+          "log_id": "restore: orientation"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

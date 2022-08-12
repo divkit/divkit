@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_optional_property"
+      ]
+    },
+    "property": {
+      "$ref": "common.json#/non_empty_string"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

@@ -1,0 +1,4 @@
+{
+    "lang": "swift",
+    "header": "import CommonCore\nimport Foundation\nimport Serialization\n\n"
+}

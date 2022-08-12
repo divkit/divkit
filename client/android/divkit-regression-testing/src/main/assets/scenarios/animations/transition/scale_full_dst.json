@@ -1,0 +1,97 @@
+{
+  "log_id": "transition/scale_full_dst",
+  "transition_animation_selector": "data_change",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "height": {
+          "type": "fixed",
+          "value": 320
+        },
+        "background": [
+          {
+            "type": "solid",
+            "color": "#2C3E50"
+          }
+        ],
+        "orientation": "overlap",
+        "items": [
+          {
+            "type": "image",
+            "id": "lenna",
+            "width": {
+              "type": "fixed",
+              "value": 160
+            },
+            "height": {
+              "type": "fixed",
+              "value": 160
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "border": {
+              "corner_radius": 12
+            },
+            "alignment_vertical": "center",
+            "alignment_horizontal": "center",
+            "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
+            "placeholder_color": "#3498DB",
+            "transition_in": {
+              "type": "scale",
+              "duration": 500
+            },
+            "transition_out": {
+              "type": "scale",
+              "duration": 500
+            }
+          },
+          {
+            "type": "text",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "fixed",
+              "value": 48
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "border": {
+              "corner_radius": 8
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#1ABC9C"
+              }
+            ],
+            "alignment_vertical": "bottom",
+            "alignment_horizontal": "center",
+            "font_size": 18,
+            "font_weight": "medium",
+            "text_alignment_vertical": "center",
+            "text_alignment_horizontal": "center",
+            "text_color": "#34495E",
+            "text": "GO BACK",
+            "actions": [
+              {
+                "log_id": "perform_backward_transition",
+                "url": "div-demo-action://set_data?path=scenarios/animations/transition/scale_full_src.json"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

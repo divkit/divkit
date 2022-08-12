@@ -1,0 +1,11 @@
+{
+  "type": "string",
+  "enum": [
+    "none",
+    "data_change",
+    "state_change",
+    "any_change"
+  ],
+  "description": "Варианты событий, которые приведут к запуску анимаций в дочерних элементах. Родительским элементом может быть [data](div-data.md) или [state](div-state.md).",
+  "deprecated": true
+}

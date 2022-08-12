@@ -1,0 +1,191 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "background_color"
+        }
+      ],
+      "font_size": 18,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#34495E"
+    }
+  },
+  "card": {
+    "log_id": "action_animations",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#2C3E50"
+            }
+          ],
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "button",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#00CCCC",
+              "text": "NATIVE",
+              "actions": [
+                {
+                  "log_id": "native_button_press",
+                  "url": "div-action://animation/native"
+                }
+              ],
+              "action_animation": {
+                "name": "native"
+              }
+            },{
+              "type": "button",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#1ABC9C",
+              "text": "FADE",
+              "actions": [
+                {
+                  "log_id": "fade_button_press",
+                  "url": "div-action://animation/fade"
+                }
+              ],
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1.0,
+                "end_value": 0.5,
+                "duration": 300,
+                "interpolator": "ease_in_out"
+              }
+            },
+            {
+              "type": "button",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#2ECC71",
+              "text": "SCALE",
+              "actions": [
+                {
+                  "log_id": "scale_button_press",
+                  "url": "div-action://animation/scale"
+                }
+              ],
+              "action_animation": {
+                "name": "scale",
+                "start_value": 1.0,
+                "end_value": 0.95,
+                "duration": 300,
+                "interpolator": "ease_in_out"
+              }
+            },
+            {
+              "type": "button",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#F1C40F",
+              "text": "SET",
+              "actions": [
+                {
+                  "log_id": "set_button_press",
+                  "url": "div-action://animation/set"
+                }
+              ],
+              "action_animation": {
+                "name": "set",
+                "items": [
+                  {
+                    "name": "fade",
+                    "start_value": 1.0,
+                    "end_value": 0.5,
+                    "duration": 300,
+                    "interpolator": "ease_in_out"
+                  },
+                  {
+                    "name": "scale",
+                    "start_value": 1.0,
+                    "end_value": 0.95,
+                    "duration": 300,
+                    "interpolator": "ease_in_out"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "button",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "margins": {
+                "bottom": 16
+              },
+              "background_color": "#E67E22",
+              "text": "NO ANIMATION",
+              "actions": [
+                {
+                  "log_id": "no_animation_button_press",
+                  "url": "div-action://animation/no_animation"
+                }
+              ],
+              "action_animation": {
+                "name": "no_animation"
+              }
+            },
+            {
+              "type": "button",
+              "height": {
+                "type": "fixed",
+                "value": 48
+              },
+              "background_color": "#E74C3C",
+              "text": "NO ACTION",
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1.0,
+                "end_value": 0.5,
+                "duration": 300,
+                "interpolator": "ease_in_out"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

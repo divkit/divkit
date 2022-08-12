@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "description": "Процентное значение размера элемента.",
+  "properties": {
+    "value": {
+      "$ref": "common.json#/positive_number",
+      "description": "Значение размера элемента."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "percentage"
+      ]
+    }
+  },
+  "required": [
+    "type",
+    "value"
+  ]
+}

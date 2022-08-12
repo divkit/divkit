@@ -1,0 +1,29 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_array",
+      "array": [
+        {
+          "type": "entity_with_complex_property",
+          "property": {
+            "$value": "c_link"
+          }
+        },
+        {
+          "type": "entity_with_required_property",
+          "$property": "r_link"
+        },
+        {
+          "type": "entity_with_string_enum_property",
+          "$property": "r_r_link"
+        }
+      ]
+    }
+  },
+  "entity": {
+    "type": "t_0",
+    "c_link": "https://ya.ru",
+    "r_link": "Some text",
+    "r_r_link": "second"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "tabs",
+  "switch_tabs_by_content_swipe_enabled": false,
+  "items": [
+    {
+      "title": "test1",
+      "div": {
+        "type": "text",
+        "text": "Ул. Льва Толстого, 16"
+      }
+    }
+  ]
+}

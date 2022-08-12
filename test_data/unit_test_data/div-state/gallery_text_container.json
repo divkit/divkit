@@ -1,0 +1,49 @@
+{
+  "type": "gallery",
+  "items": [
+    {
+      "type": "text",
+      "text": "Line 1"
+    },
+    {
+      "type": "container",
+      "orientation": "vertical",
+      "items": [
+        {
+          "type": "text",
+          "text": "Line 1"
+        },
+        {
+          "type": "state",
+          "div_id": "more",
+          "states": [
+            {
+              "state_id": "collapsed"
+            },
+            {
+              "state_id": "expanded",
+              "div": {
+                "type": "container",
+                "orientation": "vertical",
+                "items": [
+                  {
+                    "type": "text",
+                    "text": "Line 2"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Line 3"
+                  },
+                  {
+                    "type": "text",
+                    "text": "Line 4"
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

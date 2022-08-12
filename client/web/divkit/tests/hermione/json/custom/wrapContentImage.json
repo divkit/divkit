@@ -1,0 +1,332 @@
+{
+    "card": {
+        "states": [
+            {
+                "div": {
+                    "paddings": {
+                        "bottom": 48
+                    },
+                    "background": [
+                        {
+                            "type": "solid",
+                            "color": "#1B2129"
+                        }
+                    ],
+                    "type": "container",
+                    "items": [
+                        {
+                            "paddings": {
+                                "bottom": 48,
+                                "top": 48
+                            },
+                            "type": "container",
+                            "items": [
+                                {
+                                    "paddings": {
+                                        "right": 48,
+                                        "left": 48
+                                    },
+                                    "type": "container",
+                                    "items": [
+                                        {
+                                            "type": "container",
+                                            "items": [
+                                                {
+                                                    "text_color": "#e6eef9",
+                                                    "type": "text",
+                                                    "text": "Илон Маск",
+                                                    "font_size": 64,
+                                                    "font_weight": "medium",
+                                                    "line_height": 76,
+                                                    "height": {
+                                                        "value": 80,
+                                                        "type": "fixed"
+                                                    }
+                                                },
+                                                {
+                                                    "type": "text",
+                                                    "text_color": "#e6eef9",
+                                                    "text": "Американский предприниматель",
+                                                    "font_size": 36,
+                                                    "height": {
+                                                        "value": 46,
+                                                        "type": "fixed"
+                                                    },
+                                                    "font_weight": "medium",
+                                                    "line_height": 46
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "orientation": "horizontal"
+                                },
+                                {
+                                    "paddings": {
+                                        "right": 48,
+                                        "left": 48
+                                    },
+                                    "type": "gallery",
+                                    "item_spacing": 16,
+                                    "items": [
+                                        {
+                                            "line_height": 46,
+                                            "paddings": {
+                                                "right": 24,
+                                                "bottom": 13,
+                                                "left": 24,
+                                                "top": 13
+                                            },
+                                            "text": "Фильмы",
+                                            "type": "text",
+                                            "border": {
+                                                "corner_radius": 24
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "background": [
+                                                {
+                                                    "type": "solid",
+                                                    "color": "#374352"
+                                                }
+                                            ],
+                                            "font_size": 36,
+                                            "text_color": "#fff",
+                                            "font_weight": "medium"
+                                        },
+                                        {
+                                            "line_height": 46,
+                                            "paddings": {
+                                                "right": 24,
+                                                "bottom": 13,
+                                                "left": 24,
+                                                "top": 13
+                                            },
+                                            "text": "Предприниматели",
+                                            "type": "text",
+                                            "border": {
+                                                "corner_radius": 24
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "background": [
+                                                {
+                                                    "type": "solid",
+                                                    "color": "#374352"
+                                                }
+                                            ],
+                                            "font_size": 36,
+                                            "text_color": "#fff",
+                                            "font_weight": "medium"
+                                        },
+                                        {
+                                            "line_height": 46,
+                                            "paddings": {
+                                                "right": 24,
+                                                "bottom": 13,
+                                                "left": 24,
+                                                "top": 13
+                                            },
+                                            "text": "Смотрите также",
+                                            "type": "text",
+                                            "border": {
+                                                "corner_radius": 24
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "background": [
+                                                {
+                                                    "type": "solid",
+                                                    "color": "#374352"
+                                                }
+                                            ],
+                                            "font_size": 36,
+                                            "text_color": "#fff",
+                                            "font_weight": "medium"
+                                        }
+                                    ],
+                                    "margins": {
+                                        "top": 48
+                                    }
+                                }
+                            ]
+                        },
+                        {
+                            "type": "container",
+                            "items": [
+                                {
+                                    "type": "gallery",
+                                    "item_spacing": 0,
+                                    "items": [
+                                        {
+                                            "type": "image",
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        },
+                                        {
+                                            "type": "image",
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "height": {
+                                                "type": "match_parent"
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "height": {
+                                                "type": "match_parent"
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "height": {
+                                                "type": "match_parent"
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "height": {
+                                                "type": "match_parent"
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            }
+                                        },
+                                        {
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "type": "image",
+                                            "height": {
+                                                "type": "match_parent"
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            }
+                                        },
+                                        {
+                                            "type": "image",
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "height": {
+                                                "type": "match_parent"
+                                            },
+                                            "width": {
+                                                "type": "wrap_content"
+                                            }
+                                        },
+                                        {
+                                            "type": "image",
+                                            "image_url": "https://yastatic.net/s3/home/v16/services/tv2.svg",
+                                            "width": {
+                                                "type": "wrap_content"
+                                            },
+                                            "height": {
+                                                "type": "match_parent"
+                                            }
+                                        }
+                                    ],
+                                    "orientation": "horizontal",
+                                    "height": {
+                                        "type": "fixed",
+                                        "value": 344
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    "width": {
+                        "type": "match_parent"
+                    }
+                },
+                "state_id": 0
+            }
+        ],
+        "log_id": "search_rich"
+    }
+}

@@ -1,0 +1,188 @@
+apply from: "${project.projectDir}/../div-application.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+apply from: "ui-tests.gradle"
+
+apply plugin: 'upload-beta-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.yandex.test.screenshot-test-plugin'
+
+android {
+    buildFeatures {
+        buildConfig = true
+        viewBinding = true
+    }
+
+    signingConfigs {
+        yandexDevKey {
+            storeFile rootProject.file("$projectDir/../yandex-dev.keystore")
+            storePassword 'android'
+            keyAlias 'yandex-dev'
+            keyPassword 'android'
+        }
+    }
+
+    defaultConfig {
+        buildConfigField "String", "ADS_BLOCK_ID", "\"${property('mobileAds.blockId')}\""
+        testInstrumentationRunner "com.yandex.test.runner.AllureAwareAndroidRunner"
+
+        if (!project.hasProperty("include-regression-tests")) {
+            testInstrumentationRunnerArguments.notAnnotation = "com.yandex.alicekit.uitests.annotations.Regression"
+        }
+
+        versionCode divkitVersion.versionCode + divkitVersion.buildNumber
+
+        buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
+        buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.yandexDevKey
+        }
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+
+            // Yandex dev key is required by passport in release builds.
+            // Will be replaced with Yandex key by yandex-signer plugin when built on teamcity
+            signingConfig signingConfigs.yandexDevKey
+            yandexSigner.enabled = true
+        }
+        perf {
+            initWith buildTypes.release
+            matchingFallbacks = ['release']
+        }
+    }
+
+    sourceSets {
+        test.resources.srcDirs += 'src/main/assets' // needed to access assets in unit tests. https://stackoverflow.com/a/44180100/190148
+        main.assets.srcDirs += "../../../test_data/"
+        androidTest.java.srcDirs += 'src/screenshotTest/java'
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        eachDependency { details ->
+            if (details.requested.group == 'androidx.lifecycle') {
+                details.useVersion versions.androidx.lifecycle
+            }
+        }
+    }
+}
+
+def yandexSignerEnabled = Boolean.parseBoolean(project.findProperty("yandexSignerEnabled"))
+
+yandexSigner {
+    enabled = yandexSignerEnabled
+    oauthToken = System.env['YANDEX_SIGNER_OAUTH']
+    applicationName = 'DivkitDemoApp'
+    signedFileSuffix ''
+}
+
+yandexBundleSigner {
+    enabled = yandexSignerEnabled
+    applicationName = 'DivkitDemoAppBundle'
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div-core-views')
+    implementation project(path: ':div')
+    implementation project(path: ':div-json')
+    implementation project(path: ':div-lottie')
+    implementation project(path: ':div-pinch-to-zoom')
+    implementation project(path: ':divkit-regression-testing')
+    implementation project(path: ':fonts')
+    implementation project(path: ':logging')
+    implementation project(path: ':screenshot-test-runtime')
+    implementation project(path: ':ui-test-common')
+    implementation project(path: ':utils')
+    implementation project(path: ':video-custom')
+
+    implementation "androidx.browser:browser:$versions.androidx.browser"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint"
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+    implementation "androidx.work:work-runtime-ktx:$versions.androidx.work"
+    implementation "androidx.work:work-runtime:$versions.androidx.work"
+
+    implementation "javax.inject:javax.inject:$versions.javax"
+
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+
+    implementation "com.squareup.okhttp3:okhttp:$versions.okhttp"
+    implementation "com.squareup.picasso:picasso:$versions.picasso"
+
+    implementation "org.jetbrains.anko:anko-design:$versions.anko"
+    implementation "org.jetbrains.anko:anko-recyclerview-v7:$versions.anko"
+    implementation "org.jetbrains.anko:anko:$versions.anko"
+
+    implementation "com.yandex.android:mobmetricalib-internal:$versions.metrica"
+    implementation "com.yandex.mobile.perftests:perftests-client:$versions.perftests"
+    implementation "com.yandex:pulse:$versions.pulse"
+
+    implementation "com.facebook.stetho:stetho:$versions.stetho"
+    implementation "com.facebook.stetho:stetho-okhttp3:$versions.stetho"
+
+    implementation "com.neovisionaries:nv-websocket-client:2.14"
+    implementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
+
+    // QR code stuff
+    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+    implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
+    implementation 'com.google.zxing:core:3.4.1'
+
+    androidTestImplementation "org.hamcrest:hamcrest-library:$versions.hamcrestCore"
+    androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
+    androidTestImplementation "androidx.lifecycle:lifecycle-viewmodel:$versions.androidx.lifecycle"
+    androidTestImplementation "androidx.viewpager2:viewpager2:$versions.androidx.viewpager2"
+}
+
+uploadBeta {
+    applicationName = 'divkit'
+    getBranchId = { defaultBranch, variantData ->
+        return defaultBranch
+    }
+}
+
+screenshotTests {
+    enabled = project.hasProperty("screenshot-tests")
+    strictComparison = project.hasProperty("screenshot-strict-comparison")
+    testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
+    deviceDir = "${android.defaultConfig.applicationId}/screenshots"
+    referencesDir = "${project.projectDir}/src/screenshotTest/screenshots"
+}
+
+android.applicationVariants.all { variant ->
+    variant.outputs.all {
+        boolean isPerf = variant.baseName.contains("perf")
+
+        if (!isPerf) {
+            outputFileName = divkitVersion.buildNumber != 0 ?
+                    "${project.archivesBaseName}-v${versionName}-b${divkitVersion.buildNumber}-${variant.baseName}.apk" :
+                    "${project.archivesBaseName}-v${versionName}-${variant.baseName}.apk"
+        }
+    }
+}
+
+task assemblePerfTests() {
+    def outputPerfDir = "${rootProject.buildDir}/perf"
+
+    doLast {
+        def copied = 0
+        copy {
+            from buildDir
+            into outputPerfDir
+            include "**/divkit-demo-app-*.apk"
+            eachFile { file ->
+                file.path = "app.apk"
+                copied += 1
+            }
+            includeEmptyDirs = false
+        }
+        assert copied == 1 && file("$outputPerfDir/app.apk").exists()
+    }
+
+    dependsOn("assemblePerf")
+}

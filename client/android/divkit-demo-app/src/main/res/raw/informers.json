@@ -1,0 +1,1232 @@
+{
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "div": {
+          "items": [
+            {
+              "type": "shortcutGallery/8ee46e5f314baaa982d20f47590b6280",
+              "items": [
+                {
+                  "whiteBackground": "#ffffff",
+                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/common/img_light_qrcode.2.png",
+                  "titleMaxLines": 1,
+                  "subtitle": "для общест- венных мест",
+                  "action": {
+                    "log_id": "shortcut/0/qr_vaccinated",
+                    "log_url": "https://yabs.yandex.ru/count/WZeejI_zOD01XH40H1rXzXslmL6TE0K0q08GWY0nlhdxOG00000ulliXG0H80c2U6N2am-o2XS3TukG1a06-fFBmre20W0AO0Rwayl1Mk06qaBVb8y011jW1lBdceW7e0SW1a0EGYkHke0D8g0EMg0Qg0y46QGf3w0g59Dp91d9pFahfRhCegGSNrO3eCM2C1B07W82OFBW7l0Y0-0YDyfhT_ScRa4V9-0g0jHYg2n1UeIpc5zK00A3v0KSRr_0B0-WCby20W10_ykRvqPJTszaee0x0X3so3m9G0O0GtjhR8SWG-k0IW80OwH9xG4nnas08fP0JCiWK0kWKZ0BO5S6AzkoZZxpyO_2G5kS3e1QkzuIF1e4Nc1UWzT4jg1S1m1UqDe8O83OnD3SrPJapPZOpP3HXOM5XE38qE3TZDJHaPMOpOMOve1W4i1YeqkwF1j0O0lWOsvVPY_-YblAw0O0Pa1a1e1cg0xWP_m7I6H9vOM9pNtDbSdPbSYzoDZ4vBJ7e6O320_0PWC83WHh__zzB-2fZAfWQyS2q0R0Q_PAah_UUzzDlzHe10000i1jYk1i4WXmDSc91Ed5DUL59MMvND-aSW1t_VvaTg1u1s1xzZH-W7zxQso6m7oJ87zwSir4S03Y4j9XHKpuvC2DokQD49aD-bosSqEdSYGknLwZXs907FUpT915FXxiIgpldTtLhTkUj8D_-mKA-7nub1mAmkEijDyNjAHy7cQNK8rkcd7EvYqQsyFX0Z3C0~1",
+                    "url": "covid-qr://show?utm_source=promo_shortcut&utm_medium=pp&utm_campaign=promo_shortcut_qr&c=promo_shortcut_pp_qr"
+                  },
+                  "subtitleMaxLines": 2,
+                  "shortcutSize": 108,
+                  "visibility_action": {
+                    "url": "https://yabs.yandex.ru/count/WIyejI_zO8e0BGa0T0vXzXsl3UE0UmK0YW4GWY0nlhdxOG00000ulliXmGPf2aFe2eKatCa6SdC-IkbkioYf1nVLWEWnO8m4gWiGNg4ivXVL002W-G576zU0m82049WEykRvqPJTszae-13x__y1W17wwH9xG4nnas08fP0JCjWLmOhsxAEFlFnZyCaMWHUe5m62620sCJGtDMKvCsOsCsGqOM5XOJWoD3WtOpKqP6LcCs5cEPaOq1W2-1Y06RWPqXaIUM5YSrzpPN9sPN8lSZOnEIqnw1c0mWFm6O320u8S3N9YGJfnJNbHILbkLpVf780T_tyJ04Pa764GA30RGy5WA1fJaT92sW11cij6iygSax4GUoyvw14PPW9QetnO8t8objc4TiwoH5GFHwWe6qu0~1=WNmejI_zOCC0bGi0v1FpUodgmm5014W2O9uPSAJ3x8A5mDtYv06G0Rwayl3MW8200fW1lgJoy5Qu0RIGj-KZs06ykUQY0UW1o06G0v2Av6wW0qYm0mAu1Fy1g0Qg0x07W82OFBW7l0Zn1m00WFW8ZVAQtVt9cv17oVWAWBKOsGiNrO3eCM2C1EWCbp-W3i24FR8F0b01W13UsjiXo108g170X3tW4e206EaIUq1CSPDW2AMO4mR850Be58m2s1N1YlRieu-y_6EG5kS3e1QkzuIF1e4Nc1UWzT4jm1UqDg0O1B0OgDBkZmRu6DkNsOl_efRokW606Ha1e1cg0xWP_m7e6O320_0PWC83WHh__zzB-2fZAfWQyS2q0VKQ0G000B0ROhWR1EaS0F0_W1t_VvaT0F0_g1u1s1xzZH-W7zxQso6m7oJ87zwSir4H040Ga5gW5Vn93G59GCpRBGonUdIrTJfT1OtP742hUveeA1y7cMceHsuAn6ZQkLcE0W00~1",
+                    "log_id": "shortcut/0/qr_vaccinated"
+                  },
+                  "titleMarginsBottom": 1,
+                  "colorBackground": "#3399CCEE",
+                  "type": "shortcutSimple/bd6cdf50043b3cb20e4a2c6080fbb26d",
+                  "title": "QR-код"
+                },
+                {
+                  "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                },
+                {
+                  "subtitleMaxLines": 2,
+                  "shortcutSize": 108,
+                  "whiteBackground": "#ffffff",
+                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/weather/bkn_d_new.2.png",
+                  "subtitle": "вечером –6°\nночью –7°",
+                  "titleMaxLines": 1,
+                  "action": {
+                    "log_id": "shortcut/1/weather",
+                    "url": "https://yandex.ru/pogoda/213/?lat=55.7094002&lon=37.6414337&utm_source=morda"
+                  },
+                  "type": "weatherShortcut/c5e6176f2552a099522a2839c76de9ca",
+                  "title": "Погода",
+                  "heroText": "-5°",
+                  "leftPadding": {
+                    "unit": "sp",
+                    "value": 53,
+                    "type": "fixed"
+                  },
+                  "visibility_action": {
+                    "log_id": "shortcut/1/weather"
+                  },
+                  "titleMarginsBottom": 1,
+                  "bottomPadding": {
+                    "value": 9,
+                    "unit": "sp",
+                    "type": "fixed"
+                  },
+                  "colorBackground": "#3399CCFF"
+                },
+                {
+                  "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                },
+                {
+                  "visibility_action": {
+                    "log_id": "shortcut/2/mail"
+                  },
+                  "colorBackground": "#33EEDD66",
+                  "titleMarginsBottom": 1,
+                  "title": "Почта",
+                  "type": "shortcutRecent/6c4b9912c81eb6f84696128902809827",
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/mail1.2.png",
+                  "titleMaxLines": 1,
+                  "subtitle": "Twitter, WILDBERRIES, Яндекс.Маркет",
+                  "whiteBackground": "#ffffff",
+                  "badge": [
+                    {
+                      "shadow": "https://yastatic.net/s3/home/div/geoblock_v2/badge/simple.3.png",
+                      "type": "shortcutBadge/b6a7255ebd83863a8cad44ca84558fdf",
+                      "items": [
+                        {
+                          "count": "99+",
+                          "type": "shortcutBadgeSimple/11925057bf207a41a2d7effa23ae259b"
+                        }
+                      ]
+                    }
+                  ],
+                  "action": {
+                    "log_id": "shortcut/2/mail",
+                    "url": "https://mail.yandex.ru"
+                  },
+                  "subtitleMaxLines": 2
+                },
+                {
+                  "action": {
+                    "url": "https://taxi.tap.yandex.ru/",
+                    "log_id": "shortcut/3/turbo_taxi"
+                  },
+                  "subtitle": "на каждый день",
+                  "titleMaxLines": 1,
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ],
+                  "whiteBackground": "#ffffff",
+                  "subtitleMaxLines": 2,
+                  "colorBackground": "#33EEDD66",
+                  "titleMarginsBottom": 1,
+                  "visibility_action": {
+                    "log_id": "shortcut/3/turbo_taxi"
+                  },
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/taxi1.2.png",
+                  "title": "Такси",
+                  "type": "shortcutRecent/6c4b9912c81eb6f84696128902809827"
+                },
+                {
+                  "type": "shortcutRecent/6c4b9912c81eb6f84696128902809827",
+                  "title": "Игры",
+                  "icon": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/recent/games1.2.png",
+                  "visibility_action": {
+                    "log_id": "shortcut/4/games"
+                  },
+                  "titleMarginsBottom": 1,
+                  "colorBackground": "#33BBBBFF",
+                  "subtitleMaxLines": 2,
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ],
+                  "whiteBackground": "#ffffff",
+                  "titleMaxLines": 1,
+                  "subtitle": "более 7000 без установки",
+                  "action": {
+                    "log_id": "shortcut/4/games",
+                    "url": "https://yandex.ru/games/"
+                  }
+                },
+                {
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/markt.2.png",
+                  "type": "shortcutRecent/6c4b9912c81eb6f84696128902809827",
+                  "title": "Маркет",
+                  "titleMarginsBottom": 1,
+                  "colorBackground": "#33EEDD66",
+                  "visibility_action": {
+                    "log_id": "shortcut/5/market"
+                  },
+                  "subtitleMaxLines": 2,
+                  "action": {
+                    "url": "https://m.market.yandex.ru/?clid=1309&src_pof=1309&utm_source_service=morda&utm_campaign=market_ny2022&wprid=1643887038837862-7582944451548889572-sas2-0238-sas-l7-balancer-8080-BAL-2811&icookie=ynlauDePV8W7bQwHe%2FJScDBW8OrC0etXKPobd2ybFAq5d55Mb7ZeQU5I4FdSgpvFVIeVR1GD%2Fjusb9FtOuBO7Rrrcbg%3D",
+                    "log_id": "shortcut/5/market"
+                  },
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ],
+                  "whiteBackground": "#ffffff",
+                  "subtitle": "товары с доставкой",
+                  "titleMaxLines": 1
+                },
+                {
+                  "visibility_action": {
+                    "log_id": "shortcut/6/quasar"
+                  },
+                  "titleMarginsBottom": 1,
+                  "colorBackground": "#33DDBBFF",
+                  "type": "shortcutRecent/6c4b9912c81eb6f84696128902809827",
+                  "title": "Устройства",
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/quasar.2.png",
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ],
+                  "whiteBackground": "#ffffff",
+                  "titleMaxLines": 1,
+                  "subtitle": "управление умным домом",
+                  "action": {
+                    "url": "opensettings://?screen=quasar",
+                    "log_id": "shortcut/6/quasar"
+                  },
+                  "subtitleMaxLines": 2
+                },
+                {
+                  "subtitleMaxLines": 2,
+                  "action": {
+                    "url": "https://tv.yandex.ru/",
+                    "log_id": "shortcut/7/tv"
+                  },
+                  "subtitle": "расписание передач",
+                  "titleMaxLines": 1,
+                  "whiteBackground": "#ffffff",
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ],
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/tv.2.png",
+                  "title": "Телепрограмма",
+                  "type": "shortcutRecent/6c4b9912c81eb6f84696128902809827",
+                  "colorBackground": "#33BEBEBE",
+                  "titleMarginsBottom": 1,
+                  "visibility_action": {
+                    "log_id": "shortcut/7/tv"
+                  }
+                },
+                {
+                  "titleMaxLines": 1,
+                  "subtitle": "у вас новое достижение",
+                  "badge": [
+                    {
+                      "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                    }
+                  ],
+                  "whiteBackground": "#ffffff",
+                  "action": {
+                    "url": "https://yandex.ru/q/?utm_source=yandex&utm_medium=shortcut",
+                    "log_id": "shortcut/8/q"
+                  },
+                  "subtitleMaxLines": 2,
+                  "visibility_action": {
+                    "log_id": "shortcut/8/q"
+                  },
+                  "colorBackground": "#33BBBBFF",
+                  "titleMarginsBottom": 1,
+                  "title": "Кью",
+                  "type": "shortcutRecent/6c4b9912c81eb6f84696128902809827",
+                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/q2.2.png"
+                },
+                {
+                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/market/market_blackout2.2.png",
+                  "action": {
+                    "url": "https://m.market.yandex.ru/my/cart?clid=992&wprid=1643887038837862-7582944451548889572-sas2-0238-sas-l7-balancer-8080-BAL-2811&src_pof=992&icookie=ynlauDePV8W7bQwHe%2FJScDBW8OrC0etXKPobd2ybFAq5d55Mb7ZeQU5I4FdSgpvFVIeVR1GD%2Fjusb9FtOuBO7Rrrcbg%3D&utm_source_service=morda",
+                    "log_id": "shortcut/9/market"
+                  },
+                  "subtitleMaxLines": 2,
+                  "totalPriceLineHeight": 28,
+                  "visibility_action": {
+                    "log_id": "shortcut/9/market"
+                  },
+                  "titleMarginsBottom": 1,
+                  "colorBackground": "#3399CCEE",
+                  "title": "Корзина",
+                  "whiteBackground": "#ffffff",
+                  "subtitle": "нет товаров в корзине",
+                  "titleMaxLines": 1,
+                  "totalPrice": " ",
+                  "currency": " ",
+                  "shortcutSize": 108,
+                  "type": "shortcutMarket/09df7614ffcd30e4a4a15bb45e0a0343",
+                  "totalPriceFontSize": 26
+                },
+                {
+                  "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
+                }
+              ]
+            },
+            {
+              "items": [
+                {
+                  "moreText": "Сервисы",
+                  "servicesIcon": "https://yastatic.net/s3/home/div/geoblock_v2/bs_entry_blackout2.2.png",
+                  "locationTextPlaceholder": [
+                    {
+                      "type": "geoblock2HeaderLocationText/a95bddffb9fea92b666bff08660a215a",
+                      "text": "Даниловский район",
+                      "action": {
+                        "log_id": "location",
+                        "url": "intent://yandex.ru/maps#Intent;S.browser_fallback_url=https%3A%2F%2Fyandex.ru%2Fmaps%3Fl%3Dmap%252Ctrf%26ll%3D37.6414337%252C55.7094002%26z%3D11;package=ru.yandex.yandexmaps;scheme=http;end;?no-interstitial=1"
+                      }
+                    }
+                  ],
+                  "type": "geoblock2Header/a9e72363a884660940956be74e5b5add",
+                  "bsAccessibility": {
+                    "description": "Чтобы открыть меню сервисов нажмите дважды",
+                    "hint": "Сервисы, закрыто, кнопка"
+                  },
+                  "informersPlaceholder": [
+                    {
+                      "type": "geoblock2HeaderTraffic/f0cea59abd826e35261a0d1ca8786a3e",
+                      "action": {
+                        "url": "intent://yandex.ru/maps#Intent;S.browser_fallback_url=https%3A%2F%2Fyandex.ru%2Fmaps%3Fl%3Dmap%252Ctrf%26ll%3D37.6414337%252C55.7094002%26z%3D11;package=ru.yandex.yandexmaps;scheme=http;end;?no-interstitial=1",
+                        "log_id": "traffic"
+                      },
+                      "arrowPlaceholder": [
+                        {
+                          "height": {
+                            "type": "fixed",
+                            "value": 2,
+                            "unit": "sp"
+                          },
+                          "type": "alertEmpty/79f43e2b90cadac6ef5979d0bbfaae24"
+                        },
+                        {
+                          "trafficArrowIconUrl": "https://yastatic.net/s3/home/div/geoblock_v2/traffic/arrow_down.2.png",
+                          "type": "geoblock2HeaderTrafficArrow/bdd40f39e32a2269bd8a3c552c0af3b6"
+                        }
+                      ],
+                      "trafficIconUrl": "https://yastatic.net/s3/home/yandex-app/informer2/services/traffic-yw.2.png",
+                      "trafficRateText": "5"
+                    }
+                  ]
+                },
+                {
+                  "type": "geoblock2HeaderPromoDot/ec4b9a8ad0d77941598d9688689f6a29"
+                },
+                {
+                  "type": "geoblock2HeaderPlayer/0dfa6153cab8f19d6ff88bf2d73d4192",
+                  "playerIconUrl": "https://yastatic.net/s3/home/div/geoblock_v2/play.2.png"
+                }
+              ],
+              "orientation": "overlap",
+              "type": "container"
+            },
+            {
+              "items": [
+                {
+                  "type": "geoblock2AlertsSeparator/a7f9bf8a2a26a568ae4bf1b89a65f7e0",
+                  "separatorColor": "#e0e0e0",
+                  "div_id": "weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde_separator"
+                }
+              ],
+              "orientation": "overlap",
+              "type": "container"
+            },
+            {
+              "items": [
+                {
+                  "type": "geoAlertWrapper/9ffb69cc6936792b127f380566211a0b",
+                  "div_id": "weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde",
+                  "onSwipeActions": [
+                    {
+                      "url": "div-action://set_state?state_id=0/weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde/swiped",
+                      "log_id": "weather_grouped/swiped"
+                    },
+                    {
+                      "url": "div-action://set_state?state_id=0/weather_grouped.a299c4a1c5d9b65d5c7e29e53ac41bde_separator/swiped",
+                      "log_id": "weather_grouped/swiped"
+                    }
+                  ],
+                  "alert": {
+                    "titleSecondaryColor": "#99000000",
+                    "title": "Сегодня  −10⁠…⁠−3°; слабый снег с 16:10 до 18:00; слабый ветер 2 м⁠/⁠с",
+                    "type": "geoAlert2/45be466a6e6dddb50e883fd04546b86f",
+                    "subtitlePlaceholder": [
+                      {
+                        "type": "alertEmpty/79f43e2b90cadac6ef5979d0bbfaae24"
+                      }
+                    ],
+                    "titleLength": 7,
+                    "rightContentPlaceholder": [
+                      {
+                        "type": "container",
+                        "margins": {
+                          "left": 8
+                        },
+                        "width": {
+                          "type": "wrap_content"
+                        },
+                        "items": [
+                          {
+                            "height": {
+                              "type": "fixed",
+                              "value": 36
+                            },
+                            "width": {
+                              "value": 72,
+                              "type": "fixed"
+                            },
+                            "mapUrl": "https://static-maps.yandex.ru/1.x/?cr=0&key=ABBKoFkBAAAA3gQdOgIAuo2fHOOVBZ04CbWgljIftzdYdo0AAAAAAAAAAAAyVVe1vq15p22_q-Rsx24s6lkLjg%3D%3D&l=map%2Chttp%253A%252F%252Fah.weather.yandex.net%252Fapi%252Fv3%252Fnowcast%252Ftile%253Ffor_date%253D1643887200%2526nowcast_gen_time%253D1643886708%2526transparent%253D1%2526x%253D%2525x%2526y%253D%2525y%2526z%253D%2525z%2526scale%253D2&lang=ru&lg=0&ll=37.6414337%2C55.7094002&z=7&scale=2&size=288%2C144",
+                            "type": "nowcastAlertMap2/03391aa807676dbb76cc49a296893f7f"
+                          }
+                        ]
+                      }
+                    ],
+                    "action": {
+                      "log_id": "weather_grouped/visible",
+                      "url": "yellowskin://?background_color=%23fefefe&buttons_color=%2391989b&omnibox_color=%23f0f0f0&status_bar_theme=light&text_color=%23000000&url=https%3A%2F%2Fyandex.ru%2Fpogoda%2Fnowcast%3Flat%3D55.7094002%26lon%3D37.6414337"
+                    },
+                    "iconUrl": "https://yastatic.net/s3/home/div/geoblock_v2/weather_icons/bkn_-sn_d.2.png",
+                    "titleMaxLines": 100
+                  }
+                }
+              ],
+              "type": "container"
+            }
+          ],
+          "type": "geoblock2/42026dd1548afb802849421a73eee637",
+          "visibility_actions": [
+            {
+              "visibility_percentage": 1,
+              "log_id": "geoblock/visible",
+              "visibility_duration": 0
+            },
+            {
+              "visibility_duration": 0,
+              "visibility_percentage": 1,
+              "log_id": "weather_grouped/visible",
+              "referer": "https://yandex.ru/?clid=40316",
+              "url": "https://yabs.yandex.ru/count/WIyejI_zO8e0BGa0T0vXzXsl3UE0UmK0YW4GWY0nlhdxOG00000ulliXmGPf2aFe2eKatCa6SdC-IkbkioYf1nVLWEWnO8m4gWiGNg4ivXVL002W-G576zU0m82049WEykRvqPJTszae-13x__y1W17wwH9xG4nnas08fP0JCjWLmOhsxAEFlFnZyCaMWHUe5m62620sCJGtDMKvCsOsCsGqOM5XOJWoD3WtOpKqP6LcCs5cEPaOq1W2-1Y06RWPqXaIUM5YSrzpPN9sPN8lSZOnEIqnw1c0mWFm6O320u8S3N9YGJfnJNbHILbkLpVf780T_tyJ04Pa764GA30RGy5WA1fJaT92sW11cij6iygSax4GUoyvw14PPW9QetnO8t8objc4TiwoH5GFHwWe6qu0~1=WKSejI_zO9C0xGa0f13-g5RMam5014W2O9uPSD36YjJD8P01wg_sgJYOk07GnehK3TW1gf-M3-W1Z0AG0_33W6-W0ngm0mAe1ge3i0U0W9Wyk0Uy2D070l470020gAE5wkOGoTaB5zM0w35WZ0Je39UW3i24FTc04DMFomV840Ye4S24FTWIWO0OwH9xG4nnas08fPWJ1kWKZ0BO5S6AzkoZZxpyOw0MhlU4ZmQ15vWN6S0Nj3Qm6CtWxey6-1ZRbzcB_wAMyhe1W1cG6G6W6Qe3k1d___y1w1c0mWFm6O320u4Q__ztZlXYNOgO6l70j07r6W40002m6sAu6mJf780T_t-P7QWU0Q0VrO_B1x0V3SWVrO_B1n00E0dfcZ7N84Lu3KdMaZK5ekCN3jKtouMccpObXzva2XPFFX0KaQ2UZ25_3OY6uWG0~1"
+            }
+          ]
+        },
+        "state_id": 0
+      }
+    ]
+  },
+  "templates": {
+    "shortcutGallery/8ee46e5f314baaa982d20f47590b6280": {
+      "type": "gallery",
+      "paddings": {
+        "right": 16,
+        "bottom": 8,
+        "left": 16
+      },
+      "item_spacing": 0
+    },
+    "shortcutSimple/bd6cdf50043b3cb20e4a2c6080fbb26d": {
+      "type": "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61",
+      "margins": {
+        "top": 8
+      },
+      "items": [
+        {
+          "type": "shortcutUpperBase/a715697596d1f5a1f3c4a77d197d57ee"
+        }
+      ]
+    },
+    "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a": {
+      "delimiter_style": {
+        "orientation": "horizontal",
+        "color": "#0000"
+      },
+      "type": "separator",
+      "width": {
+        "type": "fixed",
+        "value": 8,
+        "unit": "sp"
+      }
+    },
+    "weatherShortcut/c5e6176f2552a099522a2839c76de9ca": {
+      "type": "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61",
+      "items": [
+        {
+          "type": "shortcutUpperBase/a715697596d1f5a1f3c4a77d197d57ee"
+        },
+        {
+          "type": "shortcutHero/c99da7b3b30b25585ef90f5db4e2de46"
+        }
+      ]
+    },
+    "shortcutRecent/6c4b9912c81eb6f84696128902809827": {
+      "height": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 116
+      },
+      "width": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 116
+      },
+      "items": [
+        {
+          "height": {
+            "type": "fixed",
+            "unit": "sp",
+            "value": 108
+          },
+          "background": [
+            {
+              "type": "solid",
+              "$color": "whiteBackground"
+            },
+            {
+              "type": "solid",
+              "$color": "colorBackground"
+            }
+          ],
+          "border": {
+            "corner_radius": 16
+          },
+          "items": [
+            {
+              "type": "image",
+              "margins": {
+                "bottom": 6,
+                "left": 10,
+                "top": 10
+              },
+              "width": {
+                "value": 36,
+                "unit": "sp",
+                "type": "fixed"
+              },
+              "$image_url": "icon",
+              "placeholder_color": "#0000",
+              "height": {
+                "value": 36,
+                "unit": "sp",
+                "type": "fixed"
+              }
+            },
+            {
+              "items": [
+                {
+                  "type": "shortcutTitle/52c70af2c289d43c9101d9b2355b42db"
+                },
+                {
+                  "type": "shortcutSubtitle/0454acf3cbe420c0c7562e5ee9e4d3be"
+                }
+              ],
+              "margins": {
+                "right": 8,
+                "left": 12
+              },
+              "type": "container"
+            }
+          ],
+          "width": {
+            "type": "fixed",
+            "unit": "sp",
+            "value": 108
+          },
+          "margins": {
+            "top": 8
+          },
+          "type": "container"
+        },
+        {
+          "type": "container",
+          "$items": "badge"
+        }
+      ],
+      "orientation": "overlap",
+      "type": "container"
+    },
+    "shortcutBadge/b6a7255ebd83863a8cad44ca84558fdf": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 116
+      },
+      "alignment_horizontal": "right",
+      "height": {
+        "type": "fixed",
+        "value": 40,
+        "unit": "sp"
+      },
+      "background": [
+        {
+          "scale": "fit",
+          "$image_url": "shadow",
+          "type": "image"
+        }
+      ]
+    },
+    "shortcutBadgeSimple/11925057bf207a41a2d7effa23ae259b": {
+      "border": {
+        "corner_radius": 100
+      },
+      "font_weight": "bold",
+      "width": {
+        "type": "wrap_content"
+      },
+      "margins": {
+        "right": 4,
+        "top": 4
+      },
+      "alignment_horizontal": "right",
+      "font_size": 12,
+      "text_alignment_vertical": "center",
+      "$text": "count",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ff3333"
+        }
+      ],
+      "text_alignment_horizontal": "center",
+      "text_color": "#fff",
+      "type": "text",
+      "line_height": 16,
+      "paddings": {
+        "right": 7,
+        "left": 7
+      },
+      "height": {
+        "value": 18,
+        "unit": "sp",
+        "type": "fixed"
+      }
+    },
+    "shortcutMarket/09df7614ffcd30e4a4a15bb45e0a0343": {
+      "type": "shortcutBase/dadbdf1dfd3b29f5c37965ae51c3dd61",
+      "items": [
+        {
+          "type": "shortcutUpperBase/a715697596d1f5a1f3c4a77d197d57ee"
+        },
+        {
+          "orientation": "horizontal",
+          "margins": {
+            "left": 12,
+            "bottom": 8,
+            "right": 7
+          },
+          "type": "container",
+          "items": [
+            {
+              "max_lines": 1,
+              "text_color": "#de000000",
+              "type": "text",
+              "$line_height": "totalPriceLineHeight",
+              "$text": "totalPrice",
+              "$font_size": "totalPriceFontSize",
+              "font_weight": "light",
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "line_height": 23,
+              "type": "text",
+              "text_color": "#de000000",
+              "max_lines": 1,
+              "font_size": 20,
+              "$text": "currency"
+            }
+          ],
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_vertical": "bottom"
+        }
+      ]
+    },
+    "geoblock2HeaderLocationText/a95bddffb9fea92b666bff08660a215a": {
+      "line_height": 16,
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "text_color": "#99000000",
+      "font_size": 13,
+      "max_lines": 1,
+      "paddings": {
+        "top": 1
+      }
+    },
+    "geoblock2Header/a9e72363a884660940956be74e5b5add": {
+      "content_alignment_vertical": "center",
+      "height": {
+        "type": "fixed",
+        "unit": "sp",
+        "value": 46
+      },
+      "paddings": {
+        "left": 22,
+        "bottom": 4
+      },
+      "orientation": "horizontal",
+      "type": "container",
+      "items": [
+        {
+          "content_alignment_vertical": "center",
+          "$items": "informersPlaceholder",
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "wrap_content"
+          }
+        },
+        {
+          "$items": "locationTextPlaceholder",
+          "margins": {
+            "left": 14
+          },
+          "type": "container"
+        },
+        {
+          "paddings": {
+            "right": 18,
+            "left": 8
+          },
+          "content_alignment_vertical": "center",
+          "items": [
+            {
+              "text_color": "#000",
+              "type": "text",
+              "line_height": 18,
+              "$text": "moreText",
+              "font_size": 14,
+              "font_weight": "medium",
+              "margins": {
+                "right": 6
+              },
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "height": {
+                "type": "fixed",
+                "value": 28,
+                "unit": "sp"
+              },
+              "scale": "fit",
+              "$tooltips": "servicesTooltip",
+              "width": {
+                "value": 28,
+                "unit": "sp",
+                "type": "fixed"
+              },
+              "$image_url": "servicesIcon",
+              "type": "image",
+              "tint_color": "#000"
+            }
+          ],
+          "type": "container",
+          "action": {
+            "log_id": "more",
+            "url": "bottomsheet://"
+          },
+          "$accessibility": "bsAccessibility",
+          "width": {
+            "type": "wrap_content"
+          },
+          "orientation": "horizontal"
+        }
+      ]
+    },
+    "geoblock2HeaderTraffic/f0cea59abd826e35261a0d1ca8786a3e": {
+      "type": "container",
+      "orientation": "horizontal",
+      "items": [
+        {
+          "height": {
+            "unit": "sp",
+            "value": 28,
+            "type": "fixed"
+          },
+          "scale": "fit",
+          "type": "image",
+          "width": {
+            "type": "fixed",
+            "value": 28,
+            "unit": "sp"
+          },
+          "$image_url": "trafficIconUrl"
+        },
+        {
+          "font_size": 16,
+          "$text": "trafficRateText",
+          "width": {
+            "type": "wrap_content"
+          },
+          "line_height": 20,
+          "margins": {
+            "left": 3
+          },
+          "type": "text",
+          "text_color": "#de000000"
+        },
+        {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "$items": "arrowPlaceholder"
+        }
+      ],
+      "width": {
+        "type": "wrap_content"
+      },
+      "content_alignment_vertical": "center"
+    },
+    "alertEmpty/79f43e2b90cadac6ef5979d0bbfaae24": {
+      "height": {
+        "type": "fixed",
+        "value": 0
+      },
+      "width": {
+        "value": 0,
+        "type": "fixed"
+      },
+      "type": "separator",
+      "delimiter_style": {
+        "orientation": "horizontal",
+        "color": "#0000"
+      }
+    },
+    "geoblock2HeaderTrafficArrow/bdd40f39e32a2269bd8a3c552c0af3b6": {
+      "height": {
+        "value": 20,
+        "unit": "sp",
+        "type": "fixed"
+      },
+      "tint_color": "#73000000",
+      "margins": {
+        "left": 2
+      },
+      "type": "image",
+      "width": {
+        "unit": "sp",
+        "value": 8,
+        "type": "fixed"
+      },
+      "$image_url": "trafficArrowIconUrl",
+      "scale": "fit"
+    },
+    "geoblock2HeaderPromoDot/ec4b9a8ad0d77941598d9688689f6a29": {
+      "type": "state",
+      "states": [
+        {
+          "div": {
+            "paddings": {
+              "right": 14,
+              "top": 3
+            },
+            "alignment_horizontal": "right",
+            "items": [
+              {
+                "content_alignment_horizontal": "center",
+                "height": {
+                  "unit": "sp",
+                  "value": 14,
+                  "type": "fixed"
+                },
+                "content_alignment_vertical": "center",
+                "type": "container",
+                "items": [
+                  {
+                    "height": {
+                      "type": "fixed",
+                      "unit": "sp",
+                      "value": 10
+                    },
+                    "background": [
+                      {
+                        "color": "#ff3333",
+                        "type": "solid"
+                      }
+                    ],
+                    "border": {
+                      "corner_radius": 10
+                    },
+                    "items": [
+                      {
+                        "type": "alertEmpty/79f43e2b90cadac6ef5979d0bbfaae24"
+                      }
+                    ],
+                    "width": {
+                      "type": "fixed",
+                      "value": 10,
+                      "unit": "sp"
+                    },
+                    "type": "container"
+                  }
+                ],
+                "background": [
+                  {
+                    "color": "#fff",
+                    "type": "solid"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 14
+                },
+                "width": {
+                  "unit": "sp",
+                  "value": 14,
+                  "type": "fixed"
+                }
+              }
+            ],
+            "width": {
+              "type": "wrap_content"
+            },
+            "type": "container"
+          },
+          "state_id": "promo"
+        },
+        {
+          "state_id": "default"
+        }
+      ],
+      "div_id": "more",
+      "alignment_horizontal": "right"
+    },
+    "geoblock2HeaderPlayer/0dfa6153cab8f19d6ff88bf2d73d4192": {
+      "states": [
+        {
+          "state_id": "inactive"
+        },
+        {
+          "state_id": "active",
+          "div": {
+            "alignment_horizontal": "right",
+            "paddings": {
+              "right": 14,
+              "top": 3
+            },
+            "type": "container",
+            "items": [
+              {
+                "content_alignment_vertical": "center",
+                "content_alignment_horizontal": "center",
+                "height": {
+                  "value": 14,
+                  "unit": "sp",
+                  "type": "fixed"
+                },
+                "type": "container",
+                "items": [
+                  {
+                    "items": [
+                      {
+                        "width": {
+                          "type": "match_parent"
+                        },
+                        "$image_url": "playerIconUrl",
+                        "tint_color": "#fff",
+                        "type": "image",
+                        "height": {
+                          "type": "match_parent"
+                        }
+                      }
+                    ],
+                    "width": {
+                      "type": "fixed",
+                      "unit": "sp",
+                      "value": 10
+                    },
+                    "type": "container",
+                    "border": {
+                      "corner_radius": 10
+                    },
+                    "background": [
+                      {
+                        "color": "#000",
+                        "type": "solid"
+                      }
+                    ],
+                    "height": {
+                      "unit": "sp",
+                      "value": 10,
+                      "type": "fixed"
+                    }
+                  }
+                ],
+                "background": [
+                  {
+                    "color": "#fff",
+                    "type": "solid"
+                  }
+                ],
+                "width": {
+                  "unit": "sp",
+                  "value": 14,
+                  "type": "fixed"
+                },
+                "border": {
+                  "corner_radius": 14
+                }
+              }
+            ],
+            "width": {
+              "type": "wrap_content"
+            }
+          }
+        }
+      ],
+      "extensions": [
+        {
+          "params": {
+            "inactive": [
+              "0/player_button/inactive"
+            ],
+            "active": [
+              "0/player_button/active"
+            ]
+          },
+          "id": "internal_player"
+        }
+      ],
+      "type": "state",
+      "alignment_horizontal": "right",
+      "div_id": "player_button"
+    },
+    "geoblock2AlertsSeparator/a7f9bf8a2a26a568ae4bf1b89a65f7e0": {
+      "type": "state",
+      "states": [
+        {
+          "div": {
+            "type": "separator",
+            "margins": {
+              "left": 20,
+              "bottom": 10,
+              "right": 20
+            },
+            "delimiter_style": {
+              "orientation": "horizontal",
+              "$color": "separatorColor"
+            },
+            "height": {
+              "type": "fixed",
+              "value": 1
+            }
+          },
+          "state_id": "shown"
+        },
+        {
+          "state_id": "swiped",
+          "div": {
+            "delimiter_style": {
+              "color": "#0000",
+              "orientation": "horizontal"
+            },
+            "type": "separator",
+            "height": {
+              "type": "fixed",
+              "value": 0
+            }
+          }
+        }
+      ]
+    },
+    "geoAlertWrapper/9ffb69cc6936792b127f380566211a0b": {
+      "states": [
+        {
+          "$swipe_out_actions": "onSwipeActions",
+          "$div": "alert",
+          "state_id": "shown"
+        },
+        {
+          "state_id": "swiped",
+          "div": {
+            "height": {
+              "type": "fixed",
+              "value": 0
+            },
+            "delimiter_style": {
+              "orientation": "horizontal",
+              "color": "#0000"
+            },
+            "type": "separator"
+          }
+        }
+      ],
+      "type": "state"
+    },
+    "geoAlert2/45be466a6e6dddb50e883fd04546b86f": {
+      "background": [
+        {
+          "color": "#fff",
+          "type": "solid"
+        }
+      ],
+      "paddings": {
+        "bottom": 12,
+        "left": 24,
+        "right": 16
+      },
+      "items": [
+        {
+          "items": [
+            {
+              "width": {
+                "value": 24,
+                "type": "fixed"
+              },
+              "$image_url": "iconUrl",
+              "margins": {
+                "right": 6
+              },
+              "type": "image",
+              "height": {
+                "value": 24,
+                "type": "fixed"
+              }
+            },
+            {
+              "alignment_vertical": "center",
+              "items": [
+                {
+                  "line_height": 16,
+                  "ranges": [
+                    {
+                      "text_color": "#000",
+                      "start": 0,
+                      "font_weight": "medium",
+                      "$end": "titleLength",
+                      "font_size": 14
+                    }
+                  ],
+                  "type": "text",
+                  "$max_lines": "titleMaxLines",
+                  "$text": "title",
+                  "font_size": 13,
+                  "$text_color": "titleSecondaryColor"
+                },
+                {
+                  "type": "container",
+                  "$items": "subtitlePlaceholder"
+                }
+              ],
+              "$action": "titleAction",
+              "type": "container"
+            }
+          ],
+          "orientation": "horizontal",
+          "type": "container"
+        },
+        {
+          "type": "container",
+          "width": {
+            "type": "wrap_content"
+          },
+          "$items": "rightContentPlaceholder"
+        }
+      ],
+      "orientation": "horizontal",
+      "type": "container"
+    },
+    "nowcastAlertMap2/03391aa807676dbb76cc49a296893f7f": {
+      "type": "container",
+      "orientation": "overlap",
+      "items": [
+        {
+          "height": {
+            "type": "match_parent"
+          },
+          "type": "image",
+          "$image_url": "mapUrl",
+          "width": {
+            "type": "match_parent"
+          }
+        },
+        {
+          "alignment_horizontal": "center",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#fff"
+            }
+          ],
+          "alignment_vertical": "center",
+          "border": {
+            "corner_radius": 12
+          },
+          "width": {
+            "value": 12,
+            "type": "fixed"
+          },
+          "content_alignment_horizontal": "center",
+          "height": {
+            "value": 12,
+            "type": "fixed"
+          },
+          "content_alignment_vertical": "center",
+          "type": "container",
+          "items": [
+            {
+              "background": [
+                {
+                  "color": "#ff3333",
+                  "type": "solid"
+                }
+              ],
+              "border": {
+                "corner_radius": 8
+              },
+              "width": {
+                "type": "fixed",
+                "value": 8
+              },
+              "height": {
+                "type": "fixed",
+                "value": 8
+              },
+              "content_alignment_horizontal": "center",
+              "content_alignment_vertical": "center",
+              "items": [
+                {
+                  "width": {
+                    "value": 0,
+                    "type": "fixed"
+                  },
+                  "type": "separator",
+                  "delimiter_style": {
+                    "orientation": "horizontal",
+                    "color": "#0000"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 0
+                  }
+                }
+              ],
+              "type": "container"
+            }
+          ]
+        }
+      ],
+      "border": {
+        "corner_radius": 10
+      }
+    },
+    "geoblock2/42026dd1548afb802849421a73eee637": {
+      "background": [
+        {
+          "color": "#fff",
+          "type": "solid"
+        }
+      ],
+      "type": "container",
+      "border": {
+        "corners_radius": {
+          "bottom-right": 24,
+          "bottom-left": 24
+        }
+      }
+    }
+  }
+}

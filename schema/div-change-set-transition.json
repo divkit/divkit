@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "description": "Анимации.",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "set"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "div-change-transition.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "description": "Список анимаций."
+    }
+  },
+  "required": [
+    "type",
+    "items"
+  ]
+}

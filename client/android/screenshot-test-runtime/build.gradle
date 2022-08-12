@@ -1,0 +1,9 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+
+dependencies {
+    implementation project(path: ':ui-test-common')
+
+    implementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$versions.coroutines"
+}

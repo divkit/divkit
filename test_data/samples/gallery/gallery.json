@@ -1,0 +1,118 @@
+{
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "font_size": 12,
+      "line_height": 15,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "text_color": "#000000",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "height": {
+        "type": "fixed",
+        "value": 104
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "border": {
+        "corner_radius": 16
+      }
+    },
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Галерея"
+            },
+            {
+              "type": "subtitle",
+              "text": "Может отображать элементы любого содержимого, не только картинки. Поддерживает настройку расстояния между соседними элементами",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "gallery",
+              "height": {
+                "type": "fixed",
+                "value": 120
+              },
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "item_spacing": 16,
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "Item 0"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Item 1"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Item 2"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Item 3"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Item 4"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

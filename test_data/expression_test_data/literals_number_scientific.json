@@ -1,0 +1,802 @@
+{
+    "cases": [
+        {
+            "name": "unsigned scientific literal without decimal part and with unsigned lowercase E",
+            "expression": "@{11e2}",
+            "expected": {
+                "type": "number",
+                "value": 1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with unsigned lowercase E",
+            "expression": "@{+11e2}",
+            "expected": {
+                "type": "number",
+                "value": 1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with unsigned lowercase E",
+            "expression": "@{-11e2}",
+            "expected": {
+                "type": "number",
+                "value": -1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with unsigned uppercase E",
+            "expression": "@{11E2}",
+            "expected": {
+                "type": "number",
+                "value": 1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with unsigned uppercase E",
+            "expression": "@{+11E2}",
+            "expected": {
+                "type": "number",
+                "value": 1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with unsigned uppercase E",
+            "expression": "@{-11E2}",
+            "expected": {
+                "type": "number",
+                "value": -1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with positive lowercase E",
+            "expression": "@{11e+2}",
+            "expected": {
+                "type": "number",
+                "value": 1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with positive lowercase E",
+            "expression": "@{+11e+2}",
+            "expected": {
+                "type": "number",
+                "value": 1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with positive lowercase E",
+            "expression": "@{-11e+2}",
+            "expected": {
+                "type": "number",
+                "value": -1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with positive uppercase E",
+            "expression": "@{11E+2}",
+            "expected": {
+                "type": "number",
+                "value": 1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with positive uppercase E",
+            "expression": "@{+11E+2}",
+            "expected": {
+                "type": "number",
+                "value": 1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with positive uppercase E",
+            "expression": "@{-11E+2}",
+            "expected": {
+                "type": "number",
+                "value": -1100.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with negative lowercase E",
+            "expression": "@{1100e-2}",
+            "expected": {
+                "type": "number",
+                "value": 11.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with negative lowercase E",
+            "expression": "@{+1100e-2}",
+            "expected": {
+                "type": "number",
+                "value": 11.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with negative lowercase E",
+            "expression": "@{-1100e-2}",
+            "expected": {
+                "type": "number",
+                "value": -11.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with negative uppercase E",
+            "expression": "@{1100E-2}",
+            "expected": {
+                "type": "number",
+                "value": 11.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with negative uppercase E",
+            "expression": "@{+1100E-2}",
+            "expected": {
+                "type": "number",
+                "value": 11.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with negative uppercase E",
+            "expression": "@{-1100E-2}",
+            "expected": {
+                "type": "number",
+                "value": -11.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with unsigned lowercase E",
+            "expression": "@{11.09e2}",
+            "expected": {
+                "type": "number",
+                "value": 1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with unsigned lowercase E",
+            "expression": "@{+11.09e2}",
+            "expected": {
+                "type": "number",
+                "value": 1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with unsigned lowercase E",
+            "expression": "@{-11.09e2}",
+            "expected": {
+                "type": "number",
+                "value": -1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with unsigned uppercase E",
+            "expression": "@{11.09E2}",
+            "expected": {
+                "type": "number",
+                "value": 1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with unsigned uppercase E",
+            "expression": "@{+11.09E2}",
+            "expected": {
+                "type": "number",
+                "value": 1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with unsigned uppercase E",
+            "expression": "@{-11.09E2}",
+            "expected": {
+                "type": "number",
+                "value": -1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with positive lowercase E",
+            "expression": "@{11.09e+2}",
+            "expected": {
+                "type": "number",
+                "value": 1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with positive lowercase E",
+            "expression": "@{+11.09e+2}",
+            "expected": {
+                "type": "number",
+                "value": 1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with positive lowercase E",
+            "expression": "@{-11.09e+2}",
+            "expected": {
+                "type": "number",
+                "value": -1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with positive uppercase E",
+            "expression": "@{11.09E+2}",
+            "expected": {
+                "type": "number",
+                "value": 1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with positive uppercase E",
+            "expression": "@{+11.09E+2}",
+            "expected": {
+                "type": "number",
+                "value": 1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with positive uppercase E",
+            "expression": "@{-11.09E+2}",
+            "expected": {
+                "type": "number",
+                "value": -1109.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with negative lowercase E",
+            "expression": "@{1100.09e-2}",
+            "expected": {
+                "type": "number",
+                "value": 11.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with negative lowercase E",
+            "expression": "@{+1100.09e-2}",
+            "expected": {
+                "type": "number",
+                "value": 11.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with negative lowercase E",
+            "expression": "@{-1100.09e-2}",
+            "expected": {
+                "type": "number",
+                "value": -11.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without decimal part and with negative uppercase E",
+            "expression": "@{1100.09E-2}",
+            "expected": {
+                "type": "number",
+                "value": 11.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without decimal part and with negative uppercase E",
+            "expression": "@{+1100.09E-2}",
+            "expected": {
+                "type": "number",
+                "value": 11.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without decimal part and with negative uppercase E",
+            "expression": "@{-1100.09E-2}",
+            "expected": {
+                "type": "number",
+                "value": -11.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without leading zero and with unsigned lowercase E",
+            "expression": "@{.09e2}",
+            "expected": {
+                "type": "number",
+                "value": 9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without leading zero and with unsigned lowercase E",
+            "expression": "@{+.09e2}",
+            "expected": {
+                "type": "number",
+                "value": 9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without leading zero and with unsigned lowercase E",
+            "expression": "@{-.09e2}",
+            "expected": {
+                "type": "number",
+                "value": -9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without leading zero and with unsigned uppercase E",
+            "expression": "@{.09E2}",
+            "expected": {
+                "type": "number",
+                "value": 9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without leading zero and with unsigned uppercase E",
+            "expression": "@{+.09E2}",
+            "expected": {
+                "type": "number",
+                "value": 9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without leading zero and with unsigned uppercase E",
+            "expression": "@{-.09E2}",
+            "expected": {
+                "type": "number",
+                "value": -9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without leading zero and with positive lowercase E",
+            "expression": "@{.09e+2}",
+            "expected": {
+                "type": "number",
+                "value": 9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without leading zero and with positive lowercase E",
+            "expression": "@{+.09e+2}",
+            "expected": {
+                "type": "number",
+                "value": 9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without leading zero and with positive lowercase E",
+            "expression": "@{-.09e+2}",
+            "expected": {
+                "type": "number",
+                "value": -9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without leading zero and with positive uppercase E",
+            "expression": "@{.09E+2}",
+            "expected": {
+                "type": "number",
+                "value": 9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without leading zero and with positive uppercase E",
+            "expression": "@{+.09E+2}",
+            "expected": {
+                "type": "number",
+                "value": 9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without leading zero and with positive uppercase E",
+            "expression": "@{-.09E+2}",
+            "expected": {
+                "type": "number",
+                "value": -9.0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without leading zero and with negative lowercase E",
+            "expression": "@{.09e-2}",
+            "expected": {
+                "type": "number",
+                "value": 0.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without leading zero and with negative lowercase E",
+            "expression": "@{+.09e-2}",
+            "expected": {
+                "type": "number",
+                "value": 0.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without leading zero and with negative lowercase E",
+            "expression": "@{-.09e-2}",
+            "expected": {
+                "type": "number",
+                "value": -0.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "unsigned scientific literal without leading zero and with negative uppercase E",
+            "expression": "@{.09E-2}",
+            "expected": {
+                "type": "number",
+                "value": 0.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "positive scientific literal without leading zero and with negative uppercase E",
+            "expression": "@{+.09E-2}",
+            "expected": {
+                "type": "number",
+                "value": 0.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "negative scientific literal without leading zero and with negative uppercase E",
+            "expression": "@{-.09E-2}",
+            "expected": {
+                "type": "number",
+                "value": -0.0009
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "underscore symbol unsupported in scientific number literals in numeric part",
+            "expression": "@{2_147.0e3}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "underscore symbol unsupported in scientific number literals in decimal part",
+            "expression": "@{2147.0_0093e+5}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "underscore symbol unsupported in scientific number literals in exponent part",
+            "expression": "@{2147.00093E-1_000}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivTooltip tests should create block with tooltip 1`] = `
+{
+  "type": "image",
+  "height": {
+    "type": "fixed",
+    "value": 44
+  },
+  "image_url": "https://image.url",
+  "tooltips": [
+    {
+      "id": "example_tooltip",
+      "position": "bottom-left",
+      "div": {
+        "type": "text",
+        "text": "Tooltip text"
+      }
+    }
+  ],
+  "width": {
+    "type": "fixed",
+    "value": 44
+  }
+}
+`;

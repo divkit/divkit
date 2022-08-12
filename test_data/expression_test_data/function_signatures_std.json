@@ -1,0 +1,134 @@
+{
+  "signatures": [
+    {
+      "name": "toBoolean(integer) boolean",
+      "function_name": "toBoolean",
+      "doc": "Converts argument value to boolean type. Returns true if argument is 1, false if argument is 0, error if argument is other.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to convert."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toBoolean(string) boolean",
+      "function_name": "toBoolean",
+      "doc": "Converts argument value to boolean type. Returns true if argument is \"true\", false if argument is \"false\", error if argument is other.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to convert."
+        }
+      ],
+      "result_type": "boolean",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toInteger(boolean) integer",
+      "function_name": "toInteger",
+      "doc": "Converts argument value to integer type. Returns 1 if argument is true, 0 if argument is false.",
+      "arguments": [
+        {
+          "type": "boolean",
+          "doc": "Boolean value to convert."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toInteger(number) integer",
+      "function_name": "toInteger",
+      "doc": "Converts argument value to integer type. Rounds number value down. Returns integer value.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to convert."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toInteger(string) integer",
+      "function_name": "toInteger",
+      "doc": "Converts argument value to integer type. Returns integer value.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to convert."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toNumber(integer) number",
+      "function_name": "toNumber",
+      "doc": "Converts argument value to number type. Returns number value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to convert."
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toNumber(string) number",
+      "function_name": "toNumber",
+      "doc": "Converts argument value to number type. Returns number value.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to convert."
+        }
+      ],
+      "result_type": "number",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toString(boolean) string",
+      "function_name": "toString",
+      "doc": "Converts argument value to string type. Returns string value.",
+      "arguments": [
+        {
+          "type": "boolean",
+          "doc": "Boolean value to convert."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toString(integer) string",
+      "function_name": "toString",
+      "doc": "Converts argument value to string type. Returns string value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to convert."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toString(number) string",
+      "function_name": "toString",
+      "doc": "Converts argument value to string type. Returns string value.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value to convert."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android", "web", "ios"]
+    }
+  ]
+}

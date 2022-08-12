@@ -1,0 +1,7 @@
+{
+  "type": "separator",
+  "action": {
+    "url": "div-action://set_state?state_id=42",
+    "log_id": "test_log_id"
+  }
+}

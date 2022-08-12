@@ -1,0 +1,74 @@
+{
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    },
+    "text_cell": {
+      "type": "text_with_background",
+      "text_alignment_horizontal": "center",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    },
+    "cell_with_one_pixel_margin": {
+      "type": "text_cell",
+      "margins": {
+        "top": 1,
+        "left": 1,
+        "right": 1,
+        "bottom": 1
+      }
+    },
+    "fixed_width_text": {
+      "type": "cell_with_one_pixel_margin",
+      "width": {
+        "type": "fixed",
+        "$value": "dp_width"
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 3,
+          "width": {
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "fixed_width_text",
+              "text": "100",
+              "dp_width": 100,
+              "column_span": 2
+            },
+            {
+              "type": "fixed_width_text",
+              "text": "50",
+              "dp_width": 50
+            },
+            {
+              "type": "fixed_width_text",
+              "text": "50",
+              "dp_width": 50
+            },
+            {
+              "type": "fixed_width_text",
+              "text": "100",
+              "dp_width": 100,
+              "column_span": 2
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

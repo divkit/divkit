@@ -1,0 +1,131 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "text_block": {
+      "type": "subtitle",
+      "text_color": "#000000",
+      "margins": {
+        "left": 0,
+        "right": 0
+      },
+      "paddings": {
+        "left": 10,
+        "right": 10,
+        "top": 4
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 24
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Свойства текста"
+            },
+            {
+              "type": "subtitle",
+              "text": "Демонстрация всех возможных свойств, которые можно применить к тексту",
+              "margins": {
+                "bottom": 12
+              }
+            },
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "paddings": {
+                "top": 16,
+                "bottom": 16
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "items": [
+                {
+                  "type": "text_block",
+                  "text": "Можно менять размер текста",
+                  "font_size": 22
+                },
+                {
+                  "type": "text_block",
+                  "text": "Можно менять начертание",
+                  "font_weight": "bold"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Можно добавить подчеркивание",
+                  "underline": "single"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Можно добавить зачеркивание",
+                  "strike": "single"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Можно менять расстояние между символами",
+                  "letter_spacing": 3
+                },
+                {
+                  "type": "text_block",
+                  "text": "Можно менять цвет текста",
+                  "text_color": "#3F28C3"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Можно менять выравнивание",
+                  "text_alignment_horizontal": "right"
+                },
+                {
+                  "type": "text_block",
+                  "text": "Можно менять высоту строки",
+                  "line_height": 52
+                },
+                {
+                  "type": "text_block",
+                  "text": "Можно устанавливать максимальное количество строк в тексте. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                  "max_lines": 2
+                },
+                {
+                  "type": "text_block",
+                  "text": "Этот текст можно выделять и копировать.",
+                  "selectable": 1
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

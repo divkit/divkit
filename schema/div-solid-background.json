@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "description": "Сплошной цвет фона.",
+  "properties": {
+    "color": {
+      "$ref": "common.json#/color",
+      "description": "Цвет."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "solid"
+      ]
+    }
+  },
+  "required": [
+    "color",
+    "type"
+  ]
+}

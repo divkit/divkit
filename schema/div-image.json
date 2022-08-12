@@ -1,0 +1,52 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Изображение.",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "$ref": "div-image-base.json"
+    },
+    {
+      "properties": {
+        "image_url": {
+          "$ref": "common.json#/url",
+          "description": "Прямая ссылка на изображение."
+        },
+        "high_priority_preview_show": {
+          "$ref": "common.json#/boolean_int",
+          "default_value": "false",
+          "description": "Устанавливает приоритет показа превью — превью декодируется в главном потоке и показывается первым кадром. Используйте параметр с осторожностью — он ухудшит время показа превью и может ухудшить время запуска приложения.",
+          "platforms": [
+            "android"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "image"
+          ]
+        },
+        "tint_color": {
+          "$ref": "common.json#/color",
+          "description": "Новый цвет контурного изображения."
+        },
+        "appearance_animation": {
+          "$ref": "div-fade-transition.json",
+          "description": "Анимация прозрачности при загрузке изображения.",
+          "platforms": [
+            "android"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "image_url",
+    "type"
+  ]
+}

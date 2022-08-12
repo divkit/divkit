@@ -1,0 +1,40 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gif",
+          "gif_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+          "paddings": {
+            "left": 10,
+            "right": 10
+          },
+          "margins": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "has_shadow": 1,
+            "corner_radius": 10
+          },
+          "background": [
+            {
+              "color": "#FFAAAAAA",
+              "type": "solid"
+            }
+          ],
+          "height": {
+            "type": "fixed",
+            "value": 100
+          }
+        }
+      }
+    ]
+  }
+}
+

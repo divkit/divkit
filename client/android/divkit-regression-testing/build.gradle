@@ -1,0 +1,36 @@
+apply from: "${project.projectDir}/../div-library.gradle"
+apply from: "${project.projectDir}/../div-tests.gradle"
+
+android {
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation project(path: ':assertion')
+    implementation project(path: ':div')
+    implementation project(path: ':div-data')
+    implementation project(path: ':div-json')
+    implementation project(path: ':fonts')
+    implementation project(path: ':utils')
+
+
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+
+    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation "androidx.core:core:$versions.androidx.core"
+    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
+    implementation "androidx.activity:activity-ktx:1.3.1"
+    implementation "androidx.fragment:fragment-ktx:1.3.6"
+    implementation "androidx.recyclerview:recyclerview:$versions.androidx.recycler"
+    implementation "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.androidx.lifecycle"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$versions.androidx.lifecycle"
+    implementation "com.google.android.material:material:$versions.androidx.material"
+
+    implementation 'org.yaml:snakeyaml:1.29'
+
+    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
+}

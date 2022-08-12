@@ -1,0 +1,76 @@
+topnews|Новости с Петропавловском-камчатским|{
+  "ttv": 1200,
+  "utime": 1513073949,
+  "ttl": 300,
+  "data": {
+    "tab": [
+      {
+        "full_list_button": {
+          "url": "https://m.news.yandex.ru/",
+          "title": "Все новости"
+        },
+        "url": "https://m.news.yandex.ru/",
+        "full_list_title": "Все новости",
+        "title": "Хорошие новости",
+        "news": [
+          {
+            "text": "7 миллиардов человек продолжают жить",
+            "url": "http://favera.ru/img/2014/07/28/573184_1406547000.jpg"
+          },
+          {
+            "text": "50000 самолетов благополучно взлетели и приземлились",
+            "url": "http://favera.ru/img/2014/07/28/573184_1406547000.jpg"
+          },
+          {
+            "text": "Новые лекарства и методы лечения разрабатываются каждый день",
+            "url": "http://favera.ru/img/2014/07/28/573184_1406547000.jpg"
+          },
+          {
+            "text": "Депутатов настигла массовая эпидемия диареи",
+            "url": "http://zdorovajasemja.ru/images/prichiny-i-lechenie/chastyj-stul-u-vzroslogo-prichiny-i-lechenie_2_1.jpg",
+            "is_hot": 1
+          },
+          {
+            "text": "Котики",
+            "url": "https://yandex.ru/images/search?text=Котики"
+          }
+        ]
+      },
+      {
+        "full_list_button": {
+          "url": "https://m.news.yandex.ru/Moscow",
+          "title": "Все новости региона"
+        },
+        "url": "https://m.news.yandex.ru/Moscow",
+        "full_list_title": "Все новости региона",
+        "news": [
+          {
+            "text": "В Петропавловске-Камчатском все хорошо",
+            "url": "https://ru.wikipedia.org/wiki/Петропавловск-Камчатский"
+          },
+          {
+            "text": "В Петропавловске-Камчатском все живы",
+            "url": "https://ru.wikipedia.org/wiki/Петропавловск-Камчатский"
+          },
+          {
+            "text": "В Петропавловске-Камчатском все счастливы",
+            "url": "https://ru.wikipedia.org/wiki/Петропавловск-Камчатский"
+          },
+          {
+            "text": "В Петропавловске-Камчатском светит солнце",
+            "url": "https://ru.wikipedia.org/wiki/Петропавловск-Камчатский"
+          },
+          {
+            "text": "Петропавловск-Камчатский - лучший город на свете, потому что самый длинный",
+            "url": "https://ru.wikipedia.org/wiki/Петропавловск-Камчатский"
+          }
+        ],
+        "title": "Петропавловск-Камчатский"
+      }
+    ],
+    "url": "https://m.news.yandex.ru/?lang=ru"
+  },
+  "type": "topnews",
+  "title": "Сейчас в СМИ",
+  "id": "topnews"
+}

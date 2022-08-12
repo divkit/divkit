@@ -1,0 +1,24 @@
+apply from: "${project.projectDir}/../../common-lib.gradle"
+apply from: "${project.projectDir}/../../tests.gradle"
+apply from: "${project.projectDir}/../../aspects.gradle"
+apply from: "${project.projectDir}/../../publish_alicekit.gradle"
+
+dependencies {
+    implementation project(path: ':core')
+    implementation project(path: ':json')
+    implementation project(path: ':div-json')
+    implementation project(path: ':logging')
+    implementation project(path: ':images')
+    implementation project(path: ':div-default-image-loader')
+    implementation project(path: ':div-core')
+
+    api project(path: ':div-legacy-data')
+    api project(path: ':div-data')
+    api project(path: ':div-core-views')
+
+    implementation "com.google.dagger:dagger:$versions.dagger"
+    kapt "com.google.dagger:dagger-compiler:$versions.dagger"
+
+    implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation "androidx.recyclerview:recyclerview:$versions.androidx.recycler"
+}

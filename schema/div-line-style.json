@@ -1,0 +1,8 @@
+{
+  "type": "string",
+  "description": "Стиль линий.",
+  "enum": [
+    "none",
+    "single"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Анимированное gif-изображение.",
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "$ref": "div-actionable.json"
+    },
+    {
+      "$ref": "div-image-base.json"
+    },
+    {
+      "properties": {
+        "gif_url": {
+          "$ref": "common.json#/url",
+          "description": "Прямая ссылка на gif-изображение."
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "gif"
+          ]
+        }
+      }
+    }
+  ],
+  "required": [
+    "gif_url",
+    "type"
+  ]
+}

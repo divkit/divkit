@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="legacyTabIndicatorLayoutStyle" format="reference"/>
+    <attr name="legacyButtonTextStyle" format="reference"/>
+    <attr name="legacyButtonImageStyle" format="reference"/>
+    <attr name="legacyFooterStyle" format="reference"/>
+    <attr name="legacyTitleStyle" format="reference"/>
+    <attr name="legacyTrafficLayoutStyle" format="reference"/>
+    <attr name="legacyUniversalTitleStyle" format="reference"/>
+    <attr name="legacyUniversalTextStyle" format="reference"/>
+    <attr name="legacyUniversalImageStyle" format="reference"/>
+    <attr name="legacyUniversalDayStyle" format="reference"/>
+    <attr name="legacyUniversalMonthStyle" format="reference"/>
+
+    <declare-styleable name="RatioImageView">
+        <attr name="ratio" format="float"/>
+        <attr name="customScaleType" format="enum">
+            <enum name="topCrop" value="0"/>
+        </attr>
+        <attr name="direction" format="enum">
+            <enum name="width" value="0"/>
+            <enum name="height" value="1"/>
+        </attr>
+        <attr name="ratioImageViewStyle" format="reference"/>
+    </declare-styleable>
+
+    <declare-styleable name="FitTableLayout">
+        <attr name="android:columnCount"/>
+    </declare-styleable>
+
+    <declare-styleable name="FitTableLayout_Layout">
+        <attr name="android:layout_gravity"/>
+        <attr name="android:layout_span"/>
+        <attr name="android:layout_weight"/>
+    </declare-styleable>
+</resources>

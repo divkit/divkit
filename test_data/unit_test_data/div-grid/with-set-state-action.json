@@ -1,0 +1,17 @@
+{
+  "type": "grid",
+  "column_count": 1,
+  "action": {
+    "url": "div-action://set_state?state_id=42",
+    "payload": {
+      "key": "value"
+    },
+    "log_id": "test_log_id"
+  },
+  "items": [
+    {
+      "type": "text",
+      "text": "1"
+    }
+  ]
+}

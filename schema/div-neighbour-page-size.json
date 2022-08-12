@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "description": "Фиксированное значение ширины видимой части соседней страницы.",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "fixed"
+      ]
+    },
+    "neighbour_page_width": {
+      "$ref": "div-fixed-size.json",
+      "description": "Ширина видимой части соседней страницы."
+    }
+  },
+  "required": [
+    "type",
+    "neighbour_page_width"
+  ]
+}

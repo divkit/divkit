@@ -1,0 +1,28 @@
+{
+  "log_id": "text",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "height": {
+          "type": "wrap_content"
+        },
+        "font_size": 14,
+        "line_height": 18,
+        "max_lines": 5,
+        "ellipsis": {
+          "text": "… Развернуть",
+          "ranges": [
+            {
+              "start": 2,
+              "end": 13,
+              "text_color": "#80000000"
+            }
+          ]
+        },
+        "text": "\uD83D\uDC68\u200D\uD83C\uDFED\uD83D\uDC68\u200D\uD83C\uDFED\uD83D\uDC69\u200D\uD83D\uDCBC\uD83D\uDC68\u200D\uD83D\uDCBC\uD83D\uDC69\u200D\uD83D\uDD2C\uD83E\uDDCF\u200D♂️\uD83D\uDE46\u200D♂️\uD83E\uDDDF\u200D♂️\uD83E\uDDDF\u200D♀️(¬‿¬)(⌐■_■)⪝⪘⪱⪺⪤⪛⪕⪫⪮“\uD83E\uDD45\uD83C\uDFD3\uD83E\uDE81\uD83C\uDFD3\uD83C\uDFD1\uD83C\uDFB8\uD83D\uDD10\n\nав\n\nпав\n\nы\n\nИ нет сомнений, что акционеры крупнейших компаний и по сей день остаются уделом либералов, которые жаждут быть заблокированы в рамках своих собственных рациональных ограничений. Не следует, однако, забывать, что высокое качество позиционных исследований требует от нас анализа глубокомысленных рассуждений.",
+        "type": "text"
+      }
+    }
+  ]
+}

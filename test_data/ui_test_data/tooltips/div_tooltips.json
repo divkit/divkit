@@ -1,0 +1,132 @@
+{
+  "type": "div2",
+  "log_id": "snapshot_test_card",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "orientation": "vertical",
+        "items": [
+          {
+            "type": "container",
+            "orientation": "overlap",
+            "height": {
+              "type": "fixed",
+              "value": 200
+            },
+            "width": {
+              "type": "match_parent"
+            },
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "items": [
+              {
+                "type": "button",
+                "gravity": "top-left",
+                "div_action": "div-action://show_tooltip?id=top-left",
+                "alignment_vertical": "bottom",
+                "alignment_horizontal": "right"
+              },
+              {
+                "type": "button",
+                "gravity": "top",
+                "div_action": "div-action://show_tooltip?id=top",
+                "alignment_vertical": "bottom",
+                "alignment_horizontal": "center"
+              },
+              {
+                "type": "button",
+                "gravity": "top-right",
+                "div_action": "div-action://show_tooltip?id=top-right",
+                "alignment_vertical": "bottom",
+                "alignment_horizontal": "left"
+              },
+              {
+                "type": "button",
+                "gravity": "left",
+                "div_action": "div-action://show_tooltip?id=left",
+                "alignment_vertical": "center",
+                "alignment_horizontal": "right"
+              },
+              {
+                "type": "button",
+                "gravity": "right",
+                "div_action": "div-action://show_tooltip?id=right",
+                "alignment_vertical": "center",
+                "alignment_horizontal": "left"
+              },
+              {
+                "type": "button",
+                "gravity": "bottom-left",
+                "div_action": "div-action://show_tooltip?id=bottom-left",
+                "alignment_vertical": "top",
+                "alignment_horizontal": "right"
+              },
+              {
+                "type": "button",
+                "gravity": "bottom",
+                "div_action": "div-action://show_tooltip?id=bottom",
+                "alignment_vertical": "top",
+                "alignment_horizontal": "center"
+              },
+              {
+                "type": "button",
+                "gravity": "bottom-right",
+                "div_action": "div-action://show_tooltip?id=bottom-right",
+                "alignment_vertical": "top",
+                "alignment_horizontal": "left"
+              }
+            ]
+          },
+          {
+            "type": "separator"
+          },
+          {
+            "margins": {
+              "left": 10,
+              "top": 10,
+              "right": 10,
+              "bottom": 10
+            },
+            "type": "state",
+            "alignment_horizontal": "center",
+            "div_id": "status",
+            "id": "status_text",
+            "states": [
+              {
+                "state_id": "hidden",
+                "div": {
+                  "type": "status",
+                  "text": "hidden"
+                }
+              },
+              {
+                "state_id": "showing",
+                "div": {
+                  "type": "status",
+                  "text": "showing",
+                  "action": {
+                    "log_id": "label",
+                    "url": "div-action://set_state?state_id=0/status/hidden"
+                  }
+                }
+              },
+              {
+                "state_id": "clicked",
+                "div": {
+                  "type": "status",
+                  "text": "clicked"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

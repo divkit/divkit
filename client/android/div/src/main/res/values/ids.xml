@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources>
+    <item name="base_tabbed_title_container_scroller" type="id"/>
+    <item name="div_tabs_divider" type="id"/>
+    <item name="div_tabs_container_helper" type="id"/>
+    <item name="div_tabbed_tab_title_item" type="id"/>
+
+    <item name="bitmap_load_references_tag" type="id"/>
+    <item name="image_loaded_flag" type="id"/>
+    <item name="div_tooltips_tag" type="id"/>
+    <item name="div_custom_tag" type="id"/>
+    <item name="div_penetrating_longtap_tag" type="id"/>
+
+    <item name="div_non_transition_alpha" type="id"/>
+    <item name="div_transition_position" type="id"/>
+
+    <item name="div_releasable_list" type="id"/>
+</resources>

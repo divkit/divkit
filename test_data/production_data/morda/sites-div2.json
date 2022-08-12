@@ -1,0 +1,231 @@
+{
+    "templates": {
+        "title": {
+            "type": "container",
+            "$items": "title_items",
+            "orientation": "horizontal"
+        },
+        "title_menu": {
+            "type": "image",
+            "height": {
+                "type": "fixed",
+                "value": 44
+            },
+            "placeholder_color": "#00ffffff",
+            "width": {
+                "type": "fixed",
+                "value": 44
+            }
+        },
+        "title_text": {
+            "type": "text",
+            "font_size": 20,
+            "font_weight": "medium",
+            "line_height": 24,
+            "paddings": {
+                "left": 16,
+                "right": 16,
+                "top": 12
+            },
+            "text_color": "#cc000000"
+        },
+        "sites_card": {
+            "type": "container",
+            "orientation": "vertical",
+            "items": [{
+                "type": "title"
+            }, {
+                "type": "gallery",
+                "width": {
+                    "type": "match_parent"
+                },
+                "height": {
+                    "type": "fixed",
+                    "value": 240,
+                    "unit": "sp"
+                },
+                "paddings": {
+                    "left": 16,
+                    "right": 16
+                },
+                "$items": "sites_items"
+            }, {
+                "type": "footer"
+            }],
+            "background": [{
+                "type": "solid",
+                "color": "#FFFFFF"
+            }]
+        },
+        "sites_item": {
+            "type": "container",
+            "orientation": "overlap",
+            "width": {
+                "type": "fixed",
+                "value": 216
+            },
+            "height": {
+                "type": "fixed",
+                "value": 240,
+                "unit": "sp"
+            },
+            "border": {
+                "corner_radius": 8
+            },
+            "background": [{
+                "type": "solid",
+                "color": "#261E1B"
+            }],
+            "items": [{
+                "type": "separator",
+                "background": [{
+                    "type": "image",
+                    "$image_url": "sites_background_photo"
+                }, {
+                    "type": "gradient",
+                    "angle": 90,
+                    "colors": ["#261E1B", "#00261E1B", "#00261E1B"]
+                }],
+                "delimiter_style": {
+                    "color": "#00000000"
+                },
+                "width": {
+                    "type": "fixed",
+                    "value": 216
+                },
+                "height": {
+                    "type": "fixed",
+                    "unit": "sp",
+                    "value": 132
+                }
+            }, {
+                "type": "container",
+                "orientation": "vertical",
+                "paddings": {
+                    "top": 101,
+                    "left": 12,
+                    "right": 12,
+                    "bottom": 12
+                },
+                "height": {
+                    "type": "fixed",
+                    "unit": "sp",
+                    "value": 240
+                },
+                "items": [{
+                    "type": "text",
+                    "$text": "sites_title",
+                    "font_size": 16,
+                    "line_height": 20,
+                    "text_color": "#ffffff",
+                    "font_weight": "medium",
+                    "max_lines": 5
+                }, {
+                    "type": "text",
+                    "$text": "sites_text",
+                    "font_size": 14,
+                    "line_height": 18,
+                    "text_color": "#99FFFFFF",
+                    "max_lines": 4,
+                    "height": {
+                        "type": "match_parent",
+                        "weight": 1
+                    }
+                }, {
+                    "type": "container",
+                    "orientation": "horizontal",
+                    
+                    "paddings": {
+                        "top": 11
+                    },
+                    "items": [{
+                        "type": "image",
+                        "width": {
+                            "type": "fixed",
+                            "value": 16
+                        },
+                        "height": {
+                            "type": "fixed",
+                            "value": 16
+                        },
+                        "placeholder_color": "#00ffffff",
+                        "$image_url": "sites_favicon"
+                    }, {
+                        "type": "text",
+                        "$text": "sites_source",
+                        "paddings": {
+                            "left": 4
+                        },
+                        "font_size": 13,
+                        "line_height": 16,
+                        "text_color": "#99FFFFFF"
+                    }]
+                }]
+            }]
+        },
+        "footer": {
+            "type": "text",
+            "paddings": {
+                "bottom": 13,
+                "top": 15,
+                "left": 16
+            },
+            "text_alignment_vertical": "bottom",
+            "line_height": 16,
+            "font_size": 12,
+            "text_color": "#80000000",
+            "letter_spacing": 0.75,
+            "$text": "footer_text",
+            "$action": "footer_action"
+        }
+    },
+    "card": {
+        "log_id": "sites_card",
+        "states": [{
+            "state_id": 0,
+            "div": {
+                "type": "sites_card",
+                "title_items": [{
+                    "type": "title_text",
+                    "action": {
+                        "log_id": "title",
+                        "url": "todo.ru"
+                    },
+                    "text": "Коммерсант"
+                }, {
+                    "type": "title_menu",
+                    "action": {
+                        "log_id": "menu",
+                        "menu_items": [{
+                            "action": {
+                                "log_id": "menu\/item\/0",
+                                "url": "opensettings:\/\/?screen=feed"
+                            },
+                            "text": "Настройки ленты"
+                        }, {
+                            "action": {
+                                "log_id": "menu\/item\/1",
+                                "url": "hidecard:\/\/?topic_card_ids=sites_card&undo_snackbar_text=%D0%92%D1%8B%20%D1%81%D0%BA%D1%80%D1%8B%D0%BB%D0%B8%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D1%83"
+                            },
+                            "text": "Скрыть карточку"
+                        }]
+                    },
+                    "image_url": "https:\/\/yastatic.net\/s3\/home\/yandex-app\/services_div\/general\/menu_points.3.png"
+                }],
+                "sites_items": [{
+                    "type": "sites_item",
+                    "sites_background_photo": "https://avatars.mds.yandex.net/get-zen_doc/96506/pub_5aab8b19a815f13d161aa4d6_5aab8b8e256d5c6d18182dfb/scale_1200",
+                    "sites_title": "Компания Маска",
+                    "sites_text": "Компания Маска сообщила о первых шагах для подключения человека к компьютеру",
+                    "sites_favicon": "https:\/\/yastatic.net\/s3\/home\/yandex-app\/services_div\/music\/icncoverplay.3.png",
+                    "sites_source": "kommersant.ru"
+                }],
+                "footer_text": "ВСЕ СТАТЬИ И МАТЕРИАЛЫ",
+                "footer_action": {
+                    "log_id": "footer",
+                    "url": "todo.ru"
+                }
+            }
+        }]
+    }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_entity_property"
+      ]
+    },
+    "entity": {
+      "$ref": "entity.json",
+      "default_value": "{ \"type\": \"entity_with_string_enum_property\", \"property\": \"second\" }"
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

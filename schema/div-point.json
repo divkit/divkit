@@ -1,0 +1,18 @@
+{
+  "type": "object",
+  "description": "Точка с фиксированными координатами.",
+  "properties": {
+    "x": {
+      "$ref": "div-dimension.json",
+      "description": "Координата `X`."
+    },
+    "y": {
+      "$ref": "div-dimension.json",
+      "description": "Координата `Y`."
+    }
+  },
+  "required": [
+    "x",
+    "y"
+  ]
+}

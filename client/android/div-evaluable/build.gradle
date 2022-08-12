@@ -1,0 +1,31 @@
+apply plugin: 'java-library'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+apply from: "${project.projectDir}/../publish-java.gradle"
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+task replJar(type: Jar, dependsOn: "testClasses") {
+    from "$buildDir/classes/kotlin/test"
+    from "$buildDir/classes/kotlin/main"
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    manifest {
+        attributes 'Main-Class': 'com.yandex.div.evaluable.repl.EvaluableRepl'
+    }
+    classifier "repl"
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    implementation "javax.inject:javax.inject:$versions.javax"
+
+    testImplementation "org.json:json:$versions.json"
+    testImplementation "junit:junit:$versions.junit"
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$versions.mockitoKotlin"
+}

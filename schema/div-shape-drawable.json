@@ -1,0 +1,27 @@
+{
+  "type": "object",
+  "description": "Drawable простой геометрической формы.",
+  "properties": {
+    "shape": {
+      "$ref": "div-shape.json",
+      "description": "Форма."
+    },
+    "color": {
+      "$ref": "common.json#/color",
+      "description": "Цвет заливки."
+    },
+    "stroke": {
+      "$ref": "div-stroke.json",
+      "description": "Стиль контура."
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "shape_drawable"
+      ]
+    }
+  },
+  "required": [
+    "type", "shape", "color"
+  ]
+}

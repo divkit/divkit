@@ -1,0 +1,27 @@
+{
+  "log_id": "text",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "font_size": 16,
+        "height": {
+          "type": "wrap_content"
+        },
+        "line_height": 20,
+        "max_lines": 3,
+        "ellipsis": {
+          "text": "… Развернуть",
+          "ranges": [
+            {
+              "start": 2,
+              "end": 13
+            }
+          ]
+        },
+        "text": "This is a very long text. This text should be broken into multiple lines. Very very loooong text",
+        "type": "text"
+      }
+    }
+  ]
+}

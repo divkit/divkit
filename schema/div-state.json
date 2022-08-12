@@ -1,0 +1,100 @@
+{
+  "java_extends": "DivBlockWithId",
+  "description": "Содержит наборы состояний для визуальных элементов и переключается между ними.",
+  "generate_swift_optional_arguments": false,
+  "definitions": {
+    "div_state": {
+      "type": "object",
+      "generate_swift_optional_arguments": false,
+      "properties": {
+        "state_id": {
+          "type": "string",
+          "supports_expressions": false,
+          "description": "Идентификатор состояния. Должен быть уникальным на одном уровне иерархии."
+        },
+        "div": {
+          "$ref": "div.json",
+          "description": "Содержимое. Если параметр отсутствует, то состояние не будет отображаться."
+        },
+        "animation_in": {
+          "$ref": "div-animation.json",
+          "description": "Анимация появления состояния. Вместо него используйте `transition_in`.",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "deprecated": true
+        },
+        "animation_out": {
+          "$ref": "div-animation.json",
+          "description": "Анимация исчезания состояния. Вместо него используйте `transition_out`.",
+          "platforms": [
+            "android",
+            "ios"
+          ],
+          "deprecated": true
+        },
+        "swipe_out_actions": {
+          "type": "array",
+          "items": {
+            "$ref": "div-action.json"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Действия при смахивании состояния по горизонтали.",
+          "platforms": [
+            "android"
+          ],
+          "deprecated": true
+        }
+      },
+      "required": [
+        "state_id"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "div-base.json"
+    },
+    {
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "state"
+          ]
+        },
+        "states": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/div_state"
+          },
+          "minItems": 1,
+          "clientMinItems": 1,
+          "description": "Состояния. Каждый элемент может иметь несколько состояний с разной версткой. Переход между состояниями осуществляется с помощью [специальной схемы](../../interaction.dita) элемента [action](div-action.md)."
+        },
+        "div_id": {
+          "type": "string",
+          "supports_expressions": false,
+          "description": "Идентификатор элемента. Параметр устарел, используйте `id`.",
+          "deprecated": true
+        },
+        "default_state_id": {
+          "type": "string",
+          "description": "Идентификатор состояния, которое будет выставлено по умолчанию. Если параметр не задан, то будет выставлено первое состояние из `states`."
+        },
+        "transition_animation_selector": {
+          "$ref": "div-transition-selector.json",
+          "default_value": "state_change",
+          "description": "Определяет, при каких событиях сработают анимации переходов. Вместо него используйте `transition_triggers`.",
+          "deprecated": true
+        }
+      },
+      "required": [
+        "type",
+        "states"
+      ]
+    }
+  ]
+}

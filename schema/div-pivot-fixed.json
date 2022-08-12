@@ -1,0 +1,22 @@
+{
+  "type": "object",
+  "description": "Значение смещения координат оси вращения.",
+  "properties": {
+    "value": {
+      "type": "integer",
+      "description": "Смещение."
+    },
+    "unit": {
+      "$ref": "div-size-unit.json",
+      "description": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.data).",
+      "default_value": "dp"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "pivot-fixed"
+      ]
+    }
+  },
+  "platforms": []
+}

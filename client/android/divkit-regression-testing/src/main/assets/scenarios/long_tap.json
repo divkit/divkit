@@ -1,0 +1,88 @@
+{
+  "log_id": "text",
+  "type": "state",
+  "div_id": "context_menu",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "text",
+        "width": {
+          "type": "match_parent"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "margins": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "paddings": {
+          "left": 16,
+          "top": 16,
+          "right": 16,
+          "bottom": 16
+        },
+        "alpha": 1.0,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#34495E"
+          }
+        ],
+        "border": {
+          "corner_radius": 4,
+          "has_shadow": 1
+        },
+        "font_size": 20,
+        "font_weight": "medium",
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center",
+        "text_color": "#1ABC9C",
+        "text": "Long tap menu",
+        "ranges": [
+          {
+            "start": 12,
+            "end": 17,
+            "text_color": "#F1C40F"
+          },
+          {
+            "start": 18,
+            "end": 21,
+            "text_color": "#E67E22"
+          },
+          {
+            "start": 22,
+            "end": 26,
+            "text_color": "#E74C3C"
+          }
+        ],
+        "longtap_actions": [
+          {
+            "menu_items": [
+              {
+                "text": "Показать",
+                "action": {
+                  "url": "custom-menu://show",
+                  "log_id": "custom/menu/hide"
+                }
+              },
+              {
+                "action": {
+                  "url": "custom-menu://hide",
+                  "log_id": "custom/menu/remove"
+                },
+                "text": "Скрыть"
+              }
+            ],
+            "log_id": "longtap_actions"
+          }
+        ]
+      }
+    }
+  ]
+}

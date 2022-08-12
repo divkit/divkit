@@ -1,0 +1,115 @@
+{
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    },
+    "text_cell": {
+      "type": "text_with_background",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    },
+    "text_with_one_pixel_margin": {
+      "type": "text_cell",
+      "margins": {
+        "top": 1,
+        "left": 1,
+        "right": 1,
+        "bottom": 1
+      }
+    },
+    "30x30": {
+      "type": "text_with_one_pixel_margin",
+      "height": {
+        "type": "fixed",
+        "value": 30
+      },
+      "width": {
+        "type": "fixed",
+        "value": 30
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "items": [
+            {
+              "type": "grid",
+              "column_count": 6,
+              "items": [
+                {
+                  "type": "text_with_one_pixel_margin",
+                  "text": "R span 3x1",
+                  "column_span": 3
+                },
+                {
+                  "type": "30x30",
+                  "text": "f"
+                },
+                {
+                  "type": "30x30",
+                  "text": "f"
+                },
+                {
+                  "type": "30x30",
+                  "text": "f"
+                },
+                {
+                  "type": "separator",
+                  "column_span": 6
+                },
+                {
+                  "type": "text_with_one_pixel_margin",
+                  "text": "i",
+                  "width": {
+                    "type": "wrap_content"
+                  }
+                },
+                {
+                  "type": "30x30",
+                  "text": "f"
+                },
+                {
+                  "type": "text_with_one_pixel_margin",
+                  "text": "R",
+                  "width": {
+                    "type": "match_parent",
+                    "weight": 1
+                  }
+                },
+                {
+                  "type": "30x30",
+                  "text": "f"
+                },
+                {
+                  "type": "30x30",
+                  "text": "f"
+                },
+                {
+                  "type": "30x30",
+                  "text": "f"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

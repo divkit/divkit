@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="42sp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/div_traffic_score"
+        android:clickable="false"
+        android:focusable = "false"
+        style="@style/Legacy.Traffic.Score"/>
+
+    <TextView
+        android:id="@+id/div_traffic_text"
+        style="@style/Legacy.Traffic.Text"
+        android:clickable="false"
+        android:focusable = "false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

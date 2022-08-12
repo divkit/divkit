@@ -1,0 +1,111 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DivAction tests should create block with action 1`] = `
+{
+  "type": "text",
+  "action": {
+    "log_id": "id",
+    "url": "http://some.url"
+  },
+  "text": "Some text"
+}
+`;
+
+exports[`DivAction tests should create block with action with hover 1`] = `
+{
+  "type": "text",
+  "action": {
+    "log_id": "id",
+    "url": "https://some.url",
+    "hover": {
+      "type": "background-color",
+      "color": "red"
+    }
+  },
+  "text": "Some text"
+}
+`;
+
+exports[`DivAction tests should create block with action with menu items 1`] = `
+{
+  "type": "text",
+  "action": {
+    "log_id": "id",
+    "menu_items": [
+      {
+        "text": "Menu Item",
+        "actions": [
+          {
+            "log_id": "id",
+            "url": "http://some.url"
+          }
+        ]
+      }
+    ]
+  },
+  "text": "Some text"
+}
+`;
+
+exports[`DivAction tests should create block with action with payload 1`] = `
+{
+  "type": "text",
+  "action": {
+    "log_id": "id",
+    "payload": {
+      "custom_string_value": "payload",
+      "custom_integer_value": 20
+    }
+  },
+  "text": "Some text"
+}
+`;
+
+exports[`DivAction tests should create block with actions 1`] = `
+{
+  "type": "text",
+  "actions": [
+    {
+      "log_id": "id_1",
+      "url": "http://some.url/?path_1"
+    },
+    {
+      "log_id": "id_2",
+      "url": "http://some.url/?path_2"
+    }
+  ],
+  "text": "Some text"
+}
+`;
+
+exports[`DivAction tests should create card with templatesd action properties 1`] = `
+{
+  "templates": {
+    "card": {
+      "type": "text",
+      "action": {
+        "log_id": "id",
+        "hover": {
+          "type": "background-color",
+          "$color": "hover_background_color"
+        },
+        "$url": "action_url"
+      },
+      "text": "Some text"
+    }
+  },
+  "card": {
+    "log_id": "id",
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "card",
+          "action_url": "https://some.url",
+          "hover_background_color": "red"
+        }
+      }
+    ]
+  }
+}
+`;

@@ -1,0 +1,28 @@
+{
+  "log_id": "pinch_to_zoom_with_long_tap",
+  "states": [
+    {
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "items": [
+          {
+            "type": "image",
+            "image_url": "file:///android_asset/images/lenna.png",
+            "extensions": [
+              {
+                "id": "pinch-to-zoom"
+              }
+            ],
+            "longtap_actions": [
+              {
+                "url": "tel:0987654321",
+                "log_id": "longtap_actions"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

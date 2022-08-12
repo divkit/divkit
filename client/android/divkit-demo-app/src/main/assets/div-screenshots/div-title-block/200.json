@@ -1,0 +1,24 @@
+{
+    "states": [
+        {
+            "state_id": 1,
+            "blocks": [
+                {
+                    "type": "div-title-block",
+                    "menu_items": [
+                        {
+                            "url": "https://news.yandex.ru",
+                            "text": "news"
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "background": [
+        {
+            "color": "#DDA0DD",
+            "type": "div-solid-background"
+        }
+    ]
+}

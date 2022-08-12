@@ -1,0 +1,205 @@
+{
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 20,
+      "line_height": 24,
+      "font_weight": "bold",
+      "paddings": {
+        "left": 24,
+        "right": 24,
+        "bottom": 8
+      }
+    },
+    "subtitle": {
+      "font_size": 15,
+      "line_height": 20,
+      "type": "text",
+      "paddings": {
+        "left": 24,
+        "right": 24
+      }
+    },
+    "image_block": {
+      "type": "image",
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "fixed",
+        "value": 150
+      },
+      "margins": {
+        "left": 16,
+        "right": 16,
+        "bottom": 16
+      }
+    },
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 24,
+        "right": 24
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "variables": [
+      {
+        "name": "change_state",
+        "type": "boolean",
+        "value": 0
+      },
+      {
+        "name": "state",
+        "type": "boolean",
+        "value": 0
+      }
+    ],
+    "variable_triggers": [
+      {
+        "condition": "@{change_state && state}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=change_state&value=0"
+          },
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=state&value=0"
+          },
+          {
+            "log_id": "change state",
+            "url": "div-action://set_state?state_id=0/transition_change_demo_state/state1"
+          }
+        ]
+      },
+      {
+        "condition": "@{change_state && !state}",
+        "mode": "on_variable",
+        "actions": [
+          {
+            "log_id": "update change_state flag",
+            "url": "div-action://set_variable?name=change_state&value=0"
+          },
+          {
+            "log_id": "update state variable",
+            "url": "div-action://set_variable?name=state&value=1"
+          },
+          {
+            "log_id": "change state",
+            "url": "div-action://set_state?state_id=0/transition_change_demo_state/state2"
+          }
+        ]
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "margins": {
+            "bottom": 48
+          },
+          "items": [
+            {
+              "type": "title",
+              "text": "Анимации при изменении положения или размера"
+            },
+            {
+              "type": "subtitle",
+              "text": "У каждого дива имеется возможность настроить анимацию перехода, которая воспроизводится, когда див меняет размер или положение.\n\nНа примере картинка анимированно увеличивается в ширине и перемещается в правый верхний угол при переключении состояния №2.",
+              "margins": {
+                "bottom": 24
+              }
+            },
+            {
+              "type": "state",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 250
+              },
+              "div_id": "transition_change_demo_state",
+              "states": [
+                {
+                  "state_id": "state1",
+                  "div": {
+                    "type": "image_block",
+                    "id": "image",
+                    "alignment_horizontal": "center",
+                    "alignment_vertical": "top",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "transition_change": {
+                      "type": "change_bounds",
+                      "duration": 1000
+                    }
+                  }
+                },
+                {
+                  "state_id": "state2",
+                  "div": {
+                    "type": "image_block",
+                    "id": "image",
+                    "alignment_horizontal": "right",
+                    "alignment_vertical": "bottom",
+                    "transition_change": {
+                      "type": "change_bounds",
+                      "duration": 1000
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "button",
+              "alignment_horizontal": "center",
+              "text": "Test Button",
+              "actions": [
+                {
+                  "log_id": "set_state1",
+                  "url": "div-action://set_variable?name=change_state&value=1"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

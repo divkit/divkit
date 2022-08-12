@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "description": "Размер с фиксированным соотношением сторон. Считает высоту от ширины и игнорирует другие заданные значения высоты.",
+  "properties": {
+    "ratio": {
+      "$ref": "common.json#/positive_number",
+      "description": "`ratio = width / height`."
+    }
+  },
+  "required": [
+    "ratio"
+  ]
+}

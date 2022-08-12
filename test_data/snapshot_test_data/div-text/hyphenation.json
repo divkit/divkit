@@ -1,0 +1,86 @@
+{
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "shy_text",
+              "text": "Рент\u00ADгено\u00ADэлектро\u00ADкардио\u00ADграф\u00ADичес\u00ADкий"
+            },
+            {
+              "type": "shy_text",
+              "text": "Пре\u00ADвы\u00ADсо\u00ADко\u00ADмного\u00ADрас\u00ADсмо\u00ADтри\u00ADтель\u00ADству\u00ADющий",
+              "max_lines": 3
+            },
+            {
+              "type": "shy_text",
+              "text": "Суб\u00ADстан\u00ADцион\u00ADали\u00ADзи\u00ADру\u00ADющ\u00ADими\u00ADся",
+              "max_lines": 3,
+              "ellipsis": {
+                "text": "… ещё",
+                "ranges": [
+                  {
+                    "start": 2,
+                    "end": 5,
+                    "text_color": "#80000000"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "shy_text",
+              "text": "Вы\u00ADсо\u00ADко\u00ADпре\u00ADвос\u00ADхо\u00ADди\u00ADтель\u00ADство",
+              "max_lines": 3,
+              "ranges": [
+                {
+                  "start": 0,
+                  "end": 8,
+                  "font_weight": "bold"
+                }
+              ]
+            },
+            {
+              "type": "shy_text",
+              "text": "До\u00ADсто\u00ADпри\u00ADме\u00ADча\u00ADтель\u00ADность",
+              "actions": [
+                {
+                  "log_id": "shy",
+                  "url": "content://foo"
+                }
+              ]
+            },
+            {
+              "type": "shy_text",
+              "text": "Тетрагидропиранилциклопентилтетра\u00ADгидропиридопиридиновыетель"
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "templates": {
+    "shy_text": {
+      "type": "text",
+      "paddings": {
+        "left": 10,
+        "top": 8,
+        "right": 10,
+        "bottom": 8
+      },
+      "text_color": "#21201f",
+      "line_height": 15,
+      "font_size": 12,
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "height": {
+        "type": "wrap_content"
+      }
+    }
+  }
+}

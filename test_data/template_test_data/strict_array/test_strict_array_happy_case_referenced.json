@@ -1,0 +1,26 @@
+{
+  "description": "Parsing should succeed",
+  "templates": {
+    "t_0": {
+      "type": "entity_with_strict_array",
+      "$array": "link"
+    }
+  },
+  "entity": {
+    "type": "t_0",
+    "link": [
+      {
+        "type": "entity_with_complex_property",
+        "property": {
+          "value": "https://ya.ru"
+        }
+      },
+      {
+        "type": "entity_with_complex_property",
+        "property": {
+          "value": "https://ya.ru"
+        }
+      }
+    ]
+  }
+}

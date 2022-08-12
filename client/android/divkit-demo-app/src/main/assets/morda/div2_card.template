@@ -1,0 +1,157 @@
+div2|Div2 card|{
+  "ttv":1200,
+  "utime":1508351555,
+  "ttl":1200,
+  "id": "div2_card",
+  "type": "div2",
+  "title": "Div2 card with templates",
+  "data": {
+              "states": [
+                {
+                  "state_id": 1,
+                  "div": {
+                    "type": "container",
+                    "paddings": {
+                      "bottom": 16
+                    },
+                    "height": {
+                      "type": "wrap_content"
+                    },
+                    "items": [
+                      {
+                        "type": "title_template",
+                        "title_link": "Новости района"
+                      },
+                      {
+                        "type": "gallery",
+                        "width": {
+                          "type": "match_parent"
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 204
+                        },
+                        "paddings": {
+                          "left": 16,
+                          "right": 16
+                        },
+                        "items": [
+                          {
+                            "type": "gallery_item_template",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1"
+                          },
+                          {
+                            "type": "gallery_item_template",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1"
+                          },
+                          {
+                            "type": "gallery_item_template",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1"
+                          },
+                          {
+                            "type": "gallery_item_template",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1"
+                          },
+                          {
+                            "type": "gallery_item_template",
+                            "address": "Ул. Льва Толстого, 16",
+                            "message": "Каток в парке Горького подготовился серьезно к началу сезона.\nБудет три катка: основная площадка, детский каток и для любителей хоккея. А в выходные каток будет открыт до полуночи. И еще хорошо…",
+                            "avatar_url": "https://avatars.mds.yandex.net/get-yapic/40841/520495100-1548277370/islands-200",
+                            "username": "igorbuschina",
+                            "image_count": "3",
+                            "comment_count": "1"
+                          },
+                          {
+                            "type": "container",
+                            "width": {
+                              "type": "fixed",
+                              "value": 104
+                            },
+                            "height": {
+                              "type": "fixed",
+                              "value": 204
+                            },
+                            "content_alignment_horizontal": "center",
+                            "items": [
+                              {
+                                "type": "image",
+                                "width": {
+                                  "type": "fixed",
+                                  "value": 40
+                                },
+                                "height": {
+                                  "type": "fixed",
+                                  "value": 40
+                                },
+                                "margins": {
+                                  "top": 61
+                                },
+                                "border": {
+                                  "corner_radius": 20
+                                },
+                                "background": [
+                                  {
+                                    "type": "solid",
+                                    "color": "#ffffff"
+                                  }
+                                ],
+                                "placeholder_color": "#00ffffff",
+                                "image_url": "https://i.imgur.com/CPmGi24.png"
+                              },
+                              {
+                                "type": "text",
+                                "text": "Все новости района",
+                                "font_size": 14,
+                                "text_color": "#6b7a80",
+                                "line_height": 16,
+                                "text_alignment_horizontal": "center",
+                                "height": {
+                                  "type": "wrap_content"
+                                },
+                                "paddings": {
+                                  "left": 0,
+                                  "right": 0,
+                                  "top": 10,
+                                  "bottom": 0
+                                }
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "button_template"
+                      }
+                    ],
+                    "background": [
+                      {
+                        "type": "image",
+                        "image_url": "https://api.yastatic.net/morda-logo/i/yandex-app/district/district_day.3.png"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+
+}
