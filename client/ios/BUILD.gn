@@ -1,0 +1,1262 @@
+# Copyright 2020 Yandex LLC. All rights reserved.
+
+import("//build/config/ios/yandex/rules.gni")
+import("//build/config/ios/yandex/xctest_osx.gni")
+import("//yandex/ios/build/api_generator/rules.gni")
+import("//yandex/ios/build/tests_support.gni")
+
+component_module("DivKit") {
+  module_name = "DivKit"
+  enable_exporting = true
+
+  # needed for AdLib
+  if (current_toolchain != host_toolchain) {
+    deployment_target = "10.0"
+  }
+
+  sources = [
+    "arcadia/DivKit/Actions/DivActionHandler.swift",
+    "arcadia/DivKit/Actions/DivActionIntent.swift",
+    "arcadia/DivKit/Actions/DivActionLogger.swift",
+    "arcadia/DivKit/Actions/DivActionURLHandler.swift",
+    "arcadia/DivKit/DivBlockModeling.swift",
+    "arcadia/DivKit/DivBlockModelingActionContext.swift",
+    "arcadia/DivKit/DivBlockModelingContext.swift",
+    "arcadia/DivKit/DivBlockStateStorage.swift",
+    "arcadia/DivKit/DivExtensionHandler.swift",
+    "arcadia/DivKit/DivFlagsInfo.swift",
+    "arcadia/DivKit/DivKitComponents.swift",
+    "arcadia/DivKit/DivKitInfo.swift",
+    "arcadia/DivKit/DivKitLogger.swift",
+    "arcadia/DivKit/DivStatePath.swift",
+    "arcadia/DivKit/DivVisibilityCounter.swift",
+    "arcadia/DivKit/Expressions/AnyCalcExpression.swift",
+    "arcadia/DivKit/Expressions/CalcExpression.swift",
+    "arcadia/DivKit/Expressions/CastFunctions.swift",
+    "arcadia/DivKit/Expressions/ColorFunctions.swift",
+    "arcadia/DivKit/Expressions/DatetimeFunctions.swift",
+    "arcadia/DivKit/Expressions/DictionaryExtensions.swift",
+    "arcadia/DivKit/Expressions/Expression+Helpers.swift",
+    "arcadia/DivKit/Expressions/Expression.swift",
+    "arcadia/DivKit/Expressions/ExpressionError.swift",
+    "arcadia/DivKit/Expressions/ExpressionErrorsStorage.swift",
+    "arcadia/DivKit/Expressions/ExpressionResolver.swift",
+    "arcadia/DivKit/Expressions/ExpressionResolverValueProvider.swift",
+    "arcadia/DivKit/Expressions/FieldExtensions.swift",
+    "arcadia/DivKit/Expressions/Function.swift",
+    "arcadia/DivKit/Expressions/MathFunctions.swift",
+    "arcadia/DivKit/Expressions/StringFunctions.swift",
+    "arcadia/DivKit/Expressions/Value.swift",
+    "arcadia/DivKit/Extensions/ArrayExtensions.swift",
+    "arcadia/DivKit/Extensions/BlockExtensions.swift",
+    "arcadia/DivKit/Extensions/DelayExtensions.swift",
+    "arcadia/DivKit/Extensions/DivAccessibilityExtensions.swift",
+    "arcadia/DivKit/Extensions/DivActionBase.swift",
+    "arcadia/DivKit/Extensions/DivActionExtensions.swift",
+    "arcadia/DivKit/Extensions/DivAnimationExtensions.swift",
+    "arcadia/DivKit/Extensions/DivAppearanceTransitionExtensions.swift",
+    "arcadia/DivKit/Extensions/DivBackgroundExtensions.swift",
+    "arcadia/DivKit/Extensions/DivBase/BasePropertiesOptions.swift",
+    "arcadia/DivKit/Extensions/DivBase/DivBaseExtensions.swift",
+    "arcadia/DivKit/Extensions/DivChangeTransitionExtensions.swift",
+    "arcadia/DivKit/Extensions/DivContainerExtensions.swift",
+    "arcadia/DivKit/Extensions/DivCustom/DivCustomBlockFactory.swift",
+    "arcadia/DivKit/Extensions/DivCustom/DivCustomData.swift",
+    "arcadia/DivKit/Extensions/DivCustom/DivCustomExtensions.swift",
+    "arcadia/DivKit/Extensions/DivData/DivDataExtensions.swift",
+    "arcadia/DivKit/Extensions/DivData/DivDataPatchExtensions.swift",
+    "arcadia/DivKit/Extensions/DivDrawable/DivDrawableExtensions.swift",
+    "arcadia/DivKit/Extensions/DivDrawable/DivDrawableWidthTrait.swift",
+    "arcadia/DivKit/Extensions/DivDrawable/DivShapeExtensions.swift",
+    "arcadia/DivKit/Extensions/DivEdgeInsetsExtensions.swift",
+    "arcadia/DivKit/Extensions/DivFadeTransitionExtensions.swift",
+    "arcadia/DivKit/Extensions/DivFontWeightExtensions.swift",
+    "arcadia/DivKit/Extensions/DivGalleryExtensions.swift",
+    "arcadia/DivKit/Extensions/DivGalleryProtocol.swift",
+    "arcadia/DivKit/Extensions/DivGridExtensions.swift",
+    "arcadia/DivKit/Extensions/DivImage/DivGifImageExtensions.swift",
+    "arcadia/DivKit/Extensions/DivImage/DivImageContentMode.swift",
+    "arcadia/DivKit/Extensions/DivImage/DivImageExtensions.swift",
+    "arcadia/DivKit/Extensions/DivImage/DivImageProtocol.swift",
+    "arcadia/DivKit/Extensions/DivIndicatorExtensions.swift",
+    "arcadia/DivKit/Extensions/DivInputExtensions.swift",
+    "arcadia/DivKit/Extensions/DivPagerExtensions.swift",
+    "arcadia/DivKit/Extensions/DivPivotExtensions.swift",
+    "arcadia/DivKit/Extensions/DivSeparatorExtensions.swift",
+    "arcadia/DivKit/Extensions/DivSizeExtensions.swift",
+    "arcadia/DivKit/Extensions/DivSizeUnitExtensions.swift",
+    "arcadia/DivKit/Extensions/DivSliderExtensions.swift",
+    "arcadia/DivKit/Extensions/DivStateExtensions.swift",
+    "arcadia/DivKit/Extensions/DivTabsExtensions.swift",
+    "arcadia/DivKit/Extensions/DivTextExtensions.swift",
+    "arcadia/DivKit/Extensions/DivTransformExtensions.swift",
+    "arcadia/DivKit/Extensions/DivVisibilityActionExtensions.swift",
+    "arcadia/DivKit/Extensions/DurationExtensions.swift",
+    "arcadia/DivKit/Extensions/RelativeValueExtensions.swift",
+    "arcadia/DivKit/Patches/DivPatchDownloader.swift",
+    "arcadia/DivKit/Patches/DivPatchProvider.swift",
+    "arcadia/DivKit/RawDivData.swift",
+    "arcadia/DivKit/States/DivStateInterceptor.swift",
+    "arcadia/DivKit/States/DivStateLifetime.swift",
+    "arcadia/DivKit/States/DivStateManager.swift",
+    "arcadia/DivKit/States/DivStateUpdater.swift",
+    "arcadia/DivKit/States/DivStateUpdaterProxy.swift",
+    "arcadia/DivKit/Templates/DivTemplates.swift",
+    "arcadia/DivKit/Variables/Binding.swift",
+    "arcadia/DivKit/Variables/DivTriggersStorage.swift",
+    "arcadia/DivKit/Variables/DivVariableUpdater.swift",
+    "arcadia/DivKit/Variables/DivVariablesStorage.swift",
+    "arcadia/DivKit/generated_sources/BooleanVariable.swift",
+    "arcadia/DivKit/generated_sources/BooleanVariableTemplate.swift",
+    "arcadia/DivKit/generated_sources/ColorVariable.swift",
+    "arcadia/DivKit/generated_sources/ColorVariableTemplate.swift",
+    "arcadia/DivKit/generated_sources/Div.swift",
+    "arcadia/DivKit/generated_sources/DivAccessibility.swift",
+    "arcadia/DivKit/generated_sources/DivAccessibilityTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivAction.swift",
+    "arcadia/DivKit/generated_sources/DivActionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivAlignmentHorizontal.swift",
+    "arcadia/DivKit/generated_sources/DivAlignmentVertical.swift",
+    "arcadia/DivKit/generated_sources/DivAnimation.swift",
+    "arcadia/DivKit/generated_sources/DivAnimationInterpolator.swift",
+    "arcadia/DivKit/generated_sources/DivAnimationTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivAppearanceSetTransition.swift",
+    "arcadia/DivKit/generated_sources/DivAppearanceSetTransitionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivAppearanceTransition.swift",
+    "arcadia/DivKit/generated_sources/DivAppearanceTransitionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivAspect.swift",
+    "arcadia/DivKit/generated_sources/DivAspectTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivBackground.swift",
+    "arcadia/DivKit/generated_sources/DivBackgroundTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivBase.swift",
+    "arcadia/DivKit/generated_sources/DivBorder.swift",
+    "arcadia/DivKit/generated_sources/DivBorderTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivChangeBoundsTransition.swift",
+    "arcadia/DivKit/generated_sources/DivChangeBoundsTransitionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivChangeSetTransition.swift",
+    "arcadia/DivKit/generated_sources/DivChangeSetTransitionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivChangeTransition.swift",
+    "arcadia/DivKit/generated_sources/DivChangeTransitionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivContainer.swift",
+    "arcadia/DivKit/generated_sources/DivContainerTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivCornersRadius.swift",
+    "arcadia/DivKit/generated_sources/DivCornersRadiusTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivCount.swift",
+    "arcadia/DivKit/generated_sources/DivCountTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivCustom.swift",
+    "arcadia/DivKit/generated_sources/DivCustomTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivData.swift",
+    "arcadia/DivKit/generated_sources/DivDataTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivDimension.swift",
+    "arcadia/DivKit/generated_sources/DivDimensionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivDownloadCallbacks.swift",
+    "arcadia/DivKit/generated_sources/DivDownloadCallbacksTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivDrawable.swift",
+    "arcadia/DivKit/generated_sources/DivDrawableTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivEdgeInsets.swift",
+    "arcadia/DivKit/generated_sources/DivEdgeInsetsTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivExtension.swift",
+    "arcadia/DivKit/generated_sources/DivExtensionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivFadeTransition.swift",
+    "arcadia/DivKit/generated_sources/DivFadeTransitionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivFixedCount.swift",
+    "arcadia/DivKit/generated_sources/DivFixedCountTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivFixedSize.swift",
+    "arcadia/DivKit/generated_sources/DivFixedSizeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivFocus.swift",
+    "arcadia/DivKit/generated_sources/DivFocusTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivFontFamily.swift",
+    "arcadia/DivKit/generated_sources/DivFontWeight.swift",
+    "arcadia/DivKit/generated_sources/DivGallery.swift",
+    "arcadia/DivKit/generated_sources/DivGalleryTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivGifImage.swift",
+    "arcadia/DivKit/generated_sources/DivGifImageTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivGradientBackground.swift",
+    "arcadia/DivKit/generated_sources/DivGradientBackgroundTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivGrid.swift",
+    "arcadia/DivKit/generated_sources/DivGridTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivImage.swift",
+    "arcadia/DivKit/generated_sources/DivImageBackground.swift",
+    "arcadia/DivKit/generated_sources/DivImageBackgroundTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivImageScale.swift",
+    "arcadia/DivKit/generated_sources/DivImageTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivIndicator.swift",
+    "arcadia/DivKit/generated_sources/DivIndicatorTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivInfinityCount.swift",
+    "arcadia/DivKit/generated_sources/DivInfinityCountTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivInput.swift",
+    "arcadia/DivKit/generated_sources/DivInputTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivLineStyle.swift",
+    "arcadia/DivKit/generated_sources/DivMatchParentSize.swift",
+    "arcadia/DivKit/generated_sources/DivMatchParentSizeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivNeighbourPageSize.swift",
+    "arcadia/DivKit/generated_sources/DivNeighbourPageSizeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPageSize.swift",
+    "arcadia/DivKit/generated_sources/DivPageSizeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPager.swift",
+    "arcadia/DivKit/generated_sources/DivPagerLayoutMode.swift",
+    "arcadia/DivKit/generated_sources/DivPagerLayoutModeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPagerTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPatch.swift",
+    "arcadia/DivKit/generated_sources/DivPatchTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPercentageSize.swift",
+    "arcadia/DivKit/generated_sources/DivPercentageSizeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPivot.swift",
+    "arcadia/DivKit/generated_sources/DivPivotFixed.swift",
+    "arcadia/DivKit/generated_sources/DivPivotFixedTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPivotPercentage.swift",
+    "arcadia/DivKit/generated_sources/DivPivotPercentageTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPivotTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivPoint.swift",
+    "arcadia/DivKit/generated_sources/DivPointTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivRoundedRectangleShape.swift",
+    "arcadia/DivKit/generated_sources/DivRoundedRectangleShapeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivScaleTransition.swift",
+    "arcadia/DivKit/generated_sources/DivScaleTransitionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivSeparator.swift",
+    "arcadia/DivKit/generated_sources/DivSeparatorTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivShadow.swift",
+    "arcadia/DivKit/generated_sources/DivShadowTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivShape.swift",
+    "arcadia/DivKit/generated_sources/DivShapeDrawable.swift",
+    "arcadia/DivKit/generated_sources/DivShapeDrawableTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivShapeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivSize.swift",
+    "arcadia/DivKit/generated_sources/DivSizeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivSizeUnit.swift",
+    "arcadia/DivKit/generated_sources/DivSlideTransition.swift",
+    "arcadia/DivKit/generated_sources/DivSlideTransitionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivSlider.swift",
+    "arcadia/DivKit/generated_sources/DivSliderTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivSolidBackground.swift",
+    "arcadia/DivKit/generated_sources/DivSolidBackgroundTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivState.swift",
+    "arcadia/DivKit/generated_sources/DivStateTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivStroke.swift",
+    "arcadia/DivKit/generated_sources/DivStrokeTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivTabs.swift",
+    "arcadia/DivKit/generated_sources/DivTabsTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivText.swift",
+    "arcadia/DivKit/generated_sources/DivTextTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivTooltip.swift",
+    "arcadia/DivKit/generated_sources/DivTooltipTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivTransform.swift",
+    "arcadia/DivKit/generated_sources/DivTransformTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivTransitionBase.swift",
+    "arcadia/DivKit/generated_sources/DivTransitionSelector.swift",
+    "arcadia/DivKit/generated_sources/DivTransitionTrigger.swift",
+    "arcadia/DivKit/generated_sources/DivTrigger.swift",
+    "arcadia/DivKit/generated_sources/DivTriggerTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivVariable.swift",
+    "arcadia/DivKit/generated_sources/DivVariableTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivVisibility.swift",
+    "arcadia/DivKit/generated_sources/DivVisibilityAction.swift",
+    "arcadia/DivKit/generated_sources/DivVisibilityActionTemplate.swift",
+    "arcadia/DivKit/generated_sources/DivWrapContentSize.swift",
+    "arcadia/DivKit/generated_sources/DivWrapContentSizeTemplate.swift",
+    "arcadia/DivKit/generated_sources/IntegerVariable.swift",
+    "arcadia/DivKit/generated_sources/IntegerVariableTemplate.swift",
+    "arcadia/DivKit/generated_sources/NumberVariable.swift",
+    "arcadia/DivKit/generated_sources/NumberVariableTemplate.swift",
+    "arcadia/DivKit/generated_sources/StringVariable.swift",
+    "arcadia/DivKit/generated_sources/StringVariableTemplate.swift",
+    "arcadia/DivKit/generated_sources/UrlVariable.swift",
+    "arcadia/DivKit/generated_sources/UrlVariableTemplate.swift",
+  ]
+
+  if (is_ios) {
+    sources += [ "arcadia/DivKit/ErrorListView.swift" ]
+  }
+
+  public_deps = [
+    ":LayoutKit",
+    ":Serialization",
+    ":TemplatesSupport",
+    "//base/ios/yandex",
+    "//base/ios/yandex/ui",
+    "//yandex/ios/search_app/CommonCore:Networking",
+  ]
+}
+
+osx_xctest_bundle("DivKit_OSXTests") {
+  module_name = "DivKit_OSXTests"
+
+  sources = [
+    "arcadia/DivKitTests/DivActionIntentTests.swift",
+    "arcadia/DivKitTests/DivBlockStateStorageTests.swift",
+    "arcadia/DivKitTests/DivBuilders.swift",
+    "arcadia/DivKitTests/DivKitTests.swift",
+    "arcadia/DivKitTests/DivSerializationTests.swift",
+    "arcadia/DivKitTests/DivStateManagerTests.swift",
+    "arcadia/DivKitTests/Expressions/ExpressionParsingTests.swift",
+    "arcadia/DivKitTests/Expressions/ExpressionResolvingTests.swift",
+    "arcadia/DivKitTests/Expressions/FunctionSignaturesTests.swift",
+    "arcadia/DivKitTests/Extensions/DivActionExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivContainerExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivDataExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivDataPatchExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivGalleryExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivGifImageExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivGridExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivImageExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivSeparatorExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivTabsExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/DivTextExtensionsTests.swift",
+    "arcadia/DivKitTests/Extensions/Expected.swift",
+    "arcadia/DivKitTests/Platform.swift",
+    "arcadia/DivKitTests/RuntimeTestCase.swift",
+    "arcadia/DivKitTests/Templates/TemplatesExpectedModels.swift",
+    "arcadia/DivKitTests/Templates/TemplatesTests.swift",
+    "arcadia/DivKitTests/Variables/DivTriggerTests.swift",
+    "arcadia/DivKitTests/Variables/DivVariablesStorageTest.swift",
+  ]
+
+  deps = [
+    ":DivKit_Crossplatform_resources",
+    ":DivKit_OSXTests_resources",
+  ]
+
+  public_deps = [ ":DivKit" ]
+}
+
+bundle_data_ios("DivKit_Crossplatform_resources") {
+  bundle_toolchain = host_toolchain
+  sources = [
+    "expression_test_data/function_signatures_color.json",
+    "expression_test_data/function_signatures_datetime.json",
+    "expression_test_data/function_signatures_math.json",
+    "expression_test_data/function_signatures_std.json",
+    "expression_test_data/function_signatures_strings.json",
+    "expression_test_data/functions_arithmetic_integer.json",
+    "expression_test_data/functions_arithmetic_number.json",
+    "expression_test_data/functions_color_argb.json",
+    "expression_test_data/functions_color_getters.json",
+    "expression_test_data/functions_color_setters.json",
+    "expression_test_data/functions_comparison_integer.json",
+    "expression_test_data/functions_comparison_number.json",
+    "expression_test_data/functions_datetime.json",
+    "expression_test_data/functions_string.json",
+    "expression_test_data/functions_to_boolean.json",
+    "expression_test_data/functions_to_integer.json",
+    "expression_test_data/functions_to_number.json",
+    "expression_test_data/functions_to_string.json",
+    "expression_test_data/literals_boolean.json",
+    "expression_test_data/literals_integer.json",
+    "expression_test_data/literals_number.json",
+    "expression_test_data/literals_number_scientific.json",
+    "expression_test_data/literals_string.json",
+    "expression_test_data/operations_comparison_datetime.json",
+    "expression_test_data/operations_comparison_integer.json",
+    "expression_test_data/operations_comparison_number.json",
+    "expression_test_data/operations_div_integer.json",
+    "expression_test_data/operations_div_number.json",
+    "expression_test_data/operations_equality_boolean.json",
+    "expression_test_data/operations_equality_color.json",
+    "expression_test_data/operations_equality_datetime.json",
+    "expression_test_data/operations_equality_integer.json",
+    "expression_test_data/operations_equality_number.json",
+    "expression_test_data/operations_equality_string.json",
+    "expression_test_data/operations_equality_url.json",
+    "expression_test_data/operations_logical_boolean.json",
+    "expression_test_data/operations_mod_integer.json",
+    "expression_test_data/operations_mod_number.json",
+    "expression_test_data/operations_mul_integer.json",
+    "expression_test_data/operations_mul_number.json",
+    "expression_test_data/operations_sub_integer.json",
+    "expression_test_data/operations_sub_number.json",
+    "expression_test_data/operations_sum_integer.json",
+    "expression_test_data/operations_sum_number.json",
+    "expression_test_data/operations_ternary.json",
+    "expression_test_data/operations_unsupported_datetime.json",
+    "expression_test_data/string_templates.json",
+    "unit_test_data/div-container/horizontal_orientation_axial_alignments.json",
+    "unit_test_data/div-container/horizontal_orientation_no_alignments.json",
+    "unit_test_data/div-container/horizontal_wrap_content_height_match_parent_items.json",
+    "unit_test_data/div-container/horizontal_wrap_content_width_match_parent_item.json",
+    "unit_test_data/div-container/invalid_items.json",
+    "unit_test_data/div-container/item_with_action.json",
+    "unit_test_data/div-container/overlap_wrap_content_height_match_parent_items.json",
+    "unit_test_data/div-container/overlap_wrap_content_width_match_parent_items.json",
+    "unit_test_data/div-container/vertical_orientation_axial_alignments.json",
+    "unit_test_data/div-container/vertical_orientation_no_alignments.json",
+    "unit_test_data/div-container/vertical_wrap_content_height_match_parent_item.json",
+    "unit_test_data/div-container/vertical_wrap_content_width_match_parent_items.json",
+    "unit_test_data/div-container/with_action.json",
+    "unit_test_data/div-container/with_multi_actions.json",
+    "unit_test_data/div-container/with_multi_actions_with_menu.json",
+    "unit_test_data/div-container/with_set_state_action.json",
+    "unit_test_data/div-container/wrap_content_width_match_parent_items.json",
+    "unit_test_data/div-gallery/gallery.json",
+    "unit_test_data/div-gallery/horizontal_gallery_match_parent_height_items.json",
+    "unit_test_data/div-gallery/horizontal_gallery_match_parent_width_items.json",
+    "unit_test_data/div-gallery/horizontal_gallery_mixed_height_items.json",
+    "unit_test_data/div-gallery/horizontal_gallery_wrap_content_width.json",
+    "unit_test_data/div-gallery/invalid_items.json",
+    "unit_test_data/div-gallery/nested_gallery.json",
+    "unit_test_data/div-gallery/paging.json",
+    "unit_test_data/div-gallery/vertical_gallery_match_parent_height_items.json",
+    "unit_test_data/div-gallery/vertical_gallery_match_parent_width_items.json",
+    "unit_test_data/div-gallery/vertical_gallery_mixed_width_items.json",
+    "unit_test_data/div-gallery/vertical_gallery_wrap_content_height.json",
+    "unit_test_data/div-gif-image/height_wrap_content.json",
+    "unit_test_data/div-gif-image/width_wrap_content.json",
+    "unit_test_data/div-gif-image/with_action.json",
+    "unit_test_data/div-gif-image/with_set_state_action.json",
+    "unit_test_data/div-grid/incompatible-horizontal-traits.json",
+    "unit_test_data/div-grid/incompatible-vertical-traits.json",
+    "unit_test_data/div-grid/invalid-column-span1.json",
+    "unit_test_data/div-grid/invalid-column-span2.json",
+    "unit_test_data/div-grid/invalid-column-span3.json",
+    "unit_test_data/div-grid/invalid-row-span1.json",
+    "unit_test_data/div-grid/invalid-row-span2.json",
+    "unit_test_data/div-grid/invalid-row-span3.json",
+    "unit_test_data/div-grid/with-action.json",
+    "unit_test_data/div-grid/with-set-state-action.json",
+    "unit_test_data/div-image/height_wrap_content.json",
+    "unit_test_data/div-image/width_wrap_content.json",
+    "unit_test_data/div-image/with_action.json",
+    "unit_test_data/div-image/with_set_state_action.json",
+    "unit_test_data/div-separator/horizontal_wrap_content_width.json",
+    "unit_test_data/div-separator/vertical_wrap_content_height.json",
+    "unit_test_data/div-separator/with_action.json",
+    "unit_test_data/div-separator/with_set_state_action.json",
+    "unit_test_data/div-tabs/switch_by_content_swipe_disabled.json",
+    "unit_test_data/div-tabs/switch_by_content_swipe_enabled.json",
+    "unit_test_data/div-text/with_action.json",
+    "unit_test_data/div-text/with_set_state_action.json",
+  ]
+  outputs = [ "{{bundle_resources_dir}}/{{source_target_relative}}/" ]
+}
+
+bundle_data_ios("DivKit_OSXTests_resources") {
+  bundle_toolchain = host_toolchain
+  sources = [
+    "arcadia/DivKitTests/Templates/TestData/gallery_with_template.json",
+    "arcadia/DivKitTests/Templates/TestData/gallery_without_template.json",
+    "arcadia/DivKitTests/Templates/TestData/text_card_with_template.json",
+    "arcadia/DivKitTests/Templates/TestData/text_card_without_template.json",
+  ]
+}
+
+simulator_tests_bundle("DivKitSnapshotTests") {
+  sources = [
+    "arcadia/DivKitSnapshotTests/DivIndicatorTests.swift",
+    "arcadia/DivKitSnapshotTests/DivKitSnapshotTestCase.swift",
+    "arcadia/DivKitSnapshotTests/DivSnapshotTests.swift",
+    "arcadia/DivKitSnapshotTests/MordaProductionTests.swift",
+    "arcadia/DivKitSnapshotTests/ReferenceSet.swift",
+    "arcadia/DivKitSnapshotTests/RuntimeTestCase.swift",
+    "arcadia/DivKitSnapshotTests/SnapshotTestKit/Diff.swift",
+    "arcadia/DivKitSnapshotTests/SnapshotTestKit/ScreenSize.swift",
+    "arcadia/DivKitSnapshotTests/SnapshotTestKit/Snapshot.swift",
+    "arcadia/DivKitSnapshotTests/SnapshotTestKit/SnapshotTestKit.swift",
+  ]
+
+  public_deps = [
+    "//yandex/ios/search_app/CommonCore",
+    "//yandex/ios/search_app/DivKit",
+    "//yandex/ios/search_app/SnapshotTester",
+  ]
+
+  deps = [
+    ":DivKitSnapshotTests_info_plist_resources",
+    ":DivKitSnapshotTests_resources",
+  ]
+
+  snapshot_tester_data =
+      [ "//yandex/ios/search_app/DivKit/reference_snapshots" ]
+}
+
+compile_plist("DivKitSnapshotTests_info_plist") {
+  plist_templates = [ "SnapshotsInfo.plist" ]
+  format = "binary1"
+  _project_dir = rebase_path("//yandex/ios/search_app")
+  substitutions = [ "PROJECT_DIR=${_project_dir}" ]
+  output_name = "$target_gen_dir/SnapshotsInfo.plist"
+}
+
+bundle_data_ios("DivKitSnapshotTests_info_plist_resources") {
+  allow_resources_from_output = true
+  sources = get_target_outputs(":DivKitSnapshotTests_info_plist")
+  public_deps = [ ":DivKitSnapshotTests_info_plist" ]
+}
+
+bundle_data_ios("DivKitSnapshotTests_resources") {
+  sources = [
+    "../arcadia/divkit/public/test_data/production_data",
+    "../arcadia/divkit/public/test_data/snapshot_test_data",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/avatar_200.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/avatar_200.imageset/islands-200.jpeg",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/chess.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/chess.imageset/chess.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/chess_transparent.imageset/3d-chessboard.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/chess_transparent.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/district_day.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/district_day.imageset/district_day.3.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/exclamation_mark.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/exclamation_mark.imageset/exclamation_mark.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/image_icon.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/image_icon.imageset/images_day.1.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/karavaevy.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/karavaevy.imageset/s1200.jpeg",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/lenna.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/lenna.imageset/lenna.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/menu_icon2.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/menu_icon2.imageset/menu_points.3.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/menu_icon3.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/menu_icon3.imageset/menu_icon3.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/nature.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/nature.imageset/nature.jpg",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/omni_icon.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/omni_icon.imageset/omni_icon.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/radio_jazz.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/radio_jazz.imageset/radio_jazz.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/radio_pop.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/radio_pop.imageset/radio_pop.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/radio_rock.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/radio_rock.imageset/radio_rock.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/radio_yours.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/radio_yours.imageset/radio_yours.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/rating_star_0.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/rating_star_0.imageset/orig-3.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/rating_star_05.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/rating_star_05.imageset/orig-2.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/rating_star_1.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/rating_star_1.imageset/orig.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/route_icon.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/route_icon.imageset/route.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/schedule_icon.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/schedule_icon.imageset/Schedule.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/train_icon.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/train_icon.imageset/express-3x.png",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/zen_menu_dark.3.imageset/Contents.json",
+    "arcadia/DivKitSnapshotTests/Images.xcassets/zen_menu_dark.3.imageset/zen_menu_dark.3.png",
+  ]
+}
+
+module("DivKitExtensions") {
+  module_name = "DivKitExtensions"
+  enable_exporting = true
+
+  # needed for AdLib
+  if (current_toolchain != host_toolchain) {
+    deployment_target = "10.0"
+  }
+
+  sources = [
+    "arcadia/DivKitExtensions/DivBackgroundExtensions.swift",
+    "arcadia/DivKitExtensions/DivExtensions.swift",
+    "arcadia/DivKitExtensions/EdgeInsets+DivVariables.swift",
+    "arcadia/DivKitExtensions/ExtensionHandlers/BlurExtensionHandler.swift",
+    "arcadia/DivKitExtensions/ExtensionHandlers/ImageExtensionHandler.swift",
+    "arcadia/DivKitExtensions/ExtensionHandlers/ImageThemeExtensionHandler.swift",
+    "arcadia/DivKitExtensions/ExtensionHandlers/PinchToZoomExtensionHandler.swift",
+    "arcadia/DivKitExtensions/ExtensionHandlers/TextExtensionHandler.swift",
+  ]
+
+  public_deps = [
+    ":DivKit",
+    ":LayoutKit",
+    "//yandex/ios/search_app/CommonCore",
+  ]
+}
+
+module("TemplatesSupport") {
+  module_name = "TemplatesSupport"
+  enable_exporting = true
+
+  # needed for AdLib
+  if (current_toolchain != host_toolchain) {
+    deployment_target = "10.0"
+  }
+
+  sources = [
+    "arcadia/TemplatesSupport/Base.swift",
+    "arcadia/TemplatesSupport/Context.swift",
+    "arcadia/TemplatesSupport/Field.swift",
+    "arcadia/TemplatesSupport/ParsingMode.swift",
+    "arcadia/TemplatesSupport/SerializationExtensions.swift",
+    "arcadia/TemplatesSupport/TemplateDeserializable.swift",
+    "arcadia/TemplatesSupport/TemplateError.swift",
+    "arcadia/TemplatesSupport/TemplateToType.swift",
+    "arcadia/TemplatesSupport/TemplateValue.swift",
+  ]
+
+  public_deps = [
+    ":Serialization",
+    "//yandex/ios/search_app/CommonCore",
+  ]
+}
+
+osx_xctest_bundle("TemplatesSupport_OSXTests") {
+  module_name = "TemplatesSupport_OSXTests"
+
+  sources = [
+    "arcadia/TemplatesSupportTests/ArrayOfNestedItemsTests.swift",
+    "arcadia/TemplatesSupportTests/ArrayTests.swift",
+    "arcadia/TemplatesSupportTests/ArrayWithTransformTests.swift",
+    "arcadia/TemplatesSupportTests/ComplexPropertyTests.swift",
+    "arcadia/TemplatesSupportTests/DefaultValueTests.swift",
+    "arcadia/TemplatesSupportTests/EntityProtocol.swift",
+    "arcadia/TemplatesSupportTests/Expected.swift",
+    "arcadia/TemplatesSupportTests/OptionalComplexPropertyTests.swift",
+    "arcadia/TemplatesSupportTests/OptionalPropertyTests.swift",
+    "arcadia/TemplatesSupportTests/OptionalStringEnumPropertyTests.swift",
+    "arcadia/TemplatesSupportTests/PropertyTests.swift",
+    "arcadia/TemplatesSupportTests/StrictArrayTests.swift",
+    "arcadia/TemplatesSupportTests/StringEnumPropertyTests.swift",
+    "arcadia/TemplatesSupportTests/TemplateToTypeTests.swift",
+    "arcadia/TemplatesSupportTests/TemplatesSupportTests.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/Entity.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithArray.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithArrayOfNestedItems.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithArrayOfNestedItemsTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithArrayTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithArrayWithTransform.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithArrayWithTransformTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithComplexProperty.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithComplexPropertyTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithComplexPropertyWithDefaultValue.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithComplexPropertyWithDefaultValueTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithEntityProperty.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithEntityPropertyTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithOptionalComplexProperty.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithOptionalComplexPropertyTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithOptionalProperty.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithOptionalPropertyTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithOptionalStringEnumProperty.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithOptionalStringEnumPropertyTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithPropertyWithDefaultValue.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithPropertyWithDefaultValueTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithRequiredProperty.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithRequiredPropertyTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithSimpleProperties.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithSimplePropertiesTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithStrictArray.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithStrictArrayTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithStringArrayProperty.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithStringArrayPropertyTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithStringEnumProperty.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithStringEnumPropertyTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithStringEnumPropertyWithDefaultValue.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithStringEnumPropertyWithDefaultValueTemplate.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithoutProperties.swift",
+    "arcadia/TemplatesSupportTests/generated_sources/EntityWithoutPropertiesTemplate.swift",
+  ]
+
+  deps = [ ":TemplatesSupport_OSXTests_resources" ]
+  public_deps = [ ":TemplatesSupport" ]
+}
+
+bundle_data_ios("TemplatesSupport_OSXTests_resources") {
+  bundle_toolchain = host_toolchain
+  sources = [
+    "template_test_data/array/test_array_empty.json",
+    "template_test_data/array/test_array_invalid_items.json",
+    "template_test_data/array/test_array_invalid_items_in_data.json",
+    "template_test_data/array/test_array_missing_data.json",
+    "template_test_data/array/test_array_missing_one_link.json",
+    "template_test_data/array/test_array_nested.json",
+    "template_test_data/array/test_array_nested_with_internal_link.json",
+    "template_test_data/array/test_array_not_templated.json",
+    "template_test_data/array/test_array_one_invalid_item.json",
+    "template_test_data/array/test_array_with_complex_items_with_internal_links.json",
+    "template_test_data/array/test_array_with_heterogeneous_items.json",
+    "template_test_data/array/test_array_with_heterogeneous_items_with_internal_links.json",
+    "template_test_data/array/test_array_with_internal_links.json",
+    "template_test_data/array/test_array_with_link.json",
+    "template_test_data/array/test_array_with_link_to_internal_link.json",
+    "template_test_data/array/test_array_with_nested_templated_array.json",
+    "template_test_data/array/test_array_with_override_in_items.json",
+    "template_test_data/array/test_array_with_override_in_template.json",
+    "template_test_data/array/test_array_with_templated_items.json",
+    "template_test_data/array/test_array_without_link.json",
+    "template_test_data/array_of_nested_items/test_array_of_nested_items_with_item_template.json",
+    "template_test_data/array_of_nested_items/test_array_of_nested_items_with_item_template_without_data.json",
+    "template_test_data/array_of_nested_items/test_array_of_nested_items_with_item_template_without_item_required_property.json",
+    "template_test_data/array_of_nested_items/test_array_of_nested_items_with_link_for_items.json",
+    "template_test_data/array_of_nested_items/test_array_of_nested_items_with_link_for_items_with_item_template.json",
+    "template_test_data/array_of_nested_items/test_array_of_nested_items_with_link_for_items_without_item_required_property.json",
+    "template_test_data/array_of_nested_items/test_array_of_nested_items_without_item_required_property.json",
+    "template_test_data/array_of_nested_items/test_array_of_nested_items_without_templates.json",
+    "template_test_data/array_with_transform/test_array_with_transform_invalid_items.json",
+    "template_test_data/array_with_transform/test_array_with_transform_not_templated_invalid_items.json",
+    "template_test_data/array_with_transform/test_array_with_transform_not_templated_one_invalid_item.json",
+    "template_test_data/array_with_transform/test_array_with_transform_one_invalid_item.json",
+    "template_test_data/complex_property/test_complex_property_not_templated.json",
+    "template_test_data/complex_property/test_complex_property_with_internal_link.json",
+    "template_test_data/complex_property/test_complex_property_with_internal_link_missing_data.json",
+    "template_test_data/complex_property/test_complex_property_with_internal_link_override_in_template.json",
+    "template_test_data/complex_property/test_complex_property_with_link.json",
+    "template_test_data/complex_property/test_complex_property_with_link_missing_data.json",
+    "template_test_data/complex_property/test_complex_property_with_link_to_internal_link.json",
+    "template_test_data/complex_property/test_complex_property_with_override_in_template.json",
+    "template_test_data/complex_property/test_complex_property_without_link.json",
+    "template_test_data/complex_property/test_complex_property_without_link_missing_data.json",
+    "template_test_data/complex_property/test_invalid_complex_property_not_templated.json",
+    "template_test_data/default_value/test_invalid_value_presented_directly.json",
+    "template_test_data/default_value/test_invalid_value_referenced_by_link.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_not_templated.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_with_internal_link.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_with_internal_link_missing_data.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_with_internal_link_override_in_template.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_with_link.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_with_link_missing_data.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_with_override_in_template.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_without_link.json",
+    "template_test_data/optional_complex_property/test_optional_complex_property_without_link_missing_data.json",
+    "template_test_data/optional_complex_property/test_optional_invalid_complex_property_not_templated.json",
+    "template_test_data/optional_property/test_optional_property_not_templated.json",
+    "template_test_data/optional_property/test_optional_property_with_link.json",
+    "template_test_data/optional_property/test_optional_property_with_link_missing_data.json",
+    "template_test_data/optional_property/test_optional_property_with_override.json",
+    "template_test_data/optional_property/test_optional_property_with_override_in_template.json",
+    "template_test_data/optional_property/test_optional_property_without_link.json",
+    "template_test_data/optional_property/test_optional_property_without_link_missing_data.json",
+    "template_test_data/optional_string_enum_property/test_optional_string_enum_property_not_templated.json",
+    "template_test_data/optional_string_enum_property/test_optional_string_enum_property_with_link.json",
+    "template_test_data/optional_string_enum_property/test_optional_string_enum_property_with_link_missing_data.json",
+    "template_test_data/optional_string_enum_property/test_optional_string_enum_property_with_override.json",
+    "template_test_data/optional_string_enum_property/test_optional_string_enum_property_without_link.json",
+    "template_test_data/optional_string_enum_property/test_optional_string_enum_property_without_link_missing_data.json",
+    "template_test_data/property/test_property_not_templated.json",
+    "template_test_data/property/test_property_not_templated_invalid.json",
+    "template_test_data/property/test_property_template_unknown_type.json",
+    "template_test_data/property/test_property_unknown_type.json",
+    "template_test_data/property/test_property_with_link.json",
+    "template_test_data/property/test_property_with_link_invalid.json",
+    "template_test_data/property/test_property_with_link_missing_data.json",
+    "template_test_data/property/test_property_with_link_to_link.json",
+    "template_test_data/property/test_property_with_override.json",
+    "template_test_data/property/test_property_with_override_in_template.json",
+    "template_test_data/property/test_property_without_link.json",
+    "template_test_data/property/test_property_without_link_invalid.json",
+    "template_test_data/property/test_property_without_link_missing_data.json",
+    "template_test_data/strict_array/test_referenced_strict_array_with_non_object_item.json",
+    "template_test_data/strict_array/test_referenced_strict_array_with_non_resolvable_item.json",
+    "template_test_data/strict_array/test_strict_array_happy_case.json",
+    "template_test_data/strict_array/test_strict_array_happy_case_referenced.json",
+    "template_test_data/strict_array/test_strict_array_with_non_object_item.json",
+    "template_test_data/strict_array/test_strict_array_with_non_object_item_ref.json",
+    "template_test_data/strict_array/test_strict_array_with_non_resolvable_item.json",
+    "template_test_data/strict_array/test_strict_array_with_non_resolvable_item_ref.json",
+    "template_test_data/string_enum_property/test_string_enum_property_not_templated.json",
+    "template_test_data/string_enum_property/test_string_enum_property_with_link.json",
+    "template_test_data/string_enum_property/test_string_enum_property_with_link_missing_data.json",
+    "template_test_data/string_enum_property/test_string_enum_property_with_override.json",
+    "template_test_data/string_enum_property/test_string_enum_property_without_link.json",
+    "template_test_data/string_enum_property/test_string_enum_property_without_link_missing_data.json",
+  ]
+}
+
+component_module("Serialization") {
+  module_name = "Serialization"
+  enable_exporting = true
+
+  if (current_toolchain != host_toolchain) {
+    deployment_target = "10.0"
+  }
+
+  sources = [
+    "arcadia/Serialization/Deserializable.swift",
+    "arcadia/Serialization/DeserializationError.swift",
+    "arcadia/Serialization/DeserializationResult.swift",
+    "arcadia/Serialization/Dictionary+Serialization.swift",
+    "arcadia/Serialization/Serializable.swift",
+    "arcadia/Serialization/SettingProperty+Serializable.swift",
+    "arcadia/Serialization/Validation.swift",
+    "arcadia/Serialization/ValueDeserialization.swift",
+  ]
+
+  public_deps = [ "//yandex/ios/search_app/CommonCore" ]
+}
+
+module("LivePreview") {
+  module_name = "LivePreview"
+
+  sources = [
+    "arcadia/LivePreview/LivePreviewGraph.swift",
+    "arcadia/LivePreview/Networking/DivViewSocket.swift",
+    "arcadia/LivePreview/Networking/JSONPayload.swift",
+    "arcadia/LivePreview/Networking/Payload.swift",
+    "arcadia/LivePreview/Networking/SocketURLBuilder.swift",
+    "arcadia/LivePreview/Networking/UIStatePayloadFactory.swift",
+    "arcadia/LivePreview/QRScanner/MetadataCaptureSession.swift",
+    "arcadia/LivePreview/QRScanner/ScannerViewController.swift",
+    "arcadia/LivePreview/UI/BlockProvider.swift",
+    "arcadia/LivePreview/UI/LivePreviewView.swift",
+    "arcadia/LivePreview/UI/ScannerView.swift",
+    "arcadia/LivePreview/UI/URLInputView.swift",
+    "arcadia/LivePreview/Utils/DeviceInfo.swift",
+  ]
+
+  deps = [ ":DivKit" ]
+
+  public_deps = [ "//yandex/ios/search_app/CommonCore" ]
+}
+
+module("DivKitDemoApp") {
+  module_name = "DivKitDemoApp"
+  deployment_target = "14.0"
+
+  sources = [
+    "arcadia/DivKitDemoApp/DivKit/DemoDivCustomBlockFactory.swift",
+    "arcadia/DivKitDemoApp/DivKit/DivBlockProvider.swift",
+    "arcadia/DivKitDemoApp/DivKit/SamplePatchProvider.swift",
+    "arcadia/DivKitDemoApp/DivKitDemoApp.swift",
+    "arcadia/DivKitDemoApp/UI/DivOnlineView.swift",
+    "arcadia/DivKitDemoApp/UI/DivSamplesView.swift",
+    "arcadia/DivKitDemoApp/UI/DivView.swift",
+    "arcadia/DivKitDemoApp/UI/DivViewGraph.swift",
+    "arcadia/DivKitDemoApp/UI/MainView.swift",
+    "arcadia/DivKitDemoApp/UI/VisibilityTrackingCardView.swift",
+    "arcadia/DivKitDemoApp/UI/VisibilityTrackingScrollView.swift",
+    "arcadia/DivKitDemoApp/Utils/Alert.swift",
+    "arcadia/DivKitDemoApp/Utils/FolderNames.swift",
+    "arcadia/DivKitDemoApp/Utils/URLOpener.swift",
+    "arcadia/DivKitDemoApp/Utils/URLWithFileNames.swift",
+  ]
+
+  deps = [
+    ":samples_a11y_mode_resources",
+    ":samples_a11y_resources",
+    ":samples_patches_resources",
+    ":samples_root_resources",
+    ":samples_slider_resources",
+    "//base/ios/yandex:core",
+    "//yandex/ios/search_app/DivKit",
+    "//yandex/ios/search_app/DivKit:DivKitExtensions",
+    "//yandex/ios/search_app/DivKit:LivePreview",
+  ]
+}
+
+bundle_data_ios("samples_root_resources") {
+  visibility = [ ":*" ]
+
+  sources = [
+    "arcadia/DivKitDemoApp/Samples/actions.json",
+    "arcadia/DivKitDemoApp/Samples/animations_button.json",
+    "arcadia/DivKitDemoApp/Samples/custom.json",
+    "arcadia/DivKitDemoApp/Samples/extensions.json",
+    "arcadia/DivKitDemoApp/Samples/gallery.json",
+    "arcadia/DivKitDemoApp/Samples/gallery_with_columns.json",
+    "arcadia/DivKitDemoApp/Samples/gallery_with_horizontal_columns.json",
+    "arcadia/DivKitDemoApp/Samples/gif_image.json",
+    "arcadia/DivKitDemoApp/Samples/indicator.json",
+    "arcadia/DivKitDemoApp/Samples/input.json",
+    "arcadia/DivKitDemoApp/Samples/pager.json",
+    "arcadia/DivKitDemoApp/Samples/patches.json",
+    "arcadia/DivKitDemoApp/Samples/pinch_to_zoom.json",
+    "arcadia/DivKitDemoApp/Samples/states.json",
+    "arcadia/DivKitDemoApp/Samples/tabs.json",
+    "arcadia/DivKitDemoApp/Samples/text.json",
+    "arcadia/DivKitDemoApp/Samples/text_selectable.json",
+    "arcadia/DivKitDemoApp/Samples/transitions_change.json",
+    "arcadia/DivKitDemoApp/Samples/transitions_div_data.json",
+    "arcadia/DivKitDemoApp/Samples/transitions_in_out.json",
+    "arcadia/DivKitDemoApp/Samples/triggers.json",
+    "arcadia/DivKitDemoApp/Samples/variables.json",
+    "arcadia/DivKitDemoApp/Samples/visibility.json",
+    "arcadia/DivKitDemoApp/Samples/visibility_actions.json",
+  ]
+
+  outputs = [ "{{bundle_resources_dir}}/Samples/" + "{{source_file_part}}" ]
+}
+
+bundle_data_ios("samples_patches_resources") {
+  visibility = [ ":*" ]
+
+  sources = [
+    "arcadia/DivKitDemoApp/Samples/Patches/delete.json",
+    "arcadia/DivKitDemoApp/Samples/Patches/error.json",
+    "arcadia/DivKitDemoApp/Samples/Patches/patch_1.json",
+    "arcadia/DivKitDemoApp/Samples/Patches/patch_2.json",
+  ]
+
+  outputs =
+      [ "{{bundle_resources_dir}}/Samples/Patches/" + "{{source_file_part}}" ]
+}
+
+bundle_data_ios("samples_slider_resources") {
+  visibility = [ ":*" ]
+
+  sources = [
+    "arcadia/DivKitDemoApp/Samples/Slider/base.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_active_track.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_inactive_track.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_text_bottom.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_text_left.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_text_left_top.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_text_right.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_text_top.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_text_top_bottom.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_thumb.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_thumb_secondary.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_thumb_text.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_thumb_text_secondary.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/custom_tick_marks.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/fixed_size.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/match_parent_size.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/nps.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/one_thumb_action.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/one_thumb_animation_test.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/one_thumb_discrete_action.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/secondary_thumb_on_left.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/two_thumb_action.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/two_thumb_discrete_action.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/with_active_tick_marks.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/with_inactive_tick_marks.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/with_paddings.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/with_stroke.json",
+    "arcadia/DivKitDemoApp/Samples/Slider/wrap_content_size.json",
+  ]
+
+  outputs =
+      [ "{{bundle_resources_dir}}/Samples/Slider/" + "{{source_file_part}}" ]
+}
+
+bundle_data_ios("samples_a11y_resources") {
+  visibility = [ ":*" ]
+
+  sources = [
+    "arcadia/DivKitDemoApp/Samples/Accessibility/descriptions.json",
+    "arcadia/DivKitDemoApp/Samples/Accessibility/types.json",
+  ]
+
+  outputs = [ "{{bundle_resources_dir}}/Samples/Accessibility/" +
+              "{{source_file_part}}" ]
+}
+
+bundle_data_ios("samples_a11y_mode_resources") {
+  visibility = [ ":*" ]
+
+  sources = [
+    "arcadia/DivKitDemoApp/Samples/Accessibility/Mode/default.json",
+    "arcadia/DivKitDemoApp/Samples/Accessibility/Mode/exclude.json",
+    "arcadia/DivKitDemoApp/Samples/Accessibility/Mode/merge.json",
+  ]
+
+  outputs = [ "{{bundle_resources_dir}}/Samples/Accessibility/Mode/" +
+              "{{source_file_part}}" ]
+}
+
+component_module("LayoutKitInterface") {
+  module_name = "LayoutKitInterface"
+  enable_exporting = true
+
+  if (current_toolchain != host_toolchain) {
+    deployment_target = "10.0"
+  }
+
+  sources = [
+    "arcadia/LayoutKit/Interface/ActionsAttribute.swift",
+    "arcadia/LayoutKit/Interface/CommonHandler.swift",
+    "arcadia/LayoutKit/Interface/Menu.swift",
+    "arcadia/LayoutKit/Interface/UIElementPath.swift",
+    "arcadia/LayoutKit/Interface/UserInterfaceAction.swift",
+  ]
+
+  # Do not add any dependencies here!
+  public_deps = [
+    "//base/ios/yandex/tiny",
+    "//base/ios/yandex/ui",
+  ]
+}
+
+component_module("LayoutKit") {
+  module_name = "LayoutKit"
+  enable_exporting = true
+
+  if (current_toolchain != host_toolchain) {
+    deployment_target = "10.0"
+  }
+
+  sources = [
+    "arcadia/LayoutKit/LayoutKit/Base/AttributedStringExtensions.swift",
+    "arcadia/LayoutKit/LayoutKit/Base/UILink.swift",
+    "arcadia/LayoutKit/LayoutKit/Binding.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/AccessibilityContaining.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ActionAnimation.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Anchor/AnchorBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Anchor/AnchorBlockLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/AnchorPoint.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/AnimatableImageBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Aspect/AspectBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BackgroundBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Block+Accessibility.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Block+Animation.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Block+CAAnimationRendering.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Block+Debugging.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Block+Layout.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Block+Reusable.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Block.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlockAlignment2D.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlockBorder.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlockError.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlockTooltip+Layout.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlockTooltip.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlockWithLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlockWithTraits.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlocksStateExtensions.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BlurEffect.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BoundaryTrait+CALayer.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BoundaryTrait.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/BoundaryTraitExtensions.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Container/ContainerBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Container/ContainerBlockExtensions.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/CornerRadii.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/CornerRadiiExtensions.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/DebugInfoBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Decorations/Block+Decorations.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Decorations/ContextMenu.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Decorations/DecoratingBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Decorations/LongTapActions.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Delay.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/DetachableAnimationBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Duration.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ElementStateUpdating.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/EmptyBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/GalleryBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Grid/Grid.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Grid/GridBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Grid/GridLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageBaseBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageBlock+Copy.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageRenderableBlock/Array+ImageRenderableBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageRenderableBlock/ContainerBlock+ImageRenderableBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageRenderableBlock/ImageBlock+ImageRenderableBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageRenderableBlock/ImageRenderableBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageRenderableBlock/LayredBlock+ImageRenderableBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageRenderableBlock/SeparatorBlock+ImageRenderableBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ImageRenderableBlock/TextBlock+ImageRenderableBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/IntrincisHeights.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/LaidOutBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/LayeredBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/LayeredBlockLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/LayoutCaching.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/LayoutTrait.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/MaskedBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/PageControlBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/PagerBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/PinchToZoomBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ResizableBlockMeasure.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/RoundedRect.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/SeparatorBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Shadow/BlockShadow.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Shadow/ShadedBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/SizeForwardingBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Slider/SliderBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Slider/SliderModel.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Slider/SliderThumbNumber.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/StateBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/SwipeContainerBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/SwitchBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/SwitchableContainerBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/SwitchableContainerBlockLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/SwitchableContentBlockState.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TabsBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TextBlock+Copy.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TextBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TextFieldBlock+Debugging.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TextFieldBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TextInputBlock+Debugging.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TextInputBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TimingFunction.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TransitioningAnimation.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/TransitioningBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/VideoBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/ViewType.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/Visibility.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/VisibilityAction.swift",
+    "arcadia/LayoutKit/LayoutKit/Blocks/WrapperBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/ClosureIntrinsicCalculator.swift",
+    "arcadia/LayoutKit/LayoutKit/Exports.swift",
+    "arcadia/LayoutKit/LayoutKit/GenericViewBlock.swift",
+    "arcadia/LayoutKit/LayoutKit/TooltipFactory.swift",
+    "arcadia/LayoutKit/LayoutKit/Types.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Actions/UIActionExtensions.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Base/GalleryVisibilityDelegate.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Base/GalleryVisibilityState.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Base/GenericCollectionLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Base/PageIndicator/PageIndicatorConfiguration.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Base/ScrollableContentPager.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Base/VisibilityState.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Blocks/ElementState.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabContentsViewDelegate.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabListSelectionDataSource.swift",
+    "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabTitlesViewModel.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/Background.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/BackgroundImage.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/GalleryViewLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/GalleryViewMetrics.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/GalleryViewModel.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/GalleryViewModelDelegate.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/GalleryViewState.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/InsetMode.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/PagerViewLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/PagerViewState.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabContentsViewLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabContentsViewModel.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabError.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabInterimItemExtensions.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabListViewModel.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabPageViewModel.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabSeparatorStyle.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabTitleStyle.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabTitleViewModel.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabViewLayout.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabViewModel.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabViewState.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabbedPagesHeightMode.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TabbedPages/TabbedPagesViewModelDelegate.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TextAnimation.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/TooltipInfo.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/VisibilityActionPerformer/VisibilityActionPerformer.swift",
+    "arcadia/LayoutKit/LayoutKit/ViewModels/VisibilityActionPerformer/VisibilityActionPerformers.swift",
+  ]
+
+  public_deps = [
+    ":LayoutKitInterface",
+    "//base/ios/yandex",
+    "//base/ios/yandex/ui",
+    "//yandex/ios/search_app/CommonCore",
+  ]
+
+  if (is_ios) {
+    sources += [
+      "arcadia/LayoutKit/LayoutKit/Blocks/Anchor/AnchorBlock+UIViewRenderable.swift",
+      "arcadia/LayoutKit/LayoutKit/Blocks/Aspect/AspectBlock+UIViewRenderable.swift",
+      "arcadia/LayoutKit/LayoutKit/Blocks/GradientBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/Blocks/Slider/SliderBlock+UIViewRenderable.swift",
+      "arcadia/LayoutKit/LayoutKit/Blocks/Slider/SliderView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/AnalyticsClickEventHandling.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/AnalyticsUrlEventHandling.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/AppActionEventProtocol.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/CommonHandlerExtensions.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/GalleryEvent/GalleryScrollEventHandling.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/MenuExtensions.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/PagerEventHandling.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/TooltipEventPerforming.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/UIActionEventPerforming.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Actions/UIActionEventPerformingAdapter.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/GenericCollectionReusableView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/GenericCollectionViewCell.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/GenericCollectionViewDataSource.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/GenericCollectionViewLayout.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/PageIndicator/IndicatorState/ActiveIndicatorOffsets.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/PageIndicator/IndicatorState/IndicatorStateAnimator.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/PageIndicator/IndicatorState/PageIndicatorState.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/PageIndicator/PageIndicatorLayer.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/PageIndicator/PageIndicatorLayerParams.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/PageIndicator/PageIndicatorView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Base/ScrollableContentPager+ScrollDelegate.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/AccessibilityBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/AnimatableImageBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/Array+UIViewRenderable.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/BackgroundBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/BlockViewProtocol.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/BlocksDebugEnvironment.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/ContainerBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/DebugInfoBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/DecoratingBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/DetachableAnimationBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/EffectiveBackgroundColorProviding.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/EmptyBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/GalleryBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/GenericViewBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/GridBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/ImageBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/LaidOutBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/LayeredBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/MaskedBlock+UIViewRenderable.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/PageControlBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/PagerBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/PinchToZoomBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/ReferenceEquatable.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/RenderingDelegate.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/SeparatorBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/ShadedBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/StateBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/SwipeContainerBlock+UIViewRenderable.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/SwitchBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/SwitchableContainerBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/TabsBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/TextBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/TextFieldBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/TextInputBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/TooltipProtocol.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/TransitioningBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/UIView+TransitioningAnimation.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/UIViewRenderable.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/UIViewRenderableBlockWithLayout.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Blocks/VideoBlock+UIViewRenderableBlock.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/AnimatingGradientView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/Background+UIViewRendering.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/BlockHostingView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/BoxShadowView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/ClickableView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/CompositeView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/ContextMenuDelegate.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/GalleryView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/NoContentTouchDelaysCollectionView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/SegmentedProgressView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/Block+CollectionCellModelExtensions.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabContentsView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabListSelectionDataSourceImpl.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabListView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabListViewDataSource.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabListViewDelegate.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabListViewDelegateTabSelection.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabSelectionWireframe.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/TabbedPages/TabbedPagesView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/URLActionHandlingView.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/ViewWithContentInsets.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/ViewWithShadow.swift",
+      "arcadia/LayoutKit/LayoutKit/UI/Views/VisibleBoundsTrackingCollectionView.swift",
+    ]
+  }
+}
+
+osx_xctest_bundle("LayoutKit_OSXTests") {
+  module_name = "LayoutKit_OSXTests"
+
+  sources = [
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/BlockTests+Layout.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/ContainerBlockTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/GalleryBlockTestModels.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/GalleryBlockTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/GridBlockTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/LayeredBlockLayoutTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/LayeredBlockTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/PagerBlockTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/ResizableBlockMeasureTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/SwitchableContainerBlockTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/TabsBlockTestModels.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/TabsBlockTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/TextBlockTestModels.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Blocks/WrapperBlockTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/UI/Base/GenericCollectionLayoutTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/UI/Base/ScrollableContentPagerTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/Utils.swift",
+    "arcadia/LayoutKit/LayoutKitTests/ViewModels/GalleryViewLayoutTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/ViewModels/GalleryViewMetricsTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/ViewModels/TabbedPages/TabContentsViewModelTests.swift",
+    "arcadia/LayoutKit/LayoutKitTests/ViewModels/VisibilityActionPerformer/VisibilityActionPerformerTests.swift",
+  ]
+
+  public_deps = [ ":LayoutKit" ]
+}
+
+simulator_tests_bundle("LayoutKit_iOSTests") {
+  sources = [
+    "arcadia/LayoutKit/LayoutKit_iOSTests/UI/Blocks/Array+UIViewRenderableTests.swift",
+    "arcadia/LayoutKit/LayoutKit_iOSTests/UI/Blocks/UIViewRenderable+AccessibilityTests.swift",
+    "arcadia/LayoutKit/LayoutKit_iOSTests/UI/Views/TabbedPages/TabListSelectionDataSourceImplTests.swift",
+    "arcadia/LayoutKit/LayoutKit_iOSTests/ViewModels/TabbedPages/TabInterimItemExtensionsTests.swift",
+  ]
+
+  public_deps = [ ":LayoutKit" ]
+}
