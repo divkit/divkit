@@ -1,5 +1,0 @@
-!DivKit.xcodeproj
-/.build
-/.swiftpm
-/DivKit/generated_sources/*_hash
-/TemplatesSupportTests/generated_sources/*_hash
