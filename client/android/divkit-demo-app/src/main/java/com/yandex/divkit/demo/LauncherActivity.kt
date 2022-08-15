@@ -46,18 +46,5 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         binding.root.addView(div)
-
-        val permissionRequest = PermissionRequestBuilder()
-            .requestCode(PERMISSION_REQUEST_CODE)
-            .requiredPermission(Permission.ACCESS_FINE_LOCATION)
-            .build()
-        permissionManager.setListener(PERMISSION_REQUEST_CODE, object: PermissionRequestCallback {
-            override fun invoke(result: PermissionRequestResult) {
-                when {
-                    result.areAllPermissionsGranted() -> permissionManager.removeListener(PERMISSION_REQUEST_CODE)
-                }
-            }
-        })
-        permissionManager.requestPermissions(permissionRequest)
     }
 }
