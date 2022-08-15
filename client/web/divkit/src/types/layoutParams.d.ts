@@ -1,6 +1,7 @@
 import { Orientation } from './orientation';
 
 export type Align = 'start' | 'center' | 'end';
+export type ScrollSnap = 'start' | 'center' | 'end';
 
 export interface LayoutParams {
     parentHAlign?: Align;
@@ -13,5 +14,5 @@ export interface LayoutParams {
         colSpan: number;
         rowSpan: number;
     };
-    scrollSnap?: boolean;
+    scrollSnap?: ScrollSnap;
 }

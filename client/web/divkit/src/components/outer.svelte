@@ -215,8 +215,6 @@
         `${layoutParams.gridArea.y + 1}/${layoutParams.gridArea.x + 1}/span ${layoutParams.gridArea.rowSpan}/span ${layoutParams.gridArea.colSpan}` :
         undefined;
 
-    $: scrollSnapMod = layoutParams.scrollSnap ? true : undefined;
-
     $: jsonAlpha = rootCtx.getDerivedFromVars(json.alpha);
     let alpha = 1;
     let opacity: number | undefined;
@@ -398,7 +396,7 @@
         ...widthMods,
         ...heightMods,
         'parent-overlap': parentOverlapMod,
-        'scroll-snap': scrollSnapMod,
+        'scroll-snap': layoutParams.scrollSnap,
         'hide-on-transition-in': stateChangingInProgress ||
             visibilityChangingInProgress ||
             transitionChangeInProgress,

@@ -31,6 +31,10 @@
     scroll-snap-type: both mandatory;
 }
 
+.gallery_scroll-snap > .gallery__scroller > .gallery__items-grid {
+    scroll-snap-align: start;
+}
+
 .gallery__items-grid {
     box-sizing: border-box;
     display: flex;

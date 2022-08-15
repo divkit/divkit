@@ -106,8 +106,12 @@
     grid-area: 1 / 1 / 2 / 2;
 }
 
-.outer_scroll-snap {
+.outer_scroll-snap_center {
     scroll-snap-align: center;
+}
+
+.outer_scroll-snap_start {
+    scroll-snap-align: start;
 }
 
 .outer__border {

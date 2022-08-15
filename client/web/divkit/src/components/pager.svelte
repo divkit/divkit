@@ -75,7 +75,7 @@
     }
 
     const childLayoutParams: LayoutParams = {
-        scrollSnap: true
+        scrollSnap: 'center'
     };
 
     let orientation: Orientation = 'horizontal';

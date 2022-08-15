@@ -13,6 +13,7 @@
     import type { Orientation } from '../types/orientation';
     import type { MaybeMissing } from '../expressions/json';
     import type { Size } from '../types/sizes';
+    import type { Style } from '../types/general';
     import { ROOT_CTX, RootCtxValue } from '../context/root';
     import Outer from './outer.svelte';
     import Unknown from './unknown.svelte';
@@ -108,32 +109,6 @@
         align = correctAlignment($jsonCrossContentAlignment, align);
     }
 
-    let scrollSnap = false;
-    $: jsonScrollMode = rootCtx.getDerivedFromVars(json.scroll_mode);
-    let childLayoutParams: LayoutParams = {};
-    $: {
-        let newChildLayoutParams: LayoutParams = {};
-        scrollSnap = false;
-
-        if (orientation === 'horizontal') {
-            newChildLayoutParams.parentVAlign = align;
-        } else {
-            newChildLayoutParams.parentHAlign = align;
-        }
-
-        if ($jsonScrollMode === 'paging') {
-            scrollSnap = true;
-            newChildLayoutParams.scrollSnap = true;
-        }
-
-        // todo multiple columns
-        if (columns === 1) {
-            newChildLayoutParams.parentLayoutOrientation = orientation;
-        }
-
-        childLayoutParams = assignIfDifferent(newChildLayoutParams, childLayoutParams);
-    }
-
     let gridGap: string | undefined;
     let itemSpacing = 8;
     $: jsonItemSpacing = rootCtx.getDerivedFromVars(json.item_spacing);
@@ -176,6 +151,37 @@
                 }
             });
         }
+    }
+
+    let scrollerStyle: Style = {};
+    let scrollSnap = false;
+    $: jsonScrollMode = rootCtx.getDerivedFromVars(json.scroll_mode);
+    let childLayoutParams: LayoutParams = {};
+    $: {
+        const newScrollerStyle: Style = {};
+        let newChildLayoutParams: LayoutParams = {};
+        scrollSnap = false;
+
+        if (orientation === 'horizontal') {
+            newChildLayoutParams.parentVAlign = align;
+        } else {
+            newChildLayoutParams.parentHAlign = align;
+        }
+
+        if ($jsonScrollMode === 'paging') {
+            scrollSnap = true;
+            newChildLayoutParams.scrollSnap = 'start';
+            const scrollPadding = orientation === 'horizontal' ? 'scroll-padding-left' : 'scroll-padding-top';
+            newScrollerStyle[scrollPadding] = pxToEm(itemSpacing / 2);
+        }
+
+        // todo multiple columns
+        if (columns === 1) {
+            newChildLayoutParams.parentLayoutOrientation = orientation;
+        }
+
+        scrollerStyle = assignIfDifferent(newScrollerStyle, scrollerStyle);
+        childLayoutParams = assignIfDifferent(newChildLayoutParams, childLayoutParams);
     }
 
     $: gridStyle = {
@@ -241,7 +247,7 @@
         const scrollDirection: keyof ScrollToOptions = isHorizontal ? 'left' : 'top';
 
         scroller.scroll({
-            [scrollDirection]: galleryElements[index][elementOffset],
+            [scrollDirection]: Math.max(0, galleryElements[index][elementOffset] - itemSpacing / 2),
             behavior
         });
     }
@@ -364,6 +370,7 @@
             class={css.gallery__scroller}
             bind:this={scroller}
             on:scroll={onScroll}
+            style={makeStyle(scrollerStyle)}
         >
             <div
                 class={css['gallery__items-grid']}
