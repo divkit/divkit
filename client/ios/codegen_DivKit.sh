@@ -1,1 +1,1 @@
-./codegen.sh DivKit/generator_config ../../arcadia/divkit/public/schema DivKit/generated_sources
+./codegen.sh DivKit/generator_config ../../schema DivKit/generated_sources

@@ -1,1 +1,1 @@
-../../lfs-storage/Contents/mobile-homeapi-binaries/macosx/HomeAPIGenerator $1 $2 $3
+../../../internal/homeapigenerator-binaries/macosx/HomeAPIGenerator $1 $2 $3
