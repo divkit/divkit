@@ -1,5 +1,3 @@
-// Copyright 2016 Yandex LLC. All rights reserved.
-
 import UIKit
 
 import LayoutKitInterface

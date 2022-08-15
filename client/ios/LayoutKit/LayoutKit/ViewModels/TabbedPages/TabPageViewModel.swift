@@ -1,5 +1,3 @@
-// Copyright 2017 Yandex LLC. All rights reserved.
-
 import CommonCore
 import LayoutKitInterface
 

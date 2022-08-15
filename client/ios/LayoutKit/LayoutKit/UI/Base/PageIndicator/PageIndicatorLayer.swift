@@ -1,6 +1,3 @@
-// Copyright 2021 Yandex LLC. All rights reserved.
-// Based on https://github.com/mohn93/AdvancedPageControl
-
 import UIKit
 
 import CommonCore

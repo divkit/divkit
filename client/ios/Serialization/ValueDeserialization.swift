@@ -1,5 +1,3 @@
-// Copyright 2019 Yandex LLC. All rights reserved.
-
 import CoreFoundation
 
 import CommonCore

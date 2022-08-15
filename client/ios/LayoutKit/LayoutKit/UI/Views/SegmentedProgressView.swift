@@ -1,5 +1,3 @@
-// Copyright 2021 Yandex LLC. All rights reserved.
-
 import UIKit
 
 import CommonCore

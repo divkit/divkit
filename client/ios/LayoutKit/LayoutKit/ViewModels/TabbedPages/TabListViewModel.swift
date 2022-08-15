@@ -1,5 +1,3 @@
-// Copyright 2016 Yandex LLC. All rights reserved.
-
 import CoreGraphics
 
 import BaseUI

@@ -1,5 +1,3 @@
-// Copyright 2016 Yandex LLC. All rights reserved.
-
 import QuartzCore
 
 extension BlockAnimation {

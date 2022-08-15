@@ -1,5 +1,3 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 import BaseUI
 import CommonCore
 import Serialization

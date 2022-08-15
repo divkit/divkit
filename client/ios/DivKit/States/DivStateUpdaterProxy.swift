@@ -1,5 +1,3 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 public final class DivStateUpdaterProxy: DivStateUpdater {
   public weak var subject: DivStateUpdater?
 

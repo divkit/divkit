@@ -1,5 +1,3 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 #if INTERNAL_BUILD
 import CoreGraphics
 import Foundation

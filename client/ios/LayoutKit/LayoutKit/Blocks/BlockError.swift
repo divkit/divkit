@@ -1,6 +1,3 @@
-// Copyright (C) 2018 Yandex LLC. All rights reserved.
-// Author: Slava Mirgorod <sl0nius@yandex-team.ru>
-
 import Foundation
 
 import CommonCore

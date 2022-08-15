@@ -1,5 +1,3 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 import Foundation
 
 private var externalLogger: (String) -> Void = { _ in }

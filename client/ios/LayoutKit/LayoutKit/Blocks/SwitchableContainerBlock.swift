@@ -1,6 +1,3 @@
-// Copyright (C) 2018 Yandex LLC. All rights reserved.
-// Author: Denis A. Malykh <mrdekk@yandex-team.ru>
-
 import CoreGraphics
 import Foundation
 

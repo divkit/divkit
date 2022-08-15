@@ -1,5 +1,3 @@
-// Copyright 2018 Yandex LLC. All rights reserved.
-
 public struct Context {
   public let templates: Templates
   public let templateToType: TemplateToType

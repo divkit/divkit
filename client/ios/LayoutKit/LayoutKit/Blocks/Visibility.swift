@@ -1,5 +1,3 @@
-// Copyright 2017 Yandex LLC. All rights reserved.
-
 public enum Visibility {
   case visible
   case notVisible

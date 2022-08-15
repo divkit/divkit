@@ -1,5 +1,3 @@
-// Copyright 2021 Yandex LLC. All rights reserved.
-
 public struct Delay: ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, Equatable {
   public let value: Double
 

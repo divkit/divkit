@@ -1,5 +1,3 @@
-// Copyright 2018 Yandex LLC. All rights reserved.
-
 /// Supported modes for dictionary interpretation.
 public enum ParsingMode {
   /// Do not treat object body as links container.

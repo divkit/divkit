@@ -1,5 +1,3 @@
-// Copyright 2018 Yandex LLC. All rights reserved.
-
 @testable import LayoutKit
 
 import Foundation
