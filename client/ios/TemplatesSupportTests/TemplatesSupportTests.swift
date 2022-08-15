@@ -4,14 +4,14 @@ import XCTest
 
 import Serialization
 
-final class TemplatesSupport_OSXTests: XCTestCase {}
+final class TemplatesSupportTests: XCTestCase {}
 
 func readEntity<T: TemplateDeserializable & TemplateValue>(
   _: T.Type,
   fileName: String
 ) throws -> T.ResolvedValue? {
-  let url = Bundle(for: TemplatesSupport_OSXTests.self)
-    .url(forResource: fileName, withExtension: "json")!
+  let url = Bundle(for: TemplatesSupportTests.self)
+    .url(forResource: "template_test_data/\(fileName)", withExtension: "json")!
   let data = try Data(contentsOf: url)
   guard let dictionary = try JSONSerialization
     .jsonObject(with: data, options: []) as? [String: Any] else {
