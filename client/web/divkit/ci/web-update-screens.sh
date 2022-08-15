@@ -17,6 +17,7 @@ export checkout_config="{
   }"
 
 npm ci
+cd ci && npm ci && cd -
 npm run build:prod
 npm run test:hermione:update
 

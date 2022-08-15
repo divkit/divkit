@@ -22,5 +22,5 @@ module.exports.process = function process(src, filename) {
         plugins
     });
 
-    return result ? result.code : src;
+    return result;
 };

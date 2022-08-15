@@ -1,6 +1,6 @@
 module.exports = {
     extends: [
-        './node_modules/@yandex-int/lint/eslintrc.js',
+        './.eslintrc.base.js',
         'plugin:@typescript-eslint/recommended'
     ],
     parser: '@typescript-eslint/parser',

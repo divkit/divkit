@@ -34,74 +34,74 @@ const steps = {
     'web:check:ts': [
         'npm run check:ts',
         {
-            files: prepareSelectivity([
+            /*files: prepareSelectivity([
                 `${projectPrefix}/tsconfig.json`,
-                `${projectPrefix}/**/*.svelte`,
-                `${projectPrefix}/**/*.ts`,
+                `${projectPrefix}/!**!/!*.svelte`,
+                `${projectPrefix}/!**!/!*.ts`,
                 `${projectPrefix}/package.json`
-            ])
+            ])*/
         }
     ],
     'web:check:eslint': [
         'npm run check:eslint',
         {
-            files: prepareSelectivity([
-                `${projectPrefix}/**/*.js`,
-                `${projectPrefix}/**/*.ts`,
-                `${projectPrefix}/**/*.svelte`,
+            /*files: prepareSelectivity([
+                `${projectPrefix}/!**!/!*.js`,
+                `${projectPrefix}/!**!/!*.ts`,
+                `${projectPrefix}/!**!/!*.svelte`,
                 `${projectPrefix}/tsconfig.json`,
                 `${projectPrefix}/package.json`,
                 `${projectPrefix}/.eslintrc.js`
-            ])
+            ])*/
         }
     ],
     'web:check:svelte': [
         'npm run check:svelte',
         {
-            files: prepareSelectivity([
-                `${projectPrefix}/**/*.svelte`,
-                `${projectPrefix}/**/*.ts`,
+            /*files: prepareSelectivity([
+                `${projectPrefix}/!**!/!*.svelte`,
+                `${projectPrefix}/!**!/!*.ts`,
                 `${projectPrefix}/package.json`
-            ])
+            ])*/
         }
     ],
     'web:build:prod': [
         'npm run build:prod',
         {
             intermediate: true,
-            files: prepareSelectivity([
-                `${projectPrefix}/src/**`,
+            /*files: prepareSelectivity([
+                `${projectPrefix}/src/!**`,
                 `${projectPrefix}/webpack.config.js`,
-                'public/test_data/**'
-            ])
+                'public/test_data/!**'
+            ])*/
         }
     ],
     'web:test:unit': [
         'npm run test:unit',
         {
-            files: prepareSelectivity([
-                `${projectPrefix}/**/*.ts`,
+            /*files: prepareSelectivity([
+                `${projectPrefix}/!**!/!*.ts`,
                 `${projectPrefix}/tests/templates`,
                 `${projectPrefix}/tests/utils`,
                 `${projectPrefix}/tools`,
                 `${projectPrefix}/package.json`,
                 `${projectPrefix}/jest.config.js`,
                 `${projectPrefix}/webpack.config.js`,
-                'public/test_data/**'
-            ])
+                'public/test_data/!**'
+            ])*/
         }
     ],
     'web:test:hermione': [
         'npm run test:hermione',
         {
-            files: prepareSelectivity([
-                `${projectPrefix}/src/**`,
+            /*files: prepareSelectivity([
+                `${projectPrefix}/src/!**`,
                 `${projectPrefix}/tests/hermione`,
                 `${projectPrefix}/.hermione.conf.js`,
                 `${projectPrefix}/package.json`,
                 `${projectPrefix}/webpack.config.js`,
-                'public/test_data/**'
-            ]),
+                'public/test_data/!**'
+            ]),*/
             report: 'hermione-gui-report',
             main: 'index.html',
             attributes: {

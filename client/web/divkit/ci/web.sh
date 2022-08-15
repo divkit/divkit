@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -ex
+
 echo "node `node -v`"
 echo "npm `npm -v`"
 
@@ -17,4 +19,5 @@ export checkout_config="{
   }"
 
 npm ci
+cd ci && npm ci && cd -
 node ci/checks.js

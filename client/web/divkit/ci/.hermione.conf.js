@@ -22,7 +22,7 @@ global.assert = chai.assert;
 const plugins = {
     'static-server': {
         // path: path.resolve(__dirname, 'tests/hermione/static'),
-        path: path.resolve(__dirname, '../../..'),
+        path: path.resolve(__dirname, '../../../..'),
         port: tunnelerLocalPort
     },
     'html-reporter/hermione': {
@@ -48,7 +48,7 @@ const plugins = {
 module.exports = {
     sets: {
         all: {
-            files: 'tests/hermione/**/*.hermione.js'
+            files: '../tests/hermione/**/*.hermione.js'
         }
     },
 
@@ -112,7 +112,6 @@ module.exports = {
     sessionRequestTimeout: 150000,
     sessionQuitTimeout: 5000,
     waitTimeout: 10000,
-    screenshotOnRejectTimeout: 5000,
 
     compositeImage: true,
     antialiasingTolerance: 4,
@@ -129,7 +128,7 @@ module.exports = {
 
     screenshotDelay: 400,
     screenshotsDir: (test) => {
-        let basePath = 'tests/hermione/screens/';
+        let basePath = '../tests/hermione/screens/';
         let testPath = '';
         let parent = test.parent;
 
@@ -144,7 +143,7 @@ module.exports = {
     prepareBrowser: function (browser) {
         // chaiAsPromised.transferPromiseness = browser.transferPromiseness;
 
-        const commandsDir = path.resolve(__dirname, 'tests/hermione/commands');
+        const commandsDir = path.resolve(__dirname, '../tests/hermione/commands');
 
         fs.readdirSync(commandsDir)
             .filter(function(name) {
