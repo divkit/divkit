@@ -1,9 +1,9 @@
-import type { BooleanValue, EvalValue, IntegerValue, NumberValue, StringValue } from '../eval';
+import type { BooleanValue, ColorValue, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
 import { registerFunc } from './funcs';
-import { BOOLEAN, INTEGER, MAX_INT, MIN_INT, NUMBER, STRING } from '../const';
+import { BOOLEAN, COLOR, INTEGER, MAX_INT, MIN_INT, NUMBER, STRING, URL } from '../const';
 import { valToString } from '../utils';
 
-function toString(arg: IntegerValue | NumberValue | BooleanValue): EvalValue {
+function toString(arg: IntegerValue | NumberValue | BooleanValue | ColorValue | UrlValue): EvalValue {
     return {
         type: STRING,
         value: valToString(arg)
@@ -107,6 +107,8 @@ export function registerStd(): void {
     registerFunc('toString', [INTEGER], toString);
     registerFunc('toString', [NUMBER], toString);
     registerFunc('toString', [BOOLEAN], toString);
+    registerFunc('toString', [COLOR], toString);
+    registerFunc('toString', [URL], toString);
 
     registerFunc('toNumber', [INTEGER], toNumber);
     registerFunc('toNumber', [STRING], toNumber);

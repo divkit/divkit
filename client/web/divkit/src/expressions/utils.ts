@@ -1,9 +1,11 @@
-import type { EvalValue } from './eval';
+import type { EvalValue, EvalValueBase } from './eval';
 import type { Node, Variable } from './ast';
 import type { EvalTypes } from './eval';
 import type { VariablesMap } from './eval';
 import { walk } from './walk';
 import { MAX_INT, MIN_INT } from './const';
+import { parseColor, ParsedColor } from '../utils/correctColor';
+import { padLeft } from '../utils/padLeft';
 
 export function valToInternal(val: EvalValue): EvalValue {
     if (val.type === 'url' || val.type === 'color') {
@@ -24,8 +26,6 @@ export function dateToString(date: Date): string {
 }
 
 export function valToString(val: EvalValue): string {
-    val = valToInternal(val);
-
     if (val.type === 'string') {
         return val.value;
     } else if (val.type === 'integer') {
@@ -48,9 +48,15 @@ export function valToString(val: EvalValue): string {
         return val.value ? 'true' : 'false';
     } else if (val.type === 'datetime') {
         return dateToString(val.value);
+    } else if (val.type === 'color') {
+        return stringifyColor(safeConvertColor(val.value));
+    } else if (val.type === 'url') {
+        return val.value;
     }
 
-    throw new Error(`Unexpected type ${val.type}`);
+
+    // For purpose when new eval value types will be added
+    throw new Error(`Unexpected type ${(val as EvalValueBase).type}`);
 }
 
 export function valToPreview(val: EvalValue): string {
@@ -114,4 +120,24 @@ export function containsUnsetVariables(ast: Node, variables: VariablesMap): bool
     });
 
     return result;
+}
+
+export function safeConvertColor(color: string): ParsedColor {
+    const res = parseColor(color);
+
+    if (res) {
+        return res;
+    }
+
+    throw new Error('Unable to convert value to Color, expected format #AARRGGBB.');
+}
+
+export function stringifyColor(color: ParsedColor): string {
+    return `#${[color.a, color.r, color.g, color.b].map(it => {
+        if (it < 0 || it > 255) {
+            throw new Error('Value out of range 0..1.');
+        }
+
+        return padLeft(Math.round(it).toString(16), 2);
+    }).join('').toUpperCase()}`;
 }

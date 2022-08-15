@@ -85,6 +85,96 @@
       ]
     },
     {
+      "name": "color with format #RGB to string => string",
+      "expression": "@{toString(color)}",
+      "expected": {
+          "type": "string",
+          "value": "#FFFFCCEE"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "color",
+          "value": "#fce"
+        }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "color with format #ARGB to string => string",
+      "expression": "@{toString(color)}",
+      "expected": {
+          "type": "string",
+          "value": "#DDFFCCEE"
+      },
+      "variables": [
+          {
+              "type": "color",
+              "name": "color",
+              "value": "#dfce"
+          }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "color with format #RRGGBB to string => string",
+      "expression": "@{toString(color)}",
+      "expected": {
+          "type": "string",
+          "value": "#FFFFCCEE"
+      },
+      "variables": [
+          {
+              "type": "color",
+              "name": "color",
+              "value": "#ffCCeE"
+          }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "color with format #AARRGGBB to string => string",
+      "expression": "@{toString(color)}",
+      "expected": {
+          "type": "string",
+          "value": "#DDFFCCEE"
+      },
+      "variables": [
+          {
+              "type": "color",
+              "name": "color",
+              "value": "#DdffCCeE"
+          }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
+      "name": "url to string => string",
+      "expression": "@{toString(url)}",
+      "expected": {
+          "type": "string",
+          "value": "https://ya.ru/?hello=1"
+      },
+      "variables": [
+          {
+              "type": "url",
+              "name": "url",
+              "value": "https://ya.ru/?hello=1"
+          }
+      ],
+      "platforms": [
+          "web"
+      ]
+    },
+    {
       "name": "string to string => error",
       "expression": "@{toString('abc')}",
       "expected": {

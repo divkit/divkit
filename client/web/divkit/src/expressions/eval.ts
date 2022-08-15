@@ -357,7 +357,7 @@ function evalCallExpression(vars: VariablesMap, expr: CallExpression): EvalValue
 
     let func: Func | undefined;
 
-    const args = expr.arguments.map(arg => evalAny(vars, arg)).map(valToInternal);
+    const args = expr.arguments.map(arg => evalAny(vars, arg));
     const funcKey = funcName + ':' + args.map(arg => arg.type).join('#');
 
     if (!funcByArgs.has(funcKey)) {

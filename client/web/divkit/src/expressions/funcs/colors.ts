@@ -1,30 +1,10 @@
-import type { EvalValue, NumberValue, StringValue } from '../eval';
+import type { ColorValue, EvalValue, NumberValue, StringValue } from '../eval';
 import { registerFunc } from './funcs';
-import { NUMBER, STRING } from '../const';
-import { parseColor, ParsedColor } from '../../utils/correctColor';
-import { padLeft } from '../../utils/padLeft';
+import { COLOR, NUMBER, STRING } from '../const';
+import { ParsedColor } from '../../utils/correctColor';
+import { safeConvertColor, stringifyColor } from '../utils';
 
-function safeConvertColor(color: string): ParsedColor {
-    const res = parseColor(color);
-
-    if (res) {
-        return res;
-    }
-
-    throw new Error('Unable to convert value to Color, expected format #AARRGGBB.');
-}
-
-function stringifyColor(color: ParsedColor): string {
-    return `#${[color.a, color.r, color.g, color.b].map(it => {
-        if (it < 0 || it > 255) {
-            throw new Error('Value out of range 0..1.');
-        }
-
-        return padLeft(Math.round(it).toString(16), 2);
-    }).join('').toUpperCase()}`;
-}
-
-function colorGetter(field: keyof ParsedColor): (color: StringValue) => EvalValue {
+function colorGetter(field: keyof ParsedColor): (color: StringValue | ColorValue) => EvalValue {
     return color => {
         const parsed = safeConvertColor(color.value);
 
@@ -35,14 +15,14 @@ function colorGetter(field: keyof ParsedColor): (color: StringValue) => EvalValu
     };
 }
 
-function colorSetter(field: keyof ParsedColor): (color: StringValue, val: NumberValue) => EvalValue {
+function colorSetter(field: keyof ParsedColor): (color: StringValue | ColorValue, val: NumberValue) => EvalValue {
     return (color, val) => {
         const parsed = safeConvertColor(color.value);
 
         parsed[field] = val.value * 255;
 
         return {
-            type: STRING,
+            type: color.type,
             value: stringifyColor(parsed)
         };
     };
@@ -88,14 +68,22 @@ function argb(alpha: NumberValue, red: NumberValue, green: NumberValue, blue: Nu
 
 export function registerColors(): void {
     registerFunc('getColorAlpha', [STRING], getColorAlpha);
+    registerFunc('getColorAlpha', [COLOR], getColorAlpha);
     registerFunc('getColorRed', [STRING], getColorRed);
+    registerFunc('getColorRed', [COLOR], getColorRed);
     registerFunc('getColorGreen', [STRING], getColorGreen);
+    registerFunc('getColorGreen', [COLOR], getColorGreen);
     registerFunc('getColorBlue', [STRING], getColorBlue);
+    registerFunc('getColorBlue', [COLOR], getColorBlue);
 
     registerFunc('setColorAlpha', [STRING, NUMBER], setColorAlpha);
+    registerFunc('setColorAlpha', [COLOR, NUMBER], setColorAlpha);
     registerFunc('setColorRed', [STRING, NUMBER], setColorRed);
+    registerFunc('setColorRed', [COLOR, NUMBER], setColorRed);
     registerFunc('setColorGreen', [STRING, NUMBER], setColorGreen);
+    registerFunc('setColorGreen', [COLOR, NUMBER], setColorGreen);
     registerFunc('setColorBlue', [STRING, NUMBER], setColorBlue);
+    registerFunc('setColorBlue', [COLOR, NUMBER], setColorBlue);
 
     registerFunc('rgb', [NUMBER, NUMBER, NUMBER], rgb);
     registerFunc('argb', [NUMBER, NUMBER, NUMBER, NUMBER], argb);

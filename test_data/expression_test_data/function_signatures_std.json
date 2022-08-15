@@ -129,6 +129,32 @@
       ],
       "result_type": "string",
       "platforms": ["android", "web", "ios"]
+    },
+    {
+      "name": "toString(color) string",
+      "function_name": "toString",
+      "doc": "Converts argument value to string type. Returns string value.",
+      "arguments": [
+          {
+              "type": "color",
+              "doc": "Color value to convert."
+          }
+      ],
+      "result_type": "string",
+      "platforms": ["web"]
+    },
+    {
+      "name": "toString(url) string",
+      "function_name": "toString",
+      "doc": "Converts argument value to string type. Returns string value.",
+      "arguments": [
+          {
+              "type": "url",
+              "doc": "Url value to convert."
+          }
+      ],
+      "result_type": "string",
+      "platforms": ["web"]
     }
   ]
 }
