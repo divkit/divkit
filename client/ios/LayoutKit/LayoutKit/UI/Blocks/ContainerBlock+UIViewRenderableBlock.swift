@@ -94,7 +94,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     self.renderingDelegate = renderingDelegate
 
     // Configuring views may lead to unpredictable side effects,
-    // including view hierarchy layout: https://paste.yandex-team.ru/8073674
+    // including view hierarchy layout.
     preventLayout = true
     blockViews = blockViews.reused(
       with: model.children.map(\.content),

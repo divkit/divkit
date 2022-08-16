@@ -19,8 +19,7 @@ extension Div {
   fileprivate func applySingleItemPatch(_ patch: DivPatch) -> Div {
     if let change = patch.getChange(id: id) {
       guard let items = change.items, items.count == 1 else {
-        // could not delete or insert multiple items if single item is required
-        // TODO: report error https://st.yandex-team.ru/ALICEKITIOS-2385
+        DivKitLogger.error("Patch contains multiple items, but single item is expected: \(id)")
         return self
       }
       return items[0]
@@ -36,8 +35,7 @@ extension Div {
       if items.count == 1 {
         return items[0]
       }
-      // could not insert multiple items if single item is required
-      // TODO: report error https://st.yandex-team.ru/ALICEKITIOS-2385
+      DivKitLogger.error("Patch contains multiple items, but single item is expected: \(id)")
       return self
     }
     return applyPatchToChildren(patch)

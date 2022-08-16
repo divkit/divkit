@@ -83,7 +83,7 @@ private final class AnchorView: BlockView, VisibleBoundsTrackingContainer {
     }
 
     // Configuring views may lead to unpredictable side effects,
-    // including view hierarchy layout: https://paste.yandex-team.ru/8073674
+    // including view hierarchy layout.
     preventLayout = true
     leadingView = reuse(block.leading, view: leadingView)
     centerView = reuse(block.center, view: centerView)

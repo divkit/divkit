@@ -16,7 +16,6 @@ extension DivChangeTransition {
           .asTimingFunction()
       )
     case .divChangeSetTransition:
-      // TODO: support transition sets when needed (https://st.yandex-team.ru/ALICEKITIOS-2516)
       return nil
     }
   }

@@ -69,7 +69,6 @@ extension NonEmptyArray where C: RangeReplaceableCollection, Element == Either<
   }
 }
 
-// https://st.yandex-team.ru/ALICEKITIOS-2237#603761011eb7332942780596
 public indirect enum DeserializationResult<T> {
   public typealias Error = Either<DeserializationError, FieldError>
   public typealias Errors = NonEmptyArray<Error>

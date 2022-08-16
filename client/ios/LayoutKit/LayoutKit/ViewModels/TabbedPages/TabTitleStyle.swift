@@ -41,7 +41,6 @@ public struct TabTitleStyle: Equatable {
   }
 
   public static func ==(lhs: TabTitleStyle, rhs: TabTitleStyle) -> Bool {
-    // TODO: https://st.yandex-team.ru/ALICEKITIOS-990
     lhs.typo.hasEqualDistributedAttributes(to: rhs.typo) &&
       lhs.inactiveTypo.hasEqualDistributedAttributes(to: rhs.inactiveTypo) &&
       lhs.paddings == rhs.paddings &&
