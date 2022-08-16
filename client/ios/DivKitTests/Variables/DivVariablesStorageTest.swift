@@ -231,6 +231,20 @@ final class DivVariablesStorageTest: XCTestCase {
 
     XCTAssertNil(event)
   }
+  
+  func test_appendGlobalVariables() {
+    storage.set(variables: variables, triggerUpdate: false)
+    
+    let newVariables: DivVariables = [
+      "int_var": .integer(0),
+      "new_var": .string("arbitrary")
+    ]
+    storage.append(variables: newVariables, triggerUpdate: true)
+    
+    let expectedVariables = variables + newVariables
+    XCTAssertEqual(expectedVariables, makeVariables())
+    XCTAssertEqual(.global(["int_var", "new_var"]), event?.kind)
+  }
 
   private func makeVariables(cardId: DivCardID = cardId) -> DivVariables {
     storage.makeVariables(for: cardId)

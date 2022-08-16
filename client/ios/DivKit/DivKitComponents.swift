@@ -120,11 +120,10 @@ public final class DivKitComponents {
 
   private func setVariablesAndTriggers(divData: DivData?, cardId: DivCardID) {
     let divDataVariables = divData?.variables?.extractDivVariableValues() ?? [:]
-    let storageVariables = variablesStorage.makeVariables(for: cardId)
-
-    variablesStorage.set(
-      cardId: cardId,
-      variables: divDataVariables + storageVariables
+    variablesStorage.append(
+      variables: divDataVariables,
+      for: cardId,
+      replaceExisting: false
     )
 
     triggersStorage.set(

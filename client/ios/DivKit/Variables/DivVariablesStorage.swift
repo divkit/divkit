@@ -146,6 +146,13 @@ public final class DivVariablesStorage {
       ))
     }
   }
+  
+  public func append(
+    variables: DivVariables,
+    triggerUpdate: Bool
+  ) {
+    set(variables: storage.global + variables, triggerUpdate: triggerUpdate)
+  }
 
   public func makeVariables(for cardId: DivCardID) -> DivVariables {
     storage.makeVariables(for: cardId)
