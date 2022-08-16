@@ -17,14 +17,11 @@ ggys
 grechka62
 grehhov
 gulevsky
-hpotter
 i-ts
 ilim-ablyaev
 ivanovsky-v
 jeffset
-kindrik
 laringv
-luckyall
 malets
 merfemor
 morevsavva
@@ -33,8 +30,6 @@ nikita-kladov
 nikonovmi
 nikstarygin
 nkhodyunya
-novikaud
-nslus
 olegmax
 ov-mm
 pazus
@@ -44,12 +39,9 @@ ripp
 rnkorneeva
 sdimy
 smirnov-maxim
-somebody
-stanisvs
 stefan-nsk
 svyat-starkov
 tayrinn
-the-room-101
 timatifey
 ttok
 tur1st
@@ -60,8 +52,6 @@ victorsamun
 viktor-reznik
 yagamayunov
 yboyarinov
-zeac
-zhelonkin-n
 
 The following authors have licensed their contributions to YANDEX LLC and everyone who uses "DivKit" under the licensing terms detailed in LICENSE available at [3].
 4eb0da <4eb0da@yandex-team.ru>
@@ -82,14 +72,11 @@ ggys <ggys@yandex-team.ru>
 grechka62 <grechka62@yandex-team.ru>
 grehhov <grehhov@yandex-team.ru>
 gulevsky <gulevsky@yandex-team.ru>
-hpotter <hpotter@yandex-team.ru>
 i-ts <i-ts@yandex-team.ru>
 ilim-ablyaev <ilim-ablyaev@yandex-team.ru>
 ivanovsky-v <ivanovsky-v@yandex-team.ru>
 jeffset <jeffset@yandex-team.ru>
-kindrik <kindrik@yandex-team.ru>
 laringv <laringv@yandex-team.ru>
-luckyall <luckyall@yandex-team.ru>
 malets <malets@yandex-team.ru>
 merfemor <merfemor@yandex-team.ru>
 morevsavva <morevsavva@yandex-team.ru>
@@ -98,8 +85,6 @@ nikita-kladov <nikita-kladov@yandex-team.ru>
 nikonovmi <nikonovmi@yandex-team.ru>
 nikstarygin <nikstarygin@yandex-team.ru>
 nkhodyunya <nkhodyunya@yandex-team.ru>
-novikaud <novikaud@yandex-team.ru>
-nslus <nslus@yandex-team.ru>
 olegmax <olegmax@yandex-team.ru>
 ov-mm <ov-mm@yandex-team.ru>
 pazus <pazus@yandex-team.ru>
@@ -109,12 +94,9 @@ ripp <ripp@yandex-team.ru>
 rnkorneeva <rnkorneeva@yandex-team.ru>
 sdimy <sdimy@yandex-team.ru>
 smirnov-maxim <smirnov-maxim@yandex-team.ru>
-somebody <somebody@yandex-team.ru>
-stanisvs <stanisvs@yandex-team.ru>
 stefan-nsk <stefan-nsk@yandex-team.ru>
 svyat-starkov <svyat-starkov@yandex-team.ru>
 tayrinn <tayrinn@yandex-team.ru>
-the-room-101 <the-room-101@yandex-team.ru>
 timatifey <timatifey@yandex-team.ru>
 ttok <ttok@yandex-team.ru>
 tur1st <tur1st@yandex-team.ru>
@@ -125,5 +107,3 @@ victorsamun <victorsamun@yandex-team.ru>
 viktor-reznik <viktor-reznik@yandex-team.ru>
 yagamayunov <yagamayunov@yandex-team.ru>
 yboyarinov <yboyarinov@yandex-team.ru>
-zeac <zeac@yandex-team.ru>
-zhelonkin-n <zhelonkin-n@yandex-team.ru>
