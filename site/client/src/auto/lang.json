@@ -1,0 +1,40 @@
+{
+    "ru": {
+        "name": "Русский",
+        "languageChooser": "Выбранный язык",
+        "playground": "Песочница",
+        "samples": "Примеры",
+        "share": "Поделиться",
+        "components": "Компоненты: ",
+        "timeToRender": "Время на отрисовку: ",
+        "customViewport": "Своё",
+        "structure": "Структура",
+        "errors": "Ошибоньки",
+        "warnings": "Предупреждения",
+        "noErrors": "Нет ошибок",
+        "run": "Запустить",
+        "runTitle": "Запустить код (%s)",
+        "toJsonWarning": "Код будет заменён на json и это нельзя будет отменить. Продолжить?",
+        "toTsWarning": "Текущее состояние будет заменено примером кода на TypeScript и это нельзя будет отменить. Продолжить?",
+        "runCodeFirst": "Превью будет показано после первого успешного запуска кода. Для запуска нажмите кнопку над кодом или сочетание клавиш %s."
+    },
+    "en": {
+        "name": "English",
+        "languageChooser": "Selected language",
+        "playground": "Playground",
+        "samples": "Samples",
+        "share": "Share",
+        "components": "Components: ",
+        "timeToRender": "Time to render: ",
+        "customViewport": "Custom",
+        "structure": "Structure",
+        "errors": "Errors",
+        "warnings": "Warnings",
+        "noErrors": "No errors",
+        "run": "Run",
+        "runTitle": "Run code (%s)",
+        "toJsonWarning": "Code would be lost and cannot be recovered. Continue?",
+        "toTsWarning": "Current state would be lost and cannot be recovered. Continue?",
+        "runCodeFirst": "Preview will be shown after the first successful code run. To run the code, click the button above the code editor or press %s."
+    }
+}
