@@ -233,6 +233,7 @@ public struct FunctionSignature: Decodable {
     case boolean
     case datetime
     case color
+    case url
 
     func check(arg: Any) -> Bool {
       type(of: arg) == swiftType
@@ -252,6 +253,8 @@ public struct FunctionSignature: Decodable {
         return Date.self
       case .color:
         return Color.self
+      case .url:
+        return URL.self
       }
     }
 
