@@ -37,6 +37,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let keyboardType: KeyboardType
   public let backgroundColor: Color
   public let maxIntrinsicNumberOfLines = 1
+  public weak var parentScrollView: ScrollView?
 
   public init(
     widthTrait: LayoutTrait = .resizable,
@@ -44,7 +45,8 @@ public final class TextInputBlock: BlockWithTraits {
     text: NSAttributedString,
     keyboardAppearance: KeyboardAppearance = defaultKeyboardAppearance,
     keyboardType: KeyboardType = .default,
-    backgroundColor: Color = .clear
+    backgroundColor: Color = .clear,
+    parentScrollView: ScrollView? = nil
   ) {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
@@ -52,6 +54,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.keyboardAppearance = keyboardAppearance
     self.keyboardType = keyboardType
     self.backgroundColor = backgroundColor
+    self.parentScrollView = parentScrollView
   }
 
   public var intrinsicContentWidth: CGFloat {

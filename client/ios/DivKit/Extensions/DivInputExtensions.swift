@@ -53,7 +53,8 @@ extension DivInput: DivBlockModeling {
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context.expressionResolver),
       heightTrait: makeContentHeightTrait(with: context.expressionResolver),
-      text: attributedText
+      text: attributedText,
+      parentScrollView: context.parentScrollView
     )
   }
 }

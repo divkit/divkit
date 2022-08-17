@@ -96,7 +96,8 @@ public final class DivKitComponents {
 
   public func makeContext(
     cardId: DivCardID,
-    cachedImageHolders: [ImageHolder]
+    cachedImageHolders: [ImageHolder],
+    parentScrollView: ScrollView? = nil
   ) -> DivBlockModelingContext {
     DivBlockModelingContext(
       cardId: cardId,
@@ -110,7 +111,8 @@ public final class DivKitComponents {
       flagsInfo: flagsInfo,
       extensionHandlers: extensionHandlers,
       variables: variablesStorage.makeVariables(for: cardId),
-      showDebugInfo: showDebugInfo
+      showDebugInfo: showDebugInfo,
+      parentScrollView: parentScrollView
     )
   }
 

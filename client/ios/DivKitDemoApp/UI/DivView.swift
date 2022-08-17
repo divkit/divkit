@@ -65,6 +65,7 @@ private final class DivViewController: UIViewController {
       PinchToZoomExtensionHandler(overlayView: view),
     ]
 
+    blockProvider.parentScrollView = scrollView
     blockProvider.block
       .currentAndNewValues
       .addObserver(updateBlockView)

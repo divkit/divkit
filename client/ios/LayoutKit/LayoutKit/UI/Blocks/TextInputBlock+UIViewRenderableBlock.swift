@@ -18,6 +18,7 @@ extension TextInputBlock {
     inputView.backgroundColor = backgroundColor.systemColor
     inputView.setKeyboardAppearance(keyboardAppearance)
     inputView.setKeyboardType(keyboardType)
+    inputView.setParentScrollView(parentScrollView)
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -26,6 +27,11 @@ extension TextInputBlock {
 }
 
 private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
+  private weak var parentScrollView: ScrollView?
+  private var tapGestureRecognizer: UITapGestureRecognizer?
+  private var keyboardOpeningInProgress = false
+  private var keyboardHeight: CGFloat = 0
+
   var text: NSAttributedString? {
     get {
       view.attributedText
@@ -57,6 +63,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     view.keyboardType = type.uiType
   }
 
+  func setParentScrollView(_ parentScrollView: ScrollView?) {
+    self.parentScrollView = parentScrollView
+  }
+
   private let view = UITextView()
 
   override init(frame: CGRect) {
@@ -68,6 +78,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     view.autocorrectionType = .no
     view.backgroundColor = .clear
     view.textContainerInset = .zero
+    view.delegate = self
 
     addSubview(view)
   }
@@ -80,6 +91,109 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   override func layoutSubviews() {
     super.layoutSubviews()
     view.frame = bounds
+  }
+
+  override func didMoveToWindow() {
+    if window != nil {
+      startKeyboardTracking()
+    } else {
+      stopAllTracking()
+    }
+  }
+
+  private func startKeyboardTracking() {
+    let notificationCenter = NotificationCenter.default
+    notificationCenter.addObserver(
+      self,
+      selector: #selector(keyboardWillShow),
+      name: UIResponder.keyboardWillShowNotification,
+      object: nil
+    )
+    notificationCenter.addObserver(
+      self,
+      selector: #selector(keyboardDidShow),
+      name: UIResponder.keyboardDidShowNotification,
+      object: nil
+    )
+    notificationCenter.addObserver(
+      self,
+      selector: #selector(keyboardWillHide),
+      name: UIResponder.keyboardWillHideNotification,
+      object: nil
+    )
+  }
+
+  private func stopAllTracking() {
+    NotificationCenter.default.removeObserver(self)
+  }
+
+  @objc private func keyboardWillShow(notification: Notification) {
+    keyboardOpeningInProgress = true
+    if let keyboardFrame = notification
+      .userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+      let keyboardRectangle = keyboardFrame.cgRectValue
+      keyboardHeight = keyboardRectangle.height
+    }
+  }
+
+  @objc private func keyboardDidShow(_: Notification) {
+    keyboardOpeningInProgress = false
+  }
+
+  @objc private func keyboardWillHide(_: Notification) {
+    keyboardHeight = 0
+  }
+}
+
+extension TextInputBlockView: UITextViewDelegate {
+  func textViewDidBeginEditing(_ textView: UITextView) {
+    let frameInWindow = textView.convert(textView.frame, to: nil)
+    let bottomPoint = frameInWindow.maxY + additionalOffset
+    scrollToVisible(bottomPoint)
+    startListeningTap()
+  }
+
+  func textViewDidEndEditing(_ textView: UITextView) {
+    stopListeningTap()
+  }
+
+  private func startListeningTap() {
+    guard tapGestureRecognizer == nil else { return }
+    guard let scrollView = parentScrollView else { return }
+    let tapRecognizer = UITapGestureRecognizer(
+      target: self,
+      action: #selector(dissmissKeyboard)
+    )
+    tapRecognizer.cancelsTouchesInView = false
+    scrollView.addGestureRecognizer(tapRecognizer)
+    tapGestureRecognizer = tapRecognizer
+  }
+
+  @objc private func dissmissKeyboard() {
+    view.resignFirstResponder()
+  }
+
+  private func stopListeningTap() {
+    guard tapGestureRecognizer != nil else { return }
+    guard let scrollView = parentScrollView else { return }
+    scrollView.removeGestureRecognizer(tapGestureRecognizer!)
+    tapGestureRecognizer = nil
+  }
+
+  private func scrollToVisible(_ targetY: CGFloat) {
+    guard let scrollView = parentScrollView else { return }
+    let frameInWindow = scrollView.convert(scrollView.frame, to: nil)
+    var visibleY = frameInWindow.maxY + scrollView.contentOffset.y
+    if keyboardOpeningInProgress {
+      visibleY = visibleY - keyboardHeight
+    }
+    if targetY > visibleY {
+      let scrollPoint = CGPoint(
+        x: 0,
+        y: scrollView.contentOffset.y + targetY - visibleY
+      )
+      scrollView.setContentOffset(scrollPoint, animated: true)
+    }
   }
 }
 
@@ -139,3 +253,5 @@ extension TextInputBlock.KeyboardType {
     }
   }
 }
+
+private let additionalOffset = 25.0

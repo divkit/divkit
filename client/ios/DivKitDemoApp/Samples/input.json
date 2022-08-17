@@ -171,7 +171,191 @@
                             "font_weight": "medium",
                             "text_color": "#000000",
                             "text_variable": "my_edit_text_3",
-                            "hint_text": "Centered alignment",
+                            "hint_text": "Centered alignment 1",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E74C3C",
+                            "max_lines": 2,
+                            "keyboard_type": "text"
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "my_edit_text_3",
+                            "hint_text": "Centered alignment 2",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E74C3C",
+                            "max_lines": 2,
+                            "keyboard_type": "text"
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "my_edit_text_3",
+                            "hint_text": "Centered alignment 3",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E74C3C",
+                            "max_lines": 2,
+                            "keyboard_type": "text"
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "my_edit_text_3",
+                            "hint_text": "Centered alignment 4",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E74C3C",
+                            "max_lines": 2,
+                            "keyboard_type": "text"
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "my_edit_text_3",
+                            "hint_text": "Centered alignment 5",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E74C3C",
                             "max_lines": 2,

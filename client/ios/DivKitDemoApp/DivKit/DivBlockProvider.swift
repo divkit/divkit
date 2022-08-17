@@ -11,6 +11,7 @@ final class DivBlockProvider {
   private let disposePool = AutodisposePool()
 
   private var divData: DivData?
+  public weak var parentScrollView: ScrollView?
 
   let block: ObservableProperty<Block> = ObservableProperty(initialValue: noDataBlock)
 
@@ -39,7 +40,8 @@ final class DivBlockProvider {
       block.value = try divData.makeBlock(
         context: divKitComponents.makeContext(
           cardId: cardId,
-          cachedImageHolders: block.value.getImageHolders()
+          cachedImageHolders: block.value.getImageHolders(),
+          parentScrollView: parentScrollView
         )
       )
     } catch {

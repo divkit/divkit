@@ -1,5 +1,6 @@
 import CoreGraphics
 
+import Base
 import BaseUI
 import LayoutKit
 import Networking
@@ -22,6 +23,7 @@ public struct DivBlockModelingContext {
   public let expressionResolver: ExpressionResolver
   public let showDebugInfo: ((ViewType) -> Void)?
   public var childrenA11yDescription: String?
+  public weak var parentScrollView: ScrollView?
 
   #if INTERNAL_BUILD
   let blockModelingErrorsStorage: ExpressionErrorsStorage
@@ -44,7 +46,8 @@ public struct DivBlockModelingContext {
     stateInterceptors: [DivStateInterceptor] = [],
     variables: DivVariables = [:],
     showDebugInfo: ((ViewType) -> Void)? = nil,
-    childrenA11yDescription: String? = nil
+    childrenA11yDescription: String? = nil,
+    parentScrollView: ScrollView? = nil
   ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
@@ -60,6 +63,7 @@ public struct DivBlockModelingContext {
     self.fontSpecifiers = fontSpecifiers
     self.showDebugInfo = showDebugInfo
     self.childrenA11yDescription = childrenA11yDescription
+    self.parentScrollView = parentScrollView
 
     #if INTERNAL_BUILD
     let blockModelingErrorsStorage = ExpressionErrorsStorage()
