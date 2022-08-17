@@ -1,109 +1,49 @@
 The following authors have created the source code of "DivKit" published and distributed by YANDEX LLC as the owner:
 4eb0da
 akhmetsafin
-anarkh
-arychagov
-avasilov
-avstaim
-bacecek
 bgubanov
 chris-benua
-cypt4
-daria-lu
 edubinskaya
-evgeek
 geaden
 ggys
 grechka62
-grehhov
 gulevsky
 i-ts
-ilim-ablyaev
 ivanovsky-v
-jeffset
-laringv
-malets
-merfemor
 morevsavva
-netimen
 nikita-kladov
-nikonovmi
-nikstarygin
 nkhodyunya
-olegmax
-ov-mm
-pazus
 pkurchatov
-pyatin
-ripp
 rnkorneeva
-sdimy
-smirnov-maxim
-stefan-nsk
-svyat-starkov
 tayrinn
 timatifey
 ttok
-tur1st
-vadimkulinich
 valeriahil
 ventywing
-victorsamun
-viktor-reznik
 yagamayunov
 yboyarinov
 
 The following authors have licensed their contributions to YANDEX LLC and everyone who uses "DivKit" under the licensing terms detailed in LICENSE available at [3].
 4eb0da <4eb0da@yandex-team.ru>
 akhmetsafin <akhmetsafin@yandex-team.ru>
-anarkh <anarkh@yandex-team.ru>
-arychagov <arychagov@yandex-team.ru>
-avasilov <avasilov@yandex-team.ru>
-avstaim <avstaim@yandex-team.ru>
-bacecek <bacecek@yandex-team.ru>
 bgubanov <bgubanov@yandex-team.ru>
 chris-benua <chris-benua@yandex-team.ru>
-cypt4 <cypt4@yandex-team.ru>
-daria-lu <daria-lu@yandex-team.ru>
 edubinskaya <edubinskaya@yandex-team.ru>
-evgeek <evgeek@yandex-team.ru>
 geaden <geaden@yandex-team.ru>
 ggys <ggys@yandex-team.ru>
 grechka62 <grechka62@yandex-team.ru>
-grehhov <grehhov@yandex-team.ru>
 gulevsky <gulevsky@yandex-team.ru>
 i-ts <i-ts@yandex-team.ru>
-ilim-ablyaev <ilim-ablyaev@yandex-team.ru>
 ivanovsky-v <ivanovsky-v@yandex-team.ru>
-jeffset <jeffset@yandex-team.ru>
-laringv <laringv@yandex-team.ru>
-malets <malets@yandex-team.ru>
-merfemor <merfemor@yandex-team.ru>
 morevsavva <morevsavva@yandex-team.ru>
-netimen <netimen@yandex-team.ru>
 nikita-kladov <nikita-kladov@yandex-team.ru>
-nikonovmi <nikonovmi@yandex-team.ru>
-nikstarygin <nikstarygin@yandex-team.ru>
 nkhodyunya <nkhodyunya@yandex-team.ru>
-olegmax <olegmax@yandex-team.ru>
-ov-mm <ov-mm@yandex-team.ru>
-pazus <pazus@yandex-team.ru>
 pkurchatov <pkurchatov@yandex-team.ru>
-pyatin <pyatin@yandex-team.ru>
-ripp <ripp@yandex-team.ru>
 rnkorneeva <rnkorneeva@yandex-team.ru>
-sdimy <sdimy@yandex-team.ru>
-smirnov-maxim <smirnov-maxim@yandex-team.ru>
-stefan-nsk <stefan-nsk@yandex-team.ru>
-svyat-starkov <svyat-starkov@yandex-team.ru>
 tayrinn <tayrinn@yandex-team.ru>
 timatifey <timatifey@yandex-team.ru>
 ttok <ttok@yandex-team.ru>
-tur1st <tur1st@yandex-team.ru>
-vadimkulinich <vadimkulinich@yandex-team.ru>
 valeriahil <valeriahil@yandex-team.ru>
 ventywing <ventywing@yandex-team.ru>
-victorsamun <victorsamun@yandex-team.ru>
-viktor-reznik <viktor-reznik@yandex-team.ru>
 yagamayunov <yagamayunov@yandex-team.ru>
 yboyarinov <yboyarinov@yandex-team.ru>
