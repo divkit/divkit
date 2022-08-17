@@ -10,7 +10,6 @@ extension Block {
   func addingErrorsButton(
     errors: [ExpressionError],
     parentPath: UIElementPath,
-    safeAreaInsets: EdgeInsets,
     showDebugInfo: ((ViewType) -> Void)?
   ) -> Block {
     let errorsCount = errors.count
@@ -43,7 +42,6 @@ extension Block {
         boundary: .clipCorner(radius: 10),
         backgroundColor: .red
       )
-      .addingEdgeInsets(safeAreaInsets)
       .addingEdgeGaps(2)
       .addingDecorations(action: action)
 

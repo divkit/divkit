@@ -39,7 +39,6 @@ extension DivData: DivBlockModeling {
       .addingErrorsButton(
         errors: divContext.blockModelingErrorsStorage.errors,
         parentPath: divContext.parentPath,
-        safeAreaInsets: EdgeInsets(resolver: divContext.expressionResolver),
         showDebugInfo: divContext.showDebugInfo
       )
     #endif
@@ -94,37 +93,5 @@ extension Div {
     case .divImage, .divGifImage, .divText, .divSlider, .divIndicator, .divSeparator, .divInput:
       return []
     }
-  }
-}
-
-extension EdgeInsets {
-  fileprivate static let safeAreaTopVariable: DivVariableName = "safe_area_top"
-  fileprivate static let safeAreaBottomVariable: DivVariableName = "safe_area_bottom"
-  fileprivate static let safeAreaLeftVariable: DivVariableName = "safe_area_left"
-  fileprivate static let safeAreaRightVariable: DivVariableName = "safe_area_right"
-
-  fileprivate init(resolver: ExpressionResolver) {
-    let top: Double = resolver.numericValue(Self.safeAreaTopVariable.rawValue) ?? 0
-    let left: Double = resolver.numericValue(Self.safeAreaLeftVariable.rawValue) ?? 0
-    let bottom: Double = resolver.numericValue(Self.safeAreaBottomVariable.rawValue) ?? 0
-    let right: Double = resolver.numericValue(Self.safeAreaRightVariable.rawValue) ?? 0
-
-    self.init(top: top, left: left, bottom: bottom, right: right)
-  }
-
-  public var asSafeAreaVariables: DivVariables {
-    [
-      Self.safeAreaTopVariable: .number(self.top),
-      Self.safeAreaBottomVariable: .number(self.bottom),
-      Self.safeAreaLeftVariable: .number(self.left),
-      Self.safeAreaRightVariable: .number(self.right),
-    ]
-  }
-}
-
-extension ExpressionResolver {
-  fileprivate func numericValue<T>(_ expression: String) -> T? {
-    ExpressionLink(expression: expression, validator: nil)
-      .flatMap { self.resolveNumericValue(expression: .link($0)) }
   }
 }
