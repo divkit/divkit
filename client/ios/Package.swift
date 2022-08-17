@@ -75,6 +75,9 @@ let package = Package(
       path: "DivKit",
       exclude: [
         "generator_config",
+      ],
+      swiftSettings: [
+        .unsafeFlags(["-warnings-as-errors"])
       ]
     ),
 
@@ -83,7 +86,10 @@ let package = Package(
       dependencies: [
         "DivKit",
       ],
-      path: "DivKitExtensions"
+      path: "DivKitExtensions",
+      swiftSettings: [
+        .unsafeFlags(["-warnings-as-errors"])
+      ]
     ),
 
     .target(
@@ -92,7 +98,10 @@ let package = Package(
         "CommonCore",
         "LayoutKitInterface",
       ],
-      path: "LayoutKit/LayoutKit"
+      path: "LayoutKit/LayoutKit",
+      swiftSettings: [
+        .unsafeFlags(["-warnings-as-errors"])
+      ]
     ),
 
     .target(
@@ -100,7 +109,10 @@ let package = Package(
       dependencies: [
         "CommonCore",
       ],
-      path: "LayoutKit/Interface"
+      path: "LayoutKit/Interface",
+      swiftSettings: [
+        .unsafeFlags(["-warnings-as-errors"])
+      ]
     ),
 
     .target(
@@ -108,7 +120,10 @@ let package = Package(
       dependencies: [
         "CommonCore",
       ],
-      path: "Serialization"
+      path: "Serialization",
+      swiftSettings: [
+        .unsafeFlags(["-warnings-as-errors"])
+      ]
     ),
 
     .target(
@@ -117,7 +132,10 @@ let package = Package(
         "CommonCore",
         "Serialization",
       ],
-      path: "TemplatesSupport"
+      path: "TemplatesSupport",
+      swiftSettings: [
+        .unsafeFlags(["-warnings-as-errors"])
+      ]
     ),
   ]
 )
