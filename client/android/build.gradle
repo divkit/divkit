@@ -67,6 +67,7 @@ subprojects {
         if (plugins.hasPlugin("maven-publish")) {
             project.tasks.withType(PublishToMavenRepository) { task ->
                 teamcityPublish.dependsOn(task)
+                sandboxRelease.dependsOn(task)
             }
         }
 
