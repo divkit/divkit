@@ -9,12 +9,12 @@ import re
 
 from ..utils import is_dict_with_keys_of_type, is_list_of_type
 from .utils import (
-    should_generate_swift_serialization,
     alias,
     fixing_reserved_typename
 )
+from ...utils import capitalize_camel_case
 
-from ...config import Config, GeneratedLanguage, GenerationMode, Platform
+from ...config import Config, GeneratedLanguage, GenerationMode, Platform, TEMPLATE_SUFFIX
 from ..preprocessing.entities import ElementLocation
 from ..preprocessing.errors import UnresolvedReferenceError
 from .errors import GenericError, InvalidFieldRepresentationError
@@ -33,6 +33,33 @@ class Declarable(ABC):
     @parent.setter
     def parent(self, parent: Entity) -> None:
         self._parent = parent
+
+    @property
+    def resolved_declaration_prefix(self) -> str:
+        if self.parent is not None:
+            return f'{self.parent.resolved_declaration_prefix}{capitalize_camel_case(self.parent.resolved_name)}.'
+        return ''
+
+    @property
+    def resolved_prefixed_declaration(self) -> str:
+        return self.resolved_declaration_prefix + capitalize_camel_case(self.resolved_name)
+
+    @property
+    def prefixed_declaration(self) -> str:
+        return self.declaration_prefix + capitalize_camel_case(self.name)
+
+    @property
+    def declaration_prefix(self) -> str:
+        if self.parent is not None:
+            return f'{self.parent.declaration_prefix}{capitalize_camel_case(self.parent.name)}.'
+        return ''
+
+    @property
+    def template_declaration_prefix(self) -> str:
+        if self.parent is not None:
+            name = capitalize_camel_case(self.parent.resolved_name + TEMPLATE_SUFFIX)
+            return f'{self.parent.template_declaration_prefix}{name}.'
+        return ''
 
     @property
     @abstractmethod
@@ -95,10 +122,9 @@ class Entity(Declarable):
                  mode: GenerationMode,
                  config: Config.GenerationConfig):
         super().__init__()
-        self._generate_serialization_flag: bool = should_generate_swift_serialization(config, dictionary)
         self._super_entities: Optional[str] = _super_entities(config, dictionary)
         self._resolved_name: str = alias(config.lang, dictionary) or fixing_reserved_typename(name, config.lang)
-        self._name: str = self._resolved_name + mode.type.name_suffix()
+        self._name: str = self._resolved_name + mode.name_suffix
         self._root_entity: bool = dictionary.get('root_entity', False)
         self._display_name: str = dictionary.get('display_name', name)
         self._description: str = dictionary.get('description', '')
@@ -138,7 +164,7 @@ class Entity(Declarable):
             if not isinstance(prot_names, List):
                 prot_names = [prot_names]
             if is_list_of_type(prot_names, str):
-                self._protocol_names: List[str] = list(map(lambda n: n + mode.type.name_suffix(), prot_names))
+                self._protocol_names: List[str] = list(map(lambda n: n + mode.name_suffix, prot_names))
             else:
                 self._protocol_names: List[str] = []
         else:
@@ -188,6 +214,18 @@ class Entity(Declarable):
     def parent(self) -> Optional[Entity]:
         return self._parent
 
+    @property
+    def super_entities(self) -> Optional[str]:
+        return self._super_entities
+
+    @property
+    def swift_super_protocol(self) -> Optional[str]:
+        return self._swift_super_protocol
+
+    @property
+    def properties(self) -> List[Property]:
+        return self._properties
+
     @parent.setter
     def parent(self, parent: Entity) -> None:
         self._parent = parent
@@ -215,6 +253,32 @@ class Entity(Declarable):
     def enclosing_enumeration(self) -> Optional[EntityEnumeration]:
         return self._enclosing_enumeration
 
+    @property
+    def inner_types(self) -> List[Declarable]:
+        return self._inner_types
+
+    @property
+    def generation_mode(self) -> GenerationMode:
+        return self._generation_mode
+
+    @property
+    def instance_properties(self) -> List[Property]:
+        return list(filter(lambda p: not isinstance(p.property_type, StaticString), self._properties))
+
+    @property
+    def all_properties_are_optional_except_default_values(self) -> bool:
+        all_properties_are_optional = all(p.optional for p in self.properties)
+        if not all_properties_are_optional:
+            return False
+        return any(p.default_value is not None for p in self.properties)
+
+    @property
+    def static_type(self) -> Optional[str]:
+        prop = next((p for p in self._properties if p.name == 'type' and isinstance(p.property_type, StaticString)), None)
+        if prop is not None:
+            return cast(StaticString, prop.property_type).value
+        return None
+
     def __resolve_declaration_with_objects(self,
                                            property_type: PropertyType,
                                            global_objects: List[Declarable]) -> PropertyType:
@@ -224,7 +288,7 @@ class Entity(Declarable):
                 if isinstance(result, StringEnumeration):
                     return Object(name=property_type.name, object=result, format=property_type.format)
                 else:
-                    actual_name = property_type.name + self._generation_mode.type.name_suffix()
+                    actual_name = property_type.name + self._generation_mode.name_suffix
                     valid_obj = next(
                         d for d in global_objects if d.name == actual_name or d.original_name == property_type.name)
                     return Object(name=actual_name, object=valid_obj, format=property_type.format)
@@ -307,21 +371,19 @@ class EntityEnumeration(Declarable):
                  original_name: str,
                  include_in_documentation_toc: bool,
                  root_entity: bool,
-                 generate_serialization: bool,
                  generate_case_for_templates: bool,
                  entities: List[str],
                  mode: GenerationMode) -> None:
         super().__init__()
         self._resolved_name: str = name
-        self._name: str = self._resolved_name + mode.type.name_suffix()
+        self._name: str = self._resolved_name + mode.name_suffix
         self._original_name: str = original_name
         self._include_in_documentation_toc: bool = include_in_documentation_toc
         self._root_entity: bool = root_entity
-        self._generate_serialization_flag: bool = generate_serialization
         self._generate_case_for_templates: bool = generate_case_for_templates
         self._resolved_entity_names: List[str] = entities
         self._entities: List[Tuple[str, Optional[Declarable]]] = list(map(
-            lambda entity: (entity + mode.type.name_suffix(), None),
+            lambda entity: (entity + mode.name_suffix, None),
             entities
         ))
         self._mode = mode
@@ -346,6 +408,10 @@ class EntityEnumeration(Declarable):
     def parent(self) -> Optional[Entity]:
         return self._parent
 
+    @property
+    def mode(self) -> GenerationMode:
+        return self._mode
+
     @parent.setter
     def parent(self, parent: Entity) -> None:
         self._parent = parent
@@ -363,6 +429,10 @@ class EntityEnumeration(Declarable):
     @property
     def entities(self) -> List[Tuple[str, Optional[Declarable]]]:
         return self._entities
+
+    @property
+    def entity_names(self) -> List[str]:
+        return list(map(lambda x: x[0], self._entities))
 
     def resolve_dependencies(self, global_objects: List[Declarable]) -> None:
         new_entities: List[Tuple[str, Optional[Declarable]]] = []
@@ -392,6 +462,33 @@ class EntityEnumeration(Declarable):
                 'declarable': x[1].as_json if x[1] is not None else 'None'
             }, self._entities))
         }
+
+    @property
+    def common_interface(self) -> Optional[str]:
+        common_interface = self._common_interface_without_serializable
+        if common_interface is not None:
+            common_interface = f' & {common_interface}'
+        else:
+            common_interface = ''
+        return f'Serializable{common_interface}'
+
+    @property
+    def _common_interface_without_serializable(self) -> Optional[str]:
+        if self.entities:
+            interface: Optional[Entity] = cast(
+                Optional[Entity],
+                next(
+                    (cast(Entity, e[1]).implemented_protocol for e in self.entities if isinstance(e[1], Entity)),
+                    None
+                )
+            )
+            if interface is not None:
+                for entity in self.entities:
+                    other_interface = entity[1]
+                    if isinstance(other_interface, Entity) and other_interface.implemented_protocol is not interface:
+                        return None
+                return capitalize_camel_case(interface.name)
+        return None
 
 
 class StringEnumeration(Declarable):
@@ -469,13 +566,14 @@ def default_value(lang: GeneratedLanguage,
 
 
 class PropertyType(ABC):
+    @property
     def support_expressions(self) -> bool:
         if isinstance(self, (Int, Double, Bool, BoolInt, String, Color, Url)):
             return True
-        elif isinstance(self, (StaticString, StaticNative, Dictionary)):
+        elif isinstance(self, (StaticString, Dictionary)):
             return False
         elif isinstance(self, Array):
-            return self.property_type.support_expressions()
+            return self.property_type.support_expressions
         elif isinstance(self, Object):
             return isinstance(self.object, StringEnumeration)
 
@@ -490,8 +588,17 @@ class PropertyType(ABC):
                 raise error
 
     @property
+    def can_be_templated(self) -> bool:
+        if isinstance(self, Array):
+            return self.property_type.can_be_templated
+        elif isinstance(self, Object):
+            return not isinstance(self.object, StringEnumeration)
+        else:
+            return False
+
+    @property
     def as_json(self) -> Dict:
-        if isinstance(self, (Int, Double, Bool, BoolInt, String, StaticString, StaticNative, Color, Url, Dictionary)):
+        if isinstance(self, (Int, Double, Bool, BoolInt, String, StaticString, Color, Url, Dictionary)):
             return {
                 'value': str(type(self).__name__)
             }
@@ -542,13 +649,6 @@ class StaticString(PropertyType):
 
 
 @dataclass
-class StaticNative(PropertyType):
-    type: str
-    native_value: str
-    raw_value: str
-
-
-@dataclass
 class Color(PropertyType):
     pass
 
@@ -590,7 +690,8 @@ class Property:
     property_type: PropertyType
     optional: bool
     is_deprecated: bool
-    mode: GenerationMode.Type
+    mode: GenerationMode
+    predefined_use_expressions: Optional[bool]
     default_value: Optional[str]
     platforms: Optional[List[Platform]]
 
@@ -599,6 +700,12 @@ class Property:
 
     def __repr__(self) -> str:
         return str(self)
+
+    @property
+    def use_expressions(self) -> bool:
+        if self.predefined_use_expressions is None:
+            return self.property_type.support_expressions
+        return self.predefined_use_expressions
 
     @property
     def as_json(self) -> Dict:

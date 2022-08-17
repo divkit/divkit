@@ -5,7 +5,7 @@ from typing import List
 from ..config import Config
 from ..schema.modeling.entities import Declarable, Entity, EntityEnumeration, StringEnumeration
 from ..schema.modeling.text import Text
-from . import utils
+from .. import utils
 
 
 class Generator(ABC):
@@ -15,7 +15,13 @@ class Generator(ABC):
     def generate(self, objects: List[Declarable]):
         utils.clear_content_of_directory(self._config.output_path)
         for obj in objects:
-            declaration = str(self._main_declaration(obj))
+            declaration = []
+            for line in str(self._main_declaration(obj)).strip().split('\n'):
+                if line.isspace():
+                    declaration.append('')
+                else:
+                    declaration.append(line)
+            declaration = '\n'.join(declaration) + '\n'
             if not declaration.strip():
                 continue
             file_content = f'{self._head_for_file}\n{declaration}'

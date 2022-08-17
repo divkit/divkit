@@ -1,4 +1,6 @@
 import json
+import os
+import shutil
 from typing import Dict, Any
 from deepdiff import DeepDiff
 
@@ -39,3 +41,10 @@ def update_reference(filename: str, content: Any):
 
 def update_json_reference(filename: str, json_content: Dict[str, Any]):
     update_reference(filename, json.dumps(json_content, indent=2, ensure_ascii=False))
+
+
+def update_references(source_path: str, destination_path: str):
+    for filename in os.listdir(source_path):
+        src_file_path = os.path.join(source_path, filename)
+        destination_file_path = os.path.join(destination_path, filename)
+        shutil.copy(src_file_path, destination_file_path)

@@ -8,7 +8,6 @@ from . import builders
 from .entities import Declarable, StringEnumeration
 from .utils import (
     alias,
-    should_generate_swift_serialization,
     generate_cases_for_templates
 )
 
@@ -41,7 +40,6 @@ def __generate_objects(file: SchemaFile, config: Config.GenerationConfig) -> Lis
             original_name=name,
             include_in_documentation_toc=contents.get('include_in_documentation_toc', False),
             root_entity=contents.get('root_entity', False),
-            generate_serialization=should_generate_swift_serialization(config, contents),
             generate_case_for_templates=generate_cases_for_templates(config.lang, contents),
             location=location,
             config=config

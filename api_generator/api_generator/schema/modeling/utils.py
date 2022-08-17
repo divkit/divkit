@@ -1,14 +1,7 @@
 from typing import Dict, Optional, List
 
-from ...config import Config, GeneratedLanguage, Platform
+from ...config import GeneratedLanguage, Platform
 from ..utils import get_value_with_optional_by_lang
-
-
-def should_generate_swift_serialization(config: Config.GenerationConfig, root_dict: Dict[str, any]) -> bool:
-    swift = config.swift
-    if swift is not None:
-        return swift.generate_serialization
-    return root_dict.get('generate_serialization_swift', False)
 
 
 def generate_cases_for_templates(lang: GeneratedLanguage, dictionary: Dict[str, any]) -> bool:

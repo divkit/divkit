@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Optional, Union, List
 from ..utils import is_list_of_type
+from ...utils import indented
 
 
 class Text:
@@ -16,20 +17,25 @@ class Text:
                 raise TypeError
 
     def __str__(self):
-        return '\n'.join(map(lambda s: ' ' * self.indent_width + s, self._lines))
+        def transform(string: str) -> str:
+            if not string or string.isspace():
+                return ''
+            else:
+                return indented(string, indent_width=self.indent_width)
+        return '\n'.join(map(transform, self._lines))
 
     def __add__(self, other) -> Text:
         if isinstance(other, str):
-            return Text(self._lines + [other])
+            return Text(init_lines=self._lines + [other], indent_width=self.indent_width)
         elif is_list_of_type(other, str):
-            return Text(self._lines + other)
+            return Text(init_lines=self._lines + other, indent_width=self.indent_width)
         elif is_list_of_type(other, Text):
-            sum_text = Text(self._lines, self.indent_width)
+            sum_lines = self._lines.copy()
             for other_text in other:
-                sum_text += other_text
-            return sum_text
+                sum_lines.append(str(other_text))
+            return Text(init_lines=sum_lines, indent_width=self.indent_width)
         elif isinstance(other, Text):
-            return Text(self._lines + [str(other)])
+            return Text(init_lines=self._lines + [str(other)], indent_width=self.indent_width)
         else:
             raise TypeError
 

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import Text, List, Optional
+from typing import Text, List
 from pydantic import BaseModel
 from enum import Enum, auto
 
@@ -19,53 +19,33 @@ class GeneratedLanguage(str, Enum):
     DOCUMENTATION = 'documentation'
 
 
-class GeneratedAccessLevel(str, Enum):
-    PUBLIC = 'public'
-    INTERNAL = 'internal'
-
-
 TEMPLATE_SUFFIX = '_template'
 
 
-class GenerationMode:
-    class Type(Enum):
-        NORMAL_WITH_TEMPLATES = auto()
-        NORMAL_WITHOUT_TEMPLATES = auto()
-        TEMPLATE = auto()
-
-        def is_template(self):
-            if self in [GenerationMode.Type.NORMAL_WITH_TEMPLATES, GenerationMode.Type.NORMAL_WITHOUT_TEMPLATES]:
-                return False
-            elif self is GenerationMode.Type.TEMPLATE:
-                return True
-
-        def name_suffix(self):
-            if self in [GenerationMode.Type.NORMAL_WITH_TEMPLATES, GenerationMode.Type.NORMAL_WITHOUT_TEMPLATES]:
-                return ''
-            elif self is GenerationMode.Type.TEMPLATE:
-                return TEMPLATE_SUFFIX
-
-    def __init__(self, generation_type: GenerationMode.Type):
-        self._type = generation_type
-
-    @property
-    def type(self) -> GenerationMode.Type:
-        return self._type
+class GenerationMode(Enum):
+    NORMAL_WITH_TEMPLATES = auto()
+    NORMAL_WITHOUT_TEMPLATES = auto()
+    TEMPLATE = auto()
 
     @property
     def is_template(self) -> bool:
-        return self._type.is_template()
+        if self in [GenerationMode.NORMAL_WITH_TEMPLATES, GenerationMode.NORMAL_WITHOUT_TEMPLATES]:
+            return False
+        elif self is GenerationMode.TEMPLATE:
+            return True
+
+    @property
+    def name_suffix(self) -> str:
+        if self in [GenerationMode.NORMAL_WITH_TEMPLATES, GenerationMode.NORMAL_WITHOUT_TEMPLATES]:
+            return ''
+        elif self is GenerationMode.TEMPLATE:
+            return TEMPLATE_SUFFIX
 
 
 class Config:
     class GenerationConfig(BaseModel):
-        class Swift(BaseModel):
-            access_level: GeneratedAccessLevel = GeneratedAccessLevel.PUBLIC
-            generate_serialization: bool = False
-
         lang: GeneratedLanguage
         header: Text = ''
-        swift: Optional[Swift] = None
         errors_collectors: List[str] = []
 
     def __init__(self, config_path: str, schema_path: str, output_path: str):

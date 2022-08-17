@@ -1,16 +1,18 @@
-from .config import Config
+from .config import Config, GeneratedLanguage
 from .schema.preprocessing import schema_preprocessing
 from .schema.modeling import build_objects
-from .generators import Generator
+from .generators import Generator, SwiftGenerator
 
 
 def __build_generator(config: Config) -> Generator:
     lang = config.generation.lang
-    generator_dict = {}
+    generator_dict = {
+        GeneratedLanguage.SWIFT: SwiftGenerator
+    }
     generator = generator_dict.get(lang, None)
     if generator is None:
         raise NotImplementedError
-    return generator()
+    return generator(config)
 
 
 def generate_api(config: Config):

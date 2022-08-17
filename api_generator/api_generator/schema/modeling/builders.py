@@ -1,9 +1,8 @@
 import re
-from typing import List, Tuple, Optional, Dict, Union, cast
+from typing import List, Tuple, Optional, Dict, Union, cast, Any
 
 from .utils import (
     fixing_reserved_typename,
-    should_generate_swift_serialization,
     generate_cases_for_templates,
     alias,
     platforms
@@ -22,7 +21,6 @@ from .entities import (
     default_value as property_default_value,
     Int,
     Bool,
-    BoolInt,
     Double,
     StaticString,
     Object,
@@ -31,7 +29,7 @@ from .entities import (
     Url,
     Color,
     String,
-    Dictionary
+    Dictionary, BoolInt
 )
 from .errors import InvalidFieldRepresentationError, UnsupportedFormatTypeError
 
@@ -62,7 +60,7 @@ def __resolve_string_field(name: str,
     else:
         format_value: Optional[Union[str, Dict[str, any]]] = dictionary.get('format')
         if format_value == 'uri':
-            return Url(schemes=dictionary.get('schemes', [])), []
+            return Url(schemes=dictionary.get('schemes')), []
         elif format_value == 'color':
             return Color(), []
         elif is_dict_with_keys_of_type(format_value, str):
@@ -82,7 +80,7 @@ def __resolve_string_field(name: str,
             return String(min_length=dictionary.get('minLength', 0),
                           formatted=format_value == 'formatted_string',
                           regex=regex,
-                          enable_optimization=dictionary.get('optimization', False)), []
+                          enable_optimization=dictionary.get('client_optimized', False)), []
 
 
 def _entity_enumeration_build(entities: List[Dict[str, any]],
@@ -90,7 +88,6 @@ def _entity_enumeration_build(entities: List[Dict[str, any]],
                               original_name: str,
                               include_in_documentation_toc: bool,
                               root_entity: bool,
-                              generate_serialization: bool,
                               generate_case_for_templates: bool,
                               location: ElementLocation,
                               mode: GenerationMode,
@@ -124,7 +121,6 @@ def _entity_enumeration_build(entities: List[Dict[str, any]],
                                                original_name=original_name,
                                                include_in_documentation_toc=include_in_documentation_toc,
                                                root_entity=root_entity,
-                                               generate_serialization=generate_serialization,
                                                generate_case_for_templates=generate_case_for_templates,
                                                entities=property_types,
                                                mode=mode))] + resulting_declarations
@@ -135,7 +131,6 @@ def entity_enumeration_build(entities: List[Dict[str, any]],
                              original_name: str,
                              include_in_documentation_toc: bool,
                              root_entity: bool,
-                             generate_serialization: bool,
                              generate_case_for_templates: bool,
                              location: ElementLocation,
                              config: Config.GenerationConfig) -> List[Declarable]:
@@ -145,14 +140,13 @@ def entity_enumeration_build(entities: List[Dict[str, any]],
                                          original_name=original_name,
                                          include_in_documentation_toc=include_in_documentation_toc,
                                          root_entity=root_entity,
-                                         generate_serialization=generate_serialization,
                                          generate_case_for_templates=generate_case_for_templates,
                                          location=location,
                                          mode=mode,
                                          config=config)
 
-    normal_result: List[Declarable] = make_result(GenerationMode(GenerationMode.Type.NORMAL_WITH_TEMPLATES))
-    template_result: List[Declarable] = make_result(GenerationMode(GenerationMode.Type.TEMPLATE))
+    normal_result: List[Declarable] = make_result(GenerationMode(GenerationMode.NORMAL_WITH_TEMPLATES))
+    template_result: List[Declarable] = make_result(GenerationMode(GenerationMode.TEMPLATE))
     return normal_result + template_result
 
 
@@ -167,10 +161,10 @@ def entity_build(name: str,
                       mode=mode,
                       config=config)
 
-    normal: Entity = make_result(mode=GenerationMode(generation_type=GenerationMode.Type.NORMAL_WITH_TEMPLATES))
+    normal: Entity = make_result(mode=GenerationMode.NORMAL_WITH_TEMPLATES)
     if not normal.generate_as_protocol:
         if config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.KOTLIN]:
-            return [normal, make_result(mode=GenerationMode(generation_type=GenerationMode.Type.TEMPLATE))]
+            return [normal, make_result(mode=GenerationMode.TEMPLATE)]
         raise NotImplementedError(f'Templates are not supported for {config.lang.value}')
     return [normal]
 
@@ -190,7 +184,6 @@ def type_property_build(dictionary: Dict[str, any],
             original_name=outer_name,
             include_in_documentation_toc=dictionary.get('include_in_documentation_toc', False),
             root_entity=dictionary.get('root_entity', False),
-            generate_serialization=should_generate_swift_serialization(config, dictionary),
             generate_case_for_templates=generate_cases_for_templates(config.lang, dictionary),
             location=location + 'anyOf',
             mode=mode,
@@ -240,6 +233,13 @@ def type_property_build(dictionary: Dict[str, any],
         return Object(name=type_value.replace('$defined_', ''), object=None, format=ObjectFormat.DEFAULT), []
 
 
+def __should_use_expressions(property_type: PropertyType, dictionary: Dict[str, Any]) -> Optional[bool]:
+    support_expressions = dictionary.get('supports_expressions', True)
+    if property_type.support_expressions:
+        return support_expressions
+    return False if not support_expressions else None
+
+
 def property_build(properties: Dict[str, Dict[str, any]],
                    required: Optional[str],
                    location: ElementLocation,
@@ -260,14 +260,18 @@ def property_build(properties: Dict[str, Dict[str, any]],
                                                     location=location_val,
                                                     dictionary=dictionary)
         is_required: bool = dict_field in required if required is not None else False
-        name = alias(lang=config.lang, dictionary=dictionary)
+        name = alias(lang=config.lang, dictionary=dictionary) or dict_field
         properties_list.append(Property(name=name,
                                         description=dictionary.get('description'),
                                         dict_field=dict_field,
                                         property_type=property_type,
                                         optional=not is_required,
                                         is_deprecated=dictionary.get('deprecated', False),
-                                        mode=mode.type,
+                                        mode=mode,
+                                        predefined_use_expressions=__should_use_expressions(
+                                            property_type=property_type,
+                                            dictionary=dictionary
+                                        ),
                                         default_value=default_value,
                                         platforms=platforms(dictionary)))
         inner_types_list.extend(inner_types)
