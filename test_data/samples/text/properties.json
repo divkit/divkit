@@ -48,11 +48,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Свойства текста"
+              "text": "Text properties"
             },
             {
               "type": "subtitle",
-              "text": "Демонстрация всех возможных свойств, которые можно применить к тексту",
+              "text": "All possible properties that can be applied to text",
               "margins": {
                 "bottom": 12
               }
@@ -73,52 +73,52 @@
               "items": [
                 {
                   "type": "text_block",
-                  "text": "Можно менять размер текста",
+                  "text": "Change the text size",
                   "font_size": 22
                 },
                 {
                   "type": "text_block",
-                  "text": "Можно менять начертание",
+                  "text": "Change the font style",
                   "font_weight": "bold"
                 },
                 {
                   "type": "text_block",
-                  "text": "Можно добавить подчеркивание",
+                  "text": "Underline text",
                   "underline": "single"
                 },
                 {
                   "type": "text_block",
-                  "text": "Можно добавить зачеркивание",
+                  "text": "Cross out text (strikethrough)",
                   "strike": "single"
                 },
                 {
                   "type": "text_block",
-                  "text": "Можно менять расстояние между символами",
+                  "text": "Change the space between characters",
                   "letter_spacing": 3
                 },
                 {
                   "type": "text_block",
-                  "text": "Можно менять цвет текста",
+                  "text": "Change the text color",
                   "text_color": "#3F28C3"
                 },
                 {
                   "type": "text_block",
-                  "text": "Можно менять выравнивание",
+                  "text": "Change the alignment",
                   "text_alignment_horizontal": "right"
                 },
                 {
                   "type": "text_block",
-                  "text": "Можно менять высоту строки",
+                  "text": "Change the height of a line",
                   "line_height": 52
                 },
                 {
                   "type": "text_block",
-                  "text": "Можно устанавливать максимальное количество строк в тексте. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                  "text": "Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text. Set the maximum number of lines in the text.",
                   "max_lines": 2
                 },
                 {
                   "type": "text_block",
-                  "text": "Этот текст можно выделять и копировать.",
+                  "text": "You can highlight and copy this text",
                   "selectable": 1
                 }
               ]

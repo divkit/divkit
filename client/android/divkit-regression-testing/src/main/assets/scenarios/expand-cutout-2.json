@@ -48,7 +48,7 @@
                             "state_id": "short",
                             "div": {
                               "type": "text_14_18_regular",
-                              "text_14_18_regular__text": "ПриветПриветПриветПриветПриветПриветПриветПриветПриветПриветПривет\n\nПриветПриветПриветПривет\n\nПриветПриветПриветПриветПриветПривет\n\nПриветПриветПриветПриветПриветПриветПриветПривет\n\nhttps://habr.com/ru/post/539208/\n\nwww.google.com/...f-8",
+                              "text_14_18_regular__text": "Hihihihihihihihiihihiiihihihihihihihhiihhihihihihihihihihihihihihhihihihih\n\nhttps://habr.com/ru/post/539208/\n\nwww.google.com/...f-8",
                               "text_14_18_regular__text_color": "#333333",
                               "ranges": [
                                 {
@@ -60,11 +60,11 @@
                               "margin": 15,
                               "max_lines": 5,
                               "ellipsis": {
-                                "text": "… Развернуть",
+                                "text": "… Expand",
                                 "ranges": [
                                   {
                                     "start": 2,
-                                    "end": 13,
+                                    "end": 9,
                                     "text_color": "#80000000"
                                   }
                                 ]

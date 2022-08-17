@@ -983,7 +983,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ НОВОСТИ ОБЩЕСТВА",
+                      "text": "all news",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"
@@ -993,7 +993,7 @@
                 }
               },
               {
-                "title": "ЭКОНОМИКА",
+                "title": "PAGE 5",
                 "div": {
                   "type": "container",
                   "paddings": {
@@ -1318,7 +1318,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ НОВОСТИ ЭКОНОМИКИ",
+                      "text": "expand",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"
@@ -1328,7 +1328,7 @@
                 }
               },
               {
-                "title": "В МИРЕ",
+                "title": "PAGE 6",
                 "div": {
                   "type": "container",
                   "paddings": {
@@ -1653,7 +1653,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ МИРОВЫЕ НОВОСТИ",
+                      "text": "expand",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"
@@ -1663,7 +1663,7 @@
                 }
               },
               {
-                "title": "Page index 6",
+                "title": "PAGE 8",
                 "div": {
                   "type": "container",
                   "paddings": {
@@ -1988,7 +1988,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ НОВОСТИ СПОРТА",
+                      "text": "expand",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"
@@ -1998,7 +1998,7 @@
                 }
               },
               {
-                "title": "ПРОИСШЕСТВИЯ",
+                "title": "PAGE 9",
                 "div": {
                   "type": "container",
                   "paddings": {
@@ -2323,7 +2323,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ ПРОИСШЕСТВИЯ",
+                      "text": "expand",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"
@@ -2333,7 +2333,7 @@
                 }
               },
               {
-                "title": "КУЛЬТУРА",
+                "title": "PAGE 10",
                 "div": {
                   "type": "container",
                   "paddings": {
@@ -2658,7 +2658,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ НОВОСТИ КУЛЬТУРЫ",
+                      "text": "expand",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"
@@ -2668,7 +2668,7 @@
                 }
               },
               {
-                "title": "HI-TECH",
+                "title": "PAGE 11",
                 "div": {
                   "type": "container",
                   "paddings": {
@@ -2993,7 +2993,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ НОВОСТИ ТЕХНОЛОГИЙ",
+                      "text": "expand",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"
@@ -3003,7 +3003,7 @@
                 }
               },
               {
-                "title": "НАУКА",
+                "title": "PAGE 12",
                 "div": {
                   "type": "container",
                   "paddings": {
@@ -3328,7 +3328,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ НОВОСТИ НАУКИ",
+                      "text": "expand",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"
@@ -3338,7 +3338,7 @@
                 }
               },
               {
-                "title": "АВТО",
+                "title": "PAGE 10",
                 "div": {
                   "type": "container",
                   "paddings": {
@@ -3663,7 +3663,7 @@
                       "max_lines": 1,
                       "text_alignment_vertical": "center",
                       "text_color": "#999999",
-                      "text": "ВСЕ НОВОСТИ АВТО",
+                      "text": "expand",
                       "action": {
                         "log_id": "news/more",
                         "url": "action://none/"

@@ -50,7 +50,7 @@
           "items": [
             {
               "type": "text",
-              "text": "Кнопка неактивна - фон красный\n\nКнопка активна - фон голубой\n\nFORWARD - перебор UP - DOWN - LEFT - RIGHT (если кнопка активна, то она ведет в обратном направлении)\nUP, DOWN, LEFT, RIGHT - сразу выбирает нужную кнопку",
+              "text": "Button is inactive - background is red\n\nButton is active - background is blue\n\nFORWARD - enumeration UP - DOWN - LEFT - RIGHT (if button is active, it changes the directions)\nUP, DOWN, LEFT, RIGHT - set button",
               "text_color": "#000000",
               "margins": {
                 "top": 8,

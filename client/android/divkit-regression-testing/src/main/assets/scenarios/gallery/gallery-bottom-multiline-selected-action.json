@@ -228,15 +228,15 @@
                                       "state_id": "short",
                                       "div": {
                                         "type": "text_14_18_regular",
-                                        "text_14_18_regular__text": "В настоящее время в мире насчитывается около 600 млн домашних кошек, выведено около 200 пород, от длинношёрстных до лишённых шерсти, признанных и зарегистрированных различными фелинологическими организациями.",
+                                        "text_14_18_regular__text": "The cat is similar in anatomy to the other felid species: it has a strong flexible body, quick reflexes, sharp teeth and retractable claws adapted to killing small prey. Its night vision and sense of smell are well developed.",
                                         "text_14_18_regular__text_color": "#333333",
                                         "max_lines": 2,
                                         "ellipsis": {
-                                          "text": "… Развернуть",
+                                          "text": "… Expand",
                                           "ranges": [
                                             {
                                               "start": 2,
-                                              "end": 13,
+                                              "end": 9,
                                               "text_color": "#80000000",
                                               "actions": [
                                                 {
@@ -265,7 +265,7 @@
                                       "state_id": "long",
                                       "div": {
                                         "type": "text_14_18_regular",
-                                        "text_14_18_regular__text": "В настоящее время в мире насчитывается около 600 млн домашних кошек, выведено около 200 пород, от длинношёрстных до лишённых шерсти, признанных и зарегистрированных различными фелинологическими организациями.",
+                                        "text_14_18_regular__text": "The cat is similar in anatomy to the other felid species: it has a strong flexible body, quick reflexes, sharp teeth and retractable claws adapted to killing small prey. Its night vision and sense of smell are well developed.",
                                         "text_14_18_regular__text_color": "#333333",
                                         "actions": [
                                           {
@@ -309,15 +309,15 @@
                                       "state_id": "short",
                                       "div": {
                                         "type": "text_14_18_regular",
-                                        "text_14_18_regular__text": "Гуси — род водоплавающих птиц семейства утиных, отряда гусеобразных. Гуси отличаются клювом, имеющим при основании большую высоту, чем ширину, и оканчивающимся ноготком с острым краем.",
+                                        "text_14_18_regular__text": "Cat communication includes vocalizations like meowing, purring, trilling, hissing, growling and grunting as well as cat-specific body language.",
                                         "text_14_18_regular__text_color": "#333333",
                                         "max_lines": 2,
                                         "ellipsis": {
-                                          "text": "… Развернуть",
+                                          "text": "… Expand",
                                           "ranges": [
                                             {
                                               "start": 2,
-                                              "end": 13,
+                                              "end": 9,
                                               "text_color": "#80000000",
                                               "actions": [
                                                 {
@@ -346,7 +346,7 @@
                                       "state_id": "long",
                                       "div": {
                                         "type": "text_14_18_regular",
-                                        "text_14_18_regular__text": "Гуси — род водоплавающих птиц семейства утиных, отряда гусеобразных. Гуси отличаются клювом, имеющим при основании большую высоту, чем ширину, и оканчивающимся ноготком с острым краем.",
+                                        "text_14_18_regular__text": "Cat communication includes vocalizations like meowing, purring, trilling, hissing, growling and grunting as well as cat-specific body language.",
                                         "text_14_18_regular__text_color": "#333333",
                                         "actions": [
                                           {
@@ -390,15 +390,15 @@
                                       "state_id": "short",
                                       "div": {
                                         "type": "text_14_18_regular",
-                                        "text_14_18_regular__text": "Тело змеи покрыто чешуйчатой кожей.",
+                                        "text_14_18_regular__text": "It was long thought that cat domestication began in ancient Egypt, where cats were venerated from around 3100 BC, but recent advances in archaeology and genetics have shown that their domestication occurred in Western Asia around 7500 BC.",
                                         "text_14_18_regular__text_color": "#333333",
                                         "max_lines": 2,
                                         "ellipsis": {
-                                          "text": "… Развернуть",
+                                          "text": "… Expand",
                                           "ranges": [
                                             {
                                               "start": 2,
-                                              "end": 13,
+                                              "end": 9,
                                               "text_color": "#80000000",
                                               "actions": [
                                                 {
@@ -427,7 +427,7 @@
                                       "state_id": "long",
                                       "div": {
                                         "type": "text_14_18_regular",
-                                        "text_14_18_regular__text": "Тело змеи покрыто чешуйчатой кожей.",
+                                        "text_14_18_regular__text": "It was long thought that cat domestication began in ancient Egypt, where cats were venerated from around 3100 BC, but recent advances in archaeology and genetics have shown that their domestication occurred in Western Asia around 7500 BC.",
                                         "text_14_18_regular__text_color": "#333333",
                                         "actions": [
                                           {
@@ -471,15 +471,15 @@
                                       "state_id": "short",
                                       "div": {
                                         "type": "text_14_18_regular",
-                                        "text_14_18_regular__text": "Кра́бы, или короткохво́стые ра́ки, — инфраотряд десятиногих ракообразных, обитающих в солёной и пресной воде.",
+                                        "text_14_18_regular__text": "Vizslas are very energetic, gentle-mannered, loyal, caring, and very affectionate. They quickly form close bonds with their owners, children, and even strangers.",
                                         "text_14_18_regular__text_color": "#333333",
                                         "max_lines": 2,
                                         "ellipsis": {
-                                          "text": "… Развернуть",
+                                          "text": "… Expand",
                                           "ranges": [
                                             {
                                               "start": 2,
-                                              "end": 13,
+                                              "end": 9,
                                               "text_color": "#80000000",
                                               "actions": [
                                                 {
@@ -508,7 +508,7 @@
                                       "state_id": "long",
                                       "div": {
                                         "type": "text_14_18_regular",
-                                        "text_14_18_regular__text": "Кра́бы, или короткохво́стые ра́ки, — инфраотряд десятиногих ракообразных, обитающих в солёной и пресной воде.",
+                                        "text_14_18_regular__text": "Vizslas are very energetic, gentle-mannered, loyal, caring, and very affectionate. They quickly form close bonds with their owners, children, and even strangers.",
                                         "text_14_18_regular__text_color": "#333333",
                                         "actions": [
                                           {

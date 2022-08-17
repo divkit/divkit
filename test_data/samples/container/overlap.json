@@ -68,11 +68,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Контейнер с наложением"
+              "text": "Overlay container"
             },
             {
               "type": "subtitle",
-              "text": "Элементы накладываются друг на друга в порядке расположения в массиве items",
+              "text": "The elements are layered on top of each other in the order of their position in the items array.",
               "margins": {
                 "bottom": 24
               }
@@ -90,12 +90,12 @@
                 },
                 {
                   "type": "text_block",
-                  "text": "Левый верхний угол",
+                  "text": "Upper-left corner",
                   "alignment_horizontal": "left"
                 },
                 {
                   "type": "text_block",
-                  "text": "Текст поверх",
+                  "text": "Text on top",
                   "margins": {
                     "left": 16,
                     "top": 16
@@ -110,12 +110,12 @@
                 },
                 {
                   "type": "text_block",
-                  "text": "Правый верхний угол",
+                  "text": "Upper-right corner",
                   "alignment_horizontal": "right"
                 },
                 {
                   "type": "text_block",
-                  "text": "Правый нижний угол",
+                  "text": "Lower-right corner",
                   "alignment_vertical": "bottom",
                   "alignment_horizontal": "right"
                 }

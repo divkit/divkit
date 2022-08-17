@@ -63,11 +63,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Выравнивание внутри контейнера"
+              "text": "Alignment inside a container"
             },
             {
               "type": "subtitle",
-              "text": "Здесь представлено 2 контейнера: вертикальный и горизонтальный.\nДля выравнивания по горизонтали (на первом контейнере) используется alignment_horizontal, по вертикали (на втором контейнере) - alignment_vertical",
+              "text": "There are 2 containers here: vertical and horizontal.\\nFor horizontal alignment (in the first container), alignment_horizontal is used, and for vertical alignment (in the second container), alignment_vertical is used.",
               "margins": {
                 "bottom": 24
               }

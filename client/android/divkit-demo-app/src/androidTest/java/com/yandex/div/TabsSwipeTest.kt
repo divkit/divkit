@@ -74,7 +74,7 @@ class TabsSwipeTest {
             val selectedTab = selectedTab
             assert { checkSelectedTab(0, selectedTab) }
         }
-        tabSwipe { clickOnHeader("Таб 2") }
+        tabSwipe { clickOnHeader("Tab 2") }
         divTabs {
             val selectedTab = selectedTab
             assert { checkSelectedTab(2, selectedTab) }

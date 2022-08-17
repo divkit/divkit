@@ -36,11 +36,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Применение свойства на часть текста"
+              "text": "Applying a property to part of text"
             },
             {
               "type": "subtitle",
-              "text": "Текст поддерживает возможность вставить картинку в указанную позицию или поменять свойства текста на промежутке.\n\nНа примере изображение звезды было вставлено в текст на позицию 71, у символов первого слова заменён цвет, а также увеличено расстояние между символами третьего слова и добавлено подчеркивание",
+              "text": "Text lets you insert an image in the specified position or change the text properties in a certain interval.\n\nIn the example, an image of a star was inserted into the text at position 71, the color of the characters of the first word was changed, the distance between the characters of the third word was increased, and a word was underlined.",
               "margins": {
                 "bottom": 12
               }

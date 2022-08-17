@@ -54,11 +54,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Таблица"
+              "text": "Table"
             },
             {
               "type": "subtitle",
-              "text": "Элементы располагаются по строкам и столбцам.\n\nТакже ячейки в строках и столбцах можно обьединять - в примере элемент 1 объединяет 2 ячейки по вертикали, элемент 4 объединяет 2 ячейки по горизонтали. Всего в таблице 2 столбца",
+              "text": "Elements are arranged in rows and columns.\n\nCells in rows and columns can be merged: in the example, element 1 merges 2 cells vertically and element 4 merges 2 cells horizontally. There are 2 columns total in the table.",
               "margins": {
                 "bottom": 24
               }

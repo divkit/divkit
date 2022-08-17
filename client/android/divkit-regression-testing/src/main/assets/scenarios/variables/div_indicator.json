@@ -178,57 +178,57 @@
             },
             {
               "type": "button",
-              "text": "Цвет активного айтема #ff00ff00",
+              "text": "Active item color #ff00ff00",
               "click_action": "div-action://set_variable?name=active_item_color&value=%23ff00ff00"
             },
             {
               "type": "button",
-              "text": "Скейл активного айтема 2",
+              "text": "Active item scale 2",
               "click_action": "div-action://set_variable?name=active_item_size&value=2"
             },
             {
               "type": "button",
-              "text": "Цвет неактивного айтема #ff005500",
+              "text": "Inactive item color #ff005500",
               "click_action": "div-action://set_variable?name=inactive_item_color&value=%23ff005500"
             },
             {
               "type": "button",
-              "text": "Скейл крайних айтемов 0.3",
+              "text": "Scale of furthest items 0.3",
               "click_action": "div-action://set_variable?name=minimum_item_size&value=0.3"
             },
             {
               "type": "button",
-              "text": "Анимация переключения worm",
+              "text": "Animation of page change 'worm'",
               "click_action": "div-action://set_variable?name=indicator_animation&value=worm"
             },
             {
               "type": "button",
-              "text": "Расстояние между айтемами 30",
+              "text": "Space between items 30",
               "click_action": "div-action://set_variable?name=space_between_centers.value&value=30"
             },
             {
               "type": "button",
-              "text": "Ширина айтема 15",
+              "text": "Item's width 15",
               "click_action": "div-action://set_variable?name=item_width.value&value=15"
             },
             {
               "type": "button",
-              "text": "Высота айтема 15",
+              "text": "Item's height 15",
               "click_action": "div-action://set_variable?name=item_height.value&value=15"
             },
             {
               "type": "button",
-              "text": "Радиус скругления айтема 8",
+              "text": "Corners radius 8",
               "click_action": "div-action://set_variable?name=corner_radius.value&value=8"
             },
             {
               "type": "button",
-              "text": "Общая ширина индикатора 300",
+              "text": "Indicator width 300",
               "click_action": "div-action://set_variable?name=indicator_width&value=300"
             },
             {
               "type": "button",
-              "text": "Все размеры в sp",
+              "text": "Size in sp",
               "actions": [
                 {
                   "log_id": "button_log_id",
@@ -250,7 +250,7 @@
             },
             {
               "type": "button",
-              "text": "Сброс для проверки в разных положениях пейджера",
+              "text": "Reset state",
               "actions": [
                 {
                   "log_id": "button_log_id",

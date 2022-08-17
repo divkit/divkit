@@ -45,7 +45,7 @@
           "items": [
             {
               "type": "text_16_20_bold",
-              "text_16_20_bold__text": "Как смотреть гравюры Дюрера",
+              "text_16_20_bold__text": "This is title",
               "text_16_20_bold__text_color": "#000000",
               "auto_ellipsize": 1,
               "margins": {
@@ -60,7 +60,7 @@
             },
             {
               "type": "text_14_18_regular",
-              "text_14_18_regular__text": "Благодаря Альбрехту Дюреру гравюра стала одним из самых популярных искусств конца XV — начала XVI века. Рассказываем о том как было.",
+              "text_14_18_regular__text": "This is long text with max_lines = 2 and auto_ellipsize = 1. This is long text with max_lines = 2 and auto_ellipsize = 1. This is long text with max_lines = 2 and auto_ellipsize = 1. This is long text with max_lines = 2 and auto_ellipsize = 1. This is long text with max_lines = 2 and auto_ellipsize = 1. This is long text with max_lines = 2 and auto_ellipsize = 1.",
               "text_14_18_regular__text_color": "#333333",
               "auto_ellipsize": 1,
               "margins": {

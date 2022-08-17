@@ -62,14 +62,14 @@
           "items": [
             {
               "type": "title",
-              "text": "Горизонтальный контейнер",
+              "text": "Horizontal container",
               "margins": {
                 "bottom": 8
               }
             },
             {
               "type": "subtitle",
-              "text": "Устроен аналогично вертикальному контейнеру, только элементы располагаются по горизонтали.",
+              "text": "Similar to a vertical container, but the elements are arranged horizontally.",
               "margins": {
                 "bottom": 24
               }

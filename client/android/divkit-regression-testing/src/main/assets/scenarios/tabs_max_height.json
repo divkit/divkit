@@ -8,7 +8,7 @@
             {
               "tabs": [
                 {
-                  "title": "Таб 0",
+                  "title": "Tab 0",
                   "title_click_action": {
                     "log_id": "tab title/click/0"
                   },
@@ -41,7 +41,7 @@
                   }
                 },
                 {
-                  "title": "Таб 1",
+                  "title": "Tab 1",
                   "title_click_action": {
                     "log_id": "tab title/click/1"
                   },
@@ -86,7 +86,7 @@
                   }
                 },
                 {
-                  "title": "Таб 2",
+                  "title": "Tab 2",
                   "title_click_action": {
                     "log_id": "tab title/click/2"
                   },
@@ -137,7 +137,7 @@
                   }
                 },
                 {
-                  "title": "Таб 3",
+                  "title": "Tab 3",
                   "title_click_action": {
                     "log_id": "tab title/click/3"
                   },
@@ -182,7 +182,7 @@
                   }
                 },
                 {
-                  "title": "Таб 4",
+                  "title": "Tab 4",
                   "title_click_action": {
                     "log_id": "tab title/click/4"
                   },
@@ -221,7 +221,7 @@
                   }
                 },
                 {
-                  "title": "Таб 5",
+                  "title": "Tab 5",
                   "title_click_action": {
                     "log_id": "tab title/click/5"
                   },

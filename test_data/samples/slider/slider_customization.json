@@ -72,18 +72,18 @@
           "items": [
             {
               "type": "title",
-              "text": "Слайдер"
+              "text": "Slider."
             },
             {
               "type": "subtitle",
-              "text": "Представляет собой шкалу с возможностью выбора значений в диапазоне. Может иметь один или два указателя.",
+              "text": "A scale where you can select values from a range. It can have one or two pointers.",
               "margins": {
                 "bottom": 24
               }
             },
             {
               "type": "subtitle",
-              "text": "Слайдер с одним указателем"
+              "text": "Slider with one pointer"
             },
             {
               "type": "slider",
@@ -148,7 +148,7 @@
                 "top": 24
               },
               "type": "subtitle",
-              "text": "Слайдер с двумя указателями"
+              "text": "Slider with two pointers"
             },
             {
               "type": "slider",
@@ -237,7 +237,7 @@
                 "top": 24
               },
               "type": "subtitle",
-              "text": "Слайдер с засечками"
+              "text": "Slider with ticks"
             },
             {
               "type": "slider",
@@ -348,7 +348,7 @@
                 "top": 24
               },
               "type": "subtitle",
-              "text": "Слайдер с измененным стилем активной шкалы"
+              "text": "Slider with a modified style for the active scale"
             },
             {
               "type": "slider",
@@ -417,7 +417,7 @@
                 "top": 24
               },
               "type": "subtitle",
-              "text": "Слайдер с измененным стилем указателя"
+              "text": "Slider with a modified pointer style"
             },
             {
               "type": "slider",
@@ -483,7 +483,7 @@
                 "top": 24
               },
               "type": "subtitle",
-              "text": "Слайдер с выбранным значением на указателе"
+              "text": "Slider with a selected value on the pointer"
             },
             {
               "type": "slider",

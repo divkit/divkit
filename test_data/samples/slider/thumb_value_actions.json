@@ -59,11 +59,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Действия при изменении значения слайдера"
+              "text": "Actions when changing the slider value."
             },
             {
               "type": "subtitle",
-              "text": "Слайдер поддерживает возможность отслеживать изменения выбранного значения.\n\nНа примере с помощью слайдера устанавливается прозрачность текста: выбирается число в диапазоне от 0 до 1 и при изменении значения обновляется поле 'alpha' у текста",
+              "text": "The slider lets you track changes in the selected value.\n\nIn the example, the slider is used to set text transparency: a number in the range from 0 to 1 is selected and when the value changes, the 'alpha' field of the text is updated.",
               "margins": {
                 "bottom": 24
               }
@@ -140,7 +140,7 @@
                 },
                 {
                   "type": "subtitle",
-                  "text": "Слайдер с одним указателем",
+                  "text": "Slider with one pointer",
                   "margins": {
                     "top": 16
                   },

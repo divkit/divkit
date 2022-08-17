@@ -54,11 +54,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Вес элемента в таблице"
+              "text": "The weight of a table element."
             },
             {
               "type": "subtitle",
-              "text": "Вес элемента определяет, сколько пространства он занимает внутри таблицы. Может применяться как к ширине, так и к высоте.\n\nВ примере у элементов 2 и 3 вес по ширине равен 2",
+              "text": "The weight of an element determines how much space it occupies inside the table. It can be applied to both width and height.\n\nIn the example, elements 2 and 3 have a width weight of 2.\n",
               "margins": {
                 "bottom": 24
               }

@@ -319,11 +319,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Анимации переходов"
+              "text": "Transition animations"
             },
             {
               "type": "subtitle",
-              "text": "У каждого дива имеется возможность настроить анимацию перехода, которая воспроизводится, когда див появляется либо исчезает"
+              "text": "For each div, you can customize the transition animation to be played when the div appears or disappears."
             },
             {
               "type": "animation_title",

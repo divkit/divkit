@@ -68,11 +68,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Набор состояний"
+              "text": "A set of states"
             },
             {
               "type": "subtitle",
-              "text": "C помощью состояний можно создавать интерактивные элементы, такие как кнопки или раскрываемый контент.\n\nНа примере - кнопка, которая при нажатии меняет текст, расположенный на ней.",
+              "text": "States can be used to create interactive elements, such as buttons or expandable content.\n\nThe example shows a button that changes its own text when clicked.",
               "margins": {
                 "bottom": 12
               }

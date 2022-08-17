@@ -135,11 +135,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Анимации при изменении положения или размера"
+              "text": "Move and resize animations"
             },
             {
               "type": "subtitle",
-              "text": "У каждого дива имеется возможность настроить анимацию перехода, которая воспроизводится, когда див меняет размер или положение.\n\nНа примере картинка анимированно увеличивается в ширине и перемещается в правый верхний угол при переключении состояния №2.",
+              "text": "For each div, you can customize the transition animation to be played when the div changes its size or position.\n\nIn the example, the picture is animated to increase in width and moves to the upper-right corner when switching to state 2.",
               "margins": {
                 "bottom": 24
               }

@@ -67,11 +67,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Галерея"
+              "text": "Gallery"
             },
             {
               "type": "subtitle",
-              "text": "Может отображать элементы любого содержимого, не только картинки. Поддерживает настройку расстояния между соседними элементами",
+              "text": "Displays elements with any content, not just images. It lets you set the distance between adjacent elements.",
               "margins": {
                 "bottom": 24
               }

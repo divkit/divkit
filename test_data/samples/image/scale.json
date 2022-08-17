@@ -94,7 +94,7 @@
           "items": [
             {
               "type": "title",
-              "text": "Масштаб изображения"
+              "text": "Image scale"
             },
             {
               "type": "image_container",
@@ -120,7 +120,7 @@
             },
             {
               "type": "subtitle",
-              "text": "fill — заполняет все доступное место, что не помещается — обрезается.",
+              "text": "fill: Fills all available space. If something doesn't fit, it's cropped.",
               "margins": {
                 "bottom": 24
               }
@@ -149,7 +149,7 @@
             },
             {
               "type": "subtitle",
-              "text": "fit — вписывается в границы, оставшееся место будет пустым.",
+              "text": "fit: Fits into the boundaries. Any remaining space will be empty.",
               "margins": {
                 "bottom": 38
               }
@@ -172,7 +172,7 @@
             },
             {
               "type": "subtitle",
-              "text": "fixed – фиксированный размер и пропорции изображения."
+              "text": "fixed: Fixed image sizes and proportions."
             }
           ]
         }

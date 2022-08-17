@@ -37,63 +37,63 @@
           "state_id": "6",
           "div": {
             "type": "nps_button",
-            "text": "🤔 Не уверен"
+            "text": "🤔 Not sure"
           }
         },
         {
           "state_id": "1",
           "div": {
             "type": "nps_button",
-            "text": "😔 Все плохо"
+            "text": "😔 This is bad"
           }
         },
         {
           "state_id": "2",
           "div": {
             "type": "nps_button",
-            "text": "😔 Все плохо"
+            "text": "😔 This is bad"
           }
         },
         {
           "state_id": "3",
           "div": {
             "type": "nps_button",
-            "text": "😔 Все плохо"
+            "text": "😔 This is bad"
           }
         },
         {
           "state_id": "4",
           "div": {
             "type": "nps_button",
-            "text": "🤔 Не уверен"
+            "text": "🤔 Not sure"
           }
         },
         {
           "state_id": "5",
           "div": {
             "type": "nps_button",
-            "text": "🤔 Не уверен"
+            "text": "🤔 Not sure"
           }
         },
         {
           "state_id": "7",
           "div": {
             "type": "nps_button",
-            "text": "😐 Вы можете лучше"
+            "text": "😐 You can do better"
           }
         },
         {
           "state_id": "8",
           "div": {
             "type": "nps_button",
-            "text": "🙂 Хорошо"
+            "text": "🙂 Good"
           }
         },
         {
           "state_id": "9",
           "div": {
             "type": "nps_button",
-            "text": "😁 Отлично"
+            "text": "😁 Excellent"
           }
         },
         {
@@ -141,7 +141,7 @@
           "items": [
             {
               "type": "text",
-              "text": "Спустись вниз и найдешь слайдер",
+              "text": "Scroll up to find slider",
               "margins": {
                 "top": 256,
                 "bottom": 256,
@@ -152,7 +152,7 @@
             },
             {
               "type": "text",
-              "text": "Порекомендуете ли вы приложение Яндекс своим друзьям и знакомым?",
+              "text": "Will you recommend Yandex to your friends and family?",
               "margins": {
                 "top": 8,
                 "bottom": 8,
@@ -173,7 +173,7 @@
               "items": [
                 {
                   "type": "text",
-                  "text": "обязательно",
+                  "text": "always",
                   "item_width": {
                     "type": "match_parent"
                   },
@@ -183,7 +183,7 @@
                 },
                 {
                   "type": "text",
-                  "text": "никогда",
+                  "text": "never",
                   "text_color": "#a0000000"
                 }
               ]

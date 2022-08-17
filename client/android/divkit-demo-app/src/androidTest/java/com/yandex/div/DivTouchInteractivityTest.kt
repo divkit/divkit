@@ -19,9 +19,9 @@ class DivTouchInteractivityTest {
         testClicks {
             testAsset = "scenarios/simple_tap.json"
             activityTestRule.buildContainer()
-            click("Нажми меня")
+            click("Click on me")
             assert {
-                checkShown("Вы нажали меня :)")
+                checkShown("You clicked on me :)")
             }
         }
     }
@@ -33,7 +33,7 @@ class DivTouchInteractivityTest {
             activityTestRule.buildContainer()
             longClick("Long tap menu")
             assert {
-                checkShown("Показать")
+                checkShown("Show")
             }
         }
     }

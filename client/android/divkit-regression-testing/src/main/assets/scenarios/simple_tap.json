@@ -37,7 +37,7 @@
               "state_id": "not_tapped",
               "div": {
                 "type": "label_text",
-                "text": "Нажми меня",
+                "text": "Click on me",
                 "actions": [
                   {
                     "log_id": "not_tapped",
@@ -50,7 +50,7 @@
               "state_id": "tapped",
               "div": {
                 "type": "label_text",
-                "text": "Вы нажали меня :)",
+                "text": "You clicked on me :)",
                 "actions": [
                   {
                     "log_id": "tapped",

@@ -247,7 +247,7 @@
                                   "right": 8
                                 },
                                 "text_13_16_regular__text_color": "#FFFF",
-                                "text_13_16_regular__text": "Нажмите, чтобы смотреть со звуком",
+                                "text_13_16_regular__text": "Click to watching with the volume turned on",
                                 "visibility_actions": [
                                   {
                                     "log_id": "hide_unmute_notification",

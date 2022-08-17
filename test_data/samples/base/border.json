@@ -65,11 +65,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Рамка"
+              "text": "Border"
             },
             {
               "type": "subtitle",
-              "text": "С помощью рамки (border) можно настраивать скругления углов, обводку и тени.",
+              "text": "Using a border, you can set the corner radius (round corners), outline, and shadows.",
               "margins": {
                 "bottom": 24
               }

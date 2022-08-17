@@ -162,7 +162,7 @@
           "items": [
             {
               "type": "text",
-              "text": "Записывать экран",
+              "text": "Record screen",
               "font_size": 18,
               "font_weight": "regular",
               "line_height": 24,

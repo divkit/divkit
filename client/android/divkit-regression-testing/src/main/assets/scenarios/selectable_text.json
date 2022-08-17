@@ -35,12 +35,12 @@
           "items": [
             {
               "type": "text_block",
-              "text": "Этот текст можно выделять и копировать.",
+              "text": "This text is selectable and can be copied.",
               "selectable": 1
             },
             {
               "type": "text_block",
-              "text": "Этот нельзя."
+              "text": "This text is not selectable."
             }
           ]
         }

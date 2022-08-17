@@ -67,7 +67,7 @@
           },
           "items": [
             {
-              "title": "Пункт 1",
+              "title": "State 1",
               "div": {
                 "type": "tab",
                 "items": [
@@ -155,7 +155,7 @@
               }
             },
             {
-              "title": "Пункт 2",
+              "title": "State 2",
               "div": {
                 "type": "tab",
                 "items": [

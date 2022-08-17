@@ -66,11 +66,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Табы"
+              "text": "Tabs"
             },
             {
               "type": "subtitle",
-              "text": "Представляет собой набор вкладок и строку с ярлыками.\n\nОдномоментно видно только одну вкладку, остальные можно переключить по клику на ярлык соответствующей вкладки",
+              "text": "A set of tabs and a row with labels.\n\nOnly one tab is visible at a time, the rest can be switched by tapping the label of the respective tab.",
               "margins": {
                 "bottom": 24
               }

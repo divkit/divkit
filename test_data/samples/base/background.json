@@ -56,11 +56,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Фон"
+              "text": "Background"
             },
             {
               "type": "subtitle",
-              "text": "Может быть сполшным цветом, градиентом или картинкой. Также можно накладывать несколько фонов друг на друга.",
+              "text": "It can be a solid color, gradient, or an image. You can also overlay multiple backgrounds on top of each other.",
               "margins": {
                 "bottom": 24
               }
@@ -83,7 +83,7 @@
                     }
                   ],
                   "text_alignment_vertical": "bottom",
-                  "text": "Сплошной фон"
+                  "text": "Solid background"
                 },
                 {
                   "type": "text_block",
@@ -102,7 +102,7 @@
                     }
                   ],
                   "text_alignment_vertical": "bottom",
-                  "text": "Градиент"
+                  "text": "Gradient"
                 },
                 {
                   "type": "text_block",
@@ -117,7 +117,7 @@
                     }
                   ],
                   "text_alignment_vertical": "bottom",
-                  "text": "Картинка"
+                  "text": "Image"
                 },
                 {
                   "type": "text_block",
@@ -140,7 +140,7 @@
                     }
                   ],
                   "text_alignment_vertical": "bottom",
-                  "text": "Градиент и картинка"
+                  "text": "Gradient and image"
                 }
               ]
             }

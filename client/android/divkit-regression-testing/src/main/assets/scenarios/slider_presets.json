@@ -442,7 +442,7 @@
           "items": [
             {
               "type": "title_preset",
-              "text": "Дефолтный слайдер"
+              "text": "Default slider"
             },
             {
               "type": "slider_preset",
@@ -454,7 +454,7 @@
             },
             {
               "type": "title_preset",
-              "text": "Мин - 0, макс - 10"
+              "text": "Min - 0, max - 10"
             },
             {
               "type": "slider_preset",
@@ -514,7 +514,7 @@
             },
             {
               "type": "title_preset",
-              "text": "Мин - 0, макс - 3"
+              "text": "Min - 0, max - 3"
             },
             {
               "type": "slider_preset",
@@ -574,7 +574,7 @@
             },
             {
               "type": "title_preset",
-              "text": "Двойной с и без делений"
+              "text": "Double with or without ticks"
             },
             {
               "type": "slider_preset",
@@ -690,7 +690,7 @@
             },
             {
               "type": "title_preset",
-              "text": "Кастомные настройки"
+              "text": "Custom preference"
             },
             {
               "type": "state",

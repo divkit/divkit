@@ -65,7 +65,7 @@
           {
             "menu_items": [
               {
-                "text": "Показать",
+                "text": "Show",
                 "action": {
                   "url": "custom-menu://show",
                   "log_id": "custom/menu/hide"
@@ -76,7 +76,7 @@
                   "url": "custom-menu://hide",
                   "log_id": "custom/menu/remove"
                 },
-                "text": "Скрыть"
+                "text": "Hide"
               }
             ],
             "log_id": "longtap_actions"

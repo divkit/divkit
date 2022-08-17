@@ -68,11 +68,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Типы определения размера"
+              "text": "Sizing types"
             },
             {
               "type": "subtitle",
-              "text": "match_parent - размер подстраивается под размер родительского блока\n\nwrap_content - размер подстраивается под содержимое\n\nfixed - фиксированный размер",
+              "text": "match_parent: The size adjusts to the size of the parent block\n\nnwrap_content: The size adjusts to the content\n\nfixed: The size is fixed",
               "margins": {
                 "bottom": 24
               }
@@ -86,7 +86,7 @@
                   "width": {
                     "type": "wrap_content"
                   },
-                  "text": "Это wrap_content текст"
+                  "text": "This is wrap_content text"
                 },
                 {
                   "type": "text_block",
@@ -94,14 +94,14 @@
                     "type": "fixed",
                     "value": 100
                   },
-                  "text": "Это fixed текст с шириной равной 100dp"
+                  "text": "This is fixed text that is 100dp wide"
                 },
                 {
                   "type": "text_block",
                   "width": {
                     "type": "match_parent"
                   },
-                  "text": "Это match_parent текст"
+                  "text": "This is match_parent text"
                 }
               ]
             }

@@ -59,11 +59,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Вертикальный контейнер"
+              "text": "Vertical container"
             },
             {
               "type": "subtitle",
-              "text": "Чтобы элемент занял все свободное место, его ширина должна быть match_parent. Если таких элементов несколько, они поделят место поровну или распределят его согласно значению параметра weight, если он указан",
+              "text": "If you want an element to take up all free space, set its width to match_parent. If there are multiple elements like this, they will divide the space equally or distribute it according to the weight value, if specified.",
               "margins": {
                 "bottom": 24
               }

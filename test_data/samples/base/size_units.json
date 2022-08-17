@@ -68,11 +68,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Единицы измерения размера"
+              "text": "Size units"
             },
             {
               "type": "subtitle",
-              "text": "dp (density-independent pixels) — единица измерения, которая используется по умолчанию и не зависит от плотности экрана. Конвертируется в pt на IOS, в dp на Android, в px - в Вебе\n\nsp (scale-independent pixels) — единица измерения, которая зависит от коэффициента размера текста в телефоне. Используется только на Android.\n\npx - пиксели. Не подстраивается под плотность экрана, поэтому элемент с размером в пикселях будет выглядеть по-разному на экранах с разной плотностью. Не поддерживается в Вебе",
+              "text": "dp (density-independent pixels) are units that are used by default and do not depend on the screen density. Converts to pt on IOS, dp on Android, and px in the web interface\n\nsp (scale-independent pixels) are units that depend on the font size factor of a mobile device. Only used on Android.\n\npx are pixels. They don't scale to the screen density, so an element whose size is defined in pixels will look different on screens with different densities. Not supported in the web interface.",
               "margins": {
                 "bottom": 24
               }
@@ -87,7 +87,7 @@
                     "type": "fixed",
                     "value": 30
                   },
-                  "text": "Высота в dp, а текст в sp"
+                  "text": "Height in dp, text in sp"
                 },
                 {
                   "type": "text_block",
@@ -96,7 +96,7 @@
                     "value": 30,
                     "unit": "sp"
                   },
-                  "text": "Высота в sp и текст в sp"
+                  "text": "Height and text in sp"
                 },
                 {
                   "type": "text_block",
@@ -106,7 +106,7 @@
                     "unit": "sp"
                   },
                   "font_size_unit": "dp",
-                  "text": "Высота в sp, а текст в dp"
+                  "text": "Height in sp, text in dp"
                 },
                 {
                   "type": "text_block",
@@ -115,7 +115,7 @@
                     "value": 30
                   },
                   "font_size_unit": "dp",
-                  "text": "Высота в dp и текст в dp"
+                  "text": "Height and text in dp"
                 },
                 {
                   "type": "text_block",
@@ -126,7 +126,7 @@
                   },
                   "font_size": 40,
                   "font_size_unit": "px",
-                  "text": "Высота 100 px, текст 40 px"
+                  "text": "Height is 100 px, text is 40 px"
                 }
               ]
             }

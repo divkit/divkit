@@ -63,11 +63,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Пейджер"
+              "text": "Pager"
             },
             {
               "type": "subtitle",
-              "text": "Пейджер отображает горизонтальный набор карточек, где полностью видна основная карточка, а соседние показываются частично.\n\nПейджер можно использовать вместе с индикатором, чтобы отображать, какая карточка выбрана.\n\nИндикатор - это тоже див, его можно располагать независимо от пейджера.\n\nНа примере - пейджер с пятью карточками и индикатор сверху.",
+              "text": "A pager displays a horizontal set of cards, where the main card is fully visible and the neighboring ones are partially displayed.\n\nYou can use it with an indicator to show which card is selected.\n\nAn indicator is also a div and can be positioned independently of a pager.\n\nThe example shows a pager with five cards and an indicator on top.",
               "margins": {
                 "bottom": 24
               }

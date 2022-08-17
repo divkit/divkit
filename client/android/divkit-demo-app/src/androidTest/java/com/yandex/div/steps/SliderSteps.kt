@@ -31,9 +31,9 @@ internal fun slider(f: SliderSteps.() -> Unit) = f(SliderSteps())
 
 internal open class SliderSteps : DivTestAssetSteps() {
 
-    val BUTTON_VALUE_PERFECT = "Отлично"
-    val BUTTON_VALUE_NOT_SURE = "Не уверен"
-    val BUTTON_VALUE_BAD = "Все плохо"
+    val BUTTON_VALUE_PERFECT = "Excellent"
+    val BUTTON_VALUE_NOT_SURE = "Not sure"
+    val BUTTON_VALUE_BAD = "This is bad"
 
     fun ActivityTestRule<*>.buildContainer(): Unit = Step.step("Build container") {
         buildContainer(

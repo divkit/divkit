@@ -64,11 +64,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Пустое состояние"
+              "text": "Empty state"
             },
             {
               "type": "subtitle",
-              "text": "Можно указать пустое состояние в списке возможных состояний, и тогда при переключении на него блок будет исчезать.\n\nВ примере кнопка исчезает при клике на неё.",
+              "text": "You can specify an empty state in the list of possible states. In this case, when switching to this state, the block will disappear.\n\nIn the example, the button disappears when tapped.",
               "margins": {
                 "bottom": 24
               }

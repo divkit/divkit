@@ -47,11 +47,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Разделитель"
+              "text": "Separator."
             },
             {
               "type": "subtitle",
-              "text": "Может быть вертикальным и горизонтальным, возможно также настроить цвет или сделать разделитель прозрачным",
+              "text": "Can be vertical or horizontal. You can set the color or make the separator transparent.",
               "margins": {
                 "bottom": 24
               }

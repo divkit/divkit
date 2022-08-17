@@ -61,11 +61,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Анимации при нажатии"
+              "text": "Tap animations"
             },
             {
               "type": "subtitle",
-              "text": "Если у дива указано хотя бы одно действие на тап, то можно установить анимацию при нажатии.\n\nПоддерживаются fade, scale и комбинация из fade и scale анимаций",
+              "text": "If a div has at least one tap action specified, you can set a tap animation.\n\nFade, scale, and a combination of fade and scale animations are supported.",
               "margins": {
                 "bottom": 24
               }

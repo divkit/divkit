@@ -35,11 +35,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Прозрачность"
+              "text": "Transparency"
             },
             {
               "type": "subtitle",
-              "text": "Для любого дива можно установить прозрачность - значение от 0 до 1.",
+              "text": "You can set the transparency for any div: from 0 to 1",
               "margins": {
                 "bottom": 12
               }
@@ -71,7 +71,7 @@
               ]
             },{
               "type": "subtitle",
-              "text": "У первой картинки прозрачность 1, у второй прозрачность 0.5."
+              "text": "The transparency of the first image is 1 and the second is 0.5."
             }
           ]
         }

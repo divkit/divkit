@@ -50,11 +50,11 @@
           "items": [
             {
               "type": "title",
-              "text": "Заглушки в картинках, стабы"
+              "text": "Placeholder images, stubs"
             },
             {
               "type": "subtitle",
-              "text": "По умолчанию перед загрузкой картинки используется серая заглушка, как у первой картинки.\n\nТакже можно установить однотонную цветную заглушку, как у второй картинки, либо вставить картинку, закодированную в base64 (третья картинка).",
+              "text": "By default, a gray stub is used before an image loads (first picture).\n\nYou can also set a solid colored stub (second picture) or insert a base64-encoded image (third picture).\n",
               "margins": {
                 "bottom": 32
               }
