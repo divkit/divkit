@@ -133,12 +133,12 @@
 }
 
 .outer_has-action-animation {
-    opacity: var(--divkit-animation-opacity-start);
-    transform: scale(var(--divkit-animation-scale-start));
+    opacity: var(--divkit-animation-opacity-start, 1);
+    transform: scale(var(--divkit-animation-scale-start, 1));
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 
 .outer_has-action-animation:active {
-    opacity: var(--divkit-animation-opacity-end);
-    transform: scale(var(--divkit-animation-scale-end));
+    opacity: var(--divkit-animation-opacity-end, 1);
+    transform: scale(var(--divkit-animation-scale-end, 1));
 }

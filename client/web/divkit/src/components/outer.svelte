@@ -292,10 +292,10 @@
 
     $: jsonActionAnimation = rootCtx.getDerivedFromVars(json.action_animation);
     let actionAnimationTransition = '';
-    let animationOpacityStart = 1;
-    let animationOpacityEnd = 1;
-    let animationScaleStart = 1;
-    let animationScaleEnd = 1;
+    let animationOpacityStart: number | undefined = undefined;
+    let animationOpacityEnd: number | undefined = undefined;
+    let animationScaleStart: number | undefined = undefined;
+    let animationScaleEnd: number | undefined = undefined;
     $: {
         if ($jsonActionAnimation) {
             actionAnimationTransition = parseActionAnimation($jsonActionAnimation);
