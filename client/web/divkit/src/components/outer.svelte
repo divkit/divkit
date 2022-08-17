@@ -118,7 +118,7 @@
         if ($jsonWidth) {
             if ($jsonWidth.type === 'fixed') {
                 widthNum = correctNonNegativeNumber($jsonWidth.value, widthNum);
-                newWidth = widthNum > 0 ? pxToEm(widthNum) : undefined;
+                newWidth = pxToEm(widthNum);
             } else if ($jsonWidth.type === 'match_parent') {
                 widthType = 'parent';
                 if (layoutParams.parentLayoutOrientation === 'vertical') {
@@ -170,7 +170,7 @@
         if ($jsonHeight) {
             if ($jsonHeight.type === 'fixed') {
                 heightNum = correctNonNegativeNumber($jsonHeight.value, heightNum);
-                newHeight = heightNum > 0 ? pxToEm(heightNum) : undefined;
+                newHeight = pxToEm(heightNum);
             } else if ($jsonHeight.type === 'match_parent') {
                 heightType = 'parent';
                 if (layoutParams.parentLayoutOrientation === 'horizontal') {
