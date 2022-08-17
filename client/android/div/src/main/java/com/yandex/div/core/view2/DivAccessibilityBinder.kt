@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2
 
 import android.view.View
-import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import com.yandex.div.core.annotations.Mockable
@@ -54,15 +53,12 @@ class DivAccessibilityBinder @Inject constructor(
         if (!enabled) {
             return
         }
-        val accessibilityDelegate = object : AccessibilityDelegateCompat() {
-            override fun onInitializeAccessibilityNodeInfo(
-                host: View?,
-                info: AccessibilityNodeInfoCompat?
-            ) {
-                super.onInitializeAccessibilityNodeInfo(host, info)
-                info?.bindType(type)
-            }
-        }
+        val originalDelegate = ViewCompat.getAccessibilityDelegate(view)
+
+        val accessibilityDelegate = AccessibilityDelegateWrapper(
+            originalDelegate,
+            initializeAccessibilityNodeInfo = { _, info -> info?.bindType(type) }
+        )
 
         ViewCompat.setAccessibilityDelegate(view, accessibilityDelegate)
     }
