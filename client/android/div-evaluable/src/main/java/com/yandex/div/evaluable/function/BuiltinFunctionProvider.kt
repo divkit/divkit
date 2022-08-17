@@ -53,14 +53,22 @@ class BuiltinFunctionProvider : FunctionProvider {
 
         // Color functions
         registry.register(ColorAlphaComponentGetter)
+        registry.register(ColorStringAlphaComponentGetter)
         registry.register(ColorRedComponentGetter)
+        registry.register(ColorStringRedComponentGetter)
         registry.register(ColorGreenComponentGetter)
+        registry.register(ColorStringGreenComponentGetter)
         registry.register(ColorBlueComponentGetter)
+        registry.register(ColorStringBlueComponentGetter)
 
         registry.register(ColorAlphaComponentSetter)
+        registry.register(ColorStringAlphaComponentSetter)
         registry.register(ColorRedComponentSetter)
+        registry.register(ColorStringRedComponentSetter)
         registry.register(ColorGreenComponentSetter)
+        registry.register(ColorStringGreenComponentSetter)
         registry.register(ColorBlueComponentSetter)
+        registry.register(ColorStringBlueComponentSetter)
 
         registry.register(ColorArgb)
         registry.register(ColorRgb)
@@ -103,6 +111,7 @@ class BuiltinFunctionProvider : FunctionProvider {
         registry.register(IntegerToString)
         registry.register(NumberToString)
         registry.register(BooleanToString)
+        registry.register(ColorToString)
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {

@@ -106,6 +106,7 @@
     },
     {
       "name": "setColorAlpha(string, number) string",
+      "deprecated": "Return type of setColorAlpha() become color",
       "function_name": "setColorAlpha",
       "doc": "Sets alpha value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -119,7 +120,24 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": ["web", "ios"]
+    },
+    {
+      "name": "setColorAlpha(string, number) color",
+      "function_name": "setColorAlpha",
+      "doc": "Sets alpha value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of alpha in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "color",
+      "platforms": ["android"]
     },
     {
       "name": "setColorAlpha(color, number) color",
@@ -136,10 +154,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["web", "ios"]
+      "platforms": ["android","web", "ios"]
     },
     {
       "name": "setColorRed(string, number) string",
+      "deprecated": "Return type of setColorRed() become color",
       "function_name": "setColorRed",
       "doc": "Sets red value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -153,7 +172,24 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": ["web", "ios"]
+    },
+    {
+      "name": "setColorRed(string, number) color",
+      "function_name": "setColorRed",
+      "doc": "Sets red value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of red in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "color",
+      "platforms": ["android"]
     },
     {
       "name": "setColorRed(color, number) color",
@@ -170,10 +206,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["web", "ios"]
+      "platforms": ["android","web", "ios"]
     },
     {
       "name": "setColorGreen(string, number) string",
+      "deprecated": "Return type of setColorGreen() become color",
       "function_name": "setColorGreen",
       "doc": "Sets green value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -187,7 +224,24 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": ["web", "ios"]
+    },
+    {
+      "name": "setColorGreen(string, number) color",
+      "function_name": "setColorGreen",
+      "doc": "Sets green value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of green in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "color",
+      "platforms": ["android"]
     },
     {
       "name": "setColorGreen(color, number) color",
@@ -204,10 +258,11 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["web", "ios"]
+      "platforms": ["android","web", "ios"]
     },
     {
       "name": "setColorBlue(string, number) string",
+      "deprecated": "Return type of setColorBlue() become color",
       "function_name": "setColorBlue",
       "doc": "Sets blue value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -221,7 +276,24 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": ["web", "ios"]
+    },
+    {
+      "name": "setColorBlue(string, number) color",
+      "function_name": "setColorBlue",
+      "doc": "Sets blue value of argument color. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value of color in hex format."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of blue in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android"]
     },
     {
       "name": "setColorBlue(color, number) color",
@@ -238,11 +310,12 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["web", "ios"]
+      "platforms": ["android","web", "ios"]
     },
 
     {
       "name": "argb(number, number, number, number) string",
+      "deprecated": "Return type of argb() become color",
       "function_name": "argb",
       "doc": "Creates color from values of alpha, red, green, blue values. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -264,10 +337,36 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": ["web", "ios"]
+    },
+    {
+      "name": "argb(number, number, number, number) color",
+      "function_name": "argb",
+      "doc": "Creates color from values of alpha, red, green, blue values. Returns string value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value of alpha in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of red in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of green in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of blue in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "color",
+      "platforms": ["android"]
     },
     {
       "name": "rgb(number, number, number) string",
+      "deprecated": "Return type of rgb() become color",
       "function_name": "rgb",
       "doc": "Creates color from values of red, green, blue values. Sets alpha value as 1.0. Returns string value of color in hex format '#FFAABBCC'.",
       "arguments": [
@@ -285,7 +384,28 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android", "web", "ios"]
+      "platforms": ["web", "ios"]
+    },
+    {
+      "name": "rgb(number, number, number) color",
+      "function_name": "rgb",
+      "doc": "Creates color from values of red, green, blue values. Sets alpha value as 1.0. Returns color value of color in hex format '#FFAABBCC'.",
+      "arguments": [
+        {
+          "type": "number",
+          "doc": "Number value of red in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of green in range 0.0 to 1.0."
+        },
+        {
+          "type": "number",
+          "doc": "Number value of blue in range 0.0 to 1.0."
+        }
+      ],
+      "result_type": "string",
+      "platforms": ["android"]
     }
   ]
 }

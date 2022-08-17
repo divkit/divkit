@@ -38,7 +38,6 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
         val functionName: String,
         val arguments: List<FunctionArgument>,
         val resultType: EvaluableType,
-        val platform: List<String>,
     ) {
         override fun toString(): String {
             return name
@@ -62,8 +61,9 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
             val cases = mutableListOf<TestCaseOrError<SignatureTestCase>>()
             val errors = MultiplatformTestUtils.walkJSONs(SIGNATURES_FILE_PATH) { file, json ->
                 val newCases = json.optJSONArray(SIGNATURE_FIELD).toListOfJSONObject()
+                    .filter { isForAndroidPlatform(parsePlatform(it)) }
                     .map { parseSignature(file, it) }
-                    .filter { it.error != null || isForAndroidPlatform(it.testCase?.platform) }
+                    .filter { it.error != null }
                 cases.addAll(newCases)
 
             }
@@ -94,7 +94,6 @@ class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase
                         result
                     } ?: emptyList(),
                     EvaluableType.valueOf(json.getString(SIGNATURE_RESULT_TYPE_FIELD).uppercase()),
-                    parsePlatform(json)
                 ))
 
             } catch (e: JSONException) {

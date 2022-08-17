@@ -5,10 +5,11 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
-import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.isForAndroidPlatform
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.parsePlatform
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.toListOfJSONObject
+import com.yandex.div.evaluable.types.Color
+import com.yandex.div.evaluable.types.DateTime
 import org.json.JSONException
 import org.json.JSONObject
 import org.junit.Assert
@@ -18,7 +19,6 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import java.lang.AssertionError
 import java.io.File
 
 @RunWith(Parameterized::class)
@@ -41,7 +41,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         val expectedValue = testCase.expectedValue
         if (expectedValue is Exception) {
             val actualValue = evalExpression()
-            Assert.assertEquals(expectedValue::class, actualValue::class)
+            Assert.assertTrue(actualValue is Exception)
             val expectedMessage = expectedValue.message.takeIf { it?.isNotEmpty() == true } ?: return
             Assert.assertEquals(expectedMessage, (actualValue as Throwable).message)
         } else {
@@ -76,10 +76,6 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     }
 
     data class TestVariable(val name: String, val value: Any)
-
-    data class TestColor(val value: String) {
-        override fun toString() = value
-    }
 
     data class TestUrl(val value: String) {
         override fun toString() = value
@@ -177,11 +173,21 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
             val value: Any = when (val type = json.getString(TYPE_FIELD)) {
                 VALUE_TYPE_STRING -> json.getString(VALUE_FIELD)
                 VALUE_TYPE_URL -> TestUrl(json.getString(VALUE_FIELD))
-                VALUE_TYPE_COLOR -> TestColor(json.getString(VALUE_FIELD))
+                VALUE_TYPE_COLOR -> Color.parse(json.getString(VALUE_FIELD))
                 VALUE_TYPE_INTEGER -> json.getInt(VALUE_FIELD)
                 VALUE_TYPE_DECIMAL -> json.getDouble(VALUE_FIELD)
-                VALUE_TYPE_BOOLEAN -> json.getBoolean(VALUE_FIELD)
-                VALUE_TYPE_BOOL_INT -> json.getInt(VALUE_FIELD) == 1
+                VALUE_TYPE_BOOLEAN,
+                VALUE_TYPE_BOOL_INT -> {
+                    val value = json.get(VALUE_FIELD)
+                    return when {
+                        value is Number -> value.toInt() == 1
+                        value == java.lang.Boolean.FALSE -> false
+                        value == java.lang.Boolean.TRUE -> true
+                        value is String && "true".equals(value, true) -> true
+                        value is String && "false".equals(value, true) -> false
+                        else -> throw IllegalAccessException("Unknown variable value: $value")
+                    }
+                }
                 VALUE_TYPE_DATE_TIME -> TestDate(json.getString(VALUE_FIELD))
                 VALUE_TYPE_UNIT -> Unit
                 VALUE_TYPE_ERROR -> EvaluableException(json.optString(VALUE_FIELD))

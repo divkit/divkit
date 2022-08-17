@@ -407,7 +407,7 @@
               "text_alignment_horizontal": "center",
               "text_alignment_vertical": "center",
               "text_color": "@{dark_sky}",
-              "text": "@{argb(toNumber(alpha_int) / 255.0, toNumber(red_int) / 255.0, toNumber(green_int) / 255.0, toNumber(blue_int) / 255.0)}"
+              "text": "@{toString(argb(toNumber(alpha_int) / 255.0, toNumber(red_int) / 255.0, toNumber(green_int) / 255.0, toNumber(blue_int) / 255.0))}"
             }
           ]
         }

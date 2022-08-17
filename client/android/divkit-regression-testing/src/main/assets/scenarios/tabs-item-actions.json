@@ -281,7 +281,7 @@
                 "font_size": 24,
                 "height": {
                   "type": "fixed",
-                  "value": "80"
+                  "value": 80
                 },
                 "text": "<<",
                 "text_alignment_horizontal": "center",
@@ -303,7 +303,7 @@
                 "font_size": 24,
                 "height": {
                   "type": "fixed",
-                  "value": "80"
+                  "value": 80
                 },
                 "text": "<",
                 "text_alignment_horizontal": "center",
@@ -325,7 +325,7 @@
                 "font_size": 24,
                 "height": {
                   "type": "fixed",
-                  "value": "80"
+                  "value": 80
                 },
                 "text": ">",
                 "text_alignment_horizontal": "center",
@@ -347,7 +347,7 @@
                 "font_size": 24,
                 "height": {
                   "type": "fixed",
-                  "value": "80"
+                  "value": 80
                 },
                 "text": ">>",
                 "text_alignment_horizontal": "center",

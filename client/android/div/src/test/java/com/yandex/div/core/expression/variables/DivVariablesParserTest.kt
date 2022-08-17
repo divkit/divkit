@@ -1,7 +1,7 @@
 package com.yandex.div.core.expression.variables
 
-import android.graphics.Color
 import com.yandex.div.data.Variable
+import com.yandex.div.evaluable.types.Color
 import org.json.JSONArray
 import org.junit.Assert
 import org.junit.Test
@@ -64,7 +64,7 @@ class DivVariablesParserTest {
         val variables = DivVariablesParser.parse(JSONArray(json), logger)
 
         val variable = variables[2] as Variable.ColorVariable
-        Assert.assertEquals(Color.BLACK, variable.getValue() as Int)
+        Assert.assertEquals(Color.rgb(0, 0, 0), variable.getValue())
     }
 
     @Test

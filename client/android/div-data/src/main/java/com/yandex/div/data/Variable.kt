@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.annotation.MainThread
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.util.Assert
+import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.STRING_TO_COLOR_INT
 import com.yandex.div.json.toBoolean
 import com.yandex.div.util.SynchronizedList
@@ -70,7 +71,8 @@ sealed class Variable {
         override val name: String,
         val defaultValue: Int,
     ) : Variable() {
-        internal var value: Int = defaultValue
+
+        internal var value: Color = Color(defaultValue)
             set(value) {
                 if (field == value) {
                     return
@@ -140,7 +142,7 @@ sealed class Variable {
             is ColorVariable -> {
                 val color = STRING_TO_COLOR_INT(newValue) ?: throw VariableMutationException(
                     "Wrong value format for color variable: '$newValue'")
-                value = color
+                value = Color(color)
             }
             is UrlVariable -> value = newValue.parseAsUri()
         }

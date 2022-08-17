@@ -319,6 +319,20 @@
                 "ios",
                 "web"
             ]
+        },
+        {
+            "name": "undeclared variable",
+            "expression": "@{var}",
+            "expected": {
+                "type": "error",
+                "value": ""
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
         }
     ]
 }

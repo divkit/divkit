@@ -1,17 +1,32 @@
 package com.yandex.div.evaluable.function
 
-import com.yandex.div.evaluable.EvaluableType
+import com.yandex.div.evaluable.*
 import com.yandex.div.evaluable.Function
-import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.REASON_CONVERT_TO_COLOR
 import com.yandex.div.evaluable.REASON_OUT_OF_RANGE
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
+import com.yandex.div.evaluable.types.Color
 
 internal abstract class ColorComponentGetter(
-    private val componentGetter: (Int) -> Int
+        private val componentGetter: (Color) -> Int
 ) : Function() {
 
-    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.STRING)) // color
+    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.COLOR))
+
+    override val resultType = EvaluableType.NUMBER
+
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        return componentGetter(args.first() as Color).toColorFloatComponentValue()
+    }
+}
+
+internal abstract class ColorStringComponentGetter(
+    private val componentGetter: ColorComponentGetter
+) : Function() {
+
+    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.STRING))
 
     override val resultType = EvaluableType.NUMBER
 
@@ -20,115 +35,182 @@ internal abstract class ColorComponentGetter(
     override fun evaluate(args: List<Any>): Any {
         val colorString = args.first() as String
         val color = try {
-            parseColor(colorString)
+            Color.parse(colorString)
         } catch (e: IllegalArgumentException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_COLOR, e)
         }
-        return componentGetter(color).toColorFloatComponentValue()
+        return componentGetter.invoke(listOf(color))
     }
 }
 
 internal object ColorAlphaComponentGetter : ColorComponentGetter(
-    componentGetter = { color: Int -> Colors.alpha(color) }
+        componentGetter = { color: Color -> color.alpha() }
+) {
+    override val name = "getColorAlpha"
+}
+
+internal object ColorStringAlphaComponentGetter : ColorStringComponentGetter(
+    componentGetter = ColorAlphaComponentGetter
 ) {
     override val name = "getColorAlpha"
 }
 
 internal object ColorRedComponentGetter : ColorComponentGetter(
-    componentGetter = { color: Int -> Colors.red(color) }
+    componentGetter = { color: Color -> color.red() }
+) {
+    override val name = "getColorRed"
+}
+
+internal object ColorStringRedComponentGetter : ColorStringComponentGetter(
+        componentGetter = ColorRedComponentGetter
 ) {
     override val name = "getColorRed"
 }
 
 internal object ColorGreenComponentGetter : ColorComponentGetter(
-    componentGetter = { color: Int -> Colors.green(color) }
+    componentGetter = { color: Color -> color.green() }
+) {
+    override val name = "getColorGreen"
+}
+
+internal object ColorStringGreenComponentGetter : ColorStringComponentGetter(
+        componentGetter = ColorGreenComponentGetter
 ) {
     override val name = "getColorGreen"
 }
 
 internal object ColorBlueComponentGetter : ColorComponentGetter(
-    componentGetter = { color: Int -> Colors.blue(color) }
+    componentGetter = { color: Color -> color.blue() }
+) {
+    override val name = "getColorBlue"
+}
+
+internal object ColorStringBlueComponentGetter : ColorStringComponentGetter(
+        componentGetter = ColorBlueComponentGetter
 ) {
     override val name = "getColorBlue"
 }
 
 internal abstract class ColorComponentSetter(
-    private val componentSetter: (color: Int, value: Double) -> Int
+    private val componentSetter: (color: Color, value: Double) -> Color
 ) : Function() {
 
     override val declaredArgs = listOf(
-        FunctionArgument(type = EvaluableType.STRING), // color
+        FunctionArgument(type = EvaluableType.COLOR),
         FunctionArgument(type = EvaluableType.NUMBER), // color component value
     )
 
-    override val resultType = EvaluableType.STRING
+    override val resultType = EvaluableType.COLOR
+
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val color = args[0] as Color
+        val value = args[1] as Double
+        return try {
+            componentSetter(color, value)
+        } catch (e: IllegalArgumentException) {
+            throwExceptionOnFunctionEvaluationFailed(name, listOf(color.toString(), value), REASON_OUT_OF_RANGE)
+        }
+    }
+}
+
+internal abstract class ColorStringComponentSetter(
+        private val componentSetter: ColorComponentSetter
+) : Function() {
+
+    override val declaredArgs = listOf(
+            FunctionArgument(type = EvaluableType.STRING),
+            FunctionArgument(type = EvaluableType.NUMBER), // color component value
+    )
+
+    override val resultType = EvaluableType.COLOR
 
     override val isPure = true
 
     override fun evaluate(args: List<Any>): Any {
         val colorString = args[0] as String
-        val channelValue = args[1] as Double
         val color = try {
-            parseColor(colorString)
+            Color.parse(colorString)
         } catch (e: IllegalArgumentException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_CONVERT_TO_COLOR, e)
         }
-        return try {
-            colorAsHexString(componentSetter(color, channelValue))
-        } catch (e: IllegalArgumentException) {
-            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_OUT_OF_RANGE)
-        }
+        return componentSetter(listOf(color, args[1]))
     }
 }
 
 internal object ColorAlphaComponentSetter : ColorComponentSetter(
-    componentSetter = { color: Int, alpha: Double ->
-        Colors.argb(
+    componentSetter = { color: Color, alpha: Double ->
+        Color.argb(
             alpha.toColorIntComponentValue(),
-            Colors.red(color),
-            Colors.green(color),
-            Colors.blue(color)
+            color.red(),
+            color.green(),
+            color.blue()
         )
     }
 ) {
     override val name = "setColorAlpha"
 }
 
+internal object ColorStringAlphaComponentSetter : ColorStringComponentSetter(
+        componentSetter = ColorAlphaComponentSetter
+) {
+    override val name = "setColorAlpha"
+}
+
 internal object ColorRedComponentSetter : ColorComponentSetter(
-    componentSetter = { color: Int, red: Double ->
-        Colors.argb(
-            Colors.alpha(color),
+    componentSetter = { color: Color, red: Double ->
+        Color.argb(
+            color.alpha(),
             red.toColorIntComponentValue(),
-            Colors.green(color),
-            Colors.blue(color)
+            color.green(),
+            color.blue()
         )
     }
 ) {
     override val name = "setColorRed"
 }
 
+internal object ColorStringRedComponentSetter : ColorStringComponentSetter(
+        componentSetter = ColorRedComponentSetter
+) {
+    override val name = "setColorRed"
+}
+
 internal object ColorGreenComponentSetter : ColorComponentSetter(
-    componentSetter = { color: Int, green: Double ->
-        Colors.argb(
-            Colors.alpha(color),
-            Colors.red(color),
+    componentSetter = { color: Color, green: Double ->
+        Color.argb(
+            color.alpha(),
+            color.red(),
             green.toColorIntComponentValue(),
-            Colors.blue(color)
+            color.blue()
         )
     }
 ) {
     override val name = "setColorGreen"
 }
 
+internal object ColorStringGreenComponentSetter : ColorStringComponentSetter(
+        componentSetter = ColorGreenComponentSetter
+) {
+    override val name = "setColorGreen"
+}
+
 internal object ColorBlueComponentSetter : ColorComponentSetter(
-    componentSetter = { color: Int, blue: Double ->
-        Colors.argb(
-            Colors.alpha(color),
-            Colors.red(color),
-            Colors.green(color),
+    componentSetter = { color: Color, blue: Double ->
+        Color.argb(
+            color.alpha(),
+            color.red(),
+            color.green(),
             blue.toColorIntComponentValue()
         )
     }
+) {
+    override val name = "setColorBlue"
+}
+
+internal object ColorStringBlueComponentSetter : ColorStringComponentSetter(
+        componentSetter = ColorBlueComponentSetter
 ) {
     override val name = "setColorBlue"
 }
@@ -144,7 +226,7 @@ internal object ColorArgb : Function() {
         FunctionArgument(type = EvaluableType.NUMBER), // blue value
     )
 
-    override val resultType = EvaluableType.STRING
+    override val resultType = EvaluableType.COLOR
 
     override val isPure = true
 
@@ -154,7 +236,7 @@ internal object ColorArgb : Function() {
             val red = (args[1] as Double).toColorIntComponentValue()
             val green = (args[2] as Double).toColorIntComponentValue()
             val blue = (args[3] as Double).toColorIntComponentValue()
-            colorAsHexString(Colors.argb(alpha, red, green, blue))
+            Color.argb(alpha, red, green, blue)
         } catch (e: IllegalArgumentException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_OUT_OF_RANGE)
         }
@@ -171,7 +253,7 @@ internal object ColorRgb : Function() {
         FunctionArgument(type = EvaluableType.NUMBER), // blue value
     )
 
-    override val resultType = EvaluableType.STRING
+    override val resultType = EvaluableType.COLOR
 
     override val isPure = true
 
@@ -180,7 +262,7 @@ internal object ColorRgb : Function() {
             val red = (args[0] as Double).toColorIntComponentValue()
             val green = (args[1] as Double).toColorIntComponentValue()
             val blue = (args[2] as Double).toColorIntComponentValue()
-            colorAsHexString(Colors.argb(255, red, green, blue))
+            Color.argb(255, red, green, blue)
         } catch (e: IllegalArgumentException) {
             throwExceptionOnFunctionEvaluationFailed(name, args, REASON_OUT_OF_RANGE)
         }
@@ -197,12 +279,4 @@ private fun Int.toColorFloatComponentValue(): Double {
 private fun Double.toColorIntComponentValue(): Int {
     if (this < 0f || this > 1f) throw IllegalArgumentException()
     return (this * 255f + 0.5f).toInt()
-}
-
-private fun colorAsHexString(color: Int) = String.format("#%08X", color)
-
-@Throws(IllegalArgumentException::class)
-private fun parseColor(text: String): Int {
-    if (text.isEmpty() || text[0] != '#' || text.length != 9) throw IllegalArgumentException("Not valid format.")
-    return Colors.parseColor(text)
 }

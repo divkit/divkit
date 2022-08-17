@@ -3,15 +3,27 @@
     {
       "name": "setColorAlpha('#AA000000', 0.5) => #80000000",
       "expression": "@{setColorAlpha('#AA000000', 0.5)}",
+      "deprecated": "Return type of setColorAlpha() become color",
       "expected": {
         "type": "string",
         "value": "#80000000"
       },
       "variables": [],
       "platforms": [
-        "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "name": "setColorAlpha('#AA000000', 0.5) => #80000000",
+      "expression": "@{setColorAlpha('#AA000000', 0.5)}",
+      "expected": {
+        "type": "color",
+        "value": "#80000000"
+      },
+      "variables": [],
+      "platforms": [
+        "android"
       ]
     },
     {
@@ -29,6 +41,21 @@
         }
       ],
       "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorAlpha('#FF000000', 0.5) => #80000000",
+      "expression": "@{setColorAlpha('#FF000000', 0.5)}",
+      "deprecated": "Return type of setColorAlpha() become color",
+      "expected": {
+        "type": "string",
+        "value": "#80000000"
+      },
+      "variables": [],
+      "platforms": [
         "ios",
         "web"
       ]
@@ -37,12 +64,24 @@
       "name": "setColorAlpha('#FF000000', 0.5) => #80000000",
       "expression": "@{setColorAlpha('#FF000000', 0.5)}",
       "expected": {
-        "type": "string",
+        "type": "color",
         "value": "#80000000"
       },
       "variables": [],
       "platforms": [
-        "android",
+        "android"
+      ]
+    },
+    {
+      "name": "setColorRed('#FF000000', 0.5) => #FF800000",
+      "expression": "@{setColorRed('#FF000000', 0.5)}",
+      "deprecated": "Return type of setColorRed() become color",
+      "expected": {
+        "type": "string",
+        "value": "#FF800000"
+      },
+      "variables": [],
+      "platforms": [
         "ios",
         "web"
       ]
@@ -51,14 +90,12 @@
       "name": "setColorRed('#FF000000', 0.5) => #FF800000",
       "expression": "@{setColorRed('#FF000000', 0.5)}",
       "expected": {
-        "type": "string",
+        "type": "color",
         "value": "#FF800000"
       },
       "variables": [],
       "platforms": [
-        "android",
-        "ios",
-        "web"
+        "android"
       ]
     },
     {
@@ -76,6 +113,21 @@
         }
       ],
       "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorGreen('#FF000000', 0.5) => #FF008000",
+      "expression": "@{setColorGreen('#FF000000', 0.5)}",
+      "deprecated": "Return type of setColorGreen() become color",
+      "expected": {
+        "type": "string",
+        "value": "#FF008000"
+      },
+      "variables": [],
+      "platforms": [
         "ios",
         "web"
       ]
@@ -84,14 +136,12 @@
       "name": "setColorGreen('#FF000000', 0.5) => #FF008000",
       "expression": "@{setColorGreen('#FF000000', 0.5)}",
       "expected": {
-        "type": "string",
+        "type": "color",
         "value": "#FF008000"
       },
       "variables": [],
       "platforms": [
-        "android",
-        "ios",
-        "web"
+        "android"
       ]
     },
     {
@@ -109,6 +159,21 @@
         }
       ],
       "platforms": [
+        "android",
+        "ios",
+        "web"
+      ]
+    },
+    {
+      "name": "setColorBlue('#FF000000', 0.5) => #FF000080",
+      "expression": "@{setColorBlue('#FF000000', 0.5)}",
+      "deprecated": "Return type of setColorBlue() become color",
+      "expected": {
+        "type": "string",
+        "value": "#FF000080"
+      },
+      "variables": [],
+      "platforms": [
         "ios",
         "web"
       ]
@@ -117,14 +182,12 @@
       "name": "setColorBlue('#FF000000', 0.5) => #FF000080",
       "expression": "@{setColorBlue('#FF000000', 0.5)}",
       "expected": {
-        "type": "string",
+        "type": "color",
         "value": "#FF000080"
       },
       "variables": [],
       "platforms": [
-        "android",
-        "ios",
-        "web"
+        "android"
       ]
     },
     {
@@ -142,6 +205,7 @@
         }
       ],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

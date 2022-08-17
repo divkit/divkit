@@ -281,25 +281,6 @@
         },
         {
             "name": "string template with color variable expression",
-            "deprecated": "Color format should be the same everywhere, see case below",
-            "expression": "Sky color is @{color}",
-            "expected": {
-                "type": "string",
-                "value": "Sky color is #75bbfd"
-            },
-            "variables": [
-                {
-                    "type": "color",
-                    "value": "#75bbfd",
-                    "name": "color"
-                }
-            ],
-            "platforms": [
-                "android"
-            ]
-        },
-        {
-            "name": "string template with color variable expression",
             "expression": "Sky color is @{color}",
             "expected": {
                 "type": "string",
@@ -313,6 +294,7 @@
                 }
             ],
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]

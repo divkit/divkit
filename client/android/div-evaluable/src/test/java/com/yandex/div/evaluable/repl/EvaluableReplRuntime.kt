@@ -104,6 +104,7 @@ internal object EvaluableReplRuntime {
                 EvaluableType.NUMBER -> value.toDouble()
                 EvaluableType.BOOLEAN -> value.toBoolean()
                 EvaluableType.STRING -> value
+                EvaluableType.COLOR -> value
                 EvaluableType.DATETIME -> DateTime.parseAsUTC(value)
             }
             name to convertedValue

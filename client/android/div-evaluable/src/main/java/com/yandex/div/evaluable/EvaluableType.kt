@@ -1,5 +1,6 @@
 package com.yandex.div.evaluable
 
+import com.yandex.div.evaluable.types.Color
 import com.yandex.div.evaluable.types.DateTime
 
 enum class EvaluableType(internal val typeName: String) {
@@ -8,6 +9,7 @@ enum class EvaluableType(internal val typeName: String) {
     BOOLEAN("Boolean"),
     STRING("String"),
     DATETIME("DateTime"),
+    COLOR("Color"),
     ;
 
     override fun toString(): String {
@@ -25,6 +27,7 @@ enum class EvaluableType(internal val typeName: String) {
                 is Boolean -> BOOLEAN
                 is String -> STRING
                 is DateTime -> DATETIME
+                is Color -> COLOR
                 null -> throw EvaluableException("Unable to find type for null")
                 else -> throw EvaluableException("Unable to find type for ${value!!::class.java.name}")
             }

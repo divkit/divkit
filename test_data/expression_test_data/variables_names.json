@@ -321,66 +321,6 @@
             ]
         },
         {
-            "name": "variable name with dash symbol at first position",
-            "expression": "@{-st1t2}",
-            "expected": {
-                "type": "error",
-                "value": ""
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "ok",
-                    "name": "-st1t2"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "variable name with dash symbol in the middle",
-            "expression": "@{st1-t2}",
-            "expected": {
-                "type": "error",
-                "value": ""
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "ok",
-                    "name": "st1-t2"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "variable name with dash symbol at last position",
-            "expression": "@{st1t2-}",
-            "expected": {
-                "type": "error",
-                "value": ""
-            },
-            "variables": [
-                {
-                    "type": "string",
-                    "value": "ok",
-                    "name": "st1t2-"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
             "name": "variable name is boolean literal 'true'",
             "expression": "@{true}",
             "expected": {
