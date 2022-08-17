@@ -1,7 +1,2 @@
-/.swiftpm/
-
-XcodeBuild/
-xcuserdata/
-
 /DivKit/generated_sources/*_hash
 /TemplatesSupportTests/generated_sources/*_hash
