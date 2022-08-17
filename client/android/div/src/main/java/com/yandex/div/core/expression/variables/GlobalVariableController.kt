@@ -5,6 +5,7 @@ import android.os.Looper
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.util.Assert
 import com.yandex.div.data.Variable
+import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.util.SynchronizedList
 import java.util.concurrent.ConcurrentHashMap
@@ -26,12 +27,41 @@ class GlobalVariableController @Inject constructor() {
     private val mainHandler = Handler(Looper.getMainLooper())
     private val variables = ConcurrentHashMap<String, Variable>()
     private val declarationObservers = SynchronizedList<(Variable) -> Unit>()
-    private val declaredVariableNames = mutableListOf<String>()
+    private val declaredVariableNames = mutableSetOf<String>()
+    private val pendingDeclaration = mutableSetOf<String>()
 
     internal val variableSource = VariableSource(
         variables,
         declarationObservers
     )
+
+    @Throws(VariableDeclarationException::class)
+    fun declare(vararg variables: Variable) {
+        synchronized(declaredVariableNames) {
+            val alreadyDeclaredVariables = variables.filter {
+                declaredVariableNames.contains(it.name)
+                || pendingDeclaration.contains(it.name)
+            }
+
+            if (alreadyDeclaredVariables.isNotEmpty()) {
+                throw VariableDeclarationException("""
+                        Wanted to declare new variable(s) '$alreadyDeclaredVariables',
+                        but variable(s) with such name(s) already exists!
+                    """.trimIndent())
+            }
+
+            pendingDeclaration.addAll(variables.map { it.name })
+        }
+        putOrUpdate(*variables)
+    }
+
+    fun get(variableName: String): Variable? {
+        return variables[variableName]
+    }
+
+    fun isDeclared(variableName: String): Boolean = synchronized(declaredVariableNames) {
+        declaredVariableNames.contains(variableName)
+    }
 
     /**
      * Will add new global variables if they did not exist or
@@ -48,36 +78,36 @@ class GlobalVariableController @Inject constructor() {
             }
             return
         }
-
         putOrUpdateInternal(*variables)
     }
 
     private fun putOrUpdateInternal(vararg variables: Variable) {
-        variables.forEach { variable ->
-            this.variables[variable.name]?.let { existing ->
-                existing.setValue(from = variable)
-                variable.addObserver { existing.setValue(from = it) }
-                return@forEach
-            }
-
-            this.variables.put(variable.name, variable)?.let { existing ->
-                Assert.fail("""
+        val newDeclaredVariables = mutableListOf<Variable>()
+        synchronized(declaredVariableNames) {
+            variables.forEach { variable ->
+                if (!declaredVariableNames.contains(variable.name)) {
+                    declaredVariableNames.add(variable.name)
+                    pendingDeclaration.remove(variable.name)
+                    newDeclaredVariables.add(variable)
+                }
+                this.variables[variable.name]?.let { existing ->
+                    existing.setValue(from = variable)
+                    variable.addObserver { existing.setValue(from = it) }
+                    return@forEach
+                }
+                this.variables.put(variable.name, variable)?.let { existing ->
+                    Assert.fail("""
                     Wanted to put new variable '$variable', but variable with such name
                     already exists '$existing'! Is there a race?
                 """.trimIndent())
+                }
             }
-
         }
-
         // Declaration notifications must happen apart from updates and declarations
         // to evade errors during updates of properties which use multiple variables.
         // Property update may fail cause only part of variables just got declared.
-        variables.forEach { variable ->
-            val name = variable.name
-            if (!declaredVariableNames.contains(name)) {
-                declaredVariableNames.add(name)
-                declarationObservers.forEach { it.invoke(variable) }
-            }
+        declarationObservers.forEach { observer ->
+            newDeclaredVariables.forEach { variable -> observer.invoke(variable)}
         }
     }
 }
