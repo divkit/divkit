@@ -18,8 +18,8 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        angle: try dictionary.getOptionalField("angle"),
-        colors: try dictionary.getOptionalArray("colors", transform: Color.color(withHexString:))
+        angle: try dictionary.getOptionalExpressionField("angle"),
+        colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:))
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-gradient-background_template." + field, representation: representation)

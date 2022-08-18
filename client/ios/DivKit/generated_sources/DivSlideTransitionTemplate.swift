@@ -23,10 +23,10 @@ public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializ
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       distance: try dictionary.getOptionalField("distance", templateToType: templateToType),
-      duration: try dictionary.getOptionalField("duration"),
-      edge: try dictionary.getOptionalField("edge"),
-      interpolator: try dictionary.getOptionalField("interpolator"),
-      startDelay: try dictionary.getOptionalField("start_delay")
+      duration: try dictionary.getOptionalExpressionField("duration"),
+      edge: try dictionary.getOptionalExpressionField("edge"),
+      interpolator: try dictionary.getOptionalExpressionField("interpolator"),
+      startDelay: try dictionary.getOptionalExpressionField("start_delay")
     )
   }
 

@@ -19,7 +19,7 @@ public final class EntityWithRequiredPropertyTemplate: TemplateValue, TemplateDe
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        property: try dictionary.getOptionalField("property")
+        property: try dictionary.getOptionalExpressionField("property")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "entity_with_required_property_template." + field, representation: representation)

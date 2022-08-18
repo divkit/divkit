@@ -17,8 +17,8 @@ public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable 
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      unit: try dictionary.getOptionalField("unit"),
-      value: try dictionary.getOptionalField("value")
+      unit: try dictionary.getOptionalExpressionField("unit"),
+      value: try dictionary.getOptionalExpressionField("value")
     )
   }
 

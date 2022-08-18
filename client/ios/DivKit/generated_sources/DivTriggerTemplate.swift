@@ -16,8 +16,8 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
     do {
       self.init(
         actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
-        condition: try dictionary.getOptionalField("condition"),
-        mode: try dictionary.getOptionalField("mode")
+        condition: try dictionary.getOptionalExpressionField("condition"),
+        mode: try dictionary.getOptionalExpressionField("mode")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-trigger_template." + field, representation: representation)

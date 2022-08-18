@@ -22,10 +22,10 @@ public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
         animationIn: try dictionary.getOptionalField("animation_in", templateToType: templateToType),
         animationOut: try dictionary.getOptionalField("animation_out", templateToType: templateToType),
         div: try dictionary.getOptionalField("div", templateToType: templateToType),
-        duration: try dictionary.getOptionalField("duration"),
+        duration: try dictionary.getOptionalExpressionField("duration"),
         id: try dictionary.getOptionalField("id"),
         offset: try dictionary.getOptionalField("offset", templateToType: templateToType),
-        position: try dictionary.getOptionalField("position")
+        position: try dictionary.getOptionalExpressionField("position")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-tooltip_template." + field, representation: representation)

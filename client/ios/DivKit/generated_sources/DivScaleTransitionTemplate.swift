@@ -21,12 +21,12 @@ public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializ
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      duration: try dictionary.getOptionalField("duration"),
-      interpolator: try dictionary.getOptionalField("interpolator"),
-      pivotX: try dictionary.getOptionalField("pivot_x"),
-      pivotY: try dictionary.getOptionalField("pivot_y"),
-      scale: try dictionary.getOptionalField("scale"),
-      startDelay: try dictionary.getOptionalField("start_delay")
+      duration: try dictionary.getOptionalExpressionField("duration"),
+      interpolator: try dictionary.getOptionalExpressionField("interpolator"),
+      pivotX: try dictionary.getOptionalExpressionField("pivot_x"),
+      pivotY: try dictionary.getOptionalExpressionField("pivot_y"),
+      scale: try dictionary.getOptionalExpressionField("scale"),
+      startDelay: try dictionary.getOptionalExpressionField("start_delay")
     )
   }
 

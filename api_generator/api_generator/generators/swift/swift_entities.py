@@ -628,11 +628,11 @@ class SwiftProperty(Property):
     def deserialization_expression(self, in_value_resolving: bool) -> str:
         mode = SwiftProperty.SwiftMode(GenerationMode.TEMPLATE, self.supports_expressions)
         if isinstance(self.property_type, Array):
-            array_or_field = 'Array'
+            type_suffix = 'Array'
             item_type = cast(SwiftPropertyType, self.property_type.property_type)
             type_str = item_type.declaration(mode)
         else:
-            array_or_field = 'Field'
+            type_suffix = 'Field'
             item_type = cast(SwiftPropertyType, self.property_type)
             type_str = item_type.declaration(mode)
         include_type = in_value_resolving and self.property_type.can_be_templated
@@ -641,7 +641,8 @@ class SwiftProperty(Property):
             template_to_type_arg = swift_template_deserializable_args(self.mode)
         else:
             template_to_type_arg = ''
-        optional_deserialization = 'Optional' if self.parsed_value_is_optional or self.mode.is_template else ''
+        optional_suffix = 'Optional' if self.parsed_value_is_optional or self.mode.is_template else ''
+        expression_suffix = 'Expression' if self.supports_expressions else ''
         if in_value_resolving:
             validator_arg_string = self.validator_arg(entity_name='ResolvedValue',
                                                       mode=GenerationMode.NORMAL_WITH_TEMPLATES)
@@ -650,7 +651,7 @@ class SwiftProperty(Property):
                                                       mode=self.mode)
         transformed = cast(SwiftPropertyType, self.property_type).transform_arg
         expr = f'"{self.dict_field}"{template_to_type_arg}{transformed}{validator_arg_string}{type_arg}'
-        return f'get{optional_deserialization}{array_or_field}({expr})'
+        return f'get{optional_suffix}{expression_suffix}{type_suffix}({expr})'
 
     def add_default_value_to(self, declaration: str) -> str:
         prop_type = cast(SwiftPropertyType, self.property_type)

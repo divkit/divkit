@@ -14,9 +14,9 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
-        alpha: try dictionary.getOptionalField("alpha"),
-        blur: try dictionary.getOptionalField("blur"),
-        color: try dictionary.getOptionalField("color", transform: Color.color(withHexString:)),
+        alpha: try dictionary.getOptionalExpressionField("alpha"),
+        blur: try dictionary.getOptionalExpressionField("blur"),
+        color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
         offset: try dictionary.getOptionalField("offset", templateToType: templateToType)
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {

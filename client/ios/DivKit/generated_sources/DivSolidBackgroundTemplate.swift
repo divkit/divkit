@@ -17,7 +17,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        color: try dictionary.getOptionalField("color", transform: Color.color(withHexString:))
+        color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:))
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-solid-background_template." + field, representation: representation)

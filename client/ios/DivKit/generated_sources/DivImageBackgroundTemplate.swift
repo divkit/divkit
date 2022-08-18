@@ -22,12 +22,12 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        alpha: try dictionary.getOptionalField("alpha"),
-        contentAlignmentHorizontal: try dictionary.getOptionalField("content_alignment_horizontal"),
-        contentAlignmentVertical: try dictionary.getOptionalField("content_alignment_vertical"),
-        imageUrl: try dictionary.getOptionalField("image_url", transform: URL.init(string:)),
-        preloadRequired: try dictionary.getOptionalField("preload_required"),
-        scale: try dictionary.getOptionalField("scale")
+        alpha: try dictionary.getOptionalExpressionField("alpha"),
+        contentAlignmentHorizontal: try dictionary.getOptionalExpressionField("content_alignment_horizontal"),
+        contentAlignmentVertical: try dictionary.getOptionalExpressionField("content_alignment_vertical"),
+        imageUrl: try dictionary.getOptionalExpressionField("image_url", transform: URL.init(string:)),
+        preloadRequired: try dictionary.getOptionalExpressionField("preload_required"),
+        scale: try dictionary.getOptionalExpressionField("scale")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-image-background_template." + field, representation: representation)

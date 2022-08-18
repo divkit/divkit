@@ -16,11 +16,11 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
     public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
       do {
         self.init(
-          fontSize: try dictionary.getOptionalField("font_size"),
-          fontSizeUnit: try dictionary.getOptionalField("font_size_unit"),
-          fontWeight: try dictionary.getOptionalField("font_weight"),
+          fontSize: try dictionary.getOptionalExpressionField("font_size"),
+          fontSizeUnit: try dictionary.getOptionalExpressionField("font_size_unit"),
+          fontWeight: try dictionary.getOptionalExpressionField("font_weight"),
           offset: try dictionary.getOptionalField("offset", templateToType: templateToType),
-          textColor: try dictionary.getOptionalField("text_color", transform: Color.color(withHexString:))
+          textColor: try dictionary.getOptionalExpressionField("text_color", transform: Color.color(withHexString:))
         )
       } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
         throw DeserializationError.invalidFieldRepresentation(field: "text_style_template." + field, representation: representation)
@@ -200,21 +200,21 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
-        alignmentHorizontal: try dictionary.getOptionalField("alignment_horizontal"),
-        alignmentVertical: try dictionary.getOptionalField("alignment_vertical"),
-        alpha: try dictionary.getOptionalField("alpha"),
+        alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
+        alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
+        alpha: try dictionary.getOptionalExpressionField("alpha"),
         background: try dictionary.getOptionalArray("background", templateToType: templateToType),
         border: try dictionary.getOptionalField("border", templateToType: templateToType),
-        columnSpan: try dictionary.getOptionalField("column_span"),
+        columnSpan: try dictionary.getOptionalExpressionField("column_span"),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
         height: try dictionary.getOptionalField("height", templateToType: templateToType),
         id: try dictionary.getOptionalField("id"),
         margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
-        maxValue: try dictionary.getOptionalField("max_value"),
-        minValue: try dictionary.getOptionalField("min_value"),
+        maxValue: try dictionary.getOptionalExpressionField("max_value"),
+        minValue: try dictionary.getOptionalExpressionField("min_value"),
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
-        rowSpan: try dictionary.getOptionalField("row_span"),
+        rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         secondaryValueAccessibility: try dictionary.getOptionalField("secondary_value_accessibility", templateToType: templateToType),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
         thumbSecondaryStyle: try dictionary.getOptionalField("thumb_secondary_style", templateToType: templateToType),
@@ -233,7 +233,7 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
         transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
         transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
         transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
-        visibility: try dictionary.getOptionalField("visibility"),
+        visibility: try dictionary.getOptionalExpressionField("visibility"),
         visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
         visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
         width: try dictionary.getOptionalField("width", templateToType: templateToType)

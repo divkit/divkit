@@ -13,9 +13,9 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
     public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
       do {
         self.init(
-          int: try dictionary.getOptionalField("int"),
-          nonOptional: try dictionary.getOptionalField("non_optional"),
-          url: try dictionary.getOptionalField("url", transform: URL.init(string:))
+          int: try dictionary.getOptionalExpressionField("int"),
+          nonOptional: try dictionary.getOptionalExpressionField("non_optional"),
+          url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
         )
       } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
         throw DeserializationError.invalidFieldRepresentation(field: "nested_template." + field, representation: representation)
@@ -123,9 +123,9 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      int: try dictionary.getOptionalField("int"),
+      int: try dictionary.getOptionalExpressionField("int"),
       nested: try dictionary.getOptionalField("nested", templateToType: templateToType),
-      url: try dictionary.getOptionalField("url", transform: URL.init(string:))
+      url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
     )
   }
 

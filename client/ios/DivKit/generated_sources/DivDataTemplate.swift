@@ -128,7 +128,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       self.init(
         logId: try dictionary.getOptionalField("log_id"),
         states: try dictionary.getOptionalArray("states", templateToType: templateToType, validator: Self.statesValidator),
-        transitionAnimationSelector: try dictionary.getOptionalField("transition_animation_selector"),
+        transitionAnimationSelector: try dictionary.getOptionalExpressionField("transition_animation_selector"),
         variableTriggers: try dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
         variables: try dictionary.getOptionalArray("variables", templateToType: templateToType)
       )

@@ -19,7 +19,7 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Template
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        array: try dictionary.getOptionalArray("array", transform: Color.color(withHexString:))
+        array: try dictionary.getOptionalExpressionArray("array", transform: Color.color(withHexString:))
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "entity_with_array_with_transform_template." + field, representation: representation)

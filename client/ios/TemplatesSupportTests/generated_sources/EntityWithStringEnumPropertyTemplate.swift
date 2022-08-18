@@ -21,7 +21,7 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue, Template
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        property: try dictionary.getOptionalField("property")
+        property: try dictionary.getOptionalExpressionField("property")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "entity_with_string_enum_property_template." + field, representation: representation)

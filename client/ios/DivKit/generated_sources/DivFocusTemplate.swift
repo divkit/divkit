@@ -15,11 +15,11 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
 
     public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
       self.init(
-        down: try dictionary.getOptionalField("down"),
-        forward: try dictionary.getOptionalField("forward"),
-        left: try dictionary.getOptionalField("left"),
-        right: try dictionary.getOptionalField("right"),
-        up: try dictionary.getOptionalField("up")
+        down: try dictionary.getOptionalExpressionField("down"),
+        forward: try dictionary.getOptionalExpressionField("forward"),
+        left: try dictionary.getOptionalExpressionField("left"),
+        right: try dictionary.getOptionalExpressionField("right"),
+        up: try dictionary.getOptionalExpressionField("up")
       )
     }
 

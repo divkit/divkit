@@ -20,12 +20,12 @@ public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeseriali
       self.init(
         downloadCallbacks: try dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
         logId: try dictionary.getOptionalField("log_id"),
-        logLimit: try dictionary.getOptionalField("log_limit"),
+        logLimit: try dictionary.getOptionalExpressionField("log_limit"),
         payload: try dictionary.getOptionalField("payload"),
-        referer: try dictionary.getOptionalField("referer", transform: URL.init(string:)),
-        url: try dictionary.getOptionalField("url", transform: URL.init(string:)),
-        visibilityDuration: try dictionary.getOptionalField("visibility_duration"),
-        visibilityPercentage: try dictionary.getOptionalField("visibility_percentage")
+        referer: try dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
+        url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:)),
+        visibilityDuration: try dictionary.getOptionalExpressionField("visibility_duration"),
+        visibilityPercentage: try dictionary.getOptionalExpressionField("visibility_percentage")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-visibility-action_template." + field, representation: representation)

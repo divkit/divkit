@@ -20,14 +20,14 @@ public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
-        duration: try dictionary.getOptionalField("duration"),
-        endValue: try dictionary.getOptionalField("end_value"),
-        interpolator: try dictionary.getOptionalField("interpolator"),
+        duration: try dictionary.getOptionalExpressionField("duration"),
+        endValue: try dictionary.getOptionalExpressionField("end_value"),
+        interpolator: try dictionary.getOptionalExpressionField("interpolator"),
         items: try dictionary.getOptionalArray("items", templateToType: templateToType),
-        name: try dictionary.getOptionalField("name"),
+        name: try dictionary.getOptionalExpressionField("name"),
         repeatCount: try dictionary.getOptionalField("repeat", templateToType: templateToType),
-        startDelay: try dictionary.getOptionalField("start_delay"),
-        startValue: try dictionary.getOptionalField("start_value")
+        startDelay: try dictionary.getOptionalExpressionField("start_delay"),
+        startValue: try dictionary.getOptionalExpressionField("start_value")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-animation_template." + field, representation: representation)

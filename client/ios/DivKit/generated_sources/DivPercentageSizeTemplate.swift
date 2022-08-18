@@ -17,7 +17,7 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        value: try dictionary.getOptionalField("value")
+        value: try dictionary.getOptionalExpressionField("value")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-percentage-size_template." + field, representation: representation)

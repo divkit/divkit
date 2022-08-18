@@ -12,8 +12,8 @@ public final class DivDimensionTemplate: TemplateValue, TemplateDeserializable {
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
-        unit: try dictionary.getOptionalField("unit"),
-        value: try dictionary.getOptionalField("value")
+        unit: try dictionary.getOptionalExpressionField("unit"),
+        value: try dictionary.getOptionalExpressionField("value")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-dimension_template." + field, representation: representation)

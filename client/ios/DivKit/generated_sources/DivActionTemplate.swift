@@ -16,7 +16,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
         self.init(
           action: try dictionary.getOptionalField("action", templateToType: templateToType),
           actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
-          text: try dictionary.getOptionalField("text")
+          text: try dictionary.getOptionalExpressionField("text")
         )
       } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
         throw DeserializationError.invalidFieldRepresentation(field: "menu_item_template." + field, representation: representation)
@@ -135,11 +135,11 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
       self.init(
         downloadCallbacks: try dictionary.getOptionalField("download_callbacks", templateToType: templateToType),
         logId: try dictionary.getOptionalField("log_id"),
-        logUrl: try dictionary.getOptionalField("log_url", transform: URL.init(string:)),
+        logUrl: try dictionary.getOptionalExpressionField("log_url", transform: URL.init(string:)),
         menuItems: try dictionary.getOptionalArray("menu_items", templateToType: templateToType),
         payload: try dictionary.getOptionalField("payload"),
-        referer: try dictionary.getOptionalField("referer", transform: URL.init(string:)),
-        url: try dictionary.getOptionalField("url", transform: URL.init(string:))
+        referer: try dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
+        url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-action_template." + field, representation: representation)

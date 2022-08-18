@@ -14,8 +14,8 @@ public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
 
     public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
       self.init(
-        color: try dictionary.getOptionalField("color", transform: Color.color(withHexString:)),
-        orientation: try dictionary.getOptionalField("orientation")
+        color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
+        orientation: try dictionary.getOptionalExpressionField("orientation")
       )
     }
 
@@ -124,12 +124,12 @@ public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
       action: try dictionary.getOptionalField("action", templateToType: templateToType),
       actionAnimation: try dictionary.getOptionalField("action_animation", templateToType: templateToType),
       actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
-      alignmentHorizontal: try dictionary.getOptionalField("alignment_horizontal"),
-      alignmentVertical: try dictionary.getOptionalField("alignment_vertical"),
-      alpha: try dictionary.getOptionalField("alpha"),
+      alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
+      alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
+      alpha: try dictionary.getOptionalExpressionField("alpha"),
       background: try dictionary.getOptionalArray("background", templateToType: templateToType),
       border: try dictionary.getOptionalField("border", templateToType: templateToType),
-      columnSpan: try dictionary.getOptionalField("column_span"),
+      columnSpan: try dictionary.getOptionalExpressionField("column_span"),
       delimiterStyle: try dictionary.getOptionalField("delimiter_style", templateToType: templateToType),
       doubletapActions: try dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
       extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
@@ -139,7 +139,7 @@ public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
       longtapActions: try dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
       margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
       paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
-      rowSpan: try dictionary.getOptionalField("row_span"),
+      rowSpan: try dictionary.getOptionalExpressionField("row_span"),
       selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
       tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
       transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
@@ -147,7 +147,7 @@ public final class DivSeparatorTemplate: TemplateValue, TemplateDeserializable {
       transitionIn: try dictionary.getOptionalField("transition_in", templateToType: templateToType),
       transitionOut: try dictionary.getOptionalField("transition_out", templateToType: templateToType),
       transitionTriggers: try dictionary.getOptionalArray("transition_triggers"),
-      visibility: try dictionary.getOptionalField("visibility"),
+      visibility: try dictionary.getOptionalExpressionField("visibility"),
       visibilityAction: try dictionary.getOptionalField("visibility_action", templateToType: templateToType),
       visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
       width: try dictionary.getOptionalField("width", templateToType: templateToType)

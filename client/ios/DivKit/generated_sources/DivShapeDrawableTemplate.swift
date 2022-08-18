@@ -19,7 +19,7 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        color: try dictionary.getOptionalField("color", transform: Color.color(withHexString:)),
+        color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
         shape: try dictionary.getOptionalField("shape", templateToType: templateToType),
         stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
       )

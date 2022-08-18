@@ -14,7 +14,7 @@ public final class DivTransformTemplate: TemplateValue, TemplateDeserializable {
     self.init(
       pivotX: try dictionary.getOptionalField("pivot_x", templateToType: templateToType),
       pivotY: try dictionary.getOptionalField("pivot_y", templateToType: templateToType),
-      rotation: try dictionary.getOptionalField("rotation")
+      rotation: try dictionary.getOptionalExpressionField("rotation")
     )
   }
 

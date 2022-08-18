@@ -18,8 +18,8 @@ public final class DivFixedSizeTemplate: TemplateValue, TemplateDeserializable {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        unit: try dictionary.getOptionalField("unit"),
-        value: try dictionary.getOptionalField("value")
+        unit: try dictionary.getOptionalExpressionField("unit"),
+        value: try dictionary.getOptionalExpressionField("value")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-fixed-size_template." + field, representation: representation)

@@ -13,9 +13,9 @@ public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
-        color: try dictionary.getOptionalField("color", transform: Color.color(withHexString:)),
-        unit: try dictionary.getOptionalField("unit"),
-        width: try dictionary.getOptionalField("width")
+        color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
+        unit: try dictionary.getOptionalExpressionField("unit"),
+        width: try dictionary.getOptionalExpressionField("width")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-stroke_template." + field, representation: representation)

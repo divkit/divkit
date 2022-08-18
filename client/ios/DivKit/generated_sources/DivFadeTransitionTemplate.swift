@@ -19,10 +19,10 @@ public final class DivFadeTransitionTemplate: TemplateValue, TemplateDeserializa
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      alpha: try dictionary.getOptionalField("alpha"),
-      duration: try dictionary.getOptionalField("duration"),
-      interpolator: try dictionary.getOptionalField("interpolator"),
-      startDelay: try dictionary.getOptionalField("start_delay")
+      alpha: try dictionary.getOptionalExpressionField("alpha"),
+      duration: try dictionary.getOptionalExpressionField("duration"),
+      interpolator: try dictionary.getOptionalExpressionField("interpolator"),
+      startDelay: try dictionary.getOptionalExpressionField("start_delay")
     )
   }
 

@@ -18,9 +18,9 @@ public final class DivChangeBoundsTransitionTemplate: TemplateValue, TemplateDes
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      duration: try dictionary.getOptionalField("duration"),
-      interpolator: try dictionary.getOptionalField("interpolator"),
-      startDelay: try dictionary.getOptionalField("start_delay")
+      duration: try dictionary.getOptionalExpressionField("duration"),
+      interpolator: try dictionary.getOptionalExpressionField("interpolator"),
+      startDelay: try dictionary.getOptionalExpressionField("start_delay")
     )
   }
 

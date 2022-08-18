@@ -16,7 +16,7 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        array: try dictionary.getOptionalArray("array")
+        array: try dictionary.getOptionalExpressionArray("array")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "entity_with_string_array_property_template." + field, representation: representation)

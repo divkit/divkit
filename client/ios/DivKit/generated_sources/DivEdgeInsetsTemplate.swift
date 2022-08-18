@@ -14,11 +14,11 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
 
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
-      bottom: try dictionary.getOptionalField("bottom"),
-      left: try dictionary.getOptionalField("left"),
-      right: try dictionary.getOptionalField("right"),
-      top: try dictionary.getOptionalField("top"),
-      unit: try dictionary.getOptionalField("unit")
+      bottom: try dictionary.getOptionalExpressionField("bottom"),
+      left: try dictionary.getOptionalExpressionField("left"),
+      right: try dictionary.getOptionalExpressionField("right"),
+      top: try dictionary.getOptionalExpressionField("top"),
+      unit: try dictionary.getOptionalExpressionField("unit")
     )
   }
 

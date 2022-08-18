@@ -16,7 +16,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      constrained: try dictionary.getOptionalField("constrained")
+      constrained: try dictionary.getOptionalExpressionField("constrained")
     )
   }
 

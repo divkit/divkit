@@ -16,7 +16,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      weight: try dictionary.getOptionalField("weight")
+      weight: try dictionary.getOptionalExpressionField("weight")
     )
   }
 

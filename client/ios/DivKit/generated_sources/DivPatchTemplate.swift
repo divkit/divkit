@@ -115,7 +115,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
     do {
       self.init(
         changes: try dictionary.getOptionalArray("changes", templateToType: templateToType),
-        mode: try dictionary.getOptionalField("mode")
+        mode: try dictionary.getOptionalExpressionField("mode")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-patch_template." + field, representation: representation)

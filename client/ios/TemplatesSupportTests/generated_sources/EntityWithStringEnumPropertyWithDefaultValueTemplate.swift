@@ -20,7 +20,7 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      value: try dictionary.getOptionalField("value")
+      value: try dictionary.getOptionalExpressionField("value")
     )
   }
 

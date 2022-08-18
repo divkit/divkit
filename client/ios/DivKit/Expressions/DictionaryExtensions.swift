@@ -4,7 +4,7 @@ import Serialization
 import TemplatesSupport
 
 extension Dictionary where Key == String, Value == Any {
-  public func getOptionalField(
+  func getOptionalExpressionField(
     _ key: String
   ) throws -> Field<Expression<CFString>>? {
     Field.makeOptional(
@@ -16,25 +16,19 @@ extension Dictionary where Key == String, Value == Any {
     )
   }
 
-  public func getOptionalField<T: RawRepresentable>(
+  func getOptionalExpressionField<T: RawRepresentable>(
     _ key: String
   ) throws -> Field<Expression<T>>? {
-    try getOptionalField(
-      key,
-      transform: T.init(rawValue:)
-    )
+    try getOptionalExpressionField(key, transform: T.init(rawValue:))
   }
 
-  public func getOptionalField<T: ValidSerializationValue>(
+  func getOptionalExpressionField<T: ValidSerializationValue>(
     _ key: String
   ) throws -> Field<Expression<T>>? {
-    try getOptionalField(
-      key,
-      transform: { expressionTransform($0, transform: { $0 as T }) }
-    )
+    try getOptionalExpressionField(key, transform: { $0 as T })
   }
 
-  public func getOptionalField<T, U>(
+  func getOptionalExpressionField<T, U>(
     _ key: String,
     transform: (U) -> T?,
     validator: AnyValueValidator<Expression<T>>? = nil
@@ -46,7 +40,13 @@ extension Dictionary where Key == String, Value == Any {
     )
   }
 
-  public func getOptionalArray<T, U>(
+  func getOptionalExpressionArray<T: ValidSerializationValue>(
+    _ key: String
+  ) throws -> Field<[Expression<T>]>? {
+    try getOptionalExpressionArray(key, transform: { $0 as T })
+  }
+
+  func getOptionalExpressionArray<T, U>(
     _ key: String,
     transform: (U) -> T?,
     validator: AnyArrayValueValidator<Expression<T>>? = nil

@@ -11,7 +11,7 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
     public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
       do {
         self.init(
-          value: try dictionary.getOptionalField("value")
+          value: try dictionary.getOptionalExpressionField("value")
         )
       } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
         throw DeserializationError.invalidFieldRepresentation(field: "property_template." + field, representation: representation)

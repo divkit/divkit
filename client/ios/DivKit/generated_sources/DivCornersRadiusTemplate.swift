@@ -13,10 +13,10 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
 
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
-      bottomLeft: try dictionary.getOptionalField("bottom-left"),
-      bottomRight: try dictionary.getOptionalField("bottom-right"),
-      topLeft: try dictionary.getOptionalField("top-left"),
-      topRight: try dictionary.getOptionalField("top-right")
+      bottomLeft: try dictionary.getOptionalExpressionField("bottom-left"),
+      bottomRight: try dictionary.getOptionalExpressionField("bottom-right"),
+      topLeft: try dictionary.getOptionalExpressionField("top-left"),
+      topRight: try dictionary.getOptionalExpressionField("top-right")
     )
   }
 

@@ -11,7 +11,7 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
-        ratio: try dictionary.getOptionalField("ratio")
+        ratio: try dictionary.getOptionalExpressionField("ratio")
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
       throw DeserializationError.invalidFieldRepresentation(field: "div-aspect_template." + field, representation: representation)

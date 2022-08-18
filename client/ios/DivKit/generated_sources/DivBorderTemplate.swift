@@ -14,9 +14,9 @@ public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
 
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
-      cornerRadius: try dictionary.getOptionalField("corner_radius"),
+      cornerRadius: try dictionary.getOptionalExpressionField("corner_radius"),
       cornersRadius: try dictionary.getOptionalField("corners_radius", templateToType: templateToType),
-      hasShadow: try dictionary.getOptionalField("has_shadow"),
+      hasShadow: try dictionary.getOptionalExpressionField("has_shadow"),
       shadow: try dictionary.getOptionalField("shadow", templateToType: templateToType),
       stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
     )

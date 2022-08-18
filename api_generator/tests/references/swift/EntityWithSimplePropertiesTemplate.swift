@@ -23,15 +23,15 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
   public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-      boolean: try dictionary.getOptionalField("boolean"),
-      booleanInt: try dictionary.getOptionalField("boolean_int"),
-      color: try dictionary.getOptionalField("color", transform: Color.color(withHexString:)),
-      double: try dictionary.getOptionalField("double"),
+      boolean: try dictionary.getOptionalExpressionField("boolean"),
+      booleanInt: try dictionary.getOptionalExpressionField("boolean_int"),
+      color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
+      double: try dictionary.getOptionalExpressionField("double"),
       id: try dictionary.getOptionalField("id"),
-      integer: try dictionary.getOptionalField("integer"),
-      positiveInteger: try dictionary.getOptionalField("positive_integer"),
-      string: try dictionary.getOptionalField("string"),
-      url: try dictionary.getOptionalField("url", transform: URL.init(string:))
+      integer: try dictionary.getOptionalExpressionField("integer"),
+      positiveInteger: try dictionary.getOptionalExpressionField("positive_integer"),
+      string: try dictionary.getOptionalExpressionField("string"),
+      url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
     )
   }
 

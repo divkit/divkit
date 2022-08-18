@@ -75,7 +75,7 @@ let package = Package(
       ],
       path: "DivKit",
       exclude: [
-        "generator_config",
+        "generator_config.json",
       ],
       swiftSettings: [
         .unsafeFlags(["-warnings-as-errors"])

@@ -16,7 +16,7 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
       do {
         self.init(
           entity: try dictionary.getOptionalField("entity", templateToType: templateToType),
-          property: try dictionary.getOptionalField("property")
+          property: try dictionary.getOptionalExpressionField("property")
         )
       } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
         throw DeserializationError.invalidFieldRepresentation(field: "item_template." + field, representation: representation)
