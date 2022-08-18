@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -30,122 +28,66 @@ public final class DivTransformTemplate: TemplateValue, TemplateDeserializable {
     self.rotation = rotation
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivTransformTemplate?
-  ) -> DeserializationResult<DivTransform> {
-    let pivotXValue = parent?.pivotX?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.pivotXValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
-    let pivotYValue = parent?.pivotY?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.pivotYValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivTransformTemplate?) -> DeserializationResult<DivTransform> {
+    let pivotXValue = parent?.pivotX?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotXValidator, useOnlyLinks: true) ?? .noValue
+    let pivotYValue = parent?.pivotY?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotYValidator, useOnlyLinks: true) ?? .noValue
     let rotationValue = parent?.rotation?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
-      pivotXValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "pivot_x", level: .warning)) },
-      pivotYValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "pivot_y", level: .warning)) },
-      rotationValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "rotation", level: .warning)) }
+      pivotXValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "pivot_x", level: .warning)) },
+      pivotYValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "pivot_y", level: .warning)) },
+      rotationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "rotation", level: .warning)) }
     )
     let result = DivTransform(
       pivotX: pivotXValue.value,
       pivotY: pivotYValue.value,
       rotation: rotationValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivTransformTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivTransform> {
+  public static func resolveValue(context: Context, parent: DivTransformTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTransform> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var pivotXValue: DeserializationResult<DivPivot> = .noValue
     var pivotYValue: DeserializationResult<DivPivot> = .noValue
-    var rotationValue: DeserializationResult<Expression<Double>> = parent?.rotation?
-      .value() ?? .noValue
+    var rotationValue: DeserializationResult<Expression<Double>> = parent?.rotation?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "pivot_x":
-        pivotXValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.pivotXValidator,
-          type: DivPivotTemplate.self
-        ).merged(with: pivotXValue)
+        pivotXValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.pivotXValidator, type: DivPivotTemplate.self).merged(with: pivotXValue)
       case "pivot_y":
-        pivotYValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.pivotYValidator,
-          type: DivPivotTemplate.self
-        ).merged(with: pivotYValue)
+        pivotYValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.pivotYValidator, type: DivPivotTemplate.self).merged(with: pivotYValue)
       case "rotation":
         rotationValue = deserialize(__dictValue).merged(with: rotationValue)
       case parent?.pivotX?.link:
-        pivotXValue = pivotXValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.pivotXValidator,
-          type: DivPivotTemplate.self
-        ))
+        pivotXValue = pivotXValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.pivotXValidator, type: DivPivotTemplate.self))
       case parent?.pivotY?.link:
-        pivotYValue = pivotYValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.pivotYValidator,
-          type: DivPivotTemplate.self
-        ))
+        pivotYValue = pivotYValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.pivotYValidator, type: DivPivotTemplate.self))
       case parent?.rotation?.link:
         rotationValue = rotationValue.merged(with: deserialize(__dictValue))
       default: break
       }
     }
     if let parent = parent {
-      pivotXValue = pivotXValue.merged(with: parent.pivotX?.resolveOptionalValue(
-        context: context,
-        validator: ResolvedValue.pivotXValidator,
-        useOnlyLinks: true
-      ))
-      pivotYValue = pivotYValue.merged(with: parent.pivotY?.resolveOptionalValue(
-        context: context,
-        validator: ResolvedValue.pivotYValidator,
-        useOnlyLinks: true
-      ))
+      pivotXValue = pivotXValue.merged(with: parent.pivotX?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotXValidator, useOnlyLinks: true))
+      pivotYValue = pivotYValue.merged(with: parent.pivotY?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotYValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      pivotXValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "pivot_x", level: .warning)) },
-      pivotYValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "pivot_y", level: .warning)) },
-      rotationValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "rotation", level: .warning)) }
+      pivotXValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "pivot_x", level: .warning)) },
+      pivotYValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "pivot_y", level: .warning)) },
+      rotationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "rotation", level: .warning)) }
     )
     let result = DivTransform(
       pivotX: pivotXValue.value,
       pivotY: pivotYValue.value,
       rotation: rotationValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> DivTransformTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> DivTransformTemplate {
+    return self
   }
 
   public func resolveParent(templates: Templates) throws -> DivTransformTemplate {

@@ -1,17 +1,23 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithOptionalComplexProperty {
   public final class Property {
-    public let value: URL
+    public let value: Expression<URL>
 
-    init(value: URL) {
+    public func resolveValue(_ resolver: ExpressionResolver) -> URL? {
+      resolver.resolveStringBasedValue(expression: value, initializer: URL.init(string:))
+    }
+
+    init(
+      value: Expression<URL>
+    ) {
       self.value = value
     }
   }
@@ -22,17 +28,16 @@ public final class EntityWithOptionalComplexProperty {
   static let propertyValidator: AnyValueValidator<EntityWithOptionalComplexProperty.Property> =
     makeNoOpValueValidator()
 
-  init(property: Property? = nil) {
+  init(
+    property: Property? = nil
+  ) {
     self.property = property
   }
 }
 
 #if DEBUG
 extension EntityWithOptionalComplexProperty: Equatable {
-  public static func ==(
-    lhs: EntityWithOptionalComplexProperty,
-    rhs: EntityWithOptionalComplexProperty
-  ) -> Bool {
+  public static func ==(lhs: EntityWithOptionalComplexProperty, rhs: EntityWithOptionalComplexProperty) -> Bool {
     guard
       lhs.property == rhs.property
     else {
@@ -43,12 +48,18 @@ extension EntityWithOptionalComplexProperty: Equatable {
 }
 #endif
 
+extension EntityWithOptionalComplexProperty: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["property"] = property?.toDictionary()
+    return result
+  }
+}
+
 #if DEBUG
 extension EntityWithOptionalComplexProperty.Property: Equatable {
-  public static func ==(
-    lhs: EntityWithOptionalComplexProperty.Property,
-    rhs: EntityWithOptionalComplexProperty.Property
-  ) -> Bool {
+  public static func ==(lhs: EntityWithOptionalComplexProperty.Property, rhs: EntityWithOptionalComplexProperty.Property) -> Bool {
     guard
       lhs.value == rhs.value
     else {
@@ -58,3 +69,11 @@ extension EntityWithOptionalComplexProperty.Property: Equatable {
   }
 }
 #endif
+
+extension EntityWithOptionalComplexProperty.Property: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["value"] = value.toValidSerializationValue()
+    return result
+  }
+}

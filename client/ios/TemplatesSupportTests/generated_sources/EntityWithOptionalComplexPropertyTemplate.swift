@@ -1,55 +1,39 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
-public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue,
-  TemplateDeserializable {
+public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue, TemplateDeserializable {
   public final class PropertyTemplate: TemplateValue, TemplateDeserializable {
-    public let value: Field<URL>?
+    public let value: Field<Expression<URL>>?
 
-    public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
       do {
         self.init(
           value: try dictionary.getOptionalField("value", transform: URL.init(string:))
         )
-      } catch let DeserializationError.invalidFieldRepresentation(
-        field: field,
-        representation: representation
-      ) {
-        throw DeserializationError.invalidFieldRepresentation(
-          field: "property_template." + field,
-          representation: representation
-        )
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "property_template." + field, representation: representation)
       }
     }
 
-    init(value: Field<URL>? = nil) {
+    init(
+      value: Field<Expression<URL>>? = nil
+    ) {
       self.value = value
     }
 
-    private static func resolveOnlyLinks(
-      context: Context,
-      parent: PropertyTemplate?
-    )
-      -> DeserializationResult<EntityWithOptionalComplexProperty.Property> {
-      let valueValue = parent?.value?
-        .resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
+    private static func resolveOnlyLinks(context: Context, parent: PropertyTemplate?) -> DeserializationResult<EntityWithOptionalComplexProperty.Property> {
+      let valueValue = parent?.value?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
       var errors = mergeErrors(
-        valueValue.errorsOrWarnings?
-          .map { .right($0.asError(deserializing: "value", level: .error)) }
+        valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .error)) }
       )
       if case .noValue = valueValue {
-        errors
-          .append(.right(FieldError(
-            fieldName: "value",
-            level: .error,
-            error: .requiredFieldIsMissing
-          )))
+        errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
       }
       guard
         let valueNonNil = valueValue.value
@@ -59,41 +43,28 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue,
       let result = EntityWithOptionalComplexProperty.Property(
         value: valueNonNil
       )
-      return errors
-        .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(
-      context: Context,
-      parent: PropertyTemplate?,
-      useOnlyLinks: Bool
-    ) -> DeserializationResult<EntityWithOptionalComplexProperty.Property> {
+    public static func resolveValue(context: Context, parent: PropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalComplexProperty.Property> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
-      var valueValue: DeserializationResult<URL> = parent?.value?.value() ?? .noValue
+      var valueValue: DeserializationResult<Expression<URL>> = parent?.value?.value() ?? .noValue
       context.templateData.forEach { key, __dictValue in
         switch key {
         case "value":
-          valueValue = deserialize(__dictValue, transform: URL.init(string:))
-            .merged(with: valueValue)
+          valueValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: valueValue)
         case parent?.value?.link:
-          valueValue = valueValue
-            .merged(with: deserialize(__dictValue, transform: URL.init(string:)))
+          valueValue = valueValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
         default: break
         }
       }
       var errors = mergeErrors(
-        valueValue.errorsOrWarnings?
-          .map { Either.right($0.asError(deserializing: "value", level: .error)) }
+        valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .error)) }
       )
       if case .noValue = valueValue {
-        errors
-          .append(.right(FieldError(
-            fieldName: "value",
-            level: .error,
-            error: .requiredFieldIsMissing
-          )))
+        errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
       }
       guard
         let valueNonNil = valueValue.value
@@ -103,16 +74,15 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue,
       let result = EntityWithOptionalComplexProperty.Property(
         value: valueNonNil
       )
-      return errors
-        .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates _: Templates) throws -> PropertyTemplate {
-      self
+    private func mergedWithParent(templates: Templates) throws -> PropertyTemplate {
+      return self
     }
 
     public func resolveParent(templates: Templates) throws -> PropertyTemplate {
-      try mergedWithParent(templates: templates)
+      return try mergedWithParent(templates: templates)
     }
   }
 
@@ -138,31 +108,18 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue,
     self.property = property
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: EntityWithOptionalComplexPropertyTemplate?
-  ) -> DeserializationResult<EntityWithOptionalComplexProperty> {
-    let propertyValue = parent?.property?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.propertyValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithOptionalComplexPropertyTemplate?) -> DeserializationResult<EntityWithOptionalComplexProperty> {
+    let propertyValue = parent?.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      propertyValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "property", level: .warning)) }
+      propertyValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "property", level: .warning)) }
     )
     let result = EntityWithOptionalComplexProperty(
       property: propertyValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityWithOptionalComplexPropertyTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<EntityWithOptionalComplexProperty> {
+  public static func resolveValue(context: Context, parent: EntityWithOptionalComplexPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalComplexProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -170,47 +127,27 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue,
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "property":
-        propertyValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.propertyValidator,
-          type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self
-        ).merged(with: propertyValue)
+        propertyValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.propertyValidator, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self).merged(with: propertyValue)
       case parent?.property?.link:
-        propertyValue = propertyValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.propertyValidator,
-          type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self
-        ))
+        propertyValue = propertyValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.propertyValidator, type: EntityWithOptionalComplexPropertyTemplate.PropertyTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      propertyValue = propertyValue.merged(with: parent.property?.resolveOptionalValue(
-        context: context,
-        validator: ResolvedValue.propertyValidator,
-        useOnlyLinks: true
-      ))
+      propertyValue = propertyValue.merged(with: parent.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      propertyValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "property", level: .warning)) }
+      propertyValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "property", level: .warning)) }
     )
     let result = EntityWithOptionalComplexProperty(
       property: propertyValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws
-    -> EntityWithOptionalComplexPropertyTemplate {
+  private func mergedWithParent(templates: Templates) throws -> EntityWithOptionalComplexPropertyTemplate {
     guard let parent = parent, parent != Self.type else { return self }
-    guard let parentTemplate = templates[parent] as? EntityWithOptionalComplexPropertyTemplate
-    else {
+    guard let parentTemplate = templates[parent] as? EntityWithOptionalComplexPropertyTemplate else {
       throw DeserializationError.unknownType(type: parent)
     }
     let mergedParent = try parentTemplate.mergedWithParent(templates: templates)
@@ -221,8 +158,7 @@ public final class EntityWithOptionalComplexPropertyTemplate: TemplateValue,
     )
   }
 
-  public func resolveParent(templates: Templates) throws
-    -> EntityWithOptionalComplexPropertyTemplate {
+  public func resolveParent(templates: Templates) throws -> EntityWithOptionalComplexPropertyTemplate {
     let merged = try mergedWithParent(templates: templates)
 
     return EntityWithOptionalComplexPropertyTemplate(

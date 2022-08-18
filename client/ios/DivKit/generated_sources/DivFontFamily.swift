@@ -1,13 +1,11 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public enum DivFontFamily: String, CaseIterable {
-  case text
-  case display
+  case text = "text"
+  case display = "display"
 }

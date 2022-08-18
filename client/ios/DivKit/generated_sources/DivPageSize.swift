@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -11,7 +9,9 @@ public final class DivPageSize {
   public static let type: String = "percentage"
   public let pageWidth: DivPercentageSize
 
-  init(pageWidth: DivPercentageSize) {
+  init(
+    pageWidth: DivPercentageSize
+  ) {
     self.pageWidth = pageWidth
   }
 }

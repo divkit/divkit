@@ -1,19 +1,17 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivAnimation {
   public enum Name: String, CaseIterable {
-    case fade
-    case translate
-    case scale
-    case native
-    case set
+    case fade = "fade"
+    case translate = "translate"
+    case scale = "scale"
+    case native = "native"
+    case set = "set"
     case noAnimation = "no_animation"
   }
 
@@ -35,10 +33,7 @@ public final class DivAnimation {
   }
 
   public func resolveInterpolator(_ resolver: ExpressionResolver) -> DivAnimationInterpolator {
-    resolver.resolveStringBasedValue(
-      expression: interpolator,
-      initializer: DivAnimationInterpolator.init(rawValue:)
-    ) ?? DivAnimationInterpolator.spring
+    resolver.resolveStringBasedValue(expression: interpolator, initializer: DivAnimationInterpolator.init(rawValue:)) ?? DivAnimationInterpolator.spring
   }
 
   public func resolveName(_ resolver: ExpressionResolver) -> Name? {

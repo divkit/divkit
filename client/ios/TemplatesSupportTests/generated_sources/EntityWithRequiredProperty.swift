@@ -1,20 +1,26 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithRequiredProperty {
   public static let type: String = "entity_with_required_property"
-  public let property: String // at least 1 char
+  public let property: Expression<String> // at least 1 char
+
+  public func resolveProperty(_ resolver: ExpressionResolver) -> String? {
+    resolver.resolveStringBasedValue(expression: property, initializer: { $0 })
+  }
 
   static let propertyValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  init(property: String) {
+  init(
+    property: Expression<String>
+  ) {
     self.property = property
   }
 }
@@ -31,3 +37,12 @@ extension EntityWithRequiredProperty: Equatable {
   }
 }
 #endif
+
+extension EntityWithRequiredProperty: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["property"] = property.toValidSerializationValue()
+    return result
+  }
+}

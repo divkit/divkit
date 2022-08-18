@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -15,20 +13,14 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         value: try dictionary.getOptionalField("value")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-percentage-size_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-percentage-size_template." + field, representation: representation)
     }
   }
 
@@ -40,24 +32,13 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
     self.value = value
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivPercentageSizeTemplate?
-  ) -> DeserializationResult<DivPercentageSize> {
-    let valueValue = parent?.value?.resolveValue(
-      context: context,
-      validator: ResolvedValue.valueValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivPercentageSizeTemplate?) -> DeserializationResult<DivPercentageSize> {
+    let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .error)) }
     )
     if case .noValue = valueValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "value",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let valueNonNil = valueValue.value
@@ -67,15 +48,10 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
     let result = DivPercentageSize(
       value: valueNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivPercentageSizeTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivPercentageSize> {
+  public static func resolveValue(context: Context, parent: DivPercentageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPercentageSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -83,25 +59,17 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "value":
-        valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator)
-          .merged(with: valueValue)
+        valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
       case parent?.value?.link:
-        valueValue = valueValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.valueValidator))
+        valueValue = valueValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.valueValidator))
       default: break
       }
     }
     var errors = mergeErrors(
-      valueValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "value", level: .error)) }
+      valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .error)) }
     )
     if case .noValue = valueValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "value",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let valueNonNil = valueValue.value
@@ -111,8 +79,7 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
     let result = DivPercentageSize(
       value: valueNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivPercentageSizeTemplate {
@@ -129,6 +96,6 @@ public final class DivPercentageSizeTemplate: TemplateValue, TemplateDeserializa
   }
 
   public func resolveParent(templates: Templates) throws -> DivPercentageSizeTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

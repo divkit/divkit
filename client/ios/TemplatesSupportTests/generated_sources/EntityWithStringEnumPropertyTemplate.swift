@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -12,52 +12,37 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue, Template
 
   public static let type: String = "entity_with_string_enum_property"
   public let parent: String? // at least 1 char
-  public let property: Field<Property>?
+  public let property: Field<Expression<Property>>?
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         property: try dictionary.getOptionalField("property")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "entity_with_string_enum_property_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_string_enum_property_template." + field, representation: representation)
     }
   }
 
   init(
     parent: String?,
-    property: Field<Property>? = nil
+    property: Field<Expression<Property>>? = nil
   ) {
     self.parent = parent
     self.property = property
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: EntityWithStringEnumPropertyTemplate?
-  ) -> DeserializationResult<EntityWithStringEnumProperty> {
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithStringEnumPropertyTemplate?) -> DeserializationResult<EntityWithStringEnumProperty> {
     let propertyValue = parent?.property?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
-      propertyValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "property", level: .error)) }
+      propertyValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "property", level: .error)) }
     )
     if case .noValue = propertyValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "property",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "property", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let propertyNonNil = propertyValue.value
@@ -67,20 +52,14 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue, Template
     let result = EntityWithStringEnumProperty(
       property: propertyNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityWithStringEnumPropertyTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<EntityWithStringEnumProperty> {
+  public static func resolveValue(context: Context, parent: EntityWithStringEnumPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithStringEnumProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var propertyValue: DeserializationResult<EntityWithStringEnumProperty.Property> = parent?
-      .property?.value() ?? .noValue
+    var propertyValue: DeserializationResult<Expression<EntityWithStringEnumProperty.Property>> = parent?.property?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "property":
@@ -91,16 +70,10 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue, Template
       }
     }
     var errors = mergeErrors(
-      propertyValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "property", level: .error)) }
+      propertyValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "property", level: .error)) }
     )
     if case .noValue = propertyValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "property",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "property", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let propertyNonNil = propertyValue.value
@@ -110,12 +83,10 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue, Template
     let result = EntityWithStringEnumProperty(
       property: propertyNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws
-    -> EntityWithStringEnumPropertyTemplate {
+  private func mergedWithParent(templates: Templates) throws -> EntityWithStringEnumPropertyTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithStringEnumPropertyTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -129,6 +100,6 @@ public final class EntityWithStringEnumPropertyTemplate: TemplateValue, Template
   }
 
   public func resolveParent(templates: Templates) throws -> EntityWithStringEnumPropertyTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

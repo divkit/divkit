@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -21,14 +19,8 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
         condition: try dictionary.getOptionalField("condition"),
         mode: try dictionary.getOptionalField("mode")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-trigger_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-trigger_template." + field, representation: representation)
     }
   }
 
@@ -42,42 +34,20 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
     self.mode = mode
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivTriggerTemplate?
-  ) -> DeserializationResult<DivTrigger> {
-    let actionsValue = parent?.actions?.resolveValue(
-      context: context,
-      validator: ResolvedValue.actionsValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivTriggerTemplate?) -> DeserializationResult<DivTrigger> {
+    let actionsValue = parent?.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
     let conditionValue = parent?.condition?.resolveValue(context: context) ?? .noValue
-    let modeValue = parent?.mode?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.modeValidator
-    ) ?? .noValue
+    let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
     var errors = mergeErrors(
-      actionsValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "actions", level: .error)) },
-      conditionValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "condition", level: .error)) },
+      actionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "actions", level: .error)) },
+      conditionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "condition", level: .error)) },
       modeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "mode", level: .warning)) }
     )
     if case .noValue = actionsValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "actions",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "actions", level: .error, error: .requiredFieldIsMissing)))
     }
     if case .noValue = conditionValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "condition",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "condition", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let actionsNonNil = actionsValue.value,
@@ -90,84 +60,46 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
       condition: conditionNonNil,
       mode: modeValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivTriggerTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivTrigger> {
+  public static func resolveValue(context: Context, parent: DivTriggerTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivTrigger> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var actionsValue: DeserializationResult<[DivAction]> = .noValue
-    var conditionValue: DeserializationResult<Expression<Bool>> = parent?.condition?
-      .value() ?? .noValue
-    var modeValue: DeserializationResult<Expression<DivTrigger.Mode>> = parent?.mode?
-      .value() ?? .noValue
+    var conditionValue: DeserializationResult<Expression<Bool>> = parent?.condition?.value() ?? .noValue
+    var modeValue: DeserializationResult<Expression<DivTrigger.Mode>> = parent?.mode?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "actions":
-        actionsValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.actionsValidator,
-          type: DivActionTemplate.self
-        ).merged(with: actionsValue)
+        actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self).merged(with: actionsValue)
       case "condition":
         conditionValue = deserialize(__dictValue).merged(with: conditionValue)
       case "mode":
-        modeValue = deserialize(__dictValue, validator: ResolvedValue.modeValidator)
-          .merged(with: modeValue)
+        modeValue = deserialize(__dictValue, validator: ResolvedValue.modeValidator).merged(with: modeValue)
       case parent?.actions?.link:
-        actionsValue = actionsValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.actionsValidator,
-          type: DivActionTemplate.self
-        ))
+        actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self))
       case parent?.condition?.link:
         conditionValue = conditionValue.merged(with: deserialize(__dictValue))
       case parent?.mode?.link:
-        modeValue = modeValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.modeValidator))
+        modeValue = modeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.modeValidator))
       default: break
       }
     }
     if let parent = parent {
-      actionsValue = actionsValue.merged(with: parent.actions?.resolveValue(
-        context: context,
-        validator: ResolvedValue.actionsValidator,
-        useOnlyLinks: true
-      ))
+      actionsValue = actionsValue.merged(with: parent.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      actionsValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "actions", level: .error)) },
-      conditionValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "condition", level: .error)) },
-      modeValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "mode", level: .warning)) }
+      actionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "actions", level: .error)) },
+      conditionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "condition", level: .error)) },
+      modeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "mode", level: .warning)) }
     )
     if case .noValue = actionsValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "actions",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "actions", level: .error, error: .requiredFieldIsMissing)))
     }
     if case .noValue = conditionValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "condition",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "condition", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let actionsNonNil = actionsValue.value,
@@ -180,12 +112,11 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
       condition: conditionNonNil,
       mode: modeValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> DivTriggerTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> DivTriggerTemplate {
+    return self
   }
 
   public func resolveParent(templates: Templates) throws -> DivTriggerTemplate {

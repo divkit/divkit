@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -44,19 +42,12 @@ public final class DivGrid: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -71,20 +62,12 @@ public final class DivGrid: DivBase {
     resolver.resolveNumericValue(expression: columnSpan)
   }
 
-  public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(
-      expression: contentAlignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    ) ?? DivAlignmentHorizontal.left
+  public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
+    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.left
   }
 
-  public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver)
-    -> DivAlignmentVertical {
-    resolver.resolveStringBasedValue(
-      expression: contentAlignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    ) ?? DivAlignmentVertical.top
+  public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
+    resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.top
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -92,10 +75,7 @@ public final class DivGrid: DivBase {
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -238,12 +218,7 @@ public final class DivGrid: DivBase {
   ) {
     self.accessibility = accessibility ?? DivAccessibility()
     self.action = action
-    self.actionAnimation = actionAnimation ?? DivAnimation(
-      duration: .value(100),
-      endValue: .value(0.6),
-      name: .value(.fade),
-      startValue: .value(1)
-    )
+    self.actionAnimation = actionAnimation ?? DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
     self.actions = actions
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical

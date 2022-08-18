@@ -1,30 +1,33 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithStringArrayProperty {
   public static let type: String = "entity_with_string_array_property"
-  public let array: [String] // at least 1 elements
+  public let array: [Expression<String>] // at least 1 elements
 
-  static let arrayValidator: AnyArrayValueValidator<String> =
+  public func resolveArray(_ resolver: ExpressionResolver) -> [String]? {
+    array.map { resolver.resolveStringBasedValue(expression: $0, initializer: { $0 }) }.compactMap { $0 }
+  }
+
+  static let arrayValidator: AnyArrayValueValidator<Expression<String>> =
     makeArrayValidator(minItems: 1)
 
-  init(array: [String]) {
+  init(
+    array: [Expression<String>]
+  ) {
     self.array = array
   }
 }
 
 #if DEBUG
 extension EntityWithStringArrayProperty: Equatable {
-  public static func ==(
-    lhs: EntityWithStringArrayProperty,
-    rhs: EntityWithStringArrayProperty
-  ) -> Bool {
+  public static func ==(lhs: EntityWithStringArrayProperty, rhs: EntityWithStringArrayProperty) -> Bool {
     guard
       lhs.array == rhs.array
     else {
@@ -34,3 +37,12 @@ extension EntityWithStringArrayProperty: Equatable {
   }
 }
 #endif
+
+extension EntityWithStringArrayProperty: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["array"] = array.map { $0.toValidSerializationValue() }
+    return result
+  }
+}

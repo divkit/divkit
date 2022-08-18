@@ -1,33 +1,26 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivSeparator: DivBase {
   public final class DelimiterStyle {
     public enum Orientation: String, CaseIterable {
-      case vertical
-      case horizontal
+      case vertical = "vertical"
+      case horizontal = "horizontal"
     }
 
     public let color: Expression<Color> // default value: #14000000
     public let orientation: Expression<Orientation> // default value: horizontal
 
     public func resolveColor(_ resolver: ExpressionResolver) -> Color {
-      resolver
-        .resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:)) ??
-        Color.colorWithARGBHexCode(0x14_00_00_00)
+      resolver.resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x14000000)
     }
 
     public func resolveOrientation(_ resolver: ExpressionResolver) -> Orientation {
-      resolver.resolveStringBasedValue(
-        expression: orientation,
-        initializer: Orientation.init(rawValue:)
-      ) ?? Orientation.horizontal
+      resolver.resolveStringBasedValue(expression: orientation, initializer: Orientation.init(rawValue:)) ?? Orientation.horizontal
     }
 
     static let colorValidator: AnyValueValidator<Color> =
@@ -40,7 +33,7 @@ public final class DivSeparator: DivBase {
       color: Expression<Color>? = nil,
       orientation: Expression<Orientation>? = nil
     ) {
-      self.color = color ?? .value(Color.colorWithARGBHexCode(0x14_00_00_00))
+      self.color = color ?? .value(Color.colorWithARGBHexCode(0x14000000))
       self.orientation = orientation ?? .value(.horizontal)
     }
   }
@@ -78,19 +71,12 @@ public final class DivSeparator: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -106,10 +92,7 @@ public final class DivSeparator: DivBase {
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -240,12 +223,7 @@ public final class DivSeparator: DivBase {
   ) {
     self.accessibility = accessibility ?? DivAccessibility()
     self.action = action
-    self.actionAnimation = actionAnimation ?? DivAnimation(
-      duration: .value(100),
-      endValue: .value(0.6),
-      name: .value(.fade),
-      startValue: .value(1)
-    )
+    self.actionAnimation = actionAnimation ?? DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
     self.actions = actions
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
@@ -401,10 +379,7 @@ extension DivSeparator: Serializable {
 
 #if DEBUG
 extension DivSeparator.DelimiterStyle: Equatable {
-  public static func ==(
-    lhs: DivSeparator.DelimiterStyle,
-    rhs: DivSeparator.DelimiterStyle
-  ) -> Bool {
+  public static func ==(lhs: DivSeparator.DelimiterStyle, rhs: DivSeparator.DelimiterStyle) -> Bool {
     guard
       lhs.color == rhs.color,
       lhs.orientation == rhs.orientation

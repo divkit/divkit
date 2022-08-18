@@ -1,24 +1,23 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
-public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: TemplateValue,
-  TemplateDeserializable {
+public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: TemplateValue, TemplateDeserializable {
   public typealias Value = EntityWithStringEnumPropertyWithDefaultValue.Value
 
   public static let type: String = "entity_with_string_enum_property_with_default_value"
   public let parent: String? // at least 1 char
-  public let value: Field<Value>? // default value: second
+  public let value: Field<Expression<Value>>? // default value: second
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       value: try dictionary.getOptionalField("value")
@@ -27,68 +26,49 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
 
   init(
     parent: String?,
-    value: Field<Value>? = nil
+    value: Field<Expression<Value>>? = nil
   ) {
     self.parent = parent
     self.value = value
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?
-  ) -> DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue> {
-    let valueValue = parent?.value?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.valueValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue> {
+    let valueValue = parent?.value?.resolveOptionalValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
     let errors = mergeErrors(
-      valueValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "value", level: .warning)) }
+      valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .warning)) }
     )
     let result = EntityWithStringEnumPropertyWithDefaultValue(
       value: valueValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue> {
+  public static func resolveValue(context: Context, parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var valueValue: DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue.Value> =
-      parent?.value?.value(validatedBy: ResolvedValue.valueValidator) ?? .noValue
+    var valueValue: DeserializationResult<Expression<EntityWithStringEnumPropertyWithDefaultValue.Value>> = parent?.value?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "value":
-        valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator)
-          .merged(with: valueValue)
+        valueValue = deserialize(__dictValue, validator: ResolvedValue.valueValidator).merged(with: valueValue)
       case parent?.value?.link:
-        valueValue = valueValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.valueValidator))
+        valueValue = valueValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.valueValidator))
       default: break
       }
     }
     let errors = mergeErrors(
-      valueValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "value", level: .warning)) }
+      valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .warning)) }
     )
     let result = EntityWithStringEnumPropertyWithDefaultValue(
       value: valueValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws
-    -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
+  private func mergedWithParent(templates: Templates) throws -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
     guard let parent = parent, parent != Self.type else { return self }
-    guard let parentTemplate =
-      templates[parent] as? EntityWithStringEnumPropertyWithDefaultValueTemplate else {
+    guard let parentTemplate = templates[parent] as? EntityWithStringEnumPropertyWithDefaultValueTemplate else {
       throw DeserializationError.unknownType(type: parent)
     }
     let mergedParent = try parentTemplate.mergedWithParent(templates: templates)
@@ -99,8 +79,7 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
     )
   }
 
-  public func resolveParent(templates: Templates) throws
-    -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
-    try mergedWithParent(templates: templates)
+  public func resolveParent(templates: Templates) throws -> EntityWithStringEnumPropertyWithDefaultValueTemplate {
+    return try mergedWithParent(templates: templates)
   }
 }

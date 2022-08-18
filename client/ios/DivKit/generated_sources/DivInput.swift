@@ -1,20 +1,18 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivInput: DivBase {
   public enum KeyboardType: String, CaseIterable {
-    case text
-    case phone
-    case number
-    case email
-    case uri
-    case date
+    case text = "text"
+    case phone = "phone"
+    case number = "number"
+    case email = "email"
+    case uri = "uri"
+    case date = "date"
   }
 
   public final class NativeInterface {
@@ -24,7 +22,9 @@ public final class DivInput: DivBase {
       resolver.resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:))
     }
 
-    init(color: Expression<Color>) {
+    init(
+      color: Expression<Color>
+    ) {
       self.color = color
     }
   }
@@ -71,19 +71,12 @@ public final class DivInput: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -95,10 +88,7 @@ public final class DivInput: DivBase {
   }
 
   public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-    resolver.resolveStringBasedValue(
-      expression: fontFamily,
-      initializer: DivFontFamily.init(rawValue:)
-    ) ?? DivFontFamily.text
+    resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -106,31 +96,19 @@ public final class DivInput: DivBase {
   }
 
   public func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-    resolver.resolveStringBasedValue(
-      expression: fontSizeUnit,
-      initializer: DivSizeUnit.init(rawValue:)
-    ) ?? DivSizeUnit.sp
+    resolver.resolveStringBasedValue(expression: fontSizeUnit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.sp
   }
 
   public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
-    resolver.resolveStringBasedValue(
-      expression: fontWeight,
-      initializer: DivFontWeight.init(rawValue:)
-    ) ?? DivFontWeight.regular
+    resolver.resolveStringBasedValue(expression: fontWeight, initializer: DivFontWeight.init(rawValue:)) ?? DivFontWeight.regular
   }
 
   public func resolveHighlightColor(_ resolver: ExpressionResolver) -> Color? {
-    resolver.resolveStringBasedValue(
-      expression: highlightColor,
-      initializer: Color.color(withHexString:)
-    )
+    resolver.resolveStringBasedValue(expression: highlightColor, initializer: Color.color(withHexString:))
   }
 
   public func resolveHintColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(
-      expression: hintColor,
-      initializer: Color.color(withHexString:)
-    ) ?? Color.colorWithARGBHexCode(0x73_00_00_00)
+    resolver.resolveStringBasedValue(expression: hintColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x73000000)
   }
 
   public func resolveHintText(_ resolver: ExpressionResolver) -> String? {
@@ -138,10 +116,7 @@ public final class DivInput: DivBase {
   }
 
   public func resolveKeyboardType(_ resolver: ExpressionResolver) -> KeyboardType {
-    resolver.resolveStringBasedValue(
-      expression: keyboardType,
-      initializer: KeyboardType.init(rawValue:)
-    ) ?? KeyboardType.text
+    resolver.resolveStringBasedValue(expression: keyboardType, initializer: KeyboardType.init(rawValue:)) ?? KeyboardType.text
   }
 
   public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double {
@@ -165,17 +140,11 @@ public final class DivInput: DivBase {
   }
 
   public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(
-      expression: textColor,
-      initializer: Color.color(withHexString:)
-    ) ?? Color.colorWithARGBHexCode(0xFF_00_00_00)
+    resolver.resolveStringBasedValue(expression: textColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFF000000)
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -352,7 +321,7 @@ public final class DivInput: DivBase {
     self.fontWeight = fontWeight ?? .value(.regular)
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.highlightColor = highlightColor
-    self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73_00_00_00))
+    self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
     self.hintText = hintText
     self.id = id
     self.keyboardType = keyboardType ?? .value(.text)
@@ -365,7 +334,7 @@ public final class DivInput: DivBase {
     self.rowSpan = rowSpan
     self.selectAllOnFocus = selectAllOnFocus ?? .value(false)
     self.selectedActions = selectedActions
-    self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF_00_00_00))
+    self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textVariable = textVariable
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()

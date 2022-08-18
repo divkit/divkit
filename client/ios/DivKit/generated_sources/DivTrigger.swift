@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -22,8 +20,7 @@ public final class DivTrigger {
   }
 
   public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
-    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode
-      .onCondition
+    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode.onCondition
   }
 
   static let actionsValidator: AnyArrayValueValidator<DivAction> =

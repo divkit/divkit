@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -73,19 +71,12 @@ public final class DivState: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -104,19 +95,12 @@ public final class DivState: DivBase {
     resolver.resolveNumericValue(expression: rowSpan)
   }
 
-  public func resolveTransitionAnimationSelector(_ resolver: ExpressionResolver)
-    -> DivTransitionSelector {
-    resolver.resolveStringBasedValue(
-      expression: transitionAnimationSelector,
-      initializer: DivTransitionSelector.init(rawValue:)
-    ) ?? DivTransitionSelector.stateChange
+  public func resolveTransitionAnimationSelector(_ resolver: ExpressionResolver) -> DivTransitionSelector {
+    resolver.resolveStringBasedValue(expression: transitionAnimationSelector, initializer: DivTransitionSelector.init(rawValue:)) ?? DivTransitionSelector.stateChange
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -370,8 +354,7 @@ extension DivState: Serializable {
     result["states"] = states.map { $0.toDictionary() }
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform.toDictionary()
-    result["transition_animation_selector"] = transitionAnimationSelector
-      .toValidSerializationValue()
+    result["transition_animation_selector"] = transitionAnimationSelector.toValidSerializationValue()
     result["transition_change"] = transitionChange?.toDictionary()
     result["transition_in"] = transitionIn?.toDictionary()
     result["transition_out"] = transitionOut?.toDictionary()

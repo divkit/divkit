@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -21,14 +19,8 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         pageWidth: try dictionary.getOptionalField("page_width", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-page-size_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-page-size_template." + field, representation: representation)
     }
   }
 
@@ -40,23 +32,13 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
     self.pageWidth = pageWidth
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivPageSizeTemplate?
-  ) -> DeserializationResult<DivPageSize> {
-    let pageWidthValue = parent?.pageWidth?
-      .resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivPageSizeTemplate?) -> DeserializationResult<DivPageSize> {
+    let pageWidthValue = parent?.pageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      pageWidthValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "page_width", level: .error)) }
+      pageWidthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "page_width", level: .error)) }
     )
     if case .noValue = pageWidthValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "page_width",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "page_width", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let pageWidthNonNil = pageWidthValue.value
@@ -66,15 +48,10 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
     let result = DivPageSize(
       pageWidth: pageWidthNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivPageSizeTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivPageSize> {
+  public static func resolveValue(context: Context, parent: DivPageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPageSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -82,37 +59,20 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "page_width":
-        pageWidthValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivPercentageSizeTemplate.self
-        ).merged(with: pageWidthValue)
+        pageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self).merged(with: pageWidthValue)
       case parent?.pageWidth?.link:
-        pageWidthValue = pageWidthValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivPercentageSizeTemplate.self
-        ))
+        pageWidthValue = pageWidthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivPercentageSizeTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      pageWidthValue = pageWidthValue
-        .merged(with: parent.pageWidth?.resolveValue(context: context, useOnlyLinks: true))
+      pageWidthValue = pageWidthValue.merged(with: parent.pageWidth?.resolveValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      pageWidthValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "page_width", level: .error)) }
+      pageWidthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "page_width", level: .error)) }
     )
     if case .noValue = pageWidthValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "page_width",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "page_width", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let pageWidthNonNil = pageWidthValue.value
@@ -122,8 +82,7 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
     let result = DivPageSize(
       pageWidth: pageWidthNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivPageSizeTemplate {

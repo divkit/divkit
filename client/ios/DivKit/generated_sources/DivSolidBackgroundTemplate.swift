@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -15,20 +13,14 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         color: try dictionary.getOptionalField("color", transform: Color.color(withHexString:))
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-solid-background_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-solid-background_template." + field, representation: representation)
     }
   }
 
@@ -40,24 +32,13 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
     self.color = color
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivSolidBackgroundTemplate?
-  ) -> DeserializationResult<DivSolidBackground> {
-    let colorValue = parent?.color?.resolveValue(
-      context: context,
-      transform: Color.color(withHexString:)
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivSolidBackgroundTemplate?) -> DeserializationResult<DivSolidBackground> {
+    let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     var errors = mergeErrors(
       colorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "color", level: .error)) }
     )
     if case .noValue = colorValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "color",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let colorNonNil = colorValue.value
@@ -67,15 +48,10 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
     let result = DivSolidBackground(
       color: colorNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivSolidBackgroundTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivSolidBackground> {
+  public static func resolveValue(context: Context, parent: DivSolidBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSolidBackground> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -83,25 +59,17 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "color":
-        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:))
-          .merged(with: colorValue)
+        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
       case parent?.color?.link:
-        colorValue = colorValue
-          .merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
       default: break
       }
     }
     var errors = mergeErrors(
-      colorValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "color", level: .error)) }
+      colorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "color", level: .error)) }
     )
     if case .noValue = colorValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "color",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let colorNonNil = colorValue.value
@@ -111,8 +79,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
     let result = DivSolidBackground(
       color: colorNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivSolidBackgroundTemplate {
@@ -129,6 +96,6 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
   }
 
   public func resolveParent(templates: Templates) throws -> DivSolidBackgroundTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

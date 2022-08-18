@@ -1,21 +1,19 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivTooltip {
   public enum Position: String, CaseIterable {
-    case left
+    case left = "left"
     case topLeft = "top-left"
-    case top
+    case top = "top"
     case topRight = "top-right"
-    case right
+    case right = "right"
     case bottomRight = "bottom-right"
-    case bottom
+    case bottom = "bottom"
     case bottomLeft = "bottom-left"
   }
 

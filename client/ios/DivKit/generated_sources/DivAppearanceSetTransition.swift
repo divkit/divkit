@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -14,7 +12,9 @@ public final class DivAppearanceSetTransition {
   static let itemsValidator: AnyArrayValueValidator<DivAppearanceTransition> =
     makeArrayValidator(minItems: 1)
 
-  init(items: [DivAppearanceTransition]) {
+  init(
+    items: [DivAppearanceTransition]
+  ) {
     self.items = items
   }
 }

@@ -1,16 +1,13 @@
 @testable import TemplatesSupport
 
-import XCTest
+import Foundation
 
 import Serialization
 
-final class TemplatesSupportTests: XCTestCase {}
-
-func readEntity<T: TemplateDeserializable & TemplateValue>(
-  _: T.Type,
+func readEntityWithResult(
   fileName: String
-) throws -> T.ResolvedValue? {
-  let url = Bundle(for: TemplatesSupportTests.self)
+) throws -> DeserializationResult<Entity> {
+  let url = Bundle(for: TemplateToTypeTests.self)
     .url(forResource: "template_test_data/\(fileName)", withExtension: "json")!
   let data = try Data(contentsOf: url)
   guard let dictionary = try JSONSerialization
@@ -20,23 +17,52 @@ func readEntity<T: TemplateDeserializable & TemplateValue>(
 
   let entityDict = try dictionary.getField("entity") as [String: Any]
   let templatesDict = (dictionary["templates"] as? [String: Any]) ?? [:]
-  let templateToType = calculateTemplateToType(in: templatesDict)
 
-  var templates: Templates = [:]
-  try templatesDict.forEach { [templateToType] name, value in
-    templates[name] = try EntityTemplate(
-      dictionary: value as! [String: Any],
-      templateToType: templateToType
-    ).value
-  }
+  let templateToType = calculateTemplateToType(in: templatesDict)
+  let templatesByType = try mapTemplatesByType(
+    templatesDict: templatesDict,
+    templateToType: templateToType
+  )
+  let templates = try resolveTemplates(
+    templatesByType: templatesByType,
+    untypedTemplatesByType: templatesByType.mapValues { $0.value }
+  )
 
   let context = Context(
     templates: templates,
     templateToType: templateToType,
     templateData: entityDict
   )
-  return try T(dictionary: entityDict, templateToType: templateToType)
-    .resolveParent(templates: templates)
-    .resolveValue(context: context, useOnlyLinks: false)
-    .value
+  return EntityTemplate
+    .resolveValue(context: context, parent: nil, useOnlyLinks: false)
+}
+
+func readEntity<T: TemplateDeserializable & TemplateValue>(
+  _: T.Type,
+  fileName: String
+) throws -> T.ResolvedValue? {
+  try readEntityWithResult(fileName: fileName).value?.value as? T.ResolvedValue
+}
+
+private func mapTemplatesByType(
+  templatesDict: [String: Any],
+  templateToType: TemplateToType
+) throws -> [Link: EntityTemplate] {
+  Dictionary(
+    try templatesDict.keys.compactMap { [templateToType] key in
+      let template: EntityTemplate = try templatesDict
+        .getField(key, templateToType: templateToType)
+      return (key, template)
+    },
+    uniquingKeysWith: { $1 }
+  )
+}
+
+private func resolveTemplates(
+  templatesByType: [Link: EntityTemplate],
+  untypedTemplatesByType: [Link: Any]
+) throws -> [Link: Any] {
+  try templatesByType.compactMapValues {
+    try $0.resolveParent(templates: untypedTemplatesByType).value
+  }
 }

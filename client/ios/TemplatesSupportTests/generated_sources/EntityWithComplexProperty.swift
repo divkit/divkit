@@ -1,17 +1,23 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithComplexProperty {
   public final class Property {
-    public let value: URL
+    public let value: Expression<URL>
 
-    init(value: URL) {
+    public func resolveValue(_ resolver: ExpressionResolver) -> URL? {
+      resolver.resolveStringBasedValue(expression: value, initializer: URL.init(string:))
+    }
+
+    init(
+      value: Expression<URL>
+    ) {
       self.value = value
     }
   }
@@ -19,7 +25,9 @@ public final class EntityWithComplexProperty {
   public static let type: String = "entity_with_complex_property"
   public let property: Property
 
-  init(property: Property) {
+  init(
+    property: Property
+  ) {
     self.property = property
   }
 }
@@ -37,12 +45,18 @@ extension EntityWithComplexProperty: Equatable {
 }
 #endif
 
+extension EntityWithComplexProperty: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["property"] = property.toDictionary()
+    return result
+  }
+}
+
 #if DEBUG
 extension EntityWithComplexProperty.Property: Equatable {
-  public static func ==(
-    lhs: EntityWithComplexProperty.Property,
-    rhs: EntityWithComplexProperty.Property
-  ) -> Bool {
+  public static func ==(lhs: EntityWithComplexProperty.Property, rhs: EntityWithComplexProperty.Property) -> Bool {
     guard
       lhs.value == rhs.value
     else {
@@ -52,3 +66,11 @@ extension EntityWithComplexProperty.Property: Equatable {
   }
 }
 #endif
+
+extension EntityWithComplexProperty.Property: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["value"] = value.toValidSerializationValue()
+    return result
+  }
+}

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -25,14 +23,8 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
         shape: try dictionary.getOptionalField("shape", templateToType: templateToType),
         stroke: try dictionary.getOptionalField("stroke", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-shape-drawable_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-shape-drawable_template." + field, representation: representation)
     }
   }
 
@@ -48,43 +40,20 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
     self.stroke = stroke
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivShapeDrawableTemplate?
-  ) -> DeserializationResult<DivShapeDrawable> {
-    let colorValue = parent?.color?.resolveValue(
-      context: context,
-      transform: Color.color(withHexString:)
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivShapeDrawableTemplate?) -> DeserializationResult<DivShapeDrawable> {
+    let colorValue = parent?.color?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     let shapeValue = parent?.shape?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
-    let strokeValue = parent?.stroke?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.strokeValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
+    let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      colorValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "color", level: .error)) },
-      shapeValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "shape", level: .error)) },
-      strokeValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "stroke", level: .warning)) }
+      colorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "color", level: .error)) },
+      shapeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "shape", level: .error)) },
+      strokeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "stroke", level: .warning)) }
     )
     if case .noValue = colorValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "color",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
     }
     if case .noValue = shapeValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "shape",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "shape", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let colorNonNil = colorValue.value,
@@ -97,15 +66,10 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
       shape: shapeNonNil,
       stroke: strokeValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivShapeDrawableTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivShapeDrawable> {
+  public static func resolveValue(context: Context, parent: DivShapeDrawableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivShapeDrawable> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -115,76 +79,34 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "color":
-        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:))
-          .merged(with: colorValue)
+        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:)).merged(with: colorValue)
       case "shape":
-        shapeValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivShapeTemplate.self
-        ).merged(with: shapeValue)
+        shapeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShapeTemplate.self).merged(with: shapeValue)
       case "stroke":
-        strokeValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.strokeValidator,
-          type: DivStrokeTemplate.self
-        ).merged(with: strokeValue)
+        strokeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.strokeValidator, type: DivStrokeTemplate.self).merged(with: strokeValue)
       case parent?.color?.link:
-        colorValue = colorValue
-          .merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
+        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:)))
       case parent?.shape?.link:
-        shapeValue = shapeValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivShapeTemplate.self
-        ))
+        shapeValue = shapeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivShapeTemplate.self))
       case parent?.stroke?.link:
-        strokeValue = strokeValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.strokeValidator,
-          type: DivStrokeTemplate.self
-        ))
+        strokeValue = strokeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.strokeValidator, type: DivStrokeTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      shapeValue = shapeValue
-        .merged(with: parent.shape?.resolveValue(context: context, useOnlyLinks: true))
-      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(
-        context: context,
-        validator: ResolvedValue.strokeValidator,
-        useOnlyLinks: true
-      ))
+      shapeValue = shapeValue.merged(with: parent.shape?.resolveValue(context: context, useOnlyLinks: true))
+      strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      colorValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "color", level: .error)) },
-      shapeValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "shape", level: .error)) },
-      strokeValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "stroke", level: .warning)) }
+      colorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "color", level: .error)) },
+      shapeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "shape", level: .error)) },
+      strokeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "stroke", level: .warning)) }
     )
     if case .noValue = colorValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "color",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
     }
     if case .noValue = shapeValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "shape",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "shape", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let colorNonNil = colorValue.value,
@@ -197,8 +119,7 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
       shape: shapeNonNil,
       stroke: strokeValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivShapeDrawableTemplate {

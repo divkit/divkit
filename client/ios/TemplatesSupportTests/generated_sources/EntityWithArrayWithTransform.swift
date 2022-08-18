@@ -1,30 +1,33 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithArrayWithTransform {
   public static let type: String = "entity_with_array_with_transform"
-  public let array: [Color] // at least 1 elements
+  public let array: [Expression<Color>] // at least 1 elements
 
-  static let arrayValidator: AnyArrayValueValidator<Color> =
+  public func resolveArray(_ resolver: ExpressionResolver) -> [Color]? {
+    array.map { resolver.resolveStringBasedValue(expression: $0, initializer: Color.color(withHexString:)) }.compactMap { $0 }
+  }
+
+  static let arrayValidator: AnyArrayValueValidator<Expression<Color>> =
     makeArrayValidator(minItems: 1)
 
-  init(array: [Color]) {
+  init(
+    array: [Expression<Color>]
+  ) {
     self.array = array
   }
 }
 
 #if DEBUG
 extension EntityWithArrayWithTransform: Equatable {
-  public static func ==(
-    lhs: EntityWithArrayWithTransform,
-    rhs: EntityWithArrayWithTransform
-  ) -> Bool {
+  public static func ==(lhs: EntityWithArrayWithTransform, rhs: EntityWithArrayWithTransform) -> Bool {
     guard
       lhs.array == rhs.array
     else {
@@ -34,3 +37,12 @@ extension EntityWithArrayWithTransform: Equatable {
   }
 }
 #endif
+
+extension EntityWithArrayWithTransform: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["array"] = array.map { $0.toValidSerializationValue() }
+    return result
+  }
+}

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -18,14 +16,8 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
           div: try dictionary.getOptionalField("div", templateToType: templateToType),
           stateId: try dictionary.getOptionalField("state_id")
         )
-      } catch let DeserializationError.invalidFieldRepresentation(
-        field: field,
-        representation: representation
-      ) {
-        throw DeserializationError.invalidFieldRepresentation(
-          field: "state_template." + field,
-          representation: representation
-        )
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "state_template." + field, representation: representation)
       }
     }
 
@@ -37,32 +29,18 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       self.stateId = stateId
     }
 
-    private static func resolveOnlyLinks(
-      context: Context,
-      parent: StateTemplate?
-    ) -> DeserializationResult<DivData.State> {
+    private static func resolveOnlyLinks(context: Context, parent: StateTemplate?) -> DeserializationResult<DivData.State> {
       let divValue = parent?.div?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
       let stateIdValue = parent?.stateId?.resolveValue(context: context) ?? .noValue
       var errors = mergeErrors(
         divValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "div", level: .error)) },
-        stateIdValue.errorsOrWarnings?
-          .map { .right($0.asError(deserializing: "state_id", level: .error)) }
+        stateIdValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "state_id", level: .error)) }
       )
       if case .noValue = divValue {
-        errors
-          .append(.right(FieldError(
-            fieldName: "div",
-            level: .error,
-            error: .requiredFieldIsMissing
-          )))
+        errors.append(.right(FieldError(fieldName: "div", level: .error, error: .requiredFieldIsMissing)))
       }
       if case .noValue = stateIdValue {
-        errors
-          .append(.right(FieldError(
-            fieldName: "state_id",
-            level: .error,
-            error: .requiredFieldIsMissing
-          )))
+        errors.append(.right(FieldError(fieldName: "state_id", level: .error, error: .requiredFieldIsMissing)))
       }
       guard
         let divNonNil = divValue.value,
@@ -74,15 +52,10 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
         div: divNonNil,
         stateId: stateIdNonNil
       )
-      return errors
-        .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    public static func resolveValue(
-      context: Context,
-      parent: StateTemplate?,
-      useOnlyLinks: Bool
-    ) -> DeserializationResult<DivData.State> {
+    public static func resolveValue(context: Context, parent: StateTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivData.State> {
       if useOnlyLinks {
         return resolveOnlyLinks(context: context, parent: parent)
       }
@@ -91,51 +64,28 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       context.templateData.forEach { key, __dictValue in
         switch key {
         case "div":
-          divValue = deserialize(
-            __dictValue,
-            templates: context.templates,
-            templateToType: context.templateToType,
-            type: DivTemplate.self
-          ).merged(with: divValue)
+          divValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self).merged(with: divValue)
         case "state_id":
           stateIdValue = deserialize(__dictValue).merged(with: stateIdValue)
         case parent?.div?.link:
-          divValue = divValue.merged(with: deserialize(
-            __dictValue,
-            templates: context.templates,
-            templateToType: context.templateToType,
-            type: DivTemplate.self
-          ))
+          divValue = divValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivTemplate.self))
         case parent?.stateId?.link:
           stateIdValue = stateIdValue.merged(with: deserialize(__dictValue))
         default: break
         }
       }
       if let parent = parent {
-        divValue = divValue
-          .merged(with: parent.div?.resolveValue(context: context, useOnlyLinks: true))
+        divValue = divValue.merged(with: parent.div?.resolveValue(context: context, useOnlyLinks: true))
       }
       var errors = mergeErrors(
-        divValue.errorsOrWarnings?
-          .map { Either.right($0.asError(deserializing: "div", level: .error)) },
-        stateIdValue.errorsOrWarnings?
-          .map { Either.right($0.asError(deserializing: "state_id", level: .error)) }
+        divValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "div", level: .error)) },
+        stateIdValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "state_id", level: .error)) }
       )
       if case .noValue = divValue {
-        errors
-          .append(.right(FieldError(
-            fieldName: "div",
-            level: .error,
-            error: .requiredFieldIsMissing
-          )))
+        errors.append(.right(FieldError(fieldName: "div", level: .error, error: .requiredFieldIsMissing)))
       }
       if case .noValue = stateIdValue {
-        errors
-          .append(.right(FieldError(
-            fieldName: "state_id",
-            level: .error,
-            error: .requiredFieldIsMissing
-          )))
+        errors.append(.right(FieldError(fieldName: "state_id", level: .error, error: .requiredFieldIsMissing)))
       }
       guard
         let divNonNil = divValue.value,
@@ -147,12 +97,11 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
         div: divNonNil,
         stateId: stateIdNonNil
       )
-      return errors
-        .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
     }
 
-    private func mergedWithParent(templates _: Templates) throws -> StateTemplate {
-      self
+    private func mergedWithParent(templates: Templates) throws -> StateTemplate {
+      return self
     }
 
     public func resolveParent(templates: Templates) throws -> StateTemplate {
@@ -178,27 +127,13 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     do {
       self.init(
         logId: try dictionary.getOptionalField("log_id"),
-        states: try dictionary.getOptionalArray(
-          "states",
-          templateToType: templateToType,
-          validator: Self.statesValidator
-        ),
-        transitionAnimationSelector: try dictionary
-          .getOptionalField("transition_animation_selector"),
-        variableTriggers: try dictionary.getOptionalArray(
-          "variable_triggers",
-          templateToType: templateToType
-        ),
+        states: try dictionary.getOptionalArray("states", templateToType: templateToType, validator: Self.statesValidator),
+        transitionAnimationSelector: try dictionary.getOptionalField("transition_animation_selector"),
+        variableTriggers: try dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
         variables: try dictionary.getOptionalArray("variables", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-data_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-data_template." + field, representation: representation)
     }
   }
 
@@ -216,62 +151,24 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     self.variables = variables
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivDataTemplate?
-  ) -> DeserializationResult<DivData> {
-    let logIdValue = parent?.logId?.resolveValue(
-      context: context,
-      validator: ResolvedValue.logIdValidator
-    ) ?? .noValue
-    let statesValue = parent?.states?.resolveValue(
-      context: context,
-      validator: ResolvedValue.statesValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
-    let transitionAnimationSelectorValue = parent?.transitionAnimationSelector?
-      .resolveOptionalValue(
-        context: context,
-        validator: ResolvedValue.transitionAnimationSelectorValidator
-      ) ?? .noValue
-    let variableTriggersValue = parent?.variableTriggers?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.variableTriggersValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
-    let variablesValue = parent?.variables?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.variablesValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivDataTemplate?) -> DeserializationResult<DivData> {
+    let logIdValue = parent?.logId?.resolveValue(context: context, validator: ResolvedValue.logIdValidator) ?? .noValue
+    let statesValue = parent?.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) ?? .noValue
+    let transitionAnimationSelectorValue = parent?.transitionAnimationSelector?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionAnimationSelectorValidator) ?? .noValue
+    let variableTriggersValue = parent?.variableTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.variableTriggersValidator, useOnlyLinks: true) ?? .noValue
+    let variablesValue = parent?.variables?.resolveOptionalValue(context: context, validator: ResolvedValue.variablesValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      logIdValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "log_id", level: .error)) },
-      statesValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "states", level: .error)) },
-      transitionAnimationSelectorValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "transition_animation_selector", level: .warning))
-        },
-      variableTriggersValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "variable_triggers", level: .warning)) },
-      variablesValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "variables", level: .warning)) }
+      logIdValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "log_id", level: .error)) },
+      statesValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "states", level: .error)) },
+      transitionAnimationSelectorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transition_animation_selector", level: .warning)) },
+      variableTriggersValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "variable_triggers", level: .warning)) },
+      variablesValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "variables", level: .warning)) }
     )
     if case .noValue = logIdValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "log_id",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "log_id", level: .error, error: .requiredFieldIsMissing)))
     }
     if case .noValue = statesValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "states",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "states", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let logIdNonNil = logIdValue.value,
@@ -286,142 +183,60 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       variableTriggers: variableTriggersValue.value,
       variables: variablesValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivDataTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivData> {
+  public static func resolveValue(context: Context, parent: DivDataTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivData> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var logIdValue: DeserializationResult<String> = parent?.logId?
-      .value(validatedBy: ResolvedValue.logIdValidator) ?? .noValue
+    var logIdValue: DeserializationResult<String> = parent?.logId?.value(validatedBy: ResolvedValue.logIdValidator) ?? .noValue
     var statesValue: DeserializationResult<[DivData.State]> = .noValue
-    var transitionAnimationSelectorValue: DeserializationResult<Expression<DivTransitionSelector>> =
-      parent?.transitionAnimationSelector?.value() ?? .noValue
+    var transitionAnimationSelectorValue: DeserializationResult<Expression<DivTransitionSelector>> = parent?.transitionAnimationSelector?.value() ?? .noValue
     var variableTriggersValue: DeserializationResult<[DivTrigger]> = .noValue
     var variablesValue: DeserializationResult<[DivVariable]> = .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "log_id":
-        logIdValue = deserialize(__dictValue, validator: ResolvedValue.logIdValidator)
-          .merged(with: logIdValue)
+        logIdValue = deserialize(__dictValue, validator: ResolvedValue.logIdValidator).merged(with: logIdValue)
       case "states":
-        statesValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.statesValidator,
-          type: DivDataTemplate.StateTemplate.self
-        ).merged(with: statesValue)
+        statesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self).merged(with: statesValue)
       case "transition_animation_selector":
-        transitionAnimationSelectorValue = deserialize(
-          __dictValue,
-          validator: ResolvedValue.transitionAnimationSelectorValidator
-        ).merged(with: transitionAnimationSelectorValue)
+        transitionAnimationSelectorValue = deserialize(__dictValue, validator: ResolvedValue.transitionAnimationSelectorValidator).merged(with: transitionAnimationSelectorValue)
       case "variable_triggers":
-        variableTriggersValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.variableTriggersValidator,
-          type: DivTriggerTemplate.self
-        ).merged(with: variableTriggersValue)
+        variableTriggersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.variableTriggersValidator, type: DivTriggerTemplate.self).merged(with: variableTriggersValue)
       case "variables":
-        variablesValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.variablesValidator,
-          type: DivVariableTemplate.self
-        ).merged(with: variablesValue)
+        variablesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.variablesValidator, type: DivVariableTemplate.self).merged(with: variablesValue)
       case parent?.logId?.link:
-        logIdValue = logIdValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.logIdValidator))
+        logIdValue = logIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.logIdValidator))
       case parent?.states?.link:
-        statesValue = statesValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.statesValidator,
-          type: DivDataTemplate.StateTemplate.self
-        ))
+        statesValue = statesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self))
       case parent?.transitionAnimationSelector?.link:
-        transitionAnimationSelectorValue = transitionAnimationSelectorValue
-          .merged(with: deserialize(
-            __dictValue,
-            validator: ResolvedValue.transitionAnimationSelectorValidator
-          ))
+        transitionAnimationSelectorValue = transitionAnimationSelectorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.transitionAnimationSelectorValidator))
       case parent?.variableTriggers?.link:
-        variableTriggersValue = variableTriggersValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.variableTriggersValidator,
-          type: DivTriggerTemplate.self
-        ))
+        variableTriggersValue = variableTriggersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.variableTriggersValidator, type: DivTriggerTemplate.self))
       case parent?.variables?.link:
-        variablesValue = variablesValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.variablesValidator,
-          type: DivVariableTemplate.self
-        ))
+        variablesValue = variablesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.variablesValidator, type: DivVariableTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      statesValue = statesValue.merged(with: parent.states?.resolveValue(
-        context: context,
-        validator: ResolvedValue.statesValidator,
-        useOnlyLinks: true
-      ))
-      variableTriggersValue = variableTriggersValue
-        .merged(with: parent.variableTriggers?.resolveOptionalValue(
-          context: context,
-          validator: ResolvedValue.variableTriggersValidator,
-          useOnlyLinks: true
-        ))
-      variablesValue = variablesValue.merged(with: parent.variables?.resolveOptionalValue(
-        context: context,
-        validator: ResolvedValue.variablesValidator,
-        useOnlyLinks: true
-      ))
+      statesValue = statesValue.merged(with: parent.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true))
+      variableTriggersValue = variableTriggersValue.merged(with: parent.variableTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.variableTriggersValidator, useOnlyLinks: true))
+      variablesValue = variablesValue.merged(with: parent.variables?.resolveOptionalValue(context: context, validator: ResolvedValue.variablesValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      logIdValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "log_id", level: .error)) },
-      statesValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "states", level: .error)) },
-      transitionAnimationSelectorValue.errorsOrWarnings?
-        .map {
-          Either.right($0.asError(deserializing: "transition_animation_selector", level: .warning))
-        },
-      variableTriggersValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "variable_triggers", level: .warning)) },
-      variablesValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "variables", level: .warning)) }
+      logIdValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "log_id", level: .error)) },
+      statesValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "states", level: .error)) },
+      transitionAnimationSelectorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transition_animation_selector", level: .warning)) },
+      variableTriggersValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "variable_triggers", level: .warning)) },
+      variablesValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "variables", level: .warning)) }
     )
     if case .noValue = logIdValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "log_id",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "log_id", level: .error, error: .requiredFieldIsMissing)))
     }
     if case .noValue = statesValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "states",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "states", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let logIdNonNil = logIdValue.value,
@@ -436,12 +251,11 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       variableTriggers: variableTriggersValue.value,
       variables: variablesValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> DivDataTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> DivDataTemplate {
+    return self
   }
 
   public func resolveParent(templates: Templates) throws -> DivDataTemplate {
@@ -449,10 +263,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
 
     return DivDataTemplate(
       logId: merged.logId,
-      states: try merged.states?.resolveParent(
-        templates: templates,
-        validator: Self.statesValidator
-      ),
+      states: try merged.states?.resolveParent(templates: templates, validator: Self.statesValidator),
       transitionAnimationSelector: merged.transitionAnimationSelector,
       variableTriggers: merged.variableTriggers?.tryResolveParent(templates: templates),
       variables: merged.variables?.tryResolveParent(templates: templates)

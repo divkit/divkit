@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -11,7 +9,9 @@ public final class DivNeighbourPageSize {
   public static let type: String = "fixed"
   public let neighbourPageWidth: DivFixedSize
 
-  init(neighbourPageWidth: DivFixedSize) {
+  init(
+    neighbourPageWidth: DivFixedSize
+  ) {
     self.neighbourPageWidth = neighbourPageWidth
   }
 }

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -14,7 +12,9 @@ public final class DivChangeSetTransition {
   static let itemsValidator: AnyArrayValueValidator<DivChangeTransition> =
     makeArrayValidator(minItems: 1)
 
-  init(items: [DivChangeTransition]) {
+  init(
+    items: [DivChangeTransition]
+  ) {
     self.items = items
   }
 }

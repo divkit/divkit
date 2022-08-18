@@ -1,16 +1,16 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithEntityPropertyTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "entity_with_entity_property"
   public let parent: String? // at least 1 char
-  public let entity: Field<EntityTemplate>? // default value: .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .second))
+  public let entity: Field<EntityTemplate>? // default value: .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .value(.second)))
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
@@ -30,31 +30,18 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue, TemplateDese
     self.entity = entity
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: EntityWithEntityPropertyTemplate?
-  ) -> DeserializationResult<EntityWithEntityProperty> {
-    let entityValue = parent?.entity?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.entityValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithEntityPropertyTemplate?) -> DeserializationResult<EntityWithEntityProperty> {
+    let entityValue = parent?.entity?.resolveOptionalValue(context: context, validator: ResolvedValue.entityValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      entityValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "entity", level: .warning)) }
+      entityValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "entity", level: .warning)) }
     )
     let result = EntityWithEntityProperty(
       entity: entityValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityWithEntityPropertyTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<EntityWithEntityProperty> {
+  public static func resolveValue(context: Context, parent: EntityWithEntityPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithEntityProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -62,40 +49,22 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue, TemplateDese
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "entity":
-        entityValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.entityValidator,
-          type: EntityTemplate.self
-        ).merged(with: entityValue)
+        entityValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.entityValidator, type: EntityTemplate.self).merged(with: entityValue)
       case parent?.entity?.link:
-        entityValue = entityValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.entityValidator,
-          type: EntityTemplate.self
-        ))
+        entityValue = entityValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.entityValidator, type: EntityTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      entityValue = entityValue.merged(with: parent.entity?.resolveOptionalValue(
-        context: context,
-        validator: ResolvedValue.entityValidator,
-        useOnlyLinks: true
-      ))
+      entityValue = entityValue.merged(with: parent.entity?.resolveOptionalValue(context: context, validator: ResolvedValue.entityValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      entityValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "entity", level: .warning)) }
+      entityValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "entity", level: .warning)) }
     )
     let result = EntityWithEntityProperty(
       entity: entityValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> EntityWithEntityPropertyTemplate {

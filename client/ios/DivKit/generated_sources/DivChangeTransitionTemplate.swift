@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -29,11 +27,7 @@ public enum DivChangeTransitionTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivChangeTransitionTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivChangeTransition> {
+  public static func resolveValue(context: Context, parent: DivChangeTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivChangeTransition> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -47,10 +41,7 @@ public enum DivChangeTransitionTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divChangeSetTransition(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.divChangeSetTransition(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeSetTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -58,64 +49,37 @@ public enum DivChangeTransitionTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divChangeBoundsTransition(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.divChangeBoundsTransition(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeBoundsTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     }
   }
 
-  private static func resolveUnknownValue(
-    context: Context,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivChangeTransition> {
-    guard let type = (context.templateData["type"] as? String)
-      .flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivChangeTransition> {
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
 
     switch type {
     case DivChangeSetTransition.type:
-      let result = DivChangeSetTransitionTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = DivChangeSetTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divChangeSetTransition(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.divChangeSetTransition(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeSetTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case DivChangeBoundsTransition.type:
-      let result = DivChangeBoundsTransitionTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = DivChangeBoundsTransitionTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divChangeBoundsTransition(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.divChangeBoundsTransition(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divChangeBoundsTransition(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
   }
 }
@@ -126,24 +90,11 @@ extension DivChangeTransitionTemplate: TemplateDeserializable {
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case DivChangeSetTransitionTemplate.type:
-      self =
-        .divChangeSetTransitionTemplate(try DivChangeSetTransitionTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divChangeSetTransitionTemplate(try DivChangeSetTransitionTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivChangeBoundsTransitionTemplate.type:
-      self =
-        .divChangeBoundsTransitionTemplate(
-          try DivChangeBoundsTransitionTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .divChangeBoundsTransitionTemplate(try DivChangeBoundsTransitionTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-change-transition_template",
-        representation: dictionary
-      )
+      throw DeserializationError.invalidFieldRepresentation(field: "div-change-transition_template", representation: dictionary)
     }
   }
 }

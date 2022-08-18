@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -15,7 +13,9 @@ public final class DivSolidBackground {
     resolver.resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:))
   }
 
-  init(color: Expression<Color>) {
+  init(
+    color: Expression<Color>
+  ) {
     self.color = color
   }
 }

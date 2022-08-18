@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -17,7 +15,9 @@ public final class DivAspect {
   static let ratioValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
-  init(ratio: Expression<Double>) {
+  init(
+    ratio: Expression<Double>
+  ) {
     self.ratio = ratio
   }
 }

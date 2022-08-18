@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -48,6 +46,6 @@ extension DivAppearanceTransition: Equatable {
 
 extension DivAppearanceTransition: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
-    value.toDictionary()
+    return value.toDictionary()
   }
 }

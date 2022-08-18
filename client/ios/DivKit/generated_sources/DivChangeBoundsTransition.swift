@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -18,10 +16,7 @@ public final class DivChangeBoundsTransition: DivTransitionBase {
   }
 
   public func resolveInterpolator(_ resolver: ExpressionResolver) -> DivAnimationInterpolator {
-    resolver.resolveStringBasedValue(
-      expression: interpolator,
-      initializer: DivAnimationInterpolator.init(rawValue:)
-    ) ?? DivAnimationInterpolator.easeInOut
+    resolver.resolveStringBasedValue(expression: interpolator, initializer: DivAnimationInterpolator.init(rawValue:)) ?? DivAnimationInterpolator.easeInOut
   }
 
   public func resolveStartDelay(_ resolver: ExpressionResolver) -> Int {

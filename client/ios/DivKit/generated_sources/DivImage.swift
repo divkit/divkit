@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -51,19 +49,12 @@ public final class DivImage: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -74,20 +65,12 @@ public final class DivImage: DivBase {
     resolver.resolveNumericValue(expression: columnSpan)
   }
 
-  public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(
-      expression: contentAlignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    ) ?? DivAlignmentHorizontal.center
+  public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
+    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.center
   }
 
-  public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver)
-    -> DivAlignmentVertical {
-    resolver.resolveStringBasedValue(
-      expression: contentAlignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    ) ?? DivAlignmentVertical.center
+  public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
+    resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.center
   }
 
   public func resolveHighPriorityPreviewShow(_ resolver: ExpressionResolver) -> Bool {
@@ -99,10 +82,7 @@ public final class DivImage: DivBase {
   }
 
   public func resolvePlaceholderColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(
-      expression: placeholderColor,
-      initializer: Color.color(withHexString:)
-    ) ?? Color.colorWithARGBHexCode(0x14_00_00_00)
+    resolver.resolveStringBasedValue(expression: placeholderColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x14000000)
   }
 
   public func resolvePreloadRequired(_ resolver: ExpressionResolver) -> Bool {
@@ -118,23 +98,15 @@ public final class DivImage: DivBase {
   }
 
   public func resolveScale(_ resolver: ExpressionResolver) -> DivImageScale {
-    resolver
-      .resolveStringBasedValue(expression: scale, initializer: DivImageScale.init(rawValue:)) ??
-      DivImageScale.fill
+    resolver.resolveStringBasedValue(expression: scale, initializer: DivImageScale.init(rawValue:)) ?? DivImageScale.fill
   }
 
   public func resolveTintColor(_ resolver: ExpressionResolver) -> Color? {
-    resolver.resolveStringBasedValue(
-      expression: tintColor,
-      initializer: Color.color(withHexString:)
-    )
+    resolver.resolveStringBasedValue(expression: tintColor, initializer: Color.color(withHexString:))
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -302,12 +274,7 @@ public final class DivImage: DivBase {
   ) {
     self.accessibility = accessibility ?? DivAccessibility()
     self.action = action
-    self.actionAnimation = actionAnimation ?? DivAnimation(
-      duration: .value(100),
-      endValue: .value(0.6),
-      name: .value(.fade),
-      startValue: .value(1)
-    )
+    self.actionAnimation = actionAnimation ?? DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
     self.actions = actions
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
@@ -329,7 +296,7 @@ public final class DivImage: DivBase {
     self.longtapActions = longtapActions
     self.margins = margins ?? DivEdgeInsets()
     self.paddings = paddings ?? DivEdgeInsets()
-    self.placeholderColor = placeholderColor ?? .value(Color.colorWithARGBHexCode(0x14_00_00_00))
+    self.placeholderColor = placeholderColor ?? .value(Color.colorWithARGBHexCode(0x14000000))
     self.preloadRequired = preloadRequired ?? .value(false)
     self.preview = preview
     self.rowSpan = rowSpan

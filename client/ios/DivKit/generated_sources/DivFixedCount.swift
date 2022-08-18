@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -18,7 +16,9 @@ public final class DivFixedCount {
   static let valueValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
 
-  init(value: Expression<Int>) {
+  init(
+    value: Expression<Int>
+  ) {
     self.value = value
   }
 }

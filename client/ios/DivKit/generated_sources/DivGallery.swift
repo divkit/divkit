@@ -1,27 +1,25 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivGallery: DivBase {
   public enum CrossContentAlignment: String, CaseIterable {
-    case start
-    case center
-    case end
+    case start = "start"
+    case center = "center"
+    case end = "end"
   }
 
   public enum Orientation: String, CaseIterable {
-    case horizontal
-    case vertical
+    case horizontal = "horizontal"
+    case vertical = "vertical"
   }
 
   public enum ScrollMode: String, CaseIterable {
-    case paging
-    case `default`
+    case paging = "paging"
+    case `default` = "default"
   }
 
   public static let type: String = "gallery"
@@ -59,19 +57,12 @@ public final class DivGallery: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -86,12 +77,8 @@ public final class DivGallery: DivBase {
     resolver.resolveNumericValue(expression: columnSpan)
   }
 
-  public func resolveCrossContentAlignment(_ resolver: ExpressionResolver)
-    -> CrossContentAlignment {
-    resolver.resolveStringBasedValue(
-      expression: crossContentAlignment,
-      initializer: CrossContentAlignment.init(rawValue:)
-    ) ?? CrossContentAlignment.start
+  public func resolveCrossContentAlignment(_ resolver: ExpressionResolver) -> CrossContentAlignment {
+    resolver.resolveStringBasedValue(expression: crossContentAlignment, initializer: CrossContentAlignment.init(rawValue:)) ?? CrossContentAlignment.start
   }
 
   public func resolveDefaultItem(_ resolver: ExpressionResolver) -> Int {
@@ -103,10 +90,7 @@ public final class DivGallery: DivBase {
   }
 
   public func resolveOrientation(_ resolver: ExpressionResolver) -> Orientation {
-    resolver.resolveStringBasedValue(
-      expression: orientation,
-      initializer: Orientation.init(rawValue:)
-    ) ?? Orientation.horizontal
+    resolver.resolveStringBasedValue(expression: orientation, initializer: Orientation.init(rawValue:)) ?? Orientation.horizontal
   }
 
   public func resolveRestrictParentScroll(_ resolver: ExpressionResolver) -> Bool {
@@ -118,17 +102,11 @@ public final class DivGallery: DivBase {
   }
 
   public func resolveScrollMode(_ resolver: ExpressionResolver) -> ScrollMode {
-    resolver.resolveStringBasedValue(
-      expression: scrollMode,
-      initializer: ScrollMode.init(rawValue:)
-    ) ?? ScrollMode.default
+    resolver.resolveStringBasedValue(expression: scrollMode, initializer: ScrollMode.init(rawValue:)) ?? ScrollMode.default
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =

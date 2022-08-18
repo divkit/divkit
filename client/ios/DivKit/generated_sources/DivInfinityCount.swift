@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -15,8 +13,8 @@ public final class DivInfinityCount {
 
 #if DEBUG
 extension DivInfinityCount: Equatable {
-  public static func ==(_: DivInfinityCount, _: DivInfinityCount) -> Bool {
-    true
+  public static func ==(lhs: DivInfinityCount, rhs: DivInfinityCount) -> Bool {
+    return true
   }
 }
 #endif

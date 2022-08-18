@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -89,11 +87,7 @@ public enum DivTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<Div> {
+  public static func resolveValue(context: Context, parent: DivTemplate?, useOnlyLinks: Bool) -> DeserializationResult<Div> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -107,10 +101,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divImage(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divImage(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divImage(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -118,10 +109,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGifImage(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divGifImage(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGifImage(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -129,10 +117,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divText(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divText(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divText(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -140,10 +125,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divSeparator(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divSeparator(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSeparator(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -151,10 +133,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divContainer(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divContainer(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divContainer(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -162,10 +141,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGrid(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divGrid(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGrid(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -173,10 +149,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGallery(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divGallery(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGallery(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -184,10 +157,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divPager(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divPager(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPager(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -195,10 +165,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divTabs(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divTabs(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divTabs(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -206,10 +173,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divState(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divState(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divState(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -217,10 +181,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divCustom(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divCustom(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divCustom(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -228,10 +189,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divIndicator(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divIndicator(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divIndicator(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -239,10 +197,7 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divSlider(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divSlider(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSlider(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -250,27 +205,16 @@ public enum DivTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divInput(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divInput(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divInput(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     }
   }
 
-  private static func resolveUnknownValue(
-    context: Context,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<Div> {
-    guard let type = (context.templateData["type"] as? String)
-      .flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<Div> {
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
 
     switch type {
@@ -278,10 +222,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivImageTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divImage(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divImage(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divImage(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -289,10 +230,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivGifImageTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGifImage(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divGifImage(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGifImage(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -300,10 +238,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivTextTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divText(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divText(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divText(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -311,10 +246,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivSeparatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divSeparator(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divSeparator(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSeparator(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -322,10 +254,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivContainerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divContainer(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divContainer(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divContainer(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -333,10 +262,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivGridTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGrid(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divGrid(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGrid(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -344,10 +270,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivGalleryTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divGallery(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divGallery(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divGallery(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -355,10 +278,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivPagerTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divPager(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divPager(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPager(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -366,10 +286,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivTabsTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divTabs(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divTabs(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divTabs(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -377,10 +294,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivStateTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divState(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divState(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divState(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -388,10 +302,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivCustomTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divCustom(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divCustom(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divCustom(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -399,10 +310,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivIndicatorTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divIndicator(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divIndicator(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divIndicator(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -410,10 +318,7 @@ public enum DivTemplate: TemplateValue {
       let result = DivSliderTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divSlider(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divSlider(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divSlider(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -421,19 +326,12 @@ public enum DivTemplate: TemplateValue {
       let result = DivInputTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divInput(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divInput(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divInput(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
   }
 }
@@ -444,94 +342,35 @@ extension DivTemplate: TemplateDeserializable {
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case DivImageTemplate.type:
-      self =
-        .divImageTemplate(try DivImageTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divImageTemplate(try DivImageTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivGifImageTemplate.type:
-      self =
-        .divGifImageTemplate(try DivGifImageTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divGifImageTemplate(try DivGifImageTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivTextTemplate.type:
-      self =
-        .divTextTemplate(try DivTextTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divTextTemplate(try DivTextTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivSeparatorTemplate.type:
-      self =
-        .divSeparatorTemplate(try DivSeparatorTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divSeparatorTemplate(try DivSeparatorTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivContainerTemplate.type:
-      self =
-        .divContainerTemplate(try DivContainerTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divContainerTemplate(try DivContainerTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivGridTemplate.type:
-      self =
-        .divGridTemplate(try DivGridTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divGridTemplate(try DivGridTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivGalleryTemplate.type:
-      self =
-        .divGalleryTemplate(try DivGalleryTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divGalleryTemplate(try DivGalleryTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivPagerTemplate.type:
-      self =
-        .divPagerTemplate(try DivPagerTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divPagerTemplate(try DivPagerTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivTabsTemplate.type:
-      self =
-        .divTabsTemplate(try DivTabsTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divTabsTemplate(try DivTabsTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivStateTemplate.type:
-      self =
-        .divStateTemplate(try DivStateTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divStateTemplate(try DivStateTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivCustomTemplate.type:
-      self =
-        .divCustomTemplate(try DivCustomTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divCustomTemplate(try DivCustomTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivIndicatorTemplate.type:
-      self =
-        .divIndicatorTemplate(try DivIndicatorTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divIndicatorTemplate(try DivIndicatorTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivSliderTemplate.type:
-      self =
-        .divSliderTemplate(try DivSliderTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divSliderTemplate(try DivSliderTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivInputTemplate.type:
-      self =
-        .divInputTemplate(try DivInputTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divInputTemplate(try DivInputTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div_template",
-        representation: dictionary
-      )
+      throw DeserializationError.invalidFieldRepresentation(field: "div_template", representation: dictionary)
     }
   }
 }

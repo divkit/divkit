@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -20,20 +18,12 @@ public final class DivImageBackground {
     resolver.resolveNumericValue(expression: alpha) ?? 1.0
   }
 
-  public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(
-      expression: contentAlignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    ) ?? DivAlignmentHorizontal.center
+  public func resolveContentAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
+    resolver.resolveStringBasedValue(expression: contentAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.center
   }
 
-  public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver)
-    -> DivAlignmentVertical {
-    resolver.resolveStringBasedValue(
-      expression: contentAlignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    ) ?? DivAlignmentVertical.center
+  public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
+    resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.center
   }
 
   public func resolveImageUrl(_ resolver: ExpressionResolver) -> URL? {
@@ -45,9 +35,7 @@ public final class DivImageBackground {
   }
 
   public func resolveScale(_ resolver: ExpressionResolver) -> DivImageScale {
-    resolver
-      .resolveStringBasedValue(expression: scale, initializer: DivImageScale.init(rawValue:)) ??
-      DivImageScale.fill
+    resolver.resolveStringBasedValue(expression: scale, initializer: DivImageScale.init(rawValue:)) ?? DivImageScale.fill
   }
 
   static let alphaValidator: AnyValueValidator<Double> =

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -17,11 +15,7 @@ public final class DivGradientBackground {
   }
 
   public func resolveColors(_ resolver: ExpressionResolver) -> [Color]? {
-    colors
-      .map {
-        resolver.resolveStringBasedValue(expression: $0, initializer: Color.color(withHexString:))
-      }
-      .compactMap { $0 }
+    colors.map { resolver.resolveStringBasedValue(expression: $0, initializer: Color.color(withHexString:)) }.compactMap { $0 }
   }
 
   static let angleValidator: AnyValueValidator<Int> =

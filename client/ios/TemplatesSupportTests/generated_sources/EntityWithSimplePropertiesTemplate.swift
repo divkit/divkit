@@ -1,32 +1,33 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
-public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProtocol,
-  TemplateDeserializable {
+public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProtocol, TemplateDeserializable {
   public static let type: String = "entity_with_simple_properties"
   public let parent: String? // at least 1 char
-  public let boolean: Field<Bool>?
-  public let color: Field<Color>?
-  public let double: Field<Double>?
+  public let boolean: Field<Expression<Bool>>?
+  public let booleanInt: Field<Expression<Bool>>?
+  public let color: Field<Expression<Color>>?
+  public let double: Field<Expression<Double>>?
   public let id: Field<Int>?
-  public let integer: Field<Int>?
-  public let positiveInteger: Field<Int>? // constraint: number > 0
-  public let string: Field<String>? // at least 1 char
-  public let url: Field<URL>?
+  public let integer: Field<Expression<Int>>?
+  public let positiveInteger: Field<Expression<Int>>? // constraint: number > 0
+  public let string: Field<Expression<String>>? // at least 1 char
+  public let url: Field<Expression<URL>>?
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       boolean: try dictionary.getOptionalField("boolean"),
+      booleanInt: try dictionary.getOptionalField("boolean_int"),
       color: try dictionary.getOptionalField("color", transform: Color.color(withHexString:)),
       double: try dictionary.getOptionalField("double"),
       id: try dictionary.getOptionalField("id"),
@@ -39,17 +40,19 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
 
   init(
     parent: String?,
-    boolean: Field<Bool>? = nil,
-    color: Field<Color>? = nil,
-    double: Field<Double>? = nil,
+    boolean: Field<Expression<Bool>>? = nil,
+    booleanInt: Field<Expression<Bool>>? = nil,
+    color: Field<Expression<Color>>? = nil,
+    double: Field<Expression<Double>>? = nil,
     id: Field<Int>? = nil,
-    integer: Field<Int>? = nil,
-    positiveInteger: Field<Int>? = nil,
-    string: Field<String>? = nil,
-    url: Field<URL>? = nil
+    integer: Field<Expression<Int>>? = nil,
+    positiveInteger: Field<Expression<Int>>? = nil,
+    string: Field<Expression<String>>? = nil,
+    url: Field<Expression<URL>>? = nil
   ) {
     self.parent = parent
     self.boolean = boolean
+    self.booleanInt = booleanInt
     self.color = color
     self.double = double
     self.id = id
@@ -59,54 +62,30 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
     self.url = url
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: EntityWithSimplePropertiesTemplate?
-  )
-    -> DeserializationResult<EntityWithSimpleProperties> {
-    let booleanValue = parent?.boolean?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.booleanValidator
-    ) ?? .noValue
-    let colorValue = parent?.color?.resolveOptionalValue(
-      context: context,
-      transform: Color.color(withHexString:),
-      validator: ResolvedValue.colorValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithSimplePropertiesTemplate?) -> DeserializationResult<EntityWithSimpleProperties> {
+    let booleanValue = parent?.boolean?.resolveOptionalValue(context: context, validator: ResolvedValue.booleanValidator) ?? .noValue
+    let booleanIntValue = parent?.booleanInt?.resolveOptionalValue(context: context, validator: ResolvedValue.booleanIntValidator) ?? .noValue
+    let colorValue = parent?.color?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator) ?? .noValue
     let doubleValue = parent?.double?.resolveOptionalValue(context: context) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context) ?? .noValue
     let integerValue = parent?.integer?.resolveOptionalValue(context: context) ?? .noValue
-    let positiveIntegerValue = parent?.positiveInteger?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.positiveIntegerValidator
-    ) ?? .noValue
-    let stringValue = parent?.string?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.stringValidator
-    ) ?? .noValue
-    let urlValue = parent?.url?.resolveOptionalValue(
-      context: context,
-      transform: URL.init(string:),
-      validator: ResolvedValue.urlValidator
-    ) ?? .noValue
+    let positiveIntegerValue = parent?.positiveInteger?.resolveOptionalValue(context: context, validator: ResolvedValue.positiveIntegerValidator) ?? .noValue
+    let stringValue = parent?.string?.resolveOptionalValue(context: context, validator: ResolvedValue.stringValidator) ?? .noValue
+    let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
     let errors = mergeErrors(
-      booleanValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "boolean", level: .warning)) },
-      colorValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "color", level: .warning)) },
-      doubleValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "double", level: .warning)) },
+      booleanValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "boolean", level: .warning)) },
+      booleanIntValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "boolean_int", level: .warning)) },
+      colorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "color", level: .warning)) },
+      doubleValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "double", level: .warning)) },
       idValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "id", level: .warning)) },
-      integerValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "integer", level: .warning)) },
-      positiveIntegerValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "positive_integer", level: .warning)) },
-      stringValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "string", level: .warning)) },
+      integerValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "integer", level: .warning)) },
+      positiveIntegerValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "positive_integer", level: .warning)) },
+      stringValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "string", level: .warning)) },
       urlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "url", level: .warning)) }
     )
     let result = EntityWithSimpleProperties(
       boolean: booleanValue.value,
+      booleanInt: booleanIntValue.value,
       color: colorValue.value,
       double: doubleValue.value,
       id: idValue.value,
@@ -115,42 +94,30 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
       string: stringValue.value,
       url: urlValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityWithSimplePropertiesTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<EntityWithSimpleProperties> {
+  public static func resolveValue(context: Context, parent: EntityWithSimplePropertiesTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithSimpleProperties> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var booleanValue: DeserializationResult<Bool> = parent?.boolean?
-      .value(validatedBy: ResolvedValue.booleanValidator) ?? .noValue
-    var colorValue: DeserializationResult<Color> = parent?.color?
-      .value(validatedBy: ResolvedValue.colorValidator) ?? .noValue
-    var doubleValue: DeserializationResult<Double> = parent?.double?.value() ?? .noValue
+    var booleanValue: DeserializationResult<Expression<Bool>> = parent?.boolean?.value() ?? .noValue
+    var booleanIntValue: DeserializationResult<Expression<Bool>> = parent?.booleanInt?.value() ?? .noValue
+    var colorValue: DeserializationResult<Expression<Color>> = parent?.color?.value() ?? .noValue
+    var doubleValue: DeserializationResult<Expression<Double>> = parent?.double?.value() ?? .noValue
     var idValue: DeserializationResult<Int> = parent?.id?.value() ?? .noValue
-    var integerValue: DeserializationResult<Int> = parent?.integer?.value() ?? .noValue
-    var positiveIntegerValue: DeserializationResult<Int> = parent?.positiveInteger?
-      .value(validatedBy: ResolvedValue.positiveIntegerValidator) ?? .noValue
-    var stringValue: DeserializationResult<String> = parent?.string?
-      .value(validatedBy: ResolvedValue.stringValidator) ?? .noValue
-    var urlValue: DeserializationResult<URL> = parent?.url?
-      .value(validatedBy: ResolvedValue.urlValidator) ?? .noValue
+    var integerValue: DeserializationResult<Expression<Int>> = parent?.integer?.value() ?? .noValue
+    var positiveIntegerValue: DeserializationResult<Expression<Int>> = parent?.positiveInteger?.value() ?? .noValue
+    var stringValue: DeserializationResult<Expression<String>> = parent?.string?.value() ?? .noValue
+    var urlValue: DeserializationResult<Expression<URL>> = parent?.url?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "boolean":
-        booleanValue = deserialize(__dictValue, validator: ResolvedValue.booleanValidator)
-          .merged(with: booleanValue)
+        booleanValue = deserialize(__dictValue, validator: ResolvedValue.booleanValidator).merged(with: booleanValue)
+      case "boolean_int":
+        booleanIntValue = deserialize(__dictValue, validator: ResolvedValue.booleanIntValidator).merged(with: booleanIntValue)
       case "color":
-        colorValue = deserialize(
-          __dictValue,
-          transform: Color.color(withHexString:),
-          validator: ResolvedValue.colorValidator
-        ).merged(with: colorValue)
+        colorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator).merged(with: colorValue)
       case "double":
         doubleValue = deserialize(__dictValue).merged(with: doubleValue)
       case "id":
@@ -158,28 +125,17 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
       case "integer":
         integerValue = deserialize(__dictValue).merged(with: integerValue)
       case "positive_integer":
-        positiveIntegerValue = deserialize(
-          __dictValue,
-          validator: ResolvedValue.positiveIntegerValidator
-        ).merged(with: positiveIntegerValue)
+        positiveIntegerValue = deserialize(__dictValue, validator: ResolvedValue.positiveIntegerValidator).merged(with: positiveIntegerValue)
       case "string":
-        stringValue = deserialize(__dictValue, validator: ResolvedValue.stringValidator)
-          .merged(with: stringValue)
+        stringValue = deserialize(__dictValue, validator: ResolvedValue.stringValidator).merged(with: stringValue)
       case "url":
-        urlValue = deserialize(
-          __dictValue,
-          transform: URL.init(string:),
-          validator: ResolvedValue.urlValidator
-        ).merged(with: urlValue)
+        urlValue = deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator).merged(with: urlValue)
       case parent?.boolean?.link:
-        booleanValue = booleanValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.booleanValidator))
+        booleanValue = booleanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.booleanValidator))
+      case parent?.booleanInt?.link:
+        booleanIntValue = booleanIntValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.booleanIntValidator))
       case parent?.color?.link:
-        colorValue = colorValue.merged(with: deserialize(
-          __dictValue,
-          transform: Color.color(withHexString:),
-          validator: ResolvedValue.colorValidator
-        ))
+        colorValue = colorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator))
       case parent?.double?.link:
         doubleValue = doubleValue.merged(with: deserialize(__dictValue))
       case parent?.id?.link:
@@ -187,40 +143,28 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
       case parent?.integer?.link:
         integerValue = integerValue.merged(with: deserialize(__dictValue))
       case parent?.positiveInteger?.link:
-        positiveIntegerValue = positiveIntegerValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.positiveIntegerValidator))
+        positiveIntegerValue = positiveIntegerValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.positiveIntegerValidator))
       case parent?.string?.link:
-        stringValue = stringValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.stringValidator))
+        stringValue = stringValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.stringValidator))
       case parent?.url?.link:
-        urlValue = urlValue.merged(with: deserialize(
-          __dictValue,
-          transform: URL.init(string:),
-          validator: ResolvedValue.urlValidator
-        ))
+        urlValue = urlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:), validator: ResolvedValue.urlValidator))
       default: break
       }
     }
     let errors = mergeErrors(
-      booleanValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "boolean", level: .warning)) },
-      colorValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "color", level: .warning)) },
-      doubleValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "double", level: .warning)) },
-      idValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "id", level: .warning)) },
-      integerValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "integer", level: .warning)) },
-      positiveIntegerValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "positive_integer", level: .warning)) },
-      stringValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "string", level: .warning)) },
-      urlValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "url", level: .warning)) }
+      booleanValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "boolean", level: .warning)) },
+      booleanIntValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "boolean_int", level: .warning)) },
+      colorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "color", level: .warning)) },
+      doubleValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "double", level: .warning)) },
+      idValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "id", level: .warning)) },
+      integerValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "integer", level: .warning)) },
+      positiveIntegerValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "positive_integer", level: .warning)) },
+      stringValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "string", level: .warning)) },
+      urlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "url", level: .warning)) }
     )
     let result = EntityWithSimpleProperties(
       boolean: booleanValue.value,
+      booleanInt: booleanIntValue.value,
       color: colorValue.value,
       double: doubleValue.value,
       id: idValue.value,
@@ -229,8 +173,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
       string: stringValue.value,
       url: urlValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> EntityWithSimplePropertiesTemplate {
@@ -243,6 +186,7 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
     return EntityWithSimplePropertiesTemplate(
       parent: nil,
       boolean: boolean ?? mergedParent.boolean,
+      booleanInt: booleanInt ?? mergedParent.booleanInt,
       color: color ?? mergedParent.color,
       double: double ?? mergedParent.double,
       id: id ?? mergedParent.id,
@@ -254,6 +198,6 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
   }
 
   public func resolveParent(templates: Templates) throws -> EntityWithSimplePropertiesTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

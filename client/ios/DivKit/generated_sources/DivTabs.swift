@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -36,9 +34,9 @@ public final class DivTabs: DivBase {
 
   public final class TabTitleStyle {
     public enum AnimationType: String, CaseIterable {
-      case slide
-      case fade
-      case none
+      case slide = "slide"
+      case fade = "fade"
+      case none = "none"
     }
 
     public let activeBackgroundColor: Expression<Color> // default value: #FFFFDC60
@@ -61,24 +59,15 @@ public final class DivTabs: DivBase {
     public let paddings: DivEdgeInsets // default value: DivEdgeInsets(bottom: .value(6), left: .value(8), right: .value(8), top: .value(6))
 
     public func resolveActiveBackgroundColor(_ resolver: ExpressionResolver) -> Color {
-      resolver.resolveStringBasedValue(
-        expression: activeBackgroundColor,
-        initializer: Color.color(withHexString:)
-      ) ?? Color.colorWithARGBHexCode(0xFF_FF_DC_60)
+      resolver.resolveStringBasedValue(expression: activeBackgroundColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFFFFDC60)
     }
 
     public func resolveActiveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
-      resolver.resolveStringBasedValue(
-        expression: activeFontWeight,
-        initializer: DivFontWeight.init(rawValue:)
-      )
+      resolver.resolveStringBasedValue(expression: activeFontWeight, initializer: DivFontWeight.init(rawValue:))
     }
 
     public func resolveActiveTextColor(_ resolver: ExpressionResolver) -> Color {
-      resolver.resolveStringBasedValue(
-        expression: activeTextColor,
-        initializer: Color.color(withHexString:)
-      ) ?? Color.colorWithARGBHexCode(0xCC_00_00_00)
+      resolver.resolveStringBasedValue(expression: activeTextColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xCC000000)
     }
 
     public func resolveAnimationDuration(_ resolver: ExpressionResolver) -> Int {
@@ -86,10 +75,7 @@ public final class DivTabs: DivBase {
     }
 
     public func resolveAnimationType(_ resolver: ExpressionResolver) -> AnimationType {
-      resolver.resolveStringBasedValue(
-        expression: animationType,
-        initializer: AnimationType.init(rawValue:)
-      ) ?? AnimationType.slide
+      resolver.resolveStringBasedValue(expression: animationType, initializer: AnimationType.init(rawValue:)) ?? AnimationType.slide
     }
 
     public func resolveCornerRadius(_ resolver: ExpressionResolver) -> Int? {
@@ -97,10 +83,7 @@ public final class DivTabs: DivBase {
     }
 
     public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-      resolver.resolveStringBasedValue(
-        expression: fontFamily,
-        initializer: DivFontFamily.init(rawValue:)
-      ) ?? DivFontFamily.text
+      resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -108,38 +91,23 @@ public final class DivTabs: DivBase {
     }
 
     public func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-      resolver.resolveStringBasedValue(
-        expression: fontSizeUnit,
-        initializer: DivSizeUnit.init(rawValue:)
-      ) ?? DivSizeUnit.sp
+      resolver.resolveStringBasedValue(expression: fontSizeUnit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.sp
     }
 
     public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
-      resolver.resolveStringBasedValue(
-        expression: fontWeight,
-        initializer: DivFontWeight.init(rawValue:)
-      ) ?? DivFontWeight.regular
+      resolver.resolveStringBasedValue(expression: fontWeight, initializer: DivFontWeight.init(rawValue:)) ?? DivFontWeight.regular
     }
 
     public func resolveInactiveBackgroundColor(_ resolver: ExpressionResolver) -> Color? {
-      resolver.resolveStringBasedValue(
-        expression: inactiveBackgroundColor,
-        initializer: Color.color(withHexString:)
-      )
+      resolver.resolveStringBasedValue(expression: inactiveBackgroundColor, initializer: Color.color(withHexString:))
     }
 
     public func resolveInactiveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
-      resolver.resolveStringBasedValue(
-        expression: inactiveFontWeight,
-        initializer: DivFontWeight.init(rawValue:)
-      )
+      resolver.resolveStringBasedValue(expression: inactiveFontWeight, initializer: DivFontWeight.init(rawValue:))
     }
 
     public func resolveInactiveTextColor(_ resolver: ExpressionResolver) -> Color {
-      resolver.resolveStringBasedValue(
-        expression: inactiveTextColor,
-        initializer: Color.color(withHexString:)
-      ) ?? Color.colorWithARGBHexCode(0x80_00_00_00)
+      resolver.resolveStringBasedValue(expression: inactiveTextColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x80000000)
     }
 
     public func resolveItemSpacing(_ resolver: ExpressionResolver) -> Int {
@@ -225,11 +193,9 @@ public final class DivTabs: DivBase {
       lineHeight: Expression<Int>? = nil,
       paddings: DivEdgeInsets? = nil
     ) {
-      self
-        .activeBackgroundColor = activeBackgroundColor ??
-        .value(Color.colorWithARGBHexCode(0xFF_FF_DC_60))
+      self.activeBackgroundColor = activeBackgroundColor ?? .value(Color.colorWithARGBHexCode(0xFFFFDC60))
       self.activeFontWeight = activeFontWeight
-      self.activeTextColor = activeTextColor ?? .value(Color.colorWithARGBHexCode(0xCC_00_00_00))
+      self.activeTextColor = activeTextColor ?? .value(Color.colorWithARGBHexCode(0xCC000000))
       self.animationDuration = animationDuration ?? .value(300)
       self.animationType = animationType ?? .value(.slide)
       self.cornerRadius = cornerRadius
@@ -240,17 +206,11 @@ public final class DivTabs: DivBase {
       self.fontWeight = fontWeight ?? .value(.regular)
       self.inactiveBackgroundColor = inactiveBackgroundColor
       self.inactiveFontWeight = inactiveFontWeight
-      self
-        .inactiveTextColor = inactiveTextColor ?? .value(Color.colorWithARGBHexCode(0x80_00_00_00))
+      self.inactiveTextColor = inactiveTextColor ?? .value(Color.colorWithARGBHexCode(0x80000000))
       self.itemSpacing = itemSpacing ?? .value(0)
       self.letterSpacing = letterSpacing ?? .value(0)
       self.lineHeight = lineHeight
-      self.paddings = paddings ?? DivEdgeInsets(
-        bottom: .value(6),
-        left: .value(8),
-        right: .value(8),
-        top: .value(6)
-      )
+      self.paddings = paddings ?? DivEdgeInsets(bottom: .value(6), left: .value(8), right: .value(8), top: .value(6))
     }
   }
 
@@ -291,19 +251,12 @@ public final class DivTabs: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -335,10 +288,7 @@ public final class DivTabs: DivBase {
   }
 
   public func resolveSeparatorColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(
-      expression: separatorColor,
-      initializer: Color.color(withHexString:)
-    ) ?? Color.colorWithARGBHexCode(0x14_00_00_00)
+    resolver.resolveStringBasedValue(expression: separatorColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x14000000)
   }
 
   public func resolveSwitchTabsByContentSwipeEnabled(_ resolver: ExpressionResolver) -> Bool {
@@ -346,10 +296,7 @@ public final class DivTabs: DivBase {
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -514,21 +461,11 @@ public final class DivTabs: DivBase {
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
     self.selectedTab = selectedTab ?? .value(0)
-    self.separatorColor = separatorColor ?? .value(Color.colorWithARGBHexCode(0x14_00_00_00))
-    self.separatorPaddings = separatorPaddings ?? DivEdgeInsets(
-      bottom: .value(0),
-      left: .value(12),
-      right: .value(12),
-      top: .value(0)
-    )
+    self.separatorColor = separatorColor ?? .value(Color.colorWithARGBHexCode(0x14000000))
+    self.separatorPaddings = separatorPaddings ?? DivEdgeInsets(bottom: .value(0), left: .value(12), right: .value(12), top: .value(0))
     self.switchTabsByContentSwipeEnabled = switchTabsByContentSwipeEnabled ?? .value(true)
     self.tabTitleStyle = tabTitleStyle ?? DivTabs.TabTitleStyle()
-    self.titlePaddings = titlePaddings ?? DivEdgeInsets(
-      bottom: .value(8),
-      left: .value(12),
-      right: .value(12),
-      top: .value(0)
-    )
+    self.titlePaddings = titlePaddings ?? DivEdgeInsets(bottom: .value(8), left: .value(12), right: .value(12), top: .value(0))
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()
     self.transitionChange = transitionChange
@@ -659,8 +596,7 @@ extension DivTabs: Serializable {
     result["selected_tab"] = selectedTab.toValidSerializationValue()
     result["separator_color"] = separatorColor.toValidSerializationValue()
     result["separator_paddings"] = separatorPaddings.toDictionary()
-    result["switch_tabs_by_content_swipe_enabled"] = switchTabsByContentSwipeEnabled
-      .toValidSerializationValue()
+    result["switch_tabs_by_content_swipe_enabled"] = switchTabsByContentSwipeEnabled.toValidSerializationValue()
     result["tab_title_style"] = tabTitleStyle.toDictionary()
     result["title_paddings"] = titlePaddings.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -11,8 +9,7 @@ public protocol DivBase: DivBlockModeling {
   var accessibility: DivAccessibility { get }
   var alignmentHorizontal: Expression<DivAlignmentHorizontal>? { get }
   var alignmentVertical: Expression<DivAlignmentVertical>? { get }
-  var alpha: Expression<Double> { get
-  } // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  var alpha: Expression<Double> { get } // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   var background: [DivBackground]? { get } // at least 1 elements
   var border: DivBorder { get }
   var columnSpan: Expression<Int>? { get } // constraint: number >= 0

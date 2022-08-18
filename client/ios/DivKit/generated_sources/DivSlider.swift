@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -20,24 +18,15 @@ public final class DivSlider: DivBase {
     }
 
     public func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-      resolver.resolveStringBasedValue(
-        expression: fontSizeUnit,
-        initializer: DivSizeUnit.init(rawValue:)
-      ) ?? DivSizeUnit.sp
+      resolver.resolveStringBasedValue(expression: fontSizeUnit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.sp
     }
 
     public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
-      resolver.resolveStringBasedValue(
-        expression: fontWeight,
-        initializer: DivFontWeight.init(rawValue:)
-      ) ?? DivFontWeight.regular
+      resolver.resolveStringBasedValue(expression: fontWeight, initializer: DivFontWeight.init(rawValue:)) ?? DivFontWeight.regular
     }
 
     public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
-      resolver.resolveStringBasedValue(
-        expression: textColor,
-        initializer: Color.color(withHexString:)
-      ) ?? Color.colorWithARGBHexCode(0xFF_00_00_00)
+      resolver.resolveStringBasedValue(expression: textColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFF000000)
     }
 
     static let fontSizeValidator: AnyValueValidator<Int> =
@@ -66,7 +55,7 @@ public final class DivSlider: DivBase {
       self.fontSizeUnit = fontSizeUnit ?? .value(.sp)
       self.fontWeight = fontWeight ?? .value(.regular)
       self.offset = offset
-      self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF_00_00_00))
+      self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     }
   }
 
@@ -110,19 +99,12 @@ public final class DivSlider: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -146,10 +128,7 @@ public final class DivSlider: DivBase {
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =

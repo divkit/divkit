@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -14,36 +12,31 @@ public final class DivInfinityCountTemplate: TemplateValue, TemplateDeserializab
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator)
     )
   }
 
-  init(parent: String?) {
+  init(
+    parent: String?
+  ) {
     self.parent = parent
   }
 
-  private static func resolveOnlyLinks(
-    context _: Context,
-    parent _: DivInfinityCountTemplate?
-  ) -> DeserializationResult<DivInfinityCount> {
-    .success(DivInfinityCount())
+  private static func resolveOnlyLinks(context: Context, parent: DivInfinityCountTemplate?) -> DeserializationResult<DivInfinityCount> {
+    return .success(DivInfinityCount())
   }
 
-  public static func resolveValue(
-    context _: Context,
-    parent _: DivInfinityCountTemplate?,
-    useOnlyLinks _: Bool
-  ) -> DeserializationResult<DivInfinityCount> {
-    .success(DivInfinityCount())
+  public static func resolveValue(context: Context, parent: DivInfinityCountTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivInfinityCount> {
+    return .success(DivInfinityCount())
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> DivInfinityCountTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> DivInfinityCountTemplate {
+    return self
   }
 
-  public func resolveParent(templates _: Templates) throws -> DivInfinityCountTemplate {
-    self
+  public func resolveParent(templates: Templates) throws -> DivInfinityCountTemplate {
+    return self
   }
 }

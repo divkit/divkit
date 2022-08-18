@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -31,9 +29,7 @@ public final class DivEdgeInsets {
   }
 
   public func resolveUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-    resolver
-      .resolveStringBasedValue(expression: unit, initializer: DivSizeUnit.init(rawValue:)) ??
-      DivSizeUnit.dp
+    resolver.resolveStringBasedValue(expression: unit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.dp
   }
 
   static let bottomValidator: AnyValueValidator<Int> =

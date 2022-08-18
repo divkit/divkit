@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -29,11 +27,7 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivPagerLayoutModeTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivPagerLayoutMode> {
+  public static func resolveValue(context: Context, parent: DivPagerLayoutModeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPagerLayoutMode> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -47,10 +41,7 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divPageSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divPageSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPageSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -58,27 +49,16 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divNeighbourPageSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divNeighbourPageSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divNeighbourPageSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     }
   }
 
-  private static func resolveUnknownValue(
-    context: Context,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivPagerLayoutMode> {
-    guard let type = (context.templateData["type"] as? String)
-      .flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivPagerLayoutMode> {
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
 
     switch type {
@@ -86,33 +66,20 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
       let result = DivPageSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divPageSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divPageSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divPageSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case DivNeighbourPageSize.type:
-      let result = DivNeighbourPageSizeTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = DivNeighbourPageSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divNeighbourPageSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divNeighbourPageSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divNeighbourPageSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
   }
 }
@@ -123,22 +90,11 @@ extension DivPagerLayoutModeTemplate: TemplateDeserializable {
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case DivPageSizeTemplate.type:
-      self =
-        .divPageSizeTemplate(try DivPageSizeTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divPageSizeTemplate(try DivPageSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivNeighbourPageSizeTemplate.type:
-      self =
-        .divNeighbourPageSizeTemplate(try DivNeighbourPageSizeTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divNeighbourPageSizeTemplate(try DivNeighbourPageSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-pager-layout-mode_template",
-        representation: dictionary
-      )
+      throw DeserializationError.invalidFieldRepresentation(field: "div-pager-layout-mode_template", representation: dictionary)
     }
   }
 }

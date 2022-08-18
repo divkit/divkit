@@ -1,32 +1,35 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithStringEnumProperty {
   public enum Property: String, CaseIterable {
-    case first
-    case second
+    case first = "first"
+    case second = "second"
   }
 
   public static let type: String = "entity_with_string_enum_property"
-  public let property: Property
+  public let property: Expression<Property>
 
-  init(property: Property) {
+  public func resolveProperty(_ resolver: ExpressionResolver) -> Property? {
+    resolver.resolveStringBasedValue(expression: property, initializer: Property.init(rawValue:))
+  }
+
+  init(
+    property: Expression<Property>
+  ) {
     self.property = property
   }
 }
 
 #if DEBUG
 extension EntityWithStringEnumProperty: Equatable {
-  public static func ==(
-    lhs: EntityWithStringEnumProperty,
-    rhs: EntityWithStringEnumProperty
-  ) -> Bool {
+  public static func ==(lhs: EntityWithStringEnumProperty, rhs: EntityWithStringEnumProperty) -> Bool {
     guard
       lhs.property == rhs.property
     else {
@@ -36,3 +39,12 @@ extension EntityWithStringEnumProperty: Equatable {
   }
 }
 #endif
+
+extension EntityWithStringEnumProperty: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["property"] = property.toValidSerializationValue()
+    return result
+  }
+}

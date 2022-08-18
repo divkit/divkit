@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -14,7 +12,7 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
   public let top: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let unit: Field<Expression<DivSizeUnit>>? // default value: dp
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       bottom: try dictionary.getOptionalField("bottom"),
       left: try dictionary.getOptionalField("left"),
@@ -38,37 +36,16 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
     self.unit = unit
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivEdgeInsetsTemplate?
-  ) -> DeserializationResult<DivEdgeInsets> {
-    let bottomValue = parent?.bottom?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.bottomValidator
-    ) ?? .noValue
-    let leftValue = parent?.left?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.leftValidator
-    ) ?? .noValue
-    let rightValue = parent?.right?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.rightValidator
-    ) ?? .noValue
-    let topValue = parent?.top?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.topValidator
-    ) ?? .noValue
-    let unitValue = parent?.unit?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.unitValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivEdgeInsetsTemplate?) -> DeserializationResult<DivEdgeInsets> {
+    let bottomValue = parent?.bottom?.resolveOptionalValue(context: context, validator: ResolvedValue.bottomValidator) ?? .noValue
+    let leftValue = parent?.left?.resolveOptionalValue(context: context, validator: ResolvedValue.leftValidator) ?? .noValue
+    let rightValue = parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue
+    let topValue = parent?.top?.resolveOptionalValue(context: context, validator: ResolvedValue.topValidator) ?? .noValue
+    let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let errors = mergeErrors(
-      bottomValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "bottom", level: .warning)) },
-      leftValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "left", level: .warning)) },
-      rightValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "right", level: .warning)) },
+      bottomValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "bottom", level: .warning)) },
+      leftValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "left", level: .warning)) },
+      rightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "right", level: .warning)) },
       topValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "top", level: .warning)) },
       unitValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "unit", level: .warning)) }
     )
@@ -79,15 +56,10 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
       top: topValue.value,
       unit: unitValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivEdgeInsetsTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivEdgeInsets> {
+  public static func resolveValue(context: Context, parent: DivEdgeInsetsTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivEdgeInsets> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -95,54 +67,38 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
     var leftValue: DeserializationResult<Expression<Int>> = parent?.left?.value() ?? .noValue
     var rightValue: DeserializationResult<Expression<Int>> = parent?.right?.value() ?? .noValue
     var topValue: DeserializationResult<Expression<Int>> = parent?.top?.value() ?? .noValue
-    var unitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.unit?
-      .value() ?? .noValue
+    var unitValue: DeserializationResult<Expression<DivSizeUnit>> = parent?.unit?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "bottom":
-        bottomValue = deserialize(__dictValue, validator: ResolvedValue.bottomValidator)
-          .merged(with: bottomValue)
+        bottomValue = deserialize(__dictValue, validator: ResolvedValue.bottomValidator).merged(with: bottomValue)
       case "left":
-        leftValue = deserialize(__dictValue, validator: ResolvedValue.leftValidator)
-          .merged(with: leftValue)
+        leftValue = deserialize(__dictValue, validator: ResolvedValue.leftValidator).merged(with: leftValue)
       case "right":
-        rightValue = deserialize(__dictValue, validator: ResolvedValue.rightValidator)
-          .merged(with: rightValue)
+        rightValue = deserialize(__dictValue, validator: ResolvedValue.rightValidator).merged(with: rightValue)
       case "top":
-        topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator)
-          .merged(with: topValue)
+        topValue = deserialize(__dictValue, validator: ResolvedValue.topValidator).merged(with: topValue)
       case "unit":
-        unitValue = deserialize(__dictValue, validator: ResolvedValue.unitValidator)
-          .merged(with: unitValue)
+        unitValue = deserialize(__dictValue, validator: ResolvedValue.unitValidator).merged(with: unitValue)
       case parent?.bottom?.link:
-        bottomValue = bottomValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomValidator))
+        bottomValue = bottomValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomValidator))
       case parent?.left?.link:
-        leftValue = leftValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.leftValidator))
+        leftValue = leftValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.leftValidator))
       case parent?.right?.link:
-        rightValue = rightValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.rightValidator))
+        rightValue = rightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rightValidator))
       case parent?.top?.link:
-        topValue = topValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.topValidator))
+        topValue = topValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topValidator))
       case parent?.unit?.link:
-        unitValue = unitValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.unitValidator))
+        unitValue = unitValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.unitValidator))
       default: break
       }
     }
     let errors = mergeErrors(
-      bottomValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "bottom", level: .warning)) },
-      leftValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "left", level: .warning)) },
-      rightValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "right", level: .warning)) },
-      topValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "top", level: .warning)) },
-      unitValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "unit", level: .warning)) }
+      bottomValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "bottom", level: .warning)) },
+      leftValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "left", level: .warning)) },
+      rightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "right", level: .warning)) },
+      topValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "top", level: .warning)) },
+      unitValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "unit", level: .warning)) }
     )
     let result = DivEdgeInsets(
       bottom: bottomValue.value,
@@ -151,15 +107,14 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
       top: topValue.value,
       unit: unitValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> DivEdgeInsetsTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> DivEdgeInsetsTemplate {
+    return self
   }
 
   public func resolveParent(templates: Templates) throws -> DivEdgeInsetsTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

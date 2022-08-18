@@ -1,17 +1,15 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivIndicator: DivBase {
   public enum Animation: String, CaseIterable {
-    case scale
-    case worm
-    case slider
+    case scale = "scale"
+    case worm = "worm"
+    case slider = "slider"
   }
 
   public static let type: String = "indicator"
@@ -50,29 +48,19 @@ public final class DivIndicator: DivBase {
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
   public func resolveActiveItemColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(
-      expression: activeItemColor,
-      initializer: Color.color(withHexString:)
-    ) ?? Color.colorWithARGBHexCode(0xFF_FF_DC_60)
+    resolver.resolveStringBasedValue(expression: activeItemColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFFFFDC60)
   }
 
   public func resolveActiveItemSize(_ resolver: ExpressionResolver) -> Double {
     resolver.resolveNumericValue(expression: activeItemSize) ?? 1.3
   }
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -80,9 +68,7 @@ public final class DivIndicator: DivBase {
   }
 
   public func resolveAnimation(_ resolver: ExpressionResolver) -> Animation {
-    resolver
-      .resolveStringBasedValue(expression: animation, initializer: Animation.init(rawValue:)) ??
-      Animation.scale
+    resolver.resolveStringBasedValue(expression: animation, initializer: Animation.init(rawValue:)) ?? Animation.scale
   }
 
   public func resolveColumnSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -90,10 +76,7 @@ public final class DivIndicator: DivBase {
   }
 
   public func resolveInactiveItemColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(
-      expression: inactiveItemColor,
-      initializer: Color.color(withHexString:)
-    ) ?? Color.colorWithARGBHexCode(0x33_91_9C_B5)
+    resolver.resolveStringBasedValue(expression: inactiveItemColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0x33919CB5)
   }
 
   public func resolveMinimumItemSize(_ resolver: ExpressionResolver) -> Double {
@@ -105,10 +88,7 @@ public final class DivIndicator: DivBase {
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -246,7 +226,7 @@ public final class DivIndicator: DivBase {
     width: DivSize? = nil
   ) {
     self.accessibility = accessibility ?? DivAccessibility()
-    self.activeItemColor = activeItemColor ?? .value(Color.colorWithARGBHexCode(0xFF_FF_DC_60))
+    self.activeItemColor = activeItemColor ?? .value(Color.colorWithARGBHexCode(0xFFFFDC60))
     self.activeItemSize = activeItemSize ?? .value(1.3)
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
@@ -259,7 +239,7 @@ public final class DivIndicator: DivBase {
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
-    self.inactiveItemColor = inactiveItemColor ?? .value(Color.colorWithARGBHexCode(0x33_91_9C_B5))
+    self.inactiveItemColor = inactiveItemColor ?? .value(Color.colorWithARGBHexCode(0x33919CB5))
     self.margins = margins ?? DivEdgeInsets()
     self.minimumItemSize = minimumItemSize ?? .value(0.5)
     self.paddings = paddings ?? DivEdgeInsets()

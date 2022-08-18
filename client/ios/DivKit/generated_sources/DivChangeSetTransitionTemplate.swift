@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -21,14 +19,8 @@ public final class DivChangeSetTransitionTemplate: TemplateValue, TemplateDeseri
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         items: try dictionary.getOptionalArray("items", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-change-set-transition_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-change-set-transition_template." + field, representation: representation)
     }
   }
 
@@ -40,25 +32,13 @@ public final class DivChangeSetTransitionTemplate: TemplateValue, TemplateDeseri
     self.items = items
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivChangeSetTransitionTemplate?
-  ) -> DeserializationResult<DivChangeSetTransition> {
-    let itemsValue = parent?.items?.resolveValue(
-      context: context,
-      validator: ResolvedValue.itemsValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivChangeSetTransitionTemplate?) -> DeserializationResult<DivChangeSetTransition> {
+    let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .error)) }
     )
     if case .noValue = itemsValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "items",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "items", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let itemsNonNil = itemsValue.value
@@ -68,15 +48,10 @@ public final class DivChangeSetTransitionTemplate: TemplateValue, TemplateDeseri
     let result = DivChangeSetTransition(
       items: itemsNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivChangeSetTransitionTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivChangeSetTransition> {
+  public static func resolveValue(context: Context, parent: DivChangeSetTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivChangeSetTransition> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -84,42 +59,20 @@ public final class DivChangeSetTransitionTemplate: TemplateValue, TemplateDeseri
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "items":
-        itemsValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.itemsValidator,
-          type: DivChangeTransitionTemplate.self
-        ).merged(with: itemsValue)
+        itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivChangeTransitionTemplate.self).merged(with: itemsValue)
       case parent?.items?.link:
-        itemsValue = itemsValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.itemsValidator,
-          type: DivChangeTransitionTemplate.self
-        ))
+        itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivChangeTransitionTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      itemsValue = itemsValue.merged(with: parent.items?.resolveValue(
-        context: context,
-        validator: ResolvedValue.itemsValidator,
-        useOnlyLinks: true
-      ))
+      itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      itemsValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "items", level: .error)) }
+      itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .error)) }
     )
     if case .noValue = itemsValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "items",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "items", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let itemsNonNil = itemsValue.value
@@ -129,8 +82,7 @@ public final class DivChangeSetTransitionTemplate: TemplateValue, TemplateDeseri
     let result = DivChangeSetTransition(
       items: itemsNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivChangeSetTransitionTemplate {

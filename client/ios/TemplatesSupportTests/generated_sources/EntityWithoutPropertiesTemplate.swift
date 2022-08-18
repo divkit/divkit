@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -14,36 +14,31 @@ public final class EntityWithoutPropertiesTemplate: TemplateValue, TemplateDeser
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator)
     )
   }
 
-  init(parent: String?) {
+  init(
+    parent: String?
+  ) {
     self.parent = parent
   }
 
-  private static func resolveOnlyLinks(
-    context _: Context,
-    parent _: EntityWithoutPropertiesTemplate?
-  ) -> DeserializationResult<EntityWithoutProperties> {
-    .success(EntityWithoutProperties())
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithoutPropertiesTemplate?) -> DeserializationResult<EntityWithoutProperties> {
+    return .success(EntityWithoutProperties())
   }
 
-  public static func resolveValue(
-    context _: Context,
-    parent _: EntityWithoutPropertiesTemplate?,
-    useOnlyLinks _: Bool
-  ) -> DeserializationResult<EntityWithoutProperties> {
-    .success(EntityWithoutProperties())
+  public static func resolveValue(context: Context, parent: EntityWithoutPropertiesTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithoutProperties> {
+    return .success(EntityWithoutProperties())
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> EntityWithoutPropertiesTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> EntityWithoutPropertiesTemplate {
+    return self
   }
 
-  public func resolveParent(templates _: Templates) throws -> EntityWithoutPropertiesTemplate {
-    self
+  public func resolveParent(templates: Templates) throws -> EntityWithoutPropertiesTemplate {
+    return self
   }
 }

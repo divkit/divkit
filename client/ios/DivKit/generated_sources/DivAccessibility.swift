@@ -1,27 +1,25 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivAccessibility {
   public enum Kind: String, CaseIterable {
-    case none
-    case button
-    case image
-    case text
+    case none = "none"
+    case button = "button"
+    case image = "image"
+    case text = "text"
     case editText = "edit_text"
-    case header
+    case header = "header"
     case tabBar = "tab_bar"
   }
 
   public enum Mode: String, CaseIterable {
-    case `default`
-    case merge
-    case exclude
+    case `default` = "default"
+    case merge = "merge"
+    case exclude = "exclude"
   }
 
   public let description: Expression<String>? // at least 1 char
@@ -40,8 +38,7 @@ public final class DivAccessibility {
   }
 
   public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
-    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode
-      .default
+    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode.default
   }
 
   public func resolveMuteAfterAction(_ resolver: ExpressionResolver) -> Bool {

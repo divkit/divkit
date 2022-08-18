@@ -1,16 +1,14 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivPatch {
   public enum Mode: String, CaseIterable {
-    case transactional
-    case partial
+    case transactional = "transactional"
+    case partial = "partial"
   }
 
   public final class Change {
@@ -33,8 +31,7 @@ public final class DivPatch {
   public let mode: Expression<Mode> // default value: partial
 
   public func resolveMode(_ resolver: ExpressionResolver) -> Mode {
-    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode
-      .partial
+    resolver.resolveStringBasedValue(expression: mode, initializer: Mode.init(rawValue:)) ?? Mode.partial
   }
 
   static let changesValidator: AnyArrayValueValidator<DivPatch.Change> =

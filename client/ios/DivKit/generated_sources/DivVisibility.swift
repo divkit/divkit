@@ -1,14 +1,12 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public enum DivVisibility: String, CaseIterable {
-  case visible
-  case invisible
-  case gone
+  case visible = "visible"
+  case invisible = "invisible"
+  case gone = "gone"
 }

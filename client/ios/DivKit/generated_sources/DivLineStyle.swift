@@ -1,13 +1,11 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public enum DivLineStyle: String, CaseIterable {
-  case none
-  case single
+  case none = "none"
+  case single = "single"
 }

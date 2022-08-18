@@ -1,14 +1,12 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public enum DivImageScale: String, CaseIterable {
-  case fill
+  case fill = "fill"
   case noScale = "no_scale"
-  case fit
+  case fit = "fit"
 }

@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -12,9 +12,7 @@ public enum EntityTemplate: TemplateValue {
   case entityWithArrayOfNestedItemsTemplate(EntityWithArrayOfNestedItemsTemplate)
   case entityWithArrayWithTransformTemplate(EntityWithArrayWithTransformTemplate)
   case entityWithComplexPropertyTemplate(EntityWithComplexPropertyTemplate)
-  case entityWithComplexPropertyWithDefaultValueTemplate(
-    EntityWithComplexPropertyWithDefaultValueTemplate
-  )
+  case entityWithComplexPropertyWithDefaultValueTemplate(EntityWithComplexPropertyWithDefaultValueTemplate)
   case entityWithEntityPropertyTemplate(EntityWithEntityPropertyTemplate)
   case entityWithOptionalComplexPropertyTemplate(EntityWithOptionalComplexPropertyTemplate)
   case entityWithOptionalPropertyTemplate(EntityWithOptionalPropertyTemplate)
@@ -25,9 +23,7 @@ public enum EntityTemplate: TemplateValue {
   case entityWithStrictArrayTemplate(EntityWithStrictArrayTemplate)
   case entityWithStringArrayPropertyTemplate(EntityWithStringArrayPropertyTemplate)
   case entityWithStringEnumPropertyTemplate(EntityWithStringEnumPropertyTemplate)
-  case entityWithStringEnumPropertyWithDefaultValueTemplate(
-    EntityWithStringEnumPropertyWithDefaultValueTemplate
-  )
+  case entityWithStringEnumPropertyWithDefaultValueTemplate(EntityWithStringEnumPropertyWithDefaultValueTemplate)
   case entityWithoutPropertiesTemplate(EntityWithoutPropertiesTemplate)
 
   public var value: Any {
@@ -80,29 +76,17 @@ public enum EntityTemplate: TemplateValue {
     case let .entityWithComplexPropertyTemplate(value):
       return .entityWithComplexPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithComplexPropertyWithDefaultValueTemplate(value):
-      return .entityWithComplexPropertyWithDefaultValueTemplate(
-        try value
-          .resolveParent(templates: templates)
-      )
+      return .entityWithComplexPropertyWithDefaultValueTemplate(try value.resolveParent(templates: templates))
     case let .entityWithEntityPropertyTemplate(value):
       return .entityWithEntityPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithOptionalComplexPropertyTemplate(value):
-      return .entityWithOptionalComplexPropertyTemplate(
-        try value
-          .resolveParent(templates: templates)
-      )
+      return .entityWithOptionalComplexPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithOptionalPropertyTemplate(value):
       return .entityWithOptionalPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithOptionalStringEnumPropertyTemplate(value):
-      return .entityWithOptionalStringEnumPropertyTemplate(
-        try value
-          .resolveParent(templates: templates)
-      )
+      return .entityWithOptionalStringEnumPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithPropertyWithDefaultValueTemplate(value):
-      return .entityWithPropertyWithDefaultValueTemplate(
-        try value
-          .resolveParent(templates: templates)
-      )
+      return .entityWithPropertyWithDefaultValueTemplate(try value.resolveParent(templates: templates))
     case let .entityWithRequiredPropertyTemplate(value):
       return .entityWithRequiredPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithSimplePropertiesTemplate(value):
@@ -114,20 +98,13 @@ public enum EntityTemplate: TemplateValue {
     case let .entityWithStringEnumPropertyTemplate(value):
       return .entityWithStringEnumPropertyTemplate(try value.resolveParent(templates: templates))
     case let .entityWithStringEnumPropertyWithDefaultValueTemplate(value):
-      return .entityWithStringEnumPropertyWithDefaultValueTemplate(
-        try value
-          .resolveParent(templates: templates)
-      )
+      return .entityWithStringEnumPropertyWithDefaultValueTemplate(try value.resolveParent(templates: templates))
     case let .entityWithoutPropertiesTemplate(value):
       return .entityWithoutPropertiesTemplate(try value.resolveParent(templates: templates))
     }
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<Entity> {
+  public static func resolveValue(context: Context, parent: EntityTemplate?, useOnlyLinks: Bool) -> DeserializationResult<Entity> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -141,10 +118,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithArray(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .entityWithArray(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArray(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -152,10 +126,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithArrayOfNestedItems(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithArrayOfNestedItems(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArrayOfNestedItems(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -163,10 +134,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithArrayWithTransform(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithArrayWithTransform(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArrayWithTransform(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -174,10 +142,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithComplexProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithComplexProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithComplexProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -185,13 +150,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithComplexPropertyWithDefaultValue(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithComplexPropertyWithDefaultValue(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithComplexPropertyWithDefaultValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -199,10 +158,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithEntityProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithEntityProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithEntityProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -210,13 +166,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithOptionalComplexProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithOptionalComplexProperty(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithOptionalComplexProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -224,10 +174,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithOptionalProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithOptionalProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithOptionalProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -235,13 +182,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithOptionalStringEnumProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithOptionalStringEnumProperty(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithOptionalStringEnumProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -249,13 +190,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithPropertyWithDefaultValue(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithPropertyWithDefaultValue(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithPropertyWithDefaultValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -263,10 +198,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithRequiredProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithRequiredProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithRequiredProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -274,10 +206,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithSimpleProperties(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithSimpleProperties(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithSimpleProperties(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -285,10 +214,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithStrictArray(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithStrictArray(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithStrictArray(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -296,10 +222,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithStringArrayProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithStringArrayProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithStringArrayProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -307,10 +230,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithStringEnumProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithStringEnumProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithStringEnumProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -318,13 +238,7 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithStringEnumPropertyWithDefaultValue(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithStringEnumPropertyWithDefaultValue(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithStringEnumPropertyWithDefaultValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -332,289 +246,157 @@ public enum EntityTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithoutProperties(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithoutProperties(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithoutProperties(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     }
   }
 
-  private static func resolveUnknownValue(
-    context: Context,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<Entity> {
-    guard let type = (context.templateData["type"] as? String)
-      .flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<Entity> {
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
 
     switch type {
     case EntityWithArray.type:
-      let result = EntityWithArrayTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithArrayTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithArray(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .entityWithArray(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArray(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithArrayOfNestedItems.type:
-      let result = EntityWithArrayOfNestedItemsTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithArrayOfNestedItemsTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithArrayOfNestedItems(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithArrayOfNestedItems(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArrayOfNestedItems(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithArrayWithTransform.type:
-      let result = EntityWithArrayWithTransformTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithArrayWithTransformTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithArrayWithTransform(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithArrayWithTransform(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArrayWithTransform(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithComplexProperty.type:
-      let result = EntityWithComplexPropertyTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithComplexPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithComplexProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithComplexProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithComplexProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithComplexPropertyWithDefaultValue.type:
-      let result = EntityWithComplexPropertyWithDefaultValueTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithComplexPropertyWithDefaultValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithComplexPropertyWithDefaultValue(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithComplexPropertyWithDefaultValue(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithComplexPropertyWithDefaultValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithEntityProperty.type:
-      let result = EntityWithEntityPropertyTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithEntityPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithEntityProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithEntityProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithEntityProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithOptionalComplexProperty.type:
-      let result = EntityWithOptionalComplexPropertyTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithOptionalComplexPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithOptionalComplexProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithOptionalComplexProperty(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithOptionalComplexProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithOptionalProperty.type:
-      let result = EntityWithOptionalPropertyTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithOptionalPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithOptionalProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithOptionalProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithOptionalProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithOptionalStringEnumProperty.type:
-      let result = EntityWithOptionalStringEnumPropertyTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithOptionalStringEnumPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithOptionalStringEnumProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithOptionalStringEnumProperty(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithOptionalStringEnumProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithPropertyWithDefaultValue.type:
-      let result = EntityWithPropertyWithDefaultValueTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithPropertyWithDefaultValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithPropertyWithDefaultValue(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithPropertyWithDefaultValue(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithPropertyWithDefaultValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithRequiredProperty.type:
-      let result = EntityWithRequiredPropertyTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithRequiredPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithRequiredProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithRequiredProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithRequiredProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithSimpleProperties.type:
-      let result = EntityWithSimplePropertiesTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithSimplePropertiesTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithSimpleProperties(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithSimpleProperties(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithSimpleProperties(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithStrictArray.type:
-      let result = EntityWithStrictArrayTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithStrictArrayTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithStrictArray(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithStrictArray(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithStrictArray(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithStringArrayProperty.type:
-      let result = EntityWithStringArrayPropertyTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithStringArrayPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithStringArrayProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithStringArrayProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithStringArrayProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithStringEnumProperty.type:
-      let result = EntityWithStringEnumPropertyTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithStringEnumPropertyTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithStringEnumProperty(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithStringEnumProperty(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithStringEnumProperty(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithStringEnumPropertyWithDefaultValue.type:
-      let result = EntityWithStringEnumPropertyWithDefaultValueTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithStringEnumPropertyWithDefaultValueTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithStringEnumPropertyWithDefaultValue(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(
-          .entityWithStringEnumPropertyWithDefaultValue(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithStringEnumPropertyWithDefaultValue(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case EntityWithoutProperties.type:
-      let result = EntityWithoutPropertiesTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = EntityWithoutPropertiesTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.entityWithoutProperties(value))
-      case let .partialSuccess(
-        value,
-        warnings
-      ): return .partialSuccess(.entityWithoutProperties(value), warnings: warnings)
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithoutProperties(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
   }
 }
@@ -625,136 +407,41 @@ extension EntityTemplate: TemplateDeserializable {
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case EntityWithArrayTemplate.type:
-      self =
-        .entityWithArrayTemplate(try EntityWithArrayTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .entityWithArrayTemplate(try EntityWithArrayTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithArrayOfNestedItemsTemplate.type:
-      self =
-        .entityWithArrayOfNestedItemsTemplate(
-          try EntityWithArrayOfNestedItemsTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithArrayOfNestedItemsTemplate(try EntityWithArrayOfNestedItemsTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithArrayWithTransformTemplate.type:
-      self =
-        .entityWithArrayWithTransformTemplate(
-          try EntityWithArrayWithTransformTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithArrayWithTransformTemplate(try EntityWithArrayWithTransformTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithComplexPropertyTemplate.type:
-      self =
-        .entityWithComplexPropertyTemplate(
-          try EntityWithComplexPropertyTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithComplexPropertyTemplate(try EntityWithComplexPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithComplexPropertyWithDefaultValueTemplate.type:
-      self =
-        .entityWithComplexPropertyWithDefaultValueTemplate(
-          try EntityWithComplexPropertyWithDefaultValueTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithComplexPropertyWithDefaultValueTemplate(try EntityWithComplexPropertyWithDefaultValueTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithEntityPropertyTemplate.type:
-      self =
-        .entityWithEntityPropertyTemplate(
-          try EntityWithEntityPropertyTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithEntityPropertyTemplate(try EntityWithEntityPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithOptionalComplexPropertyTemplate.type:
-      self =
-        .entityWithOptionalComplexPropertyTemplate(try EntityWithOptionalComplexPropertyTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .entityWithOptionalComplexPropertyTemplate(try EntityWithOptionalComplexPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithOptionalPropertyTemplate.type:
-      self =
-        .entityWithOptionalPropertyTemplate(
-          try EntityWithOptionalPropertyTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithOptionalPropertyTemplate(try EntityWithOptionalPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithOptionalStringEnumPropertyTemplate.type:
-      self =
-        .entityWithOptionalStringEnumPropertyTemplate(
-          try EntityWithOptionalStringEnumPropertyTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithOptionalStringEnumPropertyTemplate(try EntityWithOptionalStringEnumPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithPropertyWithDefaultValueTemplate.type:
-      self =
-        .entityWithPropertyWithDefaultValueTemplate(try EntityWithPropertyWithDefaultValueTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .entityWithPropertyWithDefaultValueTemplate(try EntityWithPropertyWithDefaultValueTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithRequiredPropertyTemplate.type:
-      self =
-        .entityWithRequiredPropertyTemplate(
-          try EntityWithRequiredPropertyTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithRequiredPropertyTemplate(try EntityWithRequiredPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithSimplePropertiesTemplate.type:
-      self =
-        .entityWithSimplePropertiesTemplate(
-          try EntityWithSimplePropertiesTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithSimplePropertiesTemplate(try EntityWithSimplePropertiesTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithStrictArrayTemplate.type:
-      self =
-        .entityWithStrictArrayTemplate(try EntityWithStrictArrayTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .entityWithStrictArrayTemplate(try EntityWithStrictArrayTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithStringArrayPropertyTemplate.type:
-      self =
-        .entityWithStringArrayPropertyTemplate(
-          try EntityWithStringArrayPropertyTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithStringArrayPropertyTemplate(try EntityWithStringArrayPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithStringEnumPropertyTemplate.type:
-      self =
-        .entityWithStringEnumPropertyTemplate(
-          try EntityWithStringEnumPropertyTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithStringEnumPropertyTemplate(try EntityWithStringEnumPropertyTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithStringEnumPropertyWithDefaultValueTemplate.type:
-      self =
-        .entityWithStringEnumPropertyWithDefaultValueTemplate(
-          try EntityWithStringEnumPropertyWithDefaultValueTemplate(
-            dictionary: dictionary,
-            templateToType: templateToType
-          )
-        )
+      self = .entityWithStringEnumPropertyWithDefaultValueTemplate(try EntityWithStringEnumPropertyWithDefaultValueTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithoutPropertiesTemplate.type:
-      self =
-        .entityWithoutPropertiesTemplate(try EntityWithoutPropertiesTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .entityWithoutPropertiesTemplate(try EntityWithoutPropertiesTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "entity_template",
-        representation: dictionary
-      )
+      throw DeserializationError.invalidFieldRepresentation(field: "entity_template", representation: dictionary)
     }
   }
 }

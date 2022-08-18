@@ -1,15 +1,13 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public enum DivFontWeight: String, CaseIterable {
-  case light
-  case medium
-  case regular
-  case bold
+  case light = "light"
+  case medium = "medium"
+  case regular = "regular"
+  case bold = "bold"
 }

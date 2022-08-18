@@ -1,17 +1,15 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public enum DivAnimationInterpolator: String, CaseIterable {
-  case linear
-  case ease
+  case linear = "linear"
+  case ease = "ease"
   case easeIn = "ease_in"
   case easeOut = "ease_out"
   case easeInOut = "ease_in_out"
-  case spring
+  case spring = "spring"
 }

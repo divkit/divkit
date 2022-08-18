@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -16,21 +14,15 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         angle: try dictionary.getOptionalField("angle"),
         colors: try dictionary.getOptionalArray("colors", transform: Color.color(withHexString:))
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-gradient-background_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-gradient-background_template." + field, representation: representation)
     }
   }
 
@@ -44,32 +36,15 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
     self.colors = colors
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivGradientBackgroundTemplate?
-  ) -> DeserializationResult<DivGradientBackground> {
-    let angleValue = parent?.angle?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.angleValidator
-    ) ?? .noValue
-    let colorsValue = parent?.colors?.resolveValue(
-      context: context,
-      transform: Color.color(withHexString:),
-      validator: ResolvedValue.colorsValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivGradientBackgroundTemplate?) -> DeserializationResult<DivGradientBackground> {
+    let angleValue = parent?.angle?.resolveOptionalValue(context: context, validator: ResolvedValue.angleValidator) ?? .noValue
+    let colorsValue = parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue
     var errors = mergeErrors(
-      angleValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "angle", level: .warning)) },
-      colorsValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "colors", level: .error)) }
+      angleValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "angle", level: .warning)) },
+      colorsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "colors", level: .error)) }
     )
     if case .noValue = colorsValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "colors",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "colors", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let colorsNonNil = colorsValue.value
@@ -80,57 +55,34 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
       angle: angleValue.value,
       colors: colorsNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivGradientBackgroundTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivGradientBackground> {
+  public static func resolveValue(context: Context, parent: DivGradientBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivGradientBackground> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var angleValue: DeserializationResult<Expression<Int>> = parent?.angle?.value() ?? .noValue
-    var colorsValue: DeserializationResult<[Expression<Color>]> = parent?.colors?
-      .value() ?? .noValue
+    var colorsValue: DeserializationResult<[Expression<Color>]> = parent?.colors?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "angle":
-        angleValue = deserialize(__dictValue, validator: ResolvedValue.angleValidator)
-          .merged(with: angleValue)
+        angleValue = deserialize(__dictValue, validator: ResolvedValue.angleValidator).merged(with: angleValue)
       case "colors":
-        colorsValue = deserialize(
-          __dictValue,
-          transform: Color.color(withHexString:),
-          validator: ResolvedValue.colorsValidator
-        ).merged(with: colorsValue)
+        colorsValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator).merged(with: colorsValue)
       case parent?.angle?.link:
-        angleValue = angleValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.angleValidator))
+        angleValue = angleValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.angleValidator))
       case parent?.colors?.link:
-        colorsValue = colorsValue.merged(with: deserialize(
-          __dictValue,
-          transform: Color.color(withHexString:),
-          validator: ResolvedValue.colorsValidator
-        ))
+        colorsValue = colorsValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator))
       default: break
       }
     }
     var errors = mergeErrors(
-      angleValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "angle", level: .warning)) },
-      colorsValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "colors", level: .error)) }
+      angleValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "angle", level: .warning)) },
+      colorsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "colors", level: .error)) }
     )
     if case .noValue = colorsValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "colors",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "colors", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let colorsNonNil = colorsValue.value
@@ -141,8 +93,7 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
       angle: angleValue.value,
       colors: colorsNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivGradientBackgroundTemplate {
@@ -160,6 +111,6 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
   }
 
   public func resolveParent(templates: Templates) throws -> DivGradientBackgroundTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

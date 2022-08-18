@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -18,7 +16,9 @@ public final class DivPercentageSize {
   static let valueValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
-  init(value: Expression<Double>) {
+  init(
+    value: Expression<Double>
+  ) {
     self.value = value
   }
 }

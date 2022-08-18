@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -15,7 +13,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       weight: try dictionary.getOptionalField("weight")
@@ -30,30 +28,18 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
     self.weight = weight
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivMatchParentSizeTemplate?
-  ) -> DeserializationResult<DivMatchParentSize> {
-    let weightValue = parent?.weight?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.weightValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivMatchParentSizeTemplate?) -> DeserializationResult<DivMatchParentSize> {
+    let weightValue = parent?.weight?.resolveOptionalValue(context: context, validator: ResolvedValue.weightValidator) ?? .noValue
     let errors = mergeErrors(
-      weightValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "weight", level: .warning)) }
+      weightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "weight", level: .warning)) }
     )
     let result = DivMatchParentSize(
       weight: weightValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivMatchParentSizeTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivMatchParentSize> {
+  public static func resolveValue(context: Context, parent: DivMatchParentSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivMatchParentSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -61,23 +47,19 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "weight":
-        weightValue = deserialize(__dictValue, validator: ResolvedValue.weightValidator)
-          .merged(with: weightValue)
+        weightValue = deserialize(__dictValue, validator: ResolvedValue.weightValidator).merged(with: weightValue)
       case parent?.weight?.link:
-        weightValue = weightValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.weightValidator))
+        weightValue = weightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.weightValidator))
       default: break
       }
     }
     let errors = mergeErrors(
-      weightValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "weight", level: .warning)) }
+      weightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "weight", level: .warning)) }
     )
     let result = DivMatchParentSize(
       weight: weightValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivMatchParentSizeTemplate {
@@ -94,6 +76,6 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
   }
 
   public func resolveParent(templates: Templates) throws -> DivMatchParentSizeTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

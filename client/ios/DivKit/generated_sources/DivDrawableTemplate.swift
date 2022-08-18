@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -24,11 +22,7 @@ public enum DivDrawableTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivDrawableTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivDrawable> {
+  public static func resolveValue(context: Context, parent: DivDrawableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivDrawable> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -42,50 +36,29 @@ public enum DivDrawableTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divShapeDrawable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divShapeDrawable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divShapeDrawable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     }
   }
 
-  private static func resolveUnknownValue(
-    context: Context,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivDrawable> {
-    guard let type = (context.templateData["type"] as? String)
-      .flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivDrawable> {
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
 
     switch type {
     case DivShapeDrawable.type:
-      let result = DivShapeDrawableTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = DivShapeDrawableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divShapeDrawable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divShapeDrawable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divShapeDrawable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
   }
 }
@@ -96,16 +69,9 @@ extension DivDrawableTemplate: TemplateDeserializable {
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case DivShapeDrawableTemplate.type:
-      self =
-        .divShapeDrawableTemplate(try DivShapeDrawableTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divShapeDrawableTemplate(try DivShapeDrawableTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-drawable_template",
-        representation: dictionary
-      )
+      throw DeserializationError.invalidFieldRepresentation(field: "div-drawable_template", representation: dictionary)
     }
   }
 }

@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -15,8 +15,16 @@ public final class EntityWithoutProperties {
 
 #if DEBUG
 extension EntityWithoutProperties: Equatable {
-  public static func ==(_: EntityWithoutProperties, _: EntityWithoutProperties) -> Bool {
-    true
+  public static func ==(lhs: EntityWithoutProperties, rhs: EntityWithoutProperties) -> Bool {
+    return true
   }
 }
 #endif
+
+extension EntityWithoutProperties: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    return result
+  }
+}

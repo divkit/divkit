@@ -1,23 +1,23 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithEntityProperty {
   public static let type: String = "entity_with_entity_property"
-  public let entity: Entity // default value: .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .second))
+  public let entity: Entity // default value: .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .value(.second)))
 
   static let entityValidator: AnyValueValidator<Entity> =
     makeNoOpValueValidator()
 
-  init(entity: Entity? = nil) {
-    self
-      .entity = entity ??
-      .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .second))
+  init(
+    entity: Entity? = nil
+  ) {
+    self.entity = entity ?? .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .value(.second)))
   }
 }
 
@@ -33,3 +33,12 @@ extension EntityWithEntityProperty: Equatable {
   }
 }
 #endif
+
+extension EntityWithEntityProperty: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["entity"] = entity.toDictionary()
+    return result
+  }
+}

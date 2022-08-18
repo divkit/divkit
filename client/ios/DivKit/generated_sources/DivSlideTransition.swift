@@ -1,18 +1,16 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class DivSlideTransition: DivTransitionBase {
   public enum Edge: String, CaseIterable {
-    case left
-    case top
-    case right
-    case bottom
+    case left = "left"
+    case top = "top"
+    case right = "right"
+    case bottom = "bottom"
   }
 
   public static let type: String = "slide"
@@ -27,15 +25,11 @@ public final class DivSlideTransition: DivTransitionBase {
   }
 
   public func resolveEdge(_ resolver: ExpressionResolver) -> Edge {
-    resolver.resolveStringBasedValue(expression: edge, initializer: Edge.init(rawValue:)) ?? Edge
-      .bottom
+    resolver.resolveStringBasedValue(expression: edge, initializer: Edge.init(rawValue:)) ?? Edge.bottom
   }
 
   public func resolveInterpolator(_ resolver: ExpressionResolver) -> DivAnimationInterpolator {
-    resolver.resolveStringBasedValue(
-      expression: interpolator,
-      initializer: DivAnimationInterpolator.init(rawValue:)
-    ) ?? DivAnimationInterpolator.easeInOut
+    resolver.resolveStringBasedValue(expression: interpolator, initializer: DivAnimationInterpolator.init(rawValue:)) ?? DivAnimationInterpolator.easeInOut
   }
 
   public func resolveStartDelay(_ resolver: ExpressionResolver) -> Int {

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -15,20 +13,14 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         value: try dictionary.getOptionalField("value")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-pivot-percentage_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-pivot-percentage_template." + field, representation: representation)
     }
   }
 
@@ -40,21 +32,13 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
     self.value = value
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivPivotPercentageTemplate?
-  ) -> DeserializationResult<DivPivotPercentage> {
+  private static func resolveOnlyLinks(context: Context, parent: DivPivotPercentageTemplate?) -> DeserializationResult<DivPivotPercentage> {
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
       valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .error)) }
     )
     if case .noValue = valueValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "value",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let valueNonNil = valueValue.value
@@ -64,15 +48,10 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
     let result = DivPivotPercentage(
       value: valueNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivPivotPercentageTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivPivotPercentage> {
+  public static func resolveValue(context: Context, parent: DivPivotPercentageTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPivotPercentage> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -87,16 +66,10 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
       }
     }
     var errors = mergeErrors(
-      valueValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "value", level: .error)) }
+      valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .error)) }
     )
     if case .noValue = valueValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "value",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let valueNonNil = valueValue.value
@@ -106,8 +79,7 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
     let result = DivPivotPercentage(
       value: valueNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivPivotPercentageTemplate {
@@ -124,6 +96,6 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
   }
 
   public func resolveParent(templates: Templates) throws -> DivPivotPercentageTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -18,7 +16,9 @@ public final class DivMatchParentSize {
   static let weightValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
-  init(weight: Expression<Double>? = nil) {
+  init(
+    weight: Expression<Double>? = nil
+  ) {
     self.weight = weight
   }
 }

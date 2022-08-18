@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -11,20 +9,14 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
   public let id: Field<String>? // at least 1 char
   public let params: Field<[String: Any]>?
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
         id: try dictionary.getOptionalField("id"),
         params: try dictionary.getOptionalField("params")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-extension_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-extension_template." + field, representation: representation)
     }
   }
 
@@ -36,24 +28,15 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
     self.params = params
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivExtensionTemplate?
-  ) -> DeserializationResult<DivExtension> {
-    let idValue = parent?.id?
-      .resolveValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
-    let paramsValue = parent?.params?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.paramsValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivExtensionTemplate?) -> DeserializationResult<DivExtension> {
+    let idValue = parent?.id?.resolveValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
+    let paramsValue = parent?.params?.resolveOptionalValue(context: context, validator: ResolvedValue.paramsValidator) ?? .noValue
     var errors = mergeErrors(
       idValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "id", level: .error)) },
-      paramsValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "params", level: .warning)) }
+      paramsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "params", level: .warning)) }
     )
     if case .noValue = idValue {
-      errors
-        .append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let idNonNil = idValue.value
@@ -64,48 +47,34 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
       id: idNonNil,
       params: paramsValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivExtensionTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivExtension> {
+  public static func resolveValue(context: Context, parent: DivExtensionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivExtension> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var idValue: DeserializationResult<String> = parent?.id?
-      .value(validatedBy: ResolvedValue.idValidator) ?? .noValue
-    var paramsValue: DeserializationResult<[String: Any]> = parent?.params?
-      .value(validatedBy: ResolvedValue.paramsValidator) ?? .noValue
+    var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
+    var paramsValue: DeserializationResult<[String: Any]> = parent?.params?.value(validatedBy: ResolvedValue.paramsValidator) ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "id":
-        idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator)
-          .merged(with: idValue)
+        idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
       case "params":
-        paramsValue = deserialize(__dictValue, validator: ResolvedValue.paramsValidator)
-          .merged(with: paramsValue)
+        paramsValue = deserialize(__dictValue, validator: ResolvedValue.paramsValidator).merged(with: paramsValue)
       case parent?.id?.link:
-        idValue = idValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
+        idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
       case parent?.params?.link:
-        paramsValue = paramsValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.paramsValidator))
+        paramsValue = paramsValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.paramsValidator))
       default: break
       }
     }
     var errors = mergeErrors(
-      idValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "id", level: .error)) },
-      paramsValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "params", level: .warning)) }
+      idValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "id", level: .error)) },
+      paramsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "params", level: .warning)) }
     )
     if case .noValue = idValue {
-      errors
-        .append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let idNonNil = idValue.value
@@ -116,15 +85,14 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
       id: idNonNil,
       params: paramsValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> DivExtensionTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> DivExtensionTemplate {
+    return self
   }
 
   public func resolveParent(templates: Templates) throws -> DivExtensionTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

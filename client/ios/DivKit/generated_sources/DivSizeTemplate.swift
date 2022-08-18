@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -34,11 +32,7 @@ public enum DivSizeTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivSizeTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivSize> {
+  public static func resolveValue(context: Context, parent: DivSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSize> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -52,10 +46,7 @@ public enum DivSizeTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divFixedSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divFixedSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -63,10 +54,7 @@ public enum DivSizeTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divMatchParentSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divMatchParentSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divMatchParentSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -74,27 +62,16 @@ public enum DivSizeTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divWrapContentSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divWrapContentSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divWrapContentSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     }
   }
 
-  private static func resolveUnknownValue(
-    context: Context,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivSize> {
-    guard let type = (context.templateData["type"] as? String)
-      .flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivSize> {
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
 
     switch type {
@@ -102,47 +79,28 @@ public enum DivSizeTemplate: TemplateValue {
       let result = DivFixedSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divFixedSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divFixedSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case DivMatchParentSize.type:
-      let result = DivMatchParentSizeTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = DivMatchParentSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divMatchParentSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divMatchParentSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divMatchParentSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case DivWrapContentSize.type:
-      let result = DivWrapContentSizeTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = DivWrapContentSizeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divWrapContentSize(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divWrapContentSize(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divWrapContentSize(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
   }
 }
@@ -153,28 +111,13 @@ extension DivSizeTemplate: TemplateDeserializable {
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case DivFixedSizeTemplate.type:
-      self =
-        .divFixedSizeTemplate(try DivFixedSizeTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divFixedSizeTemplate(try DivFixedSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivMatchParentSizeTemplate.type:
-      self =
-        .divMatchParentSizeTemplate(try DivMatchParentSizeTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divMatchParentSizeTemplate(try DivMatchParentSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivWrapContentSizeTemplate.type:
-      self =
-        .divWrapContentSizeTemplate(try DivWrapContentSizeTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divWrapContentSizeTemplate(try DivWrapContentSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-size_template",
-        representation: dictionary
-      )
+      throw DeserializationError.invalidFieldRepresentation(field: "div-size_template", representation: dictionary)
     }
   }
 }

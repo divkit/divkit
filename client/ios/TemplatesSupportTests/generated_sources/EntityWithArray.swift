@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -14,7 +14,9 @@ public final class EntityWithArray {
   static let arrayValidator: AnyArrayValueValidator<Entity> =
     makeArrayValidator(minItems: 1)
 
-  init(array: [Entity]) {
+  init(
+    array: [Entity]
+  ) {
     self.array = array
   }
 }
@@ -31,3 +33,12 @@ extension EntityWithArray: Equatable {
   }
 }
 #endif
+
+extension EntityWithArray: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["array"] = array.map { $0.toDictionary() }
+    return result
+  }
+}

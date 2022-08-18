@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -13,7 +11,7 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
   public let topLeft: Field<Expression<Int>>? // constraint: number >= 0
   public let topRight: Field<Expression<Int>>? // constraint: number >= 0
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       bottomLeft: try dictionary.getOptionalField("bottom-left"),
       bottomRight: try dictionary.getOptionalField("bottom-right"),
@@ -34,35 +32,16 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
     self.topRight = topRight
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivCornersRadiusTemplate?
-  ) -> DeserializationResult<DivCornersRadius> {
-    let bottomLeftValue = parent?.bottomLeft?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.bottomLeftValidator
-    ) ?? .noValue
-    let bottomRightValue = parent?.bottomRight?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.bottomRightValidator
-    ) ?? .noValue
-    let topLeftValue = parent?.topLeft?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.topLeftValidator
-    ) ?? .noValue
-    let topRightValue = parent?.topRight?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.topRightValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivCornersRadiusTemplate?) -> DeserializationResult<DivCornersRadius> {
+    let bottomLeftValue = parent?.bottomLeft?.resolveOptionalValue(context: context, validator: ResolvedValue.bottomLeftValidator) ?? .noValue
+    let bottomRightValue = parent?.bottomRight?.resolveOptionalValue(context: context, validator: ResolvedValue.bottomRightValidator) ?? .noValue
+    let topLeftValue = parent?.topLeft?.resolveOptionalValue(context: context, validator: ResolvedValue.topLeftValidator) ?? .noValue
+    let topRightValue = parent?.topRight?.resolveOptionalValue(context: context, validator: ResolvedValue.topRightValidator) ?? .noValue
     let errors = mergeErrors(
-      bottomLeftValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "bottom-left", level: .warning)) },
-      bottomRightValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "bottom-right", level: .warning)) },
-      topLeftValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "top-left", level: .warning)) },
-      topRightValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "top-right", level: .warning)) }
+      bottomLeftValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "bottom-left", level: .warning)) },
+      bottomRightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "bottom-right", level: .warning)) },
+      topLeftValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "top-left", level: .warning)) },
+      topRightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "top-right", level: .warning)) }
     )
     let result = DivCornersRadius(
       bottomLeft: bottomLeftValue.value,
@@ -70,63 +49,43 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
       topLeft: topLeftValue.value,
       topRight: topRightValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivCornersRadiusTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivCornersRadius> {
+  public static func resolveValue(context: Context, parent: DivCornersRadiusTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivCornersRadius> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var bottomLeftValue: DeserializationResult<Expression<Int>> = parent?.bottomLeft?
-      .value() ?? .noValue
-    var bottomRightValue: DeserializationResult<Expression<Int>> = parent?.bottomRight?
-      .value() ?? .noValue
+    var bottomLeftValue: DeserializationResult<Expression<Int>> = parent?.bottomLeft?.value() ?? .noValue
+    var bottomRightValue: DeserializationResult<Expression<Int>> = parent?.bottomRight?.value() ?? .noValue
     var topLeftValue: DeserializationResult<Expression<Int>> = parent?.topLeft?.value() ?? .noValue
-    var topRightValue: DeserializationResult<Expression<Int>> = parent?.topRight?
-      .value() ?? .noValue
+    var topRightValue: DeserializationResult<Expression<Int>> = parent?.topRight?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "bottom-left":
-        bottomLeftValue = deserialize(__dictValue, validator: ResolvedValue.bottomLeftValidator)
-          .merged(with: bottomLeftValue)
+        bottomLeftValue = deserialize(__dictValue, validator: ResolvedValue.bottomLeftValidator).merged(with: bottomLeftValue)
       case "bottom-right":
-        bottomRightValue = deserialize(__dictValue, validator: ResolvedValue.bottomRightValidator)
-          .merged(with: bottomRightValue)
+        bottomRightValue = deserialize(__dictValue, validator: ResolvedValue.bottomRightValidator).merged(with: bottomRightValue)
       case "top-left":
-        topLeftValue = deserialize(__dictValue, validator: ResolvedValue.topLeftValidator)
-          .merged(with: topLeftValue)
+        topLeftValue = deserialize(__dictValue, validator: ResolvedValue.topLeftValidator).merged(with: topLeftValue)
       case "top-right":
-        topRightValue = deserialize(__dictValue, validator: ResolvedValue.topRightValidator)
-          .merged(with: topRightValue)
+        topRightValue = deserialize(__dictValue, validator: ResolvedValue.topRightValidator).merged(with: topRightValue)
       case parent?.bottomLeft?.link:
-        bottomLeftValue = bottomLeftValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomLeftValidator))
+        bottomLeftValue = bottomLeftValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomLeftValidator))
       case parent?.bottomRight?.link:
-        bottomRightValue = bottomRightValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomRightValidator))
+        bottomRightValue = bottomRightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.bottomRightValidator))
       case parent?.topLeft?.link:
-        topLeftValue = topLeftValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.topLeftValidator))
+        topLeftValue = topLeftValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topLeftValidator))
       case parent?.topRight?.link:
-        topRightValue = topRightValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.topRightValidator))
+        topRightValue = topRightValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.topRightValidator))
       default: break
       }
     }
     let errors = mergeErrors(
-      bottomLeftValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "bottom-left", level: .warning)) },
-      bottomRightValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "bottom-right", level: .warning)) },
-      topLeftValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "top-left", level: .warning)) },
-      topRightValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "top-right", level: .warning)) }
+      bottomLeftValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "bottom-left", level: .warning)) },
+      bottomRightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "bottom-right", level: .warning)) },
+      topLeftValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "top-left", level: .warning)) },
+      topRightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "top-right", level: .warning)) }
     )
     let result = DivCornersRadius(
       bottomLeft: bottomLeftValue.value,
@@ -134,15 +93,14 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
       topLeft: topLeftValue.value,
       topRight: topRightValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> DivCornersRadiusTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> DivCornersRadiusTemplate {
+    return self
   }
 
   public func resolveParent(templates: Templates) throws -> DivCornersRadiusTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

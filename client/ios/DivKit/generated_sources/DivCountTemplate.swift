@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -29,11 +27,7 @@ public enum DivCountTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivCountTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivCount> {
+  public static func resolveValue(context: Context, parent: DivCountTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivCount> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -47,10 +41,7 @@ public enum DivCountTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divInfinityCount(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divInfinityCount(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divInfinityCount(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -58,41 +49,24 @@ public enum DivCountTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divFixedCount(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divFixedCount(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedCount(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     }
   }
 
-  private static func resolveUnknownValue(
-    context: Context,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivCount> {
-    guard let type = (context.templateData["type"] as? String)
-      .flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivCount> {
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
 
     switch type {
     case DivInfinityCount.type:
-      let result = DivInfinityCountTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = DivInfinityCountTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divInfinityCount(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divInfinityCount(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divInfinityCount(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -100,19 +74,12 @@ public enum DivCountTemplate: TemplateValue {
       let result = DivFixedCountTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.divFixedCount(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .divFixedCount(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divFixedCount(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
   }
 }
@@ -123,22 +90,11 @@ extension DivCountTemplate: TemplateDeserializable {
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case DivInfinityCountTemplate.type:
-      self =
-        .divInfinityCountTemplate(try DivInfinityCountTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divInfinityCountTemplate(try DivInfinityCountTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivFixedCountTemplate.type:
-      self =
-        .divFixedCountTemplate(try DivFixedCountTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .divFixedCountTemplate(try DivFixedCountTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-count_template",
-        representation: dictionary
-      )
+      throw DeserializationError.invalidFieldRepresentation(field: "div-count_template", representation: dictionary)
     }
   }
 }

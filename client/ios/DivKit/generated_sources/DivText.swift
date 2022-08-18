@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -55,10 +53,7 @@ public final class DivText: DivBase {
     }
 
     public func resolveTintColor(_ resolver: ExpressionResolver) -> Color? {
-      resolver.resolveStringBasedValue(
-        expression: tintColor,
-        initializer: Color.color(withHexString:)
-      )
+      resolver.resolveStringBasedValue(expression: tintColor, initializer: Color.color(withHexString:))
     }
 
     public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
@@ -112,10 +107,7 @@ public final class DivText: DivBase {
     }
 
     public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily? {
-      resolver.resolveStringBasedValue(
-        expression: fontFamily,
-        initializer: DivFontFamily.init(rawValue:)
-      )
+      resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:))
     }
 
     public func resolveFontSize(_ resolver: ExpressionResolver) -> Int? {
@@ -123,17 +115,11 @@ public final class DivText: DivBase {
     }
 
     public func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-      resolver.resolveStringBasedValue(
-        expression: fontSizeUnit,
-        initializer: DivSizeUnit.init(rawValue:)
-      ) ?? DivSizeUnit.sp
+      resolver.resolveStringBasedValue(expression: fontSizeUnit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.sp
     }
 
     public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight? {
-      resolver.resolveStringBasedValue(
-        expression: fontWeight,
-        initializer: DivFontWeight.init(rawValue:)
-      )
+      resolver.resolveStringBasedValue(expression: fontWeight, initializer: DivFontWeight.init(rawValue:))
     }
 
     public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double? {
@@ -149,17 +135,11 @@ public final class DivText: DivBase {
     }
 
     public func resolveStrike(_ resolver: ExpressionResolver) -> DivLineStyle? {
-      resolver.resolveStringBasedValue(
-        expression: strike,
-        initializer: DivLineStyle.init(rawValue:)
-      )
+      resolver.resolveStringBasedValue(expression: strike, initializer: DivLineStyle.init(rawValue:))
     }
 
     public func resolveTextColor(_ resolver: ExpressionResolver) -> Color? {
-      resolver.resolveStringBasedValue(
-        expression: textColor,
-        initializer: Color.color(withHexString:)
-      )
+      resolver.resolveStringBasedValue(expression: textColor, initializer: Color.color(withHexString:))
     }
 
     public func resolveTopOffset(_ resolver: ExpressionResolver) -> Int? {
@@ -167,10 +147,7 @@ public final class DivText: DivBase {
     }
 
     public func resolveUnderline(_ resolver: ExpressionResolver) -> DivLineStyle? {
-      resolver.resolveStringBasedValue(
-        expression: underline,
-        initializer: DivLineStyle.init(rawValue:)
-      )
+      resolver.resolveStringBasedValue(expression: underline, initializer: DivLineStyle.init(rawValue:))
     }
 
     static let actionsValidator: AnyArrayValueValidator<DivAction> =
@@ -293,19 +270,12 @@ public final class DivText: DivBase {
   public let visibilityActions: [DivVisibilityAction]? // at least 1 elements
   public let width: DivSize // default value: .divMatchParentSize(DivMatchParentSize())
 
-  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    )
+  public func resolveAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal? {
+    resolver.resolveStringBasedValue(expression: alignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:))
   }
 
   public func resolveAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical? {
-    resolver.resolveStringBasedValue(
-      expression: alignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    )
+    resolver.resolveStringBasedValue(expression: alignmentVertical, initializer: DivAlignmentVertical.init(rawValue:))
   }
 
   public func resolveAlpha(_ resolver: ExpressionResolver) -> Double {
@@ -321,17 +291,11 @@ public final class DivText: DivBase {
   }
 
   public func resolveFocusedTextColor(_ resolver: ExpressionResolver) -> Color? {
-    resolver.resolveStringBasedValue(
-      expression: focusedTextColor,
-      initializer: Color.color(withHexString:)
-    )
+    resolver.resolveStringBasedValue(expression: focusedTextColor, initializer: Color.color(withHexString:))
   }
 
   public func resolveFontFamily(_ resolver: ExpressionResolver) -> DivFontFamily {
-    resolver.resolveStringBasedValue(
-      expression: fontFamily,
-      initializer: DivFontFamily.init(rawValue:)
-    ) ?? DivFontFamily.text
+    resolver.resolveStringBasedValue(expression: fontFamily, initializer: DivFontFamily.init(rawValue:)) ?? DivFontFamily.text
   }
 
   public func resolveFontSize(_ resolver: ExpressionResolver) -> Int {
@@ -339,17 +303,11 @@ public final class DivText: DivBase {
   }
 
   public func resolveFontSizeUnit(_ resolver: ExpressionResolver) -> DivSizeUnit {
-    resolver.resolveStringBasedValue(
-      expression: fontSizeUnit,
-      initializer: DivSizeUnit.init(rawValue:)
-    ) ?? DivSizeUnit.sp
+    resolver.resolveStringBasedValue(expression: fontSizeUnit, initializer: DivSizeUnit.init(rawValue:)) ?? DivSizeUnit.sp
   }
 
   public func resolveFontWeight(_ resolver: ExpressionResolver) -> DivFontWeight {
-    resolver.resolveStringBasedValue(
-      expression: fontWeight,
-      initializer: DivFontWeight.init(rawValue:)
-    ) ?? DivFontWeight.regular
+    resolver.resolveStringBasedValue(expression: fontWeight, initializer: DivFontWeight.init(rawValue:)) ?? DivFontWeight.regular
   }
 
   public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double {
@@ -377,49 +335,31 @@ public final class DivText: DivBase {
   }
 
   public func resolveStrike(_ resolver: ExpressionResolver) -> DivLineStyle {
-    resolver
-      .resolveStringBasedValue(expression: strike, initializer: DivLineStyle.init(rawValue:)) ??
-      DivLineStyle.none
+    resolver.resolveStringBasedValue(expression: strike, initializer: DivLineStyle.init(rawValue:)) ?? DivLineStyle.none
   }
 
   public func resolveText(_ resolver: ExpressionResolver) -> CFString? {
-    resolver.resolveStringBasedValue(expression: text, initializer: { $0 as CFString })
+    resolver.resolveStringBasedValue(expression: text, initializer: { $0 as CFString})
   }
 
-  public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver)
-    -> DivAlignmentHorizontal {
-    resolver.resolveStringBasedValue(
-      expression: textAlignmentHorizontal,
-      initializer: DivAlignmentHorizontal.init(rawValue:)
-    ) ?? DivAlignmentHorizontal.left
+  public func resolveTextAlignmentHorizontal(_ resolver: ExpressionResolver) -> DivAlignmentHorizontal {
+    resolver.resolveStringBasedValue(expression: textAlignmentHorizontal, initializer: DivAlignmentHorizontal.init(rawValue:)) ?? DivAlignmentHorizontal.left
   }
 
   public func resolveTextAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
-    resolver.resolveStringBasedValue(
-      expression: textAlignmentVertical,
-      initializer: DivAlignmentVertical.init(rawValue:)
-    ) ?? DivAlignmentVertical.top
+    resolver.resolveStringBasedValue(expression: textAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.top
   }
 
   public func resolveTextColor(_ resolver: ExpressionResolver) -> Color {
-    resolver.resolveStringBasedValue(
-      expression: textColor,
-      initializer: Color.color(withHexString:)
-    ) ?? Color.colorWithARGBHexCode(0xFF_00_00_00)
+    resolver.resolveStringBasedValue(expression: textColor, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFF000000)
   }
 
   public func resolveUnderline(_ resolver: ExpressionResolver) -> DivLineStyle {
-    resolver.resolveStringBasedValue(
-      expression: underline,
-      initializer: DivLineStyle.init(rawValue:)
-    ) ?? DivLineStyle.none
+    resolver.resolveStringBasedValue(expression: underline, initializer: DivLineStyle.init(rawValue:)) ?? DivLineStyle.none
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
-    resolver.resolveStringBasedValue(
-      expression: visibility,
-      initializer: DivVisibility.init(rawValue:)
-    ) ?? DivVisibility.visible
+    resolver.resolveStringBasedValue(expression: visibility, initializer: DivVisibility.init(rawValue:)) ?? DivVisibility.visible
   }
 
   static let accessibilityValidator: AnyValueValidator<DivAccessibility> =
@@ -627,12 +567,7 @@ public final class DivText: DivBase {
   ) {
     self.accessibility = accessibility ?? DivAccessibility()
     self.action = action
-    self.actionAnimation = actionAnimation ?? DivAnimation(
-      duration: .value(100),
-      endValue: .value(0.6),
-      name: .value(.fade),
-      startValue: .value(1)
-    )
+    self.actionAnimation = actionAnimation ?? DivAnimation(duration: .value(100), endValue: .value(0.6), name: .value(.fade), startValue: .value(1))
     self.actions = actions
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
@@ -668,7 +603,7 @@ public final class DivText: DivBase {
     self.text = text
     self.textAlignmentHorizontal = textAlignmentHorizontal ?? .value(.left)
     self.textAlignmentVertical = textAlignmentVertical ?? .value(.top)
-    self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF_00_00_00))
+    self.textColor = textColor ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.textGradient = textGradient
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()

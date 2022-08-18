@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -26,7 +26,7 @@ public enum Entity {
   case entityWithStringEnumPropertyWithDefaultValue(EntityWithStringEnumPropertyWithDefaultValue)
   case entityWithoutProperties(EntityWithoutProperties)
 
-  public var value: Any {
+  public var value: Serializable {
     switch self {
     case let .entityWithArray(value):
       return value
@@ -78,10 +78,7 @@ extension Entity: Equatable {
       return l == r
     case let (.entityWithComplexProperty(l), .entityWithComplexProperty(r)):
       return l == r
-    case let (
-      .entityWithComplexPropertyWithDefaultValue(l),
-      .entityWithComplexPropertyWithDefaultValue(r)
-    ):
+    case let (.entityWithComplexPropertyWithDefaultValue(l), .entityWithComplexPropertyWithDefaultValue(r)):
       return l == r
     case let (.entityWithEntityProperty(l), .entityWithEntityProperty(r)):
       return l == r
@@ -103,10 +100,7 @@ extension Entity: Equatable {
       return l == r
     case let (.entityWithStringEnumProperty(l), .entityWithStringEnumProperty(r)):
       return l == r
-    case let (
-      .entityWithStringEnumPropertyWithDefaultValue(l),
-      .entityWithStringEnumPropertyWithDefaultValue(r)
-    ):
+    case let (.entityWithStringEnumPropertyWithDefaultValue(l), .entityWithStringEnumPropertyWithDefaultValue(r)):
       return l == r
     case let (.entityWithoutProperties(l), .entityWithoutProperties(r)):
       return l == r
@@ -116,3 +110,9 @@ extension Entity: Equatable {
   }
 }
 #endif
+
+extension Entity: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    return value.toDictionary()
+  }
+}

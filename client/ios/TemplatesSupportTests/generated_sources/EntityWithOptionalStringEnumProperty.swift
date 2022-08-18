@@ -1,35 +1,38 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithOptionalStringEnumProperty {
   public enum Property: String, CaseIterable {
-    case first
-    case second
+    case first = "first"
+    case second = "second"
   }
 
   public static let type: String = "entity_with_optional_string_enum_property"
-  public let property: Property?
+  public let property: Expression<Property>?
+
+  public func resolveProperty(_ resolver: ExpressionResolver) -> Property? {
+    resolver.resolveStringBasedValue(expression: property, initializer: Property.init(rawValue:))
+  }
 
   static let propertyValidator: AnyValueValidator<EntityWithOptionalStringEnumProperty.Property> =
     makeNoOpValueValidator()
 
-  init(property: Property? = nil) {
+  init(
+    property: Expression<Property>? = nil
+  ) {
     self.property = property
   }
 }
 
 #if DEBUG
 extension EntityWithOptionalStringEnumProperty: Equatable {
-  public static func ==(
-    lhs: EntityWithOptionalStringEnumProperty,
-    rhs: EntityWithOptionalStringEnumProperty
-  ) -> Bool {
+  public static func ==(lhs: EntityWithOptionalStringEnumProperty, rhs: EntityWithOptionalStringEnumProperty) -> Bool {
     guard
       lhs.property == rhs.property
     else {
@@ -39,3 +42,12 @@ extension EntityWithOptionalStringEnumProperty: Equatable {
   }
 }
 #endif
+
+extension EntityWithOptionalStringEnumProperty: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["type"] = Self.type
+    result["property"] = property?.toValidSerializationValue()
+    return result
+  }
+}

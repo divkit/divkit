@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -17,14 +15,8 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
         x: try dictionary.getOptionalField("x", templateToType: templateToType),
         y: try dictionary.getOptionalField("y", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-point_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-point_template." + field, representation: representation)
     }
   }
 
@@ -36,10 +28,7 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
     self.y = y
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivPointTemplate?
-  ) -> DeserializationResult<DivPoint> {
+  private static func resolveOnlyLinks(context: Context, parent: DivPointTemplate?) -> DeserializationResult<DivPoint> {
     let xValue = parent?.x?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     let yValue = parent?.y?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
@@ -47,12 +36,10 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
       yValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "y", level: .error)) }
     )
     if case .noValue = xValue {
-      errors
-        .append(.right(FieldError(fieldName: "x", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.right(FieldError(fieldName: "x", level: .error, error: .requiredFieldIsMissing)))
     }
     if case .noValue = yValue {
-      errors
-        .append(.right(FieldError(fieldName: "y", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.right(FieldError(fieldName: "y", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let xNonNil = xValue.value,
@@ -64,15 +51,10 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
       x: xNonNil,
       y: yNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivPointTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivPoint> {
+  public static func resolveValue(context: Context, parent: DivPointTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivPoint> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -81,33 +63,13 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "x":
-        xValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivDimensionTemplate.self
-        ).merged(with: xValue)
+        xValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).merged(with: xValue)
       case "y":
-        yValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivDimensionTemplate.self
-        ).merged(with: yValue)
+        yValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self).merged(with: yValue)
       case parent?.x?.link:
-        xValue = xValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivDimensionTemplate.self
-        ))
+        xValue = xValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self))
       case parent?.y?.link:
-        yValue = yValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivDimensionTemplate.self
-        ))
+        yValue = yValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDimensionTemplate.self))
       default: break
       }
     }
@@ -120,12 +82,10 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
       yValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "y", level: .error)) }
     )
     if case .noValue = xValue {
-      errors
-        .append(.right(FieldError(fieldName: "x", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.right(FieldError(fieldName: "x", level: .error, error: .requiredFieldIsMissing)))
     }
     if case .noValue = yValue {
-      errors
-        .append(.right(FieldError(fieldName: "y", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.right(FieldError(fieldName: "y", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let xNonNil = xValue.value,
@@ -137,12 +97,11 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
       x: xNonNil,
       y: yNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates _: Templates) throws -> DivPointTemplate {
-    self
+  private func mergedWithParent(templates: Templates) throws -> DivPointTemplate {
+    return self
   }
 
   public func resolveParent(templates: Templates) throws -> DivPointTemplate {

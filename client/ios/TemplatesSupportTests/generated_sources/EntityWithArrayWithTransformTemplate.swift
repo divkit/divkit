@@ -1,64 +1,46 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithArrayWithTransformTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "entity_with_array_with_transform"
   public let parent: String? // at least 1 char
-  public let array: Field<[Color]>? // at least 1 elements
+  public let array: Field<[Expression<Color>]>? // at least 1 elements
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         array: try dictionary.getOptionalArray("array", transform: Color.color(withHexString:))
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "entity_with_array_with_transform_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_array_with_transform_template." + field, representation: representation)
     }
   }
 
   init(
     parent: String?,
-    array: Field<[Color]>? = nil
+    array: Field<[Expression<Color>]>? = nil
   ) {
     self.parent = parent
     self.array = array
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: EntityWithArrayWithTransformTemplate?
-  ) -> DeserializationResult<EntityWithArrayWithTransform> {
-    let arrayValue = parent?.array?.resolveValue(
-      context: context,
-      transform: Color.color(withHexString:),
-      validator: ResolvedValue.arrayValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithArrayWithTransformTemplate?) -> DeserializationResult<EntityWithArrayWithTransform> {
+    let arrayValue = parent?.array?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator) ?? .noValue
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "array", level: .error)) }
     )
     if case .noValue = arrayValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "array",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "array", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let arrayNonNil = arrayValue.value
@@ -68,48 +50,28 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Template
     let result = EntityWithArrayWithTransform(
       array: arrayNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityWithArrayWithTransformTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<EntityWithArrayWithTransform> {
+  public static func resolveValue(context: Context, parent: EntityWithArrayWithTransformTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithArrayWithTransform> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var arrayValue: DeserializationResult<[Color]> = parent?.array?
-      .value(validatedBy: ResolvedValue.arrayValidator) ?? .noValue
+    var arrayValue: DeserializationResult<[Expression<Color>]> = parent?.array?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "array":
-        arrayValue = deserialize(
-          __dictValue,
-          transform: Color.color(withHexString:),
-          validator: ResolvedValue.arrayValidator
-        ).merged(with: arrayValue)
+        arrayValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator).merged(with: arrayValue)
       case parent?.array?.link:
-        arrayValue = arrayValue.merged(with: deserialize(
-          __dictValue,
-          transform: Color.color(withHexString:),
-          validator: ResolvedValue.arrayValidator
-        ))
+        arrayValue = arrayValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator))
       default: break
       }
     }
     var errors = mergeErrors(
-      arrayValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "array", level: .error)) }
+      arrayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "array", level: .error)) }
     )
     if case .noValue = arrayValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "array",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "array", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let arrayNonNil = arrayValue.value
@@ -119,12 +81,10 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Template
     let result = EntityWithArrayWithTransform(
       array: arrayNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws
-    -> EntityWithArrayWithTransformTemplate {
+  private func mergedWithParent(templates: Templates) throws -> EntityWithArrayWithTransformTemplate {
     guard let parent = parent, parent != Self.type else { return self }
     guard let parentTemplate = templates[parent] as? EntityWithArrayWithTransformTemplate else {
       throw DeserializationError.unknownType(type: parent)
@@ -138,6 +98,6 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Template
   }
 
   public func resolveParent(templates: Templates) throws -> EntityWithArrayWithTransformTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

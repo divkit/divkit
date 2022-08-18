@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -19,19 +17,10 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
-        neighbourPageWidth: try dictionary.getOptionalField(
-          "neighbour_page_width",
-          templateToType: templateToType
-        )
+        neighbourPageWidth: try dictionary.getOptionalField("neighbour_page_width", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-neighbour-page-size_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-neighbour-page-size_template." + field, representation: representation)
     }
   }
 
@@ -43,25 +32,13 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
     self.neighbourPageWidth = neighbourPageWidth
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivNeighbourPageSizeTemplate?
-  ) -> DeserializationResult<DivNeighbourPageSize> {
-    let neighbourPageWidthValue = parent?.neighbourPageWidth?.resolveValue(
-      context: context,
-      useOnlyLinks: true
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivNeighbourPageSizeTemplate?) -> DeserializationResult<DivNeighbourPageSize> {
+    let neighbourPageWidthValue = parent?.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      neighbourPageWidthValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "neighbour_page_width", level: .error)) }
+      neighbourPageWidthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "neighbour_page_width", level: .error)) }
     )
     if case .noValue = neighbourPageWidthValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "neighbour_page_width",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "neighbour_page_width", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let neighbourPageWidthNonNil = neighbourPageWidthValue.value
@@ -71,15 +48,10 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
     let result = DivNeighbourPageSize(
       neighbourPageWidth: neighbourPageWidthNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivNeighbourPageSizeTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivNeighbourPageSize> {
+  public static func resolveValue(context: Context, parent: DivNeighbourPageSizeTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivNeighbourPageSize> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -87,37 +59,20 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "neighbour_page_width":
-        neighbourPageWidthValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivFixedSizeTemplate.self
-        ).merged(with: neighbourPageWidthValue)
+        neighbourPageWidthValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self).merged(with: neighbourPageWidthValue)
       case parent?.neighbourPageWidth?.link:
-        neighbourPageWidthValue = neighbourPageWidthValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          type: DivFixedSizeTemplate.self
-        ))
+        neighbourPageWidthValue = neighbourPageWidthValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivFixedSizeTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      neighbourPageWidthValue = neighbourPageWidthValue
-        .merged(with: parent.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true))
+      neighbourPageWidthValue = neighbourPageWidthValue.merged(with: parent.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      neighbourPageWidthValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "neighbour_page_width", level: .error)) }
+      neighbourPageWidthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "neighbour_page_width", level: .error)) }
     )
     if case .noValue = neighbourPageWidthValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "neighbour_page_width",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "neighbour_page_width", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let neighbourPageWidthNonNil = neighbourPageWidthValue.value
@@ -127,8 +82,7 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
     let result = DivNeighbourPageSize(
       neighbourPageWidth: neighbourPageWidthNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivNeighbourPageSizeTemplate {

@@ -1,21 +1,21 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
 public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "entity_with_optional_property"
   public let parent: String? // at least 1 char
-  public let property: Field<String>? // at least 1 char
+  public let property: Field<Expression<String>>? // at least 1 char
 
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     self.init(
       parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
       property: try dictionary.getOptionalField("property")
@@ -24,62 +24,44 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
 
   init(
     parent: String?,
-    property: Field<String>? = nil
+    property: Field<Expression<String>>? = nil
   ) {
     self.parent = parent
     self.property = property
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: EntityWithOptionalPropertyTemplate?
-  )
-    -> DeserializationResult<EntityWithOptionalProperty> {
-    let propertyValue = parent?.property?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.propertyValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithOptionalPropertyTemplate?) -> DeserializationResult<EntityWithOptionalProperty> {
+    let propertyValue = parent?.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
     let errors = mergeErrors(
-      propertyValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "property", level: .warning)) }
+      propertyValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "property", level: .warning)) }
     )
     let result = EntityWithOptionalProperty(
       property: propertyValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityWithOptionalPropertyTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<EntityWithOptionalProperty> {
+  public static func resolveValue(context: Context, parent: EntityWithOptionalPropertyTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithOptionalProperty> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
-    var propertyValue: DeserializationResult<String> = parent?.property?
-      .value(validatedBy: ResolvedValue.propertyValidator) ?? .noValue
+    var propertyValue: DeserializationResult<Expression<String>> = parent?.property?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "property":
-        propertyValue = deserialize(__dictValue, validator: ResolvedValue.propertyValidator)
-          .merged(with: propertyValue)
+        propertyValue = deserialize(__dictValue, validator: ResolvedValue.propertyValidator).merged(with: propertyValue)
       case parent?.property?.link:
-        propertyValue = propertyValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.propertyValidator))
+        propertyValue = propertyValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.propertyValidator))
       default: break
       }
     }
     let errors = mergeErrors(
-      propertyValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "property", level: .warning)) }
+      propertyValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "property", level: .warning)) }
     )
     let result = EntityWithOptionalProperty(
       property: propertyValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> EntityWithOptionalPropertyTemplate {
@@ -96,6 +78,6 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
   }
 
   public func resolveParent(templates: Templates) throws -> EntityWithOptionalPropertyTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

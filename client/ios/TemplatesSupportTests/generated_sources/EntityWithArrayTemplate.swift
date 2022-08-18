@@ -1,9 +1,9 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
+@testable import DivKit
 
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -21,14 +21,8 @@ public final class EntityWithArrayTemplate: TemplateValue, TemplateDeserializabl
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         array: try dictionary.getOptionalArray("array", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "entity_with_array_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_array_template." + field, representation: representation)
     }
   }
 
@@ -40,25 +34,13 @@ public final class EntityWithArrayTemplate: TemplateValue, TemplateDeserializabl
     self.array = array
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: EntityWithArrayTemplate?
-  ) -> DeserializationResult<EntityWithArray> {
-    let arrayValue = parent?.array?.resolveValue(
-      context: context,
-      validator: ResolvedValue.arrayValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: EntityWithArrayTemplate?) -> DeserializationResult<EntityWithArray> {
+    let arrayValue = parent?.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       arrayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "array", level: .error)) }
     )
     if case .noValue = arrayValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "array",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "array", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let arrayNonNil = arrayValue.value
@@ -68,15 +50,10 @@ public final class EntityWithArrayTemplate: TemplateValue, TemplateDeserializabl
     let result = EntityWithArray(
       array: arrayNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: EntityWithArrayTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<EntityWithArray> {
+  public static func resolveValue(context: Context, parent: EntityWithArrayTemplate?, useOnlyLinks: Bool) -> DeserializationResult<EntityWithArray> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -84,42 +61,20 @@ public final class EntityWithArrayTemplate: TemplateValue, TemplateDeserializabl
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "array":
-        arrayValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.arrayValidator,
-          type: EntityTemplate.self
-        ).merged(with: arrayValue)
+        arrayValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self).merged(with: arrayValue)
       case parent?.array?.link:
-        arrayValue = arrayValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.arrayValidator,
-          type: EntityTemplate.self
-        ))
+        arrayValue = arrayValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.arrayValidator, type: EntityTemplate.self))
       default: break
       }
     }
     if let parent = parent {
-      arrayValue = arrayValue.merged(with: parent.array?.resolveValue(
-        context: context,
-        validator: ResolvedValue.arrayValidator,
-        useOnlyLinks: true
-      ))
+      arrayValue = arrayValue.merged(with: parent.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      arrayValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "array", level: .error)) }
+      arrayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "array", level: .error)) }
     )
     if case .noValue = arrayValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "array",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "array", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let arrayNonNil = arrayValue.value
@@ -129,8 +84,7 @@ public final class EntityWithArrayTemplate: TemplateValue, TemplateDeserializabl
     let result = EntityWithArray(
       array: arrayNonNil
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> EntityWithArrayTemplate {

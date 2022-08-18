@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -21,10 +19,7 @@ public final class DivScaleTransition: DivTransitionBase {
   }
 
   public func resolveInterpolator(_ resolver: ExpressionResolver) -> DivAnimationInterpolator {
-    resolver.resolveStringBasedValue(
-      expression: interpolator,
-      initializer: DivAnimationInterpolator.init(rawValue:)
-    ) ?? DivAnimationInterpolator.easeInOut
+    resolver.resolveStringBasedValue(expression: interpolator, initializer: DivAnimationInterpolator.init(rawValue:)) ?? DivAnimationInterpolator.easeInOut
   }
 
   public func resolvePivotX(_ resolver: ExpressionResolver) -> Double {

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -49,11 +47,7 @@ public enum DivVariableTemplate: TemplateValue {
     }
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivVariableTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivVariable> {
+  public static func resolveValue(context: Context, parent: DivVariableTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivVariable> {
     guard let parent = parent else {
       if useOnlyLinks {
         return .failure(NonEmptyArray(.missingType(representation: context.templateData)))
@@ -67,10 +61,7 @@ public enum DivVariableTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.stringVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .stringVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.stringVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -78,10 +69,7 @@ public enum DivVariableTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.numberVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .numberVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.numberVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -89,10 +77,7 @@ public enum DivVariableTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.integerVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .integerVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.integerVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -100,10 +85,7 @@ public enum DivVariableTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.booleanVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .booleanVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.booleanVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -111,10 +93,7 @@ public enum DivVariableTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.colorVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .colorVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.colorVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -122,27 +101,16 @@ public enum DivVariableTemplate: TemplateValue {
       let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.urlVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .urlVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.urlVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     }
   }
 
-  private static func resolveUnknownValue(
-    context: Context,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivVariable> {
-    guard let type = (context.templateData["type"] as? String)
-      .flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+  private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivVariable> {
+    guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
 
     switch type {
@@ -150,10 +118,7 @@ public enum DivVariableTemplate: TemplateValue {
       let result = StringVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.stringVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .stringVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.stringVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -161,38 +126,23 @@ public enum DivVariableTemplate: TemplateValue {
       let result = NumberVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.numberVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .numberVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.numberVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case IntegerVariable.type:
-      let result = IntegerVariableTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = IntegerVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.integerVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .integerVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.integerVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     case BooleanVariable.type:
-      let result = BooleanVariableTemplate.resolveValue(
-        context: context,
-        useOnlyLinks: useOnlyLinks
-      )
+      let result = BooleanVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.booleanVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .booleanVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.booleanVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -200,10 +150,7 @@ public enum DivVariableTemplate: TemplateValue {
       let result = ColorVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.colorVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .colorVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.colorVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -211,19 +158,12 @@ public enum DivVariableTemplate: TemplateValue {
       let result = UrlVariableTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
       case let .success(value): return .success(.urlVariable(value))
-      case let .partialSuccess(value, warnings): return .partialSuccess(
-          .urlVariable(value),
-          warnings: warnings
-        )
+      case let .partialSuccess(value, warnings): return .partialSuccess(.urlVariable(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(
-        fieldName: "type",
-        level: .error,
-        error: .requiredFieldIsMissing
-      )))
+      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
   }
 }
@@ -234,46 +174,19 @@ extension DivVariableTemplate: TemplateDeserializable {
     let blockType = templateToType[receivedType] ?? receivedType
     switch blockType {
     case StringVariableTemplate.type:
-      self =
-        .stringVariableTemplate(try StringVariableTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .stringVariableTemplate(try StringVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     case NumberVariableTemplate.type:
-      self =
-        .numberVariableTemplate(try NumberVariableTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .numberVariableTemplate(try NumberVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     case IntegerVariableTemplate.type:
-      self =
-        .integerVariableTemplate(try IntegerVariableTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .integerVariableTemplate(try IntegerVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     case BooleanVariableTemplate.type:
-      self =
-        .booleanVariableTemplate(try BooleanVariableTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .booleanVariableTemplate(try BooleanVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     case ColorVariableTemplate.type:
-      self =
-        .colorVariableTemplate(try ColorVariableTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .colorVariableTemplate(try ColorVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     case UrlVariableTemplate.type:
-      self =
-        .urlVariableTemplate(try UrlVariableTemplate(
-          dictionary: dictionary,
-          templateToType: templateToType
-        ))
+      self = .urlVariableTemplate(try UrlVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-variable_template",
-        representation: dictionary
-      )
+      throw DeserializationError.invalidFieldRepresentation(field: "div-variable_template", representation: dictionary)
     }
   }
 }

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -48,42 +46,18 @@ public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializ
     self.startDelay = startDelay
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivSlideTransitionTemplate?
-  ) -> DeserializationResult<DivSlideTransition> {
-    let distanceValue = parent?.distance?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.distanceValidator,
-      useOnlyLinks: true
-    ) ?? .noValue
-    let durationValue = parent?.duration?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.durationValidator
-    ) ?? .noValue
-    let edgeValue = parent?.edge?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.edgeValidator
-    ) ?? .noValue
-    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.interpolatorValidator
-    ) ?? .noValue
-    let startDelayValue = parent?.startDelay?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.startDelayValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivSlideTransitionTemplate?) -> DeserializationResult<DivSlideTransition> {
+    let distanceValue = parent?.distance?.resolveOptionalValue(context: context, validator: ResolvedValue.distanceValidator, useOnlyLinks: true) ?? .noValue
+    let durationValue = parent?.duration?.resolveOptionalValue(context: context, validator: ResolvedValue.durationValidator) ?? .noValue
+    let edgeValue = parent?.edge?.resolveOptionalValue(context: context, validator: ResolvedValue.edgeValidator) ?? .noValue
+    let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
+    let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let errors = mergeErrors(
-      distanceValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "distance", level: .warning)) },
-      durationValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "duration", level: .warning)) },
-      edgeValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "edge", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "interpolator", level: .warning)) },
-      startDelayValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "start_delay", level: .warning)) }
+      distanceValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "distance", level: .warning)) },
+      durationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "duration", level: .warning)) },
+      edgeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "edge", level: .warning)) },
+      interpolatorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "interpolator", level: .warning)) },
+      startDelayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "start_delay", level: .warning)) }
     )
     let result = DivSlideTransition(
       distance: distanceValue.value,
@@ -92,90 +66,52 @@ public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializ
       interpolator: interpolatorValue.value,
       startDelay: startDelayValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivSlideTransitionTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivSlideTransition> {
+  public static func resolveValue(context: Context, parent: DivSlideTransitionTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivSlideTransition> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var distanceValue: DeserializationResult<DivDimension> = .noValue
-    var durationValue: DeserializationResult<Expression<Int>> = parent?.duration?
-      .value() ?? .noValue
-    var edgeValue: DeserializationResult<Expression<DivSlideTransition.Edge>> = parent?.edge?
-      .value() ?? .noValue
-    var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = parent?
-      .interpolator?.value() ?? .noValue
-    var startDelayValue: DeserializationResult<Expression<Int>> = parent?.startDelay?
-      .value() ?? .noValue
+    var durationValue: DeserializationResult<Expression<Int>> = parent?.duration?.value() ?? .noValue
+    var edgeValue: DeserializationResult<Expression<DivSlideTransition.Edge>> = parent?.edge?.value() ?? .noValue
+    var interpolatorValue: DeserializationResult<Expression<DivAnimationInterpolator>> = parent?.interpolator?.value() ?? .noValue
+    var startDelayValue: DeserializationResult<Expression<Int>> = parent?.startDelay?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "distance":
-        distanceValue = deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.distanceValidator,
-          type: DivDimensionTemplate.self
-        ).merged(with: distanceValue)
+        distanceValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.distanceValidator, type: DivDimensionTemplate.self).merged(with: distanceValue)
       case "duration":
-        durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator)
-          .merged(with: durationValue)
+        durationValue = deserialize(__dictValue, validator: ResolvedValue.durationValidator).merged(with: durationValue)
       case "edge":
-        edgeValue = deserialize(__dictValue, validator: ResolvedValue.edgeValidator)
-          .merged(with: edgeValue)
+        edgeValue = deserialize(__dictValue, validator: ResolvedValue.edgeValidator).merged(with: edgeValue)
       case "interpolator":
-        interpolatorValue = deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator)
-          .merged(with: interpolatorValue)
+        interpolatorValue = deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator).merged(with: interpolatorValue)
       case "start_delay":
-        startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator)
-          .merged(with: startDelayValue)
+        startDelayValue = deserialize(__dictValue, validator: ResolvedValue.startDelayValidator).merged(with: startDelayValue)
       case parent?.distance?.link:
-        distanceValue = distanceValue.merged(with: deserialize(
-          __dictValue,
-          templates: context.templates,
-          templateToType: context.templateToType,
-          validator: ResolvedValue.distanceValidator,
-          type: DivDimensionTemplate.self
-        ))
+        distanceValue = distanceValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.distanceValidator, type: DivDimensionTemplate.self))
       case parent?.duration?.link:
-        durationValue = durationValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.durationValidator))
+        durationValue = durationValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.durationValidator))
       case parent?.edge?.link:
-        edgeValue = edgeValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.edgeValidator))
+        edgeValue = edgeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.edgeValidator))
       case parent?.interpolator?.link:
-        interpolatorValue = interpolatorValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator))
+        interpolatorValue = interpolatorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.interpolatorValidator))
       case parent?.startDelay?.link:
-        startDelayValue = startDelayValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.startDelayValidator))
+        startDelayValue = startDelayValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.startDelayValidator))
       default: break
       }
     }
     if let parent = parent {
-      distanceValue = distanceValue.merged(with: parent.distance?.resolveOptionalValue(
-        context: context,
-        validator: ResolvedValue.distanceValidator,
-        useOnlyLinks: true
-      ))
+      distanceValue = distanceValue.merged(with: parent.distance?.resolveOptionalValue(context: context, validator: ResolvedValue.distanceValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      distanceValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "distance", level: .warning)) },
-      durationValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "duration", level: .warning)) },
-      edgeValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "edge", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "interpolator", level: .warning)) },
-      startDelayValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "start_delay", level: .warning)) }
+      distanceValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "distance", level: .warning)) },
+      durationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "duration", level: .warning)) },
+      edgeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "edge", level: .warning)) },
+      interpolatorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "interpolator", level: .warning)) },
+      startDelayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "start_delay", level: .warning)) }
     )
     let result = DivSlideTransition(
       distance: distanceValue.value,
@@ -184,8 +120,7 @@ public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializ
       interpolator: interpolatorValue.value,
       startDelay: startDelayValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivSlideTransitionTemplate {

@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -20,7 +18,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
   static let parentValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  public convenience init(dictionary: [String: Any], templateToType _: TemplateToType) throws {
+  public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
     do {
       self.init(
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
@@ -31,14 +29,8 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
         preloadRequired: try dictionary.getOptionalField("preload_required"),
         scale: try dictionary.getOptionalField("scale")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(
-      field: field,
-      representation: representation
-    ) {
-      throw DeserializationError.invalidFieldRepresentation(
-        field: "div-image-background_template." + field,
-        representation: representation
-      )
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-image-background_template." + field, representation: representation)
     }
   }
 
@@ -60,55 +52,23 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
     self.scale = scale
   }
 
-  private static func resolveOnlyLinks(
-    context: Context,
-    parent: DivImageBackgroundTemplate?
-  ) -> DeserializationResult<DivImageBackground> {
-    let alphaValue = parent?.alpha?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.alphaValidator
-    ) ?? .noValue
-    let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.contentAlignmentHorizontalValidator
-    ) ?? .noValue
-    let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.contentAlignmentVerticalValidator
-    ) ?? .noValue
-    let imageUrlValue = parent?.imageUrl?.resolveValue(
-      context: context,
-      transform: URL.init(string:)
-    ) ?? .noValue
-    let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.preloadRequiredValidator
-    ) ?? .noValue
-    let scaleValue = parent?.scale?.resolveOptionalValue(
-      context: context,
-      validator: ResolvedValue.scaleValidator
-    ) ?? .noValue
+  private static func resolveOnlyLinks(context: Context, parent: DivImageBackgroundTemplate?) -> DeserializationResult<DivImageBackground> {
+    let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let contentAlignmentHorizontalValue = parent?.contentAlignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentHorizontalValidator) ?? .noValue
+    let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentVerticalValidator) ?? .noValue
+    let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
+    let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context, validator: ResolvedValue.preloadRequiredValidator) ?? .noValue
+    let scaleValue = parent?.scale?.resolveOptionalValue(context: context, validator: ResolvedValue.scaleValidator) ?? .noValue
     var errors = mergeErrors(
-      alphaValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "alpha", level: .warning)) },
-      contentAlignmentHorizontalValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "content_alignment_horizontal", level: .warning)) },
-      contentAlignmentVerticalValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "content_alignment_vertical", level: .warning)) },
-      imageUrlValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "image_url", level: .error)) },
-      preloadRequiredValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "preload_required", level: .warning)) },
-      scaleValue.errorsOrWarnings?
-        .map { .right($0.asError(deserializing: "scale", level: .warning)) }
+      alphaValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "alpha", level: .warning)) },
+      contentAlignmentHorizontalValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "content_alignment_horizontal", level: .warning)) },
+      contentAlignmentVerticalValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "content_alignment_vertical", level: .warning)) },
+      imageUrlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "image_url", level: .error)) },
+      preloadRequiredValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "preload_required", level: .warning)) },
+      scaleValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "scale", level: .warning)) }
     )
     if case .noValue = imageUrlValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "image_url",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "image_url", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value
@@ -123,107 +83,58 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
       preloadRequired: preloadRequiredValue.value,
       scale: scaleValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(
-    context: Context,
-    parent: DivImageBackgroundTemplate?,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<DivImageBackground> {
+  public static func resolveValue(context: Context, parent: DivImageBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivImageBackground> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
-    var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> =
-      parent?.contentAlignmentHorizontal?.value() ?? .noValue
-    var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> =
-      parent?.contentAlignmentVertical?.value() ?? .noValue
-    var imageUrlValue: DeserializationResult<Expression<URL>> = parent?.imageUrl?
-      .value() ?? .noValue
-    var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?
-      .value() ?? .noValue
-    var scaleValue: DeserializationResult<Expression<DivImageScale>> = parent?.scale?
-      .value() ?? .noValue
+    var contentAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.contentAlignmentHorizontal?.value() ?? .noValue
+    var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
+    var imageUrlValue: DeserializationResult<Expression<URL>> = parent?.imageUrl?.value() ?? .noValue
+    var preloadRequiredValue: DeserializationResult<Expression<Bool>> = parent?.preloadRequired?.value() ?? .noValue
+    var scaleValue: DeserializationResult<Expression<DivImageScale>> = parent?.scale?.value() ?? .noValue
     context.templateData.forEach { key, __dictValue in
       switch key {
       case "alpha":
-        alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator)
-          .merged(with: alphaValue)
+        alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
       case "content_alignment_horizontal":
-        contentAlignmentHorizontalValue = deserialize(
-          __dictValue,
-          validator: ResolvedValue.contentAlignmentHorizontalValidator
-        ).merged(with: contentAlignmentHorizontalValue)
+        contentAlignmentHorizontalValue = deserialize(__dictValue, validator: ResolvedValue.contentAlignmentHorizontalValidator).merged(with: contentAlignmentHorizontalValue)
       case "content_alignment_vertical":
-        contentAlignmentVerticalValue = deserialize(
-          __dictValue,
-          validator: ResolvedValue.contentAlignmentVerticalValidator
-        ).merged(with: contentAlignmentVerticalValue)
+        contentAlignmentVerticalValue = deserialize(__dictValue, validator: ResolvedValue.contentAlignmentVerticalValidator).merged(with: contentAlignmentVerticalValue)
       case "image_url":
-        imageUrlValue = deserialize(__dictValue, transform: URL.init(string:))
-          .merged(with: imageUrlValue)
+        imageUrlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: imageUrlValue)
       case "preload_required":
-        preloadRequiredValue = deserialize(
-          __dictValue,
-          validator: ResolvedValue.preloadRequiredValidator
-        ).merged(with: preloadRequiredValue)
+        preloadRequiredValue = deserialize(__dictValue, validator: ResolvedValue.preloadRequiredValidator).merged(with: preloadRequiredValue)
       case "scale":
-        scaleValue = deserialize(__dictValue, validator: ResolvedValue.scaleValidator)
-          .merged(with: scaleValue)
+        scaleValue = deserialize(__dictValue, validator: ResolvedValue.scaleValidator).merged(with: scaleValue)
       case parent?.alpha?.link:
-        alphaValue = alphaValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.alphaValidator))
+        alphaValue = alphaValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alphaValidator))
       case parent?.contentAlignmentHorizontal?.link:
-        contentAlignmentHorizontalValue = contentAlignmentHorizontalValue
-          .merged(with: deserialize(
-            __dictValue,
-            validator: ResolvedValue.contentAlignmentHorizontalValidator
-          ))
+        contentAlignmentHorizontalValue = contentAlignmentHorizontalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.contentAlignmentHorizontalValidator))
       case parent?.contentAlignmentVertical?.link:
-        contentAlignmentVerticalValue = contentAlignmentVerticalValue
-          .merged(with: deserialize(
-            __dictValue,
-            validator: ResolvedValue.contentAlignmentVerticalValidator
-          ))
+        contentAlignmentVerticalValue = contentAlignmentVerticalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.contentAlignmentVerticalValidator))
       case parent?.imageUrl?.link:
-        imageUrlValue = imageUrlValue
-          .merged(with: deserialize(__dictValue, transform: URL.init(string:)))
+        imageUrlValue = imageUrlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
       case parent?.preloadRequired?.link:
-        preloadRequiredValue = preloadRequiredValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.preloadRequiredValidator))
+        preloadRequiredValue = preloadRequiredValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.preloadRequiredValidator))
       case parent?.scale?.link:
-        scaleValue = scaleValue
-          .merged(with: deserialize(__dictValue, validator: ResolvedValue.scaleValidator))
+        scaleValue = scaleValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.scaleValidator))
       default: break
       }
     }
     var errors = mergeErrors(
-      alphaValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "alpha", level: .warning)) },
-      contentAlignmentHorizontalValue.errorsOrWarnings?
-        .map {
-          Either.right($0.asError(deserializing: "content_alignment_horizontal", level: .warning))
-        },
-      contentAlignmentVerticalValue.errorsOrWarnings?
-        .map {
-          Either.right($0.asError(deserializing: "content_alignment_vertical", level: .warning))
-        },
-      imageUrlValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "image_url", level: .error)) },
-      preloadRequiredValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "preload_required", level: .warning)) },
-      scaleValue.errorsOrWarnings?
-        .map { Either.right($0.asError(deserializing: "scale", level: .warning)) }
+      alphaValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "alpha", level: .warning)) },
+      contentAlignmentHorizontalValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "content_alignment_horizontal", level: .warning)) },
+      contentAlignmentVerticalValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "content_alignment_vertical", level: .warning)) },
+      imageUrlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "image_url", level: .error)) },
+      preloadRequiredValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "preload_required", level: .warning)) },
+      scaleValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "scale", level: .warning)) }
     )
     if case .noValue = imageUrlValue {
-      errors
-        .append(.right(FieldError(
-          fieldName: "image_url",
-          level: .error,
-          error: .requiredFieldIsMissing
-        )))
+      errors.append(.right(FieldError(fieldName: "image_url", level: .error, error: .requiredFieldIsMissing)))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value
@@ -238,8 +149,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
       preloadRequired: preloadRequiredValue.value,
       scale: scaleValue.value
     )
-    return errors
-      .isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
   private func mergedWithParent(templates: Templates) throws -> DivImageBackgroundTemplate {
@@ -252,8 +162,7 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
     return DivImageBackgroundTemplate(
       parent: nil,
       alpha: alpha ?? mergedParent.alpha,
-      contentAlignmentHorizontal: contentAlignmentHorizontal ?? mergedParent
-        .contentAlignmentHorizontal,
+      contentAlignmentHorizontal: contentAlignmentHorizontal ?? mergedParent.contentAlignmentHorizontal,
       contentAlignmentVertical: contentAlignmentVertical ?? mergedParent.contentAlignmentVertical,
       imageUrl: imageUrl ?? mergedParent.imageUrl,
       preloadRequired: preloadRequired ?? mergedParent.preloadRequired,
@@ -262,6 +171,6 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
   }
 
   public func resolveParent(templates: Templates) throws -> DivImageBackgroundTemplate {
-    try mergedWithParent(templates: templates)
+    return try mergedWithParent(templates: templates)
   }
 }

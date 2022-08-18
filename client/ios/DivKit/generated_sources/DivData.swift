@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -27,12 +25,8 @@ public final class DivData {
   public let variableTriggers: [DivTrigger]? // at least 1 elements
   public let variables: [DivVariable]? // at least 1 elements
 
-  public func resolveTransitionAnimationSelector(_ resolver: ExpressionResolver)
-    -> DivTransitionSelector {
-    resolver.resolveStringBasedValue(
-      expression: transitionAnimationSelector,
-      initializer: DivTransitionSelector.init(rawValue:)
-    ) ?? DivTransitionSelector.none
+  public func resolveTransitionAnimationSelector(_ resolver: ExpressionResolver) -> DivTransitionSelector {
+    resolver.resolveStringBasedValue(expression: transitionAnimationSelector, initializer: DivTransitionSelector.init(rawValue:)) ?? DivTransitionSelector.none
   }
 
   static let logIdValidator: AnyValueValidator<String> =
@@ -91,8 +85,7 @@ extension DivData: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["log_id"] = logId
     result["states"] = states.map { $0.toDictionary() }
-    result["transition_animation_selector"] = transitionAnimationSelector
-      .toValidSerializationValue()
+    result["transition_animation_selector"] = transitionAnimationSelector.toValidSerializationValue()
     result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }
     return result

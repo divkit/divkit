@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -22,9 +20,7 @@ public final class DivShadow {
   }
 
   public func resolveColor(_ resolver: ExpressionResolver) -> Color {
-    resolver
-      .resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:)) ?? Color
-      .colorWithARGBHexCode(0xFF_00_00_00)
+    resolver.resolveStringBasedValue(expression: color, initializer: Color.color(withHexString:)) ?? Color.colorWithARGBHexCode(0xFF000000)
   }
 
   static let alphaValidator: AnyValueValidator<Double> =
@@ -44,7 +40,7 @@ public final class DivShadow {
   ) {
     self.alpha = alpha ?? .value(0.19)
     self.blur = blur ?? .value(2)
-    self.color = color ?? .value(Color.colorWithARGBHexCode(0xFF_00_00_00))
+    self.color = color ?? .value(Color.colorWithARGBHexCode(0xFF000000))
     self.offset = offset
   }
 }

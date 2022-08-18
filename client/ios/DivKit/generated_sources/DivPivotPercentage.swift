@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -15,7 +13,9 @@ public final class DivPivotPercentage {
     resolver.resolveNumericValue(expression: value)
   }
 
-  init(value: Expression<Double>) {
+  init(
+    value: Expression<Double>
+  ) {
     self.value = value
   }
 }

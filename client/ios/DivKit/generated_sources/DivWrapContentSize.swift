@@ -1,9 +1,7 @@
 // Generated code. Do not modify.
 
-import CoreFoundation
-import Foundation
-
 import CommonCore
+import Foundation
 import Serialization
 import TemplatesSupport
 
@@ -18,7 +16,9 @@ public final class DivWrapContentSize {
   static let constrainedValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
 
-  init(constrained: Expression<Bool>? = nil) {
+  init(
+    constrained: Expression<Bool>? = nil
+  ) {
     self.constrained = constrained
   }
 }
