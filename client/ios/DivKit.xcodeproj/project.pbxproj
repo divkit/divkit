@@ -18,7 +18,6 @@
 		8C0E7371288AE219009BEB3C /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0E7370288AE219009BEB3C /* DivKit */; };
 		8C0E7373288AE563009BEB3C /* snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7372288AE563009BEB3C /* snapshot_test_data */; };
 		8C0E7375288AE576009BEB3C /* production_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7374288AE576009BEB3C /* production_data */; };
-		8C0E737F288AE8F4009BEB3C /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0E737E288AE8F4009BEB3C /* DivKit */; };
 		8C0E7381288AE9BB009BEB3C /* FontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C0E7380288AE9BB009BEB3C /* FontProvider.swift */; };
 		8C0E7395288AEF18009BEB3C /* YSText-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7391288AEF18009BEB3C /* YSText-Medium.ttf */; };
 		8C0E7396288AEF18009BEB3C /* YSText-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C0E7392288AEF18009BEB3C /* YSText-Light.ttf */; };
@@ -142,6 +141,7 @@
 		8C7B1CA82865C01E0036EF4C /* DivBlockStateStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1BEF2865C01C0036EF4C /* DivBlockStateStorageTests.swift */; };
 		8C7B1CA92865C01E0036EF4C /* DivStateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */; };
 		8C7B1CAF2865C1090036EF4C /* Samples in Resources */ = {isa = PBXBuildFile; fileRef = 8C7B1CAE2865C1090036EF4C /* Samples */; };
+		8C81DF9F28AE51D2009B17D2 /* BaseUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C81DF9E28AE51D2009B17D2 /* BaseUI */; };
 		8C88636128AB802C00D04928 /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C88636028AB802C00D04928 /* ReferenceSet.swift */; };
 		8C9284DA288ACCE400BEA1FA /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284CF288ACCE400BEA1FA /* Diff.swift */; };
 		8C9284DB288ACCE400BEA1FA /* Snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284D0288ACCE400BEA1FA /* Snapshot.swift */; };
@@ -194,6 +194,20 @@
 			proxyType = 1;
 			remoteGlobalIDString = 8C7B197B2865AC240036EF4C;
 			remoteInfo = LivePreview;
+		};
+		8C81DF9828AE4B80009B17D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C9284F6288ADEEA00BEA1FA;
+			remoteInfo = SnapshotTestsHostApp;
+		};
+		8C81DF9A28AE4B9A009B17D2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 8C9844F32864C2CC001ED5F3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8C9284F6288ADEEA00BEA1FA;
+			remoteInfo = SnapshotTestsHostApp;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -449,7 +463,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C0E737F288AE8F4009BEB3C /* DivKit in Frameworks */,
+				8C81DF9F28AE51D2009B17D2 /* BaseUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1004,6 +1018,7 @@
 			);
 			dependencies = (
 				8C6E40C328AAA5360038E107 /* PBXTargetDependency */,
+				8C81DF9B28AE4B9A009B17D2 /* PBXTargetDependency */,
 			);
 			name = LayoutKitSnapshotTests;
 			packageProductDependencies = (
@@ -1067,6 +1082,7 @@
 			);
 			dependencies = (
 				8C0E736F288AE211009BEB3C /* PBXTargetDependency */,
+				8C81DF9928AE4B80009B17D2 /* PBXTargetDependency */,
 			);
 			name = DivKitSnapshotTests;
 			packageProductDependencies = (
@@ -1087,11 +1103,11 @@
 			buildRules = (
 			);
 			dependencies = (
-				8C0E737D288AE8EF009BEB3C /* PBXTargetDependency */,
+				8C81DF9D28AE51CE009B17D2 /* PBXTargetDependency */,
 			);
 			name = SnapshotTestsHostApp;
 			packageProductDependencies = (
-				8C0E737E288AE8F4009BEB3C /* DivKit */,
+				8C81DF9E28AE51D2009B17D2 /* BaseUI */,
 			);
 			productName = SnapshotTestsHostApp;
 			productReference = 8C9284F7288ADEEA00BEA1FA /* SnapshotTestsHostApp.app */;
@@ -1483,10 +1499,6 @@
 			isa = PBXTargetDependency;
 			productRef = 8C0E736E288AE211009BEB3C /* DivKit */;
 		};
-		8C0E737D288AE8EF009BEB3C /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			productRef = 8C0E737C288AE8EF009BEB3C /* DivKit */;
-		};
 		8C1CF63C286B58890016D0A1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 8C1CF63B286B58890016D0A1 /* TemplatesSupport */;
@@ -1499,6 +1511,20 @@
 			isa = PBXTargetDependency;
 			target = 8C7B197B2865AC240036EF4C /* LivePreview */;
 			targetProxy = 8C7B19A82865AD4D0036EF4C /* PBXContainerItemProxy */;
+		};
+		8C81DF9928AE4B80009B17D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C9284F6288ADEEA00BEA1FA /* SnapshotTestsHostApp */;
+			targetProxy = 8C81DF9828AE4B80009B17D2 /* PBXContainerItemProxy */;
+		};
+		8C81DF9B28AE4B9A009B17D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8C9284F6288ADEEA00BEA1FA /* SnapshotTestsHostApp */;
+			targetProxy = 8C81DF9A28AE4B9A009B17D2 /* PBXContainerItemProxy */;
+		};
+		8C81DF9D28AE51CE009B17D2 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 8C81DF9C28AE51CE009B17D2 /* BaseUI */;
 		};
 		8CA382DD287C5CE700C99F4F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1902,14 +1928,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = DivKit;
 		};
-		8C0E737C288AE8EF009BEB3C /* DivKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DivKit;
-		};
-		8C0E737E288AE8F4009BEB3C /* DivKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = DivKit;
-		};
 		8C1CF63B286B58890016D0A1 /* TemplatesSupport */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = TemplatesSupport;
@@ -1925,6 +1943,14 @@
 		8C6E40C428AAA62F0038E107 /* LayoutKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LayoutKit;
+		};
+		8C81DF9C28AE51CE009B17D2 /* BaseUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BaseUI;
+		};
+		8C81DF9E28AE51D2009B17D2 /* BaseUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BaseUI;
 		};
 		8CA382DC287C5CE700C99F4F /* DivKitExtensions */ = {
 			isa = XCSwiftPackageProductDependency;

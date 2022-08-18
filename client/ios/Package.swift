@@ -8,6 +8,7 @@ let package = Package(
     .iOS(.v10),
   ],
   products: [
+    .library(name: "BaseUI", targets: ["BaseUI"]),
     .library(name: "DivKit", targets: ["DivKit"]),
     .library(name: "DivKitExtensions", targets: ["DivKitExtensions"]),
     .library(name: "LayoutKit", targets: ["LayoutKit"]),
