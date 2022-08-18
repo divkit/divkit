@@ -1,27 +1,27 @@
-## DivKit for Web
+## DivKit for the Web
 
-### Использование
+### Installation
 
 ```
-npm i @yandex-int/divkit --save-dev
+npm i @divkit/divkit --save
 ```
 
-[Примеры использования](../divkit-examples)
+### Usage
 
-[Основная дока про divjson](https://doc.yandex-team.ru/divkit/overview/concepts/about.html)
+[Example usage repos](../divkit-examples)
 
-С любым вариантом использования нужно подключить css файл `dist/client.css` каким-либо способом (сборка, напрямую в хтмл, ...).
+For all variants of usage, css file `dist/client.css` is required. Include it in any way (import as module, link directly in html, etc).
 
-Подключить js можно несколькими способами. Нужно определиться с несколькими вопросами:
+JS code can be bundled with various strategies. Basically you need to answer a few questions
 
-### Есть ли SSR рендеринг или всё целиком рисуется на клиенте?
+### Is there any server-side rendering (SSR) or will it be only on client?
 
-#### SSR + гидрация
+#### SSR + hydration
 
-Тогда стоит использовать часть `/server` на сервере:
+On the server side there is `/server` module:
 
 ```js
-import {render} from '@yandex-int/divkit/server';
+import {render} from '@divkit/divkit/server';
 
 const html = render({
     id: 'smth',
@@ -35,10 +35,10 @@ const html = render({
 });
 ```
 
-И клиентскую с поддержкой гидрации `/client-hydratable` на клиенте:
+Then use `/client-hydratable` on client to hydrate server-side html::
 
 ```js
-import {render} from '@yandex-int/divkit/client-hydratable';
+import {render} from '@divkit/divkit/client-hydratable';
 
 render({
     id: 'smth',
@@ -54,12 +54,12 @@ render({
 });
 ```
 
-#### Только клиентская отрисовка
+#### Client-only rendering
 
-Для чисто клиентской отрисовки есть отдельная сборка `/client`. Она чуть меньше по размеру, чем `/client-hydratable`
+For the client-only usage there is `/client` module. The size of this module is slightly smaller than `/client-hydratable`.
 
 ```js
-import {render} from '@yandex-int/divkit/client';
+import {render} from '@divkit/divkit/client';
 
 render({
     id: 'smth',
@@ -74,15 +74,15 @@ render({
 });
 ```
 
-### Нужны ES-модули или common-js?
+### Are you want to use ES module or CommonJS module?
 
-Есть сборки и для того, и для того
+The package contains both of them.
 
-Node.js должна подхватить нужную версию автоматически
+Node.js will automatically use the appropriate version.
 
-Webpack для сборки должен подхватить версию с ES-модулями
+Webpack will use ES modules version.
 
-Если вам нужна именно common-js версия, то нужные файлики лежат тут:
+For the direct CommonJS usage, this files can be used:
 
 ```
 dist/client.js
@@ -90,7 +90,7 @@ dist/client-hydratable.js
 dist/server.js
 ```
 
-Версия с ES-модулями лежат по путям:
+ES modules files:
 
 ```
 dist/esm/client.mjs
@@ -98,11 +98,11 @@ dist/esm/client-hydratable.mjs
 dist/esm/server.mjs
 ```
 
-При желании, ES-версию можно использовать без сборки в браузере напрямую:
+ES modules can be used in the browser directly without any build:
 
 ```html
 <script type="module">
-    import {render} from './node_modules/@yandex-int/divkit/dist/esm/client.mjs';
+    import {render} from './node_modules/@divkit/divkit/dist/esm/client.mjs';
 
     render({
         id: 'smth',
@@ -118,10 +118,10 @@ dist/esm/server.mjs
 </script>
 ```
 
-### Использование в браузере через window без сборки
+### Use in the browser via global variables without build:
 
 ```html
-<script src="./node_modules/@yandex-int/divkit/dist/browser/client.js"></script>
+<script src="./node_modules/@divkit/divkit/dist/browser/client.js"></script>
 <script>
     window.Ya.Divkit.render({
         id: 'smth',
@@ -137,70 +137,79 @@ dist/esm/server.mjs
 </script>
 ```
 
-### Тайпскрипт и тайпинги
+### TypeScript and types
 
-Для всех 3 файлов есть тайпинги, которые должны подхватиться автоматически
+All modules have typescript definitions (client, client-hydratable and server), so typescript will load them at any use.
 
-### Поддержка браузеров и node.js
+### Browser/Node.js support
 
-Должно работать, но сложные варианты вёрстки могут вести себя по-разному в старых версиях и в новых. Если встретитесь с таким, приносите, пожалуйста
+Browser support
 ```
 chrome >= 58
 safari >= 11
 firefox >= 67
 ```
 
-Нода
+Node.js
 ```
 Node.js >= 8
 ```
 
 ### API
 
-Все 3 экспортируемых файла содержат одну функцию: `render`. Функция `render` работает похожим образом, но отличаются входные параметры.
+All 3 exported modules have an exported function `render`. This function works in a similar way on client and server.
 
-`/client` и `/client-hydratable` принимает `target` - HTML-элемент, в который нужно нарисовать вёрстку.
+`/client` and `/client-hydratable` requires option `target` - an HTML-element that is used to render json.
 
-Версия из `/server` вместо этого возвращает строку с html.
+Instead, `/server` module will return an HTML string.
 
-### Параметры
+### Options
 
 #### id
 
-Строка, обязательный параметр.
+String, required.
 
-Задаёт уникальный идентификатор блока. Он нужен для генерации уникальных id и классов. Соответственно, не должно быть такого, что два блока нарисованы на одной странице с одним значением `id`.
+Means the unique block identifier. Used to generate ids and classes. There should not be 2 blocks with the same `id` on the page.
 
 #### json
 
-Обязательный параметр, сам divjson.
+Object, required.
+
+Divjson itself.
 
 #### target
 
-`/client` и `/client-hydratable`
+`/client` and `/client-hydratable`
 
-HTML-элемент, в который нужно нарисовать divjson.
-
-Обязательный для клиендсайда и не используется в серверсайде
+HTML-element, required.
 
 #### hydrate
 
 `/client-hydratable`
 
-Стоит прислать со значением `true`, если гидрируется вёрстка с SSR.
-Также всё ещё можно рисовать элементы чисто на клиенте, не передавая `hydrate`.
+Boolean, optional.
 
-Не обязательный
+It must be `true`, if the current render must hydrate html in `target`.
 
 #### onError
 
-Все 3 варианта принимают обязательный параметр `id`. Он нужен для генерации уникальных id и классов. Соответственно, не должно быть такого, что два блока нарисованы на одной странице с одним значением `id`.
+Function, optional.
+
+Callback for errors and warnings for manual processing.
+
+```js
+function onError({error}) {
+    console.log(error.level, error.additional, error.message);
+}
+```
 
 #### onStat
 
-`/client` и `/client-hydratable`
+`/client` and `/client-hydratable`
 
-Не обязательный колбек, который срабатывает, если пользователь нажал по элементу с `action` или если элемент имеет `visibility_action` и сработало условие:
+Function, optional.
+
+Used for logging clicks (for elements with `action`) and visibility logging (for elements with `visibility_action`).
 
 ```js
 function onStat(details) {
@@ -209,39 +218,23 @@ function onStat(details) {
 }
 ```
 
-Также все 3 варианта позволяют задать обработчик ошибок `onError`:
-
-```js
-function onError(details) {
-    console.error(details.error);
-}
-```
-
-`details.error` имеет тип Error с дополнительными полями `level` и `additional`. Формат задуман для совместимости с [error-counter](https://github.yandex-team.ru/RUM/error-counter):
-
-```js
-function onError(details) {
-    Ya.Rum.logError({}, details.error);
-}
-```
-
 #### platform
 
 `desktop` | `touch` | `auto`
 
-По умолчанию `auto` - пытается определить платформу по тачевым событиям. Влияет на ховеры, стрелочки в галерее.
+The default value is `auto`. Tweaks for mouse or touch events.
 
 
-#### theme (ЭКСПЕРИМЕНТАЛЬНОЕ)
+#### theme (EXPERIMENTAL)
 
 `system` | `light` | `dark`
 
-По умолчанию `system`. Влияет на работу переменных из палитры.
+The default value is `system`. Affects variables in `palette`.
 
 
-### Поддержка палитры (ЭКСПЕРИМЕНТАЛЬНОЕ)
+### Palette support (EXPERIMENTAL)
 
-В `json` рядом с `card` и `templates` можно передать поле `palette` с цветами для светлой и тёмной темы:
+Divjson along with the `card` and `templates` can contain a `palette` property with colors for light and dark themes:
 
 ```json
 {

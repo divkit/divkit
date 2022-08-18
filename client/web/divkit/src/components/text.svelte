@@ -90,8 +90,9 @@
         if ($jsonMaxLines && $jsonMaxLines > 1) {
             let lines = Number($jsonMaxLines);
 
-            newMaxHeight = lines * lineHeight + 'em'; // Многострочное обрезание ткста работает, только если нет разметки и картинок
+            newMaxHeight = lines * lineHeight + 'em';
 
+            // multiline overflow enabled only if there is no images and ranges
             if (!$jsonRanges && !$jsonImages) {
                 newLineClamp = lines;
                 newMultiline = true;
@@ -132,7 +133,7 @@
         let newRootTextColor = '';
 
         if ($jsonMaxLines && isAllTextSameColor && isOnlyOneColorDefined) {
-            // Красим троеточие, если текст у цвета ровно один
+            // Recolor the ellipsis only if the entire text have the same color
             newRootTextColor = correctColor(
                 ($jsonTextColor || ($jsonRanges && $jsonRanges[0] && $jsonRanges[0].text_color)) as string,
                 1,
@@ -421,7 +422,7 @@
                                 style={makeStyle({
                                     width: item.image.width,
                                     height: item.image.height,
-                                    // Обнуляем высоту строки для inline-block
+                                    // Normalizes line-height for the containing text line
                                     'margin-top': customLineHeight ? `-${item.image.height}` : undefined,
                                     'margin-bottom': customLineHeight ? `-${item.image.height}` : undefined,
                                     filter: item.image.svgFilterId ? `url(#${item.image.svgFilterId})` : undefined

@@ -1,12 +1,11 @@
 'use strict';
 
 /**
- * Открывает указанную пример
+ * Opens specific example
  *
  * @alias browser.yaOpenExample
  *
- * @param {string} project
- * @param {string} platform
+ * @param {string} example
  * @param {YaOpenExampleParams} params
  *
  * @returns {Promise}

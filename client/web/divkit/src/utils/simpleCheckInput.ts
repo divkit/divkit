@@ -3,9 +3,9 @@ import { wrapError, WrappedError } from './wrapError';
 import { TYPE_MAP } from '../components/typeMap';
 
 /**
- * Простая проверка на то, что json похож на нормальный
+ * Simple check for json card
  * @param json
- * @returns
+ * @returns Error string or null if everything fine
  */
 export function simpleCheckInput(json?: Partial<DivJson>): WrappedError | null {
     if (!json) {

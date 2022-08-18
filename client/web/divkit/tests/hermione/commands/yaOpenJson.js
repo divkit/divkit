@@ -1,12 +1,11 @@
 'use strict';
 
 /**
- * Открывает указанную пример
+ * Opens specific json
  *
  * @alias browser.yaOpenJson
  *
- * @param {string} project
- * @param {string} platform
+ * @param {string} jsonPath
  * @param {YaOpenExampleParams} params
  *
  * @returns {Promise}

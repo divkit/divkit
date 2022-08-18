@@ -9,13 +9,13 @@ describe('pxToEm', () => {
     });
 
     test('strings', () => {
-        // @ts-expect-error Прокидываем строку вместо числа
+        // @ts-expect-error string instead of number
         expect(pxToEm('1')).toBe('0.1em');
-        // @ts-expect-error Прокидываем строку вместо числа
+        // @ts-expect-error string instead of number
         expect(pxToEm('2')).toBe('0.2em');
-        // @ts-expect-error Прокидываем строку вместо числа
+        // @ts-expect-error string instead of number
         expect(pxToEm('10')).toBe('1em');
-        // @ts-expect-error Прокидываем строку вместо числа
+        // @ts-expect-error string instead of number
         expect(pxToEm('20')).toBe('2em');
     });
 
@@ -25,20 +25,20 @@ describe('pxToEm', () => {
     });
 
     test('NaN', () => {
-        // @ts-expect-error Прокидываем не число
+        // @ts-expect-error not a number
         expect(pxToEm(null)).toBe('0');
-        // @ts-expect-error Прокидываем не число
+        // @ts-expect-error not a number
         expect(pxToEm(false)).toBe('0');
-        // @ts-expect-error Прокидываем не число
+        // @ts-expect-error not a number
         expect(pxToEm(true)).toBe('0');
         expect(pxToEm(NaN)).toBe('0');
-        // @ts-expect-error Прокидываем не число
+        // @ts-expect-error not a number
         expect(pxToEm(undefined)).toBe('0');
-        // @ts-expect-error Прокидываем не число
+        // @ts-expect-error not a number
         expect(pxToEm('')).toBe('0');
-        // @ts-expect-error Прокидываем не число
+        // @ts-expect-error not a number
         expect(pxToEm('abc')).toBe('0');
-        // @ts-expect-error Прокидываем не число
+        // @ts-expect-error not a number
         expect(pxToEm({})).toBe('0');
     });
 });

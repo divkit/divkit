@@ -4,7 +4,7 @@ describe('fontWeightToCss', () => {
     test('simple', () => {
         expect(fontWeightToCss(undefined)).toBe(undefined);
 
-        // @ts-expect-error Проверяем невалидное значение
+        // @ts-expect-error Incorrect value
         expect(fontWeightToCss('abc')).toBe(undefined);
 
         expect(fontWeightToCss('light')).toBe(300);

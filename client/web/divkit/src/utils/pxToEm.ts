@@ -1,5 +1,5 @@
 /**
- * Конвертирует пиксели приложения в em, чтобы всё скейлилось
+ * Converts px to em with rounding
  * @param value
  * @returns
  */

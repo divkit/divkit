@@ -50,12 +50,12 @@
 }
 
 .outer_width_parent {
-    /*Не используем width: 100%, потому что ещё есть маржины*/
+    /* width: 100% is not used because of margins */
     justify-self: stretch;
 }
 
 .outer_height_parent {
-    /*Не используем height: 100%, потому что ещё есть маржины*/
+    /* height: 100% is not used because of margins */
     align-self: stretch;
 }
 

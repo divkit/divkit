@@ -1,5 +1,5 @@
 /**
- * Собирает строчку стилей из объекта
+ * Merges rules from object into css string
  * @param styles
  * @returns
  */

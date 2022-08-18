@@ -70,10 +70,10 @@
     }
     let childStore: Readable<ChildInfo[]>;
     $: {
-        let childs: Readable<ChildInfo>[] = [];
+        let children: Readable<ChildInfo>[] = [];
 
         items.forEach(item => {
-            childs.push(
+            children.push(
                 rootCtx.getDerivedFromVars({
                     rowSpan: item.json.row_span,
                     columnSpan: item.json.column_span,
@@ -83,7 +83,7 @@
             );
         });
 
-        childStore = derived(childs, val => val);
+        childStore = derived(children, val => val);
     }
 
     let resultItems: {

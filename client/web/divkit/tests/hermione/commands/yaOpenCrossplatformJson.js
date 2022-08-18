@@ -1,12 +1,11 @@
 'use strict';
 
 /**
- * Открывает указанную пример
+ * Opens example from multiplatform tests
  *
  * @alias browser.yaOpenCrossplatformJson
  *
- * @param {string} project
- * @param {string} platform
+ * @param {string} jsonPath
  * @param {YaOpenExampleParams} params
  *
  * @returns {Promise}

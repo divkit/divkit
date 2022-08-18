@@ -1,14 +1,18 @@
 {
-    "name": "@yandex-int/divkit",
+    "name": "@divkit/divkit",
     "version": "1.12.0",
     "description": "DivKit for web",
-    "keywords": [],
+    "keywords": [
+        "server-driven-ui",
+        "ssr",
+        "web",
+        "divkit",
+        "renderer"
+    ],
     "author": "",
-    "repository": {
-        "type": "arc",
-        "url": "https://a.yandex-team.ru/arc/trunk/arcadia/portal/frontend/divkit"
-    },
-    "license": "UNLICENSED",
+    "homepage": "https://github.com/divkit/divkit",
+    "repository": "github:divkit/divkit",
+    "license": "Apache-2.0",
     "files": [
         "dist/*",
         "typings/*",
@@ -68,7 +72,8 @@
         "build:watch": "npm run build:peggy && webpack serve --config webpack-dev.config.js",
         "build:peggy": "peggy src/expressions/expressions.peggy --allowed-start-rules start,JsonStringContents --format es",
         "build:dev-prod": "npm run build:peggy && NODE_ENV=production webpack-cli --config webpack-dev.config.js",
-        "build:prod": "npm run build:peggy && rm -rf dist/ && NODE_ENV=production npx webpack-cli --progress"
+        "build:prod": "npm run build:peggy && rm -rf dist/ && NODE_ENV=production npx webpack-cli --progress",
+        "prepublishOnly": "cp ../../../LICENCE ./"
     },
     "browserslist": {
         "production": [

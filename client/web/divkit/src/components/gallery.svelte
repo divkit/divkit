@@ -128,14 +128,14 @@
 
     let childStore: Readable<(MaybeMissing<Size> | undefined)[]>;
     $: {
-        let childs: Readable<MaybeMissing<Size> | undefined>[] = [];
+        let children: Readable<MaybeMissing<Size> | undefined>[] = [];
 
         items.forEach(item => {
             const itemSize = orientation === 'horizontal' ? 'width' : 'height';
-            childs.push(rootCtx.getDerivedFromVars(item.json[itemSize]));
+            children.push(rootCtx.getDerivedFromVars(item.json[itemSize]));
         });
 
-        childStore = derived(childs, val => val);
+        childStore = derived(children, val => val);
     }
     $: {
         templateSizes = [];

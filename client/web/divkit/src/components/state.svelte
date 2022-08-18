@@ -84,9 +84,9 @@
         node: HTMLElement;
         resolvePromise?: (val?: void) => void;
     }
-    let childsWithTransitionIn: ChildWithTransition[] = [];
-    let childsWithTransitionOut: ChildWithTransition[] = [];
-    let childsWithTransitionChange: ChildWithTransitionChange[] = [];
+    let childrenWithTransitionIn: ChildWithTransition[] = [];
+    let childrenWithTransitionOut: ChildWithTransition[] = [];
+    let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
     function getItemAnimation(rootBbox: DOMRect, child: ChildWithTransition, direction: 'in' | 'out'): AnimationItem {
         let { json, templateContext, transitions, node } = child;
@@ -153,14 +153,14 @@
                 let transitionsOutToRun: AnimationItem[] = [];
                 if (animationRoot) {
                     const rootBbox = animationRoot.getBoundingClientRect();
-                    transitionsOutToRun = childsWithTransitionOut.map(it => getItemAnimation(rootBbox, it, 'out'));
+                    transitionsOutToRun = childrenWithTransitionOut.map(it => getItemAnimation(rootBbox, it, 'out'));
                 }
-                childsWithTransitionChange.forEach(child => {
+                childrenWithTransitionChange.forEach(child => {
                     transitionChangeBoxes.set(child.id, child.node.getBoundingClientRect());
                 });
-                childsWithTransitionIn = [];
-                childsWithTransitionOut = [];
-                childsWithTransitionChange = [];
+                childrenWithTransitionIn = [];
+                childrenWithTransitionOut = [];
+                childrenWithTransitionChange = [];
 
                 const newState = items.find(it => it.state_id === stateId) || null;
                 if (newState) {
@@ -182,7 +182,7 @@
                 const rootBbox = animationRoot.getBoundingClientRect();
 
                 let transitionsInToRun: AnimationItem[] =
-                    childsWithTransitionIn.map(it => getItemAnimation(rootBbox, it, 'in'));
+                    childrenWithTransitionIn.map(it => getItemAnimation(rootBbox, it, 'in'));
 
                 const inOutList: AnimationItem[] = transitionsOutToRun.concat(transitionsInToRun);
                 const maxDuration = inOutList.reduce((acc: number, item: AnimationItem) => {
@@ -192,7 +192,7 @@
                     );
                 }, 0);
 
-                const changeList: ChangeBoundsItem[] = childsWithTransitionChange
+                const changeList: ChangeBoundsItem[] = childrenWithTransitionChange
                     .filter(child => transitionChangeBoxes.has(child.id))
                     .map(child => {
                         const res: ChangeBoundsItem = {
@@ -311,7 +311,7 @@
                     transitions,
                     node
                 };
-                childsWithTransitionIn.push(item);
+                childrenWithTransitionIn.push(item);
 
                 return new Promise<void>(resolve => {
                     item.resolvePromise = resolve;
@@ -329,7 +329,7 @@
                     transitions,
                     node
                 };
-                childsWithTransitionOut.push(item);
+                childrenWithTransitionOut.push(item);
 
                 return new Promise<void>(resolve => {
                     item.resolvePromise = resolve;
@@ -354,7 +354,7 @@
                     transitions,
                     node
                 };
-                childsWithTransitionChange.push(item);
+                childrenWithTransitionChange.push(item);
 
                 return new Promise<void>(resolve => {
                     item.resolvePromise = resolve;

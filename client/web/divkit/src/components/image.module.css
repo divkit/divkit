@@ -15,7 +15,7 @@
     display: block;
     width: 100%;
     height: 100%;
-    /*Для плейсхолдера*/
+    /* Placeholder styling */
     background-size: cover;
     background-position: 50% 50%;
 }

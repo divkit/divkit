@@ -1,11 +1,11 @@
 import { padLeft } from './padLeft';
 
 /**
- * Конвертирует строку с цветом из приложения в строку с цветом css
- * @param color Строка с цветом в виде #RGB, #ARGB, #RRGGBB, #AARRGGBB
- * @param alpha Прозрачность цвета
- * @param defaultColor Цвет, который возвращается в случае некорректного color
- * @returns Корректный для css цвет
+ * Converts color from app format (ARGB) to css format (RGBA)
+ * @param color Color with format #RGB, #ARGB, #RRGGBB, #AARRGGBB
+ * @param alpha Color additional opacity
+ * @param defaultColor Default color value, used if input color is incorrect
+ * @returns Color with opacity if it has correct format, or defaultColor elsewhere
  */
 export function correctColor(color: string | undefined, alpha = 1, defaultColor = 'transparent'): string {
     color = (color || '').toLowerCase();

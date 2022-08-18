@@ -1,6 +1,6 @@
 .text {
     display: flex;
-    /*Уже есть в outer*/
+    /* Already hidden in outer */
     /*overflow: hidden;*/
 }
 
@@ -59,7 +59,7 @@
 }
 
 .text_multiline .text__inner {
-    /* Для работу -webkit-line-clamp */
+    /* For -webkit-line-clamp */
     display: -webkit-box;
     -webkit-box-orient: vertical;
 }

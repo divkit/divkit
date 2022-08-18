@@ -6,7 +6,7 @@ describe('simpleCheckInput', () => {
         })).toMatchSnapshot();
 
         expect(simpleCheckInput({
-            // @ts-expect-error Нет обязательных полей
+            // @ts-expect-error Not enough required fields
             card: {},
             templates: {}
         })).toMatchSnapshot();
@@ -37,7 +37,7 @@ describe('simpleCheckInput', () => {
         expect(simpleCheckInput({
             card: {
                 log_id: 'abc',
-                // @ts-expect-error Специально сломанный json
+                // @ts-expect-error Explicit incorrect json
                 states: [{
                     state_id: 0
                 }]

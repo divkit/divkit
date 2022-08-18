@@ -1,5 +1,5 @@
 /**
- * Реплейсит "опасные" для html символы
+ * Escapes html
  * @param str
  * @returns
  */

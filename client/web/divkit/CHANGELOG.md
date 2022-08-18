@@ -77,7 +77,7 @@ New features:
 * Added `selectable` property support for `text` block (and now text by default cannot be selected, to match Android / iOS behaviour)
 
 Fixes:
-* Fixes for `grid`'s childs sizing
+* Fixes for `grid`'s children sizing
 * Recursive templates now correctly produces error instead of infinity loop
 
 
