@@ -6,11 +6,15 @@ import com.yandex.div.util.SynchronizedList
 
 @Mockable
 class VariableSource(
-    val variables: Map<String, Variable>,
+    private val variables: Map<String, Variable>,
+    private val requestObserver: (variableName: String) -> Unit,
     private val declarationObservers: SynchronizedList<(Variable) -> Unit>
 ) {
 
-    internal fun getMutableVariable(name: String) = variables[name]
+    internal fun getMutableVariable(name: String): Variable? {
+        requestObserver.invoke(name)
+        return variables[name]
+    }
 
     internal fun observeDeclaration(observer: (Variable) -> Unit) {
         declarationObservers.add(observer)

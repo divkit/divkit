@@ -17,7 +17,7 @@ class SynchronizedList<T> {
     }
 
     fun forEach(callback: (T) -> Unit) {
-        val listCopy = mutableListOf<T>()
+        val listCopy = ArrayList<T>(list.size)
 
         synchronized(list) {
             listCopy.addAll(list)

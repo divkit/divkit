@@ -29,9 +29,15 @@ class GlobalVariableController @Inject constructor() {
     private val declarationObservers = SynchronizedList<(Variable) -> Unit>()
     private val declaredVariableNames = mutableSetOf<String>()
     private val pendingDeclaration = mutableSetOf<String>()
+    private val externalVariableRequestObservers = SynchronizedList<(variableName: String) -> Unit>()
+
+    private val requestsObserver = { variableName: String ->
+        externalVariableRequestObservers.forEach { it.invoke(variableName) }
+    }
 
     internal val variableSource = VariableSource(
         variables,
+        requestsObserver,
         declarationObservers
     )
 
@@ -109,5 +115,16 @@ class GlobalVariableController @Inject constructor() {
         declarationObservers.forEach { observer ->
             newDeclaredVariables.forEach { variable -> observer.invoke(variable)}
         }
+    }
+
+    /**
+     * Allows to track requests to defined or not yet defined global variables.
+     */
+    fun addVariableRequestObserver(observer: (variableName: String) -> Unit) {
+        externalVariableRequestObservers.add(observer)
+    }
+
+    fun removeVariableRequestObserver(observer: (variableName: String) -> Unit) {
+        externalVariableRequestObservers.remove(observer)
     }
 }

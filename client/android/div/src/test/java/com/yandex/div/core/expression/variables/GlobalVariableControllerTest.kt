@@ -99,4 +99,17 @@ class GlobalVariableControllerTest {
         underTest.putOrUpdate(firstVar)
         verify(declarationCallback, times(2)).invoke(any())
     }
+
+    @Test
+    fun `request to defined and undefined variable is notified to observer`() {
+        val observer = mock<(String) -> Unit>()
+        underTest.putOrUpdate(Variable.StringVariable("Defined var", "value of A"))
+        underTest.addVariableRequestObserver(observer)
+
+        underTest.variableSource.getMutableVariable("Defined var")
+        underTest.variableSource.getMutableVariable("Undefined var")
+
+        verify(observer).invoke("Defined var")
+        verify(observer).invoke("Undefined var")
+    }
 }
