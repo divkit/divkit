@@ -1,5 +1,5 @@
 import re
-from typing import List, Tuple, Optional, Dict, Union, cast, Any
+from typing import List, Tuple, Optional, Dict, Union, cast
 
 from .utils import (
     fixing_reserved_typename,
@@ -233,13 +233,6 @@ def type_property_build(dictionary: Dict[str, any],
         return Object(name=type_value.replace('$defined_', ''), object=None, format=ObjectFormat.DEFAULT), []
 
 
-def __should_use_expressions(property_type: PropertyType, dictionary: Dict[str, Any]) -> Optional[bool]:
-    support_expressions = dictionary.get('supports_expressions', True)
-    if property_type.support_expressions:
-        return support_expressions
-    return False if not support_expressions else None
-
-
 def property_build(properties: Dict[str, Dict[str, any]],
                    required: Optional[str],
                    location: ElementLocation,
@@ -269,10 +262,7 @@ def property_build(properties: Dict[str, Dict[str, any]],
                                         optional=not is_required,
                                         is_deprecated=dictionary.get('deprecated', False),
                                         mode=mode,
-                                        predefined_use_expressions=__should_use_expressions(
-                                            property_type=property_type,
-                                            dictionary=dictionary
-                                        ),
+                                        supports_expressions_flag=dictionary.get('supports_expressions', True),
                                         default_value=default_value,
                                         platforms=platforms(dictionary)))
         inner_types_list.extend(inner_types)

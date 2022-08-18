@@ -212,7 +212,7 @@ class SwiftGenerator(Generator):
             result += EMPTY
 
         filtered_props = list(filter(
-            lambda p: p.swift_mode.use_expressions and not p.mode.is_template,
+            lambda p: p.supports_expressions and not p.mode.is_template,
             properties_to_declare))
         for prop in filtered_props:
             result += prop.expression_resolving_method(self._access_level).indented()
@@ -254,7 +254,7 @@ class SwiftGenerator(Generator):
             type_decl = prop.type_declaration
             comment = prop.declaration_comment
             result += Text(f'var {name}: {type_decl} {{ get }}{comment}').indented()
-        for prop in filter(lambda p: p.swift_mode.use_expressions and not p.mode.is_template, props):
+        for prop in filter(lambda p: p.supports_expressions and not p.mode.is_template, props):
             result += Text(prop.expression_resolving_method_declaration(SwiftAccessLevel.INTERNAL)).indented()
         result += '}'
         return result

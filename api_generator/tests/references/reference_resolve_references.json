@@ -506,142 +506,6 @@
       }
     },
     {
-      "entity_with_property_with_default_value.json": {
-        "type": "object",
-        "definitions": {
-          "int_prop": {
-            "default_value": "0",
-            "$resolved_refs": [
-              "common.json#/non_negative_integer"
-            ],
-            "type": "integer",
-            "constraint": "number >= 0"
-          },
-          "url_prop": {
-            "schemes": [
-              "https"
-            ],
-            "default_value": "https://yandex.ru",
-            "$resolved_refs": [
-              "common.json#/url"
-            ],
-            "type": "string",
-            "format": "uri"
-          },
-          "nested": {
-            "type": "object",
-            "properties": {
-              "int": {
-                "$resolved_refs": [
-                  "#/definitions/int_prop",
-                  "common.json#/non_negative_integer"
-                ],
-                "default_value": "0",
-                "type": "integer",
-                "constraint": "number >= 0"
-              },
-              "url": {
-                "$resolved_refs": [
-                  "#/definitions/url_prop",
-                  "common.json#/url"
-                ],
-                "schemes": [
-                  "https"
-                ],
-                "default_value": "https://yandex.ru",
-                "type": "string",
-                "format": "uri"
-              },
-              "non_optional": {
-                "type": "string"
-              }
-            },
-            "description_translations": {
-                "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
-                "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
-            },
-            "required": [
-              "non_optional"
-            ]
-          }
-        },
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_property_with_default_value"
-            ]
-          },
-          "int": {
-            "$resolved_refs": [
-              "#/definitions/int_prop",
-              "common.json#/non_negative_integer"
-            ],
-            "default_value": "0",
-            "type": "integer",
-            "constraint": "number >= 0"
-          },
-          "url": {
-            "$resolved_refs": [
-              "#/definitions/url_prop",
-              "common.json#/url"
-            ],
-            "schemes": [
-              "https"
-            ],
-            "default_value": "https://yandex.ru",
-            "type": "string",
-            "format": "uri"
-          },
-          "nested": {
-            "$resolved_refs": [
-              "#/definitions/nested"
-            ],
-            "type": "object",
-            "properties": {
-              "int": {
-                "$resolved_refs": [
-                  "#/definitions/int_prop",
-                  "common.json#/non_negative_integer"
-                ],
-                "default_value": "0",
-                "type": "integer",
-                "constraint": "number >= 0",
-                "$typename": "int_prop"
-              },
-              "url": {
-                "$resolved_refs": [
-                  "#/definitions/url_prop",
-                  "common.json#/url"
-                ],
-                "schemes": [
-                  "https"
-                ],
-                "default_value": "https://yandex.ru",
-                "type": "string",
-                "format": "uri",
-                "$typename": "url_prop"
-              },
-              "non_optional": {
-                "type": "string"
-              }
-            },
-            "description_translations": {
-              "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
-              "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
-            },
-            "required": [
-              "non_optional"
-            ],
-            "$typename": "nested"
-          }
-        },
-        "required": [
-          "type"
-        ]
-      }
-    },
-    {
       "entity_with_required_property.json": {
         "type": "object",
         "properties": {
@@ -799,12 +663,144 @@
       }
     },
     {
+      "entity_with_property_with_default_value.json": {
+        "type": "object",
+        "definitions": {
+          "int_prop": {
+            "default_value": "0",
+            "$resolved_refs": [
+              "common.json#/non_negative_integer"
+            ],
+            "type": "integer",
+            "constraint": "number >= 0"
+          },
+          "url_prop": {
+            "schemes": [
+              "https"
+            ],
+            "default_value": "https://yandex.ru",
+            "$resolved_refs": [
+              "common.json#/url"
+            ],
+            "type": "string",
+            "format": "uri"
+          },
+          "nested": {
+            "type": "object",
+            "properties": {
+              "int": {
+                "$resolved_refs": [
+                  "#/definitions/int_prop",
+                  "common.json#/non_negative_integer"
+                ],
+                "default_value": "0",
+                "type": "integer",
+                "constraint": "number >= 0"
+              },
+              "url": {
+                "$resolved_refs": [
+                  "#/definitions/url_prop",
+                  "common.json#/url"
+                ],
+                "schemes": [
+                  "https"
+                ],
+                "default_value": "https://yandex.ru",
+                "type": "string",
+                "format": "uri"
+              },
+              "non_optional": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "non_optional"
+            ],
+            "description_translations": {
+              "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
+              "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
+            }
+          }
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_property_with_default_value"
+            ]
+          },
+          "int": {
+            "$resolved_refs": [
+              "#/definitions/int_prop",
+              "common.json#/non_negative_integer"
+            ],
+            "default_value": "0",
+            "type": "integer",
+            "constraint": "number >= 0"
+          },
+          "url": {
+            "$resolved_refs": [
+              "#/definitions/url_prop",
+              "common.json#/url"
+            ],
+            "schemes": [
+              "https"
+            ],
+            "default_value": "https://yandex.ru",
+            "type": "string",
+            "format": "uri"
+          },
+          "nested": {
+            "$resolved_refs": [
+              "#/definitions/nested"
+            ],
+            "type": "object",
+            "properties": {
+              "int": {
+                "$resolved_refs": [
+                  "#/definitions/int_prop",
+                  "common.json#/non_negative_integer"
+                ],
+                "default_value": "0",
+                "type": "integer",
+                "constraint": "number >= 0",
+                "$typename": "int_prop"
+              },
+              "url": {
+                "$resolved_refs": [
+                  "#/definitions/url_prop",
+                  "common.json#/url"
+                ],
+                "schemes": [
+                  "https"
+                ],
+                "default_value": "https://yandex.ru",
+                "type": "string",
+                "format": "uri",
+                "$typename": "url_prop"
+              },
+              "non_optional": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "non_optional"
+            ],
+            "$typename": "nested",
+            "description_translations": {
+              "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
+              "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
+            }
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
       "entity_with_simple_properties.json": {
         "type": "object",
-        "description_translations": {
-          "en": "Entity with simple properties.",
-          "ru": "Объект с простыми свойствами."
-        },
         "swift_protocols": "EntityProtocol",
         "properties": {
           "type": {
@@ -822,15 +818,15 @@
             }
           },
           "string": {
-            "description_translations": {
-              "en": "String.",
-              "ru": "Строка."
-            },
             "platforms": [
               "android",
               "ios",
               "web"
             ],
+            "description_translations": {
+              "en": "String.",
+              "ru": "Строка."
+            },
             "$resolved_refs": [
               "common.json#/non_empty_string"
             ],
@@ -860,14 +856,14 @@
             }
           },
           "boolean_int": {
-            "description_translations": {
-              "en": "Boolean value in numeric format.",
-              "ru": "Логическое значение в числовом формате."
-            },
             "deprecated": true,
             "platforms": [
               "android"
             ],
+            "description_translations": {
+              "en": "Boolean value in numeric format.",
+              "ru": "Логическое значение в числовом формате."
+            },
             "$resolved_refs": [
               "common.json#/boolean_int"
             ],
@@ -879,11 +875,11 @@
             "format": "boolean"
           },
           "positive_integer": {
+            "platforms": [],
             "description_translations": {
               "en": "Positive integer.",
               "ru": "Положительное целое число."
             },
-            "platforms": [],
             "$resolved_refs": [
               "common.json#/positive_integer"
             ],
@@ -911,7 +907,11 @@
         },
         "required": [
           "type"
-        ]
+        ],
+        "description_translations": {
+          "en": "Entity with simple properties.",
+          "ru": "Объект с простыми свойствами."
+        }
       }
     },
     {

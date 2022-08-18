@@ -39,7 +39,7 @@ PARENT_PROPERTY = Property(
     optional=True,
     is_deprecated=False,
     mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES,
-    predefined_use_expressions=False,
+    supports_expressions_flag=False,
     default_value=None,
     platforms=None
 )
@@ -239,13 +239,13 @@ class SwiftEntity(Entity):
             else:
                 name = prop.declaration_name
                 if prop.internal_validator_declaration(GenerationMode.NORMAL_WITH_TEMPLATES) is None or \
-                        prop.use_expressions:
+                        prop.supports_expressions:
                     value = ''
                 else:
                     value = f'validatedBy: ResolvedValue.{prop.validator_var_name}'
                 initial_value = f' = parent?.{name}?.value({value}) ?? .noValue'
             mode = SwiftProperty.SwiftMode(value=GenerationMode.NORMAL_WITH_TEMPLATES,
-                                           use_expressions=prop.use_expressions)
+                                           use_expressions=prop.supports_expressions)
             val_type = cast(SwiftPropertyType, prop.property_type).prefixed_declaration(mode)
             result += f'  var {prop.value_resolving_local_var_name}: DeserializationResult<{val_type}>{initial_value}'
 
@@ -390,7 +390,7 @@ class SwiftProperty(Property):
 
     @property
     def swift_mode(self) -> SwiftMode:
-        return SwiftProperty.SwiftMode(value=self.mode, use_expressions=self.use_expressions)
+        return SwiftProperty.SwiftMode(value=self.mode, use_expressions=self.supports_expressions)
 
     @property
     def declaration_name(self) -> str:
@@ -626,7 +626,7 @@ class SwiftProperty(Property):
             cast(SwiftPropertyType, self.property_type).empty_constructor is not None
 
     def deserialization_expression(self, in_value_resolving: bool) -> str:
-        mode = SwiftProperty.SwiftMode(GenerationMode.TEMPLATE, self.use_expressions)
+        mode = SwiftProperty.SwiftMode(GenerationMode.TEMPLATE, self.supports_expressions)
         if isinstance(self.property_type, Array):
             array_or_field = 'Array'
             item_type = cast(SwiftPropertyType, self.property_type.property_type)
@@ -661,7 +661,7 @@ class SwiftProperty(Property):
         else:
             return declaration
 
-        if self.use_expressions:
+        if self.supports_expressions:
             default_value_declaration_to_use = f'.value({default_value_declaration_to_use})'
 
         return f'{declaration} ?? {default_value_declaration_to_use}'
@@ -691,7 +691,7 @@ class SwiftProperty(Property):
     def serialization_declaration(self) -> str:
         prefix = f'result["{self.dict_field}"] = '
         prop = cast(SwiftPropertyType, self.property_type)
-        suffix = prop.serialization_suffix(self.use_expressions)
+        suffix = prop.serialization_suffix(self.supports_expressions)
         return f'{prefix}{self.declaration_name}{"?" if self.should_be_optional and suffix else ""}{suffix}'
 
 
@@ -830,7 +830,7 @@ class SwiftPropertyType(PropertyType):
                 if str_type is None:
                     continue
                 declaration = cast(SwiftPropertyType, prop.property_type).internal_declaration(str_type)
-                default_value = f'.value({declaration})' if prop.swift_mode.use_expressions else declaration
+                default_value = f'.value({declaration})' if prop.supports_expressions else declaration
                 args.append(f'{prop.declaration_name}: {default_value}')
             args = ', '.join(args)
             return f'{entity.declaration_prefix}{utils.capitalize_camel_case(entity.original_name)}({args})'

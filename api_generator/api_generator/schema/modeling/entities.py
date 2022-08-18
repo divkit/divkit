@@ -569,13 +569,13 @@ def default_value(lang: GeneratedLanguage,
 
 class PropertyType(ABC):
     @property
-    def support_expressions(self) -> bool:
+    def supports_expressions(self) -> bool:
         if isinstance(self, (Int, Double, Bool, BoolInt, String, Color, Url)):
             return True
-        elif isinstance(self, (StaticString, Dictionary)):
+        elif isinstance(self, (Dictionary, StaticString)):
             return False
         elif isinstance(self, Array):
-            return self.property_type.support_expressions
+            return self.property_type.supports_expressions
         elif isinstance(self, Object):
             return isinstance(self.object, StringEnumeration)
 
@@ -694,7 +694,7 @@ class Property:
     optional: bool
     is_deprecated: bool
     mode: GenerationMode
-    predefined_use_expressions: Optional[bool]
+    supports_expressions_flag: bool
     default_value: Optional[str]
     platforms: Optional[List[Platform]]
 
@@ -705,10 +705,10 @@ class Property:
         return str(self)
 
     @property
-    def use_expressions(self) -> bool:
-        if self.predefined_use_expressions is None:
-            return self.property_type.support_expressions
-        return self.predefined_use_expressions
+    def supports_expressions(self) -> bool:
+        if self.property_type.supports_expressions:
+            return self.supports_expressions_flag
+        return False
 
     @property
     def as_json(self) -> Dict:
