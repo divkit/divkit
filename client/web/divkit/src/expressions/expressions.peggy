@@ -84,7 +84,7 @@ JsonStringChar
     / '@{}' { return ''; }
     / !( '\\' / '@{' ) . { return text(); }
     / '@{' [^}]+ '}' { throw new Error('Incorrect interpolation'); }
-    / '@{' { return text(); }
+    / '@{' { throw new Error('Incorrect interpolation'); }
     / '\\' str:'@{' { return str; }
     / '\\' char:. { return escapeChar(char); }
 
@@ -152,7 +152,7 @@ StringChar
     / '@{}' { return ''; }
     / !('\\' / "'" / '@{') . { return text(); }
     / '@{' [^'}]+ '}' { throw new Error('Incorrect interpolation'); }
-    / '@{' { return text(); }
+    / '@{' { throw new Error('Incorrect interpolation'); }
     / '\\' str:'@{' { return str; }
     / '\\' char:. { return escapeChar(char); }
 
