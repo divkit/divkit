@@ -86,6 +86,9 @@
         contentHAlign = correctAlignmentHorizontal($jsonContentHAlign, contentHAlign);
     }
 
+    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
+    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
+
     let childLayoutParams: LayoutParams = {};
     $: {
         let newChildLayoutParams: LayoutParams = {};
@@ -95,9 +98,15 @@
         }
         if (orientation !== 'horizontal') {
             newChildLayoutParams.parentHAlign = HALIGN_MAP[contentHAlign];
+            if ($jsonHeight?.type === 'wrap_content' || !$jsonHeight) {
+                newChildLayoutParams.parentVerticalWrapContent = true;
+            }
         }
         if (orientation !== 'vertical') {
             newChildLayoutParams.parentVAlign = VALIGN_MAP[contentVAlign];
+            if ($jsonWidth?.type === 'wrap_content') {
+                newChildLayoutParams.parentHorizontalWrapContent = true;
+            }
         }
         if (orientation === 'horizontal') {
             newChildLayoutParams.parentLayoutOrientation = 'horizontal';
@@ -126,43 +135,36 @@
     }
 
     let style: Style = {};
-    let hasConstrainedError = false;
     $: {
         let newStyle: Style = {};
-        let hasConstrainedError = false;
 
         if (orientation !== 'overlap') {
             const sizeProp = orientation === 'vertical' ? 'height' : 'width';
+            const isWrapContentOnAxis = orientation === 'vertical' ? ($jsonHeight?.type === 'wrap_content' || !$jsonHeight) : $jsonWidth?.type === 'wrap_content';
             let sizes = $sizesStore;
-            let constrained = 0;
 
             let sizeTemplate = sizes
                 .map(size => {
-                    if (size) {
-                        if (size.type === 'match_parent') {
-                            return (Number(size.weight) || 1) + 'fr';
+                    if (!size && sizeProp === 'width' || size?.type === 'match_parent') {
+                        if (isWrapContentOnAxis) {
+                            rootCtx.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                                level: 'warn'
+                            }));
+                            return 'minmax(0, auto)';
                         }
-                    } else if (sizeProp === 'width') {
-                        return '1fr';
-                    }
 
-                    if (
+                        return (Number(size?.weight) || 1) + 'fr';
+                    } else if (
                         size &&
                         size.type === 'wrap_content' &&
                         size.constrained
                     ) {
-                        ++constrained;
                         return 'minmax(0, auto)';
                     }
 
                     return 'auto';
                 })
                 .join(' ');
-
-            if (constrained > 1) {
-                hasConstrainedError = true;
-                rootCtx.logError(wrapError(new Error('Too many constrained items for div "container"')));
-            }
 
             const templateRule = orientation === 'vertical' ? 'grid-template-rows' : 'grid-template-columns';
             newStyle[templateRule] = sizeTemplate;
@@ -176,11 +178,9 @@
         valign: contentVAlign,
         halign: contentHAlign
     };
-
-    $: hasError = hasItemsError || hasConstrainedError;
 </script>
 
-{#if !hasError}
+{#if !hasItemsError}
     <Outer
         cls={genClassName('container', css, mods)}
         {json}

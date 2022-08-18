@@ -119,15 +119,21 @@
             if ($jsonWidth.type === 'fixed') {
                 widthNum = correctNonNegativeNumber($jsonWidth.value, widthNum);
                 newWidth = pxToEm(widthNum);
+            } else if (
+                $jsonWidth.type === 'wrap_content' ||
+                !layoutParams.overlapParent && $jsonWidth.type === 'match_parent' && layoutParams.parentHorizontalWrapContent
+            ) {
+                widthType = 'content';
+                if (
+                    $jsonWidth.type === 'wrap_content' && $jsonWidth.constrained ||
+                    $jsonWidth.type === 'match_parent' && layoutParams.parentHorizontalWrapContent
+                ) {
+                    newWidthMods['width-constrained'] = true;
+                }
             } else if ($jsonWidth.type === 'match_parent') {
                 widthType = 'parent';
                 if (layoutParams.parentLayoutOrientation === 'vertical') {
                     newWidth = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.left || 0) + ($jsonMargins?.right || 0))})`;
-                }
-            } else if ($jsonWidth.type === 'wrap_content') {
-                widthType = 'content';
-                if ($jsonWidth.constrained) {
-                    newWidthMods['width-constrained'] = true;
                 }
             }
         } else {
@@ -171,15 +177,21 @@
             if ($jsonHeight.type === 'fixed') {
                 heightNum = correctNonNegativeNumber($jsonHeight.value, heightNum);
                 newHeight = pxToEm(heightNum);
+            } else if (
+                $jsonHeight.type === 'wrap_content' ||
+                !layoutParams.overlapParent && $jsonHeight.type === 'match_parent' && layoutParams.parentVerticalWrapContent
+            ) {
+                heightType = 'content';
+                if (
+                    $jsonHeight.type === 'wrap_content' && $jsonHeight.constrained ||
+                    $jsonHeight.type === 'match_parent' && layoutParams.parentVerticalWrapContent
+                ) {
+                    newHeightMods['height-constrained'] = true;
+                }
             } else if ($jsonHeight.type === 'match_parent') {
                 heightType = 'parent';
                 if (layoutParams.parentLayoutOrientation === 'horizontal') {
                     newHeight = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.top || 0) + ($jsonMargins?.bottom || 0))})`;
-                }
-            } else if ($jsonHeight.type === 'wrap_content') {
-                heightType = 'content';
-                if ($jsonHeight.constrained) {
-                    newHeightMods['height-constrained'] = true;
                 }
             }
         } else {
@@ -210,6 +222,10 @@
     }
 
     $: parentOverlapMod = layoutParams.overlapParent ? true : undefined;
+
+    $: parentOverlapAbsoluteMod = layoutParams.overlapParent &&
+        (!$jsonWidth || $jsonWidth.type === 'match_parent') &&
+        $jsonHeight?.type === 'match_parent';
 
     $: gridArea = layoutParams.gridArea ?
         `${layoutParams.gridArea.y + 1}/${layoutParams.gridArea.x + 1}/span ${layoutParams.gridArea.rowSpan}/span ${layoutParams.gridArea.colSpan}` :
@@ -396,6 +412,7 @@
         ...widthMods,
         ...heightMods,
         'parent-overlap': parentOverlapMod,
+        'parent-overlap-absolute': parentOverlapAbsoluteMod,
         'scroll-snap': layoutParams.scrollSnap,
         'hide-on-transition-in': stateChangingInProgress ||
             visibilityChangingInProgress ||

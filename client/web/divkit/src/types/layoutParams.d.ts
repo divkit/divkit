@@ -7,6 +7,8 @@ export interface LayoutParams {
     parentHAlign?: Align;
     parentVAlign?: Align;
     parentLayoutOrientation?: Orientation;
+    parentHorizontalWrapContent?: boolean;
+    parentVerticalWrapContent?: boolean;
     overlapParent?: boolean;
     gridArea?: {
         x: number;
