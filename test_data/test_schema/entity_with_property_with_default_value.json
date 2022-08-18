@@ -25,7 +25,7 @@
           "type": "string"
         }
       },
-      "description": "non_optional is used to suppress auto-generation of default value for object with all-optional fields",
+      "$description": "translations.json#/entity_with_property_with_default_value_nested",
       "required": [
         "non_optional"
       ]

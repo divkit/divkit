@@ -14,6 +14,8 @@ from . import entities
 def has_unresolved_references(dictionary: Dict) -> bool:
     if isinstance(dictionary.get('$ref'), str):
         return True
+    if isinstance(dictionary.get('$description'), str):
+        return True
     for value in dictionary.values():
         if isinstance(value, Dict) and has_unresolved_references(value):
             return True
@@ -119,6 +121,14 @@ def resolve_references(
     lang: GeneratedLanguage,
     reference_stack: List[entities.Reference] = None
 ) -> Dict[str, any]:
+    description_ref = dictionary.get('$description')
+    if isinstance(description_ref, str):
+        description = entities.DescriptionReference(location=location, ref=description_ref)
+        result = deepcopy(dictionary)
+        result['description_translations'] = description.value
+        result.pop('$description', None)
+        return result
+
     if reference_stack is None:
         reference_stack = []
     reference = dictionary.get('$ref')

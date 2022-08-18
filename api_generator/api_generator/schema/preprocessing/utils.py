@@ -1,6 +1,8 @@
 from typing import Dict, List, TypeVar, Optional
 from copy import deepcopy
 
+from . import errors
+from .entities import ElementLocation, SchemaFile
 from ...config import GeneratedLanguage
 
 Key = TypeVar('T')
@@ -48,3 +50,34 @@ def number_of_references(obj_name: str, dictionary: Dict[str, any]) -> int:
 def code_generation_disabled(lang: GeneratedLanguage, dictionary: Dict[str, any]) -> bool:
     value = get_value_with_optional_by_lang('code_generation_disabled', lang, dictionary)
     return value or False
+
+
+def get_full_reference_location(location: ElementLocation, ref: str) -> (str, SchemaFile, List[str]):
+    invalid_reference_error = errors.InvalidFileReferenceError(location, ref)
+    components: List[str] = ref.split('#')
+
+    if len(components) > 2:
+        raise invalid_reference_error
+
+    if len(components) == 2 and not components[0]:
+        path: List[str] = list(filter(None, components[1].split('/')))
+        return '', location.file, path
+
+    try:
+        parent_directory = location.file.parent_dir
+        if parent_directory is None:
+            raise invalid_reference_error
+        ref = parent_directory.resolve(components[0])
+        if not isinstance(ref, SchemaFile):
+            raise invalid_reference_error
+
+        if len(components) == 2:
+            path: List[str] = list(filter(None, components[1].split('/')))
+        else:
+            path: List[str] = []
+
+        ref_dir_path = '/'.join(components[0].split('/')[:-1])
+        prefix = '' if not ref_dir_path else ref_dir_path + '/'
+        return prefix, ref, path
+    except errors.InvalidReferenceError:
+        raise invalid_reference_error

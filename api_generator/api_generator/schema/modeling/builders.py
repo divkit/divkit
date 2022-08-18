@@ -263,6 +263,7 @@ def property_build(properties: Dict[str, Dict[str, any]],
         name = alias(lang=config.lang, dictionary=dictionary) or dict_field
         properties_list.append(Property(name=name,
                                         description=dictionary.get('description'),
+                                        description_translations=dictionary.get('description_translations', {}),
                                         dict_field=dict_field,
                                         property_type=property_type,
                                         optional=not is_required,

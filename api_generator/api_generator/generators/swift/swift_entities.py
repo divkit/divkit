@@ -28,6 +28,7 @@ from ...schema.modeling.text import Text, EMPTY
 PARENT_PROPERTY = Property(
     name='parent',
     description=None,
+    description_translations={},
     dict_field='type',
     property_type=String(
         min_length=1,

@@ -210,39 +210,12 @@ class ElementLocation:
 
 class Reference:
     def __init__(self, location: ElementLocation, ref: str):
-        invalid_reference_error = errors.InvalidFileReferenceError(location, ref)
-        components: List[str] = ref.split('#')
         prefix: str
         self._file: SchemaFile
         self._path: List[str]
         self._value: Dict[str, any]
 
-        if len(components) > 2:
-            raise invalid_reference_error
-
-        if len(components) == 2 and not components[0]:
-            self._file: SchemaFile = location.file
-            self._path: List[str] = list(filter(lambda comp: comp, components[1].split('/')))
-            prefix = ''
-        else:
-            try:
-                parent_directory = location.file.parent_dir
-                if parent_directory is None:
-                    raise invalid_reference_error
-                ref = parent_directory.resolve(components[0])
-                if not isinstance(ref, SchemaFile):
-                    raise invalid_reference_error
-                self._file: SchemaFile = ref
-
-                if len(components) == 2:
-                    self._path: List[str] = list(filter(lambda comp: comp, components[1].split('/')))
-                else:
-                    self._path: List[str] = []
-
-                ref_dir_path = '/'.join(components[0].split('/')[:-1])
-                prefix = '' if not ref_dir_path else ref_dir_path + '/'
-            except errors.InvalidReferenceError:
-                raise invalid_reference_error
+        prefix, self._file, self._path = utils.get_full_reference_location(location, ref)
 
         definition = preprocessor.prepend_prefix_to_references(
             prefix=prefix,
@@ -304,4 +277,16 @@ class Reference:
 
     @property
     def value(self) -> Dict[str, any]:
+        return self._value
+
+
+class DescriptionReference:
+    def __init__(self, location: ElementLocation, ref: str):
+        file: SchemaFile
+        path: List[str]
+        _, file, path = utils.get_full_reference_location(location, ref)
+        self._value = utils.enclosed_dict_for(keys=path, dictionary=file.contents)
+
+    @property
+    def value(self) -> Dict[str, str]:
         return self._value

@@ -128,6 +128,7 @@ class Entity(Declarable):
         self._root_entity: bool = dictionary.get('root_entity', False)
         self._display_name: str = dictionary.get('display_name', name)
         self._description: str = dictionary.get('description', '')
+        self._description_object: Dict[str, str] = dictionary.get('description_translations', {})
         self._swift_super_protocol: Optional[str] = dictionary.get('swift_super_protocol')
         self._include_in_documentation_toc: bool = dictionary.get('include_in_documentation_toc', False)
         self._original_name: str = name
@@ -449,8 +450,9 @@ class EntityEnumeration(Declarable):
         if self in stack:
             return
         for _, entity in self._entities:
-            entity.check_dependencies_resolved(location=location + self._name,
-                                               stack=stack + [self])
+            if entity is not None:
+                entity.check_dependencies_resolved(location=location + self._name,
+                                                   stack=stack + [self])
 
     @property
     def as_json(self) -> Dict:
@@ -686,6 +688,7 @@ class Object(PropertyType):
 class Property:
     name: str
     description: Optional[str]
+    description_translations: Dict[str, str]
     dict_field: str
     property_type: PropertyType
     optional: bool
@@ -714,3 +717,8 @@ class Property:
             'name': self.name,
             'property_type': self.property_type.as_json
         }
+
+
+class DescriptionLanguage(str, Enum):
+    EN = 'en'
+    RU = 'ru'
