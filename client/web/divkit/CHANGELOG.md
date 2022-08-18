@@ -1,3 +1,19 @@
+## 3.0.0 (August 18, 2022)
+
+Version now in sync with the Android and iOS.
+
+Changes and additions:
+* Changed `gallery` items alignment
+* Changed variables' types processing in expressions
+* Added additional functions for `Color` and `Url`
+* Changed `wrap_content` / `match_parent` in several cases to better match the Android layout. Better `match_parent` inside `wrap_content` handling. Better `match_parent` inside `container` with `overlap`. Container now can have multiple `constrained` children.
+
+Fixes:
+* Fixed `gallery` inside other `gallery`
+* `width` and `height` can now be zero
+* Fixed extra unused css variables in html
+* Fixed the case with string interpolation without closing bracket
+
 ## 1.12.0 (August 10, 2022)
 
 Additions:
