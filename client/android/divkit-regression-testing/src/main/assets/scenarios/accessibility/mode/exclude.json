@@ -70,6 +70,20 @@
                     "type": "solid",
                     "color": "#1ABC9C"
                   }
+                ],
+                "actions": [
+                  {
+                    "menu_items": [
+                      {
+                        "text": "Элемент 1",
+                        "action": {
+                          "url": "custom-menu://singleTap",
+                          "log_id": "custom/menu/singleTap"
+                        }
+                      }
+                    ],
+                    "log_id": "tap_actions"
+                  }
                 ]
               },
               {
@@ -120,6 +134,20 @@
                     "border": {
                       "corner_radius": 8
                     },
+                    "actions": [
+                      {
+                        "menu_items": [
+                          {
+                            "text": "Элемент 2",
+                            "action": {
+                              "url": "custom-menu://singleTap",
+                              "log_id": "custom/menu/singleTap"
+                            }
+                          }
+                        ],
+                        "log_id": "tap_actions"
+                      }
+                    ],
                     "background": [
                       {
                         "type": "solid",
@@ -151,6 +179,20 @@
                     "accessibility": {
                       "description": "Это Элемент 3"
                     },
+                    "actions": [
+                      {
+                        "menu_items": [
+                          {
+                            "text": "Элемент 3",
+                            "action": {
+                              "url": "custom-menu://singleTap",
+                              "log_id": "custom/menu/singleTap"
+                            }
+                          }
+                        ],
+                        "log_id": "tap_actions"
+                      }
+                    ],
                     "border": {
                       "corner_radius": 8
                     },
@@ -188,6 +230,20 @@
                   "mode": "exclude",
                   "description": "Это Элемент 4"
                 },
+                "actions": [
+                  {
+                    "menu_items": [
+                      {
+                        "text": "Элемент 4",
+                        "action": {
+                          "url": "custom-menu://singleTap",
+                          "log_id": "custom/menu/singleTap"
+                        }
+                      }
+                    ],
+                    "log_id": "tap_actions"
+                  }
+                ],
                 "border": {
                   "corner_radius": 8
                 },
@@ -231,6 +287,20 @@
               {
                 "type": "solid",
                 "color": "#1ABC9C"
+              }
+            ],
+            "actions": [
+              {
+                "menu_items": [
+                  {
+                    "text": "Элемент 5",
+                    "action": {
+                      "url": "custom-menu://singleTap",
+                      "log_id": "custom/menu/singleTap"
+                    }
+                  }
+                ],
+                "log_id": "tap_actions"
               }
             ]
           }

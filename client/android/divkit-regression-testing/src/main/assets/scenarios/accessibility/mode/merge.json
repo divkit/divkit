@@ -12,6 +12,20 @@
         "accessibility": {
           "mode": "merge"
         },
+        "actions": [
+          {
+            "menu_items": [
+              {
+                "text": "Элемент 1, Элемент 2, Элемент 3",
+                "action": {
+                  "url": "custom-menu://singleTap",
+                  "log_id": "custom/menu/singleTap"
+                }
+              }
+            ],
+            "log_id": "tap_actions"
+          }
+        ],
         "background": [
           {
             "type": "solid",

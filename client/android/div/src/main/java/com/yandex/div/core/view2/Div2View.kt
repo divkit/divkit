@@ -662,6 +662,12 @@ class Div2View private constructor(
         return propagatedAccessibilityModes[view]
     }
 
+    internal fun isDescendantAccessibilityMode(view: View): Boolean {
+        return (view.parent as? View)?.let { parent ->
+            propagatedAccessibilityModes[parent] == propagatedAccessibilityModes[view]
+        } ?: false
+    }
+
     @Throws(VariableMutationException::class)
     fun setVariable(name: String, value: String) {
         val mutableVariable = variableController?.getMutableVariable(name) ?: run {

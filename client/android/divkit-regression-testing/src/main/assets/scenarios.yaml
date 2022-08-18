@@ -275,6 +275,8 @@ steps:
 expect:
   - Focusing on all card
   - You will hear "Это Элемент 1, Это Элемент 2, Это Элемент 3"
+  - On activation menu with text "Элемент 1, Элемент 2, Элемент 3" appears
+  - On focus TalkBack should not say "Коснитесь дважды и удерживайте"
 paths:
   - 'scenarios/accessibility/mode/merge.json'
 ---
@@ -286,6 +288,7 @@ steps:
 expect:
   - Focuse on 5-th item
   - Услышим "Это Элемент 5"
+  - При выключенном TalkBack на каждой кнопке при тапе должно появляться меню с названием этой кнопки
 paths:
   - 'scenarios/accessibility/mode/exclude.json'
 ---

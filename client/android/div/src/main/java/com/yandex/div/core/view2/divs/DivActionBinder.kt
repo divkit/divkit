@@ -92,7 +92,8 @@ internal class DivActionBinder @Inject constructor(
         bindTapActions(divView, target, divGestureListener, actions, shouldIgnoreActionMenuItems)
 
         if (accessibilityEnabled &&
-            DivAccessibility.Mode.DEFAULT != divView.getPropagatedAccessibilityMode(target)) {
+            DivAccessibility.Mode.MERGE == divView.getPropagatedAccessibilityMode(target) &&
+            divView.isDescendantAccessibilityMode(target)) {
             target.isClickable = clickableState
             target.isLongClickable = longClickableState
         }
@@ -199,6 +200,7 @@ internal class DivActionBinder @Inject constructor(
             target.setPenetratingLongClickable()
         } else {
             target.setOnLongClickListener(null)
+            target.isLongClickable = false
             target.setPenetratingLongClickable(null)
         }
     }

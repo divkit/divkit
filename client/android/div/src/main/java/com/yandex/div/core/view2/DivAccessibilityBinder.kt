@@ -150,7 +150,11 @@ class DivAccessibilityBinder @Inject constructor(
         when (mode) {
             DivAccessibility.Mode.MERGE -> {
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_YES
-                setActionable(!isDescendant)
+                if (!isDescendant) {
+                    isFocusable = true
+                } else {
+                    setActionable(false)
+                }
             }
             DivAccessibility.Mode.EXCLUDE -> {
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
