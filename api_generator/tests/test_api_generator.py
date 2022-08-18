@@ -57,9 +57,11 @@ def assert_test_generator(config_filename: str, references_folder_name: str):
         os.makedirs(OUTPUT_PATH)
     generate_api(config)
     references_path = utils.path_generator_tests(f'references/{references_folder_name}')
+
     if SHOULD_UPDATE_REFERENCES:
         utils.update_references(source_path=OUTPUT_PATH, destination_path=references_path)
-        print('Updating references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.')
+        assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'
+
     for filename in os.listdir(references_path):
         ref_file_path = os.path.join(references_path, filename)
         generated_file_path = os.path.join(OUTPUT_PATH, filename)
