@@ -31,9 +31,9 @@
     let hasItemsError = false;
     $: jsonItems = json.items;
     $: {
-        if (!jsonItems?.length) {
+        if (!jsonItems?.length || !Array.isArray(jsonItems)) {
             hasItemsError = true;
-            rootCtx.logError(wrapError(new Error('Empty "items" prop for div "grid"')));
+            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "grid"')));
         } else {
             hasItemsError = false;
         }
@@ -46,7 +46,7 @@
         columnCount = correctPositiveNumber($jsonColumnCount, columnCount);
     }
 
-    $: items = (jsonItems || []).map(item => {
+    $: items = (!hasItemsError && jsonItems || []).map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
 

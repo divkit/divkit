@@ -38,9 +38,9 @@
     let hasError = false;
     $: items = json.items || [];
     $: {
-        if (!items?.length) {
+        if (!items?.length || !Array.isArray(items)) {
             hasError = true;
-            rootCtx.logError(wrapError(new Error('Empty "items" prop for div "tabs"')));
+            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "tabs"')));
         } else {
             hasError = false;
         }
@@ -54,7 +54,7 @@
     let selected = jsonSelectedTab && Number(jsonSelectedTab) || 0;
 
     $: {
-        if (items && (selected < 0 || selected >= items.length)) {
+        if (!hasError && (selected < 0 || selected >= items.length)) {
             rootCtx.logError(wrapError(new Error('Incorrect "selected_tab" prop for div "tabs"'), {
                 additional: {
                     selected: json.selected_tab,
@@ -188,6 +188,10 @@
     let showedPanels: boolean[] = [];
     let visiblePanels: boolean[] = [];
     function updateItems(_items: TabItem[]): void {
+        if (hasError) {
+            return;
+        }
+
         showedPanels = items.map((_, i) => i === selected);
         visiblePanels = items.map((_, i) => i === selected);
     }
@@ -426,7 +430,7 @@
         return { x, y };
     }
 
-    if (json.id) {
+    if (json.id && !hasError) {
         rootCtx.registerInstance<SwitchElements>(json.id, {
             setCurrentItem(item: number) {
                 if (item < 0 || item > items.length - 1) {

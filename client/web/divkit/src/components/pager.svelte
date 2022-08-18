@@ -32,7 +32,18 @@
     const instId = rootCtx.genId('pager');
 
     let pagerItemsWrapper: HTMLElement;
-    $: items = (json.items || []).map(item => {
+
+    let hasItemsError = false;
+    $: {
+        if (!json.items?.length || !Array.isArray(json.items)) {
+            hasItemsError = true;
+            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "pager"')));
+        } else {
+            hasItemsError = false;
+        }
+    }
+
+    $: items = (!hasItemsError && json.items || []).map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
 
@@ -49,16 +60,6 @@
     });
 
     let currentItem = 0;
-
-    let hasItemsError = false;
-    $: {
-        if (!items.length) {
-            hasItemsError = true;
-            rootCtx.logError(wrapError(new Error('Empty "items" prop for div "pager"')));
-        } else {
-            hasItemsError = false;
-        }
-    }
 
     let hasLayoutModeError = false;
     $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);

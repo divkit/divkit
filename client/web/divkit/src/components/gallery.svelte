@@ -43,9 +43,9 @@
     let hasError = false;
     $: jsonItems = json.items;
     $: {
-        if (!jsonItems?.length) {
+        if (!jsonItems?.length || !Array.isArray(jsonItems)) {
             hasError = true;
-            rootCtx.logError(wrapError(new Error('Empty "items" prop for div "gallery"')));
+            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "gallery"')));
         } else {
             hasError = false;
         }
@@ -57,7 +57,7 @@
         origJson: DivBaseData;
     }
 
-    $: items = (jsonItems || []).map(item => {
+    $: items = (!hasError && jsonItems || []).map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
 
@@ -299,15 +299,17 @@
     }
 
     onMount(() => {
-        updateArrowsVisibility();
+        if (!hasError) {
+            updateArrowsVisibility();
 
-        if (defaultItem) {
-            const galleryElements = getItems();
-            scrollToGalleryItem(galleryElements, defaultItem, 'auto');
+            if (defaultItem) {
+                const galleryElements = getItems();
+                scrollToGalleryItem(galleryElements, defaultItem, 'auto');
+            }
         }
     });
 
-    if (json.id) {
+    if (json.id && !hasError) {
         rootCtx.registerInstance<SwitchElements>(json.id, {
             setCurrentItem(item: number) {
                 const galleryElements = getItems();

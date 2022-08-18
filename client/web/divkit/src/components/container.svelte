@@ -44,15 +44,15 @@
     let hasItemsError = false;
     $: jsonItems = json.items;
     $: {
-        if (!jsonItems?.length) {
+        if (!jsonItems?.length || !Array.isArray(jsonItems)) {
             hasItemsError = true;
-            rootCtx.logError(wrapError(new Error('Empty "items" prop for div "container"')));
+            rootCtx.logError(wrapError(new Error('Incorrect or empty "items" prop for div "container"')));
         } else {
             hasItemsError = false;
         }
     }
 
-    $: items = (jsonItems || []).map(item => {
+    $: items = (!hasItemsError && jsonItems || []).map(item => {
         let childJson: DivBaseData = item as DivBaseData;
         let childContext: TemplateContext = templateContext;
 
