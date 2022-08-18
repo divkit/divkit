@@ -16,8 +16,10 @@ public final class EntityWithArrayOfNestedItems {
     static let propertyValidator: AnyValueValidator<String> =
       makeStringValidator(minLength: 1)
 
-    init(entity: Entity,
-         property: Expression<String>) {
+    init(
+      entity: Entity,
+      property: Expression<String>
+    ) {
       self.entity = entity
       self.property = property
     }
@@ -29,7 +31,9 @@ public final class EntityWithArrayOfNestedItems {
   static let itemsValidator: AnyArrayValueValidator<EntityWithArrayOfNestedItems.Item> =
     makeArrayValidator(minItems: 1)
 
-  init(items: [Item]) {
+  init(
+    items: [Item]
+  ) {
     self.items = items
   }
 }

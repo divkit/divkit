@@ -35,16 +35,18 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
     )
   }
 
-  init(parent: String?,
-       boolean: Field<Expression<Bool>>? = nil,
-       booleanInt: Field<Expression<Bool>>? = nil,
-       color: Field<Expression<Color>>? = nil,
-       double: Field<Expression<Double>>? = nil,
-       id: Field<Int>? = nil,
-       integer: Field<Expression<Int>>? = nil,
-       positiveInteger: Field<Expression<Int>>? = nil,
-       string: Field<Expression<String>>? = nil,
-       url: Field<Expression<URL>>? = nil) {
+  init(
+    parent: String?,
+    boolean: Field<Expression<Bool>>? = nil,
+    booleanInt: Field<Expression<Bool>>? = nil,
+    color: Field<Expression<Color>>? = nil,
+    double: Field<Expression<Double>>? = nil,
+    id: Field<Int>? = nil,
+    integer: Field<Expression<Int>>? = nil,
+    positiveInteger: Field<Expression<Int>>? = nil,
+    string: Field<Expression<String>>? = nil,
+    url: Field<Expression<URL>>? = nil
+  ) {
     self.parent = parent
     self.boolean = boolean
     self.booleanInt = booleanInt

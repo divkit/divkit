@@ -15,7 +15,9 @@ public final class EntityWithRequiredProperty {
   static let propertyValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  init(property: Expression<String>) {
+  init(
+    property: Expression<String>
+  ) {
     self.property = property
   }
 }

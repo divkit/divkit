@@ -19,8 +19,10 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
     )
   }
 
-  init(parent: String?,
-       property: Field<Expression<String>>? = nil) {
+  init(
+    parent: String?,
+    property: Field<Expression<String>>? = nil
+  ) {
     self.parent = parent
     self.property = property
   }

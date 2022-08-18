@@ -17,7 +17,9 @@ public final class EntityWithoutPropertiesTemplate: TemplateValue, TemplateDeser
     )
   }
 
-  init(parent: String?) {
+  init(
+    parent: String?
+  ) {
     self.parent = parent
   }
 

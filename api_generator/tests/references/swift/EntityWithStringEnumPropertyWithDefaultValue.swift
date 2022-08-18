@@ -21,7 +21,9 @@ public final class EntityWithStringEnumPropertyWithDefaultValue {
   static let valueValidator: AnyValueValidator<EntityWithStringEnumPropertyWithDefaultValue.Value> =
     makeNoOpValueValidator()
 
-  init(value: Expression<Value>? = nil) {
+  init(
+    value: Expression<Value>? = nil
+  ) {
     self.value = value ?? .value(.second)
   }
 }

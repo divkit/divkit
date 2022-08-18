@@ -15,7 +15,9 @@ public final class EntityWithOptionalProperty {
   static let propertyValidator: AnyValueValidator<String> =
     makeStringValidator(minLength: 1)
 
-  init(property: Expression<String>? = nil) {
+  init(
+    property: Expression<String>? = nil
+  ) {
     self.property = property
   }
 }

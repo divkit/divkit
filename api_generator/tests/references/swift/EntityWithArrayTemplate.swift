@@ -23,8 +23,10 @@ public final class EntityWithArrayTemplate: TemplateValue, TemplateDeserializabl
     }
   }
 
-  init(parent: String?,
-       array: Field<[EntityTemplate]>? = nil) {
+  init(
+    parent: String?,
+    array: Field<[EntityTemplate]>? = nil
+  ) {
     self.parent = parent
     self.array = array
   }

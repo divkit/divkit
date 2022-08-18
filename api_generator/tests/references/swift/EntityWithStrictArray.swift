@@ -11,7 +11,9 @@ public final class EntityWithStrictArray {
   static let arrayValidator: AnyArrayValueValidator<Entity> =
     makeStrictArrayValidator(minItems: 1)
 
-  init(array: [Entity]) {
+  init(
+    array: [Entity]
+  ) {
     self.array = array
   }
 }

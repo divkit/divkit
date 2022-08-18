@@ -91,10 +91,10 @@ class SwiftGenerator(Generator):
         self_extensions = []
         if not entity.generate_as_protocol and not entity.generation_mode.is_template:
             equatable_extension = Text('#if DEBUG')
-            swift_props = entity.instance_properties_swift
+            props = entity.instance_properties_swift
             equatable_properties = list(filter(lambda p: cast(SwiftPropertyType, p.property_type).is_equatable,
-                                               swift_props))
-            if len(equatable_properties) != len(swift_props):
+                                               props))
+            if len(equatable_properties) != len(props):
                 equatable_extension += '// WARNING: this == is incomplete because of [String: Any] in class fields'
             pref_decl = entity.prefixed_declaration
             equatable_extension += f'extension {pref_decl}: Equatable {{'
@@ -112,7 +112,7 @@ class SwiftGenerator(Generator):
             serialization += '    var result: [String: ValidSerializationValue] = [:]'
             if entity.has_static_type:
                 serialization += '    result["type"] = Self.type'
-            for prop in swift_props:
+            for prop in props:
                 serialization += Text(prop.serialization_declaration).indented(indent_width=4)
             serialization += '    return result'
             serialization += '  }'

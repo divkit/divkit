@@ -66,15 +66,17 @@ public final class EntityWithSimpleProperties: EntityProtocol {
   static let urlValidator: AnyValueValidator<URL> =
     makeNoOpValueValidator()
 
-  init(boolean: Expression<Bool>? = nil,
-       booleanInt: Expression<Bool>? = nil,
-       color: Expression<Color>? = nil,
-       double: Expression<Double>? = nil,
-       id: Int? = nil,
-       integer: Expression<Int>? = nil,
-       positiveInteger: Expression<Int>? = nil,
-       string: Expression<String>? = nil,
-       url: Expression<URL>? = nil) {
+  init(
+    boolean: Expression<Bool>? = nil,
+    booleanInt: Expression<Bool>? = nil,
+    color: Expression<Color>? = nil,
+    double: Expression<Double>? = nil,
+    id: Int? = nil,
+    integer: Expression<Int>? = nil,
+    positiveInteger: Expression<Int>? = nil,
+    string: Expression<String>? = nil,
+    url: Expression<URL>? = nil
+  ) {
     self.boolean = boolean
     self.booleanInt = booleanInt
     self.color = color

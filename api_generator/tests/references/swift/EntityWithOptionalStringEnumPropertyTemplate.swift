@@ -21,8 +21,10 @@ public final class EntityWithOptionalStringEnumPropertyTemplate: TemplateValue, 
     )
   }
 
-  init(parent: String?,
-       property: Field<Expression<Property>>? = nil) {
+  init(
+    parent: String?,
+    property: Field<Expression<Property>>? = nil
+  ) {
     self.parent = parent
     self.property = property
   }

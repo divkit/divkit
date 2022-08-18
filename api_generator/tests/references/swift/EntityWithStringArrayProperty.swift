@@ -15,7 +15,9 @@ public final class EntityWithStringArrayProperty {
   static let arrayValidator: AnyArrayValueValidator<Expression<String>> =
     makeArrayValidator(minItems: 1)
 
-  init(array: [Expression<String>]) {
+  init(
+    array: [Expression<String>]
+  ) {
     self.array = array
   }
 }

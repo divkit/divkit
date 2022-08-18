@@ -18,7 +18,9 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
       }
     }
 
-    init(value: Field<Expression<String>>? = nil) {
+    init(
+      value: Field<Expression<String>>? = nil
+    ) {
       self.value = value
     }
 
@@ -95,8 +97,10 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
     )
   }
 
-  init(parent: String?,
-       property: Field<PropertyTemplate>? = nil) {
+  init(
+    parent: String?,
+    property: Field<PropertyTemplate>? = nil
+  ) {
     self.parent = parent
     self.property = property
   }

@@ -26,8 +26,10 @@ public final class EntityWithStrictArrayTemplate: TemplateValue, TemplateDeseria
     }
   }
 
-  init(parent: String?,
-       array: Field<[EntityTemplate]>? = nil) {
+  init(
+    parent: String?,
+    array: Field<[EntityTemplate]>? = nil
+  ) {
     self.parent = parent
     self.array = array
   }

@@ -28,9 +28,11 @@ public final class EntityWithPropertyWithDefaultValue {
     static let urlValidator: AnyValueValidator<URL> =
       makeURLValidator(schemes: ["https"])
 
-    init(int: Expression<Int>? = nil,
-         nonOptional: Expression<String>,
-         url: Expression<URL>? = nil) {
+    init(
+      int: Expression<Int>? = nil,
+      nonOptional: Expression<String>,
+      url: Expression<URL>? = nil
+    ) {
       self.int = int ?? .value(0)
       self.nonOptional = nonOptional
       self.url = url ?? .value(URL(string: "https://yandex.ru")!)
@@ -59,9 +61,11 @@ public final class EntityWithPropertyWithDefaultValue {
   static let urlValidator: AnyValueValidator<URL> =
     makeURLValidator(schemes: ["https"])
 
-  init(int: Expression<Int>? = nil,
-       nested: Nested? = nil,
-       url: Expression<URL>? = nil) {
+  init(
+    int: Expression<Int>? = nil,
+    nested: Nested? = nil,
+    url: Expression<URL>? = nil
+  ) {
     self.int = int ?? .value(0)
     self.nested = nested
     self.url = url ?? .value(URL(string: "https://yandex.ru")!)

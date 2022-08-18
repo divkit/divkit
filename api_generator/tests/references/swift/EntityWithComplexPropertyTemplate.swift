@@ -18,7 +18,9 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
       }
     }
 
-    init(value: Field<Expression<URL>>? = nil) {
+    init(
+      value: Field<Expression<URL>>? = nil
+    ) {
       self.value = value
     }
 
@@ -99,8 +101,10 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
     }
   }
 
-  init(parent: String?,
-       property: Field<PropertyTemplate>? = nil) {
+  init(
+    parent: String?,
+    property: Field<PropertyTemplate>? = nil
+  ) {
     self.parent = parent
     self.property = property
   }

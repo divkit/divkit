@@ -22,9 +22,11 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
       }
     }
 
-    init(int: Field<Expression<Int>>? = nil,
-         nonOptional: Field<Expression<String>>? = nil,
-         url: Field<Expression<URL>>? = nil) {
+    init(
+      int: Field<Expression<Int>>? = nil,
+      nonOptional: Field<Expression<String>>? = nil,
+      url: Field<Expression<URL>>? = nil
+    ) {
       self.int = int
       self.nonOptional = nonOptional
       self.url = url
@@ -127,10 +129,12 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
     )
   }
 
-  init(parent: String?,
-       int: Field<Expression<Int>>? = nil,
-       nested: Field<NestedTemplate>? = nil,
-       url: Field<Expression<URL>>? = nil) {
+  init(
+    parent: String?,
+    int: Field<Expression<Int>>? = nil,
+    nested: Field<NestedTemplate>? = nil,
+    url: Field<Expression<URL>>? = nil
+  ) {
     self.parent = parent
     self.int = int
     self.nested = nested

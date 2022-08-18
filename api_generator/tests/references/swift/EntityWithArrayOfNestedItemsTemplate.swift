@@ -20,8 +20,10 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
       }
     }
 
-    init(entity: Field<EntityTemplate>? = nil,
-         property: Field<Expression<String>>? = nil) {
+    init(
+      entity: Field<EntityTemplate>? = nil,
+      property: Field<Expression<String>>? = nil
+    ) {
       self.entity = entity
       self.property = property
     }
@@ -129,8 +131,10 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
     }
   }
 
-  init(parent: String?,
-       items: Field<[ItemTemplate]>? = nil) {
+  init(
+    parent: String?,
+    items: Field<[ItemTemplate]>? = nil
+  ) {
     self.parent = parent
     self.items = items
   }

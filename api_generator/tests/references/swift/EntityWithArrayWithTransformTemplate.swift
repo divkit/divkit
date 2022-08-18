@@ -23,8 +23,10 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Template
     }
   }
 
-  init(parent: String?,
-       array: Field<[Expression<Color>]>? = nil) {
+  init(
+    parent: String?,
+    array: Field<[Expression<Color>]>? = nil
+  ) {
     self.parent = parent
     self.array = array
   }

@@ -128,12 +128,9 @@ class SwiftEntity(Entity):
         if not props:
             return Text('init() {}')
 
-        constructor_def = 'init('
-        result = Text()
-        padding = ' ' * len(constructor_def)
-        paddings = [constructor_def] + [padding] * (len(props) - 1)
-        tails = [','] * (len(props) - 1) + [') {']
-        for prop, padding, tail in zip(props, paddings, tails):
+        result = Text('init(')
+        tails = [','] * (len(props) - 1) + ['']
+        for prop, tail in zip(props, tails):
             if not self.generation_mode.is_template:
                 if prop.parsed_value_is_optional:
                     nullability = '' if prop.should_be_optional else '?'
@@ -144,7 +141,8 @@ class SwiftEntity(Entity):
             else:
                 nullability = ''
                 optionality = ' = nil' if prop.mode.is_template else ''
-            result += f'{padding}{prop.declaration_name}: {prop.type_declaration}{nullability}{optionality}{tail}'
+            result += f'  {prop.declaration_name}: {prop.type_declaration}{nullability}{optionality}{tail}'
+        result += ') {'
 
         for prop in props:
             decl = f'self.{prop.declaration_name} = {fixing_keywords(prop.declaration_name)}'

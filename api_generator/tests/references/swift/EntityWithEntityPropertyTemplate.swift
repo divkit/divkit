@@ -19,8 +19,10 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue, TemplateDese
     )
   }
 
-  init(parent: String?,
-       entity: Field<EntityTemplate>? = nil) {
+  init(
+    parent: String?,
+    entity: Field<EntityTemplate>? = nil
+  ) {
     self.parent = parent
     self.entity = entity
   }

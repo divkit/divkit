@@ -15,7 +15,9 @@ public final class EntityWithArrayWithTransform {
   static let arrayValidator: AnyArrayValueValidator<Expression<Color>> =
     makeArrayValidator(minItems: 1)
 
-  init(array: [Expression<Color>]) {
+  init(
+    array: [Expression<Color>]
+  ) {
     self.array = array
   }
 }

@@ -12,7 +12,9 @@ public final class EntityWithComplexPropertyWithDefaultValue {
       resolver.resolveStringBasedValue(expression: value, initializer: { $0 })
     }
 
-    init(value: Expression<String>) {
+    init(
+      value: Expression<String>
+    ) {
       self.value = value
     }
   }
@@ -23,7 +25,9 @@ public final class EntityWithComplexPropertyWithDefaultValue {
   static let propertyValidator: AnyValueValidator<EntityWithComplexPropertyWithDefaultValue.Property> =
     makeNoOpValueValidator()
 
-  init(property: Property? = nil) {
+  init(
+    property: Property? = nil
+  ) {
     self.property = property ?? EntityWithComplexPropertyWithDefaultValue.Property(value: .value("Default text"))
   }
 }

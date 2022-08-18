@@ -17,7 +17,9 @@ public final class EntityWithStringEnumProperty {
     resolver.resolveStringBasedValue(expression: property, initializer: Property.init(rawValue:))
   }
 
-  init(property: Expression<Property>) {
+  init(
+    property: Expression<Property>
+  ) {
     self.property = property
   }
 }

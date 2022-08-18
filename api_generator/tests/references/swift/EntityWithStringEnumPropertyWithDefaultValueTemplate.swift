@@ -21,8 +21,10 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
     )
   }
 
-  init(parent: String?,
-       value: Field<Expression<Value>>? = nil) {
+  init(
+    parent: String?,
+    value: Field<Expression<Value>>? = nil
+  ) {
     self.parent = parent
     self.value = value
   }

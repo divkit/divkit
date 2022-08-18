@@ -12,7 +12,9 @@ public final class EntityWithOptionalComplexProperty {
       resolver.resolveStringBasedValue(expression: value, initializer: URL.init(string:))
     }
 
-    init(value: Expression<URL>) {
+    init(
+      value: Expression<URL>
+    ) {
       self.value = value
     }
   }
@@ -23,7 +25,9 @@ public final class EntityWithOptionalComplexProperty {
   static let propertyValidator: AnyValueValidator<EntityWithOptionalComplexProperty.Property> =
     makeNoOpValueValidator()
 
-  init(property: Property? = nil) {
+  init(
+    property: Property? = nil
+  ) {
     self.property = property
   }
 }

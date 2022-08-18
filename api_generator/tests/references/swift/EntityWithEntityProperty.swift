@@ -11,7 +11,9 @@ public final class EntityWithEntityProperty {
   static let entityValidator: AnyValueValidator<Entity> =
     makeNoOpValueValidator()
 
-  init(entity: Entity? = nil) {
+  init(
+    entity: Entity? = nil
+  ) {
     self.entity = entity ?? .entityWithStringEnumProperty(EntityWithStringEnumProperty(property: .value(.second)))
   }
 }

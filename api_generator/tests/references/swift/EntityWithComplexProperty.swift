@@ -12,7 +12,9 @@ public final class EntityWithComplexProperty {
       resolver.resolveStringBasedValue(expression: value, initializer: URL.init(string:))
     }
 
-    init(value: Expression<URL>) {
+    init(
+      value: Expression<URL>
+    ) {
       self.value = value
     }
   }
@@ -20,7 +22,9 @@ public final class EntityWithComplexProperty {
   public static let type: String = "entity_with_complex_property"
   public let property: Property
 
-  init(property: Property) {
+  init(
+    property: Property
+  ) {
     self.property = property
   }
 }

@@ -11,7 +11,9 @@ public final class EntityWithArray {
   static let arrayValidator: AnyArrayValueValidator<Entity> =
     makeArrayValidator(minItems: 1)
 
-  init(array: [Entity]) {
+  init(
+    array: [Entity]
+  ) {
     self.array = array
   }
 }

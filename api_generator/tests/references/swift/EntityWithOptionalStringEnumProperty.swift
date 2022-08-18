@@ -20,7 +20,9 @@ public final class EntityWithOptionalStringEnumProperty {
   static let propertyValidator: AnyValueValidator<EntityWithOptionalStringEnumProperty.Property> =
     makeNoOpValueValidator()
 
-  init(property: Expression<Property>? = nil) {
+  init(
+    property: Expression<Property>? = nil
+  ) {
     self.property = property
   }
 }

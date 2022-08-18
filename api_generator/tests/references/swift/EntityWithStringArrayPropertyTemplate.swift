@@ -23,8 +23,10 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
     }
   }
 
-  init(parent: String?,
-       array: Field<[Expression<String>]>? = nil) {
+  init(
+    parent: String?,
+    array: Field<[Expression<String>]>? = nil
+  ) {
     self.parent = parent
     self.array = array
   }
