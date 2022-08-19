@@ -67,7 +67,7 @@
             },
             {
               "type": "subtitle",
-              "text": "There are 2 containers here: vertical and horizontal.\\nFor horizontal alignment (in the first container), alignment_horizontal is used, and for vertical alignment (in the second container), alignment_vertical is used.",
+              "text": "There are 2 containers here: vertical and horizontal. For horizontal alignment (in the first container), alignment_horizontal is used, and for vertical alignment (in the second container), alignment_vertical is used.",
               "margins": {
                 "bottom": 24
               }

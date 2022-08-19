@@ -72,7 +72,7 @@
             },
             {
               "type": "subtitle",
-              "text": "match_parent: The size adjusts to the size of the parent block\n\nnwrap_content: The size adjusts to the content\n\nfixed: The size is fixed",
+              "text": "match_parent: The size adjusts to the size of the parent block\n\nwrap_content: The size adjusts to the content\n\nfixed: The size is fixed",
               "margins": {
                 "bottom": 24
               }

@@ -82,7 +82,7 @@
                 },
                 {
                   "type": "text_block",
-                  "text": "Weight = 1",
+                  "text": "weight = 1",
                   "height": {
                     "type": "match_parent",
                     "weight": 1
