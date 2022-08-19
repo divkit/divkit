@@ -1974,7 +1974,7 @@
                                   "items": [
                                     {
                                       "type": "zen_card_image",
-                                      "zen_card_image__image_url": "https://avatars.mds.yandex.net/get-zen_doc/3628719/pub_60bd0b9e0716567b35f38846_60bd15e00716567b35133638/smart_crop_688x387_2x",
+                                      "zen_card_image__image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
                                       "placeholder_color": "#F8F8F8",
                                       "zen_card_image__aspect_ratio": 1.5,
                                       "action_animation": {

@@ -1877,7 +1877,7 @@
                                   "items": [
                                     {
                                       "type": "zen_card_image",
-                                      "zen_card_image__image_url": "https://avatars.mds.yandex.net/get-zen_doc/3418917/pub_60438fef58285736dd7daa7f_60439c0a44edc66681594f06/smart_crop_500x500_2x",
+                                      "zen_card_image__image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
                                       "placeholder_color": "#9890F8",
                                       "zen_card_image__aspect_ratio": 1.5,
                                       "action_animation": {

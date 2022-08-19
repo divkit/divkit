@@ -214,7 +214,7 @@
                 }],
                 "sites_items": [{
                     "type": "sites_item",
-                    "sites_background_photo": "https://avatars.mds.yandex.net/get-zen_doc/96506/pub_5aab8b19a815f13d161aa4d6_5aab8b8e256d5c6d18182dfb/scale_1200",
+                    "sites_background_photo": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
                     "sites_title": "Компания Маска",
                     "sites_text": "Компания Маска сообщила о первых шагах для подключения человека к компьютеру",
                     "sites_favicon": "https:\/\/yastatic.net\/s3\/home\/yandex-app\/services_div\/music\/icncoverplay.3.png",
