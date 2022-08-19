@@ -1,9 +1,11 @@
 package com.yandex.divkit.demo.div
 
+import androidx.annotation.MainThread
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.expression.variables.DivVariablesParser
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.data.Variable
+import com.yandex.div.data.VariableMutationException
 import com.yandex.div.json.ParsingErrorLogger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,6 +22,12 @@ class DemoGlobalVariablesController {
 
     private fun dispatchVariableChanged() {
         lastGlobalVariableController?.putOrUpdate(*gatherGlobalVariables())
+    }
+
+    @MainThread
+    @Throws(VariableMutationException::class)
+    fun putOrUpdate(variable: Variable) {
+        lastGlobalVariableController?.putOrUpdate(variable)
     }
 
     private fun gatherGlobalVariables(): Array<Variable> = globalVariables

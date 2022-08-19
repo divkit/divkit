@@ -1,22 +1,18 @@
 package com.yandex.divkit.demo.div.editor
 
-import android.app.Activity
 import android.graphics.Bitmap
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yandex.divkit.demo.div.editor.DivEditorScreenshot.takeScreenshot
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 
 class DivEditorUi(
     private val activity: AppCompatActivity,
-    private val userInput: EditText,
-    private val refreshButton: Button,
+    private val refreshButton: FloatingActionButton,
     private val failedTextMessage: TextView,
     private val divContainer: ViewGroup,
     private val div2Recycler: RecyclerView,
@@ -57,7 +53,6 @@ class DivEditorUi(
         refreshButton.isEnabled = false
         failedTextMessage.visibility = View.VISIBLE
         failedTextMessage.text = "Loading..."
-        hideKeyboard()
     }
 
     private fun showFailedState(failedState: DivEditorState.FailedState) {
@@ -69,8 +64,6 @@ class DivEditorUi(
 
     private fun showDivReceivedState(state: DivEditorState.DivReceivedState) {
         hideAll()
-        divContainer.visibility = View.VISIBLE
-
         div2Adapter.setList(state.divDataList)
         div2Recycler.viewTreeObserver.addOnDrawListener(debounceOnViewDrawObserver)
 
@@ -79,15 +72,8 @@ class DivEditorUi(
     }
 
     private fun hideAll() {
-        divContainer.visibility = View.GONE
         failedTextMessage.visibility = View.GONE
-        userInput.clearFocus()
         refreshButton.isEnabled = true
         divContainer.viewTreeObserver.removeOnDrawListener(debounceOnViewDrawObserver)
-    }
-
-    private fun hideKeyboard() {
-        val inputMethodManager = activity.getSystemService(Activity.INPUT_METHOD_SERVICE) as? InputMethodManager
-        inputMethodManager?.hideSoftInputFromWindow(div2Recycler.windowToken, 0)
     }
 }

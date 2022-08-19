@@ -79,6 +79,19 @@
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarColor">@color/white</item>
         <item name="android:statusBarColor">?colorPrimary</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.Demo">
+        <item name="colorPrimary">@color/demo_orange</item>
+        <item name="colorPrimaryDark">@color/demo_orange</item>
+        <item name="colorSecondary">@color/demo_orange</item>
+        <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:statusBarColor">?colorPrimary</item>
+        <item name="android:actionMenuTextColor">#000000</item>
+        <item name="android:fontFamily">@font/ys_display_medium</item>
     </style>
 
     <style name="ActivitySubtitleStyle">

@@ -155,7 +155,7 @@ class DivEditorPresenter(
     }
 
     @WorkerThread
-    private fun parseDivDataList(json: JSONObject) {
+    fun parseDivDataList(json: JSONObject) {
         val divDataList: List<DivData>? = try {
             json.parseToDiv2List(errorLogger)
         } catch (e: Exception) {

@@ -34,7 +34,8 @@
         <activity
             android:name=".div.Div2Activity"
             android:configChanges="orientation|screenSize"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar.Demo">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -42,6 +43,14 @@
                 <data android:scheme="http" android:host="*"/>
                 <data android:scheme="https" android:host="*"/>
             </intent-filter>
+        </activity>
+
+        <activity
+            android:label="@string/demo"
+            android:name=".div.Div2ScenarioActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true"
+            android:theme="@style/AppTheme.NoActionBar.Demo">
         </activity>
 
         <activity
