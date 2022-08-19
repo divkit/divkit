@@ -330,11 +330,13 @@
                         },
                         {
                             "type": "settings_category",
-                            "text": "Theme"
+                            "text": "Theme",
+                            "visibility": "gone"
                         },
                         {
                             "type": "settings_item",
                             "orientation": "vertical",
+                            "visibility": "gone",
                             "items": [
                                 {
                                     "type": "settings_item_title",
