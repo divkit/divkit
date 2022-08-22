@@ -24,3 +24,17 @@ extension Binding where T: AdditiveArithmetic & CustomStringConvertible {
     )
   }
 }
+
+extension Binding where T == String {
+  init(context: DivBlockModelingContext, name: String) {
+    self.init(
+      name: name,
+      getValue: { context.expressionResolver.getVariableValue(name: $0) ?? "" },
+      userInterfaceActionFactory: { name, value in
+       URL(string: "div-action://set_variable?name=\(name)&value=\(value.percentEncodedURLString)").flatMap {
+         DivAction(logId: "binding", url: .value($0))
+       }?.uiAction(context: context.actionContext)
+      }
+    )
+  }
+}

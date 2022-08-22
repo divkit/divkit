@@ -5,17 +5,17 @@
             {
                 "name": "my_edit_text",
                 "type": "string",
-                "value": "Initial text"
+                "value": "Variable value 1"
             },
             {
                 "name": "my_edit_text_2",
                 "type": "string",
-                "value": "Initial text 2"
+                "value": "Variable value 2"
             },
             {
                 "name": "my_edit_text_3",
                 "type": "string",
-                "value": "Initial text 3"
+                "value": "Variable value 3"
             }
         ],
         "states": [
@@ -76,7 +76,7 @@
                             "font_weight": "medium",
                             "text_color": "#000000",
                             "text_variable": "my_edit_text",
-                            "hint_text": "Very long 1 very long 2 very long 3 very long 4 very long 5 very long 6 very long 7 very long 8 text.",
+                            "hint_text": "Very long 1 very long 2 very long 3 very long 4 very long 5 very long 6 very long 7 very long 8 hint",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E74C3C",
                             "max_lines": 2,
@@ -90,6 +90,46 @@
                                     }
                                 ]
                             }
+                        },
+                        {
+                            "type": "text",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#34495E"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 4,
+                                "has_shadow": 1
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_alignment_horizontal": "center",
+                            "text_alignment_vertical": "center",
+                            "text_color": "#1ABC9C",
+                            "text": "Text of variable 1:\n@{my_edit_text}"
                         },
                         {
                             "type": "input",
@@ -125,7 +165,7 @@
                             "font_weight": "medium",
                             "text_color": "#000000",
                             "text_variable": "my_edit_text_2",
-                            "hint_text": "No paddings",
+                            "hint_text": "No paddings hint",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E74C3C",
                             "max_lines": 2,

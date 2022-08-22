@@ -14,7 +14,8 @@ extension TextInputBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let inputView = view as! TextInputBlockView
-    inputView.text = text
+    inputView.setText(value: textValue, typo: textTypo)
+    inputView.setHint(hint)
     inputView.backgroundColor = backgroundColor.systemColor
     inputView.setKeyboardAppearance(keyboardAppearance)
     inputView.setKeyboardType(keyboardType)
@@ -27,25 +28,13 @@ extension TextInputBlock {
 }
 
 private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
+  private let view = UITextView()
+  private let hintView = UILabel()
   private weak var parentScrollView: ScrollView?
   private var tapGestureRecognizer: UITapGestureRecognizer?
   private var keyboardOpeningInProgress = false
   private var keyboardHeight: CGFloat = 0
-
-  var text: NSAttributedString? {
-    get {
-      view.attributedText
-    }
-    set {
-      updateSecureTextStyle(from: newValue)
-      view.attributedText = newValue
-    }
-  }
-
-  private func updateSecureTextStyle(from string: NSAttributedString?) {
-    let color: SystemColor = string.attribute(key: .foregroundColor, defaultValue: .black)
-    view.typingAttributes[.foregroundColor] = color
-  }
+  private var textValue: Binding<String>? = nil
 
   override var backgroundColor: UIColor? {
     didSet {
@@ -54,6 +43,40 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+
+    view.isEditable = true
+    view.isSelectable = true
+    view.showsVerticalScrollIndicator = false
+    view.autocorrectionType = .no
+    view.backgroundColor = .clear
+    view.textContainerInset = .zero
+    view.delegate = self
+
+    hintView.backgroundColor = .clear
+    hintView.numberOfLines = 0
+    hintView.isUserInteractionEnabled = false
+    hintView.isHidden = true
+    hintView.contentMode = .center
+
+    addSubview(view)
+    addSubview(hintView)
+  }
+
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+    view.frame = bounds
+    hintView.frame = bounds
+    hintView.frame.origin = CGPoint(x: cusorOffset, y: 0)
+    hintView.sizeToFit()
+  }
 
   func setKeyboardAppearance(_ appearance: TextInputBlock.KeyboardAppearance) {
     view.keyboardAppearance = appearance.uiValue
@@ -67,30 +90,19 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.parentScrollView = parentScrollView
   }
 
-  private let view = UITextView()
-
-  override init(frame: CGRect) {
-    super.init(frame: frame)
-
-    view.isEditable = true
-    view.isSelectable = true
-    view.showsVerticalScrollIndicator = false
-    view.autocorrectionType = .no
-    view.backgroundColor = .clear
-    view.textContainerInset = .zero
-    view.delegate = self
-
-    addSubview(view)
+  func setText(value: Binding<String>, typo: Typo) {
+    self.textValue = value
+    view.attributedText = value.wrappedValue.with(typo: typo)
+    view.typingAttributes = typo.attributes
+    updateHintVisibility()
   }
 
-  @available(*, unavailable)
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+  func setHint(_ value: NSAttributedString) {
+    hintView.attributedText = value
   }
 
-  override func layoutSubviews() {
-    super.layoutSubviews()
-    view.frame = bounds
+  private func updateHintVisibility() {
+    hintView.isHidden = !view.attributedText.isEmpty
   }
 
   override func didMoveToWindow() {
@@ -151,6 +163,11 @@ extension TextInputBlockView: UITextViewDelegate {
     let bottomPoint = frameInWindow.maxY + additionalOffset
     scrollToVisible(bottomPoint)
     startListeningTap()
+  }
+
+  func textViewDidChange(_ textView: UITextView) {
+    updateHintVisibility()
+    textValue?.setValue(textView.attributedText.string, responder: textView)
   }
 
   func textViewDidEndEditing(_ textView: UITextView) {
@@ -255,3 +272,4 @@ extension TextInputBlock.KeyboardType {
 }
 
 private let additionalOffset = 25.0
+private let cusorOffset = 5

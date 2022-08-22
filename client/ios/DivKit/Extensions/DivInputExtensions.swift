@@ -37,23 +37,25 @@ extension DivInput: DivBlockModeling {
       typo = typo.kerned(kern)
     }
 
-    let resolvedColor: Color = resolveTextColor(context.expressionResolver)
-
-    if resolvedColor != .black {
-      typo = typo.with(color: resolvedColor)
-    }
-
     if let lineHeight = resolveLineHeight(context.expressionResolver) {
       typo = typo.with(height: CGFloat(lineHeight))
     }
 
-    let hintText = resolveHintText(context.expressionResolver) ?? ""
-    let attributedText = hintText.with(typo: typo)
+    let resolvedHintColor: Color = resolveHintColor(context.expressionResolver)
+    let hintTypo = typo.with(color: resolvedHintColor)
+    let hintValue = resolveHintText(context.expressionResolver) ?? ""
+
+    let resolvedColor: Color = resolveTextColor(context.expressionResolver)
+    let textTypo = typo.with(color: resolvedColor)
+
+    let textValue = Binding<String>(context: context, name: textVariable)
 
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context.expressionResolver),
       heightTrait: makeContentHeightTrait(with: context.expressionResolver),
-      text: attributedText,
+      hint: hintValue.with(typo: hintTypo),
+      textValue: textValue,
+      textTypo: textTypo,
       parentScrollView: context.parentScrollView
     )
   }
