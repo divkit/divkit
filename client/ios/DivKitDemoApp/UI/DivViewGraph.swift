@@ -14,6 +14,7 @@ final class DivViewGraph {
   ) {
     divKitComponents = DivKitComponents(
       divCustomBlockFactory: DemoDivCustomBlockFactory(),
+      flagsInfo: DivFlagsInfo(isTextSelectingEnabled: true, appendVariablesEnabled: true),
       patchProvider: SamplePatchProvider(),
       updateCardAction: { [weak self] _, patch in
         self?.blockProvider.update(patch: patch)
