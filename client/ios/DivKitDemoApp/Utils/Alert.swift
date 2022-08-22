@@ -4,14 +4,11 @@ import LayoutKit
 
 extension UIViewController {
   func showAlert(
-    message: String? = nil,
-    actions: [UIAlertAction] = []
+    title: String? = nil,
+    message: String? = nil
   ) {
-    let alert = UIAlertController(title: nil, message: message, preferredStyle: .actionSheet)
-    actions.forEach {
-      alert.addAction($0)
-    }
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+    let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+    alert.addAction(UIAlertAction(title: "OK", style: .default))
     present(alert, animated: true)
   }
 
@@ -19,14 +16,16 @@ extension UIViewController {
     _ menu: Menu,
     actionPerformer: UIActionEventPerforming
   ) {
-    let actions = menu.items.map { item in
-      UIAlertAction(title: item.text, style: .default) { _ in
+    let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+    menu.items.forEach { item in
+      let action = UIAlertAction(title: item.text, style: .default) { _ in
         let events = item.actions.map {
           UIActionEvent(uiAction: $0, originalSender: self)
         }
         actionPerformer.perform(uiActionEvents: events, from: self)
       }
+      alert.addAction(action)
     }
-    showAlert(actions: actions)
+    present(alert, animated: true)
   }
 }

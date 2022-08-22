@@ -4,7 +4,7 @@ import CommonCore
 import DivKit
 import Networking
 
-struct SamplePatchProvider: DivPatchProvider {
+struct DemoPatchProvider: DivPatchProvider {
   private let downloader: DivPatchDownloader
 
   init() {
@@ -29,7 +29,7 @@ struct SamplePatchProvider: DivPatchProvider {
     let url = Bundle.main.url(
       forResource: fileName,
       withExtension: "json",
-      subdirectory: "\(FolderNames.samples)/\(FolderNames.patches)"
+      subdirectory: Samples.patchesPath
     )!
     do {
       let data = try Data(contentsOf: url)

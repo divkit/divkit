@@ -76,6 +76,6 @@ private let noDataBlock = makeFallbackBlock("No data")
 private func makeFallbackBlock(_ text: String) -> Block {
   TextBlock(
     widthTrait: .resizable,
-    text: text.with(typo: Typo(size: 16, weight: .medium))
-  ).addingHorizontalGaps(8)
+    text: text.with(typo: Typo(size: 18, weight: .regular))
+  ).addingEdgeGaps(16)
 }

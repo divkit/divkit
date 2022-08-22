@@ -9,12 +9,17 @@ import LayoutKit
 struct DivView: UIViewControllerRepresentable {
   let blockProvider: DivBlockProvider
   let divKitComponents: DivKitComponents
+  let urlOpener: DemoUrlOpener
 
   func makeUIViewController(context _: Context) -> UIViewController {
-    DivViewController(
+    let controller = DivViewController(
       blockProvider: blockProvider,
       divKitComponents: divKitComponents
     )
+    urlOpener.onUnhandledUrl = { url in
+      controller.showAlert(title: "Unhandled URL", message: url.absoluteString)
+    }
+    return controller
   }
 
   func updateUIViewController(_: UIViewController, context _: Context) {}

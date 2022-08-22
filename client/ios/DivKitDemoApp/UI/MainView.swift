@@ -1,34 +1,44 @@
 import SwiftUI
 
-import CommonCore
 import LivePreview
 
 struct MainView: View {
-  @State
-  private var alert: AlertInfo?
-
   var body: some View {
     NavigationView {
-      List {
-        MenuItem(title: FolderNames.samples, image: "square.grid.2x2") {
-          DivSamplesView(urlOpener: openUrl(url:), parentFolderName: FolderNames.samples)
+      VStack(spacing: 10) {
+        Image("Logo")
+        Text("Welcome to DivKit – the modern layout technology by Yandex")
+          .font(ThemeFont.text)
+          .multilineTextAlignment(.center)
+          .padding(EdgeInsets(top: 18, leading: 0, bottom: 18, trailing: 0))
+        HStack(spacing: 8) {
+          NavigationButton("samples", color: ThemeColor.samples) {
+            SamplesView()
+          }
+          GeometryReader { geometry in
+            VStack(spacing: 10) {
+              NavigationButton("playground", color: ThemeColor.divKit) {
+                UrlInputView(divViewProvider: makeDivViewProvider())
+              }
+              NavigationButton("regression", color: ThemeColor.regression, shape: .circle) {
+                RegressionFolderView(divViewProvider: makeDivViewProvider())
+              }
+              .frame(height: geometry.size.width)
+            }
+          }
         }
-        MenuItem(title: "Load", image: "rectangle.and.pencil.and.ellipsis") {
-          DivOnlineView(urlOpener: openUrl(url:))
-        }
-        MenuItem(title: "Live Preview", image: "rectangle.and.text.magnifyingglass") {
+        NavigationButton("live preview", color: ThemeColor.livePreview) {
           livePreviewView
         }
+        .frame(height: 80)
       }
-      .navigationBarTitleDisplayMode(.inline)
-      .navigationTitle("DivKit Demo")
+      .padding(EdgeInsets(top: 46, leading: 20, bottom: 20, trailing: 20))
+      .navigationBarHidden(true)
     }
-    .alert(item: $alert) {
-      Alert(
-        title: Text("Unhandled Action"),
-        message: Text($0.text)
-      )
-    }
+  }
+  
+  private func makeDivViewProvider() -> DivViewProvider {
+    DivViewProvider()
   }
 
   private var livePreviewView: some View {
@@ -36,23 +46,35 @@ struct MainView: View {
       logger: { message in
         print(message)
       },
-      urlOpener: openUrl(url:)
+      urlOpener: DemoUrlOpener().openUrl(_:)
     )
     return graph.view
   }
-
-  private func openUrl(url: URL) {
-    if !tryOpenURL(url) {
-      alert = AlertInfo(id: url.hashValue, text: url.absoluteString)
-    }
-  }
 }
 
-private struct MenuItem<Destination>: View where Destination: View {
-  let title: String
-  let image: String
-  let destination: () -> Destination
+private struct NavigationButton<Destination>: View where Destination: View {
+  enum Shape {
+    case circle
+    case rounded
+  }
+  
+  private let title: String
+  private let color: Color
+  private let shape: Shape
+  private let destination: () -> Destination
 
+  init(
+    _ title: String,
+    color: Color,
+    shape: Shape = .rounded,
+    destination: @escaping () -> Destination
+  ) {
+    self.title = title
+    self.color = color
+    self.shape = shape
+    self.destination = destination
+  }
+  
   var body: some View {
     NavigationLink(
       destination: {
@@ -61,9 +83,30 @@ private struct MenuItem<Destination>: View where Destination: View {
           .navigationTitle(title)
       }
     ) {
-      Label(title, systemImage: image)
-        .font(.system(size: 20))
+      switch shape {
+      case .circle:
+        label.clipShape(Circle())
+      case .rounded:
+        label.cornerRadius(ThemeSize.cornerRadius)
+      }
     }
+    .buttonStyle(ScaleAnimationStyle())
+  }
+  
+  private var label: some View {
+    Text(title)
+      .font(ThemeFont.button)
+      .foregroundColor(.white)
+      .frame(maxWidth: .infinity, maxHeight: .infinity)
+      .background(color)
+  }
+}
+
+private struct ScaleAnimationStyle: ButtonStyle {
+  func makeBody(configuration: Self.Configuration) -> some View {
+    configuration
+      .label
+      .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
   }
 }
 

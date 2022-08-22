@@ -3,23 +3,22 @@ import SwiftUI
 import CommonCore
 import DivKit
 
-final class DivViewGraph {
+final class DivViewProvider {
   public let jsonDataProvider = DataProvider()
 
   private var blockProvider: DivBlockProvider!
   private var divKitComponents: DivKitComponents!
-
-  init(
-    urlOpener: @escaping UrlOpener
-  ) {
+  private let urlOpener = DemoUrlOpener()
+  
+  init() {
     divKitComponents = DivKitComponents(
       divCustomBlockFactory: DemoDivCustomBlockFactory(),
       flagsInfo: DivFlagsInfo(isTextSelectingEnabled: true, appendVariablesEnabled: true),
-      patchProvider: SamplePatchProvider(),
+      patchProvider: DemoPatchProvider(),
       updateCardAction: { [weak self] _, patch in
         self?.blockProvider.update(patch: patch)
       },
-      urlOpener: urlOpener,
+      urlOpener: urlOpener.openUrl(_:),
       variablesStorage: globalVaribalesStorage
     )
 
@@ -29,12 +28,18 @@ final class DivViewGraph {
     )
   }
 
-  func makeDivView() -> some View {
+  func makeDivView(_ url: URL) -> some View {
     DivView(
       blockProvider: blockProvider,
-      divKitComponents: divKitComponents
-    ).onDisappear { [weak self] in
+      divKitComponents: divKitComponents,
+      urlOpener: urlOpener
+    )
+    .onAppear { [weak self] in
+      self?.jsonDataProvider.set(url: url)
+    }
+    .onDisappear { [weak self] in
       self?.jsonDataProvider.set(url: nil)
+      self?.urlOpener.onUnhandledUrl = { _ in }
     }
   }
 }

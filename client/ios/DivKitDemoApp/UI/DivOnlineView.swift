@@ -1,35 +1,31 @@
 import SwiftUI
 
-import CommonCore
-
 struct DivOnlineView: View {
-  @State
-  private var urlString = ""
-
-  private let divViewGraph: DivViewGraph
-
-  init(urlOpener: @escaping UrlOpener) {
-    divViewGraph = DivViewGraph(urlOpener: urlOpener)
-  }
+  @Environment(\.presentationMode)
+  var presentationMode: Binding<PresentationMode>
+  
+  let url: URL
+  let divViewProvider: DivViewProvider
 
   var body: some View {
-    VStack {
-      HStack(spacing: 8) {
-        TextField("URL", text: $urlString)
-          .textFieldStyle(.roundedBorder)
-        Button {
-          divViewGraph.jsonDataProvider.set(url: urlString)
-          UserDefaults.standard.set(urlString, forKey: urlKey)
-        } label: {
-          Image(systemName: "arrow.triangle.2.circlepath")
-        }
-      }
-      .padding(8)
-      divViewGraph.makeDivView()
-    }.onAppear {
-      urlString = UserDefaults.standard.string(forKey: urlKey) ?? ""
+    ViewWithHeader(
+      "Playground",
+      background: ThemeColor.divKit,
+      presentationMode: presentationMode
+    ) {
+      divViewProvider.makeDivView(url)
+    }
+    .overlay(reloadButton, alignment: .topTrailing)
+  }
+  
+  private var reloadButton: some View {
+    Button(action: reload) {
+      Image(systemName: "arrow.triangle.2.circlepath")
+        .applyHeaderButtonStyle()
     }
   }
+  
+  private func reload() {
+    divViewProvider.jsonDataProvider.set(url: url)
+  }
 }
-
-private let urlKey = "url_for_div_online"
