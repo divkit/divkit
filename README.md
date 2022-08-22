@@ -7,7 +7,7 @@ The convenience of DivKit as a server-driven UI technology is that it doesn’t 
 
 We’ve made a sandbox for you to experiment with. The DivKit web engine is connected to it, but you can also download iOS/Android app demos from stores and link them to the sandbox. The data will be updated live: the sandbox connects to the playground app via web sockets.
 
-[Documentation](https://divkit.tech/doc). 
+[Documentation](https://divkit.tech/doc). [Medium](https://medium.com/p/cad519252f0f). [Habr](https://habr.com/ru/company/yandex/blog/683886/).
 
 Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru).
 
