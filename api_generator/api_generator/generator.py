@@ -1,12 +1,13 @@
 from .config import Config, GeneratedLanguage
 from .schema.preprocessing import schema_preprocessing
 from .schema.modeling import build_objects
-from .generators import Generator, SwiftGenerator
+from .generators import DocumentationGenerator, Generator, SwiftGenerator
 
 
 def __build_generator(config: Config) -> Generator:
     lang = config.generation.lang
     generator_dict = {
+        GeneratedLanguage.DOCUMENTATION: DocumentationGenerator,
         GeneratedLanguage.SWIFT: SwiftGenerator
     }
     generator = generator_dict.get(lang, None)

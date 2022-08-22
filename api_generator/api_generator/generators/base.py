@@ -11,9 +11,16 @@ from .. import utils
 class Generator(ABC):
     def __init__(self, config: Config) -> None:
         self._config = config
+        self._output_path = config.output_path
 
     def generate(self, objects: List[Declarable]):
-        utils.clear_content_of_directory(self._config.output_path)
+        self._clear_output_directory()
+        self._generate_files(objects)
+
+    def _clear_output_directory(self):
+        utils.clear_content_of_directory(self._output_path)
+
+    def _generate_files(self, objects: List[Declarable]):
         for obj in objects:
             declaration = []
             for line in str(self._main_declaration(obj)).strip().split('\n'):
@@ -24,8 +31,9 @@ class Generator(ABC):
             declaration = '\n'.join(declaration) + '\n'
             if not declaration.strip():
                 continue
-            file_content = f'{self._head_for_file}\n{declaration}'
-            filename = f'{self._config.output_path}/{self._filename(obj.name)}'
+            head_for_file = self._head_for_file + '\n' if self._head_for_file.strip() else ''
+            file_content = f'{head_for_file}{declaration}'
+            filename = f'{self._output_path}/{self._filename(obj.name)}'
             with open(filename, 'w') as file:
                 file.write(file_content)
 

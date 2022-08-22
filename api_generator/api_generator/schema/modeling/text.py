@@ -46,5 +46,9 @@ class Text:
     def indent_width(self) -> int:
         return self._indent_width
 
+    @property
+    def lines(self) -> [str]:
+        return self._lines
+
 
 EMPTY: Text = Text('')

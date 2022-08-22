@@ -49,6 +49,10 @@ def test_swift_generator():
     assert_test_generator(config_filename='swift_config.json', references_folder_name='swift')
 
 
+def test_documentation_generator():
+    assert_test_generator(config_filename='documentation_config.json', references_folder_name='documentation')
+
+
 def assert_test_generator(config_filename: str, references_folder_name: str):
     config = Config(config_path=utils.path_generator_tests(f'configs/{config_filename}'),
                     schema_path=TEST_SCHEMA_PATH,
@@ -62,23 +66,40 @@ def assert_test_generator(config_filename: str, references_folder_name: str):
         utils.update_references(source_path=OUTPUT_PATH, destination_path=references_path)
         assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'
 
-    for filename in os.listdir(references_path):
-        ref_file_path = os.path.join(references_path, filename)
-        generated_file_path = os.path.join(OUTPUT_PATH, filename)
+    __compare_dirs(references_path, OUTPUT_PATH)
 
-        with open(ref_file_path, 'r') as ref_file:
-            with open(generated_file_path, 'r') as gen_file:
-                ref_lines, gen_lines = ref_file.readlines(), gen_file.readlines()
-                lines_count = min(len(ref_lines), len(gen_lines))
-                for line_ind in range(lines_count):
-                    ref_line, gen_line = ref_lines[line_ind], gen_lines[line_ind]
-                    are_equal = ref_line == gen_line
-                    if not are_equal:
-                        print(f'Lines are not equal in file {filename}. Line number: {line_ind + 1}')
-                        print(f'Expected: [ {ref_line.strip()} ]')
-                        print(f'Actual:   [ {gen_line.strip()} ]')
-                    assert are_equal
-                lines_count_equal = len(ref_lines) == len(gen_lines)
-                if not lines_count_equal:
-                    print(f'Different lines count in reference({len(ref_lines)} lines) and generated({len(gen_lines)} lines) file {filename}.')
-                assert lines_count_equal
+
+def __compare_dirs(references_path: str, generated_path: str):
+    for file in os.listdir(references_path):
+        if os.path.isfile(os.path.join(references_path, file)):
+            ref_file_path, gen_file_path = __join_paths(references_path, generated_path, file)
+            __compare_files(file, ref_file_path, gen_file_path)
+        else:
+            ref_dir_path, gen_dir_path = __join_paths(references_path, generated_path, file)
+            __compare_dirs(ref_dir_path, gen_dir_path)
+
+
+def __join_paths(references_path: str, generated_path: str, new_path: bytes) -> (str, str):
+    ref_path = os.path.join(references_path, new_path)
+    gen_path = os.path.join(generated_path, new_path)
+    return ref_path, gen_path
+
+
+def __compare_files(filename: bytes, ref_file_path: str, generated_file_path: str):
+    with open(ref_file_path, 'r') as ref_file:
+        with open(generated_file_path, 'r') as gen_file:
+            ref_lines, gen_lines = ref_file.readlines(), gen_file.readlines()
+            lines_count = min(len(ref_lines), len(gen_lines))
+            for line_ind in range(lines_count):
+                ref_line, gen_line = ref_lines[line_ind], gen_lines[line_ind]
+                are_equal = ref_line == gen_line
+                if not are_equal:
+                    print(f'Lines are not equal in file {filename}. Line number: {line_ind + 1}')
+                    print(f'Expected: [ {ref_line.strip()} ]')
+                    print(f'Actual:   [ {gen_line.strip()} ]')
+                assert are_equal
+            lines_count_equal = len(ref_lines) == len(gen_lines)
+            if not lines_count_equal:
+                print(f'Different lines count in reference({len(ref_lines)} lines) ' +
+                      f'and generated({len(gen_lines)} lines) file {filename}.')
+            assert lines_count_equal

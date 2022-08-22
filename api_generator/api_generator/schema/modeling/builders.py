@@ -163,6 +163,8 @@ def entity_build(name: str,
 
     normal: Entity = make_result(mode=GenerationMode.NORMAL_WITH_TEMPLATES)
     if not normal.generate_as_protocol:
+        if config.lang == GeneratedLanguage.DOCUMENTATION:
+            return [normal]
         if config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.KOTLIN]:
             return [normal, make_result(mode=GenerationMode.TEMPLATE)]
         raise NotImplementedError(f'Templates are not supported for {config.lang.value}')
