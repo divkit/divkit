@@ -42,7 +42,7 @@ extension Block {
         boundary: .clipCorner(radius: 10),
         backgroundColor: .red
       )
-      .addingEdgeInsets(debugInfoParams.safeAreaInsets ?? .zero)
+      .addingEdgeInsets(debugInfoParams?.safeAreaInsets ?? .zero)
       .addingEdgeGaps(2)
       .addingDecorations(action: action)
 
