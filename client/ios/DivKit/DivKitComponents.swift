@@ -20,7 +20,6 @@ public final class DivKitComponents {
   public let urlOpener: UrlOpener
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
-  public let showDebugInfo: ((ViewType) -> Void)?
 
   public init(
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
@@ -31,8 +30,7 @@ public final class DivKitComponents {
     patchProvider: DivPatchProvider? = nil,
     updateCardAction: DivActionURLHandler.UpdateCardAction?,
     urlOpener: @escaping UrlOpener,
-    variablesStorage: DivVariablesStorage = DivVariablesStorage(),
-    showDebugInfo: ((ViewType) -> Void)? = nil
+    variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.extensionHandlers = extensionHandlers
@@ -40,7 +38,6 @@ public final class DivKitComponents {
     self.fontSpecifiers = fontSpecifiers
     self.urlOpener = urlOpener
     self.variablesStorage = variablesStorage
-    self.showDebugInfo = showDebugInfo
 
     let requestPerformer = URLRequestPerformer(urlTransform: nil)
 
@@ -97,6 +94,7 @@ public final class DivKitComponents {
   public func makeContext(
     cardId: DivCardID,
     cachedImageHolders: [ImageHolder],
+    debugInfoParams: DebugInfoParams? = nil,
     parentScrollView: ScrollView? = nil
   ) -> DivBlockModelingContext {
     DivBlockModelingContext(
@@ -111,7 +109,7 @@ public final class DivKitComponents {
       flagsInfo: flagsInfo,
       extensionHandlers: extensionHandlers,
       variables: variablesStorage.makeVariables(for: cardId),
-      showDebugInfo: showDebugInfo,
+      debugInfoParams: debugInfoParams,
       parentScrollView: parentScrollView
     )
   }

@@ -8,9 +8,9 @@ import LayoutKit
 
 extension Block {
   func addingErrorsButton(
+    debugInfoParams: DebugInfoParams?,
     errors: [ExpressionError],
-    parentPath: UIElementPath,
-    showDebugInfo: ((ViewType) -> Void)?
+    parentPath: UIElementPath
   ) -> Block {
     let errorsCount = errors.count
     guard errorsCount > 0 else {
@@ -42,11 +42,12 @@ extension Block {
         boundary: .clipCorner(radius: 10),
         backgroundColor: .red
       )
+      .addingEdgeInsets(debugInfoParams.safeAreaInsets ?? .zero)
       .addingEdgeGaps(2)
       .addingDecorations(action: action)
 
     let buttonBlock: Block
-    if let showDebugInfo = showDebugInfo {
+    if let showDebugInfo = debugInfoParams?.show {
       buttonBlock = DebugInfoBlock(
         child: indicator,
         showDebugInfo: {

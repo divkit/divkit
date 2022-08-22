@@ -21,7 +21,7 @@ public struct DivBlockModelingContext {
   public let extensionHandlers: [String: DivExtensionHandler]
   public let stateInterceptors: [String: DivStateInterceptor]
   public let expressionResolver: ExpressionResolver
-  public let showDebugInfo: ((ViewType) -> Void)?
+  public let debugInfoParams: DebugInfoParams?
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
 
@@ -45,7 +45,7 @@ public struct DivBlockModelingContext {
     extensionHandlers: [DivExtensionHandler] = [],
     stateInterceptors: [DivStateInterceptor] = [],
     variables: DivVariables = [:],
-    showDebugInfo: ((ViewType) -> Void)? = nil,
+    debugInfoParams: DebugInfoParams? = nil,
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil
   ) {
@@ -61,7 +61,7 @@ public struct DivBlockModelingContext {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
     self.fontSpecifiers = fontSpecifiers
-    self.showDebugInfo = showDebugInfo
+    self.debugInfoParams = debugInfoParams
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
 

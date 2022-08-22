@@ -37,9 +37,9 @@ extension DivData: DivBlockModeling {
       )
     #if INTERNAL_BUILD
       .addingErrorsButton(
+        debugInfoParams: divContext.debugInfoParams,
         errors: divContext.blockModelingErrorsStorage.errors,
-        parentPath: divContext.parentPath,
-        showDebugInfo: divContext.showDebugInfo
+        parentPath: divContext.parentPath
       )
     #endif
   }
