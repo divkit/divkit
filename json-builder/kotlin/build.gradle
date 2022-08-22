@@ -1,5 +1,18 @@
 apply plugin: 'kotlin'
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
 sourceSets {
     main {
         java.srcDirs += 'src/generated/kotlin'
@@ -7,7 +20,8 @@ sourceSets {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
 
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
