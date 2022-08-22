@@ -7,11 +7,11 @@
       "arguments": [
         {
           "type": "integer",
-          "doc": "Divisor integer value."
+          "doc": "Divisible integer value."
         },
         {
           "type": "integer",
-          "doc": "Divisible integer value."
+          "doc": "Divisor integer value."
         }
       ],
       "result_type": "integer",
@@ -24,11 +24,11 @@
       "arguments": [
         {
           "type": "number",
-          "doc": "Divisor number value."
+          "doc": "Divisible number value."
         },
         {
           "type": "number",
-          "doc": "Divisible number value."
+          "doc": "Divisor number value."
         }
       ],
       "result_type": "number",
@@ -41,11 +41,11 @@
       "arguments": [
         {
           "type": "integer",
-          "doc": "Divisor integer value."
+          "doc": "Divisible integer value."
         },
         {
           "type": "integer",
-          "doc": "Divisible integer value."
+          "doc": "Divisor integer value."
         }
       ],
       "result_type": "integer",
@@ -58,11 +58,11 @@
       "arguments": [
         {
           "type": "number",
-          "doc": "Divisor number value."
+          "doc": "Divisible number value."
         },
         {
           "type": "number",
-          "doc": "Divisible number value."
+          "doc": "Divisor number value."
         }
       ],
       "result_type": "number",
