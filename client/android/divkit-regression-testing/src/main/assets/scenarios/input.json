@@ -59,10 +59,9 @@
             "hint_text": "Hint",
             "hint_color": "#F1C40F",
             "highlight_color": "#E74C3C",
-            "max_lines": 2,
+            "max_visible_lines": 2,
             "line_height": 40,
-            "select_all_on_focus": 1,
-            "keyboard_type": "text"
+            "select_all_on_focus": 1
           },
           {
             "type": "text",

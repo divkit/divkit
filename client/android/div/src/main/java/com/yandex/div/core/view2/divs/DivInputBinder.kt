@@ -136,7 +136,7 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.observeMaxVisibleLines(div: DivInput, resolver: ExpressionResolver) {
-        val maxLinesExpr = div.maxLines ?: return
+        val maxLinesExpr = div.maxVisibleLines ?: return
 
         val callback = { _: Any -> maxLines = maxLinesExpr.evaluate(resolver) }
         addSubscription(maxLinesExpr.observeAndGet(resolver, callback))
@@ -162,21 +162,25 @@ internal class DivInputBinder @Inject constructor(
     }
 
     private fun DivInputView.observeKeyboardType(div: DivInput, resolver: ExpressionResolver) {
-        val callback = { _: Any -> applyKeyboardType(div, resolver) }
+        val callback = { type: DivInput.KeyboardType ->
+            applyKeyboardType(type)
+            setHorizontallyScrolling(type != DivInput.KeyboardType.MULTI_LINE_TEXT)
+        }
         addSubscription(div.keyboardType.observeAndGet(resolver, callback))
     }
 
-    private fun EditText.applyKeyboardType(div: DivInput, resolver: ExpressionResolver) {
-        inputType = when(div.keyboardType.evaluate(resolver)) {
-            DivInput.KeyboardType.DATE -> InputType.TYPE_CLASS_DATETIME
+    private fun EditText.applyKeyboardType(type: DivInput.KeyboardType) {
+        inputType = when(type) {
+            DivInput.KeyboardType.SINGLE_LINE_TEXT -> InputType.TYPE_CLASS_TEXT
+            DivInput.KeyboardType.MULTI_LINE_TEXT -> InputType.TYPE_CLASS_TEXT or
+                    InputType.TYPE_TEXT_FLAG_MULTI_LINE
             DivInput.KeyboardType.EMAIL -> InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
-            DivInput.KeyboardType.NUMBER -> InputType.TYPE_CLASS_NUMBER or
-                    InputType.TYPE_NUMBER_FLAG_DECIMAL or InputType.TYPE_NUMBER_FLAG_SIGNED
-            DivInput.KeyboardType.PHONE -> InputType.TYPE_CLASS_PHONE
             DivInput.KeyboardType.URI -> InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_VARIATION_URI
-            else -> InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            DivInput.KeyboardType.NUMBER -> InputType.TYPE_CLASS_NUMBER or
+                    InputType.TYPE_NUMBER_FLAG_DECIMAL
+            DivInput.KeyboardType.PHONE -> InputType.TYPE_CLASS_PHONE
         }
     }
 

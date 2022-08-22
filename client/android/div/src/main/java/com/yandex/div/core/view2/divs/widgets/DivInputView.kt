@@ -54,7 +54,7 @@ internal class DivInputView constructor(context: Context) : SuperLineHeightEditT
 
     override fun draw(canvas: Canvas) {
         isDrawing = true
-        borderDrawer.drawClippedAndTranslated(canvas, translationY = scrollY) { super.draw(canvas) }
+        borderDrawer.drawClippedAndTranslated(canvas, scrollX, scrollY) { super.draw(canvas) }
         isDrawing = false
     }
 
@@ -62,7 +62,7 @@ internal class DivInputView constructor(context: Context) : SuperLineHeightEditT
         if (isDrawing) {
             super.dispatchDraw(canvas)
         } else {
-            borderDrawer.drawClippedAndTranslated(canvas, translationY = scrollY) {
+            borderDrawer.drawClippedAndTranslated(canvas, scrollX, scrollY) {
                 super.dispatchDraw(canvas)
             }
         }

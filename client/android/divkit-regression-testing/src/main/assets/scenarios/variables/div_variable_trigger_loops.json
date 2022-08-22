@@ -133,7 +133,7 @@
           "text_color": "@{dark_sky}",
           "$text_variable": "input_variable",
           "$hint_text": "title",
-          "max_lines": 2,
+          "max_visible_lines": 2,
           "line_height": 40,
           "select_all_on_focus": 1,
           "keyboard_type": "number"

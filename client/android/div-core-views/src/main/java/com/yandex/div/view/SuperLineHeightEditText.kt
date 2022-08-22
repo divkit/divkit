@@ -15,7 +15,7 @@ open class SuperLineHeightEditText constructor(context: Context) : AppCompatEdit
     private var extraPaddingTop = 0
     private var extraPaddingBottom = 0
 
-    private var singleLine = false
+    private var verticallyScrolling = true
 
     private val visibleLineCount get() = when {
         lineCount == 0 -> 1
@@ -51,14 +51,14 @@ open class SuperLineHeightEditText constructor(context: Context) : AppCompatEdit
 
     override fun getCompoundPaddingBottom() = super.getCompoundPaddingBottom() + extraPaddingBottom
 
-    override fun setSingleLine(isSingleLine: Boolean) {
-        singleLine = isSingleLine
-        super.setSingleLine(isSingleLine)
+    override fun setHorizontallyScrolling(whether: Boolean) {
+        verticallyScrolling = !whether
+        super.setHorizontallyScrolling(whether)
     }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        if (singleLine) {
+        if (!verticallyScrolling) {
             return super.onTouchEvent(event)
         }
 

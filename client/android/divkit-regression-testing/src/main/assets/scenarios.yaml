@@ -768,13 +768,6 @@ expect:
 paths:
   - 'scenarios/variables/div_variable_trigger_loops.json'
 ---
-title: Div input
-tags: [ 'DivInput']
-expect:
-  - Text in input and text field is synchronized
-paths:
-  - 'scenarios/div-input.json'
----
 title: Sequential animations
 steps:
   - Click on image
@@ -838,7 +831,7 @@ steps:
   - Change text
 expect:
   - Text under the input should be equal to text in input and change on input changes.
-  - Max lines = 1. Line breaks become a whitespace.
+  - Max lines = 1. Line break is unavailable.
 paths:
   - 'scenarios/single_line_input.json'
 ---

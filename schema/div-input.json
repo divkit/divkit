@@ -60,9 +60,9 @@
           "$ref": "common.json#/non_negative_integer",
           "description": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта. Измеряется в единицах, заданных в `font_size_unit`."
         },
-        "max_lines": {
-          "$ref": "common.json#/non_negative_integer",
-          "description": "Максимальное количество строк, которые не будут обрезаны при выходе за ограничения."
+        "max_visible_lines": {
+          "$ref": "common.json#/positive_integer",
+          "description": "Максимальное количество строк, которое будет видно в окне ввода."
         },
         "letter_spacing": {
           "type": "number",
@@ -92,9 +92,9 @@
         "keyboard_type": {
           "type": "string",
           "enum": [
-            "text", "phone", "number","email", "uri", "date"
+            "single_line_text", "multi_line_text", "phone", "number", "email", "uri"
           ],
-          "default_value": "text",
+          "default_value": "multi_line_text",
           "description": "Тип клавиатуры."
         },
         "select_all_on_focus": {
