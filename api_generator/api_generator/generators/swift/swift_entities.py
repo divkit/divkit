@@ -2,6 +2,7 @@ from __future__ import annotations
 from typing import List, Optional, cast, Tuple
 from enum import Enum
 from .utils import fixing_keywords
+from ..base import declaration_comment
 from ...schema.modeling.entities import (
     Entity,
     EntityEnumeration,
@@ -56,6 +57,17 @@ def swift_template_deserializable_args_decl(mode: GenerationMode):
 
 def swift_template_deserializable_args(mode: GenerationMode):
     return ', templateToType: templateToType' if mode.is_template else ''
+
+
+def _swift_default_value_declaration_comment(p: Property) -> str:
+    if isinstance(p.property_type, Object) and not isinstance(p.property_type.object, StringEnumeration):
+        property_type = cast(SwiftPropertyType, Object(name='',
+                                                       object=p.property_type.object,
+                                                       format=ObjectFormat.DEFAULT))
+        comment_value = property_type.internal_declaration(p.default_value)
+    else:
+        comment_value = p.default_value
+    return comment_value
 
 
 class SwiftEntity(Entity):
@@ -368,19 +380,6 @@ class SwiftEntity(Entity):
         result += '}'
         return result
 
-    @property
-    def protocol_plus_super_entities(self) -> Optional[str]:
-        protocols = []
-        if self._implemented_protocol is not None:
-            protocols.append(utils.capitalize_camel_case(self._implemented_protocol.name))
-        if self.generation_mode.is_template:
-            protocols.append('TemplateValue')
-        if self.super_entities is not None:
-            protocols.append(self.super_entities)
-        if not protocols:
-            return None
-        return ', '.join(protocols)
-
 
 class SwiftProperty(Property):
     class SwiftMode:
@@ -411,45 +410,6 @@ class SwiftProperty(Property):
         return f'resolve{optional_or_empty}Value({expr})'
 
     @property
-    def declaration_comment(self) -> str:
-        comments = []
-        if isinstance(self.property_type, String):
-            string: String = self.property_type
-            if string.min_length > 0:
-                end = 's' if string.min_length > 1 else ''
-                comments.append(f'at least {string.min_length} char{end}')
-            if string.regex is not None:
-                comments.append(f'regex: {string.regex.pattern}')
-        elif isinstance(self.property_type, Array):
-            array: Array = self.property_type
-            if array.min_items > 0:
-                comments.append(f'at least {array.min_items} elements')
-            if array.strict_parsing:
-                comments.append('all received elements must be valid')
-        elif isinstance(self.property_type, Url) and self.property_type.schemes:
-            joined_schemes = ', '.join(self.property_type.schemes)
-            comments.append(f'valid schemes: [{joined_schemes}]')
-        elif isinstance(self.property_type, (Int, Double)):
-            constraint = self.property_type.constraint
-            if constraint is not None:
-                comments.append(f'constraint: {constraint}')
-
-        if self.default_value is not None:
-            if isinstance(self.property_type, Object) and not isinstance(self.property_type.object, StringEnumeration):
-                property_type = cast(SwiftPropertyType, Object(name='',
-                                                               object=self.property_type.object,
-                                                               format=ObjectFormat.DEFAULT))
-                comment_value = property_type.internal_declaration(self.default_value)
-            else:
-                comment_value = self.default_value
-            comments.append(f'default value: {comment_value}')
-
-        if not comments:
-            return ''
-        joined_comments = '; '.join(comments)
-        return f' // {joined_comments}'
-
-    @property
     def should_be_optional(self) -> bool:
         prop_type = cast(SwiftPropertyType, self.property_type)
         return self.optional and (self.default_value is None) and prop_type.empty_constructor is None
@@ -462,7 +422,7 @@ class SwiftProperty(Property):
         else:
             name = fixing_keywords(self.declaration_name)
             type_declaration = self.type_declaration
-            comment = self.declaration_comment
+            comment = declaration_comment(self, _swift_default_value_declaration_comment)
             return Text(f'{access_level.value}let {name}: {type_declaration}{comment}')
 
     def expression_resolving_method(self, access_level: SwiftAccessLevel) -> Text:

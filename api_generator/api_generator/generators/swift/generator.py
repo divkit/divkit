@@ -7,9 +7,10 @@ from .swift_entities import (
     SwiftEntityEnumeration,
     SwiftAccessLevel,
     swift_template_deserializable_args_decl,
-    swift_template_deserializable_args
+    swift_template_deserializable_args,
+    _swift_default_value_declaration_comment
 )
-from ..base import Generator
+from ..base import Generator, declaration_comment
 from ... import utils
 from ...schema.modeling.entities import (
     StringEnumeration,
@@ -20,7 +21,7 @@ from ...schema.modeling.entities import (
     String
 )
 from ...schema.modeling.text import Text, EMPTY
-from ...config import Config, GenerationMode
+from ...config import Config, GenerationMode, GeneratedLanguage
 from . import utils as swift_utils
 
 
@@ -252,7 +253,7 @@ class SwiftGenerator(Generator):
         for prop in props:
             name = prop.declaration_name
             type_decl = prop.type_declaration
-            comment = prop.declaration_comment
+            comment = declaration_comment(prop, _swift_default_value_declaration_comment)
             result += Text(f'var {name}: {type_decl} {{ get }}{comment}').indented()
         for prop in filter(lambda p: p.supports_expressions and not p.mode.is_template, props):
             result += Text(prop.expression_resolving_method_declaration(SwiftAccessLevel.INTERNAL)).indented()
@@ -283,7 +284,7 @@ class SwiftGenerator(Generator):
         if entity_enumeration.mode.is_template:
             value_type = 'Any'
         else:
-            value_type = entity_enumeration.common_interface
+            value_type = entity_enumeration.common_interface(GeneratedLanguage.SWIFT)
             if value_type is None:
                 value_type = 'Any'
         result += f'  {access_modifier}var value: {value_type} {{'

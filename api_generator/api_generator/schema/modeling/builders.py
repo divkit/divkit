@@ -163,7 +163,7 @@ def entity_build(name: str,
 
     normal: Entity = make_result(mode=GenerationMode.NORMAL_WITH_TEMPLATES)
     if not normal.generate_as_protocol:
-        if config.lang == GeneratedLanguage.DOCUMENTATION:
+        if config.lang is GeneratedLanguage.DOCUMENTATION:
             return [normal]
         if config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.KOTLIN]:
             return [normal, make_result(mode=GenerationMode.TEMPLATE)]

@@ -43,6 +43,18 @@ def update_json_reference(filename: str, json_content: Dict[str, Any]):
     update_reference(filename, json.dumps(json_content, indent=2, ensure_ascii=False))
 
 
+def clear_content_of_directory(directory: str) -> None:
+    for filename in os.listdir(directory):
+        file_path = os.path.join(directory, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f'Failed to delete {file_path}. Reason: {e}')
+
+
 def update_references(source_path: str, destination_path: str):
     for filename in os.listdir(source_path):
         src_file_path = os.path.join(source_path, filename)

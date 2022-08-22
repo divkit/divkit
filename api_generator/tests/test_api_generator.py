@@ -25,7 +25,7 @@ def test_schema_preprocessor():
         path = utils.path_generator_tests(filename)
         if SHOULD_UPDATE_REFERENCES:
             utils.update_json_reference(filename=path, json_content=root_directory.as_json)
-            print('Updating references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.')
+            assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'
         utils.assert_as_json_test(file_expected=path, content_actual=root_directory.as_json)
 
     test_config = Config(config_path=utils.path_generator_tests('configs/swift_config.json'),
@@ -46,16 +46,26 @@ def test_schema_preprocessor():
 
 
 def test_swift_generator():
-    assert_test_generator(config_filename='swift_config.json', references_folder_name='swift')
+    assert_test_generator(config_filename='swift_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='swift')
+
+
+def test_kotlin_generator():
+    assert_test_generator(config_filename='kotlin_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='kotlin')
 
 
 def test_documentation_generator():
-    assert_test_generator(config_filename='documentation_config.json', references_folder_name='documentation')
+    assert_test_generator(config_filename='documentation_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='documentation')
 
 
-def assert_test_generator(config_filename: str, references_folder_name: str):
+def assert_test_generator(config_filename: str, schema_path: str, references_folder_name: str):
     config = Config(config_path=utils.path_generator_tests(f'configs/{config_filename}'),
-                    schema_path=TEST_SCHEMA_PATH,
+                    schema_path=schema_path,
                     output_path=OUTPUT_PATH)
     if not os.path.exists(OUTPUT_PATH):
         os.makedirs(OUTPUT_PATH)
@@ -63,6 +73,7 @@ def assert_test_generator(config_filename: str, references_folder_name: str):
     references_path = utils.path_generator_tests(f'references/{references_folder_name}')
 
     if SHOULD_UPDATE_REFERENCES:
+        utils.clear_content_of_directory(directory=references_path)
         utils.update_references(source_path=OUTPUT_PATH, destination_path=references_path)
         assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'
 
@@ -79,13 +90,13 @@ def __compare_dirs(references_path: str, generated_path: str):
             __compare_dirs(ref_dir_path, gen_dir_path)
 
 
-def __join_paths(references_path: str, generated_path: str, new_path: bytes) -> (str, str):
+def __join_paths(references_path: str, generated_path: str, new_path: str) -> (str, str):
     ref_path = os.path.join(references_path, new_path)
     gen_path = os.path.join(generated_path, new_path)
     return ref_path, gen_path
 
 
-def __compare_files(filename: bytes, ref_file_path: str, generated_file_path: str):
+def __compare_files(filename: str, ref_file_path: str, generated_file_path: str):
     with open(ref_file_path, 'r') as ref_file:
         with open(generated_file_path, 'r') as gen_file:
             ref_lines, gen_lines = ref_file.readlines(), gen_file.readlines()

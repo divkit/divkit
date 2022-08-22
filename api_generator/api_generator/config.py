@@ -1,6 +1,6 @@
 from __future__ import annotations
-from typing import Text, List
-from pydantic import BaseModel
+from typing import Text, List, Optional
+from pydantic import BaseModel, Field
 from enum import Enum, auto
 
 
@@ -41,12 +41,19 @@ class GenerationMode(Enum):
         elif self is GenerationMode.TEMPLATE:
             return TEMPLATE_SUFFIX
 
+    def protocol_name(self, lang: GeneratedLanguage, name: str) -> Optional[str]:
+        if self.is_template:
+            return 'TemplateValue' if lang is GeneratedLanguage.SWIFT else f'JsonTemplate<{name}>'
+        return None
+
 
 class Config:
     class GenerationConfig(BaseModel):
         lang: GeneratedLanguage
         header: Text = ''
-        errors_collectors: List[str] = []
+        errors_collectors: List[str] = Field([], alias='errorsCollectors')
+        kotlin_annotations: List[str] = Field([], alias='kotlinAnnotations')
+        generate_equality: bool = Field(False, alias='generateEquality')
 
     def __init__(self, config_path: str, schema_path: str, output_path: str):
         self.schema_path: str = schema_path

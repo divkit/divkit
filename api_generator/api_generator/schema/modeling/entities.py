@@ -224,6 +224,20 @@ class Entity(Declarable):
         return self._swift_super_protocol
 
     @property
+    def protocol_plus_super_entities(self) -> Optional[str]:
+        protocols = []
+        if self._implemented_protocol is not None:
+            protocols.append(capitalize_camel_case(self._implemented_protocol.name))
+        protocol_name = self.generation_mode.protocol_name(self._lang, self.resolved_prefixed_declaration)
+        if protocol_name is not None:
+            protocols.append(protocol_name)
+        if self.super_entities is not None:
+            protocols.append(self.super_entities)
+        if not protocols:
+            return None
+        return ', '.join(protocols)
+
+    @property
     def properties(self) -> List[Property]:
         return self._properties
 
@@ -465,14 +479,15 @@ class EntityEnumeration(Declarable):
             }, self._entities))
         }
 
-    @property
-    def common_interface(self) -> Optional[str]:
+    def common_interface(self, lang: GeneratedLanguage) -> Optional[str]:
         common_interface = self._common_interface_without_serializable
-        if common_interface is not None:
-            common_interface = f' & {common_interface}'
-        else:
-            common_interface = ''
-        return f'Serializable{common_interface}'
+        if lang is GeneratedLanguage.SWIFT:
+            if common_interface is not None:
+                common_interface = f' & {common_interface}'
+            else:
+                common_interface = ''
+            return f'Serializable{common_interface}'
+        return common_interface
 
     @property
     def _common_interface_without_serializable(self) -> Optional[str]:

@@ -1,0 +1,99 @@
+// Generated code. Do not modify.
+
+package com.yandex.div2
+
+import android.graphics.Color
+import android.net.Uri
+import androidx.annotation.ColorInt
+import com.yandex.div.json.*
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionsList
+import com.yandex.div.json.schema.*
+import com.yandex.div.core.annotations.Mockable
+import java.io.IOException
+import java.util.BitSet
+import org.json.JSONObject
+import com.yandex.div.data.*
+
+@Mockable
+class EntityWithPropertyWithDefaultValue(
+    @JvmField final val int: Expression<Int> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
+    @JvmField final val nested: Nested? = null,
+    @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
+) : JSONSerializable {
+
+    override fun writeToJSON(): JSONObject {
+        val json = JSONObject()
+        json.writeExpression(key = "int", value = int)
+        json.write(key = "nested", value = nested)
+        json.write(key = "type", value = TYPE)
+        json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
+        return json
+    }
+
+    companion object {
+        const val TYPE = "entity_with_property_with_default_value"
+
+        private val INT_DEFAULT_VALUE = Expression.constant(0)
+        private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
+
+        @JvmStatic
+        @JvmName("fromJson")
+        operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithPropertyWithDefaultValue {
+            val logger = env.logger
+            return EntityWithPropertyWithDefaultValue(
+                int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
+                nested = JsonParser.readOptional(json, "nested", Nested.CREATOR, logger, env),
+                url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
+            )
+        }
+
+        private val INT_TEMPLATE_VALIDATOR = ValueValidator<Int> { it: Int -> it >= 0 }
+        private val INT_VALIDATOR = ValueValidator<Int> { it: Int -> it >= 0 }
+        private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
+        private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
+
+        val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValue(env, json = it) }
+    }
+
+
+    @Mockable
+    class Nested(
+        @JvmField final val int: Expression<Int> = INT_DEFAULT_VALUE, // constraint: number >= 0; default value: 0
+        @JvmField final val nonOptional: Expression<String>,
+        @JvmField final val url: Expression<Uri> = URL_DEFAULT_VALUE, // valid schemes: [https]; default value: https://yandex.ru
+    ) : JSONSerializable {
+
+        override fun writeToJSON(): JSONObject {
+            val json = JSONObject()
+            json.writeExpression(key = "int", value = int)
+            json.writeExpression(key = "non_optional", value = nonOptional)
+            json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
+            return json
+        }
+
+        companion object {
+            private val INT_DEFAULT_VALUE = Expression.constant(0)
+            private val URL_DEFAULT_VALUE = Expression.constant(Uri.parse("https://yandex.ru"))
+
+            @JvmStatic
+            @JvmName("fromJson")
+            operator fun invoke(env: ParsingEnvironment, json: JSONObject): Nested {
+                val logger = env.logger
+                return Nested(
+                    int = JsonParser.readOptionalExpression(json, "int", NUMBER_TO_INT, INT_VALIDATOR, logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE,
+                    nonOptional = JsonParser.readExpression(json, "non_optional", logger, env, TYPE_HELPER_STRING),
+                    url = JsonParser.readOptionalExpression(json, "url", STRING_TO_URI, URL_VALIDATOR, logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE
+                )
+            }
+
+            private val INT_TEMPLATE_VALIDATOR = ValueValidator<Int> { it: Int -> it >= 0 }
+            private val INT_VALIDATOR = ValueValidator<Int> { it: Int -> it >= 0 }
+            private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
+            private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
+
+            val CREATOR = { env: ParsingEnvironment, it: JSONObject -> Nested(env, json = it) }
+        }
+
+    }
+}

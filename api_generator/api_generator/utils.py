@@ -6,12 +6,10 @@ import json
 
 
 def __camel_case_components(string: str) -> List[str]:
-    def is_upper_letter(letter: str) -> bool:
-        return 'A' <= letter <= 'Z'
     result: List[str] = []
     start_component_pos = 0
     for current_pos, char in enumerate(string):
-        if is_upper_letter(char):
+        if char.isupper():
             if start_component_pos != current_pos:
                 result.append(string[start_component_pos:current_pos])
                 start_component_pos = current_pos
@@ -35,6 +33,10 @@ def lower_camel_case(string: str) -> str:
     if not components:
         return ''
     return ''.join([components[0].lower()] + list(map(lambda component: component.capitalize(), components[1::])))
+
+
+def constant_upper_case(string: str):
+    return '_'.join(map(lambda s: s.upper(), name_components(string)))
 
 
 def fixing_first_digit(string: str) -> str:
