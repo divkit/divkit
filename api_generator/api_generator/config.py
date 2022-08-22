@@ -10,11 +10,16 @@ class Platform(str, Enum):
     WEB = 'web'
 
 
+class DescriptionLanguage(str, Enum):
+    EN = 'en'
+    RU = 'ru'
+
+
 class GeneratedLanguage(str, Enum):
     SWIFT = 'swift'
     KOTLIN = 'kotlin'
     KOTLIN_DSL = 'kotlinDsl'
-    TYPES_SCRIPT = 'typescript'
+    TYPE_SCRIPT = 'typescript'
     PYTHON = 'python'
     DOCUMENTATION = 'documentation'
 

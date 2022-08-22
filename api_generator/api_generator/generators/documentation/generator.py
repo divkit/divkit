@@ -11,10 +11,9 @@ from .documentation_entities import (
 from .translations import translations
 from .utils import bold, code, paragraph
 from ..base import Generator
-from ...config import Config, Platform
+from ...config import Config, Platform, DescriptionLanguage
 from ...schema.modeling.entities import (
     Declarable,
-    DescriptionLanguage,
     Entity,
     EntityEnumeration,
     StringEnumeration,
@@ -27,14 +26,14 @@ class DocumentationGenerator(Generator):
 
     def __init__(self, config: Config) -> None:
         super().__init__(config)
-        self.__lang = ''
+        self.__lang = DescriptionLanguage.EN
         self.__translations = {}
 
     def generate(self, objects: List[Declarable]):
         self._clear_output_directory()
         objects_doc: List[DocumentationDeclarable] = list(map(lambda obj: update_declarable_base(obj), objects))
         for lang in DescriptionLanguage:
-            self.__lang = lang.lower()
+            self.__lang = lang
             self._output_path = self._config.output_path + '/' + lang
             self.__translations = translations(lang)
             Path(self._output_path).mkdir(parents=True, exist_ok=True)

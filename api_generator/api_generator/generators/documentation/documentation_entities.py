@@ -25,13 +25,6 @@ from ...schema.modeling.entities import (
 from ...schema.modeling.text import Text
 
 
-def description_doc(description_translations: Dict[str, str], lang: str, description: str) -> str:
-    try:
-        return description_translations[lang]
-    except KeyError:
-        return description
-
-
 class DocumentationPropertyType(PropertyType):
 
     @property
@@ -54,9 +47,6 @@ class DocumentationProperty(Property):
 
     def update_base(self):
         update_property_type_base(self.property_type)
-
-    def description_doc(self, lang: str) -> str:
-        return description_doc(self.description_translations, lang, self.description)
 
     @property
     def property_type_doc(self) -> DocumentationPropertyType:
@@ -137,9 +127,6 @@ class DocumentationEntity(Entity, DocumentationDeclarable):
     @property
     def display_name(self) -> str:
         return self._display_name
-
-    def description_doc(self, lang: str) -> str:
-        return description_doc(self._description_object, lang, self._description)
 
     @property
     def is_deprecated(self) -> bool:

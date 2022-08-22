@@ -34,6 +34,10 @@ from .entities import (
 from .errors import InvalidFieldRepresentationError, UnsupportedFormatTypeError
 
 
+def __generate_templates(config: Config.GenerationConfig) -> bool:
+    return config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.KOTLIN]
+
+
 def __resolve_string_field(name: str,
                            mode: GenerationMode,
                            config: Config.GenerationConfig,
@@ -113,8 +117,10 @@ def _entity_enumeration_build(entities: List[Dict[str, any]],
 
         if isinstance(property_type, StaticString):
             raise InvalidFieldRepresentationError(entity_location, entity)
-
-        property_types.append(typename)
+        elif isinstance(property_type, Object):
+            property_types.append(property_type.name)
+        else:
+            property_types.append(typename)
         resulting_declarations.extend(declarations)
 
     return [cast(Declarable, EntityEnumeration(name=name,
@@ -146,7 +152,9 @@ def entity_enumeration_build(entities: List[Dict[str, any]],
                                          config=config)
 
     normal_result: List[Declarable] = make_result(GenerationMode(GenerationMode.NORMAL_WITH_TEMPLATES))
-    template_result: List[Declarable] = make_result(GenerationMode(GenerationMode.TEMPLATE))
+    template_result: List[Declarable] = []
+    if __generate_templates(config):
+        template_result += make_result(GenerationMode(GenerationMode.TEMPLATE))
     return normal_result + template_result
 
 
@@ -162,12 +170,8 @@ def entity_build(name: str,
                       config=config)
 
     normal: Entity = make_result(mode=GenerationMode.NORMAL_WITH_TEMPLATES)
-    if not normal.generate_as_protocol:
-        if config.lang is GeneratedLanguage.DOCUMENTATION:
-            return [normal]
-        if config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.KOTLIN]:
-            return [normal, make_result(mode=GenerationMode.TEMPLATE)]
-        raise NotImplementedError(f'Templates are not supported for {config.lang.value}')
+    if not normal.generate_as_protocol and __generate_templates(config):
+        return [normal, make_result(mode=GenerationMode.TEMPLATE)]
     return [normal]
 
 

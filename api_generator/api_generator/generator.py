@@ -1,7 +1,7 @@
 from .config import Config, GeneratedLanguage
 from .schema.preprocessing import schema_preprocessing
 from .schema.modeling import build_objects
-from .generators import Generator, SwiftGenerator, KotlinGenerator, DocumentationGenerator
+from .generators import Generator, SwiftGenerator, KotlinGenerator, DocumentationGenerator, TypeScriptGenerator
 
 
 def __build_generator(config: Config) -> Generator:
@@ -10,6 +10,7 @@ def __build_generator(config: Config) -> Generator:
         GeneratedLanguage.SWIFT: SwiftGenerator,
         GeneratedLanguage.KOTLIN: KotlinGenerator,
         GeneratedLanguage.DOCUMENTATION: DocumentationGenerator,
+        GeneratedLanguage.TYPE_SCRIPT: TypeScriptGenerator,
     }
     generator = generator_dict.get(lang, None)
     if generator is None:

@@ -10,11 +10,12 @@ import re
 from ..utils import is_dict_with_keys_of_type, is_list_of_type
 from .utils import (
     alias,
-    fixing_reserved_typename
+    fixing_reserved_typename,
+    description_doc
 )
 from ...utils import capitalize_camel_case
 
-from ...config import Config, GeneratedLanguage, GenerationMode, Platform, TEMPLATE_SUFFIX
+from ...config import Config, GeneratedLanguage, GenerationMode, Platform, TEMPLATE_SUFFIX, DescriptionLanguage
 from ..preprocessing.entities import ElementLocation
 from ..preprocessing.errors import UnresolvedReferenceError
 from .errors import GenericError, InvalidFieldRepresentationError
@@ -100,7 +101,7 @@ def _super_entities(config: Config.GenerationConfig, dictionary: Dict[str, any])
         super_entities_key = 'swift_protocols'
     elif config.lang in [GeneratedLanguage.KOTLIN, GeneratedLanguage.KOTLIN_DSL]:
         super_entities_key = 'kotlin_interfaces'
-    elif config.lang is GeneratedLanguage.TYPES_SCRIPT:
+    elif config.lang is GeneratedLanguage.TYPE_SCRIPT:
         super_entities_key = 'typescript_interfaces'
     elif config.lang is GeneratedLanguage.PYTHON:
         super_entities_key = 'python_classes'
@@ -293,6 +294,9 @@ class Entity(Declarable):
         if prop is not None:
             return cast(StaticString, prop.property_type).value
         return None
+
+    def description_doc(self, lang: DescriptionLanguage = DescriptionLanguage.EN) -> str:
+        return description_doc(self._description_object, lang, self._description)
 
     def __resolve_declaration_with_objects(self,
                                            property_type: PropertyType,
@@ -507,6 +511,10 @@ class EntityEnumeration(Declarable):
                 return capitalize_camel_case(interface.name)
         return None
 
+    @property
+    def generate_case_for_templates(self) -> bool:
+        return self._generate_case_for_templates
+
 
 class StringEnumeration(Declarable):
     def __init__(self,
@@ -570,7 +578,7 @@ def default_value(lang: GeneratedLanguage,
         specific_prefix = 'kotlin_'
     elif lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.DOCUMENTATION]:
         specific_prefix = 'ios_'
-    elif lang is GeneratedLanguage.TYPES_SCRIPT:
+    elif lang is GeneratedLanguage.TYPE_SCRIPT:
         specific_prefix = 'typescript_'
     elif lang is GeneratedLanguage.PYTHON:
         specific_prefix = 'python_'
@@ -733,7 +741,5 @@ class Property:
             'property_type': self.property_type.as_json
         }
 
-
-class DescriptionLanguage(str, Enum):
-    EN = 'en'
-    RU = 'ru'
+    def description_doc(self, lang: DescriptionLanguage = DescriptionLanguage.EN) -> str:
+        return description_doc(self.description_translations, lang, self.description)

@@ -1,4 +1,5 @@
 from typing import Dict
+from ...config import DescriptionLanguage
 
 __full_translations: Dict[str, Dict[str, str]] = {
     "div_generator_entity_enumeration": {
@@ -120,8 +121,9 @@ __full_translations: Dict[str, Dict[str, str]] = {
 }
 
 
-def translations(lang: str) -> Dict[str, str]:
+def translations(lang: DescriptionLanguage) -> Dict[str, str]:
     result = dict()
+    lang_value = lang.value
     for key, values in __full_translations.items():
-        result[key] = values[lang]
+        result[key] = values[lang_value]
     return result
