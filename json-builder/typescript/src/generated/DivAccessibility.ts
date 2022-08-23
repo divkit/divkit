@@ -5,35 +5,35 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Доступность для людей с ограниченными возможностями.
+ * Accessibility for disabled people.
  */
 export interface IDivAccessibility {
     /**
-     * Описание элемента. Используется в качестве основного описания для программ экранного чтения.
+     * Element description. It is used as the main description for screen reading applications.
      */
     description?: Type<string> | DivExpression;
     /**
-     * Подсказка, что произойдет при взаимодействии. Если на iOS в настройках VoiceOver включен Speak
-     * Hints, то подсказка воспроизводится после `description`.
+     * A tooltip of what will happen during interaction. If Speak Hints is enabled in the VoiceOver
+     * settings on iOS, a tooltip is played after `description`.
      */
     hint?: Type<string> | DivExpression;
     /**
-     * Способ организации дерева accessibility. В режиме `merge` accessibility-сервис воспринимает
-     * элемент вместе с поддеревом как одно целое. В режиме `exclude` элемент вместе с поддеревом
-     * недоступен для accessibility.
+     * The way the accessibility tree is organized. In the `merge` mode the accessibility service
+     * perceives an element together with a subtree as a whole. In the `exclude` mode an element
+     * together with a subtree isn't available for accessibility.
      */
     mode?: Type<DivAccessibilityMode> | DivExpression;
     /**
-     * Заглушает звук чтения экрана после взаимодействия с элементом.
+     * Mutes the sound of the screen reader after interacting with the element.
      */
     mute_after_action?: Type<IntBoolean> | DivExpression;
     /**
-     * Описание текущего состояния элемента. Например, в описании можно указать выбранную дату для
-     * элемента выбора даты, а для переключателя — состояние включен/выключен.
+     * Description of the current state of an element. For example, in the description you can
+     * specify a selected date for a date selection element and an on/off state for a switch.
      */
     state_description?: Type<string> | DivExpression;
     /**
-     * Роль элемента. Используется для правильной идентификации элемента accessibility-сервисом.
+     * Element role. It is used for correct identification of an element by an accessibility service.
      */
     type?: Type<DivAccessibilityType>;
 }
@@ -51,4 +51,3 @@ export type DivAccessibilityType =
     | 'edit_text'
     | 'header'
     | 'tab_bar';
-

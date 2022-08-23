@@ -27,228 +27,235 @@ import {
     IDivExtension,
     IDivFocus,
     IDivTooltip,
+    IDivTransform,
     IDivVisibilityAction,
 } from './';
 
 /**
- * Текст.
+ * Text.
  */
 export class DivText<T extends DivTextProps = DivTextProps> {
     readonly _props?: Exact<DivTextProps, T>;
 
     readonly type = 'text';
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`.
+     * One action when clicking on an element. Not used if the `actions` parameter is set.
      */
     action?: Type<IDivAction>;
     /**
-     * Анимация действия. Поддерживаются `fade`, `scale` и `set`.
+     * Action animation. `Fade`, `scale`, and `set` are supported.
      */
     action_animation?: Type<IDivAnimation>;
     /**
-     * Несколько действий при нажатии на элемент.
+     * Multiple actions when clicking on an element.
      */
     actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Автоматическая обрезка текста под размер контейнера.
+     * Automatic text cropping to fit the container size.
      */
     auto_ellipsize?: Type<IntBoolean> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Действие при двойном нажатии на элемент.
+     * Action when double-clicking on an element.
      */
     doubletap_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Маркер обрезки текста. Отображается, когда размер текста превышает ограничение по количеству
-     * строк.
+     * Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
      */
     ellipsis?: Type<IDivTextEllipsis>;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Цвет текста при фокусировке на элементе.
+     * Text color when focusing on the element.
      */
     focused_text_color?: Type<string> | DivExpression;
     /**
-     * Семейство шрифтов
+     * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
+     * size.
      */
     font_family?: Type<DivFontFamily> | DivExpression;
     /**
-     * Размер шрифта.
+     * Font size.
      */
     font_size?: Type<number> | DivExpression;
     font_size_unit?: Type<DivSizeUnit> | DivExpression;
     /**
-     * Начертание.
+     * Style.
      */
     font_weight?: Type<DivFontWeight> | DivExpression;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Изображения, встроенные в текст.
+     * Images embedded in text.
      */
     images?: Type<NonEmptyArray<IDivTextImage>>;
     /**
-     * Интервал между символами.
+     * Spacing between characters.
      */
     letter_spacing?: Type<number> | DivExpression;
     /**
-     * Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта.
+     * Line spacing of the text range. The count is taken from the font baseline.
      */
     line_height?: Type<number> | DivExpression;
     /**
-     * Действие при долгом нажатии на элемент.
+     * Action when long-clicking on an element.
      */
     longtap_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Максимальное количество строк, которые не будут обрезаны при выходе за ограничения.
+     * Maximum number of lines not to be cropped when breaking the limits.
      */
     max_lines?: Type<number> | DivExpression;
     /**
-     * Минимальное число обрезанных строк при выходе за ограничения.
+     * Minimum number of cropped lines when breaking the limits.
      */
     min_hidden_lines?: Type<number> | DivExpression;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Диапазон символов, в котором можно установить дополнительные параметры стиля. Определяется
-     * обязательными полями `start` и `end`.
+     * A character range in which additional style parameters can be set. Defined by mandatory
+     * `start` and `end` fields.
      */
     ranges?: Type<NonEmptyArray<IDivTextRange>>;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Выделение и копирование текста.
+     * Selecting and copying text.
      */
     selectable?: Type<IntBoolean> | DivExpression;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Зачеркивание.
+     * Strikethrough.
      */
     strike?: Type<DivLineStyle> | DivExpression;
     /**
-     * Текст.
+     * Text.
      */
     text: Type<string> | DivExpression;
     /**
-     * Горизонтальное выравнивание текста.
+     * Horizontal text alignment.
      */
     text_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание текста.
+     * Vertical text alignment.
      */
     text_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Цвет текста. Не используется, если задан параметр `text_gradient`.
+     * Text color. Not used if the `text_gradient` parameter is set.
      */
     text_color?: Type<string> | DivExpression;
     /**
-     * Градиентный цвет текста.
+     * Gradient text color.
      */
     text_gradient?: Type<DivGradientBackground>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Способ обрезания текста. Вместо него используйте `ellipsis`.
+     * Text cropping method. Use `ellipsis` instead.
      *
      * @deprecated
      */
     truncate?: Type<DivTextTruncate> | DivExpression;
     /**
-     * Подчеркивание.
+     * Underline.
      */
     underline?: Type<DivLineStyle> | DivExpression;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 
@@ -294,6 +301,7 @@ export class DivText<T extends DivTextProps = DivTextProps> {
         this.text_color = props.text_color;
         this.text_gradient = props.text_gradient;
         this.tooltips = props.tooltips;
+        this.transform = props.transform;
         this.transition_change = props.transition_change;
         this.transition_in = props.transition_in;
         this.transition_out = props.transition_out;
@@ -309,217 +317,223 @@ export class DivText<T extends DivTextProps = DivTextProps> {
 
 interface DivTextProps {
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`.
+     * One action when clicking on an element. Not used if the `actions` parameter is set.
      */
     action?: Type<IDivAction>;
     /**
-     * Анимация действия. Поддерживаются `fade`, `scale` и `set`.
+     * Action animation. `Fade`, `scale`, and `set` are supported.
      */
     action_animation?: Type<IDivAnimation>;
     /**
-     * Несколько действий при нажатии на элемент.
+     * Multiple actions when clicking on an element.
      */
     actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Автоматическая обрезка текста под размер контейнера.
+     * Automatic text cropping to fit the container size.
      */
     auto_ellipsize?: Type<IntBoolean> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Действие при двойном нажатии на элемент.
+     * Action when double-clicking on an element.
      */
     doubletap_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Маркер обрезки текста. Отображается, когда размер текста превышает ограничение по количеству
-     * строк.
+     * Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
      */
     ellipsis?: Type<IDivTextEllipsis>;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Цвет текста при фокусировке на элементе.
+     * Text color when focusing on the element.
      */
     focused_text_color?: Type<string> | DivExpression;
     /**
-     * Семейство шрифтов
+     * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
+     * size.
      */
     font_family?: Type<DivFontFamily> | DivExpression;
     /**
-     * Размер шрифта.
+     * Font size.
      */
     font_size?: Type<number> | DivExpression;
     font_size_unit?: Type<DivSizeUnit> | DivExpression;
     /**
-     * Начертание.
+     * Style.
      */
     font_weight?: Type<DivFontWeight> | DivExpression;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Изображения, встроенные в текст.
+     * Images embedded in text.
      */
     images?: Type<NonEmptyArray<IDivTextImage>>;
     /**
-     * Интервал между символами.
+     * Spacing between characters.
      */
     letter_spacing?: Type<number> | DivExpression;
     /**
-     * Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта.
+     * Line spacing of the text range. The count is taken from the font baseline.
      */
     line_height?: Type<number> | DivExpression;
     /**
-     * Действие при долгом нажатии на элемент.
+     * Action when long-clicking on an element.
      */
     longtap_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Максимальное количество строк, которые не будут обрезаны при выходе за ограничения.
+     * Maximum number of lines not to be cropped when breaking the limits.
      */
     max_lines?: Type<number> | DivExpression;
     /**
-     * Минимальное число обрезанных строк при выходе за ограничения.
+     * Minimum number of cropped lines when breaking the limits.
      */
     min_hidden_lines?: Type<number> | DivExpression;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Диапазон символов, в котором можно установить дополнительные параметры стиля. Определяется
-     * обязательными полями `start` и `end`.
+     * A character range in which additional style parameters can be set. Defined by mandatory
+     * `start` and `end` fields.
      */
     ranges?: Type<NonEmptyArray<IDivTextRange>>;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Выделение и копирование текста.
+     * Selecting and copying text.
      */
     selectable?: Type<IntBoolean> | DivExpression;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Зачеркивание.
+     * Strikethrough.
      */
     strike?: Type<DivLineStyle> | DivExpression;
     /**
-     * Текст.
+     * Text.
      */
     text: Type<string> | DivExpression;
     /**
-     * Горизонтальное выравнивание текста.
+     * Horizontal text alignment.
      */
     text_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание текста.
+     * Vertical text alignment.
      */
     text_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Цвет текста. Не используется, если задан параметр `text_gradient`.
+     * Text color. Not used if the `text_gradient` parameter is set.
      */
     text_color?: Type<string> | DivExpression;
     /**
-     * Градиентный цвет текста.
+     * Gradient text color.
      */
     text_gradient?: Type<DivGradientBackground>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Способ обрезания текста. Вместо него используйте `ellipsis`.
+     * Text cropping method. Use `ellipsis` instead.
      *
      * @deprecated
      */
     truncate?: Type<DivTextTruncate> | DivExpression;
     /**
-     * Подчеркивание.
+     * Underline.
      */
     underline?: Type<DivLineStyle> | DivExpression;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 }
@@ -531,113 +545,113 @@ export type DivTextTruncate =
     | 'middle';
 
 /**
- * Маркер обрезки текста. Отображается, когда размер текста превышает ограничение по количеству
- * строк.
+ * Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
  */
 export interface IDivTextEllipsis {
     /**
-     * Действия при нажатии на маркер обрезки.
+     * Actions when clicking on a crop marker.
      */
     actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Изображения, встроенные в маркер обрезки.
+     * Images embedded in a crop marker.
      */
     images?: Type<NonEmptyArray<IDivTextImage>>;
     /**
-     * Диапазоны символов внутри маркера обрезки с различными стилями текста.
+     * Character ranges inside a crop marker with different text styles.
      */
     ranges?: Type<NonEmptyArray<IDivTextRange>>;
     /**
-     * Текст маркера.
+     * Marker text.
      */
     text: Type<string> | DivExpression;
 }
 
 /**
- * Изображение.
+ * Image.
  */
 export interface IDivTextImage {
     /**
-     * Высота изображения.
+     * Image height.
      */
     height?: Type<DivFixedSize>;
     /**
-     * Символ, перед которым нужно вставить изображение. Чтобы вставить изображение в конец текста,
-     * укажите номер последнего символа плюс один.
+     * A symbol to insert prior to an image. To insert an image at the end of the text, specify the
+     * number of the last character plus one.
      */
     start: Type<number> | DivExpression;
     /**
-     * Новый цвет контурного изображения.
+     * New color of a contour image.
      */
     tint_color?: Type<string> | DivExpression;
     /**
-     * Ссылка на изображение.
+     * Image URL.
      */
     url: Type<string> | DivExpression;
     /**
-     * Ширина изображения.
+     * Image width.
      */
     width?: Type<DivFixedSize>;
 }
 
 /**
- * Дополнительные параметры диапазона символов.
+ * Additional parameters of the character range.
  */
 export interface IDivTextRange {
     /**
-     * Действие при нажатии на текст.
+     * Action when clicking on text.
      */
     actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Порядковый номер последнего символа, который будет включен в диапазон.
+     * Ordinal number of the last character to be included in the range.
      */
     end: Type<number> | DivExpression;
     /**
-     * Семейство шрифтов
+     * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
+     * size.
      */
     font_family?: Type<DivFontFamily> | DivExpression;
     /**
-     * Размер шрифта.
+     * Font size.
      */
     font_size?: Type<number> | DivExpression;
     /**
-     * Единица измерения:`px` — физический пиксель.`dp` — логический пиксель, который не зависит от
-     * плотности экрана.`sp` — логический пиксель, который зависит от размера шрифта на устройстве.
-     * Указывайте в `sp` высоту.
+     * Unit of measurement:`px` — a physical pixel.`dp` — a logical pixel that doesn't depend on
+     * screen density.`sp` — a logical pixel that depends on the font size on a device. Specify
+     * height in `sp`. Only available on Android.
      */
     font_size_unit?: Type<DivSizeUnit> | DivExpression;
     /**
-     * Начертание.
+     * Style.
      */
     font_weight?: Type<DivFontWeight> | DivExpression;
     /**
-     * Расстояние между символами.
+     * Spacing between characters.
      */
     letter_spacing?: Type<number> | DivExpression;
     /**
-     * Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта.
-     * Измеряется в единицах, заданных в `font_size_unit`.
+     * Line spacing of the text range. The count is taken from the font baseline. Measured in units
+     * specified in `font_size_unit`.
      */
     line_height?: Type<number> | DivExpression;
     /**
-     * Порядковый номер символа, с которого начинается диапазон. Первый символ имеет номер `0`.
+     * Ordinal number of a character which the range begins from. The first character has a number
+     * `0`.
      */
     start: Type<number> | DivExpression;
     /**
-     * Зачеркивание.
+     * Strikethrough.
      */
     strike?: Type<DivLineStyle> | DivExpression;
     /**
-     * Цвет текста.
+     * Text color.
      */
     text_color?: Type<string> | DivExpression;
     /**
-     * Верхний отступ диапазона текста. Измеряется в единицах, заданных в `font_size_unit`.
+     * The top margin of the text range. Measured in units specified in `font_size_unit`.
      */
     top_offset?: Type<number> | DivExpression;
     /**
-     * Подчеркивание.
+     * Underline.
      */
     underline?: Type<DivLineStyle> | DivExpression;
 }
-

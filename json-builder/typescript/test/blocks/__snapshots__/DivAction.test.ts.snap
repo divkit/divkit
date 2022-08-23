@@ -11,21 +11,6 @@ exports[`DivAction tests should create block with action 1`] = `
 }
 `;
 
-exports[`DivAction tests should create block with action with hover 1`] = `
-{
-  "type": "text",
-  "action": {
-    "log_id": "id",
-    "url": "https://some.url",
-    "hover": {
-      "type": "background-color",
-      "color": "red"
-    }
-  },
-  "text": "Some text"
-}
-`;
-
 exports[`DivAction tests should create block with action with menu items 1`] = `
 {
   "type": "text",
@@ -85,10 +70,6 @@ exports[`DivAction tests should create card with templatesd action properties 1`
       "type": "text",
       "action": {
         "log_id": "id",
-        "hover": {
-          "type": "background-color",
-          "$color": "hover_background_color"
-        },
         "$url": "action_url"
       },
       "text": "Some text"
@@ -101,8 +82,7 @@ exports[`DivAction tests should create card with templatesd action properties 1`
         "state_id": 1,
         "div": {
           "type": "card",
-          "action_url": "https://some.url",
-          "hover_background_color": "red"
+          "action_url": "https://some.url"
         }
       }
     ]

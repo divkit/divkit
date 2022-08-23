@@ -5,51 +5,44 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 import {
-    DivHover,
     IDivDownloadCallbacks,
 } from './';
 
 /**
- * Определяет действие при нажатии на элемент.
+ * It defines an action when clicking on an element.
  */
 export interface IDivAction {
     /**
-     * Колбэки, которые вызываются после [дозагрузки данных](../../interaction.dita#loading-data).
+     * Callbacks that are called after [data loading](../../interaction.dita#loading-data).
      */
     download_callbacks?: Type<IDivDownloadCallbacks>;
     /**
-     * Действие при наведении на элемент.
-     *
-     * @deprecated
-     */
-    hover?: Type<DivHover>;
-    /**
-     * Идентификатор для логирования.
+     * Logging ID.
      */
     log_id: Type<string>;
     /**
-     * Ссылка для логирования.
+     * URL for logging.
      */
     log_url?: Type<string> | DivExpression;
     /**
-     * Контекстное меню.
+     * Context menu.
      */
     menu_items?: Type<NonEmptyArray<IDivActionMenuItem>>;
     /**
-     * Дополнительные параметры, передаются приложению-хосту.
+     * Additional parameters, passed to the host application.
      */
     payload?: Type<{}>;
     /**
-     * Referer-ссылка для логирования.
+     * Referer URL for logging.
      */
     referer?: Type<string> | DivExpression;
     /**
-     * Вкладка, в которой должна открыться ссылка.
+     * The tab in which the URL must be opened.
      */
     target?: Type<DivActionTarget> | DivExpression;
     /**
-     * Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с
-     * элементами](../../interaction.dita).
+     * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with
+     * elements](../../interaction.dita).
      */
     url?: Type<string> | DivExpression;
 }
@@ -58,21 +51,17 @@ export type DivActionTarget =
     | '_self'
     | '_blank';
 
-/**
- * Описания пока нет
- */
 export interface IDivActionMenuItem {
     /**
-     * Одно действие при нажатии на пункт меню. Не используется, если задан параметр `actions`.
+     * One action when clicking on a menu item. Not used if the `actions` parameter is set.
      */
     action?: Type<IDivAction>;
     /**
-     * Несколько действий при нажатии на пункт меню.
+     * Multiple actions when clicking on a menu item.
      */
     actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Заголовок пункта меню.
+     * Menu item title.
      */
     text: Type<string> | DivExpression;
 }
-

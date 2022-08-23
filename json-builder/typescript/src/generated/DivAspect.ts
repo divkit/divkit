@@ -5,8 +5,8 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Размер с фиксированным соотношением сторон. Считает высоту от ширины и игнорирует другие
- * заданные значения высоты.
+ * Size with a fixed aspect ratio. It counts height from width and ignores other specified height
+ * values.
  */
 export interface IDivAspect {
     /**

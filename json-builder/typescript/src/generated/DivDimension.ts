@@ -9,12 +9,12 @@ import {
 } from './';
 
 /**
- * Значение измерения элемента.
+ * Element dimension value.
  */
 export interface IDivDimension {
     unit?: Type<DivSizeUnit> | DivExpression;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<number> | DivExpression;
 }

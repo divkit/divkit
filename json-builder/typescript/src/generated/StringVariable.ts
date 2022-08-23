@@ -5,18 +5,18 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Строковая переменная.
+ * A string variable.
  */
 export class StringVariable<T extends StringVariableProps = StringVariableProps> {
     readonly _props?: Exact<StringVariableProps, T>;
 
     readonly type = 'string';
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<string>;
 
@@ -28,11 +28,11 @@ export class StringVariable<T extends StringVariableProps = StringVariableProps>
 
 interface StringVariableProps {
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<string>;
 }

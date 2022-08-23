@@ -9,22 +9,22 @@ import {
 } from './';
 
 /**
- * Анимация изменения положения и размеров элемента.
+ * Element position and size change animation.
  */
 export class DivChangeBoundsTransition<T extends DivChangeBoundsTransitionProps = DivChangeBoundsTransitionProps> {
     readonly _props?: Exact<DivChangeBoundsTransitionProps, T>;
 
     readonly type = 'change_bounds';
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 
@@ -37,15 +37,15 @@ export class DivChangeBoundsTransition<T extends DivChangeBoundsTransitionProps 
 
 interface DivChangeBoundsTransitionProps {
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 }

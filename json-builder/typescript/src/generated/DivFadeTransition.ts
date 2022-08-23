@@ -9,27 +9,27 @@ import {
 } from './';
 
 /**
- * Анимация прозрачности.
+ * Transparency animation.
  */
 export class DivFadeTransition<T extends DivFadeTransitionProps = DivFadeTransitionProps> {
     readonly _props?: Exact<DivFadeTransitionProps, T>;
 
     readonly type = 'fade';
     /**
-     * Значение альфа-канала, с которого начнется появление или на котором закончится исчезновение
-     * элемента.
+     * Value of the alpha channel which the element starts appearing from or at which it finishes
+     * disappearing.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 
@@ -43,20 +43,20 @@ export class DivFadeTransition<T extends DivFadeTransitionProps = DivFadeTransit
 
 interface DivFadeTransitionProps {
     /**
-     * Значение альфа-канала, с которого начнется появление или на котором закончится исчезновение
-     * элемента.
+     * Value of the alpha channel which the element starts appearing from or at which it finishes
+     * disappearing.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 }

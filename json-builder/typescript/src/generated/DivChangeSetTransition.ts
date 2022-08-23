@@ -9,14 +9,14 @@ import {
 } from './';
 
 /**
- * Анимации.
+ * Animations.
  */
 export class DivChangeSetTransition<T extends DivChangeSetTransitionProps = DivChangeSetTransitionProps> {
     readonly _props?: Exact<DivChangeSetTransitionProps, T>;
 
     readonly type = 'set';
     /**
-     * Список анимаций.
+     * List of animations.
      */
     items: Type<NonEmptyArray<DivChangeTransition>>;
 
@@ -27,7 +27,7 @@ export class DivChangeSetTransition<T extends DivChangeSetTransitionProps = DivC
 
 interface DivChangeSetTransitionProps {
     /**
-     * Список анимаций.
+     * List of animations.
      */
     items: Type<NonEmptyArray<DivChangeTransition>>;
 }

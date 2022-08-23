@@ -5,14 +5,14 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Сплошной цвет фона.
+ * Solid background color.
  */
 export class DivSolidBackground<T extends DivSolidBackgroundProps = DivSolidBackgroundProps> {
     readonly _props?: Exact<DivSolidBackgroundProps, T>;
 
     readonly type = 'solid';
     /**
-     * Цвет.
+     * Color.
      */
     color: Type<string> | DivExpression;
 
@@ -23,7 +23,7 @@ export class DivSolidBackground<T extends DivSolidBackgroundProps = DivSolidBack
 
 interface DivSolidBackgroundProps {
     /**
-     * Цвет.
+     * Color.
      */
     color: Type<string> | DivExpression;
 }

@@ -9,14 +9,14 @@ import {
 } from './';
 
 /**
- * Процентное значение ширины страницы.
+ * Percentage value of the page width.
  */
 export class DivPageSize<T extends DivPageSizeProps = DivPageSizeProps> {
     readonly _props?: Exact<DivPageSizeProps, T>;
 
     readonly type = 'percentage';
     /**
-     * Ширина страницы в процентах от ширины родительского элемента.
+     * Page width as a percentage of the parent element width.
      */
     page_width: Type<DivPercentageSize>;
 
@@ -27,7 +27,7 @@ export class DivPageSize<T extends DivPageSizeProps = DivPageSizeProps> {
 
 interface DivPageSizeProps {
     /**
-     * Ширина страницы в процентах от ширины родительского элемента.
+     * Page width as a percentage of the parent element width.
      */
     page_width: Type<DivPercentageSize>;
 }

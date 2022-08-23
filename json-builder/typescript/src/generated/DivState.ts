@@ -23,143 +23,149 @@ import {
     IDivExtension,
     IDivFocus,
     IDivTooltip,
+    IDivTransform,
     IDivVisibilityAction,
 } from './';
 
 /**
- * Содержит наборы состояний для визуальных элементов и переключается между ними.
+ * It contains sets of states for visual elements and switches between them.
  */
 export class DivState<T extends DivStateProps = DivStateProps> {
     readonly _props?: Exact<DivStateProps, T>;
 
     readonly type = 'state';
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Идентификатор состояния, которое будет выставлено по умолчанию. Если параметр не задан, то
-     * будет выставлено первое состояние из `states`.
+     * ID of the status that will be set by default. If the parameter isnt set, the first state of
+     * the `states` will be set.
      */
     default_state_id?: Type<string> | DivExpression;
     /**
-     * Идентификатор элемента. Параметр устарел, используйте `id`.
+     * ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
      *
      * @deprecated
      */
     div_id?: Type<string>;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Состояния. Каждый элемент может иметь несколько состояний с разной версткой. Переход между
-     * состояниями осуществляется с помощью [специальной схемы](../../interaction.dita) элемента
-     * [action](div-action.md).
+     * States. Each element can have a few states with a different layout. Transition between states
+     * is performed using [special scheme](../../interaction.dita) of the [action](div-action.md)
+     * element.
      */
     states: Type<NonEmptyArray<IDivStateState>>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Определяет, при каких событиях сработают анимации переходов. Вместо него используйте
-     * `transition_triggers`.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * It determines which events trigger transition animations.
      *
      * @deprecated
      */
     transition_animation_selector?: Type<DivTransitionSelector> | DivExpression;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 
@@ -183,6 +189,7 @@ export class DivState<T extends DivStateProps = DivStateProps> {
         this.selected_actions = props.selected_actions;
         this.states = props.states;
         this.tooltips = props.tooltips;
+        this.transform = props.transform;
         this.transition_animation_selector = props.transition_animation_selector;
         this.transition_change = props.transition_change;
         this.transition_in = props.transition_in;
@@ -197,165 +204,166 @@ export class DivState<T extends DivStateProps = DivStateProps> {
 
 interface DivStateProps {
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Идентификатор состояния, которое будет выставлено по умолчанию. Если параметр не задан, то
-     * будет выставлено первое состояние из `states`.
+     * ID of the status that will be set by default. If the parameter isnt set, the first state of
+     * the `states` will be set.
      */
     default_state_id?: Type<string> | DivExpression;
     /**
-     * Идентификатор элемента. Параметр устарел, используйте `id`.
+     * ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
      *
      * @deprecated
      */
     div_id?: Type<string>;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Состояния. Каждый элемент может иметь несколько состояний с разной версткой. Переход между
-     * состояниями осуществляется с помощью [специальной схемы](../../interaction.dita) элемента
-     * [action](div-action.md).
+     * States. Each element can have a few states with a different layout. Transition between states
+     * is performed using [special scheme](../../interaction.dita) of the [action](div-action.md)
+     * element.
      */
     states: Type<NonEmptyArray<IDivStateState>>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Определяет, при каких событиях сработают анимации переходов. Вместо него используйте
-     * `transition_triggers`.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * It determines which events trigger transition animations.
      *
      * @deprecated
      */
     transition_animation_selector?: Type<DivTransitionSelector> | DivExpression;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 }
 
-/**
- * Описания пока нет
- */
 export interface IDivStateState {
     /**
-     * Анимация появления состояния. Вместо него используйте `transition_in`.
+     * State appearance animation. Use `transition_in` instead.
      *
      * @deprecated
      */
     animation_in?: Type<IDivAnimation>;
     /**
-     * Анимация исчезания состояния. Вместо него используйте `transition_out`.
+     * State disappearance animation. Use `transition_out` instead.
      *
      * @deprecated
      */
     animation_out?: Type<IDivAnimation>;
     /**
-     * Содержимое. Если параметр отсутствует, то состояние не будет отображаться.
+     * Contents. If the parameter is missing, the state won't be displayed.
      */
     div?: Type<Div>;
     /**
-     * Идентификатор состояния. Должен быть уникальным на одном уровне иерархии.
+     * State ID. It must be unique at one hierarchy level.
      */
     state_id: Type<string>;
     /**
-     * Действия при смахивании состояния по горизонтали.
+     * Actions when swiping the state horizontally.
      *
      * @deprecated
      */
     swipe_out_actions?: Type<NonEmptyArray<IDivAction>>;
 }
-

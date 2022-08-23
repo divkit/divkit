@@ -9,14 +9,14 @@ import {
 } from './';
 
 /**
- * Набор анимаций, которые будут применяться одновременно.
+ * A set of animations to be applied simultaneously.
  */
 export class DivAppearanceSetTransition<T extends DivAppearanceSetTransitionProps = DivAppearanceSetTransitionProps> {
     readonly _props?: Exact<DivAppearanceSetTransitionProps, T>;
 
     readonly type = 'set';
     /**
-     * Массив анимаций.
+     * An array of animations.
      */
     items: Type<NonEmptyArray<DivAppearanceTransition>>;
 
@@ -27,7 +27,7 @@ export class DivAppearanceSetTransition<T extends DivAppearanceSetTransitionProp
 
 interface DivAppearanceSetTransitionProps {
     /**
-     * Массив анимаций.
+     * An array of animations.
      */
     items: Type<NonEmptyArray<DivAppearanceTransition>>;
 }

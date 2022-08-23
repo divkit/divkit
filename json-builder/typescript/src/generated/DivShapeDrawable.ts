@@ -10,22 +10,22 @@ import {
 } from './';
 
 /**
- * Drawable простой геометрической формы.
+ * Drawable of a simple geometric shape.
  */
 export class DivShapeDrawable<T extends DivShapeDrawableProps = DivShapeDrawableProps> {
     readonly _props?: Exact<DivShapeDrawableProps, T>;
 
     readonly type = 'shape_drawable';
     /**
-     * Цвет заливки.
+     * Fill color.
      */
     color: Type<string> | DivExpression;
     /**
-     * Форма.
+     * Form.
      */
     shape: Type<DivShape>;
     /**
-     * Стиль контура.
+     * Stroke style.
      */
     stroke?: Type<IDivStroke>;
 
@@ -38,15 +38,15 @@ export class DivShapeDrawable<T extends DivShapeDrawableProps = DivShapeDrawable
 
 interface DivShapeDrawableProps {
     /**
-     * Цвет заливки.
+     * Fill color.
      */
     color: Type<string> | DivExpression;
     /**
-     * Форма.
+     * Form.
      */
     shape: Type<DivShape>;
     /**
-     * Стиль контура.
+     * Stroke style.
      */
     stroke?: Type<IDivStroke>;
 }

@@ -5,8 +5,10 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 import {
-    DivHoverBackgroundColor,
+    DivPivotFixed,
+    DivPivotPercentage,
 } from './';
 
-export type DivHover =
-    | DivHoverBackgroundColor;
+export type DivPivot =
+    | DivPivotFixed
+    | DivPivotPercentage;

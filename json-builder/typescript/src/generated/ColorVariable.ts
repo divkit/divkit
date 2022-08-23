@@ -5,18 +5,18 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Переменная — цвет в формате HEX, представленный в виде строки.
+ * Variable — HEX color as a string.
  */
 export class ColorVariable<T extends ColorVariableProps = ColorVariableProps> {
     readonly _props?: Exact<ColorVariableProps, T>;
 
     readonly type = 'color';
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<string>;
 
@@ -28,11 +28,11 @@ export class ColorVariable<T extends ColorVariableProps = ColorVariableProps> {
 
 interface ColorVariableProps {
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<string>;
 }

@@ -5,14 +5,14 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Процентное значение размера элемента.
+ * Percentage value of the element size.
  */
 export class DivPercentageSize<T extends DivPercentageSizeProps = DivPercentageSizeProps> {
     readonly _props?: Exact<DivPercentageSizeProps, T>;
 
     readonly type = 'percentage';
     /**
-     * Значение размера элемента.
+     * Element size value.
      */
     value: Type<number> | DivExpression;
 
@@ -23,7 +23,7 @@ export class DivPercentageSize<T extends DivPercentageSizeProps = DivPercentageS
 
 interface DivPercentageSizeProps {
     /**
-     * Значение размера элемента.
+     * Element size value.
      */
     value: Type<number> | DivExpression;
 }

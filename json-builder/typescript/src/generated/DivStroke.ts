@@ -9,16 +9,16 @@ import {
 } from './';
 
 /**
- * Рамка.
+ * Stroke.
  */
 export interface IDivStroke {
     /**
-     * Цвет рамки.
+     * Stroke color.
      */
     color: Type<string> | DivExpression;
     unit?: Type<DivSizeUnit> | DivExpression;
     /**
-     * Толщина рамки.
+     * Stroke width.
      */
     width?: Type<number> | DivExpression;
 }

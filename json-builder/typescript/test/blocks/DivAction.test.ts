@@ -1,4 +1,4 @@
-import { divCard, DivHoverBackgroundColor, DivText, IDivData, reference, rewriteRefs, templateHelper } from '../../src';
+import { divCard, DivText, IDivData, reference, rewriteRefs, templateHelper } from '../../src';
 
 describe('DivAction tests', (): void => {
     it('should create block with action', (): void => {
@@ -68,21 +68,6 @@ describe('DivAction tests', (): void => {
         expect(block).toMatchSnapshot();
     });
 
-    it('should create block with action with hover', (): void => {
-        const block = new DivText({
-            text: 'Some text',
-            action: {
-                log_id: 'id',
-                url: 'https://some.url',
-                hover: new DivHoverBackgroundColor({
-                    color: 'red',
-                }),
-            },
-        });
-
-        expect(block).toMatchSnapshot();
-    });
-
     it('should create card with templatesd action properties', (): void => {
         const templates = {
             card: new DivText({
@@ -90,9 +75,6 @@ describe('DivAction tests', (): void => {
                 action: {
                     log_id: 'id',
                     url: reference('action_url'),
-                    hover: new DivHoverBackgroundColor({
-                        color: reference('hover_background_color'),
-                    }),
                 },
             }),
         };
@@ -104,7 +86,6 @@ describe('DivAction tests', (): void => {
                     state_id: 1,
                     div: templateHelper(templates).card({
                         action_url: 'https://some.url',
-                        hover_background_color: 'red',
                     }),
                 },
             ],

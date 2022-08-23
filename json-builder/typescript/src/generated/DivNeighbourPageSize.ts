@@ -9,14 +9,14 @@ import {
 } from './';
 
 /**
- * Фиксированное значение ширины видимой части соседней страницы.
+ * Fixed width value of the visible part of a neighbouring page.
  */
 export class DivNeighbourPageSize<T extends DivNeighbourPageSizeProps = DivNeighbourPageSizeProps> {
     readonly _props?: Exact<DivNeighbourPageSizeProps, T>;
 
     readonly type = 'fixed';
     /**
-     * Ширина видимой части соседней страницы.
+     * Width of the visible part of a neighbouring page.
      */
     neighbour_page_width: Type<DivFixedSize>;
 
@@ -27,7 +27,7 @@ export class DivNeighbourPageSize<T extends DivNeighbourPageSizeProps = DivNeigh
 
 interface DivNeighbourPageSizeProps {
     /**
-     * Ширина видимой части соседней страницы.
+     * Width of the visible part of a neighbouring page.
      */
     neighbour_page_width: Type<DivFixedSize>;
 }

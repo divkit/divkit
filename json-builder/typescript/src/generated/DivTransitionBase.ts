@@ -8,20 +8,17 @@ import {
     DivAnimationInterpolator,
 } from './';
 
-/**
- * Описания пока нет
- */
 export interface IDivTransitionBase {
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 }

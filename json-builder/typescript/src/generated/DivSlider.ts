@@ -24,171 +24,178 @@ import {
     IDivFocus,
     IDivPoint,
     IDivTooltip,
+    IDivTransform,
     IDivVisibilityAction,
 } from './';
 
 /**
- * Слайдер для выбора значения в диапазоне.
+ * Slider for selecting a value in the range.
  */
 export class DivSlider<T extends DivSliderProps = DivSliderProps> {
     readonly _props?: Exact<DivSliderProps, T>;
 
     readonly type = 'slider';
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Максимальное значение. Должно быть больше минимального.
+     * Maximum value. It must be greater than the minimum value.
      */
     max_value?: Type<number> | DivExpression;
     /**
-     * Минимальное значение.
+     * Minimum value.
      */
     min_value?: Type<number> | DivExpression;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Доступность для второго указателя.
+     * Accessibility for the secondary thumb.
      */
     secondary_value_accessibility?: Type<IDivAccessibility>;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Стиль второго указателя.
+     * Style of the second pointer.
      */
     thumb_secondary_style?: Type<DivDrawable>;
     /**
-     * Стиль текста во втором указателе.
+     * Text style in the second pointer.
      */
     thumb_secondary_text_style?: Type<IDivSliderTextStyle>;
     /**
-     * Название переменной для хранения текущего значения второго указателя.
+     * Name of the variable to store the current value of the secondary thumb.
      */
     thumb_secondary_value_variable?: Type<string>;
     /**
-     * Стиль первого указателя.
+     * Style of the first pointer.
      */
     thumb_style: Type<DivDrawable>;
     /**
-     * Стиль текста в первом указателе.
+     * Text style in the first pointer.
      */
     thumb_text_style?: Type<IDivSliderTextStyle>;
     /**
-     * Название переменной для хранения текущего значения указателя.
+     * Name of the variable to store the current thumb value.
      */
     thumb_value_variable?: Type<string>;
     /**
-     * Стиль активных засечек.
+     * Style of active serifs.
      */
     tick_mark_active_style?: Type<DivDrawable>;
     /**
-     * Стиль неактивных засечек.
+     * Style of inactive serifs.
      */
     tick_mark_inactive_style?: Type<DivDrawable>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Стиль активной части шкалы.
+     * Style of the active part of a scale.
      */
     track_active_style: Type<DivDrawable>;
     /**
-     * Стиль неактивной части шкалы.
+     * Style of the inactive part of a scale.
      */
     track_inactive_style: Type<DivDrawable>;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 
@@ -222,6 +229,7 @@ export class DivSlider<T extends DivSliderProps = DivSliderProps> {
         this.tooltips = props.tooltips;
         this.track_active_style = props.track_active_style;
         this.track_inactive_style = props.track_inactive_style;
+        this.transform = props.transform;
         this.transition_change = props.transition_change;
         this.transition_in = props.transition_in;
         this.transition_out = props.transition_out;
@@ -235,184 +243,186 @@ export class DivSlider<T extends DivSliderProps = DivSliderProps> {
 
 interface DivSliderProps {
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Максимальное значение. Должно быть больше минимального.
+     * Maximum value. It must be greater than the minimum value.
      */
     max_value?: Type<number> | DivExpression;
     /**
-     * Минимальное значение.
+     * Minimum value.
      */
     min_value?: Type<number> | DivExpression;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Доступность для второго указателя.
+     * Accessibility for the secondary thumb.
      */
     secondary_value_accessibility?: Type<IDivAccessibility>;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Стиль второго указателя.
+     * Style of the second pointer.
      */
     thumb_secondary_style?: Type<DivDrawable>;
     /**
-     * Стиль текста во втором указателе.
+     * Text style in the second pointer.
      */
     thumb_secondary_text_style?: Type<IDivSliderTextStyle>;
     /**
-     * Название переменной для хранения текущего значения второго указателя.
+     * Name of the variable to store the current value of the secondary thumb.
      */
     thumb_secondary_value_variable?: Type<string>;
     /**
-     * Стиль первого указателя.
+     * Style of the first pointer.
      */
     thumb_style: Type<DivDrawable>;
     /**
-     * Стиль текста в первом указателе.
+     * Text style in the first pointer.
      */
     thumb_text_style?: Type<IDivSliderTextStyle>;
     /**
-     * Название переменной для хранения текущего значения указателя.
+     * Name of the variable to store the current thumb value.
      */
     thumb_value_variable?: Type<string>;
     /**
-     * Стиль активных засечек.
+     * Style of active serifs.
      */
     tick_mark_active_style?: Type<DivDrawable>;
     /**
-     * Стиль неактивных засечек.
+     * Style of inactive serifs.
      */
     tick_mark_inactive_style?: Type<DivDrawable>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Стиль активной части шкалы.
+     * Style of the active part of a scale.
      */
     track_active_style: Type<DivDrawable>;
     /**
-     * Стиль неактивной части шкалы.
+     * Style of the inactive part of a scale.
      */
     track_inactive_style: Type<DivDrawable>;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 }
 
-/**
- * Описания пока нет
- */
 export interface IDivSliderTextStyle {
     /**
-     * Размер шрифта.
+     * Font size.
      */
     font_size: Type<number> | DivExpression;
     font_size_unit?: Type<DivSizeUnit> | DivExpression;
     /**
-     * Начертание.
+     * Style.
      */
     font_weight?: Type<DivFontWeight> | DivExpression;
     /**
-     * Сдвиг относительно центра.
+     * Shift relative to the center.
      */
     offset?: Type<IDivPoint>;
     /**
-     * Цвет текста.
+     * Text color.
      */
     text_color?: Type<string> | DivExpression;
 }
-

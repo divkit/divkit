@@ -5,18 +5,18 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Переменная — URL в виде строки.
+ * Variable — URL as a string.
  */
 export class UrlVariable<T extends UrlVariableProps = UrlVariableProps> {
     readonly _props?: Exact<UrlVariableProps, T>;
 
     readonly type = 'url';
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<string>;
 
@@ -28,11 +28,11 @@ export class UrlVariable<T extends UrlVariableProps = UrlVariableProps> {
 
 interface UrlVariableProps {
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<string>;
 }

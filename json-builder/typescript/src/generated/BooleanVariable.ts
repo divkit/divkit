@@ -5,18 +5,18 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Логическая переменная.
+ * A Boolean variable in binary format.
  */
 export class BooleanVariable<T extends BooleanVariableProps = BooleanVariableProps> {
     readonly _props?: Exact<BooleanVariableProps, T>;
 
     readonly type = 'boolean';
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<IntBoolean>;
 
@@ -28,11 +28,11 @@ export class BooleanVariable<T extends BooleanVariableProps = BooleanVariablePro
 
 interface BooleanVariableProps {
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<IntBoolean>;
 }

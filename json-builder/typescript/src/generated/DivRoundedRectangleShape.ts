@@ -9,22 +9,22 @@ import {
 } from './';
 
 /**
- * Прямоугольник со скругленными углами.
+ * A rectangle with rounded corners.
  */
 export class DivRoundedRectangleShape<T extends DivRoundedRectangleShapeProps = DivRoundedRectangleShapeProps> {
     readonly _props?: Exact<DivRoundedRectangleShapeProps, T>;
 
     readonly type = 'rounded_rectangle';
     /**
-     * Радиус скругления углов.
+     * Corner rounding radius.
      */
     corner_radius?: Type<DivFixedSize>;
     /**
-     * Высота.
+     * Height.
      */
     item_height?: Type<DivFixedSize>;
     /**
-     * Ширина.
+     * Width.
      */
     item_width?: Type<DivFixedSize>;
 
@@ -37,15 +37,15 @@ export class DivRoundedRectangleShape<T extends DivRoundedRectangleShapeProps = 
 
 interface DivRoundedRectangleShapeProps {
     /**
-     * Радиус скругления углов.
+     * Corner rounding radius.
      */
     corner_radius?: Type<DivFixedSize>;
     /**
-     * Высота.
+     * Height.
      */
     item_height?: Type<DivFixedSize>;
     /**
-     * Ширина.
+     * Width.
      */
     item_width?: Type<DivFixedSize>;
 }

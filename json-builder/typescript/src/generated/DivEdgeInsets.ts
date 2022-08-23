@@ -9,23 +9,23 @@ import {
 } from './';
 
 /**
- * Устанавливает отступы.
+ * It sets margins.
  */
 export interface IDivEdgeInsets {
     /**
-     * Нижний отступ.
+     * Bottom margin.
      */
     bottom?: Type<number> | DivExpression;
     /**
-     * Левый отступ.
+     * Left margin.
      */
     left?: Type<number> | DivExpression;
     /**
-     * Правый отступ.
+     * Right margin.
      */
     right?: Type<number> | DivExpression;
     /**
-     * Верхний отступ.
+     * Top margin.
      */
     top?: Type<number> | DivExpression;
     unit?: Type<DivSizeUnit> | DivExpression;

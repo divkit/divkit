@@ -9,19 +9,19 @@ import {
 } from './';
 
 /**
- * Фиксированный размер элемента.
+ * Fixed size of an element.
  */
 export class DivFixedSize<T extends DivFixedSizeProps = DivFixedSizeProps> {
     readonly _props?: Exact<DivFixedSizeProps, T>;
 
     readonly type = 'fixed';
     /**
-     * Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри
-     * карточки](../../layout.dita).
+     * Unit of measurement. To learn more about units of size measurement, see [Layout inside the
+     * card](../../layout.dita).
      */
     unit?: Type<DivSizeUnit> | DivExpression;
     /**
-     * Размер элемента.
+     * Element size.
      */
     value: Type<number> | DivExpression;
 
@@ -33,12 +33,12 @@ export class DivFixedSize<T extends DivFixedSizeProps = DivFixedSizeProps> {
 
 interface DivFixedSizeProps {
     /**
-     * Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри
-     * карточки](../../layout.dita).
+     * Unit of measurement. To learn more about units of size measurement, see [Layout inside the
+     * card](../../layout.dita).
      */
     unit?: Type<DivSizeUnit> | DivExpression;
     /**
-     * Размер элемента.
+     * Element size.
      */
     value: Type<number> | DivExpression;
 }

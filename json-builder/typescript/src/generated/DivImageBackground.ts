@@ -11,34 +11,34 @@ import {
 } from './';
 
 /**
- * Фоновое изображение.
+ * Background image.
  */
 export class DivImageBackground<T extends DivImageBackgroundProps = DivImageBackgroundProps> {
     readonly _props?: Exact<DivImageBackgroundProps, T>;
 
     readonly type = 'image';
     /**
-     * Прозрачность изображения.
+     * Image transparency.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Горизонтальное выравнивание изображения.
+     * Horizontal image alignment.
      */
     content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание изображения.
+     * Vertical image alignment.
      */
     content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Ссылка на изображение.
+     * Image URL.
      */
     image_url: Type<string> | DivExpression;
     /**
-     * До показа необходимо предварительно загрузить фоновое изображение.
+     * Background image must be loaded before the display.
      */
     preload_required?: Type<IntBoolean> | DivExpression;
     /**
-     * Масштабирование изображения.
+     * Image scaling.
      */
     scale?: Type<DivImageScale> | DivExpression;
 
@@ -54,27 +54,27 @@ export class DivImageBackground<T extends DivImageBackgroundProps = DivImageBack
 
 interface DivImageBackgroundProps {
     /**
-     * Прозрачность изображения.
+     * Image transparency.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Горизонтальное выравнивание изображения.
+     * Horizontal image alignment.
      */
     content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание изображения.
+     * Vertical image alignment.
      */
     content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Ссылка на изображение.
+     * Image URL.
      */
     image_url: Type<string> | DivExpression;
     /**
-     * До показа необходимо предварительно загрузить фоновое изображение.
+     * Background image must be loaded before the display.
      */
     preload_required?: Type<IntBoolean> | DivExpression;
     /**
-     * Масштабирование изображения.
+     * Image scaling.
      */
     scale?: Type<DivImageScale> | DivExpression;
 }

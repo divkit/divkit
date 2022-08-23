@@ -9,23 +9,23 @@ import {
 } from './';
 
 /**
- * Тень элемента.
+ * Element shadow.
  */
 export interface IDivShadow {
     /**
-     * Прозрачность тени.
+     * Shadow transparency.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Интенсивность размытия.
+     * Blur intensity.
      */
     blur?: Type<number> | DivExpression;
     /**
-     * Цвет тени.
+     * Shadow color.
      */
     color?: Type<string> | DivExpression;
     /**
-     * Смещение тени.
+     * Shadow offset.
      */
     offset: Type<IDivPoint>;
 }

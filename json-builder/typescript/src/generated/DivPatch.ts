@@ -9,17 +9,17 @@ import {
 } from './';
 
 /**
- * Редактирует элемент.
+ * Edits the element.
  */
 export interface IDivPatch {
     /**
-     * Изменения элементов.
+     * Element changes.
      */
     changes: Type<NonEmptyArray<IDivPatchChange>>;
     /**
-     * Порядок применения изменений:`transactional` — если во время применения хотя бы одного
-     * элемента произошла ошибка, то изменения не применяются.`partial` — применяются все возможные
-     * изменения. Если есть ошибки, то о них сообщается.
+     * Procedure for applying changes:`transactional` — if an error occurs during application of at
+     * least one element, the changes aren't applied.`partial` — all possible changes are applied. If
+     * there are errors, they are reported.
      */
     mode?: Type<DivPatchMode> | DivExpression;
 }
@@ -28,17 +28,13 @@ export type DivPatchMode =
     | 'transactional'
     | 'partial';
 
-/**
- * Описания пока нет
- */
 export interface IDivPatchChange {
     /**
-     * Идентификатор элемента для замены или удаления.
+     * ID of an element to be replaced or removed.
      */
     id: Type<string>;
     /**
-     * Элементы для вставки. Если параметр не задан, то элемент будет удален.
+     * Elements to be inserted. If the parameter isn't specified, the element will be removed.
      */
     items?: Type<NonEmptyArray<Div>>;
 }
-

@@ -11,33 +11,33 @@ import {
 } from './';
 
 /**
- * Поведение элемента при фокусировке или потере фокуса.
+ * Element behavior when focusing or losing focus.
  */
 export interface IDivFocus {
     /**
-     * Фон элемента, когда он в фокусе. Может содержать несколько слоев.
+     * Background of an element when it is in focus. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента, когда он в фокусе.
+     * Border of an element when it is in focus
      */
     border?: Type<IDivBorder>;
     /**
-     * Идентификаторы элементов, которые следующими получат фокус.
+     * IDs of elements that will be next to get focus.
      */
     next_focus_ids?: Type<IDivFocusNextFocusIds>;
     /**
-     * Действия, когда элемент теряет фокус.
+     * Actions when an element loses focus.
      */
     on_blur?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Действия, когда элемент получает фокус.
+     * Actions when an element gets focus.
      */
     on_focus?: Type<NonEmptyArray<IDivAction>>;
 }
 
 /**
- * Идентификаторы элементов, которые следующими получат фокус.
+ * IDs of elements that will be next to get focus.
  */
 export interface IDivFocusNextFocusIds {
     down?: Type<string> | DivExpression;
@@ -46,4 +46,3 @@ export interface IDivFocusNextFocusIds {
     right?: Type<string> | DivExpression;
     up?: Type<string> | DivExpression;
 }
-

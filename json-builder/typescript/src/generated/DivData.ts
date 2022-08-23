@@ -12,47 +12,41 @@ import {
 } from './';
 
 /**
- * Корневая структура.
+ * Root structure.
  */
 export interface IDivData {
     /**
-     * Идентификатор для логирования.
+     * Logging ID.
      */
     log_id: string;
     /**
-     * Набор состояний визуальных элементов. Каждый элемент может иметь несколько состояний с разной
-     * версткой. Состояния отображаются строго по одному, а переключаются с помощью
-     * [action](div-action.md).
+     * A set of visual element states. Each element can have a few states with a different layout.
+     * The states are displayed strictly one by one and switched using [action](div-action.md).
      */
     states: NonEmptyArray<IDivDataState>;
     /**
-     * События, при которых сработают анимации переходов. Вместо него используйте
-     * `transition_triggers`.
+     * Events that trigger transition animations.
      *
      * @deprecated
      */
     transition_animation_selector?: DivTransitionSelector | DivExpression;
     /**
-     * Триггеры изменения переменных.
+     * Triggers for changing variables.
      */
     variable_triggers?: NonEmptyArray<IDivTrigger>;
     /**
-     * Объявление переменных, которые могут быть использованы в элементе.
+     * Declaration of variables that can be used in an element.
      */
     variables?: NonEmptyArray<DivVariable>;
 }
 
-/**
- * Описания пока нет
- */
 export interface IDivDataState {
     /**
-     * Содержимое.
+     * Contents.
      */
     div: Div;
     /**
-     * Идентификатор состояния.
+     * State ID.
      */
     state_id: number;
 }
-

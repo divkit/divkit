@@ -11,28 +11,27 @@ import {
 } from './';
 
 /**
- * Рамка вокруг элемента.
+ * Stroke around the element.
  */
 export interface IDivBorder {
     /**
-     * Один радиус скругления углов элемента и рамки. Имеет более низкий приоритет, чем
-     * `corners_radius`.
+     * One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
      */
     corner_radius?: Type<number> | DivExpression;
     /**
-     * Несколько радиусов скругления углов элемента и рамки.
+     * Multiple radii of element and stroke corner rounding.
      */
     corners_radius?: Type<IDivCornersRadius>;
     /**
-     * Добавление тени.
+     * Adding shadow.
      */
     has_shadow?: Type<IntBoolean> | DivExpression;
     /**
-     * Параметры тени.
+     * Shadow parameters.
      */
     shadow?: Type<IDivShadow>;
     /**
-     * Стиль рамки.
+     * Stroke style.
      */
     stroke?: Type<IDivStroke>;
 }

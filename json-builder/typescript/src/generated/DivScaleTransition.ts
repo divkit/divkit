@@ -9,35 +9,35 @@ import {
 } from './';
 
 /**
- * Анимация масштабирования.
+ * Scale animation.
  */
 export class DivScaleTransition<T extends DivScaleTransitionProps = DivScaleTransitionProps> {
     readonly _props?: Exact<DivScaleTransitionProps, T>;
 
     readonly type = 'scale';
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Относительная координата `X` точки, которая не изменит своего положения при масштабировании.
+     * Relative coordinate `X` of the point that won't change its position in case of scaling.
      */
     pivot_x?: Type<number> | DivExpression;
     /**
-     * Относительная координата `Y` точки, которая не изменит своего положения при масштабировании.
+     * Relative coordinate `Y` of the point that won't change its position in case of scaling.
      */
     pivot_y?: Type<number> | DivExpression;
     /**
-     * Значение масштаба, с которого начнется появление или на котором закончится исчезновение
-     * элемента.
+     * Value of the scale  from which the element starts appearing or at which it finishes
+     * disappearing.
      */
     scale?: Type<number> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 
@@ -53,28 +53,28 @@ export class DivScaleTransition<T extends DivScaleTransitionProps = DivScaleTran
 
 interface DivScaleTransitionProps {
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Относительная координата `X` точки, которая не изменит своего положения при масштабировании.
+     * Relative coordinate `X` of the point that won't change its position in case of scaling.
      */
     pivot_x?: Type<number> | DivExpression;
     /**
-     * Относительная координата `Y` точки, которая не изменит своего положения при масштабировании.
+     * Relative coordinate `Y` of the point that won't change its position in case of scaling.
      */
     pivot_y?: Type<number> | DivExpression;
     /**
-     * Значение масштаба, с которого начнется появление или на котором закончится исчезновение
-     * элемента.
+     * Value of the scale  from which the element starts appearing or at which it finishes
+     * disappearing.
      */
     scale?: Type<number> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 }

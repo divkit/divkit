@@ -9,21 +9,21 @@ import {
 } from './';
 
 /**
- * Триггер, который вызывает действие при срабатывании.
+ * A trigger that causes an action when activated.
  */
 export interface IDivTrigger {
     /**
-     * Действие при срабатывании триггера.
+     * Action when a trigger is activated.
      */
     actions: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Условие для срабатывания триггера. Например, `liked && subscribed`.
+     * Condition for activating a trigger. For example, `liked && subscribed`.
      */
     condition: Type<IntBoolean> | DivExpression;
     /**
-     * Режим запуска триггера:`on_condition` — триггер сработает при изменении условия с `false` на
-     * `true`;`on_variable` — триггер сработает при выполнении условия и изменении значения
-     * переменной.
+     * Trigger activation mode:`on_condition` — a trigger is activated when the condition changes
+     * from `false` to `true`;`on_variable` — a trigger is activated when the condition is met and
+     * the variable value changes.
      */
     mode?: Type<DivTriggerMode> | DivExpression;
 }
@@ -31,4 +31,3 @@ export interface IDivTrigger {
 export type DivTriggerMode =
     | 'on_condition'
     | 'on_variable';
-

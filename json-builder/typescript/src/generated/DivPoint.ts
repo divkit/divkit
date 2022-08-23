@@ -9,15 +9,15 @@ import {
 } from './';
 
 /**
- * Точка с фиксированными координатами.
+ * A point with fixed coordinates.
  */
 export interface IDivPoint {
     /**
-     * Координата `X`.
+     * `X` coordinate.
      */
     x: Type<IDivDimension>;
     /**
-     * Координата `Y`.
+     * `Y` coordinate.
      */
     y: Type<IDivDimension>;
 }

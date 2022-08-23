@@ -5,14 +5,14 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Фиксированное число повторов.
+ * Fixed number of repetitions.
  */
 export class DivFixedCount<T extends DivFixedCountProps = DivFixedCountProps> {
     readonly _props?: Exact<DivFixedCountProps, T>;
 
     readonly type = 'fixed';
     /**
-     * Число повторов.
+     * Number of repetitions.
      */
     value: Type<number> | DivExpression;
 
@@ -23,7 +23,7 @@ export class DivFixedCount<T extends DivFixedCountProps = DivFixedCountProps> {
 
 interface DivFixedCountProps {
     /**
-     * Число повторов.
+     * Number of repetitions.
      */
     value: Type<number> | DivExpression;
 }

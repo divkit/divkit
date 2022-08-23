@@ -9,41 +9,40 @@ import {
 } from './';
 
 /**
- * Действия, которые выполняются, когда элемент становится видимым.
+ * Actions performed when an element becomes visible.
  */
 export interface IDivVisibilityAction {
     /**
-     * Колбэки, которые вызываются после [дозагрузки данных](../../interaction.dita#loading-data).
+     * Callbacks that are called after [data loading](../../interaction.dita#loading-data).
      */
     download_callbacks?: Type<IDivDownloadCallbacks>;
     /**
-     * Идентификатор для логирования.
+     * Logging ID.
      */
     log_id: Type<string>;
     /**
-     * Ограничение на количество логирований. При `0` ограничение снимается.
+     * Limit on the number of loggings. If `0`, the limit is removed.
      */
     log_limit?: Type<number> | DivExpression;
     /**
-     * Дополнительные параметры, передаются приложению-хосту.
+     * Additional parameters, passed to the host application.
      */
     payload?: Type<{}>;
     /**
-     * Referer-ссылка для логирования.
+     * Referer URL for logging.
      */
     referer?: Type<string> | DivExpression;
     /**
-     * Ссылка. Возможные значения: `url` или `div-action://`. Подробнее в разделе [Взаимодействие с
-     * элементами](../../interaction.dita).
+     * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with
+     * elements](../../interaction.dita).
      */
     url?: Type<string> | DivExpression;
     /**
-     * Время в миллисекундах, в течение которого элемент должен быть виден, чтобы сработал
-     * `visibility-action`.
+     * Time in milliseconds during which an element must be visible to trigger `visibility-action`.
      */
     visibility_duration?: Type<number> | DivExpression;
     /**
-     * Процент видимой части элемента, при котором срабатывает `visibility-action`.
+     * Percentage of the visible part of an element that triggers `visibility-action`.
      */
     visibility_percentage?: Type<number> | DivExpression;
 }

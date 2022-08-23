@@ -5,20 +5,20 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Градиентный фон.
+ * Gradient background.
  */
 export class DivGradientBackground<T extends DivGradientBackgroundProps = DivGradientBackgroundProps> {
     readonly _props?: Exact<DivGradientBackgroundProps, T>;
 
     readonly type = 'gradient';
     /**
-     * Угол направления градиента.
+     * Angle of gradient direction.
      */
     angle?: Type<number> | DivExpression;
     /**
-     * Цвета. Точки градиента будут расположены на равном расстоянии друг от друга.
+     * Colors. Gradient points will be located at an equal distance from each other.
      */
-    colors: Type<NonEmptyArray<string>> | DivExpression;
+    colors: Type<NonEmptyArray<string | DivExpression>>;
 
     constructor(props: Exact<DivGradientBackgroundProps, T>) {
         this.angle = props.angle;
@@ -28,11 +28,11 @@ export class DivGradientBackground<T extends DivGradientBackgroundProps = DivGra
 
 interface DivGradientBackgroundProps {
     /**
-     * Угол направления градиента.
+     * Angle of gradient direction.
      */
     angle?: Type<number> | DivExpression;
     /**
-     * Цвета. Точки градиента будут расположены на равном расстоянии друг от друга.
+     * Colors. Gradient points will be located at an equal distance from each other.
      */
-    colors: Type<NonEmptyArray<string>> | DivExpression;
+    colors: Type<NonEmptyArray<string | DivExpression>>;
 }

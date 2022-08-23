@@ -5,18 +5,18 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Переменная с плавающей точкой.
+ * A floating-point variable.
  */
 export class NumberVariable<T extends NumberVariableProps = NumberVariableProps> {
     readonly _props?: Exact<NumberVariableProps, T>;
 
     readonly type = 'number';
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<number>;
 
@@ -28,11 +28,11 @@ export class NumberVariable<T extends NumberVariableProps = NumberVariableProps>
 
 interface NumberVariableProps {
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<number>;
 }

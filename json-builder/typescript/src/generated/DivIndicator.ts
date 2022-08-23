@@ -22,152 +22,159 @@ import {
     IDivExtension,
     IDivFocus,
     IDivTooltip,
+    IDivTransform,
     IDivVisibilityAction,
 } from './';
 
 /**
- * Индикатор прогресса для [пейджера](div-pager.md).
+ * Progress indicator for [pager](div-pager.md).
  */
 export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
     readonly _props?: Exact<DivIndicatorProps, T>;
 
     readonly type = 'indicator';
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Цвет активного индикатора.
+     * Active indicator color.
      */
     active_item_color?: Type<string> | DivExpression;
     /**
-     * Множитель размера для активного индикатора.
+     * A size multiplier for an active indicator.
      */
     active_item_size?: Type<number> | DivExpression;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Анимация переключения между индикаторами.
+     * Animation of switching between indicators.
      */
     animation?: Type<DivIndicatorAnimation> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Цвет индикатора.
+     * Indicator color.
      */
     inactive_item_color?: Type<string> | DivExpression;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Множитель размера для минимального индикатора. Используется, когда на экране не помещается
-     * нужное количество индикаторов.
+     * A size multiplier for a minimal indicator. It is used when the required number of indicators
+     * don't fit on the screen.
      */
     minimum_item_size?: Type<number> | DivExpression;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Идентификатор пейджера-источника данных для индикатора.
+     * ID of the pager that is a data source for an indicator.
      */
     pager_id?: Type<string>;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Форма индикатора.
+     * Indicator shape.
      */
     shape?: Type<DivShape>;
     /**
-     * Расстояние между центрами индикаторов.
+     * Spacing between indicator centers.
      */
     space_between_centers?: Type<DivFixedSize>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 
@@ -196,6 +203,7 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
         this.shape = props?.shape;
         this.space_between_centers = props?.space_between_centers;
         this.tooltips = props?.tooltips;
+        this.transform = props?.transform;
         this.transition_change = props?.transition_change;
         this.transition_in = props?.transition_in;
         this.transition_out = props?.transition_out;
@@ -209,141 +217,147 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
 
 interface DivIndicatorProps {
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Цвет активного индикатора.
+     * Active indicator color.
      */
     active_item_color?: Type<string> | DivExpression;
     /**
-     * Множитель размера для активного индикатора.
+     * A size multiplier for an active indicator.
      */
     active_item_size?: Type<number> | DivExpression;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Анимация переключения между индикаторами.
+     * Animation of switching between indicators.
      */
     animation?: Type<DivIndicatorAnimation> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Цвет индикатора.
+     * Indicator color.
      */
     inactive_item_color?: Type<string> | DivExpression;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Множитель размера для минимального индикатора. Используется, когда на экране не помещается
-     * нужное количество индикаторов.
+     * A size multiplier for a minimal indicator. It is used when the required number of indicators
+     * don't fit on the screen.
      */
     minimum_item_size?: Type<number> | DivExpression;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Идентификатор пейджера-источника данных для индикатора.
+     * ID of the pager that is a data source for an indicator.
      */
     pager_id?: Type<string>;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Форма индикатора.
+     * Indicator shape.
      */
     shape?: Type<DivShape>;
     /**
-     * Расстояние между центрами индикаторов.
+     * Spacing between indicator centers.
      */
     space_between_centers?: Type<DivFixedSize>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 }
@@ -352,4 +366,3 @@ export type DivIndicatorAnimation =
     | 'scale'
     | 'worm'
     | 'slider';
-

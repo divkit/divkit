@@ -21,164 +21,174 @@ import {
     IDivExtension,
     IDivFocus,
     IDivTooltip,
+    IDivTransform,
     IDivVisibilityAction,
 } from './';
 
 /**
- * Галерея. Содержит горизонтальный или вертикальный набор карточек, которые можно скроллить.
+ * Gallery. It contains a horizontal or vertical set of cards that can be scrolled.
  */
 export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
     readonly _props?: Exact<DivGalleryProps, T>;
 
     readonly type = 'gallery';
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Количество колонок для плиточной верстки.
+     * Number of columns for block layout.
      */
     column_count?: Type<number> | DivExpression;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Выравнивание элементов в направлении, перпендикулярном направлению скролла. В горизонтальных
-     * галереях:`start` — выравнивание по верхнему краю карточки;`center` — по центру;`end` — по
-     * нижнему краю.</p><p>В вертикальных галереях:`start` — выравнивание по левому краю
-     * карточки;`center` — по центру;`end` — по правому краю.
+     * Aligning elements in the direction perpendicular to the scroll direction. In horizontal
+     * galleries:`start` — alignment to the top of the card;`center` — to the center;`end` — to the
+     * bottom.</p><p>In vertical galleries:`start` — alignment to the left of the card;`center` — to
+     * the center;`end` — to the right.
      */
     cross_content_alignment?: Type<DivGalleryCrossContentAlignment> | DivExpression;
     /**
-     * Порядковый номер элемента галереи, к которому будет выполнен скролл по умолчанию. Для
-     * `scroll_mode`:`default` — положение скролла устанавливается в начало элемента, без учета
-     * `item_spacing`;`paging` — положение скролла устанавливается в центр элемента.
+     * Ordinal number of the gallery element to be scrolled to by default. For
+     * `scroll_mode`:`default` — the scroll position is set to the beginning of the element, without
+     * taking into account `item_spacing`;`paging` — the scroll position is set to the center of the
+     * element.
      */
     default_item?: Type<number> | DivExpression;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Расстояние между элементами.
+     * Spacing between elements.
      */
     item_spacing?: Type<number> | DivExpression;
     /**
-     * Элементы галереи. Скролл к элементам можно осуществить с
-     * помощью:`div-action://set_current_item?id=&item=` — скролл к элементу с порядковым номером
-     * `item` внутри элемента, с заданным
-     * `id`;`div-action://set_next_item?id=[&overflow={clamp|ring}]` — скролл к следующему элементу
-     * внутри элемента, с заданным `id`;`div-action://set_previous_item?id=[&overflow={clamp|ring}]`
-     * — скролл к предыдущему элементу внутри элемента, с заданным `id`.</p><p>Опциональный параметр
-     * `overflow` позволяет задать навигацию при достижении первого или последнего элемента:`clamp` —
-     * переход остановится на пограничном элементе;`ring` — переход в начало или конец, в зависимости
-     * от текущего элемента.</p><p>По умолчанию, `clamp`.
+     * Gallery elements. Scrolling to elements can be implemented
+     * using:`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal
+     * number `item` inside an element, with the specified
+     * `id`;`div-action://set_next_item?id=[&overflow={clamp|ring}]` — scrolling to the next element
+     * inside an element, with the specified
+     * `id`;`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — scrolling to the previous
+     * element inside an element, with the specified `id`.</p><p>The optional `overflow` parameter is
+     * used to set navigation when the first or last element is reached:`clamp` — transition will
+     * stop at the border element;`ring` — go to the beginning or end, depending on the current
+     * element.</p><p>By default, `clamp`.
      */
     items: Type<NonEmptyArray<Div>>;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Ориентация галереи.
+     * Gallery orientation.
      */
     orientation?: Type<DivGalleryOrientation> | DivExpression;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * При включенном параметре галерея не будет передавать жест скролла родительскому элементу.
+     * If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent
+     * element.
      */
     restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Тип скролла: `default` — непрерывный, `paging` — постраничный.
+     * Scroll type: `default` — continuous, `paging` — page-by-page.
      */
     scroll_mode?: Type<DivGalleryScrollMode> | DivExpression;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 
@@ -207,6 +217,7 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
         this.scroll_mode = props.scroll_mode;
         this.selected_actions = props.selected_actions;
         this.tooltips = props.tooltips;
+        this.transform = props.transform;
         this.transition_change = props.transition_change;
         this.transition_in = props.transition_in;
         this.transition_out = props.transition_out;
@@ -220,153 +231,162 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
 
 interface DivGalleryProps {
     /**
-     * Доступность для людей с ограниченными возможностями.
+     * Accessibility for disabled people.
      */
     accessibility?: Type<IDivAccessibility>;
     /**
-     * Горизонтальное выравнивание элемента внутри родительского.
+     * Horizontal alignment of an element inside the parent element.
      */
     alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
     /**
-     * Вертикальное выравнивание элемента внутри родительского.
+     * Vertical alignment of an element inside the parent element.
      */
     alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
     /**
-     * Устанавливает прозрачность всего элемента: `0` — полностью прозрачный, `1` — непрозрачный.
+     * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
     alpha?: Type<number> | DivExpression;
     /**
-     * Фон элемента. Может содержать несколько слоев.
+     * Element background. It can contain multiple layers.
      */
     background?: Type<NonEmptyArray<DivBackground>>;
     /**
-     * Рамка элемента.
+     * Element stroke.
      */
     border?: Type<IDivBorder>;
     /**
-     * Количество колонок для плиточной верстки.
+     * Number of columns for block layout.
      */
     column_count?: Type<number> | DivExpression;
     /**
-     * Объединяет ячейки в столбце элемента [grid](div-grid.md).
+     * Merges cells in a column of the [grid](div-grid.md) element.
      */
     column_span?: Type<number> | DivExpression;
     /**
-     * Выравнивание элементов в направлении, перпендикулярном направлению скролла. В горизонтальных
-     * галереях:`start` — выравнивание по верхнему краю карточки;`center` — по центру;`end` — по
-     * нижнему краю.</p><p>В вертикальных галереях:`start` — выравнивание по левому краю
-     * карточки;`center` — по центру;`end` — по правому краю.
+     * Aligning elements in the direction perpendicular to the scroll direction. In horizontal
+     * galleries:`start` — alignment to the top of the card;`center` — to the center;`end` — to the
+     * bottom.</p><p>In vertical galleries:`start` — alignment to the left of the card;`center` — to
+     * the center;`end` — to the right.
      */
     cross_content_alignment?: Type<DivGalleryCrossContentAlignment> | DivExpression;
     /**
-     * Порядковый номер элемента галереи, к которому будет выполнен скролл по умолчанию. Для
-     * `scroll_mode`:`default` — положение скролла устанавливается в начало элемента, без учета
-     * `item_spacing`;`paging` — положение скролла устанавливается в центр элемента.
+     * Ordinal number of the gallery element to be scrolled to by default. For
+     * `scroll_mode`:`default` — the scroll position is set to the beginning of the element, without
+     * taking into account `item_spacing`;`paging` — the scroll position is set to the center of the
+     * element.
      */
     default_item?: Type<number> | DivExpression;
     /**
-     * Расширения для дополнительной обработки элемента. Список расширений см. в разделе
-     * [Кастомизация](../../extensions.dita).
+     * Extensions for additional processing of an element. The list of extensions is given in 
+     * [DivExtension](../../extensions.dita).
      */
     extensions?: Type<NonEmptyArray<IDivExtension>>;
     /**
-     * Параметры при фокусировке на элементе или потере фокуса.
+     * Parameters when focusing on an element or losing focus.
      */
     focus?: Type<IDivFocus>;
     /**
-     * Высота элемента. Для Android: если в этом или в дочернем элементе есть текст, укажите высоту в
-     * `sp`, чтобы элемент масштабировался вместе с текстом. Подробнее о единицах измерения размера в
-     * разделе [Верстка внутри карточки](../../layout.dita).
+     * Element height. For Android: if there is text in this or in a child element, specify height in
+     * `sp` to scale the element together with the text. To learn more about units of size
+     * measurement, see [Layout inside the card](../../layout.dita).
      */
     height?: Type<DivSize>;
     /**
-     * Идентификатор элемента. На iOS используется в качестве `accessibilityIdentifier`.
+     * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
+     * on iOS.
      */
     id?: Type<string>;
     /**
-     * Расстояние между элементами.
+     * Spacing between elements.
      */
     item_spacing?: Type<number> | DivExpression;
     /**
-     * Элементы галереи. Скролл к элементам можно осуществить с
-     * помощью:`div-action://set_current_item?id=&item=` — скролл к элементу с порядковым номером
-     * `item` внутри элемента, с заданным
-     * `id`;`div-action://set_next_item?id=[&overflow={clamp|ring}]` — скролл к следующему элементу
-     * внутри элемента, с заданным `id`;`div-action://set_previous_item?id=[&overflow={clamp|ring}]`
-     * — скролл к предыдущему элементу внутри элемента, с заданным `id`.</p><p>Опциональный параметр
-     * `overflow` позволяет задать навигацию при достижении первого или последнего элемента:`clamp` —
-     * переход остановится на пограничном элементе;`ring` — переход в начало или конец, в зависимости
-     * от текущего элемента.</p><p>По умолчанию, `clamp`.
+     * Gallery elements. Scrolling to elements can be implemented
+     * using:`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal
+     * number `item` inside an element, with the specified
+     * `id`;`div-action://set_next_item?id=[&overflow={clamp|ring}]` — scrolling to the next element
+     * inside an element, with the specified
+     * `id`;`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — scrolling to the previous
+     * element inside an element, with the specified `id`.</p><p>The optional `overflow` parameter is
+     * used to set navigation when the first or last element is reached:`clamp` — transition will
+     * stop at the border element;`ring` — go to the beginning or end, depending on the current
+     * element.</p><p>By default, `clamp`.
      */
     items: Type<NonEmptyArray<Div>>;
     /**
-     * Внешние отступы от рамки элемента.
+     * External margins from the element stroke.
      */
     margins?: Type<IDivEdgeInsets>;
     /**
-     * Ориентация галереи.
+     * Gallery orientation.
      */
     orientation?: Type<DivGalleryOrientation> | DivExpression;
     /**
-     * Внутренние отступы от рамки элемента.
+     * Internal margins from the element stroke.
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * При включенном параметре галерея не будет передавать жест скролла родительскому элементу.
+     * If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent
+     * element.
      */
     restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
     /**
-     * Объединяет ячейки в строке элемента [grid](div-grid.md).
+     * Merges cells in a string of the [grid](div-grid.dita) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
-     * Тип скролла: `default` — непрерывный, `paging` — постраничный.
+     * Scroll type: `default` — continuous, `paging` — page-by-page.
      */
     scroll_mode?: Type<DivGalleryScrollMode> | DivExpression;
     /**
-     * Список [действий](div-action.md, которые будут выполнены при выборе элемента в
-     * [пейджере](div-pager.md).
+     * List of [actions](div-action.md) to be executed when selecting an element in
+     * [pager](div-pager.md).
      */
     selected_actions?: Type<NonEmptyArray<IDivAction>>;
     /**
-     * Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по
-     * `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id
-     * подсказки.
+     * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
+     * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
      */
     tooltips?: Type<NonEmptyArray<IDivTooltip>>;
     /**
-     * Анимация изменения. Воспроизводится при изменении положения или размера элемента в новой
-     * верстке.
+     * Transformation of the element. Applies the passed transform to the element. The content that
+     * does not fit into the original view will be cut off.
+     */
+    transform?: Type<IDivTransform>;
+    /**
+     * Change animation. It is played when the position or size of an element changes in the new
+     * layout.
      */
     transition_change?: Type<DivChangeTransition>;
     /**
-     * Анимация появления. Воспроизводится при появлении элемента с новым id. Подробнее о концепции
-     * переходов в разделе [Анимация
-     * перехода](../../interaction.dita#animation/transition-animation).
+     * Appearance animation. It is played when an element with a new ID appears. To learn more about
+     * the concept of transitions, see [Animated
+     * transitions](../../interaction.dita#animation/transition-animation).
      */
     transition_in?: Type<DivAppearanceTransition>;
     /**
-     * Анимация исчезания. Воспроизводится при исчезании элемента в новой верстке.
+     * Disappearance animation. It is played when an element disappears in the new layout.
      */
     transition_out?: Type<DivAppearanceTransition>;
     /**
-     * Триггеры запуска анимации. Значение по умолчанию: `[state_change, visibility_change]`.
+     * Animation starting triggers. Default value: `[state_change, visibility_change]`.
      */
     transition_triggers?: Type<NonEmptyArray<DivTransitionTrigger>>;
     /**
-     * Видимость элемента.
+     * Element visibility.
      */
     visibility?: Type<DivVisibility> | DivExpression;
     /**
-     * Трекинг видимости одного элемента. Не используется, если задан параметр `visibility_actions`.
+     * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
+     * set.
      */
     visibility_action?: Type<IDivVisibilityAction>;
     /**
-     * Действия при появлении элемента на экране.
+     * Actions when an element appears on the screen.
      */
     visibility_actions?: Type<NonEmptyArray<IDivVisibilityAction>>;
     /**
-     * Ширина элемента.
+     * Element width.
      */
     width?: Type<DivSize>;
 }
@@ -383,4 +403,3 @@ export type DivGalleryOrientation =
 export type DivGalleryScrollMode =
     | 'paging'
     | 'default';
-

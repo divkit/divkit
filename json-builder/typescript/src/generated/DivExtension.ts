@@ -5,15 +5,15 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Расширение, которое влияет на элемент.
+ * Extension that affects an element.
  */
 export interface IDivExtension {
     /**
-     * Идентификатор расширения.
+     * Extension ID.
      */
     id: Type<string>;
     /**
-     * Дополнительные параметры расширения.
+     * Additional extension parameters.
      */
     params?: Type<{}>;
 }

@@ -5,7 +5,7 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Бесконечное число повторов.
+ * Infinite number of repetitions.
  */
 export class DivInfinityCount<T extends DivInfinityCountProps = DivInfinityCountProps> {
     readonly _props?: Exact<DivInfinityCountProps, T>;

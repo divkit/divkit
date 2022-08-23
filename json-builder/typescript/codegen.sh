@@ -1,5 +1,3 @@
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    ../../../internal/homeapigenerator-binaries/macosx/HomeAPIGenerator generator_config.json ../../schema src/generated
-else
-    ../../../internal/homeapigenerator-binaries/linux/HomeAPIGenerator generator_config.json ../../schema src/generated
-fi
+cd ../../api_generator/
+pip3 install -r requirements.txt
+python3 -m api_generator -c ../json-builder/typescript/generator_config.json -s ../schema -o ../json-builder/typescript/src/generated

@@ -11,40 +11,39 @@ import {
 } from './';
 
 /**
- * Всплывающая подсказка.
+ * Tooltip.
  */
 export interface IDivTooltip {
     /**
-     * Анимация появления подсказки. По умолчанию подсказка будет появляться постепенно со смещением
-     * от якорной точки на 10 dp.
+     * Tooltip appearance animation. By default, the tooltip will be appearing gradually with an
+     * offset from the anchor point by 10 dp.
      */
     animation_in?: Type<IDivAnimation>;
     /**
-     * Анимация исчезания подсказки. По умолчанию подсказка будет исчезать постепенно со смещением от
-     * якорной точки на 10 dp.
+     * Tooltip disappearance animation. By default, the tooltip will disappear gradually with an
+     * offset from the anchor point by 10 dp.
      */
     animation_out?: Type<IDivAnimation>;
     /**
-     * Элемент, который будет показан в подсказке. Если внутри элемента есть подсказки, они не будут
-     * показываться.
+     * An element that will be shown in a tooltip. If there are tooltips inside an element, they
+     * won't be shown.
      */
     div: Type<Div>;
     /**
-     * Продолжительность видимости подсказки в миллисекундах. При значении `0` подсказка будет видна
-     * до тех пор, пока пользователь сам ее не скроет.
+     * Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip
+     * will be visible until the user hides it.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Идентификатор подсказки. Используется, чтобы избежать повторного показа. Должен быть уникален
-     * для всех подсказок элемента.
+     * Tooltip ID. It is used to avoid re-showing. It must be unique for all element tooltips.
      */
     id: Type<string>;
     /**
-     * Сдвиг относительно якорной точки.
+     * Shift relative to an anchor point.
      */
     offset?: Type<IDivPoint>;
     /**
-     * Положение подсказки относительно элемента, к которому она относится.
+     * The position of a tooltip relative to an element it belongs to.
      */
     position: Type<DivTooltipPosition> | DivExpression;
 }
@@ -58,4 +57,3 @@ export type DivTooltipPosition =
     | 'bottom-right'
     | 'bottom'
     | 'bottom-left';
-

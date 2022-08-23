@@ -5,15 +5,15 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Размер элемента подстраивается под родительский элемент.
+ * Element size adjusts to a parent element.
  */
 export class DivMatchParentSize<T extends DivMatchParentSizeProps = DivMatchParentSizeProps> {
     readonly _props?: Exact<DivMatchParentSizeProps, T>;
 
     readonly type = 'match_parent';
     /**
-     * Вес при распределении свободного места между элементами с типом размера `match_parent` внутри
-     * элемента. Если вес не указан, то элементы поделят место поровну.
+     * Weight when distributing free space between elements with the size type `match_parent` inside
+     * an element. If the weight isn't specified, the elements will divide the place equally.
      */
     weight?: Type<number> | DivExpression;
 
@@ -24,8 +24,8 @@ export class DivMatchParentSize<T extends DivMatchParentSizeProps = DivMatchPare
 
 interface DivMatchParentSizeProps {
     /**
-     * Вес при распределении свободного места между элементами с типом размера `match_parent` внутри
-     * элемента. Если вес не указан, то элементы поделят место поровну.
+     * Weight when distributing free space between elements with the size type `match_parent` inside
+     * an element. If the weight isn't specified, the elements will divide the place equally.
      */
     weight?: Type<number> | DivExpression;
 }

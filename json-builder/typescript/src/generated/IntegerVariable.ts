@@ -5,18 +5,18 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Целочисленная переменная.
+ * An integer variable.
  */
 export class IntegerVariable<T extends IntegerVariableProps = IntegerVariableProps> {
     readonly _props?: Exact<IntegerVariableProps, T>;
 
     readonly type = 'integer';
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<number>;
 
@@ -28,11 +28,11 @@ export class IntegerVariable<T extends IntegerVariableProps = IntegerVariablePro
 
 interface IntegerVariableProps {
     /**
-     * Название переменной.
+     * Variable name.
      */
     name: Type<string>;
     /**
-     * Значение.
+     * Value.
      */
     value: Type<number>;
 }

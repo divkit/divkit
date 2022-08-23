@@ -10,33 +10,33 @@ import {
 } from './';
 
 /**
- * Анимация перемещения.
+ * Slide animation.
  */
 export class DivSlideTransition<T extends DivSlideTransitionProps = DivSlideTransitionProps> {
     readonly _props?: Exact<DivSlideTransitionProps, T>;
 
     readonly type = 'slide';
     /**
-     * Фиксированное значение смещения, с которого начнется появление или на котором закончится
-     * исчезновение элемента. Если значение не указано, то берется расстояние до выбранного края
-     * родительского элемента.
+     * A fixed value of an offset which the element starts appearing from or at which it finishes
+     * disappearing. If no value is specified, the distance to the selected edge of a parent element
+     * is used.
      */
     distance?: Type<IDivDimension>;
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Край родительского элемента для одного из типов действий:откуда элемент будет двигаться при
-     * появлении;куда элемент будет двигаться при исчезновении.
+     * Edge of a parent element for one of the action types:where the element will move from when
+     * appearing;where the element will move to when disappearing.
      */
     edge?: Type<DivSlideTransitionEdge> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 
@@ -51,26 +51,26 @@ export class DivSlideTransition<T extends DivSlideTransitionProps = DivSlideTran
 
 interface DivSlideTransitionProps {
     /**
-     * Фиксированное значение смещения, с которого начнется появление или на котором закончится
-     * исчезновение элемента. Если значение не указано, то берется расстояние до выбранного края
-     * родительского элемента.
+     * A fixed value of an offset which the element starts appearing from or at which it finishes
+     * disappearing. If no value is specified, the distance to the selected edge of a parent element
+     * is used.
      */
     distance?: Type<IDivDimension>;
     /**
-     * Продолжительность анимации в миллисекундах.
+     * Animation duration in milliseconds.
      */
     duration?: Type<number> | DivExpression;
     /**
-     * Край родительского элемента для одного из типов действий:откуда элемент будет двигаться при
-     * появлении;куда элемент будет двигаться при исчезновении.
+     * Edge of a parent element for one of the action types:where the element will move from when
+     * appearing;where the element will move to when disappearing.
      */
     edge?: Type<DivSlideTransitionEdge> | DivExpression;
     /**
-     * Характер скорости перехода.
+     * Transition speed nature.
      */
     interpolator?: Type<DivAnimationInterpolator> | DivExpression;
     /**
-     * Задержка в миллисекундах перед началом анимации.
+     * Delay in milliseconds before animation starts.
      */
     start_delay?: Type<number> | DivExpression;
 }
@@ -80,4 +80,3 @@ export type DivSlideTransitionEdge =
     | 'top'
     | 'right'
     | 'bottom';
-

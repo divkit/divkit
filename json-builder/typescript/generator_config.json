@@ -1,9 +1,4 @@
 {
   "lang": "typescript",
-  "imports": [
-    "{ Exact, IntBoolean, NonEmptyArray } from '../helper'",
-    "{ TemplateBlock, Type } from '../template'",
-    "{ DivExpression } from '../expression'"
-  ],
-  "generateExpressions": true
+  "header": "// Generated code. Do not modify.\n\nimport { Exact, IntBoolean, NonEmptyArray } from '../helper';\nimport { TemplateBlock, Type } from '../template';\nimport { DivExpression } from '../expression';\n"
 }
