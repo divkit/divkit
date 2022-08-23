@@ -8,7 +8,7 @@ export class EntityWithStringEnumProperty<T extends EntityWithStringEnumProperty
     readonly _props?: Exact<EntityWithStringEnumPropertyProps, T>;
 
     readonly type = 'entity_with_string_enum_property';
-    property: Type<EntityWithStringEnumPropertyProperty | DivExpression>;
+    property: Type<EntityWithStringEnumPropertyProperty> | DivExpression;
 
     constructor(props: Exact<EntityWithStringEnumPropertyProps, T>) {
         this.property = props.property;
@@ -16,7 +16,7 @@ export class EntityWithStringEnumProperty<T extends EntityWithStringEnumProperty
 }
 
 interface EntityWithStringEnumPropertyProps {
-    property: Type<EntityWithStringEnumPropertyProperty | DivExpression>;
+    property: Type<EntityWithStringEnumPropertyProperty> | DivExpression;
 }
 
 export type EntityWithStringEnumPropertyProperty =

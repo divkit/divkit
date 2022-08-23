@@ -20,5 +20,5 @@ interface EntityWithComplexPropertyProps {
 }
 
 export interface IEntityWithComplexPropertyProperty {
-    value: Type<string | DivExpression>;
+    value: Type<string> | DivExpression;
 }

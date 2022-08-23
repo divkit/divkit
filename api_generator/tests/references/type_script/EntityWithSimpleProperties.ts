@@ -14,21 +14,21 @@ export class EntityWithSimpleProperties<T extends EntityWithSimplePropertiesProp
     /**
      * Boolean property.
      */
-    boolean?: Type<boolean | DivExpression>;
+    boolean?: Type<boolean> | DivExpression;
     /**
      * Boolean value in numeric format.
      *
      * @deprecated
      */
-    boolean_int?: Type<IntBoolean | DivExpression>;
+    boolean_int?: Type<IntBoolean> | DivExpression;
     /**
      * Color.
      */
-    color?: Type<string | DivExpression>;
+    color?: Type<string> | DivExpression;
     /**
      * Floating point number.
      */
-    double?: Type<number | DivExpression>;
+    double?: Type<number> | DivExpression;
     /**
      * ID. Can't contain expressions.
      */
@@ -36,16 +36,16 @@ export class EntityWithSimpleProperties<T extends EntityWithSimplePropertiesProp
     /**
      * Integer.
      */
-    integer?: Type<number | DivExpression>;
+    integer?: Type<number> | DivExpression;
     /**
      * Positive integer.
      */
-    positive_integer?: Type<number | DivExpression>;
+    positive_integer?: Type<number> | DivExpression;
     /**
      * String.
      */
-    string?: Type<string | DivExpression>;
-    url?: Type<string | DivExpression>;
+    string?: Type<string> | DivExpression;
+    url?: Type<string> | DivExpression;
 
     constructor(props?: Exact<EntityWithSimplePropertiesProps, T>) {
         this.boolean = props?.boolean;
@@ -64,21 +64,21 @@ interface EntityWithSimplePropertiesProps {
     /**
      * Boolean property.
      */
-    boolean?: Type<boolean | DivExpression>;
+    boolean?: Type<boolean> | DivExpression;
     /**
      * Boolean value in numeric format.
      *
      * @deprecated
      */
-    boolean_int?: Type<IntBoolean | DivExpression>;
+    boolean_int?: Type<IntBoolean> | DivExpression;
     /**
      * Color.
      */
-    color?: Type<string | DivExpression>;
+    color?: Type<string> | DivExpression;
     /**
      * Floating point number.
      */
-    double?: Type<number | DivExpression>;
+    double?: Type<number> | DivExpression;
     /**
      * ID. Can't contain expressions.
      */
@@ -86,14 +86,14 @@ interface EntityWithSimplePropertiesProps {
     /**
      * Integer.
      */
-    integer?: Type<number | DivExpression>;
+    integer?: Type<number> | DivExpression;
     /**
      * Positive integer.
      */
-    positive_integer?: Type<number | DivExpression>;
+    positive_integer?: Type<number> | DivExpression;
     /**
      * String.
      */
-    string?: Type<string | DivExpression>;
-    url?: Type<string | DivExpression>;
+    string?: Type<string> | DivExpression;
+    url?: Type<string> | DivExpression;
 }

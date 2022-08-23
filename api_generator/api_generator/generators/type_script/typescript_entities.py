@@ -56,28 +56,29 @@ def _type_script_full_name(d: Declarable) -> str:
 
 def _type_script_type_name(property_type: PropertyType, supports_expressions: bool) -> str:
     if isinstance(property_type, (Int, Double)):
-        return_type = 'number'
+        return 'number'
     elif isinstance(property_type, Bool):
-        return_type = 'boolean'
+        return 'boolean'
     elif isinstance(property_type, BoolInt):
-        return_type = 'IntBoolean'
+        return 'IntBoolean'
     elif isinstance(property_type, (Color, String, Url)):
-        return_type = 'string'
+        return 'string'
     elif isinstance(property_type, StaticString):
         raise TypeError('Is a static type')
     elif isinstance(property_type, Dictionary):
-        return_type = '{}'
+        return '{}'
     elif isinstance(property_type, Array):
-        return f'NonEmptyArray<{_type_script_type_name(property_type.property_type, supports_expressions)}>'
+        item_type = property_type.property_type
+        array_type_name = _type_script_type_name(item_type, supports_expressions)
+        if supports_expressions and not isinstance(item_type, Array):
+            array_type_name += ' | DivExpression'
+        return f'NonEmptyArray<{array_type_name}>'
     elif isinstance(property_type, Object):
         if property_type.object is None:
             raise ValueError(f'Invalid {property_type}')
-        return_type = _type_script_full_name(property_type.object)
+        return _type_script_full_name(property_type.object)
     else:
         raise NotImplementedError
-    if supports_expressions:
-        return_type += ' | DivExpression'
-    return return_type
 
 
 def _referenced_top_level_type_name(property_type: PropertyType) -> Optional[str]:
@@ -240,4 +241,6 @@ class TypeScriptProperty(Property):
         optional_mark = '?' if self.optional else ''
         type_name = _type_script_type_name(self.property_type, self.supports_expressions)
         type_decl = f'Type<{type_name}>' if is_templatable else type_name
+        if self.supports_expressions and not isinstance(self.property_type, Array):
+            type_decl += ' | DivExpression'
         return f'{self.escaped_name}{optional_mark}: {type_decl}'

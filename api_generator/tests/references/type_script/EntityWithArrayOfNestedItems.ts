@@ -25,5 +25,5 @@ interface EntityWithArrayOfNestedItemsProps {
 
 export interface IEntityWithArrayOfNestedItemsItem {
     entity: Type<Entity>;
-    property: Type<string | DivExpression>;
+    property: Type<string> | DivExpression;
 }

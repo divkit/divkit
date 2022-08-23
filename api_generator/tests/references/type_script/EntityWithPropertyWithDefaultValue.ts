@@ -8,13 +8,13 @@ export class EntityWithPropertyWithDefaultValue<T extends EntityWithPropertyWith
     readonly _props?: Exact<EntityWithPropertyWithDefaultValueProps, T>;
 
     readonly type = 'entity_with_property_with_default_value';
-    int?: Type<number | DivExpression>;
+    int?: Type<number> | DivExpression;
     /**
      * non_optional is used to suppress auto-generation of default value for object with all-optional
      * fields.
      */
     nested?: Type<IEntityWithPropertyWithDefaultValueNested>;
-    url?: Type<string | DivExpression>;
+    url?: Type<string> | DivExpression;
 
     constructor(props?: Exact<EntityWithPropertyWithDefaultValueProps, T>) {
         this.int = props?.int;
@@ -24,13 +24,13 @@ export class EntityWithPropertyWithDefaultValue<T extends EntityWithPropertyWith
 }
 
 interface EntityWithPropertyWithDefaultValueProps {
-    int?: Type<number | DivExpression>;
+    int?: Type<number> | DivExpression;
     /**
      * non_optional is used to suppress auto-generation of default value for object with all-optional
      * fields.
      */
     nested?: Type<IEntityWithPropertyWithDefaultValueNested>;
-    url?: Type<string | DivExpression>;
+    url?: Type<string> | DivExpression;
 }
 
 /**
@@ -38,7 +38,7 @@ interface EntityWithPropertyWithDefaultValueProps {
  * fields.
  */
 export interface IEntityWithPropertyWithDefaultValueNested {
-    int?: Type<number | DivExpression>;
-    non_optional: Type<string | DivExpression>;
-    url?: Type<string | DivExpression>;
+    int?: Type<number> | DivExpression;
+    non_optional: Type<string> | DivExpression;
+    url?: Type<string> | DivExpression;
 }
