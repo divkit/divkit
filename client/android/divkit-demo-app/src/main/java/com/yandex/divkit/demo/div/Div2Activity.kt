@@ -120,6 +120,14 @@ class Div2Activity : AppCompatActivity() {
 
         qrScan = IntentIntegrator(this)
         qrScan.setOrientationLocked(false)
+
+        bindLink()
+    }
+
+    private fun bindLink() {
+        val data = intent?.data ?: return
+
+        variable.setValue(Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, data.toString()))
     }
 
 
