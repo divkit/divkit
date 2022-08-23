@@ -83,6 +83,8 @@ class Div2ScenarioActivity : AppCompatActivity() {
 
         divContext = Div2Context(baseContext = this, configuration = divConfiguration)
         div2Adapter = DivEditorAdapter(divContext)
+        globalVariableController.bindWith(divContext)
+
         with(binding.div2Recycler) {
             layoutManager = LinearLayoutManager(this@Div2ScenarioActivity, RecyclerView.VERTICAL, false)
             adapter = div2Adapter
