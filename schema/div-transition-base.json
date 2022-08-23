@@ -6,17 +6,17 @@
     "start_delay": {
       "$ref": "common.json#/non_negative_integer",
       "default_value": "0",
-      "description": "Задержка в миллисекундах перед началом анимации."
+      "$description": "translations.json#/div_transition_base_start_delay"
     },
     "duration": {
       "$ref": "common.json#/non_negative_integer",
       "default_value": "200",
-      "description": "Продолжительность анимации в миллисекундах."
+      "$description": "translations.json#/div_transition_base_duration"
     },
     "interpolator": {
       "$ref": "div-animation-interpolator.json",
       "default_value": "ease_in_out",
-      "description": "Характер скорости перехода."
+      "$description": "translations.json#/div_transition_base_interpolator"
     }
   }
 }

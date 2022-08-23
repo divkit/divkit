@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "Поведение элемента при фокусировке или потере фокуса.",
+  "$description": "translations.json#/div_focus",
   "platforms": [
     "android"
   ],
@@ -12,11 +12,11 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Фон элемента, когда он в фокусе. Может содержать несколько слоев."
+      "$description": "translations.json#/div_focus_background"
     },
     "border": {
       "$ref": "div-border.json",
-      "description": "Рамка элемента, когда он в фокусе."
+      "$description": "translations.json#/div_focus_border"
     },
     "on_focus": {
       "type": "array",
@@ -25,7 +25,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Действия, когда элемент получает фокус."
+      "$description": "translations.json#/div_focus_on_focus"
     },
     "on_blur": {
       "type": "array",
@@ -34,11 +34,11 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Действия, когда элемент теряет фокус."
+      "$description": "translations.json#/div_focus_on_blur"
     },
     "next_focus_ids": {
       "type": "object",
-      "description": "Идентификаторы элементов, которые следующими получат фокус.",
+      "$description": "translations.json#/div_focus_next_focus_ids",
       "properties": {
         "forward": {
           "$ref": "common.json#/non_empty_string"

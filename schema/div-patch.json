@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "Редактирует элемент.",
+  "$description": "translations.json#/div_patch",
   "platforms": [
     "android",
     "ios"
@@ -12,7 +12,7 @@
         "id": {
           "type": "string",
           "supports_expressions": false,
-          "description": "Идентификатор элемента для замены или удаления."
+          "$description": "translations.json#/div_patch_change_id"
         },
         "items": {
           "type": "array",
@@ -21,7 +21,7 @@
           },
           "minItems": 1,
           "clientMinItems": 1,
-          "description": "Элементы для вставки. Если параметр не задан, то элемент будет удален."
+          "$description": "translations.json#/div_patch_change_items"
         }
       },
       "required": [
@@ -36,7 +36,7 @@
         "transactional", "partial"
       ],
       "default_value": "partial",
-      "description": "Порядок применения изменений:<li>`transactional` — если во время применения хотя бы одного элемента произошла ошибка, то изменения не применяются.</li><li>`partial` — применяются все возможные изменения. Если есть ошибки, то о них сообщается.</li>"
+      "$description": "translations.json#/div_patch_mode"
     },
     "changes": {
       "type": "array",
@@ -45,7 +45,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Изменения элементов."
+      "$description": "translations.json#/div_patch_changes"
     }
   },
   "required": [

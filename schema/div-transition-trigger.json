@@ -5,5 +5,5 @@
     "state_change",
     "visibility_change"
   ],
-  "description": "Тип события, при котором запускается анимация."
+  "$description": "translations.json#/div_transition_trigger"
 }

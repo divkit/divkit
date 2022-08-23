@@ -1,10 +1,10 @@
 {
   "type": "object",
-  "description": "Размер элемента подстраивается под родительский элемент.",
+  "$description": "translations.json#/div_match_parent_size",
   "properties": {
     "weight": {
       "$ref": "common.json#/positive_number",
-      "description": "Вес при распределении свободного места между элементами с типом размера `match_parent` внутри элемента. Если вес не указан, то элементы поделят место поровну."
+      "$description": "translations.json#/div_match_parent_size_weight"
     },
     "type": {
       "type": "string",

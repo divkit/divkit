@@ -1,5 +1,5 @@
 {
-  "description": "Корневая структура.",
+  "$description": "translations.json#/div_data",
   "typescript_templatable": false,
   "generate_swift_optional_arguments": false,
   "root_entity": true,
@@ -12,11 +12,11 @@
         "state_id": {
           "type": "integer",
           "supports_expressions": false,
-          "description": "Идентификатор состояния."
+          "$description": "translations.json#/div_data_div_state_state_id"
         },
         "div": {
            "$ref": "div.json",
-           "description": "Содержимое."
+           "$description": "translations.json#/div_data_div_state_div"
         }
       },
       "required": [
@@ -35,17 +35,17 @@
       "minItems": 1,
       "clientMinItems": 1,
       "strictParsing": true,
-      "description": "Набор состояний визуальных элементов. Каждый элемент может иметь несколько состояний с разной версткой. Состояния отображаются строго по одному, а переключаются с помощью [action](div-action.md)."
+      "$description": "translations.json#/div_data_states"
     },
     "log_id": {
       "$ref": "common.json#/non_empty_string",
       "supports_expressions": false,
-      "description": "Идентификатор для логирования."
+      "$description": "translations.json#/div_data_log_id"
     },
     "transition_animation_selector": {
       "$ref": "div-transition-selector.json",
       "default_value": "none",
-      "description": "События, при которых сработают анимации переходов. Вместо него используйте `transition_triggers`.",
+      "$description": "translations.json#/div_data_transition_animation_selector",
       "deprecated": true,
       "platforms": [
         "android",
@@ -59,7 +59,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Объявление переменных, которые могут быть использованы в элементе."
+      "$description": "translations.json#/div_data_variables"
     },
     "variable_triggers": {
       "type": "array",
@@ -68,7 +68,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Триггеры изменения переменных."
+      "$description": "translations.json#/div_data_variable_triggers"
     }
   },
   "required": [

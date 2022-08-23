@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "Процентное значение ширины страницы.",
+  "$description": "translations.json#/div_page_size",
   "properties": {
     "type": {
       "type": "string",
@@ -10,7 +10,7 @@
     },
     "page_width": {
       "$ref": "div-percentage-size.json",
-      "description": "Ширина страницы в процентах от ширины родительского элемента."
+      "$description": "translations.json#/div_page_size_page_width"
     }
   },
   "required": [

@@ -2,7 +2,7 @@
   "anyOf": [
     {
       "$ref": "div-shape-drawable.json",
-      "description": "Drawable простой геометрической формы."
+      "$description": "translations.json#/div_drawable"
     }
   ]
 }

@@ -2,7 +2,7 @@
   "anyOf": [
     {
       "$ref": "div-rounded-rectangle-shape.json",
-      "description": "Прямоугольник со скругленными углами."
+      "$description": "translations.json#/div_shape_rounded_rectangle"
     }
   ]
 }

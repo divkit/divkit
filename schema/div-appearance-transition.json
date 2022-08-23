@@ -1,21 +1,21 @@
 {
-  "description": "Анимированное появление или исчезновение элемента в иерархии.",
+  "$description": "translations.json#/",
   "anyOf": [
     {
       "$ref": "div-appearance-set-transition.json",
-      "description": "Набор из нескольких переходов."
+      "$description": "translations.json#/div_appearance_transition_set"
     },
     {
       "$ref": "div-fade-transition.json",
-      "description": "Переход с анимацией полупрозрачности."
+      "$description": "translations.json#/div_appearance_transition_fade"
     },
     {
       "$ref": "div-scale-transition.json",
-      "description": "Переход с анимацией масштабирования."
+      "$description": "translations.json#/div_appearance_transition_scale"
     },
     {
       "$ref": "div-slide-transition.json",
-      "description": "Переход с анимацией перемещения."
+      "$description": "translations.json#/div_appearance_transition_slide"
     }
   ]
 }

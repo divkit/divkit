@@ -1,26 +1,26 @@
 {
   "type": "object",
-  "description": "Тень элемента.",
+  "$description": "translations.json#/div_shadow",
   "properties": {
     "color": {
       "$ref": "common.json#/color",
-      "description": "Цвет тени.",
+      "$description": "translations.json#/div_shadow_color",
       "default_value": "#000000"
     },
     "offset": {
       "$ref": "div-point.json",
-      "description": "Смещение тени."
+      "$description": "translations.json#/div_shadow_offset"
     },
     "blur": {
       "$ref": "common.json#/non_negative_integer",
-      "description": "Интенсивность размытия.",
+      "$description": "translations.json#/div_shadow_blur",
       "default_value": "2"
     },
     "alpha": {
       "type": "number",
       "default_value": "0.19",
       "constraint": "number >= 0.0 && number <= 1.0",
-      "description": "Прозрачность тени."
+      "$description": "translations.json#/div_shadow_alpha"
     }
   },
   "required": [

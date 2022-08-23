@@ -1,5 +1,5 @@
 {
-  "description": "Анимация прозрачности.",
+  "$description": "translations.json#/div_fade_transition",
   "allOf": [
     {
       "$ref": "div-transition-base.json"
@@ -16,7 +16,7 @@
           "type": "number",
           "constraint": "number >= 0.0 && number <= 1.0",
           "default_value": "0.0",
-          "description": "Значение альфа-канала, с которого начнется появление или на котором закончится исчезновение элемента."
+          "$description": "translations.json#/div_fade_transition_alpha"
         }
       }
     }

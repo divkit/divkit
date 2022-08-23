@@ -1,27 +1,27 @@
 {
   "type": "object",
-  "description": "Рамка вокруг элемента.",
+  "$description": "translations.json#/div_border",
   "properties": {
     "has_shadow": {
       "$ref": "common.json#/boolean_int",
       "default_value": "false",
-      "description": "Добавление тени."
+      "$description": "translations.json#/div_border_has_shadow"
     },
     "shadow": {
       "$ref": "div-shadow.json",
-      "description": "Параметры тени."
+      "$description": "translations.json#/div_border_shadow"
     },
     "stroke": {
       "$ref": "div-stroke.json",
-      "description": "Стиль рамки."
+      "$description": "translations.json#/div_border_stroke"
     },
     "corner_radius": {
       "$ref": "common.json#/non_negative_integer",
-      "description": "Один радиус скругления углов элемента и рамки. Имеет более низкий приоритет, чем `corners_radius`."
+      "$description": "translations.json#/div_border_corner_radius"
     },
     "corners_radius": {
       "$ref": "div-corners-radius.json",
-      "description": "Несколько радиусов скругления углов элемента и рамки."
+      "$description": "translations.json#/div_border_corners_radius"
     }
   }
 }

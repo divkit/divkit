@@ -3,11 +3,11 @@
     "string_variable": {
       "alias_kotlin": "str_variable",
       "type": "object",
-      "description": "Строковая переменная.",
+      "$description": "translations.json#/div_variable_string",
       "properties": {
         "name": {
           "$ref": "div-variable-name.json",
-          "description": "Название переменной."
+          "$description": "translations.json#/div_variable_name"
         },
         "type": {
           "type": "string",
@@ -18,7 +18,7 @@
         "value": {
           "supports_expressions": false,
           "type": "string",
-          "description": "Значение."
+          "$description": "translations.json#/div_variable_value"
         }
       },
       "required": [
@@ -28,11 +28,11 @@
     },
     "integer_variable": {
       "type": "object",
-      "description": "Целочисленная переменная.",
+      "$description": "translations.json#/div_variable_integer",
       "properties": {
         "name": {
           "$ref": "div-variable-name.json",
-          "description": "Название переменной."
+          "$description": "translations.json#/div_variable_name"
         },
         "type": {
           "type": "string",
@@ -43,7 +43,7 @@
         "value": {
           "supports_expressions": false,
           "type": "integer",
-          "description": "Значение."
+          "$description": "translations.json#/div_variable_value"
         }
       },
       "required": [
@@ -53,11 +53,11 @@
     },
     "number_variable": {
       "type": "object",
-      "description": "Переменная с плавающей точкой.",
+      "$description": "translations.json#/div_variable_number",
       "properties": {
         "name": {
           "$ref": "div-variable-name.json",
-          "description": "Название переменной."
+          "$description": "translations.json#/div_variable_name"
         },
         "type": {
           "type": "string",
@@ -68,7 +68,7 @@
         "value": {
           "supports_expressions": false,
           "type": "number",
-          "description": "Значение."
+          "$description": "translations.json#/div_variable_value"
         }
       },
       "required": [
@@ -79,11 +79,11 @@
     "boolean_variable": {
       "alias_kotlin": "bool_variable",
       "type": "object",
-      "description": "Логическая переменная.",
+      "$description": "translations.json#/div_variable_boolean",
       "properties": {
         "name": {
           "$ref": "div-variable-name.json",
-          "description": "Название переменной."
+          "$description": "translations.json#/div_variable_name"
         },
         "type": {
           "type": "string",
@@ -94,7 +94,7 @@
         "value": {
           "supports_expressions": false,
           "$ref": "common.json#/boolean_int",
-          "description": "Значение."
+          "$description": "translations.json#/div_variable_value"
         }
       },
       "required": [
@@ -104,11 +104,11 @@
     },
     "color_variable": {
       "type": "object",
-      "description": "Переменная — цвет в формате HEX, представленный в виде строки.",
+      "$description": "translations.json#/div_variable_color",
       "properties": {
         "name": {
           "$ref": "div-variable-name.json",
-          "description": "Название переменной."
+          "$description": "translations.json#/div_variable_name"
         },
         "type": {
           "supports_expressions": false,
@@ -120,7 +120,7 @@
         "value": {
           "supports_expressions": false,
           "$ref": "common.json#/color",
-          "description": "Значение."
+          "$description": "translations.json#/div_variable_value"
         }
       },
       "required": [
@@ -130,11 +130,11 @@
     },
     "url_variable": {
       "type": "object",
-      "description": "Переменная — URL в виде строки.",
+      "$description": "translations.json#/div_variable_url",
       "properties": {
         "name": {
           "$ref": "div-variable-name.json",
-          "description": "Название переменной."
+          "$description": "translations.json#/div_variable_name"
         },
         "type": {
           "type": "string",
@@ -145,7 +145,7 @@
         "value": {
           "supports_expressions": false,
           "$ref": "common.json#/url",
-          "description": "Значение."
+          "$description": "translations.json#/div_variable_value"
         }
       },
       "required": [

@@ -1,6 +1,6 @@
 {
   "java_extends": "DivBlockWithId",
-  "description": "Пейджер. Содержит горизонтальный набор карточек, которые можно скроллить постранично. Показывает основную страницу и начало следующей.",
+  "$description": "translations.json#/div_pager",
   "generate_swift_optional_arguments": false,
   "allOf": [
     {
@@ -16,12 +16,12 @@
         },
         "layout_mode": {
           "$ref": "div-pager-layout-mode.json",
-          "description": "Тип вычисления ширины основной страницы:<li>`fixed` — из фиксированной ширины следующей страницы `neighbour_page_width`;</li><li>`percentage` — из процентного значения `page_width`.</li>"
+          "$description": "translations.json#/div_pager_layout_mode"
         },
         "item_spacing": {
           "$ref": "div-fixed-size.json",
           "default_value": "{\"type\": \"fixed\",\"value\":0}",
-          "description": "Расстояние между элементами."
+          "$description": "translations.json#/div_pager_item_spacing"
         },
         "items": {
           "type": "array",
@@ -30,7 +30,7 @@
           },
           "minItems": 1,
           "clientMinItems": 1,
-          "description": "Элементы пейджера. Варианты постраничного перехода можно осуществить с помощью:<li>`div-action://set_current_item?id=&item=` — задать текущую страницу с порядковым номером `item` внутри элемента, с заданным `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — перейти на следующую страницу внутри элемента, с заданным `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — перейти на предыдущую страницу внутри элемента, с заданным `id`.</li></p><p>Опциональный параметр `overflow` позволяет задать навигацию при достижении первого или последнего элемента:<li>`clamp` — переход остановится на пограничном элементе;</li><li>`ring` — переход в начало или конец, в зависимости от текущего элемента.</li></p><p>По умолчанию, `clamp`."
+          "$description": "translations.json#/div_pager_items"
         },
         "orientation": {
           "type": "string",
@@ -38,12 +38,12 @@
           "enum": [
             "horizontal", "vertical"
           ],
-          "description": "Ориентация пейджера."
+          "$description": "translations.json#/div_pager_orientation"
         },
         "restrict_parent_scroll": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "description": "При включенном параметре пейджер не будет передавать жест скролла родительскому элементу.",
+          "$description": "translations.json#/div_pager_restrict_parent_scroll",
           "platforms": [
             "android"
           ]
@@ -51,7 +51,7 @@
         "default_item": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "0",
-          "description": "Порядковый номер элемента пейджера, который будет открываться по умолчанию."
+          "$description": "translations.json#/div_pager_default_item"
         }
       }
     }

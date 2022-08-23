@@ -1,13 +1,13 @@
 {
   "java_extends": "DivBlockWithId",
-  "description": "Слайдер для выбора значения в диапазоне.",
+  "$description": "translations.json#/div_slider",
   "definitions": {
     "text_style": {
       "type": "object",
       "properties": {
         "font_size": {
           "$ref": "common.json#/non_negative_integer",
-          "description": "Размер шрифта."
+          "$description": "translations.json#/div_font_size"
         },
         "font_size_unit": {
           "$ref": "div-size-unit.json",
@@ -19,16 +19,16 @@
         "font_weight": {
           "$ref": "div-font-weight.json",
           "default_value": "regular",
-          "description": "Начертание."
+          "$description": "translations.json#/div_font_weight"
         },
         "text_color": {
           "$ref": "common.json#/color",
           "default_value": "#FF000000",
-          "description": "Цвет текста."
+          "$description": "translations.json#/div_text_color"
         },
         "offset": {
           "$ref": "div-point.json",
-          "description": "Сдвиг относительно центра."
+          "$description": "translations.json#/div_slider_text_style_offset"
         }
       },
       "required": [
@@ -51,56 +51,56 @@
         "min_value": {
           "type": "integer",
           "default_value": "0",
-          "description": "Минимальное значение."
+          "$description": "translations.json#/div_slider_min_value"
         },
         "max_value": {
           "type": "integer",
           "default_value": "100",
-          "description": "Максимальное значение. Должно быть больше минимального."
+          "$description": "translations.json#/div_slider_max_value"
         },
         "thumb_value_variable": {
           "$ref": "div-variable-name.json",
-          "description": "Название переменной для хранения текущего значения указателя."
+          "$description": "translations.json#/div_slider_thumb_value_variable"
         },
         "thumb_secondary_value_variable": {
           "$ref": "div-variable-name.json",
-          "description": "Название переменной для хранения текущего значения второго указателя."
+          "$description": "translations.json#/div_slider_thumb_secondary_value_variable"
         },
         "thumb_style": {
           "$ref": "div-drawable.json",
-          "description": "Стиль первого указателя."
+          "$description": "translations.json#/div_slider_thumb_style"
         },
         "thumb_secondary_style": {
           "$ref": "div-drawable.json",
-          "description": "Стиль второго указателя."
+          "$description": "translations.json#/div_slider_thumb_secondary_style"
         },
         "thumb_text_style": {
           "$ref": "#/definitions/text_style",
-          "description": "Стиль текста в первом указателе."
+          "$description": "translations.json#/div_slider_thumb_text_style"
         },
         "thumb_secondary_text_style": {
           "$ref": "#/definitions/text_style",
-          "description": "Стиль текста во втором указателе."
+          "$description": "translations.json#/div_slider_thumb_secondary_text_style"
         },
         "track_active_style": {
           "$ref": "div-drawable.json",
-          "description": "Стиль активной части шкалы."
+          "$description": "translations.json#/div_slider_track_active_style"
         },
         "tick_mark_active_style": {
           "$ref": "div-drawable.json",
-          "description": "Стиль активных засечек."
+          "$description": "translations.json#/div_slider_tick_mark_active_style"
         },
         "track_inactive_style": {
           "$ref": "div-drawable.json",
-          "description": "Стиль неактивной части шкалы."
+          "$description": "translations.json#/div_slider_track_inactive_style"
         },
         "tick_mark_inactive_style": {
           "$ref": "div-drawable.json",
-          "description": "Стиль неактивных засечек."
+          "$description": "translations.json#/div_slider_tick_mark_inactive_style"
         },
         "secondary_value_accessibility": {
           "$ref": "div-accessibility.json",
-          "description": "Доступность для второго указателя.",
+          "$description": "translations.json#/div_slider_secondary_value_accessibility",
           "platforms": [
             "web"
           ]

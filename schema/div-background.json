@@ -2,15 +2,15 @@
   "anyOf": [
     {
       "$ref": "div-gradient-background.json",
-      "description": "Градиент."
+      "$description": "translations.json#/div_background_gradient"
     },
     {
       "$ref": "div-image-background.json",
-      "description": "Изображение."
+      "$description": "translations.json#/div_background_image"
     },
     {
       "$ref": "div-solid-background.json",
-      "description": "Сплошной цвет."
+      "$description": "translations.json#/div_background_solid"
     }
   ]
 }

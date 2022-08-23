@@ -1,10 +1,10 @@
 {
   "type": "object",
-  "description": "Расположение координаты оси вращения в процентах относительно элемента.",
+  "$description": "translations.json#/div_pivot_percentage_short",
   "properties": {
     "value": {
       "type": "number",
-      "description": "Расположение элемента."
+      "$description": "translations.json#/div_pivot_percentage_value"
     },
     "type": {
       "type": "string",

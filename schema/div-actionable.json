@@ -2,7 +2,7 @@
   "properties": {
     "action": {
       "$ref": "div-action.json",
-      "description": "Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`."
+      "$description": "translations.json#/div_actionable_action"
     },
     "actions": {
       "type": "array",
@@ -11,7 +11,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Несколько действий при нажатии на элемент."
+      "$description": "translations.json#/div_actionable_actions"
     },
     "longtap_actions": {
       "type": "array",
@@ -20,7 +20,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Действие при долгом нажатии на элемент.",
+      "$description": "translations.json#/div_actionable_longtap_actions",
       "platforms": [
         "android",
         "ios"
@@ -33,7 +33,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Действие при двойном нажатии на элемент.",
+      "$description": "translations.json#/div_actionable_doubletap_actions",
       "platforms": [
         "android",
         "ios"
@@ -42,7 +42,7 @@
     "action_animation": {
       "$ref": "div-animation.json",
       "default_value": "{\"name\": \"fade\", \"start_value\": 1, \"end_value\": 0.6, \"duration\": 100 }",
-      "description": "Анимация действия. Поддерживаются `fade`, `scale` и `set`."
+      "$description": "translations.json#/div_actionable_action_animation"
     }
   }
 }

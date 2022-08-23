@@ -3,31 +3,31 @@
     "placeholder_color": {
       "$ref": "common.json#/color",
       "default_value": "#14000000",
-      "description": "Фон-заглушка до загрузки изображения."
+      "$description": "translations.json#/div_image_base_placeholder_color"
     },
     "scale": {
       "$ref": "div-image-scale.json",
       "default_value": "fill",
-      "description": "Масштабирование изображения:<li>`fit` помещает картинку в элемент целиком (свободное место заполняется фоном);</li><li>`fill` масштабирует картинку по размеру элемента и обрезает лишнее.</li>"
+      "$description": "translations.json#/div_image_base_scale"
     },
     "content_alignment_vertical": {
       "$ref": "div-alignment-vertical.json",
       "default_value": "center",
-      "description": "Вертикальное выравнивание изображения."
+      "$description": "translations.json#/div_image_base_content_alignment_vertical"
     },
     "content_alignment_horizontal": {
       "$ref": "div-alignment-horizontal.json",
       "default_value": "center",
-      "description": "Горизонтальное выравнивание изображения."
+      "$description": "translations.json#/div_image_base_content_alignment_horizontal"
     },
     "preview": {
       "$ref": "common.json#/non_empty_string",
-      "description": "Превью изображения, закодированное в `base64`. Будет показано до загрузки картинки вместо `placeholder_color`. Формат `data url`: `data:[;base64],<data>`"
+      "$description": "translations.json#/div_image_base_preview"
     },
     "preload_required": {
       "$ref": "common.json#/boolean_int",
       "default_value": "false",
-      "description": "До показа необходимо предварительно загрузить фоновое изображение.",
+      "$description": "translations.json#/div_image_base_preload_required",
       "platforms": [
         "android"
       ]

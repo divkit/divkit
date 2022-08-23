@@ -1,14 +1,14 @@
 {
   "type": "object",
-  "description": "Значение смещения координат оси вращения.",
+  "$description": "translations.json#/div_pivot_fixed_short",
   "properties": {
     "value": {
       "type": "integer",
-      "description": "Смещение."
+      "$description": "translations.json#/div_pivot_fixed_value"
     },
     "unit": {
       "$ref": "div-size-unit.json",
-      "description": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.dita).",
+      "$description": "translations.json#/div_pivot_fixed_unit",
       "default_value": "dp"
     },
     "type": {

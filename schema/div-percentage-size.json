@@ -1,10 +1,10 @@
 {
   "type": "object",
-  "description": "Процентное значение размера элемента.",
+  "$description": "translations.json#/div_percentage_size",
   "properties": {
     "value": {
       "$ref": "common.json#/positive_number",
-      "description": "Значение размера элемента."
+      "$description": "translations.json#/div_percentage_size_value"
     },
     "type": {
       "type": "string",

@@ -1,6 +1,6 @@
 {
   "java_extends": "DivBlockWithId",
-  "description": "Сетка с возможностью объединения ячеек по вертикали и горизонтали.",
+  "$description": "translations.json#/div_grid",
   "generate_swift_optional_arguments": false,
   "allOf": [
     {
@@ -14,12 +14,12 @@
         "content_alignment_vertical": {
           "$ref": "div-alignment-vertical.json",
           "default_value": "top",
-          "description": "Выравнивание содержимого сетки по вертикали."
+          "$description": "translations.json#/div_grid_content_alignment_vertical"
         },
         "content_alignment_horizontal": {
           "$ref": "div-alignment-horizontal.json",
           "default_value": "left",
-          "description": "Выравнивание содержимого сетки по горизонтали."
+          "$description": "translations.json#/div_grid_content_alignment_horizontal"
         },
         "items": {
           "type": "array",
@@ -29,11 +29,11 @@
           "minItems": 1,
           "clientMinItems": 1,
           "strictParsing": true,
-          "description": "Содержимое."
+          "$description": "translations.json#/div_grid_items"
         },
         "column_count": {
           "$ref": "common.json#/non_negative_integer",
-          "description": "Количество столбцов."
+          "$description": "translations.json#/div_grid_column_count"
         },
         "type": {
           "type": "string",

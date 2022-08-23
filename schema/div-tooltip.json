@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "Всплывающая подсказка.",
+  "$description": "translations.json#/div_tooltip",
   "platforms": [
     "android",
     "ios"
@@ -9,11 +9,11 @@
     "id": {
       "$ref": "common.json#/non_empty_string",
       "supports_expressions": false,
-      "description": "Идентификатор подсказки. Используется, чтобы избежать повторного показа. Должен быть уникален для всех подсказок элемента."
+      "$description": "translations.json#/div_tooltip_id"
     },
     "div": {
       "$ref": "div.json",
-      "description": "Элемент, который будет показан в подсказке. Если внутри элемента есть подсказки, они не будут показываться."
+      "$description": "translations.json#/div_tooltip_div"
     },
     "position": {
       "type": "string",
@@ -27,24 +27,24 @@
         "bottom",
         "bottom-left"
       ],
-      "description": "Положение подсказки относительно элемента, к которому она относится."
+      "$description": "translations.json#/div_tooltip_position"
     },
     "duration": {
       "$ref": "common.json#/non_negative_integer",
       "default_value": "5000",
-      "description": "Продолжительность видимости подсказки в миллисекундах. При значении `0` подсказка будет видна до тех пор, пока пользователь сам ее не скроет."
+      "$description": "translations.json#/div_tooltip_duration"
     },
     "offset": {
       "$ref": "div-point.json",
-      "description": "Сдвиг относительно якорной точки."
+      "$description": "translations.json#/div_tooltip_offset"
     },
     "animation_in" : {
       "$ref": "div-animation.json",
-      "description": "Анимация появления подсказки. По умолчанию подсказка будет появляться постепенно со смещением от якорной точки на 10 dp."
+      "$description": "translations.json#/div_tooltip_animation_in"
     },
     "animation_out" : {
       "$ref": "div-animation.json",
-      "description": "Анимация исчезания подсказки. По умолчанию подсказка будет исчезать постепенно со смещением от якорной точки на 10 dp."
+      "$description": "translations.json#/div_tooltip_animation_out"
     }
   },
   "required": [

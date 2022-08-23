@@ -2,15 +2,15 @@
   "anyOf": [
     {
       "$ref": "div-fixed-size.json",
-      "description": "Фиксированный размер."
+      "$description": "translations.json#/div_size_fixed"
     },
     {
       "$ref": "div-match-parent-size.json",
-      "description": "Размер, который подстраивается под ширину родительского элемента."
+      "$description": "translations.json#/div_size_match_parent"
     },
     {
       "$ref": "div-wrap-content-size.json",
-      "description": "Размер, который подстраивается под содержимое элемента."
+      "$description": "translations.json#/div_size_wrap_content"
     }
   ]
 }

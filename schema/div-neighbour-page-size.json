@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "Фиксированное значение ширины видимой части соседней страницы.",
+  "$description": "translations.json#/div_neighbour_page_size",
   "properties": {
     "type": {
       "type": "string",
@@ -10,7 +10,7 @@
     },
     "neighbour_page_width": {
       "$ref": "div-fixed-size.json",
-      "description": "Ширина видимой части соседней страницы."
+      "$description": "translations.json#/div_neighbour_page_size_neighbour_page_width"
     }
   },
   "required": [

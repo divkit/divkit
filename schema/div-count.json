@@ -2,11 +2,11 @@
   "anyOf": [
     {
       "$ref": "div-infinity-count.json",
-      "description": "Бесконечное число повторов."
+      "$description": "translations.json#/div_count_infinity"
     },
     {
       "$ref": "div-fixed-count.json",
-      "description": "Фиксированное число повторов."
+      "$description": "translations.json#/div_count_fixed"
     }
   ]
 }

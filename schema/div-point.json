@@ -1,14 +1,14 @@
 {
   "type": "object",
-  "description": "Точка с фиксированными координатами.",
+  "$description": "translations.json#/div_point",
   "properties": {
     "x": {
       "$ref": "div-dimension.json",
-      "description": "Координата `X`."
+      "$description": "translations.json#/div_point_x"
     },
     "y": {
       "$ref": "div-dimension.json",
-      "description": "Координата `Y`."
+      "$description": "translations.json#/div_point_y"
     }
   },
   "required": [

@@ -1,18 +1,18 @@
 {
   "type": "object",
-  "description": "Drawable простой геометрической формы.",
+  "$description": "translations.json#/div_shape_drawable",
   "properties": {
     "shape": {
       "$ref": "div-shape.json",
-      "description": "Форма."
+      "$description": "translations.json#/div_shape_drawable_shape"
     },
     "color": {
       "$ref": "common.json#/color",
-      "description": "Цвет заливки."
+      "$description": "translations.json#/div_shape_drawable_color"
     },
     "stroke": {
       "$ref": "div-stroke.json",
-      "description": "Стиль контура."
+      "$description": "translations.json#/div_shape_drawable_stroke"
     },
     "type": {
       "type": "string",

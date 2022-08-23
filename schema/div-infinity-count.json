@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "Бесконечное число повторов.",
+  "$description": "translations.json#/div_infinity_count",
   "properties": {
     "type": {
       "type": "string",

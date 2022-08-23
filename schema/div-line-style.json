@@ -1,6 +1,6 @@
 {
   "type": "string",
-  "description": "Стиль линий.",
+  "$description": "translations.json#/div_line_style",
   "enum": [
     "none",
     "single"

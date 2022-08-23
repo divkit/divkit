@@ -4,47 +4,47 @@
   "anyOf": [
     {
       "$ref": "div-image.json",
-      "description": "Изображение."
+      "$description": "translations.json#/div_image_short"
     },
     {
       "$ref": "div-gif-image.json",
-      "description": "Gif-изображение."
+      "$description": "translations.json#/div_gif_image_short"
     },
     {
       "$ref": "div-text.json",
-      "description": "Текст."
+      "$description": "translations.json#/div_text_short"
     },
     {
       "$ref": "div-separator.json",
-      "description": "Разделитель."
+      "$description": "translations.json#/div_separator_short"
     },
     {
       "$ref": "div-container.json",
-      "description": "Контейнер."
+      "$description": "translations.json#/div_container_short"
     },
     {
       "$ref": "div-grid.json",
-      "description": "Сетка."
+      "$description": "translations.json#/div_grid_short"
     },
     {
       "$ref": "div-gallery.json",
-      "description": "Галерея."
+      "$description": "translations.json#/div_gallery_short"
     },
     {
       "$ref": "div-pager.json",
-      "description": "Пейджер."
+      "$description": "translations.json#/div_pager_short"
     },
     {
       "$ref": "div-tabs.json",
-      "description": "Табы."
+      "$description": "translations.json#/div_tabs_short"
     },
     {
       "$ref": "div-state.json",
-      "description": "Состояние."
+      "$description": "translations.json#/div_state_short"
     },
     {
       "$ref": "div-custom.json",
-      "description": "Хост-специфичный элемент.",
+      "$description": "translations.json#/div_custom_short",
       "platforms": [
         "android",
         "ios"
@@ -52,15 +52,15 @@
     },
     {
       "$ref": "div-indicator.json",
-      "description": "Индикатор прогресса для пейджера."
+      "$description": "translations.json#/div_indicator_short"
     },
     {
       "$ref": "div-slider.json",
-      "description": "Слайдер."
+      "$description": "translations.json#/div_slider_short"
     },
     {
       "$ref": "div-input.json",
-      "description": "Поле ввода текста."
+      "$description": "translations.json#/div_input_short"
     }
   ]
 }

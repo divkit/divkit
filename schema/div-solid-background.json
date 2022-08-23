@@ -1,10 +1,10 @@
 {
   "type": "object",
-  "description": "Сплошной цвет фона.",
+  "$description": "translations.json#/div_solid_background",
   "properties": {
     "color": {
       "$ref": "common.json#/color",
-      "description": "Цвет."
+      "$description": "translations.json#/div_solid_background_color"
     },
     "type": {
       "type": "string",

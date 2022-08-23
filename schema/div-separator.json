@@ -1,6 +1,6 @@
 {
   "java_extends": "DivBlockWithId",
-  "description": "Разделительная линия между элементами.",
+  "$description": "translations.json#/div_separator",
   "definitions": {
     "style": {
       "type": "object",
@@ -8,7 +8,7 @@
         "color": {
           "$ref": "common.json#/color",
           "default_value": "#14000000",
-          "description": "Цвет разделителя. Чтобы разделитель не отображался, задайте в альфа-канале прозрачность. Например, `#00FFFFFF`."
+          "$description": "translations.json#/div_separator_style_color"
         },
         "orientation": {
           "type": "string",
@@ -17,7 +17,7 @@
             "horizontal"
           ],
           "default_value": "horizontal",
-          "description": "Ориентация разделителя:<li>`vertical` — вертикальная;</li><li>`horizontal` — горизонтальная.</li>"
+          "$description": "translations.json#/div_separator_style_orientation"
         }
       }
     }
@@ -33,7 +33,7 @@
       "properties": {
         "delimiter_style": {
           "$ref": "#/definitions/style",
-          "description": "Настройки отображения разделителя."
+          "$description": "translations.json#/div_separator_delimiter_style"
         },
         "type": {
           "type": "string",

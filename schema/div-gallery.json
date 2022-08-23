@@ -1,6 +1,6 @@
 {
   "java_extends": "DivBlockWithId",
-  "description": "Галерея. Содержит горизонтальный или вертикальный набор карточек, которые можно скроллить.",
+  "$description": "translations.json#/div_gallery",
   "generate_swift_optional_arguments": false,
   "allOf": [
     {
@@ -15,7 +15,7 @@
           ]
         },
         "cross_content_alignment": {
-          "description": "Выравнивание элементов в направлении, перпендикулярном направлению скролла. В горизонтальных галереях:<li>`start` — выравнивание по верхнему краю карточки;</li><li>`center` — по центру;</li><li>`end` — по нижнему краю.</li></p><p>В вертикальных галереях:<li>`start` — выравнивание по левому краю карточки;</li><li>`center` — по центру;</li><li>`end` — по правому краю.</li>",
+          "$description": "translations.json#/div_gallery_cross_content_alignment",
           "version": "2.1",
           "type": "string",
           "enum": [
@@ -27,12 +27,12 @@
         },
         "column_count": {
           "$ref": "common.json#/positive_integer",
-          "description": "Количество колонок для плиточной верстки."
+          "$description": "translations.json#/div_gallery_column_count"
         },
         "item_spacing": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "8",
-          "description": "Расстояние между элементами."
+          "$description": "translations.json#/div_gallery_item_spacing"
         },
         "scroll_mode": {
           "type": "string",
@@ -41,7 +41,7 @@
             "paging",
             "default"
           ],
-          "description": "Тип скролла: `default` — непрерывный, `paging` — постраничный."
+          "$description": "translations.json#/div_gallery_scroll_mode"
         },
         "items": {
           "type": "array",
@@ -50,7 +50,7 @@
           },
           "minItems": 1,
           "clientMinItems": 1,
-          "description": "Элементы галереи. Скролл к элементам можно осуществить с помощью:<li>`div-action://set_current_item?id=&item=` — скролл к элементу с порядковым номером `item` внутри элемента, с заданным `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — скролл к следующему элементу внутри элемента, с заданным `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — скролл к предыдущему элементу внутри элемента, с заданным `id`.</li></p><p>Опциональный параметр `overflow` позволяет задать навигацию при достижении первого или последнего элемента:<li>`clamp` — переход остановится на пограничном элементе;</li><li>`ring` — переход в начало или конец, в зависимости от текущего элемента.</li></p><p>По умолчанию, `clamp`."
+          "$description": "translations.json#/div_gallery_items"
         },
         "orientation": {
           "type": "string",
@@ -59,12 +59,12 @@
             "horizontal",
             "vertical"
           ],
-          "description": "Ориентация галереи."
+          "$description": "translations.json#/div_gallery_orientation"
         },
         "restrict_parent_scroll": {
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
-          "description": "При включенном параметре галерея не будет передавать жест скролла родительскому элементу.",
+          "$description": "translations.json#/div_gallery_restrict_parent_scroll",
           "platforms": [
             "android"
           ]
@@ -72,7 +72,7 @@
         "default_item": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "0",
-          "description": "Порядковый номер элемента галереи, к которому будет выполнен скролл по умолчанию. Для `scroll_mode`:<li>`default` — положение скролла устанавливается в начало элемента, без учета `item_spacing`;</li><li>`paging` — положение скролла устанавливается в центр элемента.</li>"
+          "$description": "translations.json#/div_gallery_default_item"
         }
       }
     }

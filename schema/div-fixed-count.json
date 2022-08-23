@@ -1,10 +1,10 @@
 {
   "type": "object",
-  "description": "Фиксированное число повторов.",
+  "$description": "translations.json#/div_fixed_count",
   "properties": {
     "value": {
       "$ref": "common.json#/non_negative_integer",
-      "description": "Число повторов."
+      "$description": "translations.json#/div_fixed_count_value"
     },
     "type": {
       "type": "string",

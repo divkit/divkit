@@ -1,13 +1,13 @@
 {
-  "description": "Анимированное изменение состояния элемента.",
+  "$description": "translations.json#/div_change_transition",
   "anyOf": [
     {
       "$ref": "div-change-set-transition.json",
-      "description": "Набор анимаций."
+      "$description": "translations.json#/div_change_transition_set"
     },
     {
       "$ref": "div-change-bounds-transition.json",
-      "description": "Анимация изменения положения и размеров элемента."
+      "$description": "translations.json#/div_change_transition_bounds"
     }
   ]
 }

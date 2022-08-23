@@ -1,5 +1,5 @@
 {
-  "description": "Анимация изменения положения и размеров элемента.",
+  "$description": "translations.json#/div_change_bounds_transition",
   "allOf": [
     {
       "$ref": "div-transition-base.json"

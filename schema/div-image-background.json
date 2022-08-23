@@ -1,36 +1,36 @@
 {
   "type": "object",
-  "description": "Фоновое изображение.",
+  "$description": "translations.json#/div_image_background",
   "properties": {
     "image_url": {
       "$ref": "common.json#/url",
-      "description": "Ссылка на изображение."
+      "$description": "translations.json#/div_image_background_image_url"
     },
     "content_alignment_vertical": {
       "$ref": "div-alignment-vertical.json",
       "default_value": "center",
-      "description": "Вертикальное выравнивание изображения."
+      "$description": "translations.json#/div_image_background_content_alignment_vertical"
     },
     "content_alignment_horizontal": {
       "$ref": "div-alignment-horizontal.json",
       "default_value": "center",
-      "description": "Горизонтальное выравнивание изображения."
+      "$description": "translations.json#/div_image_background_content_alignment_horizontal"
     },
     "scale": {
       "$ref": "div-image-scale.json",
       "default_value": "fill",
-      "description": "Масштабирование изображения."
+      "$description": "translations.json#/div_image_background_scale"
     },
     "alpha": {
       "type": "number",
       "default_value": "1.0",
       "constraint": "number >= 0.0 && number <= 1.0",
-      "description": "Прозрачность изображения."
+      "$description": "translations.json#/div_image_background_alpha"
     },
     "preload_required": {
       "$ref": "common.json#/boolean_int",
       "default_value": "false",
-      "description": "До показа необходимо предварительно загрузить фоновое изображение.",
+      "$description": "translations.json#/div_image_background_preload_required",
       "platforms": [
         "android"
       ]

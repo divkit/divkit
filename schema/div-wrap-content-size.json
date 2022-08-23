@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "Размер элемента подстраивается под его содержимое.",
+  "$description": "translations.json#/div_wrap_content_size",
   "properties": {
     "type": {
       "type": "string",
@@ -10,7 +10,7 @@
     },
     "constrained": {
       "$ref": "common.json#/boolean_int",
-      "description": "Итоговый размер не должен превышать родительский. На iOS и в браузере по умолчанию `false`. На Android всегда `true`."
+      "$description": "translations.json#/div_wrap_content_size_constrained"
     }
   },
   "required": [

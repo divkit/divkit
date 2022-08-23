@@ -3,5 +3,5 @@
   "enum": [
     "text", "display"
   ],
-  "description": "Семейство шрифта:<li>`text` — стандартный текстовый шрифт;</li><li>`display` — семейство для шрифтов с крупным кеглем.</li>"
+  "$description": "translations.json#/div_font_family"
 }

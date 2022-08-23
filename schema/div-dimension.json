@@ -1,10 +1,10 @@
 {
   "type": "object",
-  "description": "Значение измерения элемента.",
+  "$description": "translations.json#/div_dimension",
   "properties": {
     "value": {
       "type": "number",
-      "description": "Значение."
+      "$description": "translations.json#/div_dimension_value"
     },
     "unit": {
       "$ref": "div-size-unit.json",

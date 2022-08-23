@@ -5,23 +5,23 @@
     },
     {
       "type": "object",
-      "description": "Действия, которые выполняются, когда элемент становится видимым.",
+      "$description": "translations.json#/div_visibility_action",
       "properties": {
         "visibility_percentage": {
           "type": "integer",
           "constraint": "number > 0 && number <= 100",
           "default_value": "50",
-          "description": "Процент видимой части элемента, при котором срабатывает `visibility-action`."
+          "$description": "translations.json#/div_visibility_action_visibility_percentage"
         },
         "visibility_duration": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "800",
-          "description": "Время в миллисекундах, в течение которого элемент должен быть виден, чтобы сработал `visibility-action`."
+          "$description": "translations.json#/div_visibility_action_visibility_duration"
         },
         "log_limit": {
           "$ref": "common.json#/non_negative_integer",
           "default_value": "1",
-          "description": "Ограничение на количество логирований. При `0` ограничение снимается."
+          "$description": "translations.json#/div_visibility_action_log_limit"
         }
       },
       "required": [

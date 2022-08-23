@@ -1,14 +1,14 @@
 {
   "type": "object",
-  "description": "Фиксированный размер элемента.",
+  "$description": "translations.json#/div_fixed_size",
   "properties": {
     "value": {
       "$ref": "common.json#/non_negative_integer",
-      "description": "Размер элемента."
+      "$description": "translations.json#/div_fixed_size_value"
     },
     "unit": {
       "$ref": "div-size-unit.json",
-      "description": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.dita).",
+      "$description": "translations.json#/div_fixed_size_unit",
       "default_value": "dp"
     },
     "type": {

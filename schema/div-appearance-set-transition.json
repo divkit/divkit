@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "description": "Набор анимаций, которые будут применяться одновременно.",
+  "$description": "translations.json#/div_appearance_set_transition",
   "properties": {
     "type": {
       "type": "string",
@@ -15,7 +15,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Массив анимаций."
+      "$description": "translations.json#/div_appearance_set_transition_items"
     }
   },
   "required": [

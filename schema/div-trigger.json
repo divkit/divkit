@@ -1,11 +1,11 @@
 {
   "type": "object",
-  "description": "Триггер, который вызывает действие при срабатывании.",
+  "$description": "translations.json#/div_trigger",
   "properties": {
     "condition": {
       "$ref": "common.json#/boolean_int",
       "supports_expressions": true,
-      "description": "Условие для срабатывания триггера. Например, `liked && subscribed`."
+      "$description": "translations.json#/div_trigger_condition"
     },
     "mode": {
       "type": "string",
@@ -14,7 +14,7 @@
         "on_condition",
         "on_variable"
       ],
-      "description": "Режим запуска триггера:<li>`on_condition` — триггер сработает при изменении условия с `false` на `true`;</li><li>`on_variable` — триггер сработает при выполнении условия и изменении значения переменной.</li>"
+      "$description": "translations.json#/div_trigger_mode"
     },
     "actions": {
       "type": "array",
@@ -23,7 +23,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "description": "Действие при срабатывании триггера."
+      "$description": "translations.json#/div_trigger_actions"
     }
   },
   "required": [
