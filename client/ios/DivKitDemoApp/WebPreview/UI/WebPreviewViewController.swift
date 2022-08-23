@@ -3,8 +3,7 @@ import UIKit
 
 import BaseUI
 import CommonCore
-
-@_implementationOnly import LayoutKit
+import LayoutKit
 
 typealias ScreenshotCallback = (ScreenshotInfo) -> Void
 
@@ -15,24 +14,23 @@ struct ScreenshotInfo {
   let width: Double
 }
 
-@available(iOS 13, *)
-struct LivePreviewView: UIViewControllerRepresentable {
+struct WebPreviewViewRepresentable: UIViewControllerRepresentable {
   let blockProvider: BlockProvider
   let onScreenshotTaken: ScreenshotCallback
 
   func makeUIViewController(context _: Context) -> UIViewController {
-    DivViewController(
+    WebPreviewViewController(
       blockProvider: blockProvider,
-      onSnapshotTaken: onScreenshotTaken
+      onScreenshotTaken: onScreenshotTaken
     )
   }
 
   func updateUIViewController(_: UIViewController, context _: Context) {}
 }
 
-private final class DivViewController: UIViewController {
+private final class WebPreviewViewController: UIViewController {
   private let blockProvider: BlockProvider
-  private let onSnapshotTaken: ScreenshotCallback
+  private let onScreenshotTaken: ScreenshotCallback
   private let disposePool = AutodisposePool()
   private lazy var scrollView = UIScrollView()
 
@@ -46,17 +44,16 @@ private final class DivViewController: UIViewController {
   private var lastScreenshotDate: Date?
   private var screenshotCancellationToken: Cancellable?
 
-  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
   init(
     blockProvider: BlockProvider,
-    onSnapshotTaken: @escaping ScreenshotCallback
+    onScreenshotTaken: @escaping ScreenshotCallback
   ) {
     self.blockProvider = blockProvider
-    self.onSnapshotTaken = onSnapshotTaken
+    self.onScreenshotTaken = onScreenshotTaken
 
     super.init(nibName: nil, bundle: nil)
 
@@ -116,14 +113,13 @@ private final class DivViewController: UIViewController {
       }
       return
     }
-    guard let screenshot = view.makeScreenshot(
-      afterScreenUpdates: afterScreenUpdates
-    ) else {
+    
+    guard let screenshot = view.makeScreenshot(afterScreenUpdates: afterScreenUpdates) else {
       return
     }
 
     let scale = PlatformDescription.screenScale()
-    onSnapshotTaken(
+    onScreenshotTaken(
       ScreenshotInfo(
         data: screenshot.binaryRepresentation() ?? Data(),
         density: Double(scale),
@@ -135,23 +131,15 @@ private final class DivViewController: UIViewController {
   }
 }
 
-extension DivViewController: UIActionEventPerforming {
+extension WebPreviewViewController: UIActionEventPerforming {
   private func handle(_ payload: UserInterfaceAction.Payload) {
     switch payload {
-    case .empty, .json, .url:
+    case .composite, .empty, .json, .url:
       break
     case let .menu(menu):
-      showMenu(
-        menu,
-        actionPerformer: { [unowned self] in
-          self.handle($0)
-        }
-      )
+      showMenu(menu, actionPerformer: self)
     case let .divAction(params):
       blockProvider.handleDivAction(params: params)
-    case let .composite(lhs, rhs):
-      handle(lhs)
-      handle(rhs)
     }
   }
 
@@ -162,50 +150,6 @@ extension DivViewController: UIActionEventPerforming {
   func perform(uiActionEvents events: [UIActionEvent], from _: AnyObject) {
     events.map { $0.payload }.forEach { handle($0) }
     blockProvider.update()
-  }
-}
-
-extension LayoutKit.Menu {
-  fileprivate func makeActionSheet(actionPerformer: @escaping (UserInterfaceAction.Payload) -> Void)
-    -> ActionSheetModel {
-    let buttons = items.map { item in
-      AlertButton(
-        title: item.text,
-        action: {
-          item.actions.forEach { actionPerformer($0.payload) }
-        }
-      )
-    } + [AlertButton(title: "Cancel", actionStyle: .cancel)]
-
-    return ActionSheetModel(buttons: buttons)
-  }
-}
-
-extension UIViewController {
-  func showAlert(
-    message: String? = nil,
-    actions: [UIAlertAction] = []
-  ) {
-    let alert = UIAlertController(title: nil, message: message, preferredStyle: .actionSheet)
-    actions.forEach {
-      alert.addAction($0)
-    }
-    alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-    present(alert, animated: true)
-  }
-
-  func showMenu(
-    _ menu: LayoutKit.Menu,
-    actionPerformer: @escaping (UserInterfaceAction.Payload) -> Void
-  ) {
-    let actions = menu.items.map { item in
-      UIAlertAction(title: item.text, style: .default) { _ in
-        item.actions.forEach {
-          actionPerformer($0.payload)
-        }
-      }
-    }
-    showAlert(actions: actions)
   }
 }
 

@@ -2,8 +2,6 @@ import Foundation
 
 import CommonCore
 
-@_implementationOnly import DivKit
-
 final class UIStatePayloadFactory {
   typealias Errors = [(message: String, stack: [String]?)]
 

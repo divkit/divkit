@@ -6,27 +6,21 @@ import CommonCore
 final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDelegate {
   private let captureSession = AVCaptureSession()
   private let previewLayer: AVCaptureVideoPreviewLayer
-  private let logger: LivePreviewLogger
 
-  private var previousCode = ""
-  @Property
-  var result: String
+  let result: ObservableProperty<String>
 
   var layer: CALayer { previewLayer }
 
-  init(
-    result: Property<String>,
-    logger: @escaping LivePreviewLogger
-  ) {
-    _result = result
-    self.logger = logger
+  init(result: ObservableProperty<String>) {
+    self.result = result
+    
     previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     previewLayer.videoGravity = .resizeAspectFill
 
     super.init()
 
     guard let videoCaptureDevice = AVCaptureDevice.default(for: .video) else {
-      logger("Can't create video capture device")
+      DemoAppLogger.error("Can't create video capture device")
       return
     }
 
@@ -34,13 +28,14 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
     do {
       videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
     } catch {
-      logger("Can't create video input with \(error)")
+      DemoAppLogger.error("Can't create video input with \(error)")
       return
     }
+    
     if captureSession.canAddInput(videoInput) {
       captureSession.addInput(videoInput)
     } else {
-      logger("Capture session can't add video input")
+      DemoAppLogger.error("Capture session can't add video input")
       return
     }
 
@@ -50,7 +45,7 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
       metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
       metadataOutput.metadataObjectTypes = [.qr]
     } else {
-      logger("Capture session can't add metadata output")
+      DemoAppLogger.error("Capture session can't add metadata output")
       return
     }
   }
@@ -78,17 +73,11 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
   ) {
     guard let readableObject = metadataObjects.first as? AVMetadataMachineReadableCodeObject,
           let stringValue = readableObject.stringValue else {
-      logger("Can't retrieve string value from metadata")
+      DemoAppLogger.error("Can't retrieve string value from metadata")
       return
     }
 
-    handle(code: stringValue)
-  }
-
-  private func handle(code: String) {
-    guard result.isEmpty || previousCode != code else { return }
-    previousCode = code
-    result = code
+    result.value = stringValue
   }
 }
 

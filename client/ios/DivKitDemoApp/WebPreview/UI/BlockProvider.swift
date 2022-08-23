@@ -1,9 +1,8 @@
 import BaseUI
 import CommonCore
+import DivKit
+import LayoutKit
 import Serialization
-
-@_implementationOnly import DivKit
-@_implementationOnly import LayoutKit
 
 final class BlockProvider {
   private let urlOpener: UrlOpener

@@ -1,7 +1,5 @@
 import SwiftUI
 
-import LivePreview
-
 struct MainView: View {
   var body: some View {
     NavigationView {
@@ -27,8 +25,8 @@ struct MainView: View {
             }
           }
         }
-        NavigationButton("live preview", color: ThemeColor.livePreview) {
-          livePreviewView
+        NavigationButton("settings", color: ThemeColor.settings) {
+          SettingsView()
         }
         .frame(height: 80)
       }
@@ -39,16 +37,6 @@ struct MainView: View {
   
   private func makeDivViewProvider() -> DivViewProvider {
     DivViewProvider()
-  }
-
-  private var livePreviewView: some View {
-    let graph = LivePreviewGraphImpl(
-      logger: { message in
-        print(message)
-      },
-      urlOpener: DemoUrlOpener().openUrl(_:)
-    )
-    return graph.view
   }
 }
 

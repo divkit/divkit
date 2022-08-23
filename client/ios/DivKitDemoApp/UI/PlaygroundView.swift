@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct DivOnlineView: View {
+struct PlaygroundView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
   

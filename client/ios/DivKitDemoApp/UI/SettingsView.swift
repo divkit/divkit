@@ -1,13 +1,13 @@
 import SwiftUI
 
-struct SamplesView: View {
+struct SettingsView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
   
   var body: some View {
     ViewWithHeader(
-      "Samples",
-      background: ThemeColor.samples,
+      "Settings",
+      background: ThemeColor.settings,
       presentationMode: presentationMode
     ) {
       Text("Not implemented")
