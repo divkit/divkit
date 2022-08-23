@@ -7,7 +7,8 @@ COPY client/dist /application/dist
 COPY server/package.json server/package-lock.json server/app.js /application/
 COPY server/src/* /application/src/
 
-RUN cd /application && npm ci
+RUN mkdir -p /application/artifacts
+RUN cd /application && npm ci && npm run cert
 
 CMD node /application/app.js
 # CMD node -v

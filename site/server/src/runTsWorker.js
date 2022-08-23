@@ -29,15 +29,10 @@ const tsBuilder = (() => {
     return exports;
 })();
 
-const MAX_CODE_LENGTH = 10000;
 const RUN_TIMEOUT = 150;
 
 function runTask(task) {
     const code = task.code;
-
-    if (code.length >= MAX_CODE_LENGTH) {
-        throw new Error('Code string is too big');
-    }
 
     const result = transform(code, {
         // filename: 'test.ts',

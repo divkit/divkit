@@ -6,6 +6,11 @@
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
     import translations from '../auto/lang.json';
     import PointingPopup from './PointingPopup.svelte';
+    import LivePreview from './LivePreview.svelte';
+    import { viewModeStore } from '../data/viewModeStore';
+    import { isInitialLoading, isLoadError } from '../data/session';
+    import Loader from './Loader.svelte';
+    import ErrorPage from './ErrorPage.svelte';
 
     let lang = writable('en');
     const l10n = derived(lang, lang => {
@@ -31,9 +36,17 @@
     <title>{`DivKit ${$l10n('playground')}`}</title>
 </svelte:head>
 
-<Header />
-<Main />
-<PointingPopup />
+{#if $isLoadError}
+    <ErrorPage />
+{:else if $isInitialLoading}
+    <Loader />
+{:else if $viewModeStore === 'preview'}
+    <LivePreview />
+{:else}
+    <Header />
+    <Main />
+    <PointingPopup />
+{/if}
 
 <style>
     @font-face {

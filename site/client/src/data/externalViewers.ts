@@ -1,6 +1,6 @@
 import { get, writable } from 'svelte/store';
-/*import { session } from './session';
-import { addListener, wsPromise } from './ws';*/
+import { session } from './session';
+import { addListener, wsPromise } from './ws';
 
 export interface Device {
     /** @deprecated -> os_name */
@@ -50,8 +50,7 @@ export interface ViewerError {
 let currentViewers: ExternalViewer[] = [];
 export const externalViewers = writable(currentViewers);
 
-/*
-let prevListen: string | null = null;
+/*let prevListen: string | null = null;
 
 function updateListen(ws: WebSocket): void {
     const sessionInfo = get(session);
@@ -91,6 +90,7 @@ export function listenToDevices(): void {
                     item.lastState = json.message.lastState;
                 } else {
                     currentViewers.push({
+                        connected: true,
                         id: json.message.id,
                         device: json.message.device,
                         lastState: json.message.lastState || null

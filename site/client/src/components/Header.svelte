@@ -2,9 +2,27 @@
     import {getContext} from 'svelte';
     import LanguageSelector from './LanguageSelector.svelte';
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+    import LinksPopup from './LinksPopup.svelte';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
+
+    let linksPopupShown = false;
+    let linksPopup: HTMLElement;
+    let linksButton: HTMLElement;
+
+    function onBodyClick(event: MouseEvent): void {
+        const target = event.target as HTMLElement;
+        if (
+            !linksPopup?.contains(target) &&
+            !linksButton?.contains(target) &&
+            document.body.contains(target)
+        ) {
+            linksPopupShown = false;
+        }
+    }
 </script>
+
+<svelte:body on:click={onBodyClick} />
 
 <div class="header">
     <header class="header__header">
@@ -40,11 +58,19 @@
 
         <div class="header__subnav-right">
             <ul class="header__subnav-links">
-                <li>
+                <li class="header__subnav-item">
                     <a class="header__subnav-link" href="/">{$l10n('samples')}</a>
                 </li>
-                <li>
-                    <a class="header__subnav-link" href="/">{$l10n('share')}</a>
+                <li class="header__subnav-item">
+                    <button
+                        class="header__subnav-link"
+                        on:click={() => linksPopupShown = !linksPopupShown}
+                        bind:this={linksButton}
+                    >{$l10n('share')}</button>
+
+                    {#if linksPopupShown}
+                        <LinksPopup bind:node={linksPopup} on:close={() => linksPopupShown = false} />
+                    {/if}
                 </li>
             </ul>
         </div>
@@ -93,6 +119,7 @@
     }
 
     .header__subnav {
+        position: relative;
         display: flex;
         align-items: center;
         height: 40px;
@@ -124,8 +151,15 @@
 
     .header__subnav-link {
         font-size: 16px;
+        font-family: inherit;
+        line-height: inherit;
         color: inherit;
         text-decoration: none;
+        background: none;
+        border: none;
+        border-radius: 0;
+        appearance: none;
+        cursor: pointer;
     }
 
     .header__subnav-link:hover {

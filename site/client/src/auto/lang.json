@@ -2,7 +2,7 @@
     "ru": {
         "name": "Русский",
         "languageChooser": "Выбранный язык",
-        "playground": "Песочница",
+        "playground": "Веб песочница",
         "samples": "Примеры",
         "share": "Поделиться",
         "components": "Компоненты: ",
@@ -16,12 +16,21 @@
         "runTitle": "Запустить код (%s)",
         "toJsonWarning": "Код будет заменён на json и это нельзя будет отменить. Продолжить?",
         "toTsWarning": "Текущее состояние будет заменено примером кода на TypeScript и это нельзя будет отменить. Продолжить?",
-        "runCodeFirst": "Превью будет показано после первого успешного запуска кода. Для запуска нажмите кнопку над кодом или сочетание клавиш %s."
+        "runCodeFirst": "Превью будет показано после первого успешного запуска кода. Для запуска нажмите кнопку над кодом или сочетание клавиш %s.",
+        "saveConfirm": "Исходник будет сохранён на время. Не рассчитывайте, что он будет жить бессрочно.",
+        "close": "Закрыть",
+        "okSave": "Окей, я понял",
+        "linkToEdit": "Ссылка на редактирование",
+        "linkToPreview": "Ссылка на веб превью",
+        "linkToJson": "Ссылка на json",
+        "qrCode": "QR код",
+        "copy": "Копировать",
+        "loadError": "Не удалось загрузить :("
     },
     "en": {
         "name": "English",
         "languageChooser": "Selected language",
-        "playground": "Playground",
+        "playground": "Web playground",
         "samples": "Samples",
         "share": "Share",
         "components": "Components: ",
@@ -35,6 +44,15 @@
         "runTitle": "Run code (%s)",
         "toJsonWarning": "Code would be lost and cannot be recovered. Continue?",
         "toTsWarning": "Current state would be lost and cannot be recovered. Continue?",
-        "runCodeFirst": "Preview will be shown after the first successful code run. To run the code, click the button above the code editor or press %s."
+        "runCodeFirst": "Preview will be shown after the first successful code run. To run the code, click the button above the code editor or press %s.",
+        "saveConfirm": "Source will be saved for temporal usage only. It will not live forever.",
+        "close": "Close",
+        "okSave": "Okay, I get it",
+        "linkToEdit": "Link to edit",
+        "linkToPreview": "Web preview only",
+        "linkToJson": "Link to json",
+        "qrCode": "QR code",
+        "copy": "Copy",
+        "loadError": "Cannot load :("
     }
 }

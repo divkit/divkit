@@ -11,19 +11,40 @@ const cors = require('@koa/cors');
 
 const { v4: uuidv4 } = require('uuid');
 
-// const {connect, set, get} = require('./src/db');
+const {connectMongo, setMongo, getMongo} = require('./src/mongo');
 const {runTs} = require('./src/runTs');
+const {publishJsonUpdate, subscribeJsonUpdate, unsubscribeJsonUpdate} = require('./src/redis');
 
-/*connect().then(() => {
-    console.log('db connected');
+connectMongo().then(() => {
+    console.log('mongo connected');
 }).catch(err => {
-    console.error('failed to connect', err);
-});*/
+    console.error('failed to connect mongo', err);
+});
 
 const app = new Koa();
 const router = new Router();
 
-/*router.post('/api/share', async ctx => {
+const MAX_DATA_LEN = 50000;
+
+class DataViolationError extends Error {
+    constructor(...args) {
+        super(...args);
+    }
+}
+
+function checkSourceData(lang, source, json) {
+    if (lang !== 'json' && lang !== 'ts') {
+        throw new DataViolationError('Incorrect lang');
+    }
+    if (source.length > MAX_DATA_LEN) {
+        throw new DataViolationError('Too big');
+    }
+    if (json && json.length > MAX_DATA_LEN) {
+        throw new DataViolationError('Too big');
+    }
+}
+
+router.post('/api/share', async ctx => {
     const uuid = uuidv4();
     const writeKey = uuidv4();
 
@@ -34,11 +55,13 @@ const router = new Router();
         const source = ctx.request.body.value;
         const json = ctx.request.body.json;
 
-        await set(uuid, {
+        checkSourceData(lang, source, json);
+
+        await setMongo(uuid, {
             source: lang === 'json' ? null : source,
             json: lang === 'json' ? source : json,
             language: lang,
-            writeKey,
+            writeKey
         });
 
         ctx.body = {
@@ -49,11 +72,15 @@ const router = new Router();
     } catch (err) {
         console.error(err);
 
-        ctx.status = 500;
+        if (err instanceof DataViolationError) {
+            ctx.status = 400;
+        } else {
+            ctx.status = 500;
+        }
     }
-});*/
+});
 
-/*router.post('/api/updateSource', async ctx => {
+router.post('/api/updateSource', async ctx => {
     const uuid = ctx.request.body.uuid;
     const source = ctx.request.body.value;
     const lang = ctx.request.body.language;
@@ -61,15 +88,26 @@ const router = new Router();
 
     ctx.set('Cache-Control', 'no-cache,no-store,max-age=0,must-revalidate');
 
-    const item = await get(uuid);
+    try {
+        checkSourceData(lang, source);
+    } catch (err) {
+        console.error(err);
+
+        ctx.status = 400;
+        return;
+    }
+
+    const item = await getMongo(uuid);
 
     if (item && item.writeKey === writeKey) {
         try {
-            await set(uuid, {
-                source: lang === 'json' ? null : source,
-                json: lang === 'json' ? source : item.json,
-                language: lang
-            });
+            let update = lang === 'json' ? {
+                json: source
+            } : {
+                source
+            };
+
+            await setMongo(uuid, update);
 
             ctx.body = {
                 ok: 1,
@@ -78,15 +116,12 @@ const router = new Router();
             };
 
             console.log('updateSource', uuid);
-            const data = toJson(source);
 
+            const data = toJson(source);
             if (data && lang === 'json') {
-                const message = JSON.stringify({type: 'json', message: {json: data}});
-                if (roomDevices.has(uuid)) {
-                    for (const ws of roomDevices.get(uuid)) {
-                        ws.send(message);
-                    }
-                }
+                publishJsonUpdate(uuid, JSON.stringify({
+                    data
+                }));
             }
         } catch (err) {
             console.error(err);
@@ -94,22 +129,22 @@ const router = new Router();
             ctx.status = 500;
         }
     } else {
-        ctx.status = 404;
+        ctx.status = 403;
     }
-});*/
+});
 
-/*router.get('/api/json', async ctx => {
+router.get('/api/json', async ctx => {
     const uuid = ctx.query.uuid;
 
     ctx.set('Cache-Control', 'no-cache,no-store,max-age=0,must-revalidate');
 
     try {
-        const item = await get(uuid);
+        const item = await getMongo(uuid);
 
         if (item) {
             ctx.body = item.json;
 
-            await set(uuid, item);
+            await setMongo(uuid, {});
         } else {
             ctx.status = 404;
         }
@@ -118,15 +153,15 @@ const router = new Router();
 
         ctx.status = 500;
     }
-});*/
+});
 
-/*router.get('/api/source', async ctx => {
+router.get('/api/source', async ctx => {
     const uuid = ctx.query.uuid;
 
     ctx.set('Cache-Control', 'no-cache,no-store,max-age=0,must-revalidate');
 
     try {
-        const item = await get(uuid);
+        const item = await getMongo(uuid);
 
         if (item) {
             ctx.body = {
@@ -135,7 +170,7 @@ const router = new Router();
                 language: item.language || 'json'
             };
 
-            await set(uuid, item);
+            await setMongo(uuid, {});
         } else {
             ctx.status = 404;
         }
@@ -144,7 +179,7 @@ const router = new Router();
 
         ctx.status = 500;
     }
-});*/
+});
 
 router.post('/api/runTs', async ctx => {
     const code = ctx.request.body.code;
@@ -153,12 +188,12 @@ router.post('/api/runTs', async ctx => {
 
     ctx.set('Cache-Control', 'no-cache,no-store,max-age=0,must-revalidate');
 
-    if (!code) {
+    if (!code || code.length > MAX_DATA_LEN) {
         ctx.status = 400;
         return;
     }
 
-    const item = (uuid && writeKey) ? await get(uuid) : null;
+    const item = (uuid && writeKey) ? await getMongo(uuid) : null;
 
     if (uuid && writeKey && !(item && item.writeKey === writeKey)) {
         ctx.status = 400;
@@ -169,14 +204,14 @@ router.post('/api/runTs', async ctx => {
         const res = await runTs(code);
         const strResult = JSON.stringify(res);
 
-        if (strResult.length > 10000) {
-            throw new Error('Too much data');
+        if (strResult.length > MAX_DATA_LEN) {
+            throw new DataViolationError('Too much data');
         }
 
         if (item) {
-            await set(uuid, {
+            await setMongo(uuid, {
                 json: strResult
-            })
+            });
         }
 
         ctx.body = {
@@ -184,14 +219,17 @@ router.post('/api/runTs', async ctx => {
             result: strResult
         };
 
-        /*const message = JSON.stringify({type: 'json', message: {json: res}});
-        if (roomDevices.has(uuid)) {
-            for (const ws of roomDevices.get(uuid)) {
-                ws.send(message);
-            }
-        }*/
+        publishJsonUpdate(JSON.stringify({
+            uuid,
+            data: res
+        }));
     } catch (err) {
         console.error(err);
+        if (err instanceof DataViolationError) {
+            ctx.status = 400;
+        } else {
+            ctx.status = 500;
+        }
         ctx.body = {
             error: String(err && err.message || err || 'Unknown error')
         };
@@ -226,18 +264,18 @@ app.use(router.allowedMethods());
 const port = process.env.NODE_ENV === 'production' ? 80 : 3000;
 const server = app.listen(port);
 
-/*const wss = new WebSocket.Server({server});
+const wss = new WebSocket.Server({server});
 
-/!** @type Map<string, Set<WebSocket>> *!/
+/** @type Map<string, Set<WebSocket>> */
 const roomDevices = new Map();
-/!** @type Map<WebSocket, string> *!/
+/** @type Map<WebSocket, string> */
 const deviceToUuid = new Map();
-/!** @type {Map<WebSocket, { device: object, lastState: object }>} *!/
+/** @type {Map<WebSocket, { device: object, lastState: object }>} */
 const deviceState = new Map();
-/!** @type {Map<string, Set<WebSocket>>} *!/
-const roomListeners = new Map();
-/!** @type {Map<WebSocket, string>} *!/
-const roomListenerToUuid = new Map();
+/** @type {Map<string, Set<WebSocket>>} */
+// const roomListeners = new Map();
+/** @type {Map<WebSocket, string>} */
+// const roomListenerToUuid = new Map();
 
 function toJson(str) {
     try {
@@ -247,9 +285,9 @@ function toJson(str) {
     }
 }
 
-function deviceToId(device) {
+/*function deviceToId(device) {
     return device.client_id;
-}
+}*/
 
 function disconnectDevice(ws) {
     let uuid = deviceToUuid.get(ws);
@@ -257,6 +295,9 @@ function disconnectDevice(ws) {
         const prevSet = roomDevices.get(uuid);
         if (prevSet) {
             prevSet.delete(ws);
+            if (!prevSet.size) {
+                unsubscribeJsonUpdate(uuid);
+            }
         }
         deviceToUuid.delete(ws);
     }
@@ -266,7 +307,7 @@ function disconnectDevice(ws) {
         deviceState.delete(ws);
     }
 
-    if (uuid && roomListeners.has(uuid) && state) {
+    /*if (uuid && roomListeners.has(uuid) && state) {
         for (const listenerWs of roomListeners.get(uuid)) {
             listenerWs.send(JSON.stringify({
                 type: 'disconnect_room',
@@ -276,7 +317,7 @@ function disconnectDevice(ws) {
                 }
             }));
         }
-    }
+    }*/
 }
 
 const wsCheckInterval = setInterval(function ping() {
@@ -302,7 +343,7 @@ wss.on('connection', function connection(ws) {
     });
 
     ws.on('message', async function incoming(message) {
-        console.log('received', message);
+        // console.log('received', String(message));
 
         let json;
         try {
@@ -318,7 +359,7 @@ wss.on('connection', function connection(ws) {
         switch (json.type) {
             case 'listen': {
                 const uuid = json.message.uuid;
-                const item = await get(uuid);
+                const item = await getMongo(uuid);
                 if (!item) {
                     console.log('listen - no data', uuid);
                     ws.send(JSON.stringify({type: 'error', message: {text: 'missing uuid'}}));
@@ -339,9 +380,12 @@ wss.on('connection', function connection(ws) {
                 } else {
                     console.log('listen - not a json', uuid);
                 }
+
+                subscribeToJson(uuid);
+
                 break;
             }
-            case 'ui_state': {
+            /*case 'ui_state': {
                 let item;
                 if (deviceState.has(ws)) {
                     item = deviceState.get(ws);
@@ -371,15 +415,13 @@ wss.on('connection', function connection(ws) {
                                     lastState: item.lastState
                                 }
                             }));
-
-                            delete awaitsDevice[uuid];
                         }
                     }
                 }
 
                 break;
-            }
-            case 'listen_room': {
+            }*/
+            /*case 'listen_room': {
                 if (roomListenerToUuid.has(ws)) {
                     const prevUuid = roomListenerToUuid.get(ws);
                     if (roomListeners.has(prevUuid)) {
@@ -414,13 +456,31 @@ wss.on('connection', function connection(ws) {
                 }
 
                 break;
-            }
+            }*/
         }
     });
 
     ws.on('close', () => {
         disconnectDevice(ws);
     });
-});*/
+});
+
+function subscribeToJson(uuid) {
+    subscribeJsonUpdate(uuid, message => {
+        try {
+            const json = JSON.parse(message);
+
+            if (roomDevices.has(uuid)) {
+                const message = JSON.stringify({type: 'json', message: {json: json.data}});
+
+                for (const ws of roomDevices.get(uuid)) {
+                    ws.send(message);
+                }
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    });
+}
 
 console.log(`listening on port ${port}`);
