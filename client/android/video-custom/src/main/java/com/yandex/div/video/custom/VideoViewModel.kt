@@ -10,19 +10,16 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 internal interface VideoViewModel {
     // TODO: Remove ExoPlayer instance from view model, see https://st.yandex-team.ru/DIVKIT-159
     val player: ExoPlayer
-    val stubImage: Flow<Bitmap?>
-    val stubVisible: Flow<Boolean>
-
-    fun onReadyToPlay(ready: Boolean)
+    val stubImageIfVisible: Flow<Bitmap?>
 
     fun onPlaybackError(exception: Exception)
 
@@ -61,26 +58,20 @@ internal class MutableVideoViewModel(
     private val stubImageInternal = MutableStateFlow<Bitmap?>(null)
 
     init {
-        viewModelScope.launch {
-            val stubImage = videoConfig.stubImageUrl?.let { cache.getStubImage(it) }
-            stubImageInternal.value = stubImage
+        videoConfig.stubImageUrl?.let { stubImageUrl ->
+            viewModelScope.launch {
+                val stubImage = cache.getStubImage(stubImageUrl)
+                stubImageInternal.value = stubImage
+            }
         }
     }
 
-    override val stubImage: Flow<Bitmap?>
-        get() = stubImageInternal.asStateFlow()
+    override val stubImageIfVisible: Flow<Bitmap?>
+        get() = stubImageInternal.combine(stubVisible) { image, visible ->
+            image.takeIf { visible }
+        }.distinctUntilChanged()
 
-    private val stubVisibleInternal = MutableStateFlow(false)
-
-    override val stubVisible
-        get() = stubVisibleInternal.debounce { stubVisible ->
-            // Don't show stub image immediately, wait 500ms so that stub don't blink
-            if (stubVisible) 500 else 0
-        }
-
-    override fun onReadyToPlay(ready: Boolean) {
-        stubVisibleInternal.value = !ready
-    }
+    private val stubVisible = MutableStateFlow(true)
 
     override fun onPlaybackError(exception: Exception) {
         val id = videoConfig.id ?: return
@@ -92,6 +83,7 @@ internal class MutableVideoViewModel(
         if (!isShowingStarted) {
             actionNotifier.notifyVideoStartedShowing(id)
             isShowingStarted = true
+            stubVisible.value = false
         }
     }
 

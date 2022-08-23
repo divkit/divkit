@@ -23,6 +23,7 @@ import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.regression.di.DaggerRegressionComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import org.jetbrains.anko.connectivityManager
@@ -39,7 +40,7 @@ internal object Container {
 
     val httpClient = OkHttpClient.Builder().addNetworkInterceptor(StethoInterceptor()).build()
 
-    val applicationCoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val applicationCoroutineScope = MainScope()
 
     val webSocketFactory: WebSocketFactory by lazy {
         WebSocketFactory()

@@ -39,6 +39,9 @@ class VideoCustomViewController(
     }
 
     private suspend fun preload(config: VideoConfig): Boolean {
+        // Warm up view model
+        provideViewModel(config)
+
         val stubImagePreloadJob = coroutineScope.async {
             if (config.stubImageUrl == null) return@async
             cache.cacheStubImage(config.stubImageUrl)
