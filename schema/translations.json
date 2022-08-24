@@ -364,7 +364,7 @@
     "ru": "Горизонтальное выравнивание элемента внутри родительского."
   },
   "div_base_row_span": {
-    "en": "Merges cells in a string of the [grid](div-grid.dita) element.",
+    "en": "Merges cells in a string of the [grid](div-grid.md) element.",
     "ru": "Объединяет ячейки в строке элемента [grid](div-grid.md)."
   },
   "div_base_column_span": {
