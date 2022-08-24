@@ -855,10 +855,19 @@
             }
         ]
     };
+
+    /**
+     * Fix for the :active pseudo-class on iOS
+     */
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    function emptyTouchstartHandler() {}
 </script>
 
 {#if !hasError && rootStateDiv}
-    <div class="{css.root}{isDesktop ? ` ${css.root_platform_desktop}` : ''}">
+    <div
+        class="{css.root}{isDesktop ? ` ${css.root_platform_desktop}` : ''}"
+        on:touchstart={emptyTouchstartHandler}
+    >
         <RootSvgFilters {svgFiltersMap} />
         <Unknown div={rootStateDiv} {templateContext} />
     </div>
