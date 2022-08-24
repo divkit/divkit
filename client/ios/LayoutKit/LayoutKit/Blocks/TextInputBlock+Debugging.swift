@@ -11,13 +11,7 @@ extension TextInputBlock: CustomDebugStringConvertible {
 
     result += "\n  Variable text: \(textValue.wrappedValue)"
 
-    result += "\n  Background color: \(backgroundColor)"
-
     result += "\n  Keyboard type: \(keyboardType)"
-
-    if keyboardAppearance != TextInputBlock.defaultKeyboardAppearance {
-      result += "\n  Keyboard appearance: \(keyboardAppearance)"
-    }
 
     result += "\n}"
 

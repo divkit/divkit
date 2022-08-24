@@ -16,6 +16,26 @@
                 "name": "my_edit_text_3",
                 "type": "string",
                 "value": "Variable value 3"
+            },
+            {
+                "name": "variable_phone",
+                "type": "string",
+                "value": ""
+            },
+            {
+                "name": "variable_number",
+                "type": "string",
+                "value": ""
+            },
+            {
+                "name": "variable_email",
+                "type": "string",
+                "value": ""
+            },
+            {
+                "name": "variable_uri",
+                "type": "string",
+                "value": ""
             }
         ],
         "states": [
@@ -78,10 +98,9 @@
                             "text_variable": "my_edit_text",
                             "hint_text": "Very long 1 very long 2 very long 3 very long 4 very long 5 very long 6 very long 7 very long 8 hint",
                             "hint_color": "#F1C40F",
-                            "highlight_color": "#E74C3C",
-                            "max_lines": 2,
+                            "max_visible_lines": 4,
                             "line_height": 40,
-                            "keyboard_type": "text",
+                            "keyboard_type": "multi_line_text",
                             "focus": {
                                 "blur": [
                                     {
@@ -168,8 +187,387 @@
                             "hint_text": "No paddings hint",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E74C3C",
-                            "max_lines": 2,
-                            "keyboard_type": "text"
+                            "keyboard_type": "single_line_text"
+                        },
+                        {
+                            "type": "text",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#34495E"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 4,
+                                "has_shadow": 1
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_alignment_horizontal": "center",
+                            "text_alignment_vertical": "center",
+                            "text_color": "#1ABC9C",
+                            "text": "Value of variable 2:\n@{my_edit_text_2}"
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_phone",
+                            "hint_text": "Phone",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E74CFF",
+                            "keyboard_type": "phone"
+                        },
+                        {
+                            "type": "text",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#34495E"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 4,
+                                "has_shadow": 1
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_alignment_horizontal": "center",
+                            "text_alignment_vertical": "center",
+                            "text_color": "#1ABC9C",
+                            "text": "Phone:\n@{variable_phone}"
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_number",
+                            "hint_text": "Number",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E7FF3C",
+                            "keyboard_type": "number"
+                        },
+                        {
+                            "type": "text",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#34495E"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 4,
+                                "has_shadow": 1
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_alignment_horizontal": "center",
+                            "text_alignment_vertical": "center",
+                            "text_color": "#1ABC9C",
+                            "text": "Number:\n@{variable_number}"
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_email",
+                            "hint_text": "Email",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#FF4C3C",
+                            "keyboard_type": "email"
+                        },
+                        {
+                            "type": "text",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#34495E"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 4,
+                                "has_shadow": 1
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_alignment_horizontal": "center",
+                            "text_alignment_vertical": "center",
+                            "text_color": "#1ABC9C",
+                            "text": "Email:\n@{variable_email}"
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_uri",
+                            "hint_text": "Uri",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E74C3C",
+                            "keyboard_type": "uri"
+                        },
+                        {
+                            "type": "text",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#34495E"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 4,
+                                "has_shadow": 1
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_alignment_horizontal": "center",
+                            "text_alignment_vertical": "center",
+                            "text_color": "#1ABC9C",
+                            "text": "Uri:\n@{variable_uri}"
                         },
                         {
                             "type": "input",
@@ -211,14 +609,13 @@
                             "font_weight": "medium",
                             "text_color": "#000000",
                             "text_variable": "my_edit_text_3",
-                            "hint_text": "Centered alignment 1",
+                            "hint_text": "Centered alignment",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E74C3C",
-                            "max_lines": 2,
-                            "keyboard_type": "text"
+                            "max_visible_lines": 2
                         },
                         {
-                            "type": "input",
+                            "type": "text",
                             "width": {
                                 "type": "match_parent"
                             },
@@ -243,163 +640,19 @@
                             "background": [
                                 {
                                     "type": "solid",
-                                    "color": "#FFFFFF"
+                                    "color": "#34495E"
                                 }
                             ],
                             "border": {
-                                "corner_radius": 8,
-                                "has_shadow": 1,
-                                "stroke": {
-                                    "color": "#1F000000"
-                                }
+                                "corner_radius": 4,
+                                "has_shadow": 1
                             },
                             "font_size": 20,
                             "font_weight": "medium",
-                            "text_color": "#000000",
-                            "text_variable": "my_edit_text_3",
-                            "hint_text": "Centered alignment 2",
-                            "hint_color": "#F1C40F",
-                            "highlight_color": "#E74C3C",
-                            "max_lines": 2,
-                            "keyboard_type": "text"
-                        },
-                        {
-                            "type": "input",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
-                            "margins": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#FFFFFF"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 8,
-                                "has_shadow": 1,
-                                "stroke": {
-                                    "color": "#1F000000"
-                                }
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_color": "#000000",
-                            "text_variable": "my_edit_text_3",
-                            "hint_text": "Centered alignment 3",
-                            "hint_color": "#F1C40F",
-                            "highlight_color": "#E74C3C",
-                            "max_lines": 2,
-                            "keyboard_type": "text"
-                        },
-                        {
-                            "type": "input",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
-                            "margins": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#FFFFFF"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 8,
-                                "has_shadow": 1,
-                                "stroke": {
-                                    "color": "#1F000000"
-                                }
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_color": "#000000",
-                            "text_variable": "my_edit_text_3",
-                            "hint_text": "Centered alignment 4",
-                            "hint_color": "#F1C40F",
-                            "highlight_color": "#E74C3C",
-                            "max_lines": 2,
-                            "keyboard_type": "text"
-                        },
-                        {
-                            "type": "input",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
-                            "margins": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#FFFFFF"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 8,
-                                "has_shadow": 1,
-                                "stroke": {
-                                    "color": "#1F000000"
-                                }
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_color": "#000000",
-                            "text_variable": "my_edit_text_3",
-                            "hint_text": "Centered alignment 5",
-                            "hint_color": "#F1C40F",
-                            "highlight_color": "#E74C3C",
-                            "max_lines": 2,
-                            "keyboard_type": "text"
+                            "text_alignment_horizontal": "center",
+                            "text_alignment_vertical": "center",
+                            "text_color": "#1ABC9C",
+                            "text": "Value of variable 3:\n@{my_edit_text_3}"
                         },
                         {
                             "type": "text",

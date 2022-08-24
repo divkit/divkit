@@ -50,12 +50,19 @@ extension DivInput: DivBlockModeling {
 
     let textValue = Binding<String>(context: context, name: textVariable)
 
+    let highlightColor = resolveHighlightColor(context.expressionResolver)
+
+    let keyboardType = resolveKeyboardType(context.expressionResolver)
+
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context.expressionResolver),
       heightTrait: makeContentHeightTrait(with: context.expressionResolver),
       hint: hintValue.with(typo: hintTypo),
       textValue: textValue,
       textTypo: textTypo,
+      multiLineMode: keyboardType == .multiLineText,
+      keyboardType: keyboardType.system,
+      highlightColor: highlightColor,
       parentScrollView: context.parentScrollView
     )
   }
@@ -70,6 +77,23 @@ extension DivAlignmentHorizontal {
       return .center
     case .right:
       return .right
+    }
+  }
+}
+
+extension DivInput.KeyboardType {
+  fileprivate var system: TextInputBlock.KeyboardType {
+    switch self {
+    case .singleLineText, .multiLineText:
+      return .default
+    case .phone:
+      return .phonePad
+    case .number:
+      return .numbersAndPunctuation
+    case .email:
+      return .emailAddress
+    case .uri:
+      return .URL
     }
   }
 }

@@ -7,12 +7,12 @@ import TemplatesSupport
 
 public final class DivInput: DivBase {
   public enum KeyboardType: String, CaseIterable {
-    case text = "text"
+    case singleLineText = "single_line_text"
+    case multiLineText = "multi_line_text"
     case phone = "phone"
     case number = "number"
     case email = "email"
     case uri = "uri"
-    case date = "date"
   }
 
   public final class NativeInterface {
@@ -48,11 +48,11 @@ public final class DivInput: DivBase {
   public let hintColor: Expression<Color> // default value: #73000000
   public let hintText: Expression<String>? // at least 1 char
   public let id: String? // at least 1 char
-  public let keyboardType: Expression<KeyboardType> // default value: text
+  public let keyboardType: Expression<KeyboardType> // default value: multi_line_text
   public let letterSpacing: Expression<Double> // default value: 0
   public let lineHeight: Expression<Int>? // constraint: number >= 0
   public let margins: DivEdgeInsets
-  public let maxLines: Expression<Int>? // constraint: number >= 0
+  public let maxVisibleLines: Expression<Int>? // constraint: number > 0
   public let nativeInterface: NativeInterface?
   public let paddings: DivEdgeInsets
   public let rowSpan: Expression<Int>? // constraint: number >= 0
@@ -116,7 +116,7 @@ public final class DivInput: DivBase {
   }
 
   public func resolveKeyboardType(_ resolver: ExpressionResolver) -> KeyboardType {
-    resolver.resolveStringBasedValue(expression: keyboardType, initializer: KeyboardType.init(rawValue:)) ?? KeyboardType.text
+    resolver.resolveStringBasedValue(expression: keyboardType, initializer: KeyboardType.init(rawValue:)) ?? KeyboardType.multiLineText
   }
 
   public func resolveLetterSpacing(_ resolver: ExpressionResolver) -> Double {
@@ -127,8 +127,8 @@ public final class DivInput: DivBase {
     resolver.resolveNumericValue(expression: lineHeight)
   }
 
-  public func resolveMaxLines(_ resolver: ExpressionResolver) -> Int? {
-    resolver.resolveNumericValue(expression: maxLines)
+  public func resolveMaxVisibleLines(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumericValue(expression: maxVisibleLines)
   }
 
   public func resolveRowSpan(_ resolver: ExpressionResolver) -> Int? {
@@ -210,8 +210,8 @@ public final class DivInput: DivBase {
   static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
 
-  static let maxLinesValidator: AnyValueValidator<Int> =
-    makeValueValidator(valueValidator: { $0 >= 0 })
+  static let maxVisibleLinesValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 > 0 })
 
   static let nativeInterfaceValidator: AnyValueValidator<DivInput.NativeInterface> =
     makeNoOpValueValidator()
@@ -287,7 +287,7 @@ public final class DivInput: DivBase {
     letterSpacing: Expression<Double>? = nil,
     lineHeight: Expression<Int>? = nil,
     margins: DivEdgeInsets? = nil,
-    maxLines: Expression<Int>? = nil,
+    maxVisibleLines: Expression<Int>? = nil,
     nativeInterface: NativeInterface? = nil,
     paddings: DivEdgeInsets? = nil,
     rowSpan: Expression<Int>? = nil,
@@ -324,11 +324,11 @@ public final class DivInput: DivBase {
     self.hintColor = hintColor ?? .value(Color.colorWithARGBHexCode(0x73000000))
     self.hintText = hintText
     self.id = id
-    self.keyboardType = keyboardType ?? .value(.text)
+    self.keyboardType = keyboardType ?? .value(.multiLineText)
     self.letterSpacing = letterSpacing ?? .value(0)
     self.lineHeight = lineHeight
     self.margins = margins ?? DivEdgeInsets()
-    self.maxLines = maxLines
+    self.maxVisibleLines = maxVisibleLines
     self.nativeInterface = nativeInterface
     self.paddings = paddings ?? DivEdgeInsets()
     self.rowSpan = rowSpan
@@ -403,7 +403,7 @@ extension DivInput: Equatable {
     }
     guard
       lhs.margins == rhs.margins,
-      lhs.maxLines == rhs.maxLines,
+      lhs.maxVisibleLines == rhs.maxVisibleLines,
       lhs.nativeInterface == rhs.nativeInterface
     else {
       return false
@@ -479,7 +479,7 @@ extension DivInput: Serializable {
     result["letter_spacing"] = letterSpacing.toValidSerializationValue()
     result["line_height"] = lineHeight?.toValidSerializationValue()
     result["margins"] = margins.toDictionary()
-    result["max_lines"] = maxLines?.toValidSerializationValue()
+    result["max_visible_lines"] = maxVisibleLines?.toValidSerializationValue()
     result["native_interface"] = nativeInterface?.toDictionary()
     result["paddings"] = paddings.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()

@@ -22,22 +22,14 @@ public final class TextInputBlock: BlockWithTraits {
     case asciiCapableNumberPad
   }
 
-  public enum KeyboardAppearance {
-    case `default`
-    case light
-    case dark
-  }
-
-  public static let defaultKeyboardAppearance = KeyboardAppearance.light
-
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
   public let textValue: Binding<String>
   public let textTypo: Typo
-  public let keyboardAppearance: KeyboardAppearance
+  public let multiLineMode: Bool
   public let keyboardType: KeyboardType
-  public let backgroundColor: Color
+  public let highlightColor: Color?
   public let maxIntrinsicNumberOfLines = 1
   public weak var parentScrollView: ScrollView?
 
@@ -47,9 +39,9 @@ public final class TextInputBlock: BlockWithTraits {
     hint: NSAttributedString,
     textValue: Binding<String>,
     textTypo: Typo,
-    keyboardAppearance: KeyboardAppearance = defaultKeyboardAppearance,
+    multiLineMode: Bool = true,
     keyboardType: KeyboardType = .default,
-    backgroundColor: Color = .clear,
+    highlightColor: Color? = nil,
     parentScrollView: ScrollView? = nil
   ) {
     self.widthTrait = widthTrait
@@ -57,9 +49,9 @@ public final class TextInputBlock: BlockWithTraits {
     self.hint = hint
     self.textValue = textValue
     self.textTypo = textTypo
-    self.keyboardAppearance = keyboardAppearance
+    self.multiLineMode = multiLineMode
     self.keyboardType = keyboardType
-    self.backgroundColor = backgroundColor
+    self.highlightColor = highlightColor
     self.parentScrollView = parentScrollView
   }
 
@@ -110,9 +102,10 @@ extension TextInputBlock {
       && lhs.heightTrait == rhs.heightTrait
       && lhs.hint == rhs.hint
       && lhs.textValue.wrappedValue == rhs.textValue.wrappedValue
-      && lhs.keyboardAppearance == rhs.keyboardAppearance
+      && lhs.multiLineMode == rhs.multiLineMode
       && lhs.maxIntrinsicNumberOfLines == rhs.maxIntrinsicNumberOfLines
       && lhs.keyboardType == rhs.keyboardType
+      && lhs.highlightColor == rhs.highlightColor
   }
 }
 

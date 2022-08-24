@@ -16,9 +16,9 @@ extension TextInputBlock {
     let inputView = view as! TextInputBlockView
     inputView.setText(value: textValue, typo: textTypo)
     inputView.setHint(hint)
-    inputView.backgroundColor = backgroundColor.systemColor
-    inputView.setKeyboardAppearance(keyboardAppearance)
+    inputView.setHighlightColor(highlightColor)
     inputView.setKeyboardType(keyboardType)
+    inputView.setMultiLineMode(multiLineMode)
     inputView.setParentScrollView(parentScrollView)
   }
 
@@ -28,7 +28,8 @@ extension TextInputBlock {
 }
 
 private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
-  private let view = UITextView()
+  private let multiLineInput = UITextView()
+  private let singleLineInput = UITextField()
   private let hintView = UILabel()
   private weak var parentScrollView: ScrollView?
   private var tapGestureRecognizer: UITapGestureRecognizer?
@@ -36,24 +37,24 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var keyboardHeight: CGFloat = 0
   private var textValue: Binding<String>? = nil
 
-  override var backgroundColor: UIColor? {
-    didSet {
-      view.backgroundColor = backgroundColor
-    }
-  }
-
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    view.isEditable = true
-    view.isSelectable = true
-    view.showsVerticalScrollIndicator = false
-    view.autocorrectionType = .no
-    view.backgroundColor = .clear
-    view.textContainerInset = .zero
-    view.delegate = self
+    multiLineInput.isEditable = true
+    multiLineInput.isSelectable = true
+    multiLineInput.showsVerticalScrollIndicator = false
+    multiLineInput.autocorrectionType = .no
+    multiLineInput.backgroundColor = .clear
+    multiLineInput.textContainerInset = .zero
+    multiLineInput.delegate = self
+
+    singleLineInput.isHidden = true
+    singleLineInput.autocorrectionType = .no
+    singleLineInput.backgroundColor = .clear
+    singleLineInput.delegate = self
+    singleLineInput.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
 
     hintView.backgroundColor = .clear
     hintView.numberOfLines = 0
@@ -61,7 +62,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     hintView.isHidden = true
     hintView.contentMode = .center
 
-    addSubview(view)
+    addSubview(multiLineInput)
+    addSubview(singleLineInput)
     addSubview(hintView)
   }
 
@@ -72,18 +74,33 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   override func layoutSubviews() {
     super.layoutSubviews()
-    view.frame = bounds
+    multiLineInput.frame = bounds
+    singleLineInput.frame = bounds
     hintView.frame = bounds
     hintView.frame.origin = CGPoint(x: cusorOffset, y: 0)
     hintView.sizeToFit()
   }
 
-  func setKeyboardAppearance(_ appearance: TextInputBlock.KeyboardAppearance) {
-    view.keyboardAppearance = appearance.uiValue
+  private var currentText: String {
+    guard singleLineInput.isHidden else {
+      return singleLineInput.attributedText?.string ?? ""
+    }
+    return multiLineInput.attributedText.string
   }
 
   func setKeyboardType(_ type: TextInputBlock.KeyboardType) {
-    view.keyboardType = type.uiType
+    multiLineInput.keyboardType = type.uiType
+    singleLineInput.keyboardType = type.uiType
+  }
+
+  func setMultiLineMode(_ multiLineMode: Bool) {
+    multiLineInput.isHidden = !multiLineMode
+    singleLineInput.isHidden = multiLineMode
+  }
+
+  func setHighlightColor(_ color: Color?) {
+    multiLineInput.tintColor = color?.systemColor
+    singleLineInput.tintColor = color?.systemColor
   }
 
   func setParentScrollView(_ parentScrollView: ScrollView?) {
@@ -92,8 +109,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setText(value: Binding<String>, typo: Typo) {
     self.textValue = value
-    view.attributedText = value.wrappedValue.with(typo: typo)
-    view.typingAttributes = typo.attributes
+    let attributedText = value.wrappedValue.with(typo: typo)
+    multiLineInput.attributedText = attributedText
+    singleLineInput.attributedText = attributedText
+    multiLineInput.typingAttributes = typo.attributes
+    singleLineInput.typingAttributes = typo.attributes
     updateHintVisibility()
   }
 
@@ -102,7 +122,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   private func updateHintVisibility() {
-    hintView.isHidden = !view.attributedText.isEmpty
+    hintView.isHidden = !currentText.isEmpty
   }
 
   override func didMoveToWindow() {
@@ -157,20 +177,20 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 }
 
-extension TextInputBlockView: UITextViewDelegate {
-  func textViewDidBeginEditing(_ textView: UITextView) {
-    let frameInWindow = textView.convert(textView.frame, to: nil)
+extension TextInputBlockView {
+  func inputViewDidBeginEditing(_ view: UIView) {
+    let frameInWindow = view.convert(view.frame, to: nil)
     let bottomPoint = frameInWindow.maxY + additionalOffset
     scrollToVisible(bottomPoint)
     startListeningTap()
   }
 
-  func textViewDidChange(_ textView: UITextView) {
+  func inputViewDidChange(_ view: UIView) {
     updateHintVisibility()
-    textValue?.setValue(textView.attributedText.string, responder: textView)
+    textValue?.setValue(currentText, responder: view)
   }
 
-  func textViewDidEndEditing(_ textView: UITextView) {
+  func inputViewDidEndEditing(_ view: UIView) {
     stopListeningTap()
   }
 
@@ -187,7 +207,8 @@ extension TextInputBlockView: UITextViewDelegate {
   }
 
   @objc private func dissmissKeyboard() {
-    view.resignFirstResponder()
+    multiLineInput.resignFirstResponder()
+    singleLineInput.resignFirstResponder()
   }
 
   private func stopListeningTap() {
@@ -214,29 +235,31 @@ extension TextInputBlockView: UITextViewDelegate {
   }
 }
 
-extension TextInputBlock.KeyboardAppearance {
-  fileprivate var uiValue: UIKeyboardAppearance {
-    switch self {
-    case .default:
-      return .default
-    case .light:
-      return .light
-    case .dark:
-      return .dark
-    }
+extension TextInputBlockView: UITextViewDelegate {
+  func textViewDidBeginEditing(_ textView: UITextView) {
+    inputViewDidBeginEditing(textView)
+  }
+
+  func textViewDidChange(_ textView: UITextView) {
+    inputViewDidChange(textView)
+  }
+
+  func textViewDidEndEditing(_ textView: UITextView) {
+    inputViewDidEndEditing(textView)
   }
 }
 
-extension UIKeyboardAppearance {
-  fileprivate var blockValue: TextInputBlock.KeyboardAppearance {
-    switch self {
-    case .default, .light:
-      return .light
-    case .dark:
-      return .dark
-    @unknown default:
-      return .light
-    }
+extension TextInputBlockView: UITextFieldDelegate {
+  func textFieldDidBeginEditing(_ textField: UITextField) {
+    inputViewDidBeginEditing(textField)
+  }
+
+  @objc private func textFieldDidChange() {
+    inputViewDidChange(singleLineInput)
+  }
+
+  func textFieldDidEndEditing(_ textField: UITextField) {
+    inputViewDidEndEditing(textField)
   }
 }
 
