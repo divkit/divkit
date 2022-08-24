@@ -28,7 +28,6 @@
 		8C1A375228B4189E00A047C8 /* ScannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A374F28B4189E00A047C8 /* ScannerView.swift */; };
 		8C1A376928B41BA100A047C8 /* DemoAppLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A376828B41BA000A047C8 /* DemoAppLogger.swift */; };
 		8C1A376D28B4DC2400A047C8 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A376C28B4DC2400A047C8 /* SettingsView.swift */; };
-		8C1A377828B4E3E700A047C8 /* BlockProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377028B4E3E700A047C8 /* BlockProvider.swift */; };
 		8C1A377928B4E3E700A047C8 /* WebPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377128B4E3E700A047C8 /* WebPreviewView.swift */; };
 		8C1A377A28B4E3E700A047C8 /* WebPreviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377228B4E3E700A047C8 /* WebPreviewViewController.swift */; };
 		8C1A377B28B4E3E700A047C8 /* Payload.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A377428B4E3E700A047C8 /* Payload.swift */; };
@@ -40,6 +39,8 @@
 		8C1A378A28B5143200A047C8 /* DivViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378628B5143200A047C8 /* DivViewController.swift */; };
 		8C1A378B28B5143200A047C8 /* DivViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378728B5143200A047C8 /* DivViewProvider.swift */; };
 		8C1A378D28B5146C00A047C8 /* PlaygroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */; };
+		8C1A383028B61A0300A047C8 /* SimpleDivView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A382F28B61A0300A047C8 /* SimpleDivView.swift */; };
+		8C1A383228B61A2B00A047C8 /* DemoAppComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1A383128B61A2B00A047C8 /* DemoAppComponents.swift */; };
 		8C1CF626286B561F0016D0A1 /* Expected.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1CF625286B561F0016D0A1 /* Expected.swift */; };
 		8C1CF63E286B588E0016D0A1 /* TemplatesSupport in Frameworks */ = {isa = PBXBuildFile; productRef = 8C1CF63D286B588E0016D0A1 /* TemplatesSupport */; };
 		8C1CF650286B58A70016D0A1 /* ArrayWithTransformTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C1CF640286B58A70016D0A1 /* ArrayWithTransformTests.swift */; };
@@ -142,6 +143,11 @@
 		8C7B1CA72865C01E0036EF4C /* TemplatesExpectedModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1BEE2865C01C0036EF4C /* TemplatesExpectedModels.swift */; };
 		8C7B1CA82865C01E0036EF4C /* DivBlockStateStorageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1BEF2865C01C0036EF4C /* DivBlockStateStorageTests.swift */; };
 		8C7B1CA92865C01E0036EF4C /* DivStateManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */; };
+		8C7EE1CF28B777AE008A48E6 /* YSText-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CB28B777AE008A48E6 /* YSText-Bold.ttf */; };
+		8C7EE1D028B777AE008A48E6 /* YSText-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CC28B777AE008A48E6 /* YSText-Light.ttf */; };
+		8C7EE1D128B777AE008A48E6 /* YSText-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CD28B777AE008A48E6 /* YSText-Medium.ttf */; };
+		8C7EE1D228B777AE008A48E6 /* YSText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */; };
+		8C7EE1D628B7786E008A48E6 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */; };
 		8C81DF9F28AE51D2009B17D2 /* BaseUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C81DF9E28AE51D2009B17D2 /* BaseUI */; };
 		8C88636128AB802C00D04928 /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C88636028AB802C00D04928 /* ReferenceSet.swift */; };
 		8C9284DA288ACCE400BEA1FA /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284CF288ACCE400BEA1FA /* Diff.swift */; };
@@ -227,7 +233,6 @@
 		8C1A374F28B4189E00A047C8 /* ScannerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerView.swift; sourceTree = "<group>"; };
 		8C1A376828B41BA000A047C8 /* DemoAppLogger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAppLogger.swift; sourceTree = "<group>"; };
 		8C1A376C28B4DC2400A047C8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		8C1A377028B4E3E700A047C8 /* BlockProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlockProvider.swift; sourceTree = "<group>"; };
 		8C1A377128B4E3E700A047C8 /* WebPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPreviewView.swift; sourceTree = "<group>"; };
 		8C1A377228B4E3E700A047C8 /* WebPreviewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebPreviewViewController.swift; sourceTree = "<group>"; };
 		8C1A377428B4E3E700A047C8 /* Payload.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Payload.swift; sourceTree = "<group>"; };
@@ -239,6 +244,8 @@
 		8C1A378628B5143200A047C8 /* DivViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivViewController.swift; sourceTree = "<group>"; };
 		8C1A378728B5143200A047C8 /* DivViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivViewProvider.swift; sourceTree = "<group>"; };
 		8C1A378C28B5146C00A047C8 /* PlaygroundView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaygroundView.swift; sourceTree = "<group>"; };
+		8C1A382F28B61A0300A047C8 /* SimpleDivView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleDivView.swift; sourceTree = "<group>"; };
+		8C1A383128B61A2B00A047C8 /* DemoAppComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoAppComponents.swift; sourceTree = "<group>"; };
 		8C1CF625286B561F0016D0A1 /* Expected.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Expected.swift; sourceTree = "<group>"; };
 		8C1CF634286B58810016D0A1 /* TemplatesSupportTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TemplatesSupportTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C1CF640286B58A70016D0A1 /* ArrayWithTransformTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayWithTransformTests.swift; sourceTree = "<group>"; };
@@ -344,6 +351,12 @@
 		8C7B1BEE2865C01C0036EF4C /* TemplatesExpectedModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplatesExpectedModels.swift; sourceTree = "<group>"; };
 		8C7B1BEF2865C01C0036EF4C /* DivBlockStateStorageTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivBlockStateStorageTests.swift; sourceTree = "<group>"; };
 		8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivStateManagerTests.swift; sourceTree = "<group>"; };
+		8C7EE1CB28B777AE008A48E6 /* YSText-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Bold.ttf"; sourceTree = "<group>"; };
+		8C7EE1CC28B777AE008A48E6 /* YSText-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Light.ttf"; sourceTree = "<group>"; };
+		8C7EE1CD28B777AE008A48E6 /* YSText-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Medium.ttf"; sourceTree = "<group>"; };
+		8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "YSText-Regular.ttf"; sourceTree = "<group>"; };
+		8C7EE1D328B777B9008A48E6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YSFontProvider.swift; sourceTree = "<group>"; };
 		8C87CF1B28AD059600D262E1 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		8C87CF1D28AD05BC00D262E1 /* Default.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Default.xcconfig; sourceTree = "<group>"; };
@@ -492,7 +505,6 @@
 		8C1A376F28B4E3E700A047C8 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				8C1A377028B4E3E700A047C8 /* BlockProvider.swift */,
 				8C1A377128B4E3E700A047C8 /* WebPreviewView.swift */,
 				8C1A377228B4E3E700A047C8 /* WebPreviewViewController.swift */,
 			);
@@ -515,6 +527,7 @@
 			children = (
 				8C1A378628B5143200A047C8 /* DivViewController.swift */,
 				8C1A378728B5143200A047C8 /* DivViewProvider.swift */,
+				8C1A382F28B61A0300A047C8 /* SimpleDivView.swift */,
 				8C1A378428B5143200A047C8 /* VisibilityTrackingCardView.swift */,
 				8C1A378528B5143200A047C8 /* VisibilityTrackingScrollView.swift */,
 			);
@@ -609,12 +622,15 @@
 				8C27486628AFA6A200EE7F4D /* Regression */,
 				8C4504DD28B3AB58005712FD /* samples */,
 				8C7B187B2864CA1F0036EF4C /* DivKit */,
+				8C7EE1CA28B777AE008A48E6 /* Fonts */,
 				8C1A374C28B4189E00A047C8 /* QRScanner */,
 				8C440A0E2864C6B700EF4175 /* UI */,
 				8C7B18822864CA380036EF4C /* Utils */,
 				8C1A376E28B4E3E700A047C8 /* WebPreview */,
 				8C440A032864C55400EF4175 /* AppIcon.xcassets */,
 				8C440A012864C55400EF4175 /* Assets.xcassets */,
+				8C7EE1D328B777B9008A48E6 /* Info.plist */,
+				8C1A383128B61A2B00A047C8 /* DemoAppComponents.swift */,
 				8C4409FD2864C55400EF4175 /* DivKitDemoApp.swift */,
 			);
 			path = DivKitDemoApp;
@@ -777,6 +793,18 @@
 			path = TestData;
 			sourceTree = "<group>";
 		};
+		8C7EE1CA28B777AE008A48E6 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */,
+				8C7EE1CB28B777AE008A48E6 /* YSText-Bold.ttf */,
+				8C7EE1CC28B777AE008A48E6 /* YSText-Light.ttf */,
+				8C7EE1CD28B777AE008A48E6 /* YSText-Medium.ttf */,
+				8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		8C87CF1E28AD05DE00D262E1 /* Configurations */ = {
 			isa = PBXGroup;
 			children = (
@@ -820,10 +848,10 @@
 			children = (
 				8C0E7384288AED99009BEB3C /* Fonts */,
 				8C928502288ADEEA00BEA1FA /* Assets.xcassets */,
+				8C928507288ADEEA00BEA1FA /* Info.plist */,
 				8C9284F9288ADEEA00BEA1FA /* AppDelegate.swift */,
 				8C0E7380288AE9BB009BEB3C /* FontProvider.swift */,
 				8C9284FD288ADEEA00BEA1FA /* ViewController.swift */,
-				8C928507288ADEEA00BEA1FA /* Info.plist */,
 				8C0C0766288FE8F30052C4A9 /* Main.storyboard */,
 			);
 			path = SnapshotTestsHostApp;
@@ -1177,10 +1205,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C27486728AFA6A200EE7F4D /* Regression in Resources */,
-				8C4504DE28B3AB58005712FD /* samples in Resources */,
 				8C440A0A2864C55400EF4175 /* AppIcon.xcassets in Resources */,
 				8C440A082864C55400EF4175 /* Assets.xcassets in Resources */,
+				8C27486728AFA6A200EE7F4D /* Regression in Resources */,
+				8C4504DE28B3AB58005712FD /* samples in Resources */,
+				8C7EE1CF28B777AE008A48E6 /* YSText-Bold.ttf in Resources */,
+				8C7EE1D028B777AE008A48E6 /* YSText-Light.ttf in Resources */,
+				8C7EE1D128B777AE008A48E6 /* YSText-Medium.ttf in Resources */,
+				8C7EE1D228B777AE008A48E6 /* YSText-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1301,15 +1333,16 @@
 			files = (
 				8CE1B1CD28882F200003D64F /* DemoDivCustomBlockFactory.swift in Sources */,
 				8C1A377C28B4E3E700A047C8 /* UIStatePayloadFactory.swift in Sources */,
+				8C1A383028B61A0300A047C8 /* SimpleDivView.swift in Sources */,
 				8C7B187F2864CA1F0036EF4C /* DivBlockProvider.swift in Sources */,
 				8C7B18812864CA1F0036EF4C /* DemoPatchProvider.swift in Sources */,
 				8C7B18962864CA380036EF4C /* UrlOpener.swift in Sources */,
 				8C7915D028B177CE00A4642A /* ViewWithHeader.swift in Sources */,
 				8C7B18732864C9C70036EF4C /* RegressionFolderView.swift in Sources */,
 				8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */,
-				8C1A377828B4E3E700A047C8 /* BlockProvider.swift in Sources */,
 				8CF1296528B0036F00351F65 /* Themes.swift in Sources */,
 				8C1A376928B41BA100A047C8 /* DemoAppLogger.swift in Sources */,
+				8C7EE1D628B7786E008A48E6 /* YSFontProvider.swift in Sources */,
 				8C1A377A28B4E3E700A047C8 /* WebPreviewViewController.swift in Sources */,
 				8C4720AB2875EBC7000981C9 /* Samples.swift in Sources */,
 				8C1A377D28B4E3E700A047C8 /* JSONPayload.swift in Sources */,
@@ -1320,6 +1353,7 @@
 				8C1A377928B4E3E700A047C8 /* WebPreviewView.swift in Sources */,
 				8C1A378928B5143200A047C8 /* VisibilityTrackingScrollView.swift in Sources */,
 				8C4504DC28B3AA30005712FD /* SamplesView.swift in Sources */,
+				8C1A383228B61A2B00A047C8 /* DemoAppComponents.swift in Sources */,
 				8CF1296128B0018E00351F65 /* UrlInputView.swift in Sources */,
 				8C1A377B28B4E3E700A047C8 /* Payload.swift in Sources */,
 				8C1A376D28B4DC2400A047C8 /* SettingsView.swift in Sources */,
@@ -1519,11 +1553,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 477EAT77S3;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
+				INFOPLIST_FILE = DivKitDemoApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1540,11 +1573,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = 477EAT77S3;
-				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
+				INFOPLIST_FILE = DivKitDemoApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

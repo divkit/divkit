@@ -8,3 +8,5 @@ export const session = writable({
 export const isInitialLoading = writable(false);
 
 export const isLoadError = writable(false);
+
+export const isSamples = writable(false);

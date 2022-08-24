@@ -81,12 +81,13 @@
         padding: 6px 12px;
         padding-left: calc(36px + var(--level) * 24px);
         cursor: pointer;
-        transition: background .1s ease-in-out;
         user-select: none;
         word-break: break-word;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        border: 1px solid transparent;
+        border-radius: 1024px;
     }
 
     .tree-leaf__icon {
@@ -118,13 +119,12 @@
 
     .tree-leaf:hover,
     .tree-leaf_alternate-hovered {
-        background-color: var(--accent1-semi);
+        border-color: var(--accent1-semi);
     }
 
     .tree-leaf_selected,
     .tree-leaf_selected:hover {
-        background-color: var(--accent1);
-        transition-duration: .05s;
+        border-color: var(--accent1);
     }
 
     .tree-leaf_empty_no .tree-leaf__icon:hover {

@@ -37,9 +37,7 @@
     "subtitle_text": {
       "type": "title_text",
       "width": {
-        "value": {
-          "type": "wrap_content"
-        }
+        "type": "wrap_content"
       }
     }
   },

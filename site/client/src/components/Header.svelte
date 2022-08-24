@@ -52,15 +52,23 @@
     </header>
 
     <nav class="header__subnav">
-        <a href="/" class="header__subnav-logo">
-            {$l10n('playground')}
-        </a>
+        <div class="header__subnav-left">
+            <ul class="header__subnav-links">
+                <li class="header__subnav-item">
+                    <a href="/playground" class="header__subnav-logo">
+                        {$l10n('playground')}
+                    </a>
+                </li>
+                <li class="header__subnav-item">
+                    <a class="header__subnav-link" href="/playground?samples=1">
+                        {$l10n('samples')}
+                    </a>
+                </li>
+            </ul>
+        </div>
 
         <div class="header__subnav-right">
             <ul class="header__subnav-links">
-                <li class="header__subnav-item">
-                    <a class="header__subnav-link" href="/">{$l10n('samples')}</a>
-                </li>
                 <li class="header__subnav-item">
                     <button
                         class="header__subnav-link"
@@ -143,6 +151,7 @@
 
     .header__subnav-links {
         display: flex;
+        align-items: baseline;
         gap: 20px;
         margin: 0;
         padding: 0;

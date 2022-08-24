@@ -615,7 +615,7 @@ extension NSAttributedString {
 
     context?.fillEllipse(in: CGRect(
       origin: leftmostTextSelectionPoint
-        .movingX(by: -pointerCircleSize.width / 2 - pointerShapeWidth / 2).movingY(by: lineHeight),
+        .movingX(by: -pointerCircleSize.width / 2 - pointerShapeWidth / 2).movingY(by: lineHeight - pointerCircleSize.height),
       size: pointerCircleSize
     ))
   }

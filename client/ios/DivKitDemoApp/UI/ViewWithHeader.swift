@@ -21,8 +21,10 @@ struct ViewWithHeader<Content>: View where Content: View {
   var body: some View {
     VStack(spacing: 0) {
       Text(title)
-        .font(ThemeFont.make(size: 28, weight: .medium))
+        .font(ThemeFont.makeMedium(size: 28))
         .foregroundColor(.white)
+        .lineLimit(1)
+        .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 18))
         .frame(maxWidth: .infinity, minHeight: ThemeSize.header)
         .background(background)
         .overlay(backButton, alignment: .leading)
@@ -56,5 +58,6 @@ private struct StatusBarModifier: ViewModifier {
       }
       content
     }
+    .edgesIgnoringSafeArea(.bottom)
   }
 }

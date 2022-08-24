@@ -9,23 +9,18 @@ import LayoutKit
 struct DivView: UIViewControllerRepresentable {
   let blockProvider: DivBlockProvider
   let divKitComponents: DivKitComponents
-  let urlOpener: DemoUrlOpener
 
   func makeUIViewController(context _: Context) -> UIViewController {
-    let controller = DivViewController(
+    DivViewController(
       blockProvider: blockProvider,
       divKitComponents: divKitComponents
     )
-    urlOpener.onUnhandledUrl = { url in
-      controller.showAlert(title: "Unhandled URL", message: url.absoluteString)
-    }
-    return controller
   }
 
   func updateUIViewController(_: UIViewController, context _: Context) {}
 }
 
-private final class DivViewController: UIViewController {
+open class DivViewController: UIViewController {
   private let blockProvider: DivBlockProvider
   private let divKitComponents: DivKitComponents
   private let disposePool = AutodisposePool()
@@ -52,17 +47,17 @@ private final class DivViewController: UIViewController {
     super.init(nibName: nil, bundle: nil)
   }
 
-  required init?(coder _: NSCoder) {
+  public required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override func loadView() {
+  public override func loadView() {
     scrollView.backgroundColor = .white
     scrollView.cardView = cardView
     view = scrollView
   }
 
-  override func viewDidLoad() {
+  public override func viewDidLoad() {
     super.viewDidLoad()
 
     divKitComponents.extensionHandlers = [
@@ -70,16 +65,16 @@ private final class DivViewController: UIViewController {
     ]
 
     blockProvider.parentScrollView = scrollView
-    blockProvider.block
+    blockProvider.$block
       .currentAndNewValues
       .addObserver(updateBlockView)
       .dispose(in: disposePool)
   }
 
-  override func viewWillLayoutSubviews() {
+  public override func viewWillLayoutSubviews() {
     super.viewWillLayoutSubviews()
 
-    let blockSize = blockProvider.block.value.size(forResizableBlockSize: view.bounds.size)
+    let blockSize = blockProvider.block.size(forResizableBlockSize: view.bounds.size)
     cardView.frame = CGRect(origin: .zero, size: blockSize)
     blockView.frame = cardView.bounds
     scrollView.contentSize = blockSize
@@ -87,14 +82,16 @@ private final class DivViewController: UIViewController {
     onVisibleBoundsChanged(to: scrollView.bounds)
   }
 
-  override func viewDidAppear(_: Bool) {
+  public override func viewDidAppear(_: Bool) {
     onVisibleBoundsChanged(to: scrollView.bounds)
   }
 
-  override func viewWillDisappear(_: Bool) {
+  public override func viewWillDisappear(_: Bool) {
     onVisibleBoundsChanged(to: .zero)
     divKitComponents.reset()
   }
+  
+  open func onViewUpdated() {}
 
   private func updateBlockView(block: Block) {
     let elementStateObserver = divKitComponents.blockStateStorage
@@ -111,6 +108,8 @@ private final class DivViewController: UIViewController {
     }
 
     view.setNeedsLayout()
+    
+    onViewUpdated()
   }
 
   private func onVisibleBoundsChanged(to: CGRect) {
@@ -121,26 +120,23 @@ private final class DivViewController: UIViewController {
 }
 
 extension DivViewController: UIActionEventPerforming {
-  func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
+  public func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
     perform(uiActionEvents: [event], from: sender)
   }
 
-  func perform(uiActionEvents events: [UIActionEvent], from _: AnyObject) {
+  public func perform(uiActionEvents events: [UIActionEvent], from _: AnyObject) {
     events.map { $0.payload }.forEach { handle($0) }
     blockProvider.update(patch: nil)
   }
 
   private func handle(_ payload: UserInterfaceAction.Payload) {
     switch payload {
-    case .empty, .url, .json:
+    case .composite, .empty, .json, .url:
       break
     case let .menu(menu):
       showMenu(menu, actionPerformer: self)
     case let .divAction(params):
       divKitComponents.handleActions(params: params)
-    case let .composite(lhs, rhs):
-      handle(lhs)
-      handle(rhs)
     }
   }
 }

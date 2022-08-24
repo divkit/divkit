@@ -6,6 +6,29 @@ import DivKit
 import LayoutKit
 import Serialization
 
+typealias JsonProvider = () throws -> [String: Any]
+
+struct ObservableJsonProvider {
+  @ObservableProperty
+  private var provider: JsonProvider = { [:] }
+
+  var signal: Signal<JsonProvider> {
+    $provider.currentAndNewValues
+  }
+
+  func load(url: URL) {
+    provider = {
+      try Data(contentsOf: url).asJsonDictionary()
+    }
+  }
+}
+
+extension Data {
+  func asJsonDictionary() throws -> [String: Any] {
+    return try JSONSerialization.jsonObject(with: self, options: []) as! [String: Any]
+  }
+}
+
 final class DivBlockProvider {
   private let divKitComponents: DivKitComponents
   private let disposePool = AutodisposePool()
@@ -13,20 +36,22 @@ final class DivBlockProvider {
   private var divData: DivData?
   public weak var parentScrollView: ScrollView?
 
-  let block: ObservableProperty<Block> = ObservableProperty(initialValue: noDataBlock)
+  @ObservableProperty
+  private(set) var block: Block = noDataBlock
+  @ObservableProperty
+  private(set) var errors: UIStatePayloadFactory.Errors? = nil
 
   init(
-    jsonDataProvider: Signal<DataProvider.Factory>,
+    json: Signal<JsonProvider>,
     divKitComponents: DivKitComponents
   ) {
     self.divKitComponents = divKitComponents
 
-    jsonDataProvider
-      .addObserver(update)
+    json.addObserver { [weak self] in self?.update(jsonProvider: $0) }
       .dispose(in: disposePool)
   }
 
-  func update(patch: DivPatch?) {
+  func update(patch: DivPatch? = nil) {
     guard var divData = divData else {
       return
     }
@@ -35,33 +60,51 @@ final class DivBlockProvider {
       divData = divData.applyPatch(patch)
       self.divData = divData
     }
-
+    
     do {
-      block.value = try divData.makeBlock(
+      block = try divData.makeBlock(
         context: divKitComponents.makeContext(
           cardId: cardId,
-          cachedImageHolders: block.value.getImageHolders(),
+          cachedImageHolders: block.getImageHolders(),
           parentScrollView: parentScrollView
         )
       )
     } catch {
-      block.value = makeFallbackBlock("\(error)")
+      block = makeErrorBlock("\(error)")
+      errors = [(message: error.localizedDescription, stack: nil)]
+      DemoAppLogger.error("Failed to build block: \(error)")
     }
   }
 
-  private func update(jsonData: DataProvider.Factory) {
+  private func update(jsonProvider: JsonProvider) {
     divData = nil
+    block = noDataBlock
+    errors = []
     divKitComponents.reset()
-
+    
     do {
-      guard let jsonData = try jsonData() else {
-        block.value = noDataBlock
+      let json = try jsonProvider()
+      if json.isEmpty {
         return
       }
+      
+      let palette: [String: Any]? = try json.getOptionalField("palette")
+      let paletteVariables = palette?.makePalette(themeName: "light") ?? [:]
+      divKitComponents.variablesStorage
+        .set(variables: paletteVariables, triggerUpdate: false)
 
-      divData = try divKitComponents.parseDivData(jsonData, cardId: cardId)
+      let result = try divKitComponents.parseDivData(json, cardId: cardId)
+      divData = result.value
+      errors = result.errorsOrWarnings.map {
+        $0.map {
+          let traceback = $0.traceback
+          return (message: traceback.last, stack: traceback.asArray())
+        }
+      }
     } catch {
-      block.value = makeFallbackBlock("\(error)")
+      block = makeErrorBlock("\(error)")
+      errors = [(message: error.localizedDescription, stack: nil)]
+      DemoAppLogger.error("Failed to parse DivData: \(error)")
       return
     }
 
@@ -69,13 +112,30 @@ final class DivBlockProvider {
   }
 }
 
+extension Dictionary where Key == String, Value == Any {
+  fileprivate func makePalette(themeName: String) -> DivVariables {
+    guard let palette = try? self.getArray(themeName) as? [[String: String]] else {
+      return [:]
+    }
+
+    var result: [String: Color] = [:]
+    palette.forEach {
+      guard let name = $0["name"],
+            let colorStr = $0["color"],
+            let color = Color.color(withHexString: colorStr) else { return }
+      result[name] = color
+    }
+    return result.mapToDivVariables()
+  }
+}
+
 private let cardId: DivCardID = "sample_card"
 
-private let noDataBlock = makeFallbackBlock("No data")
+private let noDataBlock = SeparatorBlock()
 
-private func makeFallbackBlock(_ text: String) -> Block {
+private func makeErrorBlock(_ text: String) -> Block {
   TextBlock(
     widthTrait: .resizable,
     text: text.with(typo: Typo(size: 18, weight: .regular))
-  ).addingEdgeGaps(16)
+  ).addingEdgeGaps(20)
 }

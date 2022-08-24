@@ -15,7 +15,6 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.transition.TransitionManager
-import com.yandex.alicekit.demo.div.installer.DivInstaller
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivStateChangeListener
 import com.yandex.div.core.animation.SpringInterpolator
@@ -43,8 +42,6 @@ open class DivActivity : AppCompatActivity() {
     private enum class DivFolder(val path: String) {
         DIV2_SAMPLES("samples")
     }
-
-    private val divInstaller = DivInstaller()
 
     private val adapter by lazy { createAdapter() }
     private val fileStorage by lazy { DivFileStorage() }
@@ -84,11 +81,6 @@ open class DivActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         addAll()
-
-        // This is developer-only mechanism to push div cards into the running application
-        divInstaller.register(this) {
-            addItemFromJson(it)
-        }
 
         // required for DivReceiver
         DivkitDemoPermissionHelper.requestReadExternalStoragePermission(this, R.string.permission_rationale_read_external_storage)
@@ -141,13 +133,6 @@ open class DivActivity : AppCompatActivity() {
         return DivViewAdapter(
             Div2Context(this, configuration)
         )
-    }
-
-    override fun onDestroy() {
-        // This is developer-only mechanism to push div cards into the running application
-        divInstaller.unregister(this)
-
-        super.onDestroy()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

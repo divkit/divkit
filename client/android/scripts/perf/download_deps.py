@@ -1,6 +1,3 @@
-# Copyright (c) 2018 Yandex LLC. All rights reserved.
-# Author: Andrey Malets <malets@yandex-team.ru>
-
 import argparse
 import contextlib
 import os

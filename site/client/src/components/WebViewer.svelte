@@ -21,6 +21,7 @@
     import { codeRunStore } from '../data/valueStore';
     import { runCode } from '../utils/shortcuts';
     import { webViewerErrors } from '../data/webViewerErrors';
+    import { sampleWarningStore } from '../data/sampleWarningStore';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
@@ -206,6 +207,19 @@
 </script>
 
 <div class="web-viewer" bind:this={root}>
+    {#if $sampleWarningStore}
+        <div class="web-viewer__warning">
+            <div class="web-viewer__warning-text">
+                {$l10n('webSupportWarning')}
+            </div>
+            <button
+                class="web-viewer__warning-close"
+                title={$l10n('close')}
+                on:click={() => $sampleWarningStore = false}
+            ></button>
+        </div>
+    {/if}
+
     <div class="web-viewer__select">
         <ViewportSelect bind:value={viewport} />
         <PlatformSelect bind:value={platform} />
@@ -276,6 +290,7 @@
         position: relative;
         margin: 10px auto 24px;
         overflow: auto;
+        outline: 1px solid var(--accent0);
     }
 
     .web-viewer__content:hover::-webkit-scrollbar-thumb {
@@ -399,5 +414,35 @@
         padding: 20px;
         background: var(--bg-secondary);
         border-radius: 10px;
+    }
+
+    .web-viewer__warning {
+        position: relative;
+        margin-bottom: 20px;
+        padding: 12px 56px 12px 20px;
+        color: var(--alt-text);
+        background: var(--alt-bg);
+    }
+
+    .web-viewer__warning-close {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 12px;
+        width: 32px;
+        height: 32px;
+        margin: auto 0;
+        padding: 0;
+        background: no-repeat 50% 50% url(../assets/closeWhite.svg);
+        appearance: none;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        opacity: .7;
+        transition: opacity .1s ease-in-out;
+    }
+
+    .web-viewer__warning-close:hover {
+        opacity: 1;
     }
 </style>

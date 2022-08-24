@@ -190,7 +190,8 @@ export const TYPE_TO_CLASS = {
 };
 
 export function createVariable(
-    name: string, type: VariableType,
+    name: string,
+    type: VariableType,
     value: unknown
 ):
     StringVariable | NumberVariable | IntegerVariable |

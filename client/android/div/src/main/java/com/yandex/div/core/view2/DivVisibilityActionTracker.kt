@@ -3,15 +3,17 @@ package com.yandex.div.core.view2
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import androidx.annotation.MainThread
+import androidx.annotation.AnyThread
 import androidx.core.os.postDelayed
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.util.Assert
 import com.yandex.div.core.util.KLog
 import com.yandex.div.core.util.doOnHierarchyLayout
 import com.yandex.div.core.view2.divs.allVisibilityActions
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibilityAction
+import java.util.Collections
 import java.util.WeakHashMap
 import javax.inject.Inject
 
@@ -32,7 +34,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
         visibilityActionDispatcher.dispatchVisibleViewsChanged(visibleActions)
         hasPostedUpdateVisibilityTask = false
     }
-    @MainThread
+    @AnyThread
     fun trackVisibilityActionsOf(
         scope: Div2View,
         view: View?,
@@ -63,6 +65,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
         div: Div,
         visibilityActions: List<DivVisibilityAction>
     ) {
+        Assert.assertMainThread()
+
         val visibilityPercentage = view.let {
             val result = viewVisibilityCalculator.calculateVisibilityPercentage(view)
             updateVisibility(view, div, result)
@@ -118,7 +122,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
             val compositeLogId = compositeLogIdOf(scope, action)
             KLog.e(TAG) { "startTracking: id=$compositeLogId" }
             return@associateTo compositeLogId to action
-        }
+        }.let { Collections.synchronizedMap(it) }
         trackedTokens.add(logIds)
         /* We use map of CompositeLogId to DivVisibilityActions as token here, so we can cancel
          * individual actions while still execute the rest of it as a bulk. */
@@ -130,11 +134,8 @@ internal class DivVisibilityActionTracker @Inject constructor(
 
     private fun cancelTracking(compositeLogId: CompositeLogId) {
         KLog.e(TAG) { "cancelTracking: id=$compositeLogId" }
-        val token: MutableMap<CompositeLogId, DivVisibilityAction> = trackedTokens.getTokenByLogId(compositeLogId) ?: return
-        token.remove(compositeLogId)
-        if (token.isEmpty()) {
-            handler.removeCallbacksAndMessages(token)
-            trackedTokens.remove(token)
+        trackedTokens.remove(compositeLogId) { emptyToken ->
+            handler.removeCallbacksAndMessages(emptyToken)
         }
     }
 

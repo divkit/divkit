@@ -1,0 +1,59 @@
+apply plugin: 'jacoco'
+
+jacoco {
+    toolVersion = versions.jacoco
+}
+
+def testVariant = project.property('testVariant')
+
+def coverageSourceDirs = [
+        'src/main/java',
+        'src/impl/java',
+        'src/gen'
+]
+
+ext.readLinesFromFile = { filepath, skipSymbol ->
+    final BufferedReader reader = new BufferedReader(new FileReader(new File(filepath)))
+    String line
+    List<String> linesAsList = new ArrayList<>()
+    while ((line = reader.readLine()) != null) {
+        if (line.trim().isEmpty() || line.startsWith(skipSymbol)) {
+            continue
+        }
+        linesAsList.add(line)
+    }
+    return linesAsList
+}
+
+if (!tasks.names.contains('jacocoTestReport')) {
+    task jacocoTestReport(type: JacocoReport, dependsOn: "test${testVariant.capitalize()}UnitTest") {
+        def excludes = readLinesFromFile("${project.projectDir}/jacoco.excludes", "#")
+
+        final classesDir = "$project.buildDir/intermediates/javac/${testVariant}"
+
+        group = "reporting"
+        description = "Generate Jacoco coverage reports after running tests."
+        reports {
+            xml.enabled = true // coveralls plugin depends on xml format report
+            html.enabled = true
+            csv.enabled = true
+        }
+        classDirectories.from {
+            fileTree(dir: classesDir, excludes: excludes)
+        }
+        sourceDirectories.from {
+            files(coverageSourceDirs)
+        }
+        executionData.from {
+            files("build/jacoco/test${testVariant.capitalize()}UnitTest.exec")
+        }
+
+        doFirst {
+            new File(classesDir).eachFileRecurse { file ->
+                if (file.name.contains('$$')) {
+                    file.renameTo(file.path.replace('$$', '$'))
+                }
+            }
+        }
+    }
+}

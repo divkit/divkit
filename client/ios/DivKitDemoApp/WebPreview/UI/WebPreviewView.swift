@@ -1,41 +1,68 @@
 import SwiftUI
+import DivKit
 
 struct WebPreviewView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
 
   let url: URL
+  
+  private let model = WebPreviewModel()
 
   var body: some View {
-    let socket = WebPreviewSocket()
-    let blockProvider = BlockProvider(
-      json: socket.response,
-      urlOpener: DemoUrlOpener().openUrl(_:)
-    )
-    let payloadFactory = UIStatePayloadFactory(
-      deviceInfo: DeviceInfo(),
-      errors: blockProvider.$errors
-    )
-    return ViewWithHeader(
+    ViewWithHeader(
       "Web Preview",
       background: ThemeColor.divKit,
       presentationMode: presentationMode
     ) {
       WebPreviewViewRepresentable(
-        blockProvider: blockProvider,
-        onScreenshotTaken: { [payloadFactory, socket] screenshotInfo in
-          socket.send(
-            state: payloadFactory.makePayload(screenshotInfo: screenshotInfo)
-          )
-        }
+        blockProvider: model.blockProvider,
+        divKitComponents: model.divKitComponents,
+        onScreenshotTaken: model.sendScreenshot(_:)
       )
-      .onAppear { [socket, url] in
-        socket.connect(httpUrl: url)
+      .onAppear { [model, url] in
+        model.connect(httpUrl: url)
       }
-      .onDisappear { [blockProvider, socket] in
-        socket.endConnection()
-        blockProvider.reset()
+      .onDisappear { [model] in
+        model.endConnection()
       }
     }
+  }
+}
+
+private struct WebPreviewModel {
+  private let socket = WebPreviewSocket()
+  private(set) var divKitComponents: DivKitComponents!
+  private(set) var blockProvider: DivBlockProvider!
+  private(set) var payloadFactory: UIStatePayloadFactory!
+  
+  init() {
+    divKitComponents = DemoAppComponents.makeDivKitComponents(
+      updateCardAction: { [weak blockProvider] _, patch in
+        blockProvider?.update(patch: patch)
+      }
+    )
+    blockProvider = DivBlockProvider(
+      json: socket.response,
+      divKitComponents: divKitComponents
+    )
+    payloadFactory = UIStatePayloadFactory(
+      deviceInfo: DeviceInfo(),
+      errors: blockProvider.$errors
+    )
+  }
+  
+  func connect(httpUrl: URL) {
+    socket.connect(httpUrl: httpUrl)
+  }
+
+  func endConnection() {
+    socket.endConnection()
+  }
+  
+  func sendScreenshot(_ screenshotInfo: ScreenshotInfo) {
+    socket.send(
+      state: payloadFactory.makePayload(screenshotInfo: screenshotInfo)
+    )
   }
 }

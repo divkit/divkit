@@ -321,17 +321,6 @@ val DivBase.hasVisibilityActions: Boolean
 val DivBase.allVisibilityActions: List<DivVisibilityAction>
     get() = visibilityActions ?: visibilityAction?.let { listOf(it) }.orEmpty()
 
-@Suppress("UNCHECKED_CAST")
-internal fun View.saveLoadReference(reference: LoadReference) {
-    val references = getTag(R.id.load_references_tag)
-    if (references == null) {
-        setTag(R.id.load_references_tag, mutableSetOf(reference))
-    } else {
-        val referenceSet = references as MutableSet<LoadReference>
-        referenceSet.add(reference)
-    }
-}
-
 fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) = suppressExpressionErrors {
     applyWidth(div.width, resolver)
     applyHeight(div.height, resolver)

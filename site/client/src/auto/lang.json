@@ -25,7 +25,8 @@
         "linkToJson": "Ссылка на json",
         "qrCode": "QR код",
         "copy": "Копировать",
-        "loadError": "Не удалось загрузить :("
+        "loadError": "Не удалось загрузить :(",
+        "webSupportWarning": "Данный пример содержит функционал, который не поддержан в реализации для Веба. Он может отличаться от нативных платформ."
     },
     "en": {
         "name": "English",
@@ -53,6 +54,7 @@
         "linkToJson": "Link to json",
         "qrCode": "QR code",
         "copy": "Copy",
-        "loadError": "Cannot load :("
+        "loadError": "Cannot load :(",
+        "webSupportWarning": "This sample contains functionality that is not supported in the implementation for the Web. It may differ from native platforms."
     }
 }

@@ -111,7 +111,7 @@
               "highlight_color": "#1DFF9000",
               "line_height": 28,
               "select_all_on_focus": 1,
-              "keyboard_type": "text"
+              "keyboard_type": "multi_line_text"
             },
             {
               "type": "container",

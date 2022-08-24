@@ -43,6 +43,7 @@ class DivMultipleStateSwitcherTest {
             DivData(logId = "id", states = listOf(divDataState)),
             DivDataTag("tag")
         )
+        bindOnAttachRunnable?.invoke()
     }
 
     private val viewBinder = mock<DivBinder>()

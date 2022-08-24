@@ -26,6 +26,6 @@ struct PlaygroundView: View {
   }
   
   private func reload() {
-    divViewProvider.jsonDataProvider.set(url: url)
+    divViewProvider.jsonProvider.load(url: url)
   }
 }

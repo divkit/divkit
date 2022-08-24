@@ -1,9 +1,6 @@
-# https://wiki.yandex-team.ru/assistant/AliceKit/ui-tests/#dobavlenienovyxjemuljatorov
 # lookup syntax https://blog.daemonl.com/2016/02/yaml.html
 # upload to sandbox with 'ya upload emulators-ui-tests.yaml --owner ALICEKIT_ANDROID --ttl inf'
 # Sandbox resource ID: 2523424242
-# Used in build template
-# https://teamcity.browser.yandex-team.ru/admin/editBuildParams.html?id=template:Mobile_AliceKitAndroid_UiTestsPrBase
 
 api27: &default
   sdk_url: 'http://s3.mds.yandex.net/alicekit/emulator-android-cmdline-tools-27.tar.gz'

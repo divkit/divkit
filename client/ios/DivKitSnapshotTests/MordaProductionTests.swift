@@ -14,10 +14,6 @@ final class MordaProductionTests: DivKitSnapshotTestCase {
     testDivs("district_day.json", imageHolderFactory: imageHolderFactory)
   }
 
-  func test_newsCardIsValid() {
-    testDivs("news.json", imageHolderFactory: imageHolderFactory)
-  }
-
   func test_poiCardIsValid() {
     testDivs("poi.json", imageHolderFactory: imageHolderFactory)
   }

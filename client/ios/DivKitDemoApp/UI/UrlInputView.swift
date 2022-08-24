@@ -6,11 +6,12 @@ struct UrlInputView: View {
 
   @State
   private var urlString = ""
-  
+
   let divViewProvider: DivViewProvider
   
   var body: some View {
-    ViewWithHeader(
+    let url = URL(string: urlString)
+    return ViewWithHeader(
       "Playground",
       background: ThemeColor.divKit,
       presentationMode: presentationMode
@@ -34,23 +35,22 @@ struct UrlInputView: View {
           .cornerRadius(ThemeSize.cornerRadius)
       }
       
-      ScannerView(result: $urlString)
-        .cornerRadius(ThemeSize.cornerRadius)
-        .frame(height: 260)
-        .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
-
-      if let url = URL(string: urlString) {
-        HStack(spacing: 10) {
-          NavigationLink("load json") {
-            PlaygroundView(url: url, divViewProvider: divViewProvider)
-          }
-          NavigationLink("web preview") {
-            WebPreviewView(url: url)
-          }
-        }
-        .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
-        .buttonStyle(LoadButtonStyle())
+      if UserPreferences.isQrScannerEnabled {
+        ScannerView(result: $urlString)
+          .cornerRadius(ThemeSize.cornerRadius)
+          .frame(height: 260)
+          .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
       }
+
+      HStack(spacing: 10) {
+        Link(title: "load json", url: url) {
+          PlaygroundView(url: $0, divViewProvider: divViewProvider)
+        }
+        Link(title: "web preview", url: url) {
+          WebPreviewView(url: $0)
+        }
+      }
+      .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
     }
     .onAppear {
       urlString = UserPreferences.lastUrl
@@ -61,7 +61,23 @@ struct UrlInputView: View {
   }
 }
 
-private struct LoadButtonStyle: ButtonStyle {
+private struct Link<Destination>: View where Destination: View {
+  let title: String
+  let url: URL?
+  let destination: (URL) -> Destination
+  
+  var body: some View {
+    NavigationLink(title) {
+      if let url = url {
+        destination(url)
+      }
+    }
+    .disabled(url == nil)
+    .buttonStyle(LinkStyle())
+  }
+}
+
+private struct LinkStyle: ButtonStyle {
   func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .font(ThemeFont.button)

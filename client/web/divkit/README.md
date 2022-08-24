@@ -1,5 +1,8 @@
 ## DivKit for the Web
 
+![client code size](https://img.shields.io/badge/client%20lib%20minified&brotli-47.7%20KB-brightgreen)
+
+
 ### Installation
 
 ```
@@ -137,6 +140,12 @@ ES modules can be used in the browser directly without any build:
 </script>
 ```
 
+### Usage with React
+
+There is a separate package for that.
+
+[React component package](../divkit-react)
+
 ### TypeScript and types
 
 All modules have typescript definitions (client, client-hydratable and server), so typescript will load them at any use.
@@ -155,15 +164,13 @@ Node.js
 Node.js >= 8
 ```
 
-### API
+### API: render
 
 All 3 exported modules have an exported function `render`. This function works in a similar way on client and server.
 
 `/client` and `/client-hydratable` requires option `target` - an HTML-element that is used to render json.
 
 Instead, `/server` module will return an HTML string.
-
-### Options
 
 #### id
 
@@ -279,4 +286,31 @@ Divjson along with the `card` and `templates` can contain a `palette` property w
         ]
     }
 }
+```
+
+### API: other
+
+#### Variables
+
+```js
+import {createVariable, createGlobalVariablesController, render} from '@divkit/divkit';
+
+// Custom variable outside of DivJson
+const variable = createVariable('name', 'string', 'val');
+
+variable.subscribe(newVal => {
+    console.log(newVal);
+});
+
+// Custom scope for variables
+const controller = createGlobalVariablesController();
+
+controller.setVariable(variable);
+
+render(({
+    id: 'smth',
+    target: document.querySelector('#root'),
+    json: {},
+    globalVariablesController: controller
+});
 ```

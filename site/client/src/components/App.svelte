@@ -6,17 +6,28 @@
     import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
     import translations from '../auto/lang.json';
     import PointingPopup from './PointingPopup.svelte';
-    import LivePreview from './LivePreview.svelte';
-    import { viewModeStore } from '../data/viewModeStore';
+    // import LivePreview from './LivePreview.svelte';
+    // import { viewModeStore } from '../data/viewModeStore';
     import { isInitialLoading, isLoadError } from '../data/session';
     import Loader from './Loader.svelte';
     import ErrorPage from './ErrorPage.svelte';
 
-    let lang = writable('en');
+    let langVal = (location.pathname.match(/(\w+)\/playground/) || [])[1] || 'en';
+    if (langVal !== 'ru' && langVal !== 'en') {
+        langVal = 'en';
+    }
+    let lang = writable(langVal);
     const l10n = derived(lang, lang => {
         return (key: string, overrideLang?: string) =>
             (translations as any)[overrideLang || lang]?.[key] || '';
     });
+
+    lang.subscribe(val => {
+        if (val !== langVal) {
+            history.pushState(null, document.title, `/${val}/playground${location.search}`);
+        }
+    });
+
     setContext<LanguageContext>(LANGUAGE_CTX, {
         lang,
         getLanguage(): string {
@@ -40,8 +51,8 @@
     <ErrorPage />
 {:else if $isInitialLoading}
     <Loader />
-{:else if $viewModeStore === 'preview'}
-    <LivePreview />
+<!--{:else if $viewModeStore === 'preview'}
+    <LivePreview />-->
 {:else}
     <Header />
     <Main />
@@ -71,7 +82,7 @@
         --accent0-text: #fff;
         --accent1: #CC2FD5;
         --accent1-text: #fff;
-        --accent1-semi: rgba(204, 47, 213, 0.3);
+        --accent1-semi: rgba(204, 47, 213, 0.5);
         --accent2: #4039CD;
 
         --alt-bg: #252525;

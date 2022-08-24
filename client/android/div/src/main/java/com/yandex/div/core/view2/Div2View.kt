@@ -28,6 +28,7 @@ import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.downloader.DivDataChangedObserver
 import com.yandex.div.core.expression.ExpressionsRuntime
+import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.state.DivStatePath
@@ -41,7 +42,6 @@ import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
 import com.yandex.div.core.view2.divs.bindLayoutParams
 import com.yandex.div.core.view2.divs.drawChildrenShadows
-import com.yandex.div.core.view2.divs.saveLoadReference
 import com.yandex.div.core.view2.divs.widgets.DivAnimator
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
@@ -96,6 +96,11 @@ class Div2View private constructor(
     private var _expressionsRuntime: ExpressionsRuntime? = null
     private val variableController: VariableController?
         get() = _expressionsRuntime?.variableController
+
+    private val monitor = Any()
+
+    @VisibleForTesting
+    internal var bindOnAttachRunnable: (() -> Unit)? = null
 
     @VisibleForTesting
     internal var stateId = INVALID_STATE_ID
@@ -171,10 +176,11 @@ class Div2View private constructor(
 
     fun setData(data: DivData?, tag: DivDataTag) = setData(data, divData, tag)
 
-    fun setData(data: DivData?, oldDivData: DivData?, tag: DivDataTag): Boolean {
+    fun setData(data: DivData?, oldDivData: DivData?, tag: DivDataTag): Boolean = synchronized(monitor) {
         if (data == null || divData == data) {
             return false
         }
+        bindOnAttachRunnable = null
 
         histogramReporter.onRenderStarted()
 
@@ -195,11 +201,11 @@ class Div2View private constructor(
             } else {
                 rebind(data, false)
             }
+            div2Component.divBinder.attachIndicators()
             false
         } else {
             updateNow(data, tag)
         }
-        div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
         return result
     }
@@ -209,10 +215,11 @@ class Div2View private constructor(
         tag: DivDataTag,
         paths: List<DivStatePath>,
         temporary: Boolean
-    ): Boolean {
+    ): Boolean = synchronized(monitor) {
         if (data == null || divData == data) {
             return false
         }
+        bindOnAttachRunnable = null
 
         histogramReporter.onRenderStarted()
 
@@ -239,10 +246,11 @@ class Div2View private constructor(
         return result
     }
 
-    fun applyPatch(patch: DivPatch): Boolean {
+    fun applyPatch(patch: DivPatch): Boolean = synchronized(monitor) {
         val oldData: DivData = divData ?: return false
         val newDivData = div2Component.patchManager.createPatchedDivData(oldData, dataTag, patch, expressionResolver)
         if (newDivData != null) {
+            bindOnAttachRunnable = null
             rebind(oldData, false)
             divData = newDivData
             div2Component.patchManager.removePatch(dataTag)
@@ -323,17 +331,24 @@ class Div2View private constructor(
         drawWasSkipped = true
     }
 
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        bindOnAttachRunnable?.invoke()
+        bindOnAttachRunnable = null
+    }
+
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         tryLogVisibility()
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
-        targetView.saveLoadReference(loadReference)
-        loadReferences.add(WeakReference(loadReference))
+        synchronized(monitor) {
+            loadReferences.add(WeakReference(loadReference))
+        }
     }
 
-    override fun cleanup() {
+    override fun cleanup() = synchronized(monitor) {
         cleanup(removeChildren = true)
     }
 
@@ -356,8 +371,11 @@ class Div2View private constructor(
         loadReferences.clear()
     }
 
-    override fun switchToState(stateId: Int, temporary: Boolean) {
-        if (stateId != INVALID_STATE_ID) forceSwitchToState(stateId, temporary)
+    override fun switchToState(stateId: Int, temporary: Boolean) = synchronized(monitor) {
+        if (stateId != INVALID_STATE_ID) {
+            bindOnAttachRunnable = null
+            forceSwitchToState(stateId, temporary)
+        }
     }
 
     override fun switchToInitialState() {
@@ -370,8 +388,9 @@ class Div2View private constructor(
         switchToState(stateId)
     }
 
-    override fun switchToState(path: DivStatePath, temporary: Boolean) {
+    override fun switchToState(path: DivStatePath, temporary: Boolean) = synchronized(monitor) {
         if (stateId == path.topLevelStateId) {
+            bindOnAttachRunnable = null
             val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
             bulkActionsHandler.switchState(state, path, temporary)
         } else if (path.topLevelStateId != INVALID_STATE_ID) {
@@ -409,11 +428,15 @@ class Div2View private constructor(
      * Observers called when DivData changed. Now it used when patch applied
      */
     fun addDivDataChangeObserver(observer: DivDataChangedObserver) {
-        divDataChangedObservers.add(observer)
+        synchronized(monitor) {
+            divDataChangedObservers.add(observer)
+        }
     }
 
     fun removeDivDataChangeObserver(observer: DivDataChangedObserver) {
-        divDataChangedObservers.remove(observer)
+        synchronized(monitor) {
+            divDataChangedObservers.remove(observer)
+        }
     }
 
     override fun resetToInitialState() {
@@ -425,47 +448,58 @@ class Div2View private constructor(
     }
 
     private fun switchToDivData(oldData: DivData?, newData: DivData): Boolean {
-        val oldState = oldData?.let {
-            val oldStateId = currentState?.currentDivStateId ?: it.getInitialStateId()
-            oldData.states.firstOrNull { state -> state.stateId == oldStateId }
+        val oldState = oldData?.state()
+        val newState = newData.state()
+
+        this.stateId = newData.stateId()
+
+        if (newState == null) {
+            return false
         }
 
-        val newStateId = currentState?.currentDivStateId ?: newData.getInitialStateId()
-        val newState = newData.states.firstOrNull { it.stateId == newStateId }
+        val isColdBind = oldData == null
+        val newStateView = if (isColdBind) {
+            buildViewAsyncAndUpdateState(newState, stateId)
+        } else {
+            buildViewAndUpdateState(newState, stateId)
+        }
 
-        this.stateId = newStateId
+        oldState?.let { discardStateVisibility(it) }
+        trackStateVisibility(newState)
 
-        if (newState != null) {
-            val newStateView = buildViewAndUpdateState(newState, newStateId)
-            if (newStateView != null) {
-                oldState?.let { discardStateVisibility(it) }
-                trackStateVisibility(newState)
-                if (oldData?.allowsTransitionsOnDataChange(expressionResolver) == true ||
-                    newData.allowsTransitionsOnDataChange(expressionResolver)) {
-                    val transition = prepareTransition(oldData, newData, oldState?.div, newState.div)
-                    if (transition != null) {
-                        val currentScene = Scene.getCurrentScene(this)
-                        currentScene?.setExitAction {
-                            releaseAndRemoveChildren(this)
-                        }
-                        val newStateScene = Scene(this, newStateView)
-                        TransitionManager.endTransitions(this)
-                        TransitionManager.go(newStateScene, transition)
-                    } else {
-                        releaseAndRemoveChildren(this)
-                        addView(newStateView)
-                        viewComponent.errorMonitor.connect(this)
-                    }
-                } else {
+        if (oldData?.allowsTransitionsOnDataChange(expressionResolver) == true ||
+            newData.allowsTransitionsOnDataChange(expressionResolver)) {
+            val transition = prepareTransition(oldData, newData, oldState?.div, newState.div)
+
+            if (transition != null) {
+                val currentScene = Scene.getCurrentScene(this)
+                currentScene?.setExitAction {
                     releaseAndRemoveChildren(this)
-                    addView(newStateView)
-                    viewComponent.errorMonitor.connect(this)
                 }
+                val newStateScene = Scene(this, newStateView)
+                TransitionManager.endTransitions(this)
+                TransitionManager.go(newStateScene, transition)
+            } else {
+                releaseAndRemoveChildren(this)
+                addView(newStateView)
+                viewComponent.errorMonitor.connect(this)
             }
-            return true
+        } else {
+            releaseAndRemoveChildren(this)
+            addView(newStateView)
+            viewComponent.errorMonitor.connect(this)
         }
 
-        return false
+        return true
+    }
+
+    private fun DivData.stateId(): Int {
+        return currentState?.currentDivStateId ?: getInitialStateId()
+    }
+
+    private fun DivData.state(): DivData.State? {
+        val stateId = stateId()
+        return states.firstOrNull { it.stateId == stateId }
     }
 
     private fun forceSwitchToState(stateId: Int, temporary: Boolean): Boolean {
@@ -513,6 +547,28 @@ class Div2View private constructor(
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
         return divBuilder.buildView(newState.div, this, DivStatePath.fromState(newState.stateId))
+    }
+
+    private fun buildViewAsyncAndUpdateState(
+        newState: DivData.State,
+        stateId: Int,
+        isUpdateTemporary: Boolean = true
+    ): View {
+        div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
+        val path = DivStatePath.fromState(newState.stateId)
+        val view = divBuilder.createView(newState.div, this, path)
+        val bindAction = {
+            suppressExpressionErrors {
+                div2Component.divBinder.bind(view, newState.div, this, path)
+            }
+            div2Component.divBinder.attachIndicators()
+        }
+        if (isAttachedToWindow) {
+            bindAction.invoke()
+        } else {
+            bindOnAttachRunnable = bindAction
+        }
+        return view
     }
 
     private fun prepareTransition(oldData: DivData?, newData: DivData, oldDiv: Div?, newDiv: Div?): Transition? {
@@ -589,10 +645,12 @@ class Div2View private constructor(
     override fun getDivTag(): DivDataTag = dataTag
 
     override fun subscribe(listener: OverflowMenuSubscriber.Listener) {
-        overflowMenuListeners.add(listener)
+        synchronized(monitor) {
+            overflowMenuListeners.add(listener)
+        }
     }
 
-    override fun clearSubscriptions() {
+    override fun clearSubscriptions() = synchronized(monitor) {
         overflowMenuListeners.clear()
     }
 
@@ -600,7 +658,7 @@ class Div2View private constructor(
         dismissPendingOverflowMenus()
     }
 
-    override fun dismissPendingOverflowMenus() {
+    override fun dismissPendingOverflowMenus() = synchronized(monitor) {
         overflowMenuListeners.forEach { it.dismiss() }
     }
 

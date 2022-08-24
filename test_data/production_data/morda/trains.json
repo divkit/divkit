@@ -364,14 +364,14 @@
                   {
                     "action": {
                       "log_id": "menu\/item\/0",
-                      "url": "opensettings:\/\/?screen=feed"
+                      "url": "https://yandex.ru"
                     },
                     "text": "Настройки ленты"
                   },
                   {
                     "action": {
                       "log_id": "menu\/item\/1",
-                      "url": "hidecard:\/\/?topic_card_ids=train_card&undo_snackbar_text=%D0%92%D1%8B%20%D1%81%D0%BA%D1%80%D1%8B%D0%BB%D0%B8%20%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D1%87%D0%BA%D1%83"
+                      "url": "https://yandex.ru"
                     },
                     "text": "Скрыть карточку"
                   }

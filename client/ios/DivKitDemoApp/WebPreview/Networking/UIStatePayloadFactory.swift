@@ -2,6 +2,13 @@ import Foundation
 
 import CommonCore
 
+struct ScreenshotInfo {
+  let data: Data
+  let density: Double
+  let height: Double
+  let width: Double
+}
+
 final class UIStatePayloadFactory {
   typealias Errors = [(message: String, stack: [String]?)]
 

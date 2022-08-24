@@ -1,11 +1,9 @@
 import UIKit
 
-class DemoUrlOpener {
-  var onUnhandledUrl: (URL) -> () = { _ in }
-  
-  func openUrl(_ url: URL) {
+enum DemoUrlOpener {
+  static func openUrl(_ url: URL) {
     guard UIApplication.shared.canOpenURL(url) else {
-      onUnhandledUrl(url)
+      DemoAppLogger.error("Unhandled URL: \(url)")
       return
     }
 

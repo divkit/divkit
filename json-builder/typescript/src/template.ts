@@ -2,6 +2,8 @@
 
 import { Div } from './generated/Div';
 import { IDivData } from './generated/DivData';
+import { UnsafeDivExpression } from './unsafe-expression';
+import { escapeExpression } from './expression';
 
 export interface ITemplates {
     [type: string]: Div;
@@ -45,9 +47,38 @@ export function template<T extends string = any, U = object>(type: T, props?: U)
     return new TemplateBlock(type, props);
 }
 
+export function escapeCard(obj: unknown): unknown {
+    if (typeof obj === 'string') {
+        return escapeExpression(obj);
+    } else if (obj instanceof UnsafeDivExpression) {
+        return obj.toJSON();
+    } else if (obj && typeof obj === 'object') {
+        if (Array.isArray(obj)) {
+            return obj.map(escapeCard);
+        } else {
+            return Object.keys(obj).reduce((acc, item) => {
+                acc[item] = escapeCard(obj[item]);
+                return acc;
+            }, {});
+        }
+    }
+    return obj;
+}
+
+class Card {
+    public templates: ITemplates;
+    public card: IDivData;
+
+    public constructor(templates: ITemplates, card: IDivData) {
+        this.templates = templates;
+        this.card = card;
+    }
+
+    public toJSON(): unknown {
+        return escapeCard(this);
+    }
+}
+
 export function divCard(templates: ITemplates, card: IDivData): { templates: ITemplates; card: IDivData } {
-    return {
-        templates: templates,
-        card: card,
-    };
+    return new Card(templates, card);
 }

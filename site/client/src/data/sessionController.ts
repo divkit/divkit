@@ -1,12 +1,12 @@
 import { get } from 'svelte/store';
 import { initialValueStore, valueStore } from './valueStore';
-import { isInitialLoading, isLoadError, session } from './session';
+import { isInitialLoading, isLoadError, isSamples, session } from './session';
 import { debounce } from '../utils/debounce';
 import { clientHostPath, serverHostPath } from '../utils/const';
 import { savedStore } from './savedStore';
 import { editorMode } from './editorMode';
 import { jsonStore } from './jsonStore';
-import { viewModeStore } from './viewModeStore';
+// import { viewModeStore } from './viewModeStore';
 import { addListener, wsPromise } from './ws';
 // import { listenToDevices } from './externalViewers';
 import { getLs, setLs } from '../utils/localStorage';
@@ -35,12 +35,18 @@ async function init() {
     const uuid = params.get('uuid');
     mode = params.get('mode') || '';
 
-    if (mode) {
+    const samples = params.get('samples') === '1';
+
+    if (samples) {
+        isSamples.set(true);
+    }
+
+    /*if (mode) {
         viewModeStore.set(mode);
         if (mode === 'preview' && uuid) {
             listenJsonForPreview(uuid);
         }
-    }
+    }*/
     /*if (mode !== 'preview') {
         listenToDevices();
     }*/
@@ -103,9 +109,9 @@ valueStore.subscribe(val => {
     const sessionInfo = get(session);
     const initialValue = get(initialValueStore);
 
-    if (get(viewModeStore) === 'preview') {
-        return;
-    }
+    // if (get(viewModeStore) === 'preview') {
+    //     return;
+    // }
 
     savedStore.set(val === initialValue);
 

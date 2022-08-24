@@ -788,3 +788,37 @@ exports[`DivCard tests should create Znatoki card 1`] = `
   }
 }
 `;
+
+exports[`DivCard tests should escape unsafe chars 1`] = `
+{
+  "templates": {},
+  "card": {
+    "log_id": "test",
+    "variables": [
+      {
+        "type": "string",
+        "name": "variable",
+        "value": "value"
+      }
+    ],
+    "states": [
+      {
+        "state_id": 1,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "text",
+              "text": "Hello \\\\\\\\\\\\\\\\ unsafe \\\\@{variable}"
+            },
+            {
+              "type": "text",
+              "text": "Hello \\\\\\\\ safe @{variable}"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+`;

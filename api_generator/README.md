@@ -13,6 +13,24 @@ The script takes a JSON schema at the input and generates the code of objects de
 
 ## Commands
 
+### Build
+
+Setup environment:
+```shell
+pip install -r requirements.txt
+pip install -r dev_requirements.txt
+```
+
+Run generator:
+```shell
+python -m api_generator -c /config/file/name.json -s /path/to/schema -o /output/path
+```
+
+Run tests:
+```shell
+python -m pytest
+```
+
 ### With ya make
 
 Build:
@@ -30,20 +48,3 @@ Run tests:
 ya make -t
 ```
 
-### Without ya make
-
-Setup environment:
-```shell
-pip install -r requirements.txt
-pip install -r dev_requirements.txt
-```
-
-Run generator:
-```shell
-python -m api_generator -c /config/file/name.json -s /path/to/schema -o /output/path
-```
-
-Run tests:
-```shell
-python -m pytest
-```

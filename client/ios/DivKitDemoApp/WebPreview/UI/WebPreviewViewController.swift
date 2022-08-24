@@ -1,26 +1,20 @@
 import SwiftUI
 import UIKit
 
-import BaseUI
 import CommonCore
-import LayoutKit
+import DivKit
 
 typealias ScreenshotCallback = (ScreenshotInfo) -> Void
 
-struct ScreenshotInfo {
-  let data: Data
-  let density: Double
-  let height: Double
-  let width: Double
-}
-
 struct WebPreviewViewRepresentable: UIViewControllerRepresentable {
-  let blockProvider: BlockProvider
+  let blockProvider: DivBlockProvider
+  let divKitComponents: DivKitComponents
   let onScreenshotTaken: ScreenshotCallback
 
   func makeUIViewController(context _: Context) -> UIViewController {
     WebPreviewViewController(
       blockProvider: blockProvider,
+      divKitComponents: divKitComponents,
       onScreenshotTaken: onScreenshotTaken
     )
   }
@@ -28,77 +22,36 @@ struct WebPreviewViewRepresentable: UIViewControllerRepresentable {
   func updateUIViewController(_: UIViewController, context _: Context) {}
 }
 
-private final class WebPreviewViewController: UIViewController {
-  private let blockProvider: BlockProvider
+private final class WebPreviewViewController: DivViewController {
   private let onScreenshotTaken: ScreenshotCallback
-  private let disposePool = AutodisposePool()
-  private lazy var scrollView = UIScrollView()
-
-  private var blockView: BlockView? {
-    didSet {
-      oldValue?.removeFromSuperview()
-      blockView.map { scrollView.addSubview($0) }
-    }
-  }
 
   private var lastScreenshotDate: Date?
   private var screenshotCancellationToken: Cancellable?
 
-  required init?(coder _: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   init(
-    blockProvider: BlockProvider,
+    blockProvider: DivBlockProvider,
+    divKitComponents: DivKitComponents,
     onScreenshotTaken: @escaping ScreenshotCallback
   ) {
-    self.blockProvider = blockProvider
     self.onScreenshotTaken = onScreenshotTaken
 
-    super.init(nibName: nil, bundle: nil)
-
-    blockProvider.$block.currentAndNewValues
-      .addObserver(updateBlockView)
-      .dispose(in: disposePool)
-  }
-
-  override func loadView() {
-    view = scrollView
-    view.backgroundColor = .white
-  }
-
-  override func viewWillLayoutSubviews() {
-    super.viewWillLayoutSubviews()
-
-    let size = blockProvider.block?.size(forResizableBlockSize: view.bounds.size) ?? .zero
-    blockView?.frame = CGRect(
-      origin: .zero,
-      size: size
+    super.init(
+      blockProvider: blockProvider,
+      divKitComponents: divKitComponents
     )
-    scrollView.contentSize = size
+  }
+
+  required init?(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
   }
 
   override func viewDidLayoutSubviews() {
     super.viewDidLayoutSubviews()
     takeScreenshot(afterScreenUpdates: false)
   }
-
-  private func updateBlockView(with block: Block?) {
-    let elementStateObserver = blockProvider.elementStateObserver
-    if let block = block, let blockView = blockView,
-       block.canConfigureBlockView(blockView) {
-      block.configureBlockView(
-        blockView,
-        observer: elementStateObserver,
-        overscrollDelegate: nil,
-        renderingDelegate: nil
-      )
-    } else {
-      blockView = block?.makeBlockView(observer: elementStateObserver)
-    }
-
-    view.setNeedsLayout()
-
+  
+  override func onViewUpdated() {
+    super.onViewUpdated()
     takeScreenshot(afterScreenUpdates: true)
   }
 
@@ -128,28 +81,6 @@ private final class WebPreviewViewController: UIViewController {
       )
     )
     lastScreenshotDate = date
-  }
-}
-
-extension WebPreviewViewController: UIActionEventPerforming {
-  private func handle(_ payload: UserInterfaceAction.Payload) {
-    switch payload {
-    case .composite, .empty, .json, .url:
-      break
-    case let .menu(menu):
-      showMenu(menu, actionPerformer: self)
-    case let .divAction(params):
-      blockProvider.handleDivAction(params: params)
-    }
-  }
-
-  func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
-    perform(uiActionEvents: [event], from: sender)
-  }
-
-  func perform(uiActionEvents events: [UIActionEvent], from _: AnyObject) {
-    events.map { $0.payload }.forEach { handle($0) }
-    blockProvider.update()
   }
 }
 

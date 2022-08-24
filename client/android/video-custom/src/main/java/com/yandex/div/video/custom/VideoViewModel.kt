@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 internal interface VideoViewModel {
-    // TODO: Remove ExoPlayer instance from view model, see https://st.yandex-team.ru/DIVKIT-159
     val player: ExoPlayer
     val stubImageIfVisible: Flow<Bitmap?>
 

@@ -10,7 +10,7 @@ const {
 } = process.env;
 const isProd = process.env.NODE_ENV === 'production';
 const publicPath = S3_PATH ?
-    `https://s3.mds.yandex.net/${S3_PATH}/${VERSION}/` : '/';
+    `https://yastatic.net/s3/${S3_PATH}/${VERSION}/` : '/';
 
 const configCommon = {
     target: 'web',
@@ -46,6 +46,25 @@ const configCommon = {
                     // 'style-loader',
                     // 'css-loader'
                 ],
+            },
+            {
+                test: /\.(([jt]s)|svelte)$/,
+                resourceQuery: {not: /inline/},
+                use: {
+                    loader: require.resolve('babel-loader'),
+                    options: {
+                        presets: [
+                            ['@babel/preset-env', {
+                                targets: {
+                                    chrome: 58,
+                                    safari: 11,
+                                    firefox: 67
+                                }
+                            }],
+                            '@babel/preset-typescript'
+                        ]
+                    }
+                }
             },
             {
                 test: /\.svelte$/,
@@ -92,26 +111,6 @@ const configCommon = {
                         }
                     }
                 },
-            },
-            {
-                test: /\.[jt]s$/,
-                exclude: /(node_modules|bower_components)/,
-                resourceQuery: {not: /inline/},
-                use: {
-                    loader: require.resolve('babel-loader'),
-                    options: {
-                        presets: [
-                            ['@babel/preset-env', {
-                                targets: {
-                                    chrome: 80,
-                                    safari: 12,
-                                    firefox: 80
-                                }
-                            }],
-                            '@babel/preset-typescript'
-                        ]
-                    }
-                }
             },
             {
                 resourceQuery: /inline/,

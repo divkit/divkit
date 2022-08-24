@@ -1,12 +1,9 @@
 package com.yandex.div.core.view2.state
 
 import android.app.Activity
-import android.view.ViewGroup
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
-import com.yandex.div.core.DivStateChangeListener
-import com.yandex.div.core.asExpression
 import com.yandex.div.core.path
 import com.yandex.div.core.state.DivPathUtils.findDivState
 import com.yandex.div.core.state.DivStatePath
@@ -17,17 +14,11 @@ import com.yandex.div2.DivData
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
-import org.mockito.kotlin.doAnswer
-import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
-import org.mockito.kotlin.whenever
 import org.robolectric.Robolectric
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.LooperMode
-import org.robolectric.shadows.ShadowLooper
 
 @RunWith(RobolectricTestRunner::class)
 class DivJoinedStateSwitcherTest {
@@ -47,6 +38,7 @@ class DivJoinedStateSwitcherTest {
             DivData(logId = "id", states = listOf(divDataState)),
             DivDataTag("tag")
         )
+        bindOnAttachRunnable?.invoke()
     }
 
     private val stateSwitcher = DivJoinedStateSwitcher(div2View, viewBinder)

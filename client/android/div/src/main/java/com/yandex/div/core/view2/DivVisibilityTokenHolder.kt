@@ -1,6 +1,8 @@
 package com.yandex.div.core.view2
 
 import android.os.Handler
+import androidx.annotation.AnyThread
+import com.yandex.div.util.SynchronizedList
 import com.yandex.div2.DivVisibilityAction
 
 /**
@@ -8,37 +10,28 @@ import com.yandex.div2.DivVisibilityAction
  * @property tokens is list of MutableMap<CompositeLogId, DivVisibilityAction>, which entries is used as token
  * for [Handler.postDelayed], so amount of entries can be changed without cancelling whole message.
  */
+@AnyThread
 internal class DivVisibilityTokenHolder {
 
-    private val tokens: MutableList<MutableMap<CompositeLogId, DivVisibilityAction>> = mutableListOf()
+    private val tokens = SynchronizedList<MutableMap<CompositeLogId, DivVisibilityAction>>()
 
-    fun remove(logId: CompositeLogId) {
+    fun remove(logId: CompositeLogId,
+               emptyTokenCallback: (Map<CompositeLogId, DivVisibilityAction>) -> Unit) {
         val log = tokens.find {
             return@find it.remove(logId) != null
         } ?: return
         if (log.isEmpty()) {
+            emptyTokenCallback(log)
             tokens.remove(log)
         }
     }
 
-    fun remove(logIds: MutableMap<CompositeLogId, DivVisibilityAction>?) = tokens.remove(logIds)
-
     fun add(logIds: MutableMap<CompositeLogId, DivVisibilityAction>) = tokens.add(logIds)
 
-    fun getTokenByLogId(logId: CompositeLogId) = tokens.find { it.contains(logId) }
-
     fun getLogId(logId: CompositeLogId): CompositeLogId? {
-        tokens.forEach { logIds: MutableMap<CompositeLogId, DivVisibilityAction> ->
-            return logIds.keys.getOrNull(logId) ?: return@forEach
+        val log = tokens.find { logIds: MutableMap<CompositeLogId, DivVisibilityAction> ->
+            logIds.containsKey(logId)
         }
-        return null
+        return log?.keys?.toTypedArray()?.find { it == logId }
     }
-}
-
-private fun MutableSet<CompositeLogId>.getOrNull(logId: CompositeLogId): CompositeLogId? {
-    val index = indexOf(logId)
-    if (index >= 0) {
-        return elementAt(index)
-    }
-    return null
 }

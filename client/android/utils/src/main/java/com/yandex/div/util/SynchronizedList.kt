@@ -2,7 +2,7 @@ package com.yandex.div.util
 
 class SynchronizedList<T> {
 
-    private val list = mutableListOf<T>()
+    @PublishedApi internal val list = mutableListOf<T>()
 
     fun add(value: T) {
         synchronized(list) {
@@ -16,13 +16,35 @@ class SynchronizedList<T> {
         }
     }
 
-    fun forEach(callback: (T) -> Unit) {
-        val listCopy = ArrayList<T>(list.size)
+    fun clear() {
+        synchronized(list) {
+            list.clear()
+        }
+    }
+
+    inline fun find(predicate: (T) -> Boolean): T? {
+        val listCopy = mutableListOf<T>()
 
         synchronized(list) {
             listCopy.addAll(list)
         }
 
-        listCopy.forEach { callback(it) }
+        return listCopy.find(predicate)
+    }
+
+    inline fun forEach(callback: (T) -> Unit) = forEachAnd(callback = callback)
+
+    inline fun forEachAndClear(callback: (T) -> Unit) = forEachAnd(this::clear, callback)
+
+    @PublishedApi
+    internal inline fun forEachAnd(listCallback: () -> Unit = {}, callback: (T) -> Unit) {
+        val listCopy: List<T>?
+
+        synchronized(list) {
+            listCopy = list.toList()
+            listCallback()
+        }
+
+        listCopy?.forEach { callback(it) }
     }
 }

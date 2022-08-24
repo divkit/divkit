@@ -5,7 +5,6 @@ import os
 import json
 from typing import Tuple, List, Dict, Any
 
-# See https://github.yandex-team.ru/portal/morda-schema/blob/master/div/2/div-animation-interpolator.json
 INTERPOLATORS = [
     "linear",
     "ease",

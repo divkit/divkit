@@ -11,23 +11,26 @@ import com.yandex.div.dsl.context.PropertyOverriding
 import com.yandex.div.dsl.context.ReferenceResolving
 import com.yandex.div.dsl.context.TemplateBinding
 
-@Suppress("ConvertToStringTemplate")
 fun propertyMapOf(vararg properties: Pair<String, Property<*>?>): Map<String, Any> {
-    return properties.mapNotNull { (key, property) ->
-        when (property) {
-            null -> null
-            is ReferenceProperty -> ("$" + key) to property.name
-            is LiteralProperty -> if (property.value == null) null else key to property.value
-            is ExpressionProperty -> key to property.expression
-        }
-    }.toMap()
+    return properties.mapNotNull { (key, property) -> associateProperty(key, property) }
+        .toMap()
 }
 
 fun propertyMapOf(vararg bindings: TemplateBinding<*>): Map<String, Any> {
     return bindings.mapNotNull { binding ->
         when (binding) {
-            is PropertyOverriding -> if (binding.value == null) null else binding.name to binding.value
-            is ReferenceResolving -> if (binding.value == null) null else binding.reference.name to binding.value
+            is PropertyOverriding -> associateProperty(binding.name, binding.property)
+            is ReferenceResolving -> associateProperty(binding.reference.name, binding.property)
         }
     }.toMap()
+}
+
+@Suppress("ConvertToStringTemplate")
+private fun associateProperty(key: String, property: Property<*>?): Pair<String, Any>? {
+    return when (property) {
+        null -> null
+        is ReferenceProperty -> ("$" + key) to property.name
+        is LiteralProperty -> if (property.value == null) null else key to property.value
+        is ExpressionProperty -> key to property.expression
+    }
 }

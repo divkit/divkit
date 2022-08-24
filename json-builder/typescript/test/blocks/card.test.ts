@@ -8,11 +8,13 @@ import {
     DivSolidBackground,
     DivTabs,
     DivText,
+    expression,
     fixed,
     IDivData,
     matchParent,
     reference,
     rewriteRefs,
+    StringVariable,
     template,
     weighted,
     wrapContent,
@@ -636,5 +638,34 @@ describe('DivCard tests', (): void => {
         };
 
         expect(divCard(rewriteRefs(templates), divData)).toMatchSnapshot();
+    });
+
+    it('should escape unsafe chars', (): void => {
+        const divData: IDivData = {
+            log_id: 'test',
+            variables: [
+                new StringVariable({
+                    name: 'variable',
+                    value: 'value',
+                }),
+            ],
+            states: [
+                {
+                    state_id: 1,
+                    div: new DivContainer({
+                        items: [
+                            new DivText({
+                                text: 'Hello \\\\ unsafe @{variable}',
+                            }),
+                            new DivText({
+                                text: expression('Hello \\\\ safe @{variable}'),
+                            }),
+                        ],
+                    }),
+                },
+            ],
+        };
+
+        expect(divCard(rewriteRefs({}), divData)).toMatchSnapshot();
     });
 });

@@ -60,8 +60,5 @@ class UrlOpenActivity : AppCompatActivity(), CoroutineScope {
 
         const val RESULT_EXTRA = "OPENED_DATA"
 
-        fun openUrl(activity: Activity, requestCode: Int) {
-            activity.startActivityForResult<UrlOpenActivity>(requestCode)
-        }
     }
 }

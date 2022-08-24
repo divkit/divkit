@@ -2,6 +2,7 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.MainThread
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
@@ -73,6 +74,7 @@ internal class DivBinder @Inject constructor(
     private val inputBinder: DivInputBinder,
     private val extensionController: DivExtensionController
 ) {
+    @MainThread
     fun bind(view: View, div: Div, divView: Div2View, path: DivStatePath) = suppressExpressionErrors {
         if (!validator.validate(div, divView.expressionResolver)) {
             bindLayoutParams(view, div.value(), divView.expressionResolver)
@@ -104,6 +106,7 @@ internal class DivBinder @Inject constructor(
         }
     }
 
+    @MainThread
     fun attachIndicators() {
         indicatorBinder.attachAll()
     }

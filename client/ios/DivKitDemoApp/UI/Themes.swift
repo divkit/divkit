@@ -13,11 +13,15 @@ enum ThemeSize {
 }
 
 enum ThemeFont {
-  static let button: Font = make(size: 24)
-  static let text: Font = make(size: 18)
+  static let button: Font = makeRegular(size: 24)
+  static let text: Font = makeRegular(size: 18)
 
-  static func make(size: CGFloat, weight: Font.Weight = .regular) -> Font {
-    .system(size: size, weight: weight)
+  static func makeRegular(size: CGFloat) -> Font {
+    .custom(YSFontProvider.regularFontName, size: size)
+  }
+
+  static func makeMedium(size: CGFloat) -> Font {
+    .custom(YSFontProvider.mediumFontName, size: size)
   }
 }
 

@@ -250,7 +250,21 @@ app.use(compress({
     br: false // disable brotli
 }));
 
-app.use(serve(__dirname + '/dist'));
+app.use(serve(__dirname + '/dist', {
+    setHeaders(res, _path, _stats) {
+        res.setHeader(
+            'content-security-policy',
+            [
+                'font-src yastatic.net',
+                'style-src \'unsafe-inline\' yastatic.net',
+                'img-src yastatic.net mc.yandex.ru',
+                'script-src yastatic.net',
+                'default-src yastatic.net',
+                'connect-src \'self\''
+            ].join(';')
+        );
+    }
+}));
 
 if (process.env.NODE_ENV !== 'production') {
     app.use(cors());

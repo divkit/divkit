@@ -43,7 +43,14 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
     let canSelect: Bool
   }
 
-  private var selectedRange: Range<Int>?
+  private var selectedRange: Range<Int>? {
+    didSet {
+      if selectedRange != oldValue {
+        setNeedsDisplay()
+      }
+    }
+  }
+
   private var activePointer: ActivePointer?
   private var selectionRect: CGRect?
 
@@ -52,6 +59,11 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private lazy var tapRecognizer = UITapGestureRecognizer(
     target: self,
     action: #selector(handleTap(_:))
+  )
+
+  private lazy var selectionTapRecognizer = UITapGestureRecognizer(
+    target: self,
+    action: #selector(handleSelectionTap(_:))
   )
 
   private lazy var longTapSelectionRecognizer = UILongPressGestureRecognizer(
@@ -93,9 +105,11 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
       if model.canSelect {
         addGestureRecognizer(longTapSelectionRecognizer)
         addGestureRecognizer(panSelectionRecognizer)
+        addGestureRecognizer(selectionTapRecognizer)
       } else {
         removeGestureRecognizer(longTapSelectionRecognizer)
         removeGestureRecognizer(panSelectionRecognizer)
+        removeGestureRecognizer(selectionTapRecognizer)
       }
 
       if model.text.hasActions || model.truncationToken?.hasActions == true {
@@ -149,11 +163,14 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
       || textLayout.runsWithAction.contains { $0.rect.contains(point) }
   }
 
+  @objc private func handleSelectionTap(_: UITapGestureRecognizer) {
+    UIMenuController.shared.hideMenu(animated: true)
+  }
+
   @objc private func handleTap(_ gesture: UITapGestureRecognizer) {
     guard gesture.state == .ended, let textLayout = textLayout else {
       return
     }
-
     let tapLocation = gesture.location(in: gesture.view)
     textLayout.runsWithAction.forEach {
       if $0.rect.contains(tapLocation) {
@@ -182,12 +199,17 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
           .flatMap { prefix.distance(from: prefix.startIndex, to: $0) + 1 } ?? 0
         selectedRange = leading..<trailing
       }
-      setNeedsDisplay()
     case .ended:
       guard let selectionRect = selectionRect else {
         return
       }
       UIMenuController.shared.presentMenu(from: self, in: selectionRect)
+      NotificationCenter.default.addObserver(
+        self,
+        selector: #selector(resetSelecting),
+        name: UIMenuController.willHideMenuNotification,
+        object: nil
+      )
     default:
       return
     }
@@ -244,10 +266,17 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   override func resignFirstResponder() -> Bool {
     let result = super.resignFirstResponder()
+    NotificationCenter.default.removeObserver(
+      self,
+      name: UIMenuController.willHideMenuNotification,
+      object: nil
+    )
+    return result
+  }
+
+  @objc private func resetSelecting() {
     selectedRange = nil
     selectionRect = nil
-    setNeedsDisplay()
-    return result
   }
 
   override func canPerformAction(_ action: Selector, withSender _: Any?) -> Bool {

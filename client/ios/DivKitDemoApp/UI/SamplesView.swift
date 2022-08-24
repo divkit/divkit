@@ -1,8 +1,11 @@
 import SwiftUI
+import DivKit
 
 struct SamplesView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
+  
+  private let model = SamplesModel()
   
   var body: some View {
     ViewWithHeader(
@@ -10,9 +13,51 @@ struct SamplesView: View {
       background: ThemeColor.samples,
       presentationMode: presentationMode
     ) {
-      Text("Not implemented")
-        .font(ThemeFont.text)
-        .padding()
+      ScrollView {
+        ForEach(model.items, id: \.cardId) {
+          SampleView(model: $0)
+        }
+      }
     }
+  }
+}
+
+struct SampleView: View {
+  let model: SampleModel
+  
+  var body: some View {
+    SimpleDivView(
+      cardId: model.cardId,
+      jsonData: model.jsonData,
+      divKitComponents: model.divKitComponents
+    )
+  }
+}
+
+final class SamplesModel {
+  private let divKitComponents = DemoAppComponents.makeDivKitComponents()
+  
+  private(set) var items: [SampleModel]!
+  
+  init() {
+    items = Samples.allSamples
+      .map {
+        SampleModel(url: $0, divKitComponents: divKitComponents)
+      }
+  }
+}
+
+final class SampleModel {
+  let cardId: DivCardID
+  let jsonData: Data?
+  let divKitComponents: DivKitComponents
+  
+  init(
+    url: URL,
+    divKitComponents: DivKitComponents
+  ) {
+    cardId = DivCardID(rawValue: url.path)
+    jsonData = try? Data(contentsOf: url)
+    self.divKitComponents = divKitComponents
   }
 }

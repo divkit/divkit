@@ -47,7 +47,7 @@
 **Генерация сценариев анимаций**
 
 ```bash
-$ ./path/to/alicekit/div/divkit-regression-testing/scripts/generate_animation_scenarios.py
+$ ./path/to/div/divkit-regression-testing/scripts/generate_animation_scenarios.py
 ```
 
 Скопировать вывод `paths` в [`assets/scenarios.yaml`](src/main/assets/scenarios.yaml).

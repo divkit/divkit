@@ -1,0 +1,6 @@
+module Pods_DivKitSample {
+  umbrella header "Pods-DivKitSample-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -17,10 +17,11 @@ let connectOptions;
 const hostsDesc = hosts.map(host => ({host, port}));
 
 if (process.env.NODE_ENV === 'production') {
-    connectOptions = [hostsDesc, {
-        redisOptions: {
-            password
-        }
+    connectOptions = [{
+        sentinels: hostsDesc,
+        name: "divview-message-queue",
+        password,
+        family: 6
     }];
 } else {
     connectOptions = [];
@@ -32,7 +33,7 @@ if (!hosts.length) {
 
 const subscribers = {};
 const connectSubscribe = new Promise(resolve => {
-    const clusterForSubscribe = connectOptions.length ? new Redis.Cluster(...connectOptions) : new Redis();
+    const clusterForSubscribe = connectOptions.length ? new Redis(...connectOptions) : new Redis();
 
     clusterForSubscribe.on('ready', () => {
         console.log('redis subscribe channel connected');
@@ -55,7 +56,7 @@ const connectSubscribe = new Promise(resolve => {
 });
 
 const connectPublish = new Promise(resolve => {
-    const clusterForPublish = connectOptions.length ? new Redis.Cluster(...connectOptions) : new Redis();
+    const clusterForPublish = connectOptions.length ? new Redis(...connectOptions) : new Redis();
 
     clusterForPublish.on('ready', () => {
         console.log('redis publish channel connected');

@@ -76,18 +76,23 @@ public final class DivKitComponents {
     visibilityCounter.reset()
   }
 
-  public func parseDivData(_ jsonData: Data, cardId: DivCardID) throws -> DivData {
-    let divData = try jsonData.parseDivData()
-    setVariablesAndTriggers(divData: divData, cardId: cardId)
-    return divData
+  public func parseDivData(
+    _ jsonDict: [String: Any],
+    cardId: DivCardID
+  ) throws -> DeserializationResult<DivData> {
+    let result = try jsonDict.parseDivData()
+    if let divData = result.value {
+      setVariablesAndTriggers(divData: divData, cardId: cardId)
+    }
+    return result
   }
 
   public func parseDivData(
-    _ dataDict: [String: Any],
+    _ jsonData: Data,
     cardId: DivCardID
-  ) -> DeserializationResult<DivData> {
-    let divData = DivData.resolve(card: dataDict, templates: nil)
-    setVariablesAndTriggers(divData: divData.value, cardId: cardId)
+  ) throws -> DivData {
+    let divData = try jsonData.parseDivData()
+    setVariablesAndTriggers(divData: divData, cardId: cardId)
     return divData
   }
 
@@ -139,12 +144,17 @@ extension Data {
           let jsonDict = jsonObj as? [String: Any] else {
       throw DeserializationError.invalidJSONData(data: self)
     }
+    return try jsonDict.parseDivData().unwrap()
+  }
+}
 
-    let rawDivData = try RawDivData(dictionary: jsonDict)
-    return try DivData.resolve(
+extension Dictionary where Key == String, Value == Any {
+  fileprivate func parseDivData() throws -> DeserializationResult<DivData> {
+    let rawDivData = try RawDivData(dictionary: self)
+    return DivData.resolve(
       card: rawDivData.card,
       templates: rawDivData.templates
-    ).unwrap()
+    )
   }
 }
 

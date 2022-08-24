@@ -1,6 +1,6 @@
 # DivKit TypeScript JSON Buidler
 
-[Документация DivKit](https://doc.yandex-team.ru/divkit/overview/)
+[Документация DivKit](https://divkit.tech/doc/)
 
 ## Что это и зачем
 Библиотека `@divkit/jsonbuilder` предоставляет типобезопасные инструменты для генерации JSON-описаний высокоуровневой верстки для клиентов DivKit.
@@ -104,25 +104,4 @@ const safeBlock = tHelper.header({
 - Урлы картинок, действий и др. были валидными;
 - Массивы не был пустыми.
 
-В сомнительных случаях сверяйтесь с [документацией DivKit](https://doc.yandex-team.ru/divkit/overview/)
-
-## Обновление библиотеки по JSON-схеме
-
-Основные типы данных автоматически генерируются по [схеме](https://a.yandex-team.ru/arcadia/divkit/public/schema). Для этого используется генератор, бинарники которого лежат в [отдельном репозитории](https://bitbucket.browser.yandex-team.ru/projects/stardust/repos/mobile-homeapi-binaries).
-
-Обновление библиотеки в соответствии со свежей схемой выглядит следующим образом:
-
-```bash
-# клонирование репозиториев с генератором
-git clone https://bitbucket.browser.yandex-team.ru/scm/stardust/mobile-homeapi-binaries.git
-
-# генерация кода
-./codegen.sh
-```
-
-Далее создаём пулл-реквест как обычно.
-
-## Ссылки
-[Документация divkit](https://doc.yandex-team.ru/divkit/overview/)
-
-[Чат поддержки в Telegram](https://t.me/joinchat/FtO3zxdxMWOsQzndJmlC0Q)
+В сомнительных случаях сверяйтесь с [документацией DivKit](https://divkit.tech/doc/)

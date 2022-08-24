@@ -76,7 +76,7 @@
                     </label>
                     <CopyButton mix="links-popup__copy" copy={linkToEdit} />
                 </div>
-                <div class="links-popup__row">
+                <!--<div class="links-popup__row">
                     <label class="links-popup__label">
                         <span class="links-popup__title">{$l10n('linkToPreview')}</span>
                         <input
@@ -90,7 +90,7 @@
                         >
                     </label>
                     <CopyButton mix="links-popup__copy" copy={linkToPreview} />
-                </div>
+                </div>-->
                 <div class="links-popup__row">
                     <label class="links-popup__label">
                         <span class="links-popup__title">{$l10n('linkToJson')}</span>
@@ -185,6 +185,7 @@
     }
 
     .links-popup__qr {
+        display: block;
         width: 100%;
         margin: 20px auto 0;
         image-rendering: pixelated;

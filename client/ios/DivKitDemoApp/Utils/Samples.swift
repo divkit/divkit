@@ -15,4 +15,12 @@ enum Samples {
       .map { url in (url, String(url.lastPathComponent.split(separator: ".").first!)) }
       .sorted { $0.1 < $1.1 }
   }
+  
+  static var allSamples: [URL] {
+    getItems(path: samplesPath, extension: "")
+      .flatMap { _, folderName in
+        getItems(path: "\(samplesPath)/\(folderName)", extension: ".json")
+      }
+      .map { url, _ in url }
+  }
 }

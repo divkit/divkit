@@ -86,6 +86,12 @@
     let isRunning = false;
     let runButton: HTMLElement;
 
+    valueStore.subscribe(val => {
+        if (editor && editor.getValue() !== val) {
+            editor.setValue(val);
+        }
+    });
+
     function getModel(type: 'ts' | 'json' | null): monaco.editor.ITextModel {
         if (type === 'json') {
             const model = monaco.editor.getModel(jsonModelUri) ||

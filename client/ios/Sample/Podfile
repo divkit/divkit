@@ -1,0 +1,6 @@
+platform :ios, '11.0'
+use_modular_headers!
+
+target 'DivKitSample' do
+  pod 'DivKit'
+end

@@ -130,7 +130,6 @@ object ColorUtils {
     /**
      * Calculates a distance between two colors, regardless alpha.
      * TODO(weird, polikarpov, achirtsov): now it is a stub, put a real algorithm.
-     * Also see [wiki](https://beta.wiki.yandex-team.ru/Users/ppolitov/custo-color/).
      *
      * @param color1 First color to calculate distance.
      * @param color2 Second color to calculate distance.

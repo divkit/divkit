@@ -161,6 +161,11 @@ task sandboxRelease {
     finalizedBy finalVerification, uploadBeta
 }
 
+task sandboxPlaygroundRelease {
+    dependsOn assembleDemoRelease
+    finalizedBy finalVerification
+}
+
 apply plugin: 'perfTests'
 
 task assemblePerf {
