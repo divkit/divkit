@@ -11,7 +11,7 @@ We’ve made a sandbox for you to experiment with. The DivKit Web engine is conn
 
 Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru).
 
-[Twitter](https://twitter.com/divkit)
+[Twitter](https://twitter.com/DivKitFramework)
 
 Project structure:
 
