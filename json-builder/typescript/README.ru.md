@@ -1,11 +1,11 @@
 # DivKit TypeScript JSON Buidler
 
-[DivKit Documentation](https://divkit.tech/doc/)
+[Документация DivKit](https://divkit.tech/doc/)
 
-## What is this and what for
-`@divkit/jsonbuilder` library provides type safe tools to generate DivKit JSON
+## Что это и зачем
+Библиотека `@divkit/jsonbuilder` предоставляет типобезопасные инструменты для генерации JSON-описаний высокоуровневой верстки для клиентов DivKit.
 
-## Example
+## Пример
 
 ```typescript
 import { divCard, DivContainer, DivText, reference, rewritRefs, template, templateHelper } from '@divkit/jsonbuilder';
@@ -44,7 +44,7 @@ console.log(JSON.stringify(
 )));
 ```
 
-In the result `JSON.stringify(divCard(...))` will return JSON below:
+В результате `JSON.stringify(divCard(...))` вернет следующий JSON:
 ```json
 {
   "templates": {
@@ -82,28 +82,30 @@ In the result `JSON.stringify(divCard(...))` will return JSON below:
 }
 ```
 
-## Typesafe templates with compile-time validation
-
-You can use `templateHelper` helper function to achieve compile time template parameters validation. Type safety works only when you enable [strictNullChecks](https://www.typescriptlang.org/docs/handbook/compiler-options.html) in tsconfig.json
+## Типизированные шаблоны (compile-time валидация)
+Для проверки компилятором набора шаблонных свойств можно использовать вспомогательную функцию `templateHelper`. Типизация работает корректно только при включенном флаге [strictNullChecks](https://www.typescriptlang.org/docs/handbook/compiler-options.html) в tsconfig.json!
 
 ```typescript
 const block = template('header', {
     title: 'Some Title'
 });
 
-// using templateHelper for checking template parameters at compile-time
+// вариант с templateHelper проверяет список параметров и их типы во время компиляции
 const safeBlock = tHelper.header({
     title: 'Some Title'
 });
 ```
 
-## Validity guarantees
+## Гарантии валидности
 
-While developing cards you need to make sure that:
+При разработке карточки нужно самостоятельно следить за тем, чтобы
 
-- Textual string are not empty;
-- Urls of images, actions, etc are valid;
-- Arrays are non-empty.
+- Текстовые строки не были пустыми;
+- Урлы картинок, действий и др. были валидными;
+- Массивы не был пустыми.
+
+В сомнительных случаях сверяйтесь с [документацией DivKit](https://divkit.tech/doc/)
+
 
 [Documentation](https://divkit.tech/doc). [Medium tutorial](https://medium.com/p/cad519252f0f). [Habr tutorial](https://habr.com/ru/company/yandex/blog/683886/).
 

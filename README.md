@@ -18,8 +18,12 @@ Project structure:
 ## Client
 Client side libraries for rendering UI on Android, iOS and Web.
 
+[Android](client/android/), [iOS](client/ios/), [Web](client/web/divkit)
+
 ## Json-builder
 Server side libraries for building JSON in DivKit format.
+
+[TypeScript](json-builder/typescript/), [Kotlin](json-builder/kotlin/)
 
 ## Schema
 JSON schema that describes DivKit data format.
