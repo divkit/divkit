@@ -2,20 +2,13 @@ export const DEFAULT_JSON_VALUE = `{
     "templates": {
         "tutorialCard": {
             "type": "container",
-            "border": {
-                "corner_radius": 16,
-                "stroke": {
-                    "color": "#aaaaaa",
-                    "width": 1
-                }
-            },
             "items": [
                 {
                     "type": "text",
                     "font_size": 21,
                     "font_weight": "bold",
                     "margins": {
-                        "bottom": 8
+                        "bottom": 16
                     },
                     "$text": "title"
                 },
@@ -23,7 +16,7 @@ export const DEFAULT_JSON_VALUE = `{
                     "type": "text",
                     "font_size": 16,
                     "margins": {
-                        "bottom": 4
+                        "bottom": 16
                     },
                     "$text": "body"
                 },
@@ -37,10 +30,10 @@ export const DEFAULT_JSON_VALUE = `{
             },
             "orientation": "vertical",
             "paddings": {
-                "top": 12,
-                "bottom": 12,
-                "left": 12,
-                "right": 12
+                "top": 30,
+                "bottom": 0,
+                "left": 30,
+                "right": 30
             }
         },
         "link": {
@@ -67,59 +60,31 @@ export const DEFAULT_JSON_VALUE = `{
                     "type": "container",
                     "items": [
                         {
+                            "type": "image",
+                            "image_url": "https://yastatic.net/s3/home/divkit/logo.png",
+                            "margins": {
+                                "top": 45,
+                                "right": 60,
+                                "bottom": 30,
+                                "left": 60
+                            }
+                        },
+                        {
                             "type": "tutorialCard",
                             "title": "DivKit",
-                            "body": "Server side driven ui Яндекса\\nПолезные ссылки:",
+                            "body": "What is DivKit and why did I get here?\\n\\nDivKit is a new Yandex open source framework that helps speed up mobile development.\\n\\niOS, Android, Web — update the interface of any applications directly from the server, without publishing updates.\\n\\nFor 5 years we have been using Devkit in the Yandex search app, Alice, Edadeal, Market, and now we are sharing it with you.\\n\\nThe source code is published on GitHub under the Apache 2.0 license.",
                             "links": [
                                 {
                                     "type": "link",
-                                    "link_text": "Официальная документация",
-                                    "link": "https://doc.yandex-team.ru/divkit/overview/",
+                                    "link_text": "More about DivKit",
+                                    "link": "https://divkit.tech/",
+                                    "log": "landing"
+                                },
+                                {
+                                    "type": "link",
+                                    "link_text": "Documentation",
+                                    "link": "https://divkit.tech/docs/",
                                     "log": "docs"
-                                },
-                                {
-                                    "type": "link",
-                                    "link_text": "Примеры карточек",
-                                    "link": "https://bitbucket.browser.yandex-team.ru/projects/ml/repos/mobile-alice-library-android/browse/div/divkit-demo-app/src/main/assets/div2",
-                                    "log": "samples"
-                                },
-                                {
-                                    "type": "link",
-                                    "link_text": "Клуб в Этушке",
-                                    "link": "https://clubs.at.yandex-team.ru/divkit/",
-                                    "log": "atushka"
-                                },
-                                {
-                                    "type": "link",
-                                    "link_text": "Канал в слаке",
-                                    "link": "https://yndx-all.slack.com/archives/C01FSDSGC7P",
-                                    "log": "slack"
-                                }
-                            ]
-                        },
-                        {
-                            "type": "tutorialCard",
-                            "title": "Горячие клавиши редактора",
-                            "body": "ctrl+space - вызвать автодополнение\\nctrl+f2 - заменить всё\\nctrl+shift+i - отформатировать json\\nctrl+shift+a закомментировать блок\\nСхолпнуть json-блоки можно с помощью стрелочек, что появляются при наведении на блок с номерами строк слева\\nf1 - вызвать меню со всеми доступными командами и горячими клавишами",
-                            "links": [
-                                {
-                                    "type": "separator",
-                                    "delimiter_style": {
-                                        "color": "#00000000"
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "tutorialCard",
-                            "title": "Интерактивная верстка на ваших устройствах",
-                            "body": "Для того, чтобы посмотреть вашу верстку на android:\\n1) Скачайте demo apk по ссылке ниже\\n2) Установите apk на устройство и перейдите во вкладку \\"Div2\\"\\n3) Нажмите на share на этой страничке и отсканируйте QR-код, нажав соответствующую кнопку в приложении, либо вставьте урл из поля \\"Link to json\\"\\n4) Для каждого подключенного устройства в редакторе появится вкладка с тем, что отображается сейчас на экране",
-                            "links": [
-                                {
-                                    "type": "link",
-                                    "link_text": "apk демо-приложения",
-                                    "link": "https://beta.m.soft.yandex.ru/description?app=divkit&platform_shortcut=android&branch=R-100",
-                                    "log": "apk"
                                 }
                             ]
                         }
@@ -134,7 +99,7 @@ export const DEFAULT_JSON_VALUE = `{
 export const DEFAULT_TS_VALUE  = `import {
     DivContainer,
     DivText,
-    DivSeparator,
+    DivImage,
     reference,
     divCard,
     templateHelper,
@@ -144,20 +109,13 @@ export const DEFAULT_TS_VALUE  = `import {
 const templates = {
     tutorialCard: new DivContainer({
         paddings: {
-            top: 12,
-            bottom: 12,
-            left: 12,
-            right: 12
+            top: 30,
+            bottom: 0,
+            left: 30,
+            right: 30
         },
         margins: {
             bottom: 6
-        },
-        border: {
-            corner_radius: 16,
-            stroke: {
-                color: '#aaaaaa',
-                width: 1
-            }
         },
         items: [
             new DivText({
@@ -165,13 +123,13 @@ const templates = {
                 font_weight: 'bold',
                 font_size: 21,
                 margins: {
-                    bottom: 8
+                    bottom: 16
                 }
             }),
             new DivText({
                 text: reference('body'),
                 margins: {
-                    bottom: 4
+                    bottom: 16
                 },
                 font_size: 16
             }),
@@ -201,60 +159,31 @@ export function getJson() {
                 state_id: 0,
                 div: new DivContainer({
                     items: [
+                        new DivImage({
+                            image_url: 'https://yastatic.net/s3/home/divkit/logo.png',
+                            margins: {
+                                top: 45,
+                                right: 60,
+                                bottom: 30,
+                                left: 60
+                            }
+                        }),
                         thelper.tutorialCard({
                             title: 'DivKit',
-                            body: 'Server side driven ui Яндекса\\nПолезные ссылки:',
+                            body: 'What is DivKit and why did I get here?\\n\\nDivKit is a new Yandex open source framework that helps speed up mobile development.\\n\\niOS, Android, Web — update the interface of any applications directly from the server, without publishing updates.\\n\\nFor 5 years we have been using Devkit in the Yandex search app, Alice, Edadeal, Market, and now we are sharing it with you.\\n\\nThe source code is published on GitHub under the Apache 2.0 license.',
                             links: [
                                 thelper.link({
-                                    text: 'Официальная документация',
+                                    text: 'More about DivKit',
                                     action: {
-                                        url: 'https://doc.yandex-team.ru/divkit/overview/',
+                                        url: 'https://divkit.tech/',
+                                        log_id: 'landing'
+                                    }
+                                }),
+                                thelper.link({
+                                    text: 'Documentation',
+                                    action: {
+                                        url: 'https://divkit.tech/docs/',
                                         log_id: 'docs'
-                                    }
-                                }),
-                                thelper.link({
-                                    text: 'Примеры карточек',
-                                    action: {
-                                        url: 'https://bitbucket.browser.yandex-team.ru/projects/ml/repos/mobile-alice-library-android/browse/div/divkit-demo-app/src/main/assets/div2',
-                                        log_id: 'samples'
-                                    }
-                                }),
-                                thelper.link({
-                                    text: 'Клуб в Этушке',
-                                    action: {
-                                        url: 'https://clubs.at.yandex-team.ru/divkit/',
-                                        log_id: 'atushka'
-                                    }
-                                }),
-                                thelper.link({
-                                    text: 'Канал в слаке',
-                                    action: {
-                                        url: 'https://yndx-all.slack.com/archives/C01FSDSGC7P',
-                                        log_id: 'slack'
-                                    }
-                                })
-                            ]
-                        }),
-                        thelper.tutorialCard({
-                            title: 'Горячие клавиши редактора',
-                            body: 'ctrl+space - вызвать автодополнение\\nctrl+f2 - заменить всё\\nctrl+shift+i - отформатировать json\\nctrl+shift+a закомментировать блок\\nСхолпнуть json-блоки можно с помощью стрелочек, что появляются при наведении на блок с номерами строк слева\\nf1 - вызвать меню со всеми доступными командами и горячими клавишами',
-                            links: [
-                                new DivSeparator({
-                                    delimiter_style: {
-                                        color: '#00000000'
-                                    }
-                                })
-                            ]
-                        }),
-                        thelper.tutorialCard({
-                            title: 'Интерактивная верстка на ваших устройствах',
-                            body: 'Для того, чтобы посмотреть вашу верстку на android:\\n1) Скачайте demo apk по ссылке ниже\\n2) Установите apk на устройство и перейдите во вкладку \\"Div2\\"\\n3) Нажмите на share на этой страничке и отсканируйте QR-код, нажав соответствующую кнопку в приложении, либо вставьте урл из поля \\"Link to json\\"\\n4) Для каждого подключенного устройства в редакторе появится вкладка с тем, что отображается сейчас на экране',
-                            links: [
-                                thelper.link({
-                                    text: 'apk демо-приложения',
-                                    action: {
-                                        url: 'https://beta.m.soft.yandex.ru/description?app=divkit&platform_shortcut=android&branch=R-100',
-                                        log_id: 'apk'
                                     }
                                 })
                             ]
