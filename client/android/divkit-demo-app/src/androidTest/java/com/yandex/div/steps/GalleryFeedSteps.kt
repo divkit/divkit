@@ -18,10 +18,10 @@ import org.junit.Assert
 // Timeout in millis to wait for visibility actions being dispatched
 private const val VISIBILITY_ACTIONS_TIMEOUT = 500L
 
-internal fun zenFeed(f: ZenFeedSteps.() -> Unit) = f(ZenFeedSteps())
+internal fun galleryFeed(f: GalleryFeedSteps.() -> Unit) = f(GalleryFeedSteps())
 
 @StepsDsl
-internal class ZenFeedSteps {
+internal class GalleryFeedSteps {
 
     fun scrollPerItem(): Unit = step("scroll feed per item") {
         for (i in 0 until 10) {
@@ -49,13 +49,13 @@ internal class ZenFeedSteps {
         }
     }
 
-    fun assert(f: ZenFeedAssertions.() -> Unit) = f(ZenFeedAssertions())
+    fun assert(f: GalleryFeedAssertions.() -> Unit) = f(GalleryFeedAssertions())
 }
 
 private fun feed() = onView(withId(R.id.gallery_feed))
 
 @StepsDsl
-internal class ZenFeedAssertions {
+internal class GalleryFeedAssertions {
 
     fun checkTrackedVisibilityActionsForContent(visibilityActions: List<DivVisibilityAction>): Unit =
         step("check tracked visibility actions for content") {
