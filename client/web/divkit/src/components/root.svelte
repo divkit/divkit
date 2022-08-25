@@ -69,13 +69,17 @@
     if (theme === 'light' || theme === 'dark') {
         currentTheme = theme;
     } else if (theme === 'system') {
-        const themeQuery = matchMedia('(prefers-color-scheme: dark)');
-        currentTheme = themeQuery.matches ? 'dark' : 'light';
-        themeQuery.addListener(() => {
+        if (typeof matchMedia !== 'undefined') {
+            const themeQuery = matchMedia('(prefers-color-scheme: dark)');
             currentTheme = themeQuery.matches ? 'dark' : 'light';
+            themeQuery.addListener(() => {
+                currentTheme = themeQuery.matches ? 'dark' : 'light';
 
-            updateTheme();
-        });
+                updateTheme();
+            });
+        } else {
+            currentTheme = 'light';
+        }
     } else {
         logError(wrapError(new Error('Unsupported theme')));
     }
