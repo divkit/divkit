@@ -63,9 +63,9 @@ export const DEFAULT_JSON_VALUE = `{
                             "type": "image",
                             "image_url": "https://yastatic.net/s3/home/divkit/logo.png",
                             "margins": {
-                                "top": 45,
+                                "top": 25,
                                 "right": 60,
-                                "bottom": 30,
+                                "bottom": 10,
                                 "left": 60
                             }
                         },
@@ -85,6 +85,24 @@ export const DEFAULT_JSON_VALUE = `{
                                     "link_text": "Documentation",
                                     "link": "https://divkit.tech/docs/",
                                     "log": "docs"
+                                },
+                                {
+                                    "type": "link",
+                                    "link_text": "News channel",
+                                    "link": "https://t.me/divkit_news",
+                                    "log": "tg_news"
+                                },
+                                {
+                                    "type": "link",
+                                    "link_text": "EN Community chat",
+                                    "link": "https://t.me/divkit_community_en",
+                                    "log": "tg_en_chat"
+                                },
+                                {
+                                    "type": "link",
+                                    "link_text": "RU Community chat",
+                                    "link": "https://t.me/divkit_community_ru",
+                                    "log": "tg_ru_chat"
                                 }
                             ]
                         }
@@ -162,9 +180,9 @@ export function getJson() {
                         new DivImage({
                             image_url: 'https://yastatic.net/s3/home/divkit/logo.png',
                             margins: {
-                                top: 45,
+                                top: 25,
                                 right: 60,
-                                bottom: 30,
+                                bottom: 10,
                                 left: 60
                             }
                         }),
@@ -184,6 +202,27 @@ export function getJson() {
                                     action: {
                                         url: 'https://divkit.tech/docs/',
                                         log_id: 'docs'
+                                    }
+                                }),
+                                thelper.link({
+                                    text: 'News channel',
+                                    action: {
+                                        url: 'https://t.me/divkit_news',
+                                        log_id: 'tg_news'
+                                    }
+                                }),
+                                thelper.link({
+                                    text: 'EN Community chat',
+                                    action: {
+                                        url: 'https://t.me/divkit_community_en',
+                                        log_id: 'tg_en_chat'
+                                    }
+                                }),
+                                thelper.link({
+                                    text: 'RU Community chat',
+                                    action: {
+                                        url: 'https://t.me/divkit_community_ru',
+                                        log_id: 'tg_ru_chat'
                                     }
                                 })
                             ]
