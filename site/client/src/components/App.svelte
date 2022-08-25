@@ -25,6 +25,7 @@
     lang.subscribe(val => {
         if (val !== langVal) {
             history.pushState(null, document.title, `/${val}/playground${location.search}`);
+            langVal = val;
         }
     });
 
@@ -38,7 +39,7 @@
         },
         l10n,
         languagesList() {
-            return ['en', 'ru'];
+            return ['ru', 'en'];
         }
     });
 </script>

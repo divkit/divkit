@@ -3,6 +3,10 @@
     import { selectedLeaf } from '../data/webStructure';
     import JsonView from './JsonView.svelte';
     import { valueStore } from '../data/valueStore';
+    import { getContext } from 'svelte';
+    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+
+    const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
     let expanded = false;
 
@@ -49,7 +53,7 @@
 
 <div class="structure-templates">
     <div class="structure-templates__title" on:click={toggle}>
-        Applied templates
+        {$l10n('appliedTemplates')}
     </div>
     {#if expanded}
         <div class="structure-templates__content" transition:slide>
@@ -61,7 +65,7 @@
                     <JsonView json={item.json} expanded={true} />
                 {/each}
             {:else}
-                Nothing to display
+                {$l10n('noStructure')}
             {/if}
         </div>
     {/if}

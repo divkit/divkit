@@ -2,9 +2,12 @@
     import { createEventDispatcher, getContext } from 'svelte';
     import type { TreeContext, TreeLeaf } from '../ctx/tree';
     import { TREE_CTX } from '../ctx/tree';
+    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
 
     export let leaf: TreeLeaf;
     export let level = 0;
+
+    const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
     const dispatch = createEventDispatcher();
 
@@ -65,7 +68,7 @@
     <div
         class="tree-leaf__icon"
         on:click={onIconClick}
-        title={leaf.childs.length ? (expanded ? 'Collapse' : 'Expand') : undefined}
+        title={leaf.childs.length ? (expanded ? $l10n('collapse') : $l10n('expand')) : undefined}
     ></div>
     {getText(leaf)}
 </div>

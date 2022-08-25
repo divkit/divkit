@@ -1,9 +1,14 @@
 <script lang="ts">
+    import { getContext } from 'svelte';
+    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+
     export let name = '';
     export let comma = false;
     export let json: any;
     export let level = 0;
     export let expanded = false;
+
+    const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
     $: keys = json && typeof json === 'object' ? Object.keys(json) : [];
     $: isStr = typeof json === 'string';
@@ -21,18 +26,18 @@
             {#if Array.isArray(json)}
                 {#if expanded}
                     <div class="json-view__row">
-                        <div class="json-view__collapse" on:click={() => expanded = false} title="Collapse"></div>
+                        <div class="json-view__collapse" on:click={() => expanded = false} title={$l10n('collapse')}></div>
                         {'['}
                     </div>
                 {:else}
-                    <div class="json-view__toggler" on:click={() => expanded = true} title="Expand">
+                    <div class="json-view__toggler" on:click={() => expanded = true} title={$l10n('expand')}>
                         {`[ ${json.length} item${json.length > 1 ? 's' : ''} ]`}
                     </div>
                 {/if}
             {:else if json && typeof json === 'object'}
                 {#if expanded}
                     <div class="json-view__row">
-                        <div class="json-view__collapse" on:click={() => expanded = false} title="Collapse"></div>
+                        <div class="json-view__collapse" on:click={() => expanded = false} title={$l10n('collapse')}></div>
                         {'{'}
                     </div>
                 {:else}

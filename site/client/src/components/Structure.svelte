@@ -13,6 +13,10 @@
     import Tree from './Tree.svelte';
     import type { TreeLeaf } from '../ctx/tree';
     import { panelStructure } from '../data/panels';
+    import { getContext } from 'svelte';
+    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+
+    const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
     $: tree = $webStructure;
     let highlightLeaf: TreeLeaf | null = null;
@@ -71,12 +75,12 @@
 
 <div class="structure">
     <div class="structure__title">
-        Structure
+        {$l10n('structure')}
 
         <button
             class="structure__select"
             class:structure__select_toggled={$highlightMode}
-            title="Select element"
+            title={$l10n('selectComponent')}
             on:click={toggleSelect}
         ></button>
 
@@ -96,7 +100,7 @@
         />
     {:else}
         <div class="structure__empty">
-            Nothing to display
+            {$l10n('noStructure')}
         </div>
     {/if}
 

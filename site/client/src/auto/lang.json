@@ -1,6 +1,6 @@
 {
     "ru": {
-        "name": "Русский",
+        "name": "Rus",
         "languageChooser": "Выбранный язык",
         "playground": "Веб песочница",
         "samples": "Примеры",
@@ -9,6 +9,9 @@
         "timeToRender": "Время на отрисовку: ",
         "customViewport": "Своё",
         "structure": "Структура",
+        "noStructure": "Нет данных",
+        "currentComponent": "Текущий компонент",
+        "appliedTemplates": "Применённые шаблоны",
         "errors": "Ошибоньки",
         "warnings": "Предупреждения",
         "noErrors": "Нет ошибок",
@@ -26,10 +29,13 @@
         "qrCode": "QR код",
         "copy": "Копировать",
         "loadError": "Не удалось загрузить :(",
-        "webSupportWarning": "Данный пример содержит функционал, который не поддержан в реализации для Веба. Он может отличаться от нативных платформ."
+        "webSupportWarning": "Данный пример содержит функционал, который не поддержан в реализации для Веба. Он может отличаться от нативных платформ.",
+        "collapse": "Свернуть",
+        "expand": "Развернуть",
+        "selectComponent": "Выбрать компонент"
     },
     "en": {
-        "name": "English",
+        "name": "Eng",
         "languageChooser": "Selected language",
         "playground": "Web playground",
         "samples": "Samples",
@@ -38,6 +44,9 @@
         "timeToRender": "Time to render: ",
         "customViewport": "Custom",
         "structure": "Structure",
+        "noStructure": "Nothing to display",
+        "currentComponent": "Current component",
+        "appliedTemplates": "Applied templates",
         "errors": "Errors",
         "warnings": "Warnings",
         "noErrors": "No errors",
@@ -55,6 +64,9 @@
         "qrCode": "QR code",
         "copy": "Copy",
         "loadError": "Cannot load :(",
-        "webSupportWarning": "This sample contains functionality that is not supported in the implementation for the Web. It may differ from native platforms."
+        "webSupportWarning": "This sample contains functionality that is not supported in the implementation for the Web. It may differ from native platforms.",
+        "collapse": "Collapse",
+        "expand": "Expand",
+        "selectComponent": "Select component"
     }
 }

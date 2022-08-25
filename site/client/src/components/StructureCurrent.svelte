@@ -3,6 +3,10 @@
     import { selectedLeaf } from '../data/webStructure';
     import JsonView from './JsonView.svelte';
     import StructureBox from './StructureBox.svelte';
+    import { getContext } from 'svelte';
+    import { LANGUAGE_CTX, LanguageContext } from '../data/languageContext';
+
+    const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
     let expanded = false;
 
@@ -15,7 +19,7 @@
 
 <div class="structure-current">
     <div class="structure-current__title" on:click={toggle}>
-        Current node
+        {$l10n('currentComponent')}
     </div>
     {#if expanded}
         <div class="structure-current__content" transition:slide>
@@ -26,7 +30,7 @@
                 {/if}
                 <JsonView json={currentJson} expanded={true} />
             {:else}
-                Nothing to display
+                {$l10n('noStructure')}
             {/if}
         </div>
     {/if}

@@ -10,7 +10,7 @@
         minWidth: 400
     }, $panelStructure && {
         component: WebViewerSidebar,
-        weight: 1,
+        weight: 3,
         minWidth: 50
     }].filter(Boolean);
 </script>
