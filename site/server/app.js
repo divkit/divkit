@@ -5,7 +5,7 @@ const WebSocket = require('ws');
 const Koa = require('koa');
 const Router = require('koa-router');
 const bodyParser = require('koa-bodyparser');
-const serve = require('koa-static');
+const staticCache = require('koa-static-cache');
 const compress = require('koa-compress');
 const cors = require('@koa/cors');
 
@@ -248,8 +248,8 @@ router.post('/api/runTs', async ctx => {
 });
 
 app.use(compress({
-    filter () {
-        return true;
+    filter (content_type) {
+        return /application\/json/i.test(content_type)
     },
     // threshold: 2048,
     gzip: {
@@ -261,19 +261,28 @@ app.use(compress({
     br: false // disable brotli
 }));
 
-app.use(serve(__dirname + '/dist', {
-    setHeaders(res, _path, _stats) {
-        res.setHeader(
-            'content-security-policy',
-            [
-                'font-src yastatic.net',
-                'style-src \'unsafe-inline\' yastatic.net',
-                'img-src yastatic.net mc.yandex.ru data:',
-                'script-src yastatic.net \'self\'',
-                'default-src yastatic.net',
-                'connect-src \'self\''
-            ].join(';')
-        );
+app.use((ctx, next) => {
+    if (ctx.request.url === '/') {
+        ctx.set('Content-Security-Policy', [
+            'font-src yastatic.net',
+            'style-src \'unsafe-inline\' yastatic.net',
+            'img-src yastatic.net mc.yandex.ru data:',
+            'script-src yastatic.net \'self\'',
+            'default-src yastatic.net',
+            'connect-src \'self\''
+        ].join(';'));
+    }
+    return next();
+});
+
+app.use(staticCache(__dirname + '/dist', {
+    maxAge: 300,
+    buffer: true,
+    gzip: true,
+    preload: true,
+    dynamic: false,
+    alias: {
+        '/': '/index.html'
     }
 }));
 
