@@ -42,6 +42,7 @@
           "type": "container",
           "orientation": "vertical",
           "margins": {
+            "top": 24,
             "bottom": 24
           },
           "items": [

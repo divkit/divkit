@@ -89,6 +89,7 @@
           "orientation": "vertical",
           "content_alignment_horizontal": "center",
           "margins": {
+            "top": 24,
             "bottom": 24
           },
           "items": [
