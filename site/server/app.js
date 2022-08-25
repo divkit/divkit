@@ -257,8 +257,8 @@ app.use(serve(__dirname + '/dist', {
             [
                 'font-src yastatic.net',
                 'style-src \'unsafe-inline\' yastatic.net',
-                'img-src yastatic.net mc.yandex.ru',
-                'script-src yastatic.net',
+                'img-src yastatic.net mc.yandex.ru blob:',
+                'script-src yastatic.net \'self\'',
                 'default-src yastatic.net',
                 'connect-src \'self\''
             ].join(';')
