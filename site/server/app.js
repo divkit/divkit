@@ -12,6 +12,7 @@ const cors = require('@koa/cors');
 const { v4: uuidv4 } = require('uuid');
 
 const {connectMongo, setMongo, getMongo} = require('./src/mongo');
+const ONE_HOUR_IN_MS = 1000 * 60 * 60;
 const {runTs} = require('./src/runTs');
 const {publishJsonUpdate, subscribeJsonUpdate, unsubscribeJsonUpdate} = require('./src/redis');
 
@@ -144,7 +145,10 @@ router.get('/api/json', async ctx => {
         if (item) {
             ctx.body = item.json;
 
-            await setMongo(uuid, {});
+            if (Date.now() - item.ts > ONE_HOUR_IN_MS) {
+                // update timestamp
+                await setMongo(uuid, {});
+            }
         } else {
             ctx.status = 404;
         }
@@ -170,7 +174,10 @@ router.get('/api/source', async ctx => {
                 language: item.language || 'json'
             };
 
-            await setMongo(uuid, {});
+            if (Date.now() - item.ts > ONE_HOUR_IN_MS) {
+                // update timestamp
+                await setMongo(uuid, {});
+            }
         } else {
             ctx.status = 404;
         }
