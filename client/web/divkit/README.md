@@ -6,7 +6,7 @@
 ### Installation
 
 ```
-npm i @divkit/divkit --save
+npm i @divkitframework/divkit --save
 ```
 
 ### Usage
@@ -24,7 +24,7 @@ JS code can be bundled with various strategies. Basically you need to answer a f
 On the server side there is `/server` module:
 
 ```js
-import {render} from '@divkit/divkit/server';
+import {render} from '@divkitframework/divkit/server';
 
 const html = render({
     id: 'smth',
@@ -41,7 +41,7 @@ const html = render({
 Then use `/client-hydratable` on client to hydrate server-side html::
 
 ```js
-import {render} from '@divkit/divkit/client-hydratable';
+import {render} from '@divkitframework/divkit/client-hydratable';
 
 render({
     id: 'smth',
@@ -62,7 +62,7 @@ render({
 For the client-only usage there is `/client` module. The size of this module is slightly smaller than `/client-hydratable`.
 
 ```js
-import {render} from '@divkit/divkit/client';
+import {render} from '@divkitframework/divkit/client';
 
 render({
     id: 'smth',
@@ -105,7 +105,7 @@ ES modules can be used in the browser directly without any build:
 
 ```html
 <script type="module">
-    import {render} from './node_modules/@divkit/divkit/dist/esm/client.mjs';
+    import {render} from './node_modules/@divkitframework/divkit/dist/esm/client.mjs';
 
     render({
         id: 'smth',
@@ -124,7 +124,7 @@ ES modules can be used in the browser directly without any build:
 ### Use in the browser via global variables without build:
 
 ```html
-<script src="./node_modules/@divkit/divkit/dist/browser/client.js"></script>
+<script src="./node_modules/@divkitframework/divkit/dist/browser/client.js"></script>
 <script>
     window.Ya.Divkit.render({
         id: 'smth',
