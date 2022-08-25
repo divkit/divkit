@@ -78,7 +78,7 @@ async function setMongo(uuid, vals) {
     });
 }
 
-async function getMongo(uuid) {
+async function getMongo(uuid, projection = {}) {
     await connectMongo();
 
     const db = client.db(DB_NAME);
@@ -86,5 +86,5 @@ async function getMongo(uuid) {
 
     return collection.findOne({
         uuid
-    });
+    }, {projection});
 }

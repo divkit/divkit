@@ -98,7 +98,7 @@ router.post('/api/updateSource', async ctx => {
         return;
     }
 
-    const item = await getMongo(uuid);
+    const item = await getMongo(uuid, {uuid: 1, writeKey: 1});
 
     if (item && item.writeKey === writeKey) {
         try {
@@ -140,7 +140,11 @@ router.get('/api/json', async ctx => {
     ctx.set('Cache-Control', 'no-cache,no-store,max-age=0,must-revalidate');
 
     try {
-        const item = await getMongo(uuid);
+        const item = await getMongo(uuid, {
+            uuid: 1,
+            json: 1,
+            ts: 1
+        });
 
         if (item) {
             ctx.body = item.json;
@@ -200,7 +204,7 @@ router.post('/api/runTs', async ctx => {
         return;
     }
 
-    const item = (uuid && writeKey) ? await getMongo(uuid) : null;
+    const item = (uuid && writeKey) ? await getMongo(uuid, {uuid: 1, writeKey: 1}) : null;
 
     if (uuid && writeKey && !(item && item.writeKey === writeKey)) {
         ctx.status = 400;
@@ -380,7 +384,10 @@ wss.on('connection', function connection(ws) {
         switch (json.type) {
             case 'listen': {
                 const uuid = json.message.uuid;
-                const item = await getMongo(uuid);
+                const item = await getMongo(uuid, {
+                    uuid: 1,
+                    json: 1
+                });
                 if (!item) {
                     console.log('listen - no data', uuid);
                     ws.send(JSON.stringify({type: 'error', message: {text: 'missing uuid'}}));
