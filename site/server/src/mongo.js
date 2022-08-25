@@ -48,7 +48,9 @@ function connectMongo() {
     }).then(() => {
         const db = client.db(DB_NAME);
         const collection = db.collection(DB_COLLECTION);
-        return collection.createIndex('uuid').then(() => {
+        return collection.createIndex('uuid', {
+            unique: true
+        }).then(() => {
             return collection.createIndex('ts', {
                 expireAfterSeconds: TIME_TO_CLEANUP
             })
