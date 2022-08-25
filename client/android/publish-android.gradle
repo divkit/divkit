@@ -4,7 +4,7 @@ apply plugin: 'maven-publish'
 
 group = 'com.yandex.div'
 
-def gitHash = { ->
+def commitHash = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
         commandLine 'arc', 'rev-parse', 'HEAD'
@@ -26,7 +26,7 @@ afterEvaluate {
                 version divkitVersionName
                 from components.release
                 if (project.hasProperty('teamcity.version')) {
-                    pom.description = "Built on commit: ${gitHash()}"
+                    pom.description = "Built on commit: ${commitHash()}"
                 }
                 ext.repo = 'release'
             }
