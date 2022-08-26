@@ -28,42 +28,11 @@
         "left": 24,
         "right": 24,
         "bottom": 12,
-        "top": 12
+        "top": 24
       }
-    },
-    "text_block": {
-      "type": "text",
-      "$text": "visible_text",
-      "id": "visible_id",
-      "width": {
-        "type": "match_parent"
-      },
-      "height": {
-        "type": "fixed",
-        "value": 88
-      },
-      "border": {
-        "corner_radius": 16
-      },
-      "background": [
-        {
-          "type": "solid",
-          "color": "#3F28C3"
-        }
-      ],
-      "text_color": "#ffffff",
-      "font_size": 14,
-      "text_alignment_vertical": "center",
-      "text_alignment_horizontal": "center"
     },
     "button": {
       "type": "text",
-      "width": {
-        "type": "match_parent"
-      },
-      "height": {
-        "type": "wrap_content"
-      },
       "paddings": {
         "left": 16,
         "top": 16,
@@ -90,46 +59,29 @@
       "text_color": "#000000"
     },
     "in_out_transition_demo_block": {
-      "type": "state",
-      "width": {
-        "type": "match_parent"
-      },
+      "type": "text",
       "height": {
-        "type": "wrap_content"
+        "type": "fixed",
+        "value": 88
       },
       "margins": {
         "left": 24,
         "right": 24,
         "bottom": 8
       },
-      "states": [
+      "border": {
+        "corner_radius": 16
+      },
+      "background": [
         {
-          "state_id": "visible",
-          "div": {
-            "type": "text_block",
-            "$text": "visible_text",
-            "id": "visible_id",
-            "width": {
-              "type": "match_parent"
-            },
-            "height": {
-              "type": "fixed",
-              "value": 88
-            },
-            "$transition_out": "transition_out_animations",
-            "$transition_in": "transition_in_animations"
-          }
-        },
-        {
-          "state_id": "invisible",
-          "div": {
-            "type": "text_block",
-            "text": "invisible",
-            "alpha": 0.0,
-            "id": "invisible_id"
-          }
+          "type": "solid",
+          "color": "#3F28C3"
         }
-      ]
+      ],
+      "text_color": "#ffffff",
+      "font_size": 14,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center"
     }
   },
   "card": {
@@ -141,136 +93,112 @@
       },
       {
         "name": "scale_state",
-        "type": "boolean",
-        "value": 1
+        "type": "string",
+        "value": "visible"
       },
       {
         "name": "slide_state",
-        "type": "boolean",
-        "value": 1
+        "type": "string",
+        "value": "visible"
       },
       {
         "name": "fade_state",
-        "type": "boolean",
-        "value": 1
+        "type": "string",
+        "value": "visible"
       },
       {
         "name": "set_state",
-        "type": "boolean",
-        "value": 1
+        "type": "string",
+        "value": "visible"
       }
     ],
     "variable_triggers": [
       {
-        "condition": "@{change_state == 'fade' && fade_state}",
+        "condition": "@{change_state == 'scale' && scale_state == 'visible'}",
         "mode": "on_variable",
         "actions": [
           {
-            "log_id": "update change_state flag",
+            "log_id": "update change_state",
             "url": "div-action://set_variable?name=change_state&value=none"
           },
           {
-            "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=fade_state&value=0"
-          },
-          {
-            "log_id": "change state",
-            "url": "div-action://set_state?state_id=0/fade_in_out/invisible"
+            "log_id": "update scale_state",
+            "url": "div-action://set_variable?name=scale_state&value=invisible"
           }
         ]
       },
       {
-        "condition": "@{change_state == 'fade' && !fade_state}",
+        "condition": "@{change_state == 'scale' && scale_state != 'visible'}",
         "mode": "on_variable",
         "actions": [
           {
-            "log_id": "update change_state flag",
+            "log_id": "update change_state",
             "url": "div-action://set_variable?name=change_state&value=none"
           },
           {
-            "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=fade_state&value=1"
-          },
-          {
-            "log_id": "change state",
-            "url": "div-action://set_state?state_id=0/fade_in_out/visible"
+            "log_id": "update scale_state",
+            "url": "div-action://set_variable?name=scale_state&value=visible"
           }
         ]
       },
       {
-        "condition": "@{change_state == 'scale' && scale_state}",
+        "condition": "@{change_state == 'fade' && fade_state == 'visible'}",
         "mode": "on_variable",
         "actions": [
           {
-            "log_id": "update change_state flag",
+            "log_id": "update change_state",
             "url": "div-action://set_variable?name=change_state&value=none"
           },
           {
-            "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=scale_state&value=0"
-          },
-          {
-            "log_id": "change state",
-            "url": "div-action://set_state?state_id=0/scale_in_out/invisible"
+            "log_id": "update fade_state",
+            "url": "div-action://set_variable?name=fade_state&value=invisible"
           }
         ]
       },
       {
-        "condition": "@{change_state == 'scale' && !scale_state}",
+        "condition": "@{change_state == 'fade' && fade_state != 'visible'}",
         "mode": "on_variable",
         "actions": [
           {
-            "log_id": "update change_state flag",
+            "log_id": "update change_state",
             "url": "div-action://set_variable?name=change_state&value=none"
           },
           {
-            "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=scale_state&value=1"
-          },
-          {
-            "log_id": "change state",
-            "url": "div-action://set_state?state_id=0/scale_in_out/visible"
+            "log_id": "update fade_state",
+            "url": "div-action://set_variable?name=fade_state&value=visible"
           }
         ]
       },
       {
-        "condition": "@{change_state == 'slide' && slide_state}",
+        "condition": "@{change_state == 'slide' && slide_state == 'visible'}",
         "mode": "on_variable",
         "actions": [
           {
-            "log_id": "update change_state flag",
+            "log_id": "update change_state",
             "url": "div-action://set_variable?name=change_state&value=none"
           },
           {
-            "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=slide_state&value=0"
-          },
-          {
-            "log_id": "change state",
-            "url": "div-action://set_state?state_id=0/slide_in_out/invisible"
+            "log_id": "update slide_state",
+            "url": "div-action://set_variable?name=slide_state&value=invisible"
           }
         ]
       },
       {
-        "condition": "@{change_state == 'slide' && !slide_state}",
+        "condition": "@{change_state == 'slide' && slide_state != 'visible'}",
         "mode": "on_variable",
         "actions": [
           {
-            "log_id": "update change_state flag",
+            "log_id": "update change_state",
             "url": "div-action://set_variable?name=change_state&value=none"
           },
           {
-            "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=slide_state&value=1"
-          },
-          {
-            "log_id": "change state",
-            "url": "div-action://set_state?state_id=0/slide_in_out/visible"
+            "log_id": "update slide_state",
+            "url": "div-action://set_variable?name=slide_state&value=visible"
           }
         ]
       },
       {
-        "condition": "@{change_state == 'set' && set_state}",
+        "condition": "@{change_state == 'set' && set_state == 'visible'}",
         "mode": "on_variable",
         "actions": [
           {
@@ -279,16 +207,12 @@
           },
           {
             "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=set_state&value=0"
-          },
-          {
-            "log_id": "change state",
-            "url": "div-action://set_state?state_id=0/set_in_out/invisible"
+            "url": "div-action://set_variable?name=set_state&value=invisible"
           }
         ]
       },
       {
-        "condition": "@{change_state == 'set' && !set_state}",
+        "condition": "@{change_state == 'set' && set_state == 'invisible'}",
         "mode": "on_variable",
         "actions": [
           {
@@ -297,11 +221,7 @@
           },
           {
             "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=set_state&value=1"
-          },
-          {
-            "log_id": "change state",
-            "url": "div-action://set_state?state_id=0/set_in_out/visible"
+            "url": "div-action://set_variable?name=set_state&value=visible"
           }
         ]
       }
@@ -332,16 +252,15 @@
             },
             {
               "type": "in_out_transition_demo_block",
-              "visible_text": "Scale",
-              "div_id": "scale_in_out",
-              "transition_out_animations": {
+              "id": "scale_in_out",
+              "text": "Scale",
+              "visibility": "@{scale_state}",
+              "transition_out": {
                 "type": "scale",
-                "scale": 0,
                 "duration": 1000
               },
-              "transition_in_animations": {
+              "transition_in": {
                 "type": "scale",
-                "scale": 0,
                 "duration": 1000
               }
             },
@@ -362,17 +281,18 @@
             },
             {
               "type": "in_out_transition_demo_block",
-              "visible_text": "Slide",
-              "div_id": "slide_in_out",
-              "transition_out_animations": {
+              "id": "slide_in_out",
+              "text": "Slide",
+              "visibility": "@{slide_state}",
+              "transition_out": {
                 "type": "slide",
-                "edge": "left",
-                "duration": 1000
+                "duration": 1000,
+                "edge": "left"
               },
-              "transition_in_animations": {
+              "transition_in": {
                 "type": "slide",
-                "edge": "left",
-                "duration": 1000
+                "duration": 1000,
+                "edge": "right"
               }
             },
             {
@@ -392,13 +312,14 @@
             },
             {
               "type": "in_out_transition_demo_block",
-              "visible_text": "Fade",
-              "div_id": "fade_in_out",
-              "transition_out_animations": {
+              "id": "fade_in_out",
+              "text": "Fade",
+              "visibility": "@{fade_state}",
+              "transition_out": {
                 "type": "fade",
                 "duration": 1000
               },
-              "transition_in_animations": {
+              "transition_in": {
                 "type": "fade",
                 "duration": 1000
               }
@@ -420,35 +341,33 @@
             },
             {
               "type": "in_out_transition_demo_block",
-              "visible_text": "Set",
-              "div_id": "set_in_out",
-              "transition_out_animations": {
+              "id": "set_in_out",
+              "text": "Set",
+              "visibility": "@{set_state}",
+              "transition_out": {
                 "type": "set",
                 "items": [
                   {
-                    "type": "slide",
-                    "edge": "right",
+                    "type": "fade",
                     "duration": 1000
                   },
                   {
                     "type": "scale",
-                    "duration": 200,
-                    "scale": 0
+                    "duration": 1000
                   }
                 ]
               },
-              "transition_in_animations": {
+              "transition_in": {
                 "type": "set",
                 "items": [
                   {
                     "type": "slide",
-                    "edge": "right",
-                    "duration": 1000
+                    "duration": 1000,
+                    "edge": "right"
                   },
                   {
-                    "type": "scale",
-                    "duration": 200,
-                    "scale": 0
+                    "type": "fade",
+                    "duration": 1000
                   }
                 ]
               }

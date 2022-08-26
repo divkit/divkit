@@ -57,7 +57,9 @@ extension UIView {
     case .fade:
       alpha = value
     case .scaleXY:
-      transform = CGAffineTransform(scale: value)
+      // https://medium.com/@sartha.tayade/problem-when-animating-a-uiview-to-scale-to-zero-using-cgaffinetransform-on-ios-2f50717add18
+      let nonZeroValue = value.isZero ? .ulpOfOne : value
+      transform = CGAffineTransform(scale: nonZeroValue)
     case .translationX:
       let x: CGFloat
       if value == TransitioningAnimation.defaultLeadingSlideDistance {
