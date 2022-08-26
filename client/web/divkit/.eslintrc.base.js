@@ -109,7 +109,8 @@ module.exports = {
         'use-isnan': 2,
 
         // Best practices
-        // "array-callback-return": 2, // https://st.yandex-team.ru/SERP-52594#1495026943000
+        // "array-callback-return" is not allowed empty "return" statement in map/reduce etc.
+        // "array-callback-return": 2,
         'block-scoped-var': 2,
         complexity: [0, 11],
         curly: [2, 'multi-line'],
