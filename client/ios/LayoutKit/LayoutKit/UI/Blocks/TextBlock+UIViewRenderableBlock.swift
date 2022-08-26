@@ -284,8 +284,14 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   override func copy(_: Any?) {
+    let maxSymbolIndex = textLayout?.lines
+      .compactMap { !$0.isTruncated ? $0.range.upperBound : -1 }.max()
+
     if let selectedRange = selectedRange {
-      UIPasteboard.general.string = model.text.string[selectedRange]
+        UIPasteboard.general.string = model.text.string[Range(uncheckedBounds: (
+        selectedRange.lowerBound,
+        min(selectedRange.upperBound, maxSymbolIndex ?? .max)
+      ))]
     }
     selectedRange = nil
     setNeedsDisplay()
@@ -351,9 +357,18 @@ extension AttributedStringLayout {
           transformedTapLocation.x > lineLayout.horizontalOffset else {
       return nil
     }
-    return CTLineGetStringIndexForPosition(
-      lineLayout.line,
-      transformedTapLocation.movingX(by: -lineLayout.horizontalOffset)
-    )
+    if !lineLayout.isTruncated {
+      return CTLineGetStringIndexForPosition(
+        lineLayout.line,
+        transformedTapLocation.movingX(by: -lineLayout.horizontalOffset)
+      )
+    } else {
+      let previousLineRange = lines.last { $0 != lineLayout }?.range
+      return (previousLineRange?.upperBound ?? 0) +
+        CTLineGetStringIndexForPosition(
+          lineLayout.line,
+          transformedTapLocation.movingX(by: -lineLayout.horizontalOffset)
+        )
+    }
   }
 }

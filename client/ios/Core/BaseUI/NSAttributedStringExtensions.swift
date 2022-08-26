@@ -120,7 +120,7 @@ struct TypographicBounds {
   }
 }
 
-typealias LineLayout = (line: CTLine, bounds: TypographicBounds, range: NSRange)
+typealias LineLayout = (line: CTLine, bounds: TypographicBounds, range: NSRange, isTruncated: Bool)
 
 struct TextLayout {
   var lines: [LineLayout]
@@ -220,7 +220,7 @@ extension NSAttributedString {
           constrainedTo: size.width,
           truncationToken: truncationToken
         ) {
-          lines.append((lastLine, lastLine.typographicBounds, suggestedRange.nsRange))
+          lines.append((lastLine, lastLine.typographicBounds, suggestedRange.nsRange, true))
         }
         break
       } else {
@@ -232,7 +232,7 @@ extension NSAttributedString {
           truncationToken: truncationToken
         ) {
           lines.removeLastIfExists()
-          lines.append((lastLine, lastLine.typographicBounds, suggestedRange.nsRange))
+          lines.append((lastLine, lastLine.typographicBounds, suggestedRange.nsRange, true))
         }
         break
       }
@@ -257,7 +257,7 @@ extension NSAttributedString {
         let correctedRange = CFRange(location: range.location, length: correctedLength)
         if subrangeEndsWithSoftHyphen(correctedRange.nsRange) {
           let correctedLine = makeHyphenatedLine(from: correctedRange.nsRange)
-          return (correctedLine, correctedLine.typographicBounds, correctedRange.nsRange)
+          return (correctedLine, correctedLine.typographicBounds, correctedRange.nsRange, false)
         } else {
           return layoutLine(
             typesetter: typesetter,
@@ -266,7 +266,7 @@ extension NSAttributedString {
         }
       }
     }
-    return (line, line.typographicBounds, range.nsRange)
+    return (line, line.typographicBounds, range.nsRange, false)
   }
 
   private func layoutLine(
@@ -278,7 +278,7 @@ extension NSAttributedString {
       typesetter,
       CFRange(location: range.location, length: lineLength)
     )
-    return (line, line.typographicBounds, range.nsRange)
+    return (line, line.typographicBounds, range.nsRange, false)
   }
 
   private func makeHyphenatedLine(from range: NSRange) -> CTLine {
@@ -397,7 +397,7 @@ extension NSAttributedString {
     var firstLineOriginX: CGFloat?
 
     var lines: [AttributedStringLineLayout] = []
-    for (line, bounds, range) in layout.lines {
+    for (line, bounds, range, isTruncated) in layout.lines {
       let lineOriginX = horizontalOffset(
         lineWidth: bounds.width,
         maxWidth: rect.width
@@ -426,7 +426,8 @@ extension NSAttributedString {
         line: line,
         verticalOffset: lineOriginY,
         horizontalOffset: lineOriginX,
-        range: range
+        range: range,
+        isTruncated: isTruncated
       ))
       lineOriginY -= bounds.height
     }
@@ -466,7 +467,8 @@ extension NSAttributedString {
         lineHeight: lineLayout.line.typographicBounds.height,
         range: lineLayout.range,
         lineOriginX: lineLayout.horizontalOffset,
-        lineOriginY: lineLayout.verticalOffset
+        lineOriginY: lineLayout.verticalOffset,
+        isTruncated: lineLayout.isTruncated
       )
     }
     return selectionRect
@@ -481,7 +483,8 @@ extension NSAttributedString {
     lineHeight: CGFloat,
     range: NSRange,
     lineOriginX: CGFloat,
-    lineOriginY: CGFloat
+    lineOriginY: CGFloat,
+    isTruncated: Bool
   ) {
     guard let leadingSelectionIndex = selectedRange?.lowerBound,
           let trailingSelectionIndex = selectedRange?.upperBound else {
@@ -496,8 +499,16 @@ extension NSAttributedString {
 
     if (range.lowerBound...range.upperBound).contains(leadingSelectionIndex),
        (range.lowerBound...range.upperBound).contains(trailingSelectionIndex) {
-      let trailingOffset = CTLineGetOffsetForStringIndex(line, trailingSelectionIndex, nil)
-      let leadingOffset = CTLineGetOffsetForStringIndex(line, leadingSelectionIndex, nil)
+      let trailingOffset = CTLineGetOffsetForStringIndex(
+        line,
+        normalizedLineIndex(index: trailingSelectionIndex, isTruncated: isTruncated, range: range),
+        nil
+      )
+      let leadingOffset = CTLineGetOffsetForStringIndex(
+        line,
+        normalizedLineIndex(index: leadingSelectionIndex, isTruncated: isTruncated, range: range),
+        nil
+      )
       needDrawLeadingPointer = true
       needDrawTrailingPointer = true
       leadingSelectionOffset = leadingOffset
@@ -507,15 +518,27 @@ extension NSAttributedString {
         size: CGSize(width: trailingOffset - leadingOffset, height: lineHeight)
       )
     } else if (range.lowerBound..<range.upperBound).contains(leadingSelectionIndex) {
-      let leadingOffset = CTLineGetOffsetForStringIndex(line, leadingSelectionIndex, nil)
-      let trailingOffset = CTLineGetOffsetForStringIndex(line, range.upperBound - 1, nil)
+      let leadingOffset = CTLineGetOffsetForStringIndex(
+        line,
+        normalizedLineIndex(index: leadingSelectionIndex, isTruncated: isTruncated, range: range),
+        nil
+      )
+      let trailingOffset = CTLineGetOffsetForStringIndex(
+        line,
+        normalizedLineIndex(index: range.upperBound - 1, isTruncated: isTruncated, range: range),
+        nil
+      )
       needDrawLeadingPointer = true
       needDrawTrailingPointer = false
       leadingSelectionOffset = leadingOffset
       trailingSelectionOffset = trailingOffset
       selectionRect.origin = CGPoint(x: lineOriginX, y: rect.height - lineOriginY)
     } else if ((range.lowerBound + 1)...range.upperBound).contains(trailingSelectionIndex) {
-      let leadingOffset = CTLineGetOffsetForStringIndex(line, range.lowerBound, nil)
+      let leadingOffset = CTLineGetOffsetForStringIndex(
+        line,
+        normalizedLineIndex(index: range.lowerBound, isTruncated: isTruncated, range: range),
+        nil
+      )
       let trailingOffset = CTLineGetOffsetForStringIndex(line, trailingSelectionIndex, nil)
       needDrawLeadingPointer = false
       needDrawTrailingPointer = true
@@ -528,7 +551,11 @@ extension NSAttributedString {
       )
     } else if leadingSelectionIndex < range.lowerBound,
               trailingSelectionIndex >= range.lowerBound {
-      let leadingOffset = CTLineGetOffsetForStringIndex(line, range.lowerBound, nil)
+      let leadingOffset = CTLineGetOffsetForStringIndex(
+        line,
+        normalizedLineIndex(index: range.lowerBound, isTruncated: isTruncated, range: range),
+        nil
+      )
       let trailingOffset = CTLineGetOffsetForStringIndex(line, range.upperBound - 1, nil)
       needDrawLeadingPointer = false
       needDrawTrailingPointer = false
@@ -615,9 +642,14 @@ extension NSAttributedString {
 
     context?.fillEllipse(in: CGRect(
       origin: leftmostTextSelectionPoint
-        .movingX(by: -pointerCircleSize.width / 2 - pointerShapeWidth / 2).movingY(by: lineHeight - pointerCircleSize.height),
+        .movingX(by: -pointerCircleSize.width / 2 - pointerShapeWidth / 2)
+        .movingY(by: lineHeight - pointerCircleSize.height),
       size: pointerCircleSize
     ))
+  }
+
+  private func normalizedLineIndex(index: Int, isTruncated: Bool, range: NSRange) -> Int {
+    isTruncated ? index - range.lowerBound : index
   }
 
   private func horizontalOffset(lineWidth: CGFloat, maxWidth: CGFloat) -> CGFloat {

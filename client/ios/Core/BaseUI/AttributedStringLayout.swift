@@ -15,9 +15,10 @@ public struct AttributedStringLayout<Action> {
   public let lines: [AttributedStringLineLayout]
 }
 
-public struct AttributedStringLineLayout {
+public struct AttributedStringLineLayout: Equatable {
   public let line: CTLine
   public let verticalOffset: CGFloat
   public let horizontalOffset: CGFloat
   public let range: NSRange
+  public let isTruncated: Bool
 }
