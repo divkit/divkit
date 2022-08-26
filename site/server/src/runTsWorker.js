@@ -1,4 +1,3 @@
-const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs');
 const {transform} = require('@babel/core');
@@ -14,10 +13,7 @@ const tsBuilder = (() => {
     const vm = new VM({
         allowAsync: false,
         sandbox: {
-            require(name) {
-                if (name === 'crypto') {
-                    return crypto;
-                }
+            require() {
                 throw new Error('Module is not found');
             },
             exports
