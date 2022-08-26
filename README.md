@@ -16,30 +16,34 @@ Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.m
 
 [Twitter](https://twitter.com/DivKitFramework)
 
-## Demo App
+## Project structure
+
+### Demo App
 
 <a href='https://play.google.com/store/apps/details?id=com.yandex.divkit.demo&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="200"/></a>
 
 <img src="client/ios/app_badge_soon.png" width="200">
 
-## Project structure
+### Client
 
-## Client
 Client side libraries for rendering UI on Android, iOS and Web.
 
 [Android](client/android/), [iOS](client/ios/), [Web](client/web/divkit)
 
+### Json-builder
 
-## Json-builder
 Server side libraries for building JSON in DivKit format.
 
 [TypeScript](json-builder/typescript/), [Kotlin](json-builder/kotlin/)
 
-## Schema
-JSON schema that describes DivKit data format.
+### Schema
 
-## Api Generator
+[JSON schema](schema) that describes DivKit data format.
+
+### Api Generator
+
 Used for generating general Api for all platforms from Schema.
 
-## Test data
+### Test data
+
 Samples and test data.
