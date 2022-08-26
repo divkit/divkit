@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="node_modules/@divkitframework/divkit/dist/client.css">
+</head>
+<body>
+
+<div id="root"><div class="divkit-c77c">
+        <span class="divkit-eb28 divkit-dc5c divkit-e456 divkit-bb7a divkit-b04c divkit-b81a"><span class="divkit-fef8 divkit-e0bf divkit-d635 divkit-e9f3 divkit-a24b divkit-b338 divkit-dc5c divkit-bb7a divkit-b81a"><span class="divkit-ae2f" style="font-size:1.2em;line-height:1.25"><span class="divkit-e716 divkit-e2dd" style="font-size:1em;line-height:1.25">Hello divkit</span></span></span>
+        <div class="divkit-d65a"></div></span></div></div>
+
+<script src="node_modules/@divkitframework/divkit/dist/browser/client-hydratable.js"></script>
+<script>
+    Ya.Divkit.render({
+        id: 'test',
+        target: document.querySelector('#root'),
+        hydrate: true,
+        json: {
+            "templates": {
+                "wrap_content_text": {
+                    "type": "text",
+                    "width": {"type": "wrap_content"}
+                }
+            },
+            "card": {
+                "log_id": "snapshot_test_card",
+                "states": [
+                    {
+                        "state_id": 0,
+                        "div": {
+                            "type": "wrap_content_text",
+                            "text": "Hello divkit"
+                        }
+                    }
+                ]
+            }
+        }
+    });
+</script>
+</body>
+</html>
