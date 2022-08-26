@@ -29,3 +29,4 @@ Use `divkit-demo-app` configuration to build and launch our demo app.
 Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.me/divkit_community_en) | [Чат на русском](https://t.me/divkit_community_ru).
 
 [Twitter](https://twitter.com/DivKitFramework)
+
