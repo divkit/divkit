@@ -13,23 +13,23 @@ Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.m
 
 [Twitter](https://twitter.com/DivKitFramework)
 
-Project structure:
+## Project structure
 
-## Client
+### Client
 Client side libraries for rendering UI on Android, iOS and Web.
 
 [Android](client/android/), [iOS](client/ios/), [Web](client/web/divkit)
 
-## Json-builder
+### Json-builder
 Server side libraries for building JSON in DivKit format.
 
 [TypeScript](json-builder/typescript/), [Kotlin](json-builder/kotlin/)
 
-## Schema
-JSON schema that describes DivKit data format.
+### Schema
+[JSON schema](schema) that describes DivKit data format.
 
-## Api Generator
+### Api Generator
 Used for generating general Api for all platforms from Schema.
 
-## Test data
+### Test data
 Samples and test data.
