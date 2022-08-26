@@ -1,0 +1,113 @@
+import com.yandex.div.gradle.PublicationType
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+buildscript {
+
+}
+
+group = 'com.yandex.div'
+
+ext {
+    publicationType = PublicationType.fromString(rootProject.findProperty("publicationType"))
+    mavenCentralUsername = rootProject.findProperty("mavenCentralUsername")
+    mavenCentralPassword = rootProject.findProperty("mavenCentralPassword")
+    artifactoryUsername = rootProject.findProperty("artifactoryUsername")
+    artifactoryPassword = rootProject.findProperty("artifactoryPassword")
+
+    signingKeyId = rootProject.findProperty("signingKeyId")
+    signingPassword = rootProject.findProperty("signingPassword")
+    signingSecretKeyRingFile = rootProject.findProperty("signingSecretKeyRingFile")
+
+    commitHash = { ->
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'arc', 'rev-parse', 'HEAD'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+}
+
+def publishToArtifactory = artifactoryUsername != null && artifactoryPassword != null
+def publishToMavenCentral = mavenCentralUsername != null && mavenCentralPassword != null
+
+if (publishToMavenCentral) {
+    rootProject.ext {
+        signing {
+            keyId = signingKeyId
+            password = signingPassword
+            secretKeyRingFile = signingSecretKeyRingFile
+        }
+        ossrhUsername = mavenCentralUsername
+        ossrhPassword = mavenCentralPassword
+    }
+}
+
+afterEvaluate {
+    if (publishToMavenCentral) {
+        signing {
+            sign publishing.publications
+            sign configurations.archives
+        }
+    }
+
+    publishing {
+        publications {
+            release(MavenPublication) {
+                pom {
+                    name = "DivKit"
+                    description = "DivKit is an open source Server-Driven UI (SDUI) framework. SDUI is a an emerging technique that leverage the server to build the user interfaces of their mobile app."
+                    url = "http://divkit.tech/"
+
+                    licenses {
+                        license {
+                            name = "Apache License, version 2.0"
+                            url = "http://www.apache.org/licenses/LICENSE-2.0"
+                            distribution = "repo"
+                        }
+                    }
+
+                    scm {
+                        connection = "scm:git://github.com/divkit/divkit.git"
+                        developerConnection = "scm:git://github.com/divkit/divkit.git"
+                        url = "https://github.com/divkit/divkit.git"
+                    }
+
+                    developers {
+                        developer {
+                            name = "Yandex"
+                            url = "http://divkit.tech/"
+                        }
+                    }
+                }
+                ext.repo = 'release'
+            }
+        }
+
+        repositories {
+            if (publishToArtifactory) {
+                maven {
+                    name 'artifactory'
+                    credentials {
+                        username artifactoryUsername
+                        password artifactoryPassword
+                    }
+                    url = publicationType.artifactoryUrl
+                }
+            }
+
+            if (publishToMavenCentral) {
+                maven {
+                    name 'mavenCentral'
+                    credentials {
+                        username mavenCentralUsername
+                        password mavenCentralPassword
+                    }
+                    url = publicationType.mavenCentralUrl
+                }
+            }
+        }
+    }
+}

@@ -1,49 +1,23 @@
-import com.yandex.div.gradle.PublicationType
-
-apply plugin: 'maven-publish'
-
-group = 'com.yandex.div'
-
-def gitHash = { ->
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-parse', 'HEAD'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
-}
-
-def publicationType = PublicationType.fromString(rootProject.findProperty("publicationType"))
+apply from: "${buildscript.sourceFile.parent}/publish-common.gradle"
 
 task sourcesJar(type: Jar) {
-    from sourceSets.main.allSource
     classifier "sources"
+    from sourceSets.main.allSource
 }
 
-// Because the components are created only during the afterEvaluate phase, you must configure
-// your publications using the afterEvaluate() lifecycle method.
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.java
                 artifact sourcesJar
+                artifact javadocJar
+                from components.java
                 version divkitVersionName
-                if (project.hasProperty('teamcity.version')) {
-                    pom.description = "Built on commit: ${gitHash()}"
-                }
-                ext.repo = 'release'
-            }
-        }
-
-        repositories {
-            maven {
-                name 'artifactory'
-                credentials {
-                    username 'yandexmobiledeploy'
-                    password 'yandexmobiledeploy'
-                }
-                url = publicationType.artifactoryUrl
             }
         }
     }

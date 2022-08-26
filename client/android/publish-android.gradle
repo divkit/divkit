@@ -1,45 +1,11 @@
-import com.yandex.div.gradle.PublicationType
+apply from: "${buildscript.sourceFile.parent}/publish-common.gradle"
 
-apply plugin: 'maven-publish'
-
-group = 'com.yandex.div'
-
-def commitHash = { ->
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'arc', 'rev-parse', 'HEAD'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim()
-}
-
-def publicationType = PublicationType.fromString(rootProject.findProperty("publicationType"))
-def artifactoryUsername = rootProject.findProperty("artifactoryUsername")
-def artifactoryPassword = rootProject.findProperty("artifactoryPassword")
-
-// Because the components are created only during the afterEvaluate phase, you must configure
-// your publications using the afterEvaluate() lifecycle method.
 afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                version divkitVersionName
                 from components.release
-                if (project.hasProperty('teamcity.version')) {
-                    pom.description = "Built on commit: ${commitHash()}"
-                }
-                ext.repo = 'release'
-            }
-        }
-
-        repositories {
-            maven {
-                name 'artifactory'
-                credentials {
-                    username artifactoryUsername
-                    password artifactoryPassword
-                }
-                url = publicationType.artifactoryUrl
+                version divkitVersionName
             }
         }
     }

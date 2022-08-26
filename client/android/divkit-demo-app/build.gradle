@@ -5,6 +5,16 @@ apply from: "ui-tests.gradle"
 apply plugin: 'upload-beta-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.yandex.test.screenshot-test-plugin'
+apply plugin: 'com.getkeepsafe.dexcount'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:3.1.0'
+    }
+}
 
 android {
     buildFeatures {

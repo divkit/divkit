@@ -11,7 +11,7 @@ ext {
     targetSdkVersion = 31
     buildToolsVersion = "33.0.0"
 
-    divkitVersionName = "${divkitVersion.versionName}${publicationType.getVersionSuffix(project.properties)}"
+    divkitVersionName = "${divkitVersion.versionName}${publicationType.getVersionSuffix()}"
 }
 
 buildscript {
