@@ -57,7 +57,7 @@
             },
             {
               "type": "text",
-              "text": "welcome to DivKit — the modern layout technology by Yandex",
+              "text": "welcome to DivKit — the modern SDUI layout technology",
               "alignment_horizontal": "center",
               "font_size": 18,
               "line_height": 24,
