@@ -98,7 +98,7 @@
                             "text_variable": "my_edit_text",
                             "hint_text": "Very long 1 very long 2 very long 3 very long 4 very long 5 very long 6 very long 7 very long 8 hint",
                             "hint_color": "#F1C40F",
-                            "max_visible_lines": 4,
+                            "select_all_on_focus": 1,
                             "line_height": 40,
                             "keyboard_type": "multi_line_text",
                             "focus": {
@@ -187,7 +187,8 @@
                             "hint_text": "No paddings hint",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E74C3C",
-                            "keyboard_type": "single_line_text"
+                            "keyboard_type": "single_line_text",
+                            "select_all_on_focus": 1
                         },
                         {
                             "type": "text",

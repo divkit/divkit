@@ -19,6 +19,7 @@ extension TextInputBlock {
     inputView.setHighlightColor(highlightColor)
     inputView.setKeyboardType(keyboardType)
     inputView.setMultiLineMode(multiLineMode)
+    inputView.setSelectAllOnFocus(selectAllOnFocus)
     inputView.setParentScrollView(parentScrollView)
   }
 
@@ -36,6 +37,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var keyboardOpeningInProgress = false
   private var keyboardHeight: CGFloat = 0
   private var textValue: Binding<String>? = nil
+  private var selectAllOnFocus = false
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -101,6 +103,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   func setHighlightColor(_ color: Color?) {
     multiLineInput.tintColor = color?.systemColor
     singleLineInput.tintColor = color?.systemColor
+  }
+
+  func setSelectAllOnFocus(_ selectAllOnFocus: Bool) {
+    self.selectAllOnFocus = selectAllOnFocus
   }
 
   func setParentScrollView(_ parentScrollView: ScrollView?) {
@@ -183,6 +189,9 @@ extension TextInputBlockView {
     let bottomPoint = frameInWindow.maxY + additionalOffset
     scrollToVisible(bottomPoint)
     startListeningTap()
+    if selectAllOnFocus {
+      view.selectAll(nil)
+    }
   }
 
   func inputViewDidChange(_ view: UIView) {

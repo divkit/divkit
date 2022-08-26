@@ -30,7 +30,8 @@ public final class TextInputBlock: BlockWithTraits {
   public let multiLineMode: Bool
   public let keyboardType: KeyboardType
   public let highlightColor: Color?
-  public let maxIntrinsicNumberOfLines = 1
+  public let maxVisibleLines: Int?
+  public let selectAllOnFocus: Bool
   public weak var parentScrollView: ScrollView?
 
   public init(
@@ -42,6 +43,8 @@ public final class TextInputBlock: BlockWithTraits {
     multiLineMode: Bool = true,
     keyboardType: KeyboardType = .default,
     highlightColor: Color? = nil,
+    maxVisibleLines: Int? = nil,
+    selectAllOnFocus: Bool = false,
     parentScrollView: ScrollView? = nil
   ) {
     self.widthTrait = widthTrait
@@ -52,6 +55,8 @@ public final class TextInputBlock: BlockWithTraits {
     self.multiLineMode = multiLineMode
     self.keyboardType = keyboardType
     self.highlightColor = highlightColor
+    self.maxVisibleLines = maxVisibleLines
+    self.selectAllOnFocus = selectAllOnFocus
     self.parentScrollView = parentScrollView
   }
 
@@ -71,7 +76,11 @@ public final class TextInputBlock: BlockWithTraits {
       return value
     case .intrinsic:
       let attributedText = getAttributedText()
-      let textHeight = attributedText.heightForWidth(width, maxNumberOfLines: maxIntrinsicNumberOfLines)
+      guard let maxVisibleLines = maxVisibleLines else {
+        let textHeight = attributedText.sizeForWidth(width).height
+        return ceil(textHeight)
+      }
+      let textHeight = attributedText.heightForWidth(width, maxNumberOfLines: maxVisibleLines)
       return ceil(textHeight)
     case .weighted:
       return 0
@@ -103,8 +112,9 @@ extension TextInputBlock {
       && lhs.hint == rhs.hint
       && lhs.textValue.wrappedValue == rhs.textValue.wrappedValue
       && lhs.multiLineMode == rhs.multiLineMode
-      && lhs.maxIntrinsicNumberOfLines == rhs.maxIntrinsicNumberOfLines
+      && lhs.maxVisibleLines == rhs.maxVisibleLines
       && lhs.keyboardType == rhs.keyboardType
+      && lhs.selectAllOnFocus == rhs.selectAllOnFocus
       && lhs.highlightColor == rhs.highlightColor
   }
 }

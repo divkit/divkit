@@ -54,6 +54,10 @@ extension DivInput: DivBlockModeling {
 
     let keyboardType = resolveKeyboardType(context.expressionResolver)
 
+    let maxVisibleLines = resolveMaxVisibleLines(context.expressionResolver)
+
+    let selectAllOnFocus = resolveSelectAllOnFocus(context.expressionResolver)
+
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context.expressionResolver),
       heightTrait: makeContentHeightTrait(with: context.expressionResolver),
@@ -63,6 +67,8 @@ extension DivInput: DivBlockModeling {
       multiLineMode: keyboardType == .multiLineText,
       keyboardType: keyboardType.system,
       highlightColor: highlightColor,
+      maxVisibleLines: maxVisibleLines,
+      selectAllOnFocus: selectAllOnFocus,
       parentScrollView: context.parentScrollView
     )
   }
