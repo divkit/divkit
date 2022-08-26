@@ -1,6 +1,6 @@
 {
-    "name": "@divkit/jsonbuilder-internal-test",
-    "version": "0.1.0",
+    "name": "@divkitframework/jsonbuilder",
+    "version": "1.0.0",
     "description": "DivKit TypeScript JSON Builder",
     "main": "./dist/jsonbuilder.js",
     "module": "./dist/es/jsonbuilder.js",
@@ -20,22 +20,21 @@
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "lint": "tsc --noEmit && eslint 'src/**/*.ts' 'test/**/*.ts'",
         "cover": "jest --collect-coverage",
-        "prepublishOnly": "npm run build"
+        "prepublishOnly": "npm run build && cp ../../LICENSE ./"
     },
     "keywords": [
+        "server-driven-ui",
         "divkit",
-        "divkit.json",
-        "divkit.ts"
+        "jsonbuilder"
     ],
     "author": "",
-    "license": "UNLICENSED",
+    "license": "Apache-2.0",
     "devDependencies": {
         "@rollup/plugin-typescript": "8.3.3",
         "@types/jest": "26.0.24",
         "@types/node": "12.6.8",
         "@typescript-eslint/eslint-plugin": "5.30.5",
         "@typescript-eslint/parser": "5.30.5",
-        "@yandex-int/tkit": "1.10.0",
         "eslint": "7.32.0",
         "eslint-plugin-prettier": "3.4.1",
         "jest": "26.6.3",

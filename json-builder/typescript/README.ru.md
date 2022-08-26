@@ -3,12 +3,12 @@
 [Документация DivKit](https://divkit.tech/doc/)
 
 ## Что это и зачем
-Библиотека `@divkit/jsonbuilder` предоставляет типобезопасные инструменты для генерации JSON-описаний высокоуровневой верстки для клиентов DivKit.
+Библиотека `@divkitframework/jsonbuilder` предоставляет типобезопасные инструменты для генерации JSON-описаний высокоуровневой верстки для клиентов DivKit.
 
 ## Пример
 
 ```typescript
-import { divCard, DivContainer, DivText, reference, rewritRefs, template, templateHelper } from '@divkit/jsonbuilder';
+import { divCard, DivContainer, DivText, reference, rewritRefs, template, templateHelper } from '@divkitframework/jsonbuilder';
 
 const templates = {
   sampleBlock: new DivContainer({

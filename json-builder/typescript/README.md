@@ -3,12 +3,12 @@
 [DivKit Documentation](https://divkit.tech/doc/)
 
 ## What is this and what for
-`@divkit/jsonbuilder` library provides type safe tools to generate DivKit JSON
+`@divkitframework/jsonbuilder` library provides type safe tools to generate DivKit JSON
 
 ## Example
 
 ```typescript
-import { divCard, DivContainer, DivText, reference, rewritRefs, template, templateHelper } from '@divkit/jsonbuilder';
+import { divCard, DivContainer, DivText, reference, rewritRefs, template, templateHelper } from '@divkitframework/jsonbuilder';
 
 const templates = {
   sampleBlock: new DivContainer({

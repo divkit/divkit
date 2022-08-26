@@ -1,0 +1,14 @@
+{
+    "name": "ci",
+    "version": "1.0.0",
+    "private": true,
+    "description": "",
+    "main": "checks.js",
+    "scripts": {},
+    "keywords": [],
+    "author": "",
+    "license": "UNLICENSED",
+    "dependencies": {
+        "@yandex-int/tkit": "1.11.1"
+    }
+}
