@@ -83,7 +83,7 @@ export const DEFAULT_JSON_VALUE = `{
                                 {
                                     "type": "link",
                                     "link_text": "Documentation",
-                                    "link": "https://divkit.tech/docs/",
+                                    "link": "https://divkit.tech/doc/",
                                     "log": "docs"
                                 },
                                 {
@@ -200,7 +200,7 @@ export function getJson() {
                                 thelper.link({
                                     text: 'Documentation',
                                     action: {
-                                        url: 'https://divkit.tech/docs/',
+                                        url: 'https://divkit.tech/doc/',
                                         log_id: 'docs'
                                     }
                                 }),
