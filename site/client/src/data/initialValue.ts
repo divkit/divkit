@@ -30,7 +30,7 @@ export const DEFAULT_JSON_VALUE = `{
             },
             "orientation": "vertical",
             "paddings": {
-                "top": 30,
+                "top": 10,
                 "bottom": 0,
                 "left": 30,
                 "right": 30
@@ -63,7 +63,7 @@ export const DEFAULT_JSON_VALUE = `{
                             "type": "image",
                             "image_url": "https://yastatic.net/s3/home/divkit/logo.png",
                             "margins": {
-                                "top": 25,
+                                "top": 10,
                                 "right": 60,
                                 "bottom": 10,
                                 "left": 60
@@ -122,7 +122,7 @@ export const DEFAULT_TS_VALUE  = `import {
     divCard,
     templateHelper,
     rewriteRefs
-} from '@divkit/jsonbuilder';
+} from '@divkitframework/jsonbuilder';
 
 const templates = {
     tutorialCard: new DivContainer({
@@ -180,7 +180,7 @@ export function getJson() {
                         new DivImage({
                             image_url: 'https://yastatic.net/s3/home/divkit/logo.png',
                             margins: {
-                                top: 25,
+                                top: 10,
                                 right: 60,
                                 bottom: 10,
                                 left: 60

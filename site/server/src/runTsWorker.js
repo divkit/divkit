@@ -55,7 +55,7 @@ function runTask(task) {
         allowAsync: false,
         sandbox: {
             require(name) {
-                if (name === '@divkit/jsonbuilder') {
+                if (name === '@divkitframework/jsonbuilder') {
                     return tsBuilder;
                 }
                 throw new Error('Module is not found');

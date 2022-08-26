@@ -41,7 +41,7 @@
     });
 
     monaco.languages.typescript.typescriptDefaults.addExtraLib(
-        `declare module '@divkit/jsonbuilder' {${tsBuilderTypes}}`,
+        `declare module '@divkitframework/jsonbuilder' {${tsBuilderTypes}}`,
         '@types/divcard2/index.d.ts'
     );
 </script>
