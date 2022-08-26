@@ -2,7 +2,6 @@
 
 ![client code size](https://img.shields.io/badge/client%20lib%20minified&brotli-47.7%20KB-brightgreen)
 
-
 ### Installation
 
 ```
@@ -314,6 +313,8 @@ render(({
     globalVariablesController: controller
 });
 ```
+
+---
 
 [Documentation](https://divkit.tech/doc). [Medium tutorial](https://medium.com/p/cad519252f0f). [Habr tutorial](https://habr.com/ru/company/yandex/blog/683886/).
 

@@ -47,4 +47,3 @@ Run tests:
 ```shell
 ya make -t
 ```
-
