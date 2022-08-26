@@ -4,6 +4,12 @@ React component wrapper to render DivJson, using the `@divkitframework/divkit` m
 
 [Main doc](../divkit/README.md).
 
+### Installation
+
+```
+npm i @divkitframework/react --save
+```
+
 ### Usage
 
 ```tsx
