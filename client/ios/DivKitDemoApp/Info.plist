@@ -9,11 +9,5 @@
 		<string>YSText-Medium.ttf</string>
 		<string>YSText-Regular.ttf</string>
 	</array>
-	<key>NSCameraUsageDescription</key>
-	<string>Used to scan QR-codes</string>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
 </dict>
 </plist>

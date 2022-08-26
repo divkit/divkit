@@ -1529,7 +1529,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.TemplatesSupportTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1540,23 +1539,142 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.TemplatesSupportTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
 		};
+		8C42F66728B8C1E600A817A9 /* Release.AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release.AppStore;
+		};
+		8C42F66828B8C1E600A817A9 /* Release.AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = DivKitDemoApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.demo.appstore;
+				PRODUCT_NAME = "DivKit Demo";
+				SDKROOT = iphoneos;
+			};
+			name = Release.AppStore;
+		};
+		8C42F66928B8C1E600A817A9 /* Release.AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.DivKitSnapshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
+			};
+			name = Release.AppStore;
+		};
+		8C42F66A28B8C1E600A817A9 /* Release.AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.DivKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release.AppStore;
+		};
+		8C42F66B28B8C1E600A817A9 /* Release.AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitSnapshotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/SnapshotTestsHostApp.app/SnapshotTestsHostApp";
+			};
+			name = Release.AppStore;
+		};
+		8C42F66C28B8C1E600A817A9 /* Release.AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release.AppStore;
+		};
+		8C42F66D28B8C1E600A817A9 /* Release.AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				INFOPLIST_FILE = SnapshotTestsHostApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.SnapshotTestsHostApp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release.AppStore;
+		};
+		8C42F66E28B8C1E600A817A9 /* Release.AppStore */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.TemplatesSupportTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release.AppStore;
+		};
 		8C4409F92864C4D300EF4175 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				INFOPLIST_FILE = DivKitDemoApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1572,11 +1690,12 @@
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				INFOPLIST_FILE = DivKitDemoApp/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "Used to scan QR-codes";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = UIInterfaceOrientationPortrait;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1592,7 +1711,6 @@
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1610,7 +1728,6 @@
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1627,7 +1744,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1643,7 +1759,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1660,7 +1775,6 @@
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1678,7 +1792,6 @@
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1697,7 +1810,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				INFOPLIST_FILE = SnapshotTestsHostApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1720,7 +1832,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				INFOPLIST_FILE = SnapshotTestsHostApp/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -1755,7 +1866,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1766,7 +1876,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
-				DEVELOPMENT_TEAM = 477EAT77S3;
 				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = iphoneos;
@@ -1781,6 +1890,7 @@
 			buildConfigurations = (
 				8C1CF639286B58810016D0A1 /* Debug */,
 				8C1CF63A286B58810016D0A1 /* Release */,
+				8C42F66E28B8C1E600A817A9 /* Release.AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1790,6 +1900,7 @@
 			buildConfigurations = (
 				8C4409F92864C4D300EF4175 /* Debug */,
 				8C4409FA2864C4D300EF4175 /* Release */,
+				8C42F66828B8C1E600A817A9 /* Release.AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1799,6 +1910,7 @@
 			buildConfigurations = (
 				8C6E40B728AAA47B0038E107 /* Debug */,
 				8C6E40B828AAA47B0038E107 /* Release */,
+				8C42F66B28B8C1E600A817A9 /* Release.AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1808,6 +1920,7 @@
 			buildConfigurations = (
 				8C7B1B1F2865BFF10036EF4C /* Debug */,
 				8C7B1B202865BFF10036EF4C /* Release */,
+				8C42F66A28B8C1E600A817A9 /* Release.AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1817,6 +1930,7 @@
 			buildConfigurations = (
 				8C9284CC288ACCBA00BEA1FA /* Debug */,
 				8C9284CD288ACCBA00BEA1FA /* Release */,
+				8C42F66928B8C1E600A817A9 /* Release.AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1826,6 +1940,7 @@
 			buildConfigurations = (
 				8C928509288ADEEA00BEA1FA /* Debug */,
 				8C92850A288ADEEA00BEA1FA /* Release */,
+				8C42F66D28B8C1E600A817A9 /* Release.AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1835,6 +1950,7 @@
 			buildConfigurations = (
 				8C9844F72864C2CC001ED5F3 /* Debug */,
 				8C9844F82864C2CC001ED5F3 /* Release */,
+				8C42F66728B8C1E600A817A9 /* Release.AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -1844,6 +1960,7 @@
 			buildConfigurations = (
 				8CF329282875D534003F799A /* Debug */,
 				8CF329292875D534003F799A /* Release */,
+				8C42F66C28B8C1E600A817A9 /* Release.AppStore */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
