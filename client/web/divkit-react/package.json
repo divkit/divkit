@@ -1,0 +1,62 @@
+{
+    "name": "@divkitframework/react",
+    "version": "1.0.0",
+    "description": "React binding for DivKit",
+    "keywords": [
+        "server-driven-ui",
+        "ssr",
+        "web",
+        "divkit",
+        "renderer",
+        "react"
+    ],
+    "author": "",
+    "repository": "github:divkit/divkit",
+    "license": "Apache-2.0",
+    "files": [
+        "dist/*",
+        "typings/*"
+    ],
+    "main": "./dist/divkit.js",
+    "types": "./typings/divkit.d.ts",
+    "scripts": {
+        "check:ts": "tsc --noEmit",
+        "check:eslint": "eslint --quiet .",
+        "build:prod": "rm -rf dist/ && NODE_ENV=production npx webpack-cli --progress",
+        "prepublishOnly": "cp ../../../LICENSE ./"
+    },
+    "browserslist": {
+        "production": [
+            "chrome >= 58",
+            "safari >= 11",
+            "firefox >= 67"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    },
+    "devDependencies": {
+        "@babel/core": "7.17.0",
+        "@babel/preset-env": "7.16.11",
+        "@babel/preset-react": "7.16.7",
+        "@babel/preset-typescript": "7.16.7",
+        "@divkitframework/divkit": "3.0.1",
+        "@types/node": "17.0.21",
+        "@types/react": "17.0.40",
+        "@typescript-eslint/eslint-plugin": "5.14.0",
+        "@typescript-eslint/parser": "5.14.0",
+        "babel-loader": "8.2.3",
+        "eslint": "7.32.0",
+        "react": "16.14.0",
+        "typescript": "4.5.5",
+        "webpack": "5.68.0",
+        "webpack-cli": "4.9.2",
+        "webpack-dev-server": "4.7.4"
+    },
+    "peerDependencies": {
+        "@divkitframework/divkit": "*",
+        "react": ">= 16"
+    }
+}
