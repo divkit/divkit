@@ -37,7 +37,7 @@ static def convertPathToUnixStyle(String path) {
 
 // Allows to use the Mainframer with Windows client
 task setHomePojoGeneratorExecAttrOnMainframer(type: Exec) {
-    def binPath = new File(projectDir, '../../../../internal/homeapigenerator-binaries/linux/HomeAPIGenerator.sh').absolutePath
+    def binPath = new File(projectDir, '../../../bin/homeapigenerator-binaries/linux/HomeAPIGenerator.sh').absolutePath
     commandLine 'chmod', '755', binPath
     println commandLine
 }
@@ -59,7 +59,7 @@ schemas.forEach{ item ->
         def configPath = item['config'].absolutePath
 
         println "Process schemas: $schemasDirectory"
-        def binPath = new File(projectDir, '../../../../internal/homeapigenerator-binaries/').absolutePath
+        def binPath = new File(projectDir, '../../../bin/homeapigenerator-binaries/').absolutePath
         if (osName.contains('windows')) {
             binPath = binPath + '/linux/HomeAPIGenerator'
             def bashCommand = 'start /w c:\\Windows\\System32\\bash.exe -c \"' +
