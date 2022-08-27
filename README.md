@@ -1,5 +1,4 @@
-# DivKit
-<img alt="Playground app" src="client/android/app_screen.png" width="30%" style="margin:20px; float:right;">
+# DivKit <img alt="Playground app" src="client/android/app_screen.png" width="30%" align="right" style="margin:20px;">
 
 <a href="https://github.com/divkit/divkit/stargazers">
 <img alt="GitHub stars" src="https://img.shields.io/github/stars/divkit/divkit"></a>
@@ -16,13 +15,13 @@ Telegram: [News](https://t.me/divkit_news) | [English-speaking chat](https://t.m
 
 [Twitter](https://twitter.com/DivKitFramework)
 
-## Project structure
-
 ### Demo App
 
 <a href='https://play.google.com/store/apps/details?id=com.yandex.divkit.demo&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' width="200"/></a>
 
 <img src="client/ios/app_badge_soon.png" width="200">
+
+## Project structure
 
 ### Client
 
