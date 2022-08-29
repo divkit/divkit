@@ -1,3 +1,8 @@
+## 4.0.0 (August 29, 2022)
+
+* Fixed `action_animation` on iOS
+
+
 ## 3.0.0 (August 18, 2022)
 
 Version now in sync with the Android and iOS.
