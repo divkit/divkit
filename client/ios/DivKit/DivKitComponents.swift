@@ -15,7 +15,7 @@ public final class DivKitComponents {
   public let fontSpecifiers: FontSpecifiers
   public let imageHolderFactory: ImageHolderFactory
   public let patchProvider: DivPatchProvider
-  public let stateManager = DivStateManager()
+  public let stateManagement: DivStateManagement
   public let triggersStorage: DivTriggersStorage
   public let urlOpener: UrlOpener
   public let variablesStorage: DivVariablesStorage
@@ -28,6 +28,9 @@ public final class DivKitComponents {
     fontSpecifiers: FontSpecifiers = BaseUI.fontSpecifiers,
     imageHolderFactory: ImageHolderFactory? = nil,
     patchProvider: DivPatchProvider? = nil,
+    requestPerformer: URLRequestPerforming? = nil,
+    stateManagement: DivStateManagement = DefaultDivStateManagement(),
+    trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
     updateCardAction: DivActionURLHandler.UpdateCardAction?,
     urlOpener: @escaping UrlOpener,
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
@@ -36,10 +39,11 @@ public final class DivKitComponents {
     self.extensionHandlers = extensionHandlers
     self.flagsInfo = flagsInfo
     self.fontSpecifiers = fontSpecifiers
+    self.stateManagement = stateManagement
     self.urlOpener = urlOpener
     self.variablesStorage = variablesStorage
 
-    let requestPerformer = URLRequestPerformer(urlTransform: nil)
+    let requestPerformer = requestPerformer ?? URLRequestPerformer(urlTransform: nil)
 
     self.imageHolderFactory = imageHolderFactory
       ?? makeImageHolderFactory(requestPerformer: requestPerformer)
@@ -48,9 +52,7 @@ public final class DivKitComponents {
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
 
     actionHandler = DivActionHandler(
-      stateUpdater: DivStateUpdaterImpl(
-        stateManager: stateManager
-      ),
+      stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
       patchProvider: self.patchProvider,
       variablesStorage: variablesStorage,
@@ -58,7 +60,8 @@ public final class DivKitComponents {
       showTooltip: { _ in },
       logger: DefaultDivActionLogger(
         requestPerformer: requestPerformer
-      )
+      ),
+      trackVisibility: trackVisibility
     )
 
     triggersStorage = DivTriggersStorage(
@@ -72,7 +75,7 @@ public final class DivKitComponents {
     patchProvider.cancelRequests()
 
     blockStateStorage.reset()
-    stateManager.reset()
+    stateManagement.reset()
     visibilityCounter.reset()
   }
 
@@ -104,7 +107,7 @@ public final class DivKitComponents {
   ) -> DivBlockModelingContext {
     DivBlockModelingContext(
       cardId: cardId,
-      stateManager: stateManager,
+      stateManager: stateManagement.getStateManagerForCard(cardId: cardId),
       blockStateStorage: blockStateStorage,
       visibilityCounter: visibilityCounter,
       imageHolderFactory: imageHolderFactory
@@ -176,7 +179,7 @@ private class DivStateUpdaterImpl: DivStateUpdater {
   }
 }
 
-func makeImageHolderFactory(requestPerformer: URLRequestPerformer) -> ImageHolderFactory {
+func makeImageHolderFactory(requestPerformer: URLRequestPerforming) -> ImageHolderFactory {
   ImageHolderFactory(
     requester: NetworkURLResourceRequester(
       performer: requestPerformer
