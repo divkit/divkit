@@ -1679,7 +1679,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.demo.beta;
 				PRODUCT_NAME = "DivKit Demo";
 				SDKROOT = iphoneos;
 			};
@@ -1700,7 +1700,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.demo;
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.demo.beta;
 				PRODUCT_NAME = "DivKit Demo";
 				SDKROOT = iphoneos;
 			};
