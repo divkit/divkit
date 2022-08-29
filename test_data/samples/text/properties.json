@@ -8,7 +8,7 @@
       "paddings": {
         "left": 24,
         "right": 24,
-        "bottom": 8
+        "bottom": 16
       }
     },
     "subtitle": {
@@ -21,16 +21,14 @@
       }
     },
     "text_block": {
-      "type": "subtitle",
+      "type": "text",
+      "font_size": 15,
       "text_color": "#000000",
-      "margins": {
-        "left": 0,
-        "right": 0
-      },
       "paddings": {
-        "left": 10,
-        "right": 10,
-        "top": 4
+        "left": 24,
+        "right": 24,
+        "top": 4,
+        "bottom": 4
       }
     }
   },
@@ -62,8 +60,8 @@
               "type": "container",
               "orientation": "vertical",
               "paddings": {
-                "top": 16,
-                "bottom": 16
+                "top": 12,
+                "bottom": 12
               },
               "background": [
                 {

@@ -40,7 +40,7 @@
       "paddings": {
         "left": 24,
         "right": 24,
-        "bottom": 8
+        "bottom": 16
       }
     },
     "subtitle": {
