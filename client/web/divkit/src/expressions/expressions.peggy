@@ -83,10 +83,11 @@ JsonStringChar
     = '@{' _ expr:Expression _ '}' { return expr; }
     / '@{}' { return ''; }
     / !( '\\' / '@{' ) . { return text(); }
-    / '@{' [^}]+ '}' { throw new Error('Incorrect interpolation'); }
-    / '@{' { throw new Error('Incorrect interpolation'); }
+    / '@{' [^}]+ '}' { throw new Error("Error tokenizing '" + input + "'."); }
+    / '@{' { throw new Error("Error tokenizing '" + input + "'."); }
     / '\\' str:'@{' { return str; }
     / '\\' char:. { return escapeChar(char); }
+    / '\\' { throw new Error("Error tokenizing '" + input + "'."); }
 
 Expression
     = expr:Or _ '?' _ first:Expression _ ':' _ second:Expression
@@ -151,10 +152,11 @@ StringChar
     = '@{' _ expr:Expression _ '}' { return expr; }
     / '@{}' { return ''; }
     / !('\\' / "'" / '@{') . { return text(); }
-    / '@{' [^'}]+ '}' { throw new Error('Incorrect interpolation'); }
-    / '@{' { throw new Error('Incorrect interpolation'); }
+    / '@{' [^'}]+ '}' { throw new Error("Error tokenizing '" + input + "'."); }
+    / '@{' { throw new Error("Error tokenizing '" + input + "'."); }
     / '\\' str:'@{' { return str; }
     / '\\' char:. { return escapeChar(char); }
+    / '\\' { throw new Error("Error tokenizing '" + input + "'."); }
 
 Integer "integer"
     = '-'? [0-9]+ { return {type: 'IntegerLiteral', value: convertToInt32(text())}; }

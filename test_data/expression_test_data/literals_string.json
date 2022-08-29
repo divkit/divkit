@@ -69,6 +69,116 @@
                 "ios",
                 "web"
             ]
+        },
+        {
+            "name": "string literal with alone backslash",
+            "expression": "@{'\\'}",
+            "expected": {
+                "type": "error",
+                "value": "Error tokenizing '@{'\\'}'."
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal simple character escape",
+            "expression": "@{'\\a'}",
+            "expected": {
+                "type": "error",
+                "value": "Incorrect string escape"
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal backslash escape",
+            "expression": "@{'\\\\'}",
+            "expected": {
+                "type": "string",
+                "value": "\\"
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal quote escape",
+            "expression": "@{'\\''}",
+            "expected": {
+                "type": "string",
+                "value": "'"
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal expression escape",
+            "expression": "@{'\\@{123}'}",
+            "expected": {
+                "type": "string",
+                "value": "@{123}"
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal backslash with at",
+            "expression": "@{'\\@'}",
+            "expected": {
+                "type": "error",
+                "value": "Incorrect string escape"
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal @ without interpolation",
+            "expression": "@{'a@bc.de'}",
+            "expected": {
+                "type": "string",
+                "value": "a@bc.de"
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal interpolation start",
+            "expression": "@{'@{ Hello there'}",
+            "expected": {
+                "type": "error",
+                "value": "Error tokenizing '@{'@{ Hello there'}'."
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal escaped interpolation start",
+            "expression": "@{'\\@{ Hello there'}",
+            "expected": {
+                "type": "string",
+                "value": "@{ Hello there"
+            },
+            "platforms": [
+                "web"
+            ]
+        },
+        {
+            "name": "string literal multiple backslashes",
+            "expression": "@{'\\\\'}",
+            "expected": {
+                "type": "string",
+                "value": "\\"
+            },
+            "platforms": [
+                "web"
+            ]
         }
     ]
 }
