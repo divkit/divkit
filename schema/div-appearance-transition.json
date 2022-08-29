@@ -1,5 +1,5 @@
 {
-  "$description": "translations.json#/",
+  "$description": "translations.json#/div_appearance_transition",
   "anyOf": [
     {
       "$ref": "div-appearance-set-transition.json",
