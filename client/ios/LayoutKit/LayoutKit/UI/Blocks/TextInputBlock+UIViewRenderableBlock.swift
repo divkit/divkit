@@ -19,7 +19,9 @@ extension TextInputBlock {
     inputView.setHighlightColor(highlightColor)
     inputView.setKeyboardType(keyboardType)
     inputView.setMultiLineMode(multiLineMode)
+    inputView.setMaxVisibleLines(maxVisibleLines)
     inputView.setSelectAllOnFocus(selectAllOnFocus)
+    inputView.setContentMode(contentMode)
     inputView.setParentScrollView(parentScrollView)
   }
 
@@ -34,10 +36,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private let hintView = UILabel()
   private weak var parentScrollView: ScrollView?
   private var tapGestureRecognizer: UITapGestureRecognizer?
-  private var keyboardOpeningInProgress = false
-  private var keyboardHeight: CGFloat = 0
+  private var scrollingWasDone = false
   private var textValue: Binding<String>? = nil
   private var selectAllOnFocus = false
+  private var inputContentMode: TextInputBlock.ContentMode = .topLeft
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -62,7 +64,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     hintView.numberOfLines = 0
     hintView.isUserInteractionEnabled = false
     hintView.isHidden = true
-    hintView.contentMode = .center
 
     addSubview(multiLineInput)
     addSubview(singleLineInput)
@@ -77,10 +78,22 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   override func layoutSubviews() {
     super.layoutSubviews()
     multiLineInput.frame = bounds
+    updateMultiLineOffset()
     singleLineInput.frame = bounds
     hintView.frame = bounds
-    hintView.frame.origin = CGPoint(x: cusorOffset, y: 0)
     hintView.sizeToFit()
+    hintView.frame.origin = CGPoint(x: offsetX(hintView), y: offsetY(hintView))
+
+    let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onTapGesture(sender:)))
+    addGestureRecognizer(tapGesture)
+  }
+
+  @objc func onTapGesture(sender: UITapGestureRecognizer) {
+    if (singleLineInput.isHidden) {
+      multiLineInput.becomeFirstResponder()
+    } else {
+      singleLineInput.becomeFirstResponder()
+    }
   }
 
   private var currentText: String {
@@ -105,8 +118,16 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     singleLineInput.tintColor = color?.systemColor
   }
 
+  func setMaxVisibleLines(_ maxVisibleLines: Int?) {
+    hintView.numberOfLines = maxVisibleLines ?? 0
+  }
+
   func setSelectAllOnFocus(_ selectAllOnFocus: Bool) {
     self.selectAllOnFocus = selectAllOnFocus
+  }
+
+  func setContentMode(_ contentMode: TextInputBlock.ContentMode) {
+    self.inputContentMode = contentMode
   }
 
   func setParentScrollView(_ parentScrollView: ScrollView?) {
@@ -121,6 +142,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     multiLineInput.typingAttributes = typo.attributes
     singleLineInput.typingAttributes = typo.attributes
     updateHintVisibility()
+    updateMultiLineOffset()
   }
 
   func setHint(_ value: NSAttributedString) {
@@ -129,6 +151,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   private func updateHintVisibility() {
     hintView.isHidden = !currentText.isEmpty
+  }
+
+  private func updateMultiLineOffset() {
+    guard !multiLineInput.isHidden else { return }
+    multiLineInput.frame.origin = CGPoint(x: 0, y: multiLineOffsetY)
   }
 
   override func didMoveToWindow() {
@@ -147,18 +174,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
       name: UIResponder.keyboardWillShowNotification,
       object: nil
     )
-    notificationCenter.addObserver(
-      self,
-      selector: #selector(keyboardDidShow),
-      name: UIResponder.keyboardDidShowNotification,
-      object: nil
-    )
-    notificationCenter.addObserver(
-      self,
-      selector: #selector(keyboardWillHide),
-      name: UIResponder.keyboardWillHideNotification,
-      object: nil
-    )
   }
 
   private func stopAllTracking() {
@@ -166,28 +181,49 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   @objc private func keyboardWillShow(notification: Notification) {
-    keyboardOpeningInProgress = true
     if let keyboardFrame = notification
       .userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
       let keyboardRectangle = keyboardFrame.cgRectValue
-      keyboardHeight = keyboardRectangle.height
+      let keyboardHeight = keyboardRectangle.height
+      tryScrollToMultiLine(keyboardHeight)
+      tryScrollToSingleLine(keyboardHeight)
     }
   }
 
-  @objc private func keyboardDidShow(_: Notification) {
-    keyboardOpeningInProgress = false
+  private func tryScrollToMultiLine(_ keyboardHeight: CGFloat) {
+    guard !scrollingWasDone, multiLineInput.isFirstResponder,
+          !multiLineInput.isHidden else { return }
+    let frameInWindow = multiLineInput.convert(multiLineInput.frame, to: nil)
+    let cursorPoint = frameInWindow.origin.y + multiLineInput.contentSize.height - multiLineOffsetY + additionalOffset
+    scrollToVisible(targetY: cursorPoint, keyboardHeight: keyboardHeight)
   }
 
-  @objc private func keyboardWillHide(_: Notification) {
-    keyboardHeight = 0
+  private func tryScrollToSingleLine(_ keyboardHeight: CGFloat) {
+    guard !scrollingWasDone, singleLineInput.isFirstResponder,
+          !singleLineInput.isHidden else { return }
+    let frameInWindow = singleLineInput.convert(singleLineInput.frame, to: nil)
+    let bottomPoint = frameInWindow.maxY + additionalOffset
+    scrollToVisible(targetY: bottomPoint, keyboardHeight: keyboardHeight)
+  }
+
+  private func scrollToVisible(targetY: CGFloat, keyboardHeight: CGFloat) {
+    guard let scrollView = parentScrollView else { return }
+    let frameInWindow = scrollView.convert(scrollView.frame, to: nil)
+    var visibleY = frameInWindow.maxY + scrollView.contentOffset.y
+    visibleY = visibleY - keyboardHeight
+    if targetY > visibleY {
+      let scrollPoint = CGPoint(
+        x: 0,
+        y: scrollView.contentOffset.y + targetY - visibleY
+      )
+      scrollView.setContentOffset(scrollPoint, animated: true)
+    }
+    scrollingWasDone = true
   }
 }
 
 extension TextInputBlockView {
   func inputViewDidBeginEditing(_ view: UIView) {
-    let frameInWindow = view.convert(view.frame, to: nil)
-    let bottomPoint = frameInWindow.maxY + additionalOffset
-    scrollToVisible(bottomPoint)
     startListeningTap()
     if selectAllOnFocus {
       view.selectAll(nil)
@@ -201,6 +237,7 @@ extension TextInputBlockView {
 
   func inputViewDidEndEditing(_ view: UIView) {
     stopListeningTap()
+    scrollingWasDone = false
   }
 
   private func startListeningTap() {
@@ -226,22 +263,6 @@ extension TextInputBlockView {
     scrollView.removeGestureRecognizer(tapGestureRecognizer!)
     tapGestureRecognizer = nil
   }
-
-  private func scrollToVisible(_ targetY: CGFloat) {
-    guard let scrollView = parentScrollView else { return }
-    let frameInWindow = scrollView.convert(scrollView.frame, to: nil)
-    var visibleY = frameInWindow.maxY + scrollView.contentOffset.y
-    if keyboardOpeningInProgress {
-      visibleY = visibleY - keyboardHeight
-    }
-    if targetY > visibleY {
-      let scrollPoint = CGPoint(
-        x: 0,
-        y: scrollView.contentOffset.y + targetY - visibleY
-      )
-      scrollView.setContentOffset(scrollPoint, animated: true)
-    }
-  }
 }
 
 extension TextInputBlockView: UITextViewDelegate {
@@ -250,6 +271,7 @@ extension TextInputBlockView: UITextViewDelegate {
   }
 
   func textViewDidChange(_ textView: UITextView) {
+    updateMultiLineOffset()
     inputViewDidChange(textView)
   }
 
@@ -269,6 +291,61 @@ extension TextInputBlockView: UITextFieldDelegate {
 
   func textFieldDidEndEditing(_ textField: UITextField) {
     inputViewDidEndEditing(textField)
+  }
+}
+
+extension TextInputBlockView {
+  private var multiLineOffsetY: CGFloat {
+    switch inputContentMode {
+    case .top, .topLeft, .topRight:
+      return 0
+    case .bottom, .bottomLeft, .bottomRight:
+      let emptySpace = multiLineInput.bounds.size.height - multiLineInput.contentSize.height
+      guard emptySpace > 0 else { return 0 }
+      return emptySpace
+    case .center, .left, .right:
+      let emptySpace = multiLineInput.bounds.size.height - multiLineInput.contentSize.height
+      guard emptySpace > 0 else { return 0 }
+      return emptySpace / 2
+    }
+  }
+
+  private func offsetX(_ view: UIView) -> CGFloat {
+    switch inputContentMode {
+    case .left, .topLeft, .bottomLeft:
+      return cusorOffset
+    case .right, .topRight, .bottomRight:
+      let emptySpace = bounds.size.width - view.bounds.size.width
+      guard emptySpace > 0 else { return 0 }
+      return emptySpace - cusorOffset
+    case .center, .top, .bottom:
+      let emptySpace = bounds.size.width - view.bounds.size.width
+      guard emptySpace > 0 else { return 0 }
+      return emptySpace / 2
+    }
+  }
+
+  private func offsetY(_ view: UIView) -> CGFloat {
+    switch inputContentMode {
+    case .top, .topLeft, .topRight:
+      return 0
+    case .bottom, .bottomLeft, .bottomRight:
+      let emptySpace = bounds.size.height - view.bounds.size.height
+      guard emptySpace > 0 else { return 0 }
+      return emptySpace
+    case .center, .left, .right:
+      let emptySpace = bounds.size.height - view.bounds.size.height
+      guard emptySpace > 0 else { return 0 }
+      return emptySpace / 2
+    }
+  }
+
+  private var cusorOffset: CGFloat {
+    if (singleLineInput.isHidden) {
+      return multiLineCusorOffset
+    } else {
+      return singleLineCusorOffset
+    }
   }
 }
 
@@ -304,4 +381,5 @@ extension TextInputBlock.KeyboardType {
 }
 
 private let additionalOffset = 25.0
-private let cusorOffset = 5
+private let singleLineCusorOffset = 2.0
+private let multiLineCusorOffset = 5.0

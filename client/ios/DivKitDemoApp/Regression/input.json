@@ -3,19 +3,9 @@
         "log_id": "input",
         "variables": [
             {
-                "name": "my_edit_text",
+                "name": "variable_text",
                 "type": "string",
-                "value": "Variable value 1"
-            },
-            {
-                "name": "my_edit_text_2",
-                "type": "string",
-                "value": "Variable value 2"
-            },
-            {
-                "name": "my_edit_text_3",
-                "type": "string",
-                "value": "Variable value 3"
+                "value": ""
             },
             {
                 "name": "variable_phone",
@@ -56,6 +46,16 @@
                     },
                     "items": [
                         {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:left, vertical:top",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
                             "type": "input",
                             "width": {
                                 "type": "match_parent"
@@ -66,7 +66,6 @@
                             },
                             "margins": {
                                 "left": 16,
-                                "top": 16,
                                 "right": 16,
                                 "bottom": 16
                             },
@@ -95,32 +94,214 @@
                             "font_size": 20,
                             "font_weight": "medium",
                             "text_color": "#000000",
-                            "text_variable": "my_edit_text",
-                            "hint_text": "Very long 1 very long 2 very long 3 very long 4 very long 5 very long 6 very long 7 very long 8 hint",
-                            "hint_color": "#F1C40F",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 1",
+                            "hint_color": "#8d8d8d",
                             "select_all_on_focus": 1,
                             "line_height": 40,
-                            "keyboard_type": "multi_line_text",
-                            "focus": {
-                                "blur": [
-                                    {
-                                        "log_id": "trigger_invoke",
-                                        "url": "div-action://set_variable?name=my_edit_text&value=blurred"
-                                    }
-                                ]
-                            }
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
                         },
                         {
                             "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:left, vertical:center",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
                             "width": {
                                 "type": "match_parent"
                             },
                             "height": {
-                                "type": "wrap_content"
+                                "type": "fixed",
+                                "value": 200
                             },
                             "margins": {
                                 "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
                                 "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 2",
+                            "hint_color": "#8d8d8d",
+                            "select_all_on_focus": 1,
+                            "line_height": 40,
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:left, vertical:bottom",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "fixed",
+                                "value": 200
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "alignment_vertical": "bottom",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 3",
+                            "hint_color": "#8d8d8d",
+                            "select_all_on_focus": 1,
+                            "line_height": 40,
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:center, vertical:top",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "fixed",
+                                "value": 200
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "top",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 4",
+                            "hint_color": "#8d8d8d",
+                            "select_all_on_focus": 1,
+                            "line_height": 40,
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:center, vertical:center",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "fixed",
+                                "value": 200
+                            },
+                            "margins": {
+                                "left": 16,
                                 "right": 16,
                                 "bottom": 16
                             },
@@ -136,19 +317,274 @@
                             "background": [
                                 {
                                     "type": "solid",
-                                    "color": "#34495E"
+                                    "color": "#FFFFFF"
                                 }
                             ],
                             "border": {
-                                "corner_radius": 4,
-                                "has_shadow": 1
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
                             },
                             "font_size": 20,
                             "font_weight": "medium",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "center",
-                            "text_color": "#1ABC9C",
-                            "text": "Text of variable 1:\n@{my_edit_text}"
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 5",
+                            "hint_color": "#8d8d8d",
+                            "select_all_on_focus": 1,
+                            "line_height": 40,
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:center, vertical:bottom",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "fixed",
+                                "value": 200
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "bottom",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 6",
+                            "hint_color": "#8d8d8d",
+                            "select_all_on_focus": 1,
+                            "line_height": 40,
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:right, vertical:top",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "fixed",
+                                "value": 200
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "right",
+                            "alignment_vertical": "top",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 7",
+                            "hint_color": "#8d8d8d",
+                            "select_all_on_focus": 1,
+                            "line_height": 40,
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:right, vertical:center",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "fixed",
+                                "value": 200
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "right",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 8",
+                            "hint_color": "#8d8d8d",
+                            "select_all_on_focus": 1,
+                            "line_height": 40,
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:right, vertical:bottom",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "fixed",
+                                "value": 200
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "right",
+                            "alignment_vertical": "bottom",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 9",
+                            "hint_color": "#8d8d8d",
+                            "select_all_on_focus": 1,
+                            "line_height": 40,
+                            "keyboard_type": "multi_line_text"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:wrap_content, horizontal:left",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
                         },
                         {
                             "type": "input",
@@ -159,6 +595,185 @@
                                 "type": "wrap_content"
                             },
                             "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "select_all_on_focus": 1,
+                            "hint_text": "Hint text 10",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "max_visible_lines": 2
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:wrap_content, horizontal:center",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "select_all_on_focus": 1,
+                            "hint_text": "Hint text 11",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "max_visible_lines": 2
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, height:wrap_content, horizontal:right",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "right",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "select_all_on_focus": 1,
+                            "hint_text": "Hint text 12",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "max_visible_lines": 2
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, max_visible_lines: not set",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
                                 "left": 16,
                                 "top": 16,
                                 "right": 16,
@@ -183,15 +798,484 @@
                             "font_size": 20,
                             "font_weight": "medium",
                             "text_color": "#000000",
-                            "text_variable": "my_edit_text_2",
-                            "hint_text": "No paddings hint",
-                            "hint_color": "#F1C40F",
+                            "text_variable": "variable_text",
+                            "select_all_on_focus": 1,
+                            "hint_text": "Hint text 13",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C"
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, max_visible_lines: 1",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "alignment_vertical": "top",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "select_all_on_focus": 1,
+                            "hint_text": "Hint text 14",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "max_visible_lines": 1
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:multi_line_text, max_visible_lines: 2",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "alignment_vertical": "top",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "select_all_on_focus": 1,
+                            "hint_text": "Hint text 15",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "max_visible_lines": 2
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:single_line_text, alignment_horizontal:left",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 16",
+                            "hint_color": "#8d8d8d",
                             "highlight_color": "#E74C3C",
                             "keyboard_type": "single_line_text",
                             "select_all_on_focus": 1
                         },
                         {
+                            "type": "separator"
+                        },
+                        {
                             "type": "text",
+                            "text": "Keyboard_type:single_line_text, alignment_horizontal:center",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 17",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "keyboard_type": "single_line_text",
+                            "select_all_on_focus": 1
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type:single_line_text, alignment_horizontal:right",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "right",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 18",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "keyboard_type": "single_line_text",
+                            "select_all_on_focus": 1
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Font_size: not set",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 19",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "keyboard_type": "single_line_text",
+                            "select_all_on_focus": 1
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Font_size: 18",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 18,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 20",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "keyboard_type": "single_line_text",
+                            "select_all_on_focus": 1
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Font_size: 25",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 25,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 21",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "keyboard_type": "single_line_text",
+                            "select_all_on_focus": 1
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Select_all_on_focus: 1",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
                             "width": {
                                 "type": "match_parent"
                             },
@@ -200,7 +1284,6 @@
                             },
                             "margins": {
                                 "left": 16,
-                                "top": 16,
                                 "right": 16,
                                 "bottom": 16
                             },
@@ -216,19 +1299,37 @@
                             "background": [
                                 {
                                     "type": "solid",
-                                    "color": "#34495E"
+                                    "color": "#FFFFFF"
                                 }
                             ],
                             "border": {
-                                "corner_radius": 4,
-                                "has_shadow": 1
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
                             },
                             "font_size": 20,
                             "font_weight": "medium",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "center",
-                            "text_color": "#1ABC9C",
-                            "text": "Value of variable 2:\n@{my_edit_text_2}"
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 22",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E74C3C",
+                            "select_all_on_focus": 1
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Select_all_on_focus: 0",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
                         },
                         {
                             "type": "input",
@@ -240,7 +1341,63 @@
                             },
                             "margins": {
                                 "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "paddings": {
+                                "left": 16,
                                 "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "center",
+                            "alignment_vertical": "center",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "variable_text",
+                            "hint_text": "Hint text 23",
+                            "hint_color": "#F1C40F",
+                            "highlight_color": "#E74C3C",
+                            "select_all_on_focus": 0
+                        },
+                        {
+                            "type": "separator"
+                        },
+                        {
+                            "type": "text",
+                            "text": "Keyboard_type: phone",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "margins": {
+                                "left": 16,
                                 "right": 16,
                                 "bottom": 16
                             },
@@ -270,50 +1427,23 @@
                             "font_weight": "medium",
                             "text_color": "#000000",
                             "text_variable": "variable_phone",
-                            "hint_text": "Phone",
+                            "hint_text": "Hint phone",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E74CFF",
                             "keyboard_type": "phone"
                         },
                         {
+                            "type": "separator"
+                        },
+                        {
                             "type": "text",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
+                            "text": "Keyboard_type: number",
+                            "font_size": 20,
                             "margins": {
                                 "left": 16,
                                 "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#34495E"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 4,
-                                "has_shadow": 1
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "center",
-                            "text_color": "#1ABC9C",
-                            "text": "Phone:\n@{variable_phone}"
+                                "right": 16
+                            }
                         },
                         {
                             "type": "input",
@@ -325,7 +1455,6 @@
                             },
                             "margins": {
                                 "left": 16,
-                                "top": 16,
                                 "right": 16,
                                 "bottom": 16
                             },
@@ -355,50 +1484,23 @@
                             "font_weight": "medium",
                             "text_color": "#000000",
                             "text_variable": "variable_number",
-                            "hint_text": "Number",
+                            "hint_text": "Hint number",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E7FF3C",
                             "keyboard_type": "number"
                         },
                         {
+                            "type": "separator"
+                        },
+                        {
                             "type": "text",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
+                            "text": "Keyboard_type: email",
+                            "font_size": 20,
                             "margins": {
                                 "left": 16,
                                 "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#34495E"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 4,
-                                "has_shadow": 1
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "center",
-                            "text_color": "#1ABC9C",
-                            "text": "Number:\n@{variable_number}"
+                                "right": 16
+                            }
                         },
                         {
                             "type": "input",
@@ -410,7 +1512,6 @@
                             },
                             "margins": {
                                 "left": 16,
-                                "top": 16,
                                 "right": 16,
                                 "bottom": 16
                             },
@@ -440,50 +1541,23 @@
                             "font_weight": "medium",
                             "text_color": "#000000",
                             "text_variable": "variable_email",
-                            "hint_text": "Email",
+                            "hint_text": "Hint email",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#FF4C3C",
                             "keyboard_type": "email"
                         },
                         {
+                            "type": "separator"
+                        },
+                        {
                             "type": "text",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
+                            "text": "Keyboard_type: uri",
+                            "font_size": 20,
                             "margins": {
                                 "left": 16,
                                 "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#34495E"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 4,
-                                "has_shadow": 1
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "center",
-                            "text_color": "#1ABC9C",
-                            "text": "Email:\n@{variable_email}"
+                                "right": 16
+                            }
                         },
                         {
                             "type": "input",
@@ -495,7 +1569,6 @@
                             },
                             "margins": {
                                 "left": 16,
-                                "top": 16,
                                 "right": 16,
                                 "bottom": 16
                             },
@@ -525,175 +1598,10 @@
                             "font_weight": "medium",
                             "text_color": "#000000",
                             "text_variable": "variable_uri",
-                            "hint_text": "Uri",
+                            "hint_text": "Hint uri",
                             "hint_color": "#F1C40F",
                             "highlight_color": "#E74C3C",
                             "keyboard_type": "uri"
-                        },
-                        {
-                            "type": "text",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
-                            "margins": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#34495E"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 4,
-                                "has_shadow": 1
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "center",
-                            "text_color": "#1ABC9C",
-                            "text": "Uri:\n@{variable_uri}"
-                        },
-                        {
-                            "type": "input",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
-                            "margins": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#FFFFFF"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 8,
-                                "has_shadow": 1,
-                                "stroke": {
-                                    "color": "#1F000000"
-                                }
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_color": "#000000",
-                            "text_variable": "my_edit_text_3",
-                            "hint_text": "Centered alignment",
-                            "hint_color": "#F1C40F",
-                            "highlight_color": "#E74C3C",
-                            "max_visible_lines": 2
-                        },
-                        {
-                            "type": "text",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
-                            "margins": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#34495E"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 4,
-                                "has_shadow": 1
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "center",
-                            "text_color": "#1ABC9C",
-                            "text": "Value of variable 3:\n@{my_edit_text_3}"
-                        },
-                        {
-                            "type": "text",
-                            "width": {
-                                "type": "match_parent"
-                            },
-                            "height": {
-                                "type": "wrap_content"
-                            },
-                            "margins": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "paddings": {
-                                "left": 16,
-                                "top": 16,
-                                "right": 16,
-                                "bottom": 16
-                            },
-                            "alpha": 1.0,
-                            "alignment_horizontal": "center",
-                            "alignment_vertical": "center",
-                            "background": [
-                                {
-                                    "type": "solid",
-                                    "color": "#FFCC00"
-                                }
-                            ],
-                            "border": {
-                                "corner_radius": 4,
-                                "has_shadow": 1
-                            },
-                            "font_size": 20,
-                            "font_weight": "medium",
-                            "text_alignment_horizontal": "center",
-                            "text_alignment_vertical": "center",
-                            "text_color": "#000000",
-                            "text": "Send"
                         }
                     ]
                 }

@@ -22,6 +22,18 @@ public final class TextInputBlock: BlockWithTraits {
     case asciiCapableNumberPad
   }
 
+  public enum ContentMode {
+    case center
+    case top
+    case bottom
+    case left
+    case right
+    case topLeft
+    case topRight
+    case bottomLeft
+    case bottomRight
+  }
+
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
@@ -32,6 +44,7 @@ public final class TextInputBlock: BlockWithTraits {
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
+  public let contentMode: ContentMode
   public weak var parentScrollView: ScrollView?
 
   public init(
@@ -45,6 +58,7 @@ public final class TextInputBlock: BlockWithTraits {
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
+    contentMode: ContentMode = .topLeft,
     parentScrollView: ScrollView? = nil
   ) {
     self.widthTrait = widthTrait
@@ -57,6 +71,7 @@ public final class TextInputBlock: BlockWithTraits {
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
+    self.contentMode = contentMode
     self.parentScrollView = parentScrollView
   }
 
@@ -75,21 +90,26 @@ public final class TextInputBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case .intrinsic:
-      let attributedText = getAttributedText()
       guard let maxVisibleLines = maxVisibleLines else {
-        let textHeight = attributedText.sizeForWidth(width).height
+        let textHeight = textForMeasuring.sizeForWidth(width).height
         return ceil(textHeight)
       }
-      let textHeight = attributedText.heightForWidth(width, maxNumberOfLines: maxVisibleLines)
+      let textHeight = textForMeasuring.heightForWidth(width, maxNumberOfLines: maxVisibleLines)
       return ceil(textHeight)
     case .weighted:
       return 0
     }
   }
 
-  private func getAttributedText() -> NSAttributedString {
+  private var textForMeasuring: NSAttributedString {
+    guard multiLineMode else {
+      return defaultTextForMeasuring.with(typo: textTypo)
+    }
     let text = textValue.wrappedValue
     if text.isEmpty {
+      if (hint.isEmpty) {
+        return defaultTextForMeasuring.with(typo: textTypo)
+      }
       return hint
     }
     return text.with(typo: textTypo)
@@ -115,9 +135,12 @@ extension TextInputBlock {
       && lhs.maxVisibleLines == rhs.maxVisibleLines
       && lhs.keyboardType == rhs.keyboardType
       && lhs.selectAllOnFocus == rhs.selectAllOnFocus
+      && lhs.contentMode == rhs.contentMode
       && lhs.highlightColor == rhs.highlightColor
   }
 }
 
 extension TextInputBlock: LayoutCachingDefaultImpl {}
 extension TextInputBlock: ElementStateUpdatingDefaultImpl {}
+
+private let defaultTextForMeasuring = "A"
