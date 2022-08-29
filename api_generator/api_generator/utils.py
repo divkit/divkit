@@ -28,6 +28,14 @@ def capitalize_camel_case(string: str) -> str:
     return ''.join(map(lambda component: component.capitalize(), name_components(string)))
 
 
+def snake_case(string: str) -> str:
+    return '_'.join(map(lambda component: component.lower(), filter(lambda s: s, name_components(string))))
+
+
+def upper_snake_case(string: str) -> str:
+    return '_'.join(map(lambda component: component.upper(), filter(lambda s: s, name_components(string))))
+
+
 def lower_camel_case(string: str) -> str:
     components = name_components(string)
     if not components:

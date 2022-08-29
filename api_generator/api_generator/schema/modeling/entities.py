@@ -10,17 +10,28 @@ import re
 from ..utils import is_dict_with_keys_of_type, is_list_of_type
 from .utils import (
     alias,
-    fixing_reserved_typename,
-    description_doc
+    fixing_reserved_typename
 )
 from ...utils import capitalize_camel_case
 
-from ...config import Config, GeneratedLanguage, GenerationMode, Platform, TEMPLATE_SUFFIX, DescriptionLanguage
+from ...config import Config, GeneratedLanguage, GenerationMode, Platform, TEMPLATE_SUFFIX
 from ..preprocessing.entities import ElementLocation
 from ..preprocessing.errors import UnresolvedReferenceError
 from .errors import GenericError, InvalidFieldRepresentationError
 
 from . import builders
+
+
+class DescriptionLanguage(str, Enum):
+    EN = 'en'
+    RU = 'ru'
+
+
+def description_doc(description_translations: Dict[str, str], lang: DescriptionLanguage, description: str) -> str:
+    try:
+        return description_translations[lang.value]
+    except KeyError:
+        return description
 
 
 class Declarable(ABC):

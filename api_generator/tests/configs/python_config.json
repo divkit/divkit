@@ -1,0 +1,4 @@
+{
+    "lang": "python",
+    "header": "# Generated code. Do not modify.\n\nfrom __future__ import annotations\nfrom pydivkit.core import BaseDiv, Field\nimport enum\nimport typing\n"
+}

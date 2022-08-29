@@ -69,6 +69,12 @@ def test_type_script_generator():
                           references_folder_name='type_script')
 
 
+def test_python_generator():
+    assert_test_generator(config_filename='python_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='python')
+
+
 def assert_test_generator(config_filename: str, schema_path: str, references_folder_name: str):
     config = Config(config_path=utils.path_generator_tests(os.path.join('configs', config_filename)),
                     schema_path=schema_path,

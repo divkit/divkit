@@ -11,13 +11,14 @@ from .documentation_entities import (
 from .translations import translations
 from .utils import bold, code, paragraph
 from ..base import Generator
-from ...config import Config, Platform, DescriptionLanguage
+from ...config import Config, Platform
 from ...schema.modeling.entities import (
     Declarable,
     Entity,
     EntityEnumeration,
     StringEnumeration,
-    Property
+    Property,
+    DescriptionLanguage
 )
 from ...schema.modeling.text import Text
 

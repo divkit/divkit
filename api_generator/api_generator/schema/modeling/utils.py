@@ -1,6 +1,6 @@
 from typing import Dict, Optional, List
 
-from ...config import GeneratedLanguage, Platform, DescriptionLanguage
+from ...config import GeneratedLanguage, Platform
 from ..utils import get_value_with_optional_by_lang
 
 
@@ -24,10 +24,3 @@ def platforms(dictionary: Dict[str, any]) -> Optional[List[Platform]]:
     if platforms_list is None:
         return None
     return list(map(lambda raw: Platform[raw.upper()], platforms_list))
-
-
-def description_doc(description_translations: Dict[str, str], lang: DescriptionLanguage, description: str) -> str:
-    try:
-        return description_translations[lang.value]
-    except KeyError:
-        return description

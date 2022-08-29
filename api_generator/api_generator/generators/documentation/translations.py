@@ -1,5 +1,5 @@
 from typing import Dict
-from ...config import DescriptionLanguage
+from ...schema.modeling.entities import DescriptionLanguage
 
 __full_translations: Dict[str, Dict[str, str]] = {
     "div_generator_android": {

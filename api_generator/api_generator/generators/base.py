@@ -65,12 +65,12 @@ class Generator(ABC):
     def _generate_files(self, objects: List[Declarable]):
         for obj in objects:
             declaration = []
-            for line in str(self._main_declaration(obj)).strip().split('\n'):
+            for line in str(self._main_declaration(obj)).rstrip().split('\n'):
                 if line.isspace():
                     declaration.append('')
                 else:
                     declaration.append(line)
-            declaration = '\n'.join(declaration).strip()
+            declaration = '\n'.join(declaration)
             if not declaration:
                 continue
             head_for_file = self._head_for_file + '\n' if self._head_for_file.strip() else ''

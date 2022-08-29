@@ -59,7 +59,7 @@ class TypeScriptGenerator(Generator):
                 return d.name
             inner_types_decl = Text()
             inner_types = sorted(filter(lambda t: isinstance(t, decl_type), entity.inner_types), key=sort_predicate)
-            for ind, p in enumerate(inner_types):
+            for p in inner_types:
                 if isinstance(p, decl_type):
                     inner_types_decl += decl_method(p)
                     inner_types_decl += EMPTY
