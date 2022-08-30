@@ -80,8 +80,8 @@
     "ru": "Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`."
   },
   "div_actionable_action_animation": {
-    "en": "Action animation. `Fade`, `scale`, and `set` are supported.",
-    "ru": "Анимация действия. Поддерживаются `fade`, `scale` и `set`."
+    "en": "Action animation. Web supports `fade`, `scale` and `set` only.",
+    "ru": "Анимация нажатия. В вебе поддерживаются только значения `fade`, `scale` и `set`."
   },
   "div_actionable_actions": {
     "en": "Multiple actions when clicking on an element.",
