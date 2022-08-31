@@ -12,12 +12,13 @@ JSON → DivData → LayoutKit block → UIView
 
 - LayoutKit is a library that builds UIKit views using declarative approach.
 
-Although DivKit produces UIKit views, it can be easyly used in SwiftUI apps (see [demo application](DivKitDemoApp)).
+Although DivKit produces UIKit views, it can be easyly used in SwiftUI apps (see [playground application](DivKitPlayground)).
 
 ## DivKit Project
 
-`DivKit.xcodeproj` – main Xcode project that contains all DivKit modules, tests and demo application.
-Use `DivKitDemoApp` scheme to build and run demo application.
+`DivKit.xcodeproj` – main Xcode project that contains all DivKit modules, tests and playground application.
+
+Use `DivKitPlayground` scheme to build and run playground application.
 
 Use `UnitTests` sheme to run all unit tests.
 

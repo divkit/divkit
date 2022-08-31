@@ -1,7 +1,7 @@
 import CommonCore
 import DivKit
 
-enum DemoAppComponents {
+enum AppComponents {
   static func makeDivKitComponents(
     updateCardAction: DivActionURLHandler.UpdateCardAction? = nil
   ) -> DivKitComponents {

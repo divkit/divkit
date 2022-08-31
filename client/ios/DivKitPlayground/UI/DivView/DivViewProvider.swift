@@ -9,7 +9,7 @@ final class DivViewProvider {
   private var divKitComponents: DivKitComponents!
   
   init() {
-    divKitComponents = DemoAppComponents.makeDivKitComponents(
+    divKitComponents = AppComponents.makeDivKitComponents(
       updateCardAction: { [weak self] _, patch in
         self?.blockProvider.update(patch: patch)
       }

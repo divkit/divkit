@@ -37,7 +37,7 @@ private struct WebPreviewModel {
   private(set) var payloadFactory: UIStatePayloadFactory!
   
   init() {
-    divKitComponents = DemoAppComponents.makeDivKitComponents(
+    divKitComponents = AppComponents.makeDivKitComponents(
       updateCardAction: { [weak blockProvider] _, patch in
         blockProvider?.update(patch: patch)
       }

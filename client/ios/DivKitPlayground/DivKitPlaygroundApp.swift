@@ -3,7 +3,7 @@ import SwiftUI
 import BaseUI
 
 @main
-struct DivKitDemoApp: App {
+struct DivKitPlaygroundApp: App {
   init() {
     let fontProvider = YSFontProvider()
     fontSpecifiers = FontSpecifiers(
