@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 from typing import List, Optional, Dict, Union, Tuple, cast
 from dataclasses import dataclass
 from enum import Enum, auto
-import validators
 import re
 
 from ..utils import is_dict_with_keys_of_type, is_list_of_type
@@ -621,7 +620,14 @@ class PropertyType(ABC):
     def validate(self, value: str, location: ElementLocation) -> None:
         error = InvalidFieldRepresentationError(location, value)
         if isinstance(self, Url):
-            if not validators.url(value):
+            regex = re.compile(
+                r'^[A-Z0-9][A-Z0-9-]+[A-Z0-9]://'  # any letter and digit with '-'
+                r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.?)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+                r'localhost|'  # localhost...
+                r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+                r'(?::\d+)?'  # optional port
+                r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+            if re.match(regex, value) is None:
                 raise error
         elif isinstance(self, Color):
             color_matcher = re.compile(r'^#([0-9a-fA-F]{2}){3,4}$')

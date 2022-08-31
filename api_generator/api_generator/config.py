@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import Text, List, Optional
-from pydantic import BaseModel, Field
+import json
 from enum import Enum, auto
 from .utils import sha256_file, sha256_dir
 import os
@@ -50,17 +50,19 @@ class GenerationMode(Enum):
 
 
 class Config:
-    class GenerationConfig(BaseModel):
-        lang: GeneratedLanguage
-        header: Text = ''
-        errors_collectors: List[str] = Field([], alias='errorsCollectors')
-        kotlin_annotations: List[str] = Field([], alias='kotlinAnnotations')
-        generate_equality: bool = Field(False, alias='generateEquality')
+    class GenerationConfig:
+        def __init__(self, dictionary):
+            self.lang: GeneratedLanguage = GeneratedLanguage(dictionary['lang'])
+            self.header: Text = dictionary.get('header') or ''
+            self.errors_collectors: List[str] = dictionary.get('errorsCollectors') or []
+            self.kotlin_annotations: List[str] = dictionary.get('kotlinAnnotations') or []
+            self.generate_equality: bool = dictionary.get('generateEquality') or False
 
     def __init__(self, generator_path: str, config_path: str, schema_path: str, output_path: str):
         self.schema_path: str = schema_path
         self.output_path: str = output_path
-        self.generation: Config.GenerationConfig = Config.GenerationConfig.parse_file(path=config_path)
+        with open(config_path) as f:
+            self.generation: Config.GenerationConfig = json.loads(f.read(), object_hook=Config.GenerationConfig)
 
         self.generator_hash = sha256_dir(generator_path)
         stored_generator_hash = _stored_sha256(os.path.join(output_path, 'generator_hash'))

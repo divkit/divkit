@@ -615,9 +615,10 @@ class SwiftProperty(Property):
 
     def add_default_value_to(self, declaration: str) -> str:
         prop_type = cast(SwiftPropertyType, self.property_type)
+        empty_dict_deserialization = prop_type.empty_constructor
         if self.default_value is not None:
             default_value_declaration_to_use = prop_type.internal_declaration(self.default_value)
-        elif (empty_dict_deserialization := prop_type.empty_constructor) is not None:
+        elif empty_dict_deserialization is not None:
             default_value_declaration_to_use = empty_dict_deserialization
         else:
             return declaration

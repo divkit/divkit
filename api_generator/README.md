@@ -17,7 +17,6 @@ The script takes a JSON schema at the input and generates the code of objects de
 
 Setup environment:
 ```shell
-pip install -r requirements.txt
 pip install -r dev_requirements.txt
 ```
 

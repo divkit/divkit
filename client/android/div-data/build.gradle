@@ -31,20 +31,6 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
 }
 
-static def convertPathToUnixStyle(String path) {
-    return "/mnt/" + path.substring(0, 1).toLowerCase() + path.substring(2).replace("\\", "/")
-}
-
-// Allows to use the Mainframer with Windows client
-task setHomePojoGeneratorExecAttrOnMainframer(type: Exec) {
-    def binPath = new File(projectDir, '../../../bin/homeapigenerator-binaries/linux/HomeAPIGenerator.sh').absolutePath
-    commandLine 'chmod', '755', binPath
-    println commandLine
-}
-
-setHomePojoGeneratorExecAttrOnMainframer.onlyIf { rootDir.toString().contains('mainframer') }
-
-def osName = System.getProperty('os.name').toLowerCase()
 def schemas = [
         ["name" : "div2",
          "scheme": new File(projectDir, "../../../schema"),
@@ -53,34 +39,17 @@ def schemas = [
 ]
 
 schemas.forEach{ item ->
-    tasks.create(name: "scheme_${item['name']}", type: Exec, dependsOn: setHomePojoGeneratorExecAttrOnMainframer) {
+    tasks.create(name: "scheme_${item['name']}", type: Exec) {
         def schemasDirectory = item['scheme'].absolutePath
         def generatedDir = item['generated']
         def configPath = item['config'].absolutePath
-
         println "Process schemas: $schemasDirectory"
-        def binPath = new File(projectDir, '../../../bin/homeapigenerator-binaries/').absolutePath
-        if (osName.contains('windows')) {
-            binPath = binPath + '/linux/HomeAPIGenerator'
-            def bashCommand = 'start /w c:\\Windows\\System32\\bash.exe -c \"' +
-                    convertPathToUnixStyle(binPath) + ' ' +
-                    convertPathToUnixStyle(configPath) + ' ' +
-                    convertPathToUnixStyle(schemasDirectory) + ' ' +
-                    convertPathToUnixStyle(generatedDir) + '\"'
-            commandLine 'cmd', '/c', bashCommand
-
-        } else if (osName.contains('linux')) {
-            binPath = binPath + '/linux/HomeAPIGenerator.sh'
-            commandLine binPath, configPath, schemasDirectory, generatedDir
-        } else {
-            binPath = binPath + '/macosx/HomeAPIGenerator'
-            commandLine binPath, configPath, schemasDirectory, generatedDir
-        }
-
+        def binPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
+        commandLine binPath, configPath, schemasDirectory, generatedDir
         println commandLine
 
         inputs.dir item['scheme']
-        inputs.file binPath
+        inputs.file item['config']
         outputs.dir generatedDir
     }
 }

@@ -261,7 +261,7 @@ class Reference:
 
         if is_unique_reference_in_same_file and not inlining_suppressed:
             typename_value = self.path[-1] if self._path else top_level_entity_name
-            definition |= {'$typename': typename_value}
+            definition = {**definition, '$typename': typename_value}
             self._value = definition
         elif should_inline:
             self._value = definition
