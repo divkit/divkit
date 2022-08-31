@@ -5,12 +5,13 @@ from .schema.preprocessing import schema_preprocessing
 from .schema.modeling import build_objects
 from .utils import sha256_for_filenames
 from .generators import (
-    Generator,
-    SwiftGenerator,
-    KotlinGenerator,
     DocumentationGenerator,
-    TypeScriptGenerator,
+    KotlinGenerator,
+    KotlinDSLGenerator,
     PythonGenerator,
+    SwiftGenerator,
+    TypeScriptGenerator,
+    Generator,
 )
 
 
@@ -22,6 +23,7 @@ def __build_generator(config: Config) -> Generator:
         GeneratedLanguage.DOCUMENTATION: DocumentationGenerator,
         GeneratedLanguage.TYPE_SCRIPT: TypeScriptGenerator,
         GeneratedLanguage.PYTHON: PythonGenerator,
+        GeneratedLanguage.KOTLIN_DSL: KotlinDSLGenerator,
     }
     generator = generator_dict.get(lang, None)
     if generator is None:

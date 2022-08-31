@@ -1,8 +1,17 @@
-from .base import Generator
-from .swift import SwiftGenerator
-from .kotlin import KotlinGenerator
 from .documentation import DocumentationGenerator
-from .type_script import TypeScriptGenerator
+from .kotlin import KotlinGenerator
+from .kotlin_dsl import KotlinDSLGenerator
 from .python import PythonGenerator
+from .swift import SwiftGenerator
+from .type_script import TypeScriptGenerator
+from .base import Generator
 
-__all__ = [Generator, SwiftGenerator, KotlinGenerator, DocumentationGenerator, TypeScriptGenerator, PythonGenerator]
+__all__ = [
+    DocumentationGenerator,
+    KotlinGenerator,
+    KotlinDSLGenerator,
+    PythonGenerator,
+    SwiftGenerator,
+    TypeScriptGenerator,
+    Generator,
+]

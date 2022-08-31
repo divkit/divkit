@@ -58,6 +58,12 @@ def test_kotlin_generator():
                           references_folder_name='kotlin')
 
 
+def test_kotlin_dsl_generator():
+    assert_test_generator(config_filename='kotlin_dsl_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='kotlin_dsl')
+
+
 def test_documentation_generator():
     assert_test_generator(config_filename='documentation_config.json',
                           schema_path=TEST_SCHEMA_PATH,

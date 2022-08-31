@@ -343,14 +343,15 @@ class Entity(Declarable):
                                           None)
 
         if self._lang is GeneratedLanguage.KOTLIN_DSL:
-            new_enumeration = None
+            self._enclosing_enumeration = None
             for enumeration in global_objects:
+                valid_enumeration = False
                 if isinstance(enumeration, EntityEnumeration):
                     valid_names = [self._name, self._resolved_name, self._original_name]
-                    new_enumeration = next((ent for ent in enumeration.entities if ent[0] in valid_names), None)
-                if new_enumeration is not None:
+                    valid_enumeration = any(ent[0] in valid_names for ent in enumeration.entities)
+                if valid_enumeration:
+                    self._enclosing_enumeration = enumeration
                     break
-            self._enclosing_enumeration = new_enumeration
 
     def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
         if self in stack:
@@ -375,6 +376,10 @@ class Entity(Declarable):
 
                 declarable.check_dependencies_resolved(location=location,
                                                        stack=stack + [self])
+
+    @property
+    def root_entity(self) -> bool:
+        return self._root_entity
 
     @property
     def as_json(self) -> Dict:
