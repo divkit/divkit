@@ -11,15 +11,15 @@ public struct DivJson: Deserializable {
     cards = try dictionary.getArray("cards")
   }
 
-  static func loadCard() throws -> DeserializationResult<DivData>? {
+  static func loadCards() throws -> [DivData] {
     let url = Bundle.main.url(forResource: "div_json", withExtension: "json")!
     let data = try Data(contentsOf: url)
     let divJson = try DivJson(JSONData: data)
-    return divJson.cards.first.flatMap {
+    return divJson.cards.compactMap {
       DivData.resolve(
         card: $0,
         templates: divJson.templates
-      )
+      ).value
     }
   }
 }

@@ -4,6 +4,7 @@
 .swiftpm
 .vscode
 build/
+Pods/
 XcodeBuild/
 xcuserdata/
 
