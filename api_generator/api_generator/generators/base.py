@@ -75,7 +75,7 @@ class Generator(ABC):
                 continue
             head_for_file = self._head_for_file + '\n' if self._head_for_file.strip() else ''
             file_content = f'{head_for_file}{declaration}\n'
-            filename = os.path.join(self._output_path, self._filename(obj.name))
+            filename = os.path.join(self._output_path, self.filename(obj.name))
             with open(filename, 'w') as file:
                 file.write(file_content)
 
@@ -94,7 +94,7 @@ class Generator(ABC):
             raise NotImplementedError
 
     @abstractmethod
-    def _filename(self, name: str) -> str:
+    def filename(self, name: str) -> str:
         pass
 
     @abstractmethod

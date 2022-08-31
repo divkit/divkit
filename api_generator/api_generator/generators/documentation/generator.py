@@ -69,7 +69,7 @@ class DocumentationGenerator(Generator):
             f'   href: concepts/divs/{obj.name}.md{toc}'
         ])
 
-    def _filename(self, name: str) -> str:
+    def filename(self, name: str) -> str:
         return name + '.md'
 
     def _entity_declaration(self, entity: DocumentationEntity) -> Text:

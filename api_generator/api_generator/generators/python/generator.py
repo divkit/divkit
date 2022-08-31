@@ -20,7 +20,7 @@ from ... import utils
 
 
 class PythonGenerator(Generator):
-    def _filename(self, name: str) -> str:
+    def filename(self, name: str) -> str:
         return f'{utils.snake_case(name)}.py'
 
     def generate(self, objects: List[Declarable]):

@@ -2,6 +2,8 @@ from __future__ import annotations
 from typing import Text, List, Optional
 from pydantic import BaseModel, Field
 from enum import Enum, auto
+from .utils import sha256_file, sha256_dir
+import os
 
 
 class Platform(str, Enum):
@@ -55,7 +57,26 @@ class Config:
         kotlin_annotations: List[str] = Field([], alias='kotlinAnnotations')
         generate_equality: bool = Field(False, alias='generateEquality')
 
-    def __init__(self, config_path: str, schema_path: str, output_path: str):
+    def __init__(self, generator_path: str, config_path: str, schema_path: str, output_path: str):
         self.schema_path: str = schema_path
         self.output_path: str = output_path
         self.generation: Config.GenerationConfig = Config.GenerationConfig.parse_file(path=config_path)
+
+        self.generator_hash = sha256_dir(generator_path)
+        stored_generator_hash = _stored_sha256(os.path.join(output_path, 'generator_hash'))
+        self.generator_changed = self.generator_hash != stored_generator_hash
+
+        self.config_hash = sha256_file(config_path)
+        stored_config_hash = _stored_sha256(os.path.join(output_path, 'config_hash'))
+        self.config_changed = self.config_hash != stored_config_hash
+
+        self.stored_input_hash = _stored_sha256(os.path.join(output_path, 'input_hash'))
+        self.stored_output_hash = _stored_sha256(os.path.join(output_path, 'output_hash'))
+
+
+def _stored_sha256(path: str) -> Optional[str]:
+    if os.path.exists(path):
+        with open(path, "r") as f:
+            data = f.read()
+            return str(data)
+    return None

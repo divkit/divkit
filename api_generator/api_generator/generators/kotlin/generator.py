@@ -27,7 +27,7 @@ class KotlinGenerator(Generator):
         self._error_collectors = config.generation.errors_collectors
         self._generate_equality = config.generation.generate_equality
 
-    def _filename(self, name: str) -> str:
+    def filename(self, name: str) -> str:
         return f'{utils.capitalize_camel_case(name)}.kt'
 
     def _entity_declaration(self, entity: Entity) -> Text:

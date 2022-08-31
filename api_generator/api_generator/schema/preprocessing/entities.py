@@ -8,6 +8,7 @@ from ...config import GeneratedLanguage
 from . import utils
 from . import errors
 from . import preprocessor
+from ...utils import sha256_dir
 
 
 class SchemaFilesystemItem(ABC):
@@ -56,6 +57,7 @@ class SchemaDirectory(SchemaFilesystemItem):
     def __init__(self, path: str, parent_dir: Optional[SchemaDirectory], lang: GeneratedLanguage):
         self._name: str = os.path.basename(os.path.normpath(path))
         self._parent_dir: SchemaDirectory = parent_dir
+        self._hash = sha256_dir(path)
         self._items: List[SchemaFilesystemItem] = list(
             filter(
                 lambda schema_file: not (isinstance(schema_file, SchemaFile) and utils.code_generation_disabled(
@@ -75,6 +77,10 @@ class SchemaDirectory(SchemaFilesystemItem):
                 )
             )
         )
+
+    @property
+    def hash(self) -> str:
+        return self._hash
 
     @property
     def as_json(self) -> Dict[str, any]:

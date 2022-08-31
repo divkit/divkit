@@ -43,7 +43,8 @@ def __parse_arguments() -> Tuple[str, str, str]:
 
 def main():
     config_path, schema_path, output_path = __parse_arguments()
-    config = Config(config_path, schema_path, output_path)
+    generator_path = os.path.dirname(__file__)
+    config = Config(generator_path, config_path, schema_path, output_path)
     generate_api(config)
 
 

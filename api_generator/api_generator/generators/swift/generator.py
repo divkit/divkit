@@ -69,7 +69,7 @@ class SwiftGenerator(Generator):
         super(SwiftGenerator, self).__init__(config)
         self._access_level = SwiftAccessLevel.PUBLIC
 
-    def _filename(self, name: str) -> str:
+    def filename(self, name: str) -> str:
         return f'{utils.capitalize_camel_case(name)}.swift'
 
     def _main_declaration(self, obj: Declarable) -> Text:

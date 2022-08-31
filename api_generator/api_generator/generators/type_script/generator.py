@@ -17,7 +17,7 @@ from ...schema.modeling.text import Text, EMPTY
 
 
 class TypeScriptGenerator(Generator):
-    def _filename(self, name: str) -> str:
+    def filename(self, name: str) -> str:
         return f'{utils.capitalize_camel_case(name)}.ts'
 
     def generate(self, objects: List[Declarable]):

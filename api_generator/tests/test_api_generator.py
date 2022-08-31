@@ -17,6 +17,7 @@ SHOULD_UPDATE_REFERENCES = False
 
 TEST_SCHEMA_PATH = utils.path_divkit_test_data('test_schema')
 REAL_SCHEMA_PATH = utils.path_divkit_test_data(os.path.join('..', 'schema'))
+API_GENERATOR_PATH = utils.path_generator_tests(os.path.join('..', 'api_generator'))
 OUTPUT_PATH = utils.path_generator_tests('output')
 
 
@@ -27,8 +28,8 @@ def test_schema_preprocessor():
             utils.update_json_reference(filename=path, json_content=root_directory.as_json)
             assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'
         utils.assert_as_json_test(file_expected=path, content_actual=root_directory.as_json)
-
-    test_config = Config(config_path=utils.path_generator_tests(os.path.join('configs', 'swift_config.json')),
+    test_config = Config(generator_path=API_GENERATOR_PATH,
+                         config_path=utils.path_generator_tests(os.path.join('configs', 'swift_config.json')),
                          schema_path=TEST_SCHEMA_PATH,
                          output_path=OUTPUT_PATH)
 
@@ -76,7 +77,8 @@ def test_python_generator():
 
 
 def assert_test_generator(config_filename: str, schema_path: str, references_folder_name: str):
-    config = Config(config_path=utils.path_generator_tests(os.path.join('configs', config_filename)),
+    config = Config(generator_path=API_GENERATOR_PATH,
+                    config_path=utils.path_generator_tests(os.path.join('configs', config_filename)),
                     schema_path=schema_path,
                     output_path=OUTPUT_PATH)
     if not os.path.exists(OUTPUT_PATH):
