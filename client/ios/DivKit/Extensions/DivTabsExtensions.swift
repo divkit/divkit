@@ -140,7 +140,8 @@ extension DivTabs.TabTitleStyle {
       baseTextColor: resolveInactiveTextColor(expressionResolver),
       activeTextColor: resolveActiveTextColor(expressionResolver),
       activeBackgroundColor: resolveActiveBackgroundColor(expressionResolver),
-      inactiveBackgroundColor: resolveInactiveBackgroundColor(expressionResolver) ?? .clear
+      inactiveBackgroundColor: resolveInactiveBackgroundColor(expressionResolver) ?? .clear,
+      itemSpacing: CGFloat(resolveItemSpacing(expressionResolver))
     )
   }
 

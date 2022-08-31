@@ -19,6 +19,7 @@ public struct TabTitleStyle: Equatable {
   public let activeTextColor: Color
   public let activeBackgroundColor: Color
   public let inactiveBackgroundColor: Color
+  public let itemSpacing: CGFloat?
 
   public init(
     typo: Typo = defaultTypo,
@@ -28,7 +29,8 @@ public struct TabTitleStyle: Equatable {
     baseTextColor: Color = defaultBaseTextColor,
     activeTextColor: Color = defaultActiveTextColor,
     activeBackgroundColor: Color = defaultActiveBackgroundColor,
-    inactiveBackgroundColor: Color = .clear
+    inactiveBackgroundColor: Color = .clear,
+    itemSpacing: CGFloat? = nil
   ) {
     self.typo = typo
     self.inactiveTypo = inactiveTypo ?? typo
@@ -38,6 +40,7 @@ public struct TabTitleStyle: Equatable {
     self.activeTextColor = activeTextColor
     self.activeBackgroundColor = activeBackgroundColor
     self.inactiveBackgroundColor = inactiveBackgroundColor
+    self.itemSpacing = itemSpacing
   }
 
   public static func ==(lhs: TabTitleStyle, rhs: TabTitleStyle) -> Bool {
@@ -48,7 +51,8 @@ public struct TabTitleStyle: Equatable {
       lhs.baseTextColor == rhs.baseTextColor &&
       lhs.activeTextColor == rhs.activeTextColor &&
       lhs.activeBackgroundColor == rhs.activeBackgroundColor &&
-      lhs.inactiveBackgroundColor == rhs.inactiveBackgroundColor
+      lhs.inactiveBackgroundColor == rhs.inactiveBackgroundColor &&
+      lhs.itemSpacing == rhs.itemSpacing
   }
 }
 

@@ -24,6 +24,7 @@ final class TabListView: UIView {
         delegate.tabs = model.items
       }
       collectionViewLayout.sectionInset = model.listPaddings
+      collectionViewLayout.minimumLineSpacing = model.itemSpacing ?? 0
       selectedItemBackground.backgroundColor = model.selectedBackgroundColor.systemColor
       setNeedsLayout()
     }

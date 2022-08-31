@@ -51,6 +51,7 @@ final class TabListSelectionDataSourceImpl: TabListSelectionDataSource {
       selectedBackgroundColor: listModel.titleStyle.activeBackgroundColor,
       backgroundColor: listModel.titleStyle.inactiveBackgroundColor,
       cornerRadius: listModel.titleStyle.cornerRadius,
+      itemSpacing: listModel.titleStyle.itemSpacing,
       selection: selection,
       offset: nil
     )
