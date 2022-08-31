@@ -1,3 +1,9 @@
+## 5.0.0 (September 5, 2022)
+
+Changes and additions:
+* Messages of expression parsing errors made more informative
+
+
 ## 4.0.0 (August 29, 2022)
 
 * Fixed `action_animation` on iOS
