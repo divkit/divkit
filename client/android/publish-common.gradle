@@ -3,10 +3,6 @@ import com.yandex.div.gradle.PublicationType
 apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
-buildscript {
-
-}
-
 group = 'com.yandex.div'
 
 ext {

@@ -1,5 +1,13 @@
 apply from: "${buildscript.sourceFile.parent}/publish-common.gradle"
 
+android {
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+}
+
 afterEvaluate {
     publishing {
         publications {
