@@ -182,8 +182,8 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
   @objc private func handleSelectionLongTap(_ gesture: UILongPressGestureRecognizer) {
     becomeFirstResponder()
     let elementIndex = textLayout?.getTapElementIndex(
-      from: gesture.location(in: gesture.view),
-      viewHeight: bounds.height
+      from: gesture.location(in: gesture.view)
+        .applying(CGAffineTransform(translationX: 0, y: bounds.height).scaledBy(x: 1, y: -1))
     )
     switch gesture.state {
     case .began:
@@ -216,9 +216,11 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   @objc private func handleSelectionPan(_ gesture: UIPanGestureRecognizer) {
+    let point = gesture.location(in: gesture.view)
+    let transformedPoint = point
+      .applying(CGAffineTransform(translationX: 0, y: bounds.height).scaledBy(x: 1, y: -1))
     let elementIndex = textLayout?.getTapElementIndex(
-      from: gesture.location(in: gesture.view),
-      viewHeight: bounds.height
+      from: transformedPoint
     )
     switch gesture.state {
     case .began:
@@ -226,17 +228,36 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
             let elementIndex = elementIndex else {
         return
       }
-      if min(
-        abs(elementIndex - selectedRange.lowerBound),
-        abs(elementIndex - selectedRange.upperBound)
-      ) < 3 {
-        activePointer =
-          (
-            abs(elementIndex - selectedRange.lowerBound) <
-              abs(elementIndex - selectedRange.upperBound)
-          ) ?
-          .leading : .trailing
+      let lineIndex = textLayout?.lines.lastIndex(where: {
+        transformedPoint.y <= $0.verticalOffset
+      }) ?? 0
+      let prevLineElementIndex = textLayout?.getTapElementIndex(
+        from: CGPoint(
+          x: point.x,
+          y: textLayout?.lines.element(at: lineIndex - 1)?.verticalOffset
+            .advanced(by: -1) ?? .infinity
+        )
+      )
+      let nextLineElementIndex = textLayout?.getTapElementIndex(
+        from: CGPoint(
+          x: point.x,
+          y: textLayout?.lines.element(at: lineIndex + 1)?.verticalOffset.advanced(by: -1) ?? 0
+        )
+      )
+      let nearestIndex = [elementIndex, prevLineElementIndex, nextLineElementIndex]
+        .compactMap(identity).first { min(
+          abs($0 - selectedRange.lowerBound),
+          abs($0 - selectedRange.upperBound)
+        ) < 5 }
+      guard let nearestIndex = nearestIndex else {
+        return
       }
+      activePointer =
+        (
+          abs(nearestIndex - selectedRange.lowerBound) <
+            abs(nearestIndex - selectedRange.upperBound)
+        ) ?
+        .leading : .trailing
     case .changed:
       guard let activePointer = activePointer, let elementIndex = elementIndex,
             let selectedRange = selectedRange else {
@@ -288,7 +309,7 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
       .compactMap { !$0.isTruncated ? $0.range.upperBound : -1 }.max()
 
     if let selectedRange = selectedRange {
-        UIPasteboard.general.string = model.text.string[Range(uncheckedBounds: (
+      UIPasteboard.general.string = model.text.string[Range(uncheckedBounds: (
         selectedRange.lowerBound,
         min(selectedRange.upperBound, maxSymbolIndex ?? .max)
       ))]
@@ -349,25 +370,23 @@ private enum ActivePointer {
 }
 
 extension AttributedStringLayout {
-  fileprivate func getTapElementIndex(from point: CGPoint, viewHeight: CGFloat) -> Int? {
-    let transform = CGAffineTransform(translationX: 0, y: viewHeight).scaledBy(x: 1, y: -1)
-    let transformedTapLocation = point.applying(transform)
-    let lineLayout = lines.last(where: { transformedTapLocation.y <= $0.verticalOffset })
+  fileprivate func getTapElementIndex(from point: CGPoint) -> Int? {
+    let lineLayout = lines.last(where: { point.y <= $0.verticalOffset })
     guard let lineLayout = lineLayout,
-          transformedTapLocation.x > lineLayout.horizontalOffset else {
+          point.x > lineLayout.horizontalOffset else {
       return nil
     }
     if !lineLayout.isTruncated {
       return CTLineGetStringIndexForPosition(
         lineLayout.line,
-        transformedTapLocation.movingX(by: -lineLayout.horizontalOffset)
+        point.movingX(by: -lineLayout.horizontalOffset)
       )
     } else {
       let previousLineRange = lines.last { $0 != lineLayout }?.range
       return (previousLineRange?.upperBound ?? 0) +
         CTLineGetStringIndexForPosition(
           lineLayout.line,
-          transformedTapLocation.movingX(by: -lineLayout.horizontalOffset)
+          point.movingX(by: -lineLayout.horizontalOffset)
         )
     }
   }
