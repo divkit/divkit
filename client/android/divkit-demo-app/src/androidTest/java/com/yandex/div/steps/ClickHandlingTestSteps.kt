@@ -16,7 +16,7 @@ import com.yandex.divkit.demo.div.DemoDiv2Logger
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.junit.Assert
-import ru.tinkoff.allure.Step
+import ru.tinkoff.allure.step as allureStep
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 
@@ -34,7 +34,7 @@ internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
         actions.put(type to description)
     })
 
-    fun ActivityTestRule<*>.buildContainer(): Unit = Step.step("Build container") {
+    fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
         buildContainer(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -43,22 +43,22 @@ internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
     }
 
     fun click(text: String): Unit =
-        Step.step("Click on view with text='$text'") {
+        allureStep("Click on view with text='$text'") {
             findView(text).perform(click())
         }
 
     fun clickOnImage(): Unit =
-        Step.step("Click on image") {
+        allureStep("Click on image") {
             onView(isAssignableFrom(AppCompatImageView::class.java)).perform(click())
         }
 
     fun doubleClick(text: String): Unit =
-        Step.step("Double click on view with text='$text'") {
+        allureStep("Double click on view with text='$text'") {
             findView(text).perform(doubleClick())
         }
 
     fun longClick(text: String): Unit =
-        Step.step("Long click on view with text='$text'") {
+        allureStep("Long click on view with text='$text'") {
             findView(text).perform(longClick())
         }
 
@@ -81,13 +81,13 @@ internal class ClickHandlingAssertions(private val actionsReceived: Map<Pair<Str
 
     fun checkClicked(contentDescription: String, times: Int = 1) {
         val actualTimesClicked = actionsReceived["click" to contentDescription]
-        Step.step("Expected times clicked on '$contentDescription': $times, actual: $actualTimesClicked") {
+        allureStep("Expected times clicked on '$contentDescription': $times, actual: $actualTimesClicked") {
             Assert.assertEquals(times, actualTimesClicked)
         }
     }
 
     fun checkShown(text: String) {
-        Step.step("View with text='$text' is shown") {
+        allureStep("View with text='$text' is shown") {
             onView(withText(text)).check(matches(isDisplayed()))
         }
     }

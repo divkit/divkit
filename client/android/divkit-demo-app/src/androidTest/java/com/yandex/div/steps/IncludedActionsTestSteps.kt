@@ -7,7 +7,7 @@ import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
-import ru.tinkoff.allure.Step
+import ru.tinkoff.allure.step as allureStep
 
 internal fun includedActions(f: IncludedActionsTestSteps.() -> Unit) = f(IncludedActionsTestSteps())
 
@@ -17,7 +17,7 @@ class IncludedActionsTestSteps: DivTestAssetSteps() {
     private val expandButton = onView(withText("EXPAND"))
     private val commentsButton = onView(withText("SHOW COMMENTS"))
 
-    fun ActivityTestRule<*>.buildContainer(): Unit = Step.step("Build container") {
+    fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
         testAsset = "scenarios/action_visibility/article.json"
         buildContainer(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }

@@ -1,8 +1,8 @@
 package com.yandex.divkit.demo.benchmark
 
 import android.os.SystemClock
-import com.yandex.perftests.core.Reporter
-import com.yandex.perftests.core.Units
+import com.yandex.divkit.demo.perf.PerfMetricReporter
+import java.util.concurrent.TimeUnit
 
 internal class BlockMetrics<T>(
     val result: T,
@@ -24,5 +24,5 @@ internal inline fun <T> profile(block: () -> T): BlockMetrics<T> {
 
 internal fun reportTime(metricName: String, millis: Long) {
     if (millis <= 0) return
-    Reporter.reportMetric(metricName, Units.MILLISECONDS, millis)
+    PerfMetricReporter.reportTimeMetric(metricName, TimeUnit.MILLISECONDS, millis)
 }

@@ -12,7 +12,7 @@ import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.equalTo
-import ru.tinkoff.allure.Step.Companion.step
+import ru.tinkoff.allure.step
 
 internal fun divFocus(f: DivFocusSteps.() -> Unit) = f(DivFocusSteps())
 

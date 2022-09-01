@@ -25,7 +25,7 @@ import com.yandex.test.util.StepsDsl
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.Matcher
-import ru.tinkoff.allure.Step.Companion.step
+import ru.tinkoff.allure.step
 
 internal fun pinchToZoom(f: PinchToZoomSteps.() -> Unit) = f(PinchToZoomSteps())
 

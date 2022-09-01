@@ -19,7 +19,7 @@ import com.yandex.divkit.demo.div.DivUtils
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.test.util.StepsDsl
 import org.jetbrains.anko.contentView
-import ru.tinkoff.allure.Step.Companion.step
+import ru.tinkoff.allure.step
 import java.util.UUID
 
 @StepsDsl

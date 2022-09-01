@@ -7,7 +7,6 @@ buildscript {
     apply from: "${project.projectDir}/../dependencies.gradle"
 
     repositories {
-        maven { url 'https://artifactory.yandex.net/central' }
         mavenCentral()
     }
     dependencies {
@@ -16,8 +15,6 @@ buildscript {
 }
 
 repositories {
-    maven { url 'https://artifactory.yandex.net/google-android' }
-    maven { url 'https://artifactory.yandex.net/central' }
     google()
     mavenCentral()
 }

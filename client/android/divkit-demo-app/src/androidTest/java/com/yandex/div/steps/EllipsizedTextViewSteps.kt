@@ -22,7 +22,7 @@ import org.hamcrest.Description
 import org.hamcrest.TypeSafeMatcher
 import org.jetbrains.anko.contentView
 import org.junit.Assert
-import ru.tinkoff.allure.Step.Companion.step
+import ru.tinkoff.allure.step
 
 internal fun ellipsizedTextView(f: EllipsizedTextViewSteps.() -> Unit) = f(EllipsizedTextViewSteps())
 

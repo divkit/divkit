@@ -1,7 +1,0 @@
-repositories {
-    maven { url 'https://artifactory.yandex.net/alicekit' }
-    maven { url 'https://artifactory.yandex.net/central' }
-    maven { url 'https://artifactory.yandex.net/google-android' }
-    google()
-    mavenCentral()
-}

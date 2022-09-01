@@ -14,31 +14,31 @@ import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
 import org.hamcrest.Matchers.allOf
 import org.junit.Assert
-import ru.tinkoff.allure.Step
+import ru.tinkoff.allure.step
 
 internal fun tabSwipe(f: DivTabSwipeTestSteps.() -> Unit) = f(DivTabSwipeTestSteps())
 
 @StepsDsl
 class DivTabSwipeTestSteps : DivTestAssetSteps() {
 
-    fun ActivityTestRule<*>.buildContainer(): Unit = Step.step("Build container") {
+    fun ActivityTestRule<*>.buildContainer(): Unit = step("Build container") {
         buildContainer(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 
-    fun swipeTabLeft(): Unit = Step.step("Swipe tab left") {
+    fun swipeTabLeft(): Unit = step("Swipe tab left") {
         tab.perform(swipeLeft())
     }
 
-    fun swipeTabRight(): Unit = Step.step("Swipe tab right") {
+    fun swipeTabRight(): Unit = step("Swipe tab right") {
         tab.perform(swipeRight())
     }
 
-    fun clickOnHeader(header: String) = Step.step("Click on header \"$header\"") {
+    fun clickOnHeader(header: String) = step("Click on header \"$header\"") {
         onView(allOf(withParent(withResourceName("tab_sliding_oval_indicator")),
             withText(header))).scrollTo().tap()
     }
 
-    fun swipeHeadersLeft() = Step.step("Scroll headers") {
+    fun swipeHeadersLeft() = step("Scroll headers") {
         onView(withResourceName("base_tabbed_title_container_scroller")).perform(swipeLeft())
     }
 

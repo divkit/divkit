@@ -18,7 +18,7 @@ import org.junit.runners.Parameterized.Parameters
 import java.io.File
 
 @RunWith(Parameterized::class)
-class Div2RebindScreenshotTest(case: String) {
+class Div2RebindScreenshotTest(case: String, escapedCase: String) {
 
     private val caseRelativePath = case
         .substringAfter("$TEST_CASES_PATH${File.separator}")
@@ -55,12 +55,12 @@ class Div2RebindScreenshotTest(case: String) {
         private val context: Context = ApplicationProvider.getApplicationContext()
 
         @JvmStatic
-        @Parameters(name = "{0}")
-        fun cases(): List<String> {
+        @Parameters(name = "{1}")
+        fun cases(): List<Array<String>> {
             val filter = { filename: String -> filename.endsWith(CASE_EXTENSION) && !filename.contains("templates") }
             val testCases = AssetEnumerator(context).enumerate(TEST_CASES_PATH, filter)
             val productionCases = AssetEnumerator(context).enumerate(PRODUCTION_CASES_PATH, filter)
-            return testCases + productionCases
+            return (testCases + productionCases).withEscapedParameter()
         }
     }
 }

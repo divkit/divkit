@@ -12,7 +12,7 @@ import com.yandex.test.util.StepsDsl
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.hamcrest.TypeSafeMatcher
-import ru.tinkoff.allure.Step.Companion.step
+import ru.tinkoff.allure.step
 
 internal fun superLineHeightTextView(f: SuperLineHeightTextViewSteps.() -> Unit) = f(SuperLineHeightTextViewSteps())
 

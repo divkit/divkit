@@ -26,12 +26,9 @@ ext.versions = [
         picasso                         : '2.8',
         pulse                           : '1.0.10',
         robolectric                     : '4.4',
-        signer                          : '4.7.4',
         stetho                          : '1.5.1',
-        strikt                          : '0.28.1',
-        tinkoffAllure                   : '2.1.5',
-        uikit                           : '0.6.0',
-        uploadBeta                      : '3.4.7'
+        strikt                          : '0.28.2',
+        tinkoffAllure                   : '2.5.1'
 ]
 
 ext.versions.androidx = [

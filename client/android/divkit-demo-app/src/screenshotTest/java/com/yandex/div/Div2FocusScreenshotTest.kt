@@ -14,7 +14,7 @@ import org.junit.runners.Parameterized
 import java.io.File
 
 @RunWith(Parameterized::class)
-class Div2FocusScreenshotTest(case: String) {
+class Div2FocusScreenshotTest(case: String, escapedCase: String) {
 
     private val caseName = case
         .substringAfterLast(File.separator)
@@ -47,9 +47,9 @@ class Div2FocusScreenshotTest(case: String) {
         private val context: Context = ApplicationProvider.getApplicationContext()
 
         @JvmStatic
-        @Parameterized.Parameters(name = "{0}")
+        @Parameterized.Parameters(name = "{1}")
         fun cases() = AssetEnumerator(context).enumerate(TEST_CASES_PATH) { filename ->
             filename.contains(CASE_PREFIX) && filename.endsWith(CASE_EXTENSION)
-        }
+        }.withEscapedParameter()
     }
 }

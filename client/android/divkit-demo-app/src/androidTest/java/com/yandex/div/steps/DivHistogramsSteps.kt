@@ -8,7 +8,7 @@ import com.yandex.divkit.demo.div.histogram.HistogramDispatcher
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.UiAutomator
 import org.junit.Assert
-import ru.tinkoff.allure.Step.Companion.step
+import ru.tinkoff.allure.step
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit

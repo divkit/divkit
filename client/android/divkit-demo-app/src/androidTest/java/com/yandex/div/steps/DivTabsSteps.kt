@@ -12,7 +12,7 @@ import com.yandex.div.utils.ViewPagerActions
 import com.yandex.div.utils.runOnView
 import com.yandex.test.util.StepsDsl
 import org.junit.Assert
-import ru.tinkoff.allure.Step.Companion.step
+import ru.tinkoff.allure.step
 
 internal fun divTabs(f: DivTabsSteps.() -> Unit) = f(DivTabsSteps())
 

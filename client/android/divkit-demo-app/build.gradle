@@ -2,18 +2,11 @@ apply from: "${project.projectDir}/../div-application.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "ui-tests.gradle"
 
-apply plugin: 'upload-beta-android'
 apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.yandex.test.screenshot-test-plugin'
-apply plugin: 'com.getkeepsafe.dexcount'
 
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:3.1.0'
-    }
+repositories {
+    maven { url 'https://repo.gradle.org/gradle/libs-releases' }
 }
 
 android {
@@ -22,54 +15,54 @@ android {
         viewBinding = true
     }
 
-    signingConfigs {
-        yandexDevKey {
-            storeFile rootProject.file("$projectDir/../yandex-dev.keystore")
-            storePassword 'android'
-            keyAlias 'yandex-dev'
-            keyPassword 'android'
-        }
-    }
-
     defaultConfig {
+        versionCode divkitVersion.versionCode + divkitVersion.buildNumber
+        buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
         buildConfigField "String", "ADS_BLOCK_ID", "\"${property('mobileAds.blockId')}\""
-        testInstrumentationRunner "com.yandex.test.runner.AllureAwareAndroidRunner"
+        buildConfigField "String", "METRICA_API_KEY", "\"${project.findProperty("metricaApiKey") ?: ""}\""
+        buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
 
+        testInstrumentationRunner "com.yandex.test.runner.AllureAwareAndroidRunner"
         if (!project.hasProperty("include-regression-tests")) {
             testInstrumentationRunnerArguments.notAnnotation = "com.yandex.alicekit.uitests.annotations.Regression"
         }
-
-        versionCode divkitVersion.versionCode + divkitVersion.buildNumber
-
-        buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
-        buildConfigField "int", "BUILD_NUMBER", "${divkitVersion.buildNumber}"
     }
 
     buildTypes {
         debug {
             minifyEnabled false
-            signingConfig signingConfigs.yandexDevKey
         }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-
-            // Yandex dev key is required by passport in release builds.
-            // Will be replaced with Yandex key by yandex-signer plugin when built on teamcity
-            signingConfig signingConfigs.yandexDevKey
-            yandexSigner.enabled = true
-        }
-        perf {
-            initWith buildTypes.release
-            matchingFallbacks = ['release']
         }
     }
 
     sourceSets {
-        test.resources.srcDirs += 'src/main/assets' // needed to access assets in unit tests. https://stackoverflow.com/a/44180100/190148
-        main.assets.srcDirs += "../../../test_data/"
-        androidTest.java.srcDirs += 'src/screenshotTest/java'
+        main {
+            assets.srcDirs += "../../../test_data/"
+        }
+
+        debug {
+            java.srcDirs = ['src/public/java']
+        }
+
+        release {
+            java.srcDirs = ['src/public/java']
+        }
+
+        test {
+            resources.srcDirs += 'src/main/assets' // needed to access assets in unit tests.
+        }
+
+        androidTest {
+            java.srcDirs += 'src/screenshotTest/java'
+        }
     }
+}
+
+afterEvaluate {
+    println(android.sourceSets.main.java.srcDirs)
 }
 
 configurations.all {
@@ -80,20 +73,6 @@ configurations.all {
             }
         }
     }
-}
-
-def yandexSignerEnabled = Boolean.parseBoolean(project.findProperty("yandexSignerEnabled"))
-
-yandexSigner {
-    enabled = yandexSignerEnabled
-    oauthToken = System.env['YANDEX_SIGNER_OAUTH']
-    applicationName = 'DivkitDemoApp'
-    signedFileSuffix ''
-}
-
-yandexBundleSigner {
-    enabled = yandexSignerEnabled
-    applicationName = 'DivkitDemoAppBundle'
 }
 
 dependencies {
@@ -128,9 +107,7 @@ dependencies {
     implementation "org.jetbrains.anko:anko-recyclerview-v7:$versions.anko"
     implementation "org.jetbrains.anko:anko:$versions.anko"
 
-    implementation "com.yandex.android:mobmetricalib-internal:$versions.metrica"
-    implementation "com.yandex.mobile.perftests:perftests-client:$versions.perftests"
-    implementation "com.yandex:pulse:$versions.pulse"
+    implementation "com.yandex.android:mobmetricalib:$versions.metrica"
 
     implementation "com.facebook.stetho:stetho:$versions.stetho"
     implementation "com.facebook.stetho:stetho-okhttp3:$versions.stetho"
@@ -139,7 +116,7 @@ dependencies {
     implementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
 
     // QR code stuff
-    implementation 'me.dm7.barcodescanner:zxing:1.9.13'
+    implementation 'me.dm7.barcodescanner:zxing:1.9.8'
     implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
     implementation 'com.google.zxing:core:3.4.1'
 
@@ -147,13 +124,6 @@ dependencies {
     androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"
     androidTestImplementation "androidx.lifecycle:lifecycle-viewmodel:$versions.androidx.lifecycle"
     androidTestImplementation "androidx.viewpager2:viewpager2:$versions.androidx.viewpager2"
-}
-
-uploadBeta {
-    applicationName = 'divkit'
-    getBranchId = { defaultBranch, variantData ->
-        return defaultBranch
-    }
 }
 
 screenshotTests {
@@ -165,6 +135,7 @@ screenshotTests {
 }
 
 android.applicationVariants.all { variant ->
+
     variant.outputs.all {
         boolean isPerf = variant.baseName.contains("perf")
 
@@ -176,23 +147,7 @@ android.applicationVariants.all { variant ->
     }
 }
 
-task assemblePerfTests() {
-    def outputPerfDir = "${rootProject.buildDir}/perf"
-
-    doLast {
-        def copied = 0
-        copy {
-            from buildDir
-            into outputPerfDir
-            include "**/divkit-demo-app-*.apk"
-            eachFile { file ->
-                file.path = "app.apk"
-                copied += 1
-            }
-            includeEmptyDirs = false
-        }
-        assert copied == 1 && file("$outputPerfDir/app.apk").exists()
-    }
-
-    dependsOn("assemblePerf")
+def internalConfiguration = file("${project.projectDir}/build-internal.gradle")
+if (internalConfiguration.exists()) {
+    apply from: internalConfiguration
 }

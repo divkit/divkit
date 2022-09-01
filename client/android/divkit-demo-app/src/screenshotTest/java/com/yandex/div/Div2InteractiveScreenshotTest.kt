@@ -15,7 +15,7 @@ import org.junit.runners.Parameterized.Parameters
 import java.io.File
 
 @RunWith(Parameterized::class)
-class Div2InteractiveScreenshotTest(case: String) {
+class Div2InteractiveScreenshotTest(case: String, escapedCase: String) {
 
     private val caseRelativePath = case
         .substringAfter("$TEST_CASES_PATH${File.separator}")
@@ -53,8 +53,8 @@ class Div2InteractiveScreenshotTest(case: String) {
                 case.removePrefix(TEST_CASES_PATH).removeSuffix(CASE_EXTENSION)
 
         @JvmStatic
-        @Parameters(name = "{0}")
-        fun cases(): List<String> {
+        @Parameters(name = "{1}")
+        fun cases(): List<Array<String>> {
             val filter = { filename: String ->
                 filename.endsWith(CASE_EXTENSION) && !filename.contains("templates")
             }
@@ -63,7 +63,7 @@ class Div2InteractiveScreenshotTest(case: String) {
             if (testCases.isEmpty()) {
                 Assert.fail("No testcases found at '$TEST_CASES_PATH'")
             }
-            return testCases
+            return testCases.withEscapedParameter()
         }
     }
 }

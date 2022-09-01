@@ -31,5 +31,5 @@ internal class AndroidDevice(
         exec.runCommand(command = "$adb pull -p $devicePath $hostPath", timeoutSec = 300L)
     }
 
-    fun remove(devicePath: String) = adb("shell rm -r $devicePath")
+    fun remove(devicePath: String) = adb("shell rm -rf $devicePath")
 }

@@ -1,15 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'com.getkeepsafe.dexcount'
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.getkeepsafe.dexcount:dexcount-gradle-plugin:3.1.0'
-    }
-}
 
 android {
     buildFeatures {
@@ -36,9 +26,9 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':div-core')
-    implementation project(path: ':div')
-    implementation project(path: ':div-json')
+    implementation 'com.yandex.div:div-core:3.0.1'
+    implementation 'com.yandex.div:div:3.0.1'
+    implementation 'com.yandex.div:div-json:3.0.1'
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.2'

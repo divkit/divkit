@@ -11,11 +11,12 @@ dependencies {
     api "androidx.test.espresso:espresso-core:$versions.androidx.espresso"
     api "androidx.test.espresso:espresso-intents:$versions.androidx.espresso"
 
-    api "ru.tinkoff.allure:allure-android:$versions.tinkoffAllure@aar"
     api "ru.tinkoff.allure:allure-common:$versions.tinkoffAllure"
     api "ru.tinkoff.allure:allure-model:$versions.tinkoffAllure"
+    api "ru.tinkoff.allure:allure-android:$versions.tinkoffAllure@aar"
 
     implementation project(path: ':utils')
     implementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
     implementation "org.easytesting:fest-reflect:$versions.festReflect"
+    implementation "com.google.code.gson:gson:$versions.gson"  // used by allure
 }

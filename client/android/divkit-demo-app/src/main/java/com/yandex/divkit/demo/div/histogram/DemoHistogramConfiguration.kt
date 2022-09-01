@@ -5,8 +5,7 @@ import com.yandex.div.core.histogram.HistogramBridge
 import com.yandex.div.core.util.KLog
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.RenderConfiguration
-import com.yandex.perftests.core.Reporter
-import com.yandex.perftests.core.Units
+import com.yandex.divkit.demo.perf.PerfMetricReporter
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 
@@ -51,7 +50,7 @@ internal class LoggingHistogramBridge : HistogramBridge {
         recordHistogram("$name: $sample")
         dispatcher?.dispatch(name)
         if (sample <= 0) return
-        Reporter.reportMetric(name, Units.BYTES, sample.toLong())
+        PerfMetricReporter.reportCountMetric(name, sample.toLong())
     }
 
     override fun recordTimeHistogram(
@@ -65,7 +64,7 @@ internal class LoggingHistogramBridge : HistogramBridge {
         recordHistogram("$name: ${unit.toMillis(duration)}")
         dispatcher?.dispatch(name)
         if (duration <= 0) return
-        Reporter.reportMetric(name, Units.MILLISECONDS, unit.toMillis(duration))
+        PerfMetricReporter.reportTimeMetric(name, TimeUnit.MILLISECONDS, unit.toMillis(duration))
     }
 
     override fun recordSparseSlowlyHistogram(name: String, sample: Int) {

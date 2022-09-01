@@ -25,7 +25,7 @@ import org.hamcrest.Matcher
 import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.containsString
 import org.hamcrest.TypeSafeMatcher
-import ru.tinkoff.allure.Step
+import ru.tinkoff.allure.step as allureStep
 
 internal fun slider(f: SliderSteps.() -> Unit) = f(SliderSteps())
 
@@ -35,7 +35,7 @@ internal open class SliderSteps : DivTestAssetSteps() {
     val BUTTON_VALUE_NOT_SURE = "Not sure"
     val BUTTON_VALUE_BAD = "This is bad"
 
-    fun ActivityTestRule<*>.buildContainer(): Unit = Step.step("Build container") {
+    fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
         buildContainer(
             ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT,

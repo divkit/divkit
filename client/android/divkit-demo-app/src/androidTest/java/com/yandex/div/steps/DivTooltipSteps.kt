@@ -21,7 +21,7 @@ import com.yandex.divkit.demo.R
 import com.yandex.test.util.StepsDsl
 import com.yandex.test.util.assertNoPopupsAreDisplayed
 import org.hamcrest.Matchers.allOf
-import ru.tinkoff.allure.Step.Companion.step
+import ru.tinkoff.allure.step
 
 internal fun tooltipDiv(f: DivTooltipSteps.() -> Unit) = f(DivTooltipSteps())
 
