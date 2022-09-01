@@ -45,6 +45,9 @@ public final class TextInputBlock: BlockWithTraits {
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
   public let contentMode: ContentMode
+  public let path: UIElementPath
+  public let onFocusActions: [UserInterfaceAction]
+  public let onBlurActions: [UserInterfaceAction]
   public weak var parentScrollView: ScrollView?
 
   public init(
@@ -59,6 +62,9 @@ public final class TextInputBlock: BlockWithTraits {
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
     contentMode: ContentMode = .topLeft,
+    path: UIElementPath,
+    onFocusActions: [UserInterfaceAction] = [],
+    onBlurActions: [UserInterfaceAction] = [],
     parentScrollView: ScrollView? = nil
   ) {
     self.widthTrait = widthTrait
@@ -72,6 +78,9 @@ public final class TextInputBlock: BlockWithTraits {
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
     self.contentMode = contentMode
+    self.path = path
+    self.onFocusActions = onFocusActions
+    self.onBlurActions = onBlurActions
     self.parentScrollView = parentScrollView
   }
 

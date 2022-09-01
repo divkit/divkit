@@ -54,7 +54,12 @@ extension DivBase {
     // and alpha should be applied to block with border and shadow.
     let visibilityActions = makeVisibilityActions(context: context)
 
+    let focusState: FocusViewState = context.blockStateStorage.getState(context.parentPath) ?? .default
+    let background = getBackground(focusState)
+    let border = getBorder(focusState)
+
     block = applyBackground(
+      background,
       to: block,
       imageHolderFactory: context.imageHolderFactory,
       expressionResolver: expressionResolver
@@ -94,6 +99,22 @@ extension DivBase {
         .flatMap { CGAffineTransform(rotationAngle: CGFloat($0) * .pi / 180) } ?? .identity,
       anchorPoint: anchorPoint
     )
+  }
+
+  private func getBackground(_ focusState: FocusViewState) -> [DivBackground]? {
+    guard focusState.isFocused else {
+      return background
+    }
+    let focusedBackground = focus?.background ?? background
+    return focusedBackground
+  }
+
+  private func getBorder(_ focusState: FocusViewState) -> DivBorder {
+    guard focusState.isFocused else {
+      return border
+    }
+    let focusedBorder = focus?.border ?? border
+    return focusedBorder
   }
 
   func alignment2D(
@@ -198,11 +219,12 @@ extension DivBase {
   }
 
   private func applyBackground(
+    _ backgrounds: [DivBackground]?,
     to block: Block,
     imageHolderFactory: ImageHolderFactory,
     expressionResolver: ExpressionResolver
   ) -> Block {
-    guard let backgrounds = background else {
+    guard let backgrounds = backgrounds else {
       return block
     }
 

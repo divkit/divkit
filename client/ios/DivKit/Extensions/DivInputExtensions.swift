@@ -63,6 +63,12 @@ extension DivInput: DivBlockModeling {
 
     let contentMode = makeContentMode(verticalAlignment: verticalAlignment,
                                       horizontalAlignment: horizontalAlignment)
+    let onFocusActions = (focus?.onFocus ?? []).map {
+      $0.uiAction(context: context.actionContext)
+    }
+    let onBlurActions = (focus?.onBlur ?? []).map {
+      $0.uiAction(context: context.actionContext)
+    }
 
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context.expressionResolver),
@@ -76,6 +82,9 @@ extension DivInput: DivBlockModeling {
       maxVisibleLines: maxVisibleLines,
       selectAllOnFocus: selectAllOnFocus,
       contentMode: contentMode,
+      path: context.parentPath,
+      onFocusActions: onFocusActions,
+      onBlurActions: onBlurActions,
       parentScrollView: context.parentScrollView
     )
   }

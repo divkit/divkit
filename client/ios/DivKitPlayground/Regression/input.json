@@ -3,6 +3,11 @@
         "log_id": "input",
         "variables": [
             {
+                "name": "focusable_text",
+                "type": "string",
+                "value": ""
+            },
+            {
                 "name": "variable_text",
                 "type": "string",
                 "value": ""
@@ -45,6 +50,89 @@
                         }
                     },
                     "items": [
+                        {
+                            "type": "text",
+                            "text": "Change input when it focused",
+                            "font_size": 20,
+                            "margins": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16
+                            }
+                        },
+                        {
+                            "type": "input",
+                            "width": {
+                                "type": "match_parent"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "paddings": {
+                                "left": 16,
+                                "top": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "margins": {
+                                "left": 16,
+                                "right": 16,
+                                "bottom": 16
+                            },
+                            "alpha": 1.0,
+                            "alignment_horizontal": "left",
+                            "background": [
+                                {
+                                    "type": "solid",
+                                    "color": "#FFFFFF"
+                                }
+                            ],
+                            "border": {
+                                "corner_radius": 8,
+                                "has_shadow": 1,
+                                "stroke": {
+                                    "color": "#1F000000"
+                                }
+                            },
+                            "font_size": 20,
+                            "font_weight": "medium",
+                            "text_color": "#000000",
+                            "text_variable": "focusable_text",
+                            "hint_text": "Hint text",
+                            "hint_color": "#8d8d8d",
+                            "highlight_color": "#E74C3C",
+                            "keyboard_type": "single_line_text",
+                            "focus": {
+                                "background": [
+                                    {
+                                        "type": "solid",
+                                        "color": "#FFFF00"
+                                    }
+                                ],
+                                "border": {
+                                    "corner_radius": 8,
+                                    "has_shadow": 1,
+                                    "stroke": {
+                                        "color": "#b81c1c"
+                                    }
+                                },
+                                "on_focus": [
+                                    {
+                                        "log_id": "on_focus_event",
+                                        "url": "div-action://set_variable?name=focusable_text&value=Focused"
+                                    }
+                                ],
+                                "on_blur": [
+                                    {
+                                        "log_id": "on_blur_event",
+                                        "url": "div-action://set_variable?name=focusable_text&value=Blurred"
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "type": "separator"
+                        },
                         {
                             "type": "text",
                             "text": "Keyboard_type:multi_line_text, height:fixed, horizontal:left, vertical:top",

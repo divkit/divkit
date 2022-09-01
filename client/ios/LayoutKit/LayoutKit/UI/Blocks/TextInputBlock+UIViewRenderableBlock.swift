@@ -9,7 +9,7 @@ extension TextInputBlock {
 
   public func configureBlockView(
     _ view: BlockView,
-    observer _: ElementStateObserver?,
+    observer: ElementStateObserver?,
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {
@@ -23,6 +23,10 @@ extension TextInputBlock {
     inputView.setSelectAllOnFocus(selectAllOnFocus)
     inputView.setContentMode(contentMode)
     inputView.setParentScrollView(parentScrollView)
+    inputView.setOnFocusActions(onFocusActions)
+    inputView.setOnBlurActions(onBlurActions)
+    inputView.setPath(path)
+    inputView.setObserver(observer)
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
@@ -40,6 +44,10 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var textValue: Binding<String>? = nil
   private var selectAllOnFocus = false
   private var inputContentMode: TextInputBlock.ContentMode = .topLeft
+  private var onFocusActions: [UserInterfaceAction] = []
+  private var onBlurActions: [UserInterfaceAction] = []
+  private var path: UIElementPath? = nil
+  private weak var observer: ElementStateObserver?
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
@@ -132,6 +140,22 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
 
   func setParentScrollView(_ parentScrollView: ScrollView?) {
     self.parentScrollView = parentScrollView
+  }
+
+  func setOnFocusActions(_ onFocusActions: [UserInterfaceAction]) {
+    self.onFocusActions = onFocusActions
+  }
+
+  func setOnBlurActions(_ onBlurActions: [UserInterfaceAction]) {
+    self.onBlurActions = onBlurActions
+  }
+
+  func setPath(_ path: UIElementPath) {
+    self.path = path
+  }
+
+  func setObserver(_ observer: ElementStateObserver?) {
+    self.observer = observer
   }
 
   func setText(value: Binding<String>, typo: Typo) {
@@ -228,6 +252,7 @@ extension TextInputBlockView {
     if selectAllOnFocus {
       view.selectAll(nil)
     }
+    onFocus()
   }
 
   func inputViewDidChange(_ view: UIView) {
@@ -238,6 +263,7 @@ extension TextInputBlockView {
   func inputViewDidEndEditing(_ view: UIView) {
     stopListeningTap()
     scrollingWasDone = false
+    onBlur()
   }
 
   private func startListeningTap() {
@@ -262,6 +288,18 @@ extension TextInputBlockView {
     guard let scrollView = parentScrollView else { return }
     scrollView.removeGestureRecognizer(tapGestureRecognizer!)
     tapGestureRecognizer = nil
+  }
+
+  private func onFocus() {
+    onFocusActions.perform(sendingFrom: self)
+    guard let path = path else { return }
+    observer?.elementStateChanged(FocusViewState(isFocused: true), forPath: path)
+  }
+
+  private func onBlur() {
+    onBlurActions.perform(sendingFrom: self)
+    guard let path = path else { return }
+    observer?.elementStateChanged(FocusViewState(isFocused: false), forPath: path)
   }
 }
 

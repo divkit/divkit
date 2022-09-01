@@ -94,7 +94,7 @@ open class DivViewController: UIViewController {
   open func onViewUpdated() {}
 
   private func updateBlockView(block: Block) {
-    let elementStateObserver = divKitComponents.blockStateStorage
+    let elementStateObserver = self
     if let blockView = blockView, block.canConfigureBlockView(blockView) {
       block.configureBlockView(
         blockView,
@@ -116,6 +116,13 @@ open class DivViewController: UIViewController {
     let from = lastBounds
     lastBounds = to
     scrollView.onVisibleBoundsChanged(from: from, to: to)
+  }
+}
+
+extension DivViewController: ElementStateObserver {
+  public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
+    divKitComponents.blockStateStorage.elementStateChanged(state, forPath: path)
+    blockProvider.update(patch: nil)
   }
 }
 
