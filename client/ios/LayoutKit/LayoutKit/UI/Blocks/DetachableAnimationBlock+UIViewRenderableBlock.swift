@@ -36,11 +36,15 @@ final class DetachableAnimationBlockView: BlockView {
     didSet {
       if let childView = childView {
         addSubview(childView)
+        animatedView = nil
       } else {
+        animatedView = oldValue
         oldValue?.removeFromSuperview()
       }
     }
   }
+
+  private var animatedView: BlockView?
 
   private var animationIn: [TransitioningAnimation]?
   private var animationOut: [TransitioningAnimation]?
@@ -188,6 +192,6 @@ final class DetachableAnimationBlockView: BlockView {
 
 extension DetachableAnimationBlockView: VisibleBoundsTrackingContainer {
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] {
-    childView.asArray()
+    (childView ?? animatedView).asArray()
   }
 }
