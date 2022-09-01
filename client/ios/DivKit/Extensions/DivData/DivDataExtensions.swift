@@ -7,30 +7,32 @@ extension DivData: DivBlockModeling {
   static let rootPath = DivStatePath(rawValue: UIElementPath("{root}"))
 
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
-    guard let state = findState(for: context.parentDivStatePath?.stateId) else {
+    let stateManager = context.stateManager
+    guard let state = getCurrentState(stateManager: stateManager) else {
       throw DivBlockModelingError("DivData has no states", path: context.parentPath)
     }
 
-    let stateIdString = String(state.stateId)
-    let stateId = DivStateID(rawValue: stateIdString)
-    let statePath = DivStatePath(rawValue: UIElementPath(stateIdString))
+    let stateId = String(state.stateId)
+    let statePath = DivStatePath(rawValue: UIElementPath(stateId))
     let div = state.div
     let divContext = modified(context) {
       $0.cardLogId = $0.cardLogId ?? logId
-      $0.parentPath = $0.parentPath + stateIdString
+      $0.parentPath = $0.parentPath + stateId
       $0.parentDivStatePath = statePath
       if case .divGallery = div {} else {
         $0.galleryResizableInsets = nil
       }
     }
 
-    let stateManager = context.stateManager
     stateManager.updateBlockIdsWithStateChangeTransition(
       statePath: statePath,
       div: div
     )
     let block = try div.value.makeBlock(context: divContext)
-    stateManager.setState(stateBlockPath: DivData.rootPath, stateID: stateId)
+    stateManager.setState(
+      stateBlockPath: DivData.rootPath,
+      stateID: DivStateID(rawValue: stateId)
+    )
     return block
       .addingStateBlock(
         ids: stateManager.getVisibleIds(statePath: statePath)
@@ -44,12 +46,13 @@ extension DivData: DivBlockModeling {
     #endif
   }
 
-  public func findState(for stateId: DivDataStateID?) -> DivData.State? {
-    guard let stateId = stateId?.rawValue else {
+  public func getCurrentState(stateManager: DivStateManager) -> DivData.State? {
+    guard let item = stateManager.get(stateBlockPath: DivData.rootPath) else {
       return states.first
     }
-
-    if let state = states.first(where: { $0.stateId == stateId }) {
+    
+    let stateId = item.currentStateID.rawValue
+    if let state = states.first(where: { String($0.stateId) == stateId }) {
       return state
     }
 

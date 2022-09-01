@@ -7,34 +7,38 @@ import BaseUI
 import CommonCore
 
 final class DivDataExtensionsTests: XCTestCase {
-  func test_WhenStateIsNil_TakesFirstDiv() throws {
-    let block = try data.makeBlock(
-      context: modified(.default) {
-        $0.parentDivStatePath = nil
-      }
-    ).withoutStateBlock()
+  func test_WhenStateIsNil_TakesFirstState() throws {
+    let block = try data
+      .makeBlock(context: .default)
+      .withoutStateBlock()
     let expectedBlock = try data.states[0].div.value
       .makeBlock(context: .default)
     XCTAssertTrue(block == expectedBlock)
   }
 
-  func test_WhenStateIsPresent_TakesCorrespondingDiv() throws {
-    let block = try data.makeBlock(
-      context: modified(.default) {
-        $0.parentDivStatePath = DivStatePath(rawValue: UIElementPath("1"))
-      }
-    ).withoutStateBlock()
+  func test_WhenStateIsPresent_TakesCorrespondingState() throws {
+    let context = DivBlockModelingContext()
+    context.stateManager.setStateWithHistory(
+      path: DivData.rootPath,
+      stateID: DivStateID(rawValue: "1")
+    )
+    let block = try data
+      .makeBlock(context: context)
+      .withoutStateBlock()
     let expectedBlock = try data.states[1].div.value
       .makeBlock(context: .default)
     XCTAssertTrue(block == expectedBlock)
   }
 
-  func test_WhenStateIsNotPresent_TakesFirstState() throws {
-    let block = try data.makeBlock(
-      context: modified(.default) {
-        $0.parentDivStatePath = DivStatePath(rawValue: UIElementPath("100500"))
-      }
-    ).withoutStateBlock()
+  func test_WhenStateIsNotFound_TakesFirstState() throws {
+    let context = DivBlockModelingContext()
+    context.stateManager.setStateWithHistory(
+      path: DivData.rootPath,
+      stateID: DivStateID(rawValue: "100500")
+    )
+    let block = try data
+      .makeBlock(context: context)
+      .withoutStateBlock()
     let expectedBlock = try data.states[0].div.value
       .makeBlock(context: .default)
     XCTAssertTrue(block == expectedBlock)

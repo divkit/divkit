@@ -161,24 +161,6 @@ extension Dictionary where Key == String, Value == Any {
   }
 }
 
-private class DivStateUpdaterImpl: DivStateUpdater {
-  private let stateManager: DivStateManager
-
-  init(stateManager: DivStateManager) {
-    self.stateManager = stateManager
-  }
-
-  func set(
-    path: DivStatePath,
-    cardId _: DivCardID,
-    lifetime _: DivStateLifetime
-  ) {
-    if let (parentPath, stateId) = path.split() {
-      stateManager.setStateWithHistory(path: parentPath, stateID: stateId)
-    }
-  }
-}
-
 func makeImageHolderFactory(requestPerformer: URLRequestPerforming) -> ImageHolderFactory {
   ImageHolderFactory(
     requester: NetworkURLResourceRequester(

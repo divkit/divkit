@@ -13,12 +13,11 @@ public class DefaultDivStateManagement: DivStateManagement {
   public func set(
     path: DivStatePath,
     cardId: DivCardID,
-    lifetime: DivStateLifetime
+    lifetime _: DivStateLifetime
   ) {
     let stateManager = getStateManagerForCard(cardId: cardId)
-    if let (parentPath, stateId) = path.split() {
-      stateManager.setStateWithHistory(path: parentPath, stateID: stateId)
-    }
+    let (parentPath, stateId) = path.split() ?? (DivData.rootPath, DivStateID(rawValue: path.rawValue.root))
+    stateManager.setStateWithHistory(path: parentPath, stateID: stateId)
     stateManagersForCards[cardId] = stateManager
   }
 
