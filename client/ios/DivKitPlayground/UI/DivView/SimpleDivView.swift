@@ -52,7 +52,9 @@ private final class SimpleDivUIView: UIView {
 
     if let jsonData = jsonData {
       do {
-        divData = try divKitComponents.parseDivData(jsonData, cardId: cardId)
+        divData = try divKitComponents
+          .parseDivDataWithTemplates(jsonData, cardId: cardId)
+          .unwrap()
       } catch {
         block = makeErrorBlock("\(error)")
       }

@@ -83,20 +83,43 @@ public final class DivKitComponents {
     _ jsonDict: [String: Any],
     cardId: DivCardID
   ) throws -> DeserializationResult<DivData> {
-    let result = try jsonDict.parseDivData()
+    try parseDivDataWithTemplates(["card": jsonDict], cardId: cardId)
+  }
+
+  /// Parses DivData from JSON in following format:
+  /// {
+  ///   "card": { ... },
+  ///   "templates": { ... }
+  /// }
+  public func parseDivDataWithTemplates(
+    _ jsonDict: [String: Any],
+    cardId: DivCardID
+  ) throws -> DeserializationResult<DivData> {
+    let rawDivData = try RawDivData(dictionary: jsonDict)
+    let result = DivData.resolve(
+      card: rawDivData.card,
+      templates: rawDivData.templates
+    )
     if let divData = result.value {
       setVariablesAndTriggers(divData: divData, cardId: cardId)
     }
     return result
   }
 
-  public func parseDivData(
+  /// Parses DivData from JSON in following format:
+  /// {
+  ///   "card": { ... },
+  ///   "templates": { ... }
+  /// }
+  public func parseDivDataWithTemplates(
     _ jsonData: Data,
     cardId: DivCardID
-  ) throws -> DivData {
-    let divData = try jsonData.parseDivData()
-    setVariablesAndTriggers(divData: divData, cardId: cardId)
-    return divData
+  ) throws -> DeserializationResult<DivData> {
+    guard let jsonObj = try? JSONSerialization.jsonObject(with: jsonData),
+          let jsonDict = jsonObj as? [String: Any] else {
+      throw DeserializationError.invalidJSONData(data: jsonData)
+    }
+    return try parseDivDataWithTemplates(jsonDict, cardId: cardId)
   }
 
   public func makeContext(
@@ -137,26 +160,6 @@ public final class DivKitComponents {
     triggersStorage.set(
       cardId: cardId,
       triggers: divData?.variableTriggers ?? []
-    )
-  }
-}
-
-extension Data {
-  fileprivate func parseDivData() throws -> DivData {
-    guard let jsonObj = try? JSONSerialization.jsonObject(with: self),
-          let jsonDict = jsonObj as? [String: Any] else {
-      throw DeserializationError.invalidJSONData(data: self)
-    }
-    return try jsonDict.parseDivData().unwrap()
-  }
-}
-
-extension Dictionary where Key == String, Value == Any {
-  fileprivate func parseDivData() throws -> DeserializationResult<DivData> {
-    let rawDivData = try RawDivData(dictionary: self)
-    return DivData.resolve(
-      card: rawDivData.card,
-      templates: rawDivData.templates
     )
   }
 }

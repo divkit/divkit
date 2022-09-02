@@ -93,7 +93,7 @@ final class DivBlockProvider {
       divKitComponents.variablesStorage
         .set(variables: paletteVariables, triggerUpdate: false)
 
-      let result = try divKitComponents.parseDivData(json, cardId: cardId)
+      let result = try divKitComponents.parseDivDataWithTemplates(json, cardId: cardId)
       divData = result.value
       errors = result.errorsOrWarnings.map {
         $0.map {
