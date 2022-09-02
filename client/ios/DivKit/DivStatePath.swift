@@ -3,6 +3,8 @@ import LayoutKit
 
 public enum CardIDTag {}
 public typealias DivCardID = Tagged<CardIDTag, String>
+public enum DivDataStateIDTag {}
+public typealias DivDataStateID = Tagged<DivDataStateIDTag, Int>
 public enum DivStateIDTag {}
 public typealias DivStateID = Tagged<DivStateIDTag, String>
 public enum DivStatePathTag {}
@@ -33,6 +35,10 @@ extension Tagged where Tag == DivStatePathTag, RawValue == UIElementPath {
     return DivStatePath(rawValue: path)
   }
 
+  public var stateId: DivDataStateID? {
+    Int(rawValue.root).map(DivDataStateID.init(rawValue:))
+  }
+
   public var stateBlockPath: DivStatePath {
     if let parentElement = rawValue.parent {
       return DivStatePath(rawValue: parentElement)
@@ -54,6 +60,12 @@ extension Tagged where Tag == DivStatePathTag, RawValue == UIElementPath {
 
   public static func +(parent: DivStatePath, blockId: String) -> DivBlockPath {
     DivBlockPath(rawValue: parent.rawValue + blockId)
+  }
+}
+
+extension Tagged where Tag == DivDataStateIDTag, RawValue == Int {
+  public func asPath() -> DivStatePath {
+    DivStatePath(rawValue: UIElementPath("\(rawValue)"))
   }
 }
 
