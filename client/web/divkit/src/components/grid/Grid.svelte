@@ -2,24 +2,24 @@
     import { getContext } from 'svelte';
     import { derived, Readable } from 'svelte/store';
 
-    import css from './grid.module.css';
+    import css from './Grid.module.css';
 
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivGridData } from '../types/grid';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { DivBaseData } from '../types/base';
-    import type { Size } from '../types/sizes';
-    import type { AlignmentHorizontal, AlignmentVertical } from '../types/alignment';
-    import type { MaybeMissing } from '../expressions/json';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import Outer from './outer.svelte';
-    import Unknown from './unknown.svelte';
-    import { wrapError } from '../utils/wrapError';
-    import { genClassName } from '../utils/genClassName';
-    import { gridCalcTemplates } from '../utils/gridCalcTemplates';
-    import { correctPositiveNumber } from '../utils/correctPositiveNumber';
-    import { correctAlignmentVertical } from '../utils/correctAlignmentVertical';
-    import { correctAlignmentHorizontal } from '../utils/correctAlignmentHorizontal';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivGridData } from '../../types/grid';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivBaseData } from '../../types/base';
+    import type { Size } from '../../types/sizes';
+    import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type { MaybeMissing } from '../../expressions/json';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
+    import { wrapError } from '../../utils/wrapError';
+    import { genClassName } from '../../utils/genClassName';
+    import { gridCalcTemplates } from '../../utils/gridCalcTemplates';
+    import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
+    import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
 
     export let json: Partial<DivGridData> = {};
     export let templateContext: TemplateContext;

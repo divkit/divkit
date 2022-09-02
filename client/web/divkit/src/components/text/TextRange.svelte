@@ -1,18 +1,18 @@
 <script lang="ts">
-    import css from './textRange.module.css';
+    import css from './TextRange.module.css';
 
-    import type { TextRange } from '../types/text';
-    import type { Action } from '../../typings/common';
-    import type { MaybeMissing } from '../expressions/json';
-    import Actionable from './actionable.svelte';
-    import { pxToEm } from '../utils/pxToEm';
-    import { makeStyle } from '../utils/makeStyle';
-    import { genClassName } from '../utils/genClassName';
-    import { correctPositiveNumber } from '../utils/correctPositiveNumber';
-    import { isPositiveNumber } from '../utils/isPositiveNumber';
-    import { correctFontWeight } from '../utils/correctFontWeight';
-    import { correctColor } from '../utils/correctColor';
-    import { isNonNegativeNumber } from '../utils/isNonNegativeNumber';
+    import type { TextRange } from '../../types/text';
+    import type { Action } from '../../../typings/common';
+    import type { MaybeMissing } from '../../expressions/json';
+    import Actionable from '../utilities/Actionable.svelte';
+    import { pxToEm } from '../../utils/pxToEm';
+    import { makeStyle } from '../../utils/makeStyle';
+    import { genClassName } from '../../utils/genClassName';
+    import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
+    import { isPositiveNumber } from '../../utils/isPositiveNumber';
+    import { correctFontWeight } from '../../utils/correctFontWeight';
+    import { correctColor } from '../../utils/correctColor';
+    import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
 
     export let text: string;
     export let rootFontSize: number;

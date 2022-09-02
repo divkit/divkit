@@ -1,22 +1,22 @@
 <script lang="ts">
     import { getContext, tick } from 'svelte';
 
-    import rootCss from './root.module.css';
-    import css from './indicator.module.css';
+    import rootCss from '../Root.module.css';
+    import css from './Indicator.module.css';
 
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { DivIndicatorData } from '../types/indicator';
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { PagerData } from '../stores/pagers';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivIndicatorData } from '../../types/indicator';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { PagerData } from '../../stores/pagers';
 
-    import Outer from './outer.svelte';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { genClassName } from '../utils/genClassName';
-    import { correctNonNegativeNumber } from '../utils/correctNonNegativeNumber';
-    import { pxToEm } from '../utils/pxToEm';
-    import { correctColor } from '../utils/correctColor';
-    import { correctPositiveNumber } from '../utils/correctPositiveNumber';
-    import { ARROW_LEFT, ARROW_RIGHT, END, HOME } from '../utils/keyboard/codes';
+    import Outer from '../utilities/Outer.svelte';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { genClassName } from '../../utils/genClassName';
+    import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
+    import { pxToEm } from '../../utils/pxToEm';
+    import { correctColor } from '../../utils/correctColor';
+    import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
+    import { ARROW_LEFT, ARROW_RIGHT, END, HOME } from '../../utils/keyboard/codes';
 
     export let json: Partial<DivIndicatorData> = {};
     export let templateContext: TemplateContext;

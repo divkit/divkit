@@ -1,23 +1,23 @@
 <script lang="ts">
     import { getContext } from 'svelte';
 
-    import css from './slider.module.css';
+    import css from './Slider.module.css';
 
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { DivSliderData } from '../types/slider';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { ACTION_CTX, ActionCtxValue } from '../context/action';
-    import { genClassName } from '../utils/genClassName';
-    import { correctDrawableStyle, DrawableStyle } from '../utils/correctDrawableStyles';
-    import { pxToEm, pxToEmWithUnits } from '../utils/pxToEm';
-    import { correctSliderTextStyle, TransformedSliderTextStyle } from '../utils/correctSliderTextStyle';
-    import { wrapError } from '../utils/wrapError';
-    import { isNonNegativeNumber } from '../utils/isNonNegativeNumber';
-    import { clamp } from '../utils/clamp';
-    import { correctNumber } from '../utils/correctNumber';
-    import Outer from './outer.svelte';
-    import { createVariable } from '../expressions/variable';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivSliderData } from '../../types/slider';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { ACTION_CTX, ActionCtxValue } from '../../context/action';
+    import { genClassName } from '../../utils/genClassName';
+    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
+    import { correctSliderTextStyle, TransformedSliderTextStyle } from '../../utils/correctSliderTextStyle';
+    import { wrapError } from '../../utils/wrapError';
+    import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
+    import { clamp } from '../../utils/clamp';
+    import { correctNumber } from '../../utils/correctNumber';
+    import Outer from '../utilities/Outer.svelte';
+    import { createVariable } from '../../expressions/variable';
 
     export let json: Partial<DivSliderData> = {};
     export let templateContext: TemplateContext;

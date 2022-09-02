@@ -1,15 +1,15 @@
 <script lang="ts">
     import { getContext, setContext } from 'svelte';
 
-    import rootCss from './root.module.css';
+    import rootCss from '../Root.module.css';
 
-    import type { Action } from '../../typings/common';
-    import type { MaybeMissing } from '../expressions/json';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { doNothing } from '../utils/doNothing';
-    import { ACTION_CTX, ActionCtxValue } from '../context/action';
-    import { wrapError } from '../utils/wrapError';
-    import { getUrlSchema, isBuiltinSchema } from '../utils/url';
+    import type { Action } from '../../../typings/common';
+    import type { MaybeMissing } from '../../expressions/json';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { doNothing } from '../../utils/doNothing';
+    import { ACTION_CTX, ActionCtxValue } from '../../context/action';
+    import { wrapError } from '../../utils/wrapError';
+    import { getUrlSchema, isBuiltinSchema } from '../../utils/url';
 
     export let actions: MaybeMissing<Action[]> | undefined = undefined;
     export let cls = '';

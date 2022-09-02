@@ -3,7 +3,7 @@
     import { setContext } from 'svelte';
     import { derived, writable } from 'svelte/store';
 
-    import css from './root.module.css';
+    import css from './Root.module.css';
 
     import type {
         Action,
@@ -21,8 +21,8 @@
     import type { AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { DivStateData } from '../types/state';
-    import Unknown from './unknown.svelte';
-    import RootSvgFilters from './rootSvgFilters.svelte';
+    import Unknown from './utilities/Unknown.svelte';
+    import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { ROOT_CTX, RootCtxValue, Running } from '../context/root';
     import { applyTemplate } from '../utils/applyTemplate';
     import { wrapError, WrappedError } from '../utils/wrapError';

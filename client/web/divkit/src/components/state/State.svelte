@@ -1,21 +1,21 @@
 <script lang="ts">
     import { setContext, getContext, tick } from 'svelte';
 
-    import css from './state.module.css';
+    import css from './State.module.css';
 
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { DivStateData, State } from '../types/state';
-    import type { AnyTransition, AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
-    import type { ChangeBoundsTransition } from '../types/base';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { wrapError } from '../utils/wrapError';
-    import { STATE_CTX, StateCtxValue, StateInterface } from '../context/state';
-    import { calcMaxDuration, inOutTransition } from '../utils/inOutTransition';
-    import { changeBoundsTransition } from '../utils/changeBoundsTransition';
-    import { flattenTransition } from '../utils/flattenTransition';
-    import Outer from './outer.svelte';
-    import Unknown from './unknown.svelte';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivStateData, State } from '../../types/state';
+    import type { AnyTransition, AppearanceTransition, DivBaseData, TransitionChange } from '../../types/base';
+    import type { ChangeBoundsTransition } from '../../types/base';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { wrapError } from '../../utils/wrapError';
+    import { STATE_CTX, StateCtxValue, StateInterface } from '../../context/state';
+    import { calcMaxDuration, inOutTransition } from '../../utils/inOutTransition';
+    import { changeBoundsTransition } from '../../utils/changeBoundsTransition';
+    import { flattenTransition } from '../../utils/flattenTransition';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
 
     export let json: Partial<DivStateData> = {};
     export let templateContext: TemplateContext;

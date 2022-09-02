@@ -1,4 +1,4 @@
-import Root from './components/root.svelte';
+import Root from './components/Root.svelte';
 import type { Platform, Theme } from '../typings/common';
 import type { GlobalVariablesController } from './expressions/globalVariablesController';
 

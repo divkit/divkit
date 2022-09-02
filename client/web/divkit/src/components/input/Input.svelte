@@ -1,22 +1,22 @@
 <script lang="ts">
     import { getContext, onMount } from 'svelte';
 
-    import css from './input.module.css';
+    import css from './Input.module.css';
 
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { DivInputData, KeyboardType } from '../types/input';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { genClassName } from '../utils/genClassName';
-    import { pxToEm } from '../utils/pxToEm';
-    import { wrapError } from '../utils/wrapError';
-    import { correctColor } from '../utils/correctColor';
-    import { correctPositiveNumber } from '../utils/correctPositiveNumber';
-    import { correctFontWeight } from '../utils/correctFontWeight';
-    import { isPositiveNumber } from '../utils/isPositiveNumber';
-    import { isNumber } from '../utils/isNumber';
-    import Outer from './outer.svelte';
-    import { createVariable } from '../expressions/variable';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivInputData, KeyboardType } from '../../types/input';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { genClassName } from '../../utils/genClassName';
+    import { pxToEm } from '../../utils/pxToEm';
+    import { wrapError } from '../../utils/wrapError';
+    import { correctColor } from '../../utils/correctColor';
+    import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
+    import { correctFontWeight } from '../../utils/correctFontWeight';
+    import { isPositiveNumber } from '../../utils/isPositiveNumber';
+    import { isNumber } from '../../utils/isNumber';
+    import Outer from '../utilities/Outer.svelte';
+    import { createVariable } from '../../expressions/variable';
 
     export let json: Partial<DivInputData> = {};
     export let templateContext: TemplateContext;

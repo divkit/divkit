@@ -1,5 +1,5 @@
 <script lang="ts">
-    import css from './rootSvgFilters.module.css';
+    import css from './RootSvgFilters.module.css';
 
     export let svgFiltersMap: Record<string, string>;
 </script>

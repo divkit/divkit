@@ -2,25 +2,25 @@
     import { getContext } from 'svelte';
     import { derived, Readable } from 'svelte/store';
 
-    import css from './container.module.css';
+    import css from './Container.module.css';
 
-    import type { Style } from '../types/general';
-    import type { ContainerOrientation, DivContainerData } from '../types/container';
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { Size } from '../types/sizes';
-    import type { DivBaseData } from '../types/base';
-    import type { AlignmentHorizontal, AlignmentVertical } from '../types/alignment';
-    import type { MaybeMissing } from '../expressions/json';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import Outer from './outer.svelte';
-    import Unknown from './unknown.svelte';
-    import { wrapError } from '../utils/wrapError';
-    import { genClassName } from '../utils/genClassName';
-    import { correctContainerOrientation } from '../utils/correctContainerOrientation';
-    import { correctAlignmentVertical } from '../utils/correctAlignmentVertical';
-    import { correctAlignmentHorizontal } from '../utils/correctAlignmentHorizontal';
-    import { assignIfDifferent } from '../utils/assignIfDifferent';
+    import type { Style } from '../../types/general';
+    import type { ContainerOrientation, DivContainerData } from '../../types/container';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { Size } from '../../types/sizes';
+    import type { DivBaseData } from '../../types/base';
+    import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type { MaybeMissing } from '../../expressions/json';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
+    import { wrapError } from '../../utils/wrapError';
+    import { genClassName } from '../../utils/genClassName';
+    import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
+    import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
+    import { assignIfDifferent } from '../../utils/assignIfDifferent';
 
     export let json: Partial<DivContainerData> = {};
     export let templateContext: TemplateContext;

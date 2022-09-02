@@ -1,12 +1,12 @@
 <script lang="ts">
     import { getContext } from 'svelte';
     import type { SvelteComponent } from 'svelte';
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { DivBaseData } from '../types/base';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { wrapError } from '../utils/wrapError';
-    import { TYPE_MAP } from './typeMap';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivBaseData } from '../../types/base';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { wrapError } from '../../utils/wrapError';
+    import { TYPE_MAP } from '../typeMap';
 
     export let div: DivBaseData;
     export let templateContext: TemplateContext;

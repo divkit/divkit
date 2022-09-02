@@ -1,16 +1,16 @@
 import { SvelteComponent } from 'svelte';
-import Text from './text.svelte';
-import Container from './container.svelte';
-import Separator from './separator.svelte';
-import Image from './image.svelte';
-import Grid from './grid.svelte';
-import Gallery from './gallery.svelte';
-import Tabs from './tabs.svelte';
-import State from './state.svelte';
-import Pager from './pager.svelte';
-import Indicator from './indicator.svelte';
-import Slider from './slider.svelte';
-import Input from './input.svelte';
+import Text from './text/Text.svelte';
+import Container from './container/Container.svelte';
+import Separator from './separator/Separator.svelte';
+import Image from './image/Image.svelte';
+import Grid from './grid/Grid.svelte';
+import Gallery from './gallery/Gallery.svelte';
+import Tabs from './tabs/Tabs.svelte';
+import State from './state/State.svelte';
+import Pager from './pager/Pager.svelte';
+import Indicator from './indicator/Indicator.svelte';
+import Slider from './slider/Slider.svelte';
+import Input from './input/Input.svelte';
 
 export const TYPE_MAP: Record<string, typeof SvelteComponent> = {
     text: Text,

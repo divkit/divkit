@@ -1,19 +1,19 @@
 <script lang="ts">
     import { getContext } from 'svelte';
 
-    import css from './separator.module.css';
+    import css from './Separator.module.css';
 
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivSeparatorData } from '../types/separator';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { Orientation } from '../types/orientation';
-    import Outer from './outer.svelte';
-    import { makeStyle } from '../utils/makeStyle';
-    import { pxToEm } from '../utils/pxToEm';
-    import { genClassName } from '../utils/genClassName';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { correctGeneralOrientation } from '../utils/correctGeneralOrientation';
-    import { correctColor } from '../utils/correctColor';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivSeparatorData } from '../../types/separator';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { Orientation } from '../../types/orientation';
+    import Outer from '../utilities/Outer.svelte';
+    import { makeStyle } from '../../utils/makeStyle';
+    import { pxToEm } from '../../utils/pxToEm';
+    import { genClassName } from '../../utils/genClassName';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { correctGeneralOrientation } from '../../utils/correctGeneralOrientation';
+    import { correctColor } from '../../utils/correctColor';
 
     export let json: Partial<DivSeparatorData> = {};
     export let templateContext: TemplateContext;

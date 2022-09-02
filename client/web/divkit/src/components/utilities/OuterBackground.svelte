@@ -1,11 +1,11 @@
 <script lang="ts">
-    import css from './outerBackground.module.css';
+    import css from './OuterBackground.module.css';
 
-    import type { Style } from '../types/general';
-    import type { Background } from '../types/background';
-    import type { MaybeMissing } from '../expressions/json';
-    import { getBackground } from '../utils/background';
-    import { makeStyle } from '../utils/makeStyle';
+    import type { Style } from '../../types/general';
+    import type { Background } from '../../types/background';
+    import type { MaybeMissing } from '../../expressions/json';
+    import { getBackground } from '../../utils/background';
+    import { makeStyle } from '../../utils/makeStyle';
 
     export let background: MaybeMissing<Background[]> = [];
 

@@ -1,22 +1,22 @@
 <script lang="ts">
     import { getContext, onDestroy } from 'svelte';
 
-    import css from './image.module.css';
+    import css from './Image.module.css';
 
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivImageData } from '../types/image';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { AlignmentHorizontal, AlignmentVertical } from '../types/alignment';
-    import Outer from './outer.svelte';
-    import { makeStyle } from '../utils/makeStyle';
-    import { genClassName } from '../utils/genClassName';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { wrapError } from '../utils/wrapError';
-    import { htmlFilter } from '../utils/htmlFilter';
-    import { imageSize } from '../utils/background';
-    import { correctImagePosition } from '../utils/correctImagePosition';
-    import { isPositiveNumber } from '../utils/isPositiveNumber';
-    import { correctColor } from '../utils/correctColor';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivImageData } from '../../types/image';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import Outer from '../utilities/Outer.svelte';
+    import { makeStyle } from '../../utils/makeStyle';
+    import { genClassName } from '../../utils/genClassName';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { wrapError } from '../../utils/wrapError';
+    import { htmlFilter } from '../../utils/htmlFilter';
+    import { imageSize } from '../../utils/background';
+    import { correctImagePosition } from '../../utils/correctImagePosition';
+    import { isPositiveNumber } from '../../utils/isPositiveNumber';
+    import { correctColor } from '../../utils/correctColor';
 
     export let json: Partial<DivImageData> = {};
     export let templateContext: TemplateContext;

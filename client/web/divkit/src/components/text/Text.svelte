@@ -1,30 +1,30 @@
 <script lang="ts">
     import { getContext, onDestroy } from 'svelte';
 
-    import css from './text.module.css';
-    import rootCss from './root.module.css';
+    import css from './Text.module.css';
+    import rootCss from '../Root.module.css';
 
-    import type { DivTextData, TextImage, TextRange, TextStyles } from '../types/text';
-    import type { Style } from '../types/general';
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { Action, DivBase, TemplateContext } from '../../typings/common';
-    import type { AlignmentHorizontal, AlignmentVertical } from '../types/alignment';
-    import type { MaybeMissing } from '../expressions/json';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import Outer from './outer.svelte';
-    import TextRangeView from './textRange.svelte';
-    import { makeStyle } from '../utils/makeStyle';
-    import { pxToEm } from '../utils/pxToEm';
-    import { wrapError } from '../utils/wrapError';
-    import { genClassName } from '../utils/genClassName';
-    import { getBackground } from '../utils/background';
-    import { correctPositiveNumber } from '../utils/correctPositiveNumber';
-    import { isPositiveNumber } from '../utils/isPositiveNumber';
-    import { correctAlignmentHorizontal } from '../utils/correctAlignmentHorizontal';
-    import { correctAlignmentVertical } from '../utils/correctAlignmentVertical';
-    import { correctColor } from '../utils/correctColor';
-    import { correctBooleanInt } from '../utils/correctBooleanInt';
-    import { propToString } from '../utils/propToString';
+    import type { DivTextData, TextImage, TextRange, TextStyles } from '../../types/text';
+    import type { Style } from '../../types/general';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { Action, DivBase, TemplateContext } from '../../../typings/common';
+    import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type { MaybeMissing } from '../../expressions/json';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import Outer from '../utilities/Outer.svelte';
+    import TextRangeView from './TextRange.svelte';
+    import { makeStyle } from '../../utils/makeStyle';
+    import { pxToEm } from '../../utils/pxToEm';
+    import { wrapError } from '../../utils/wrapError';
+    import { genClassName } from '../../utils/genClassName';
+    import { getBackground } from '../../utils/background';
+    import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
+    import { isPositiveNumber } from '../../utils/isPositiveNumber';
+    import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
+    import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
+    import { correctColor } from '../../utils/correctColor';
+    import { correctBooleanInt } from '../../utils/correctBooleanInt';
+    import { propToString } from '../../utils/propToString';
 
     export let json: Partial<DivTextData> = {};
     export let templateContext: TemplateContext;

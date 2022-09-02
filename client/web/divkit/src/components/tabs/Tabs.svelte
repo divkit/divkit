@@ -1,31 +1,31 @@
 <script lang="ts">
     import { getContext, tick } from 'svelte';
 
-    import css from './tabs.module.css';
+    import css from './Tabs.module.css';
 
-    import type { Mods } from '../types/general';
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { DivTabsData } from '../types/tabs';
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { EdgeInsets } from '../types/edgeInserts';
-    import type { SwitchElements, Overflow } from '../types/switch-elements';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import Outer from './outer.svelte';
-    import Unknown from './unknown.svelte';
-    import { wrapError } from '../utils/wrapError';
-    import { genClassName } from '../utils/genClassName';
-    import Actionable from './actionable.svelte';
-    import { makeStyle } from '../utils/makeStyle';
-    import { ARROW_LEFT, ARROW_RIGHT, END, HOME } from '../utils/keyboard/codes';
-    import { pxToEm } from '../utils/pxToEm';
-    import { isPositiveNumber } from '../utils/isPositiveNumber';
-    import { correctPositiveNumber } from '../utils/correctPositiveNumber';
-    import { correctEdgeInserts } from '../utils/correctEdgeInserts';
-    import { correctBorderRadius } from '../utils/correctBorderRadius';
-    import { correctColor } from '../utils/correctColor';
-    import { correctFontWeight } from '../utils/correctFontWeight';
-    import { TabItem } from '../types/tabs';
-    import { isNonNegativeNumber } from '../utils/isNonNegativeNumber';
+    import type { Mods } from '../../types/general';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { DivTabsData } from '../../types/tabs';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { EdgeInsets } from '../../types/edgeInserts';
+    import type { SwitchElements, Overflow } from '../../types/switch-elements';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
+    import Actionable from '../utilities/Actionable.svelte';
+    import { wrapError } from '../../utils/wrapError';
+    import { genClassName } from '../../utils/genClassName';
+    import { makeStyle } from '../../utils/makeStyle';
+    import { ARROW_LEFT, ARROW_RIGHT, END, HOME } from '../../utils/keyboard/codes';
+    import { pxToEm } from '../../utils/pxToEm';
+    import { isPositiveNumber } from '../../utils/isPositiveNumber';
+    import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
+    import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
+    import { correctBorderRadius } from '../../utils/correctBorderRadius';
+    import { correctColor } from '../../utils/correctColor';
+    import { correctFontWeight } from '../../utils/correctFontWeight';
+    import { TabItem } from '../../types/tabs';
+    import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
 
     export let json: Partial<DivTabsData> = {};
     export let templateContext: TemplateContext;

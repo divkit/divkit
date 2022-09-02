@@ -1,27 +1,27 @@
 <script lang="ts">
     import { getContext, onMount } from 'svelte';
 
-    import css from './pager.module.css';
+    import css from './Pager.module.css';
 
-    import type { DivBase, TemplateContext } from '../../typings/common';
-    import type { DivBaseData } from '../types/base';
-    import type { DivPagerData } from '../types/pager';
-    import type { LayoutParams } from '../types/layoutParams';
-    import type { Orientation } from '../types/orientation';
-    import type { PagerData } from '../stores/pagers';
-    import type { Overflow, SwitchElements } from '../types/switch-elements';
+    import type { DivBase, TemplateContext } from '../../../typings/common';
+    import type { DivBaseData } from '../../types/base';
+    import type { DivPagerData } from '../../types/pager';
+    import type { LayoutParams } from '../../types/layoutParams';
+    import type { Orientation } from '../../types/orientation';
+    import type { PagerData } from '../../stores/pagers';
+    import type { Overflow, SwitchElements } from '../../types/switch-elements';
 
-    import Outer from './outer.svelte';
-    import Unknown from './unknown.svelte';
-    import { ROOT_CTX, RootCtxValue } from '../context/root';
-    import { wrapError } from '../utils/wrapError';
-    import { genClassName } from '../utils/genClassName';
-    import { pxToEm, pxToEmWithUnits } from '../utils/pxToEm';
-    import { makeStyle } from '../utils/makeStyle';
-    import { correctGeneralOrientation } from '../utils/correctGeneralOrientation';
-    import { correctEdgeInserts } from '../utils/correctEdgeInserts';
-    import { isNonNegativeNumber } from '../utils/isNonNegativeNumber';
-    import { debounce } from '../utils/debounce';
+    import Outer from '../utilities/Outer.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { wrapError } from '../../utils/wrapError';
+    import { genClassName } from '../../utils/genClassName';
+    import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
+    import { makeStyle } from '../../utils/makeStyle';
+    import { correctGeneralOrientation } from '../../utils/correctGeneralOrientation';
+    import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
+    import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
+    import { debounce } from '../../utils/debounce';
 
     export let json: Partial<DivPagerData> = {};
     export let templateContext: TemplateContext;
