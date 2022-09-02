@@ -1,11 +1,7 @@
 package com.yandex.div.core.expression.variables
 
-import android.os.Looper
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,7 +12,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.Shadows.shadowOf
 
 @RunWith(RobolectricTestRunner::class)
 class VariableChangeSubscribeHelperTest {
@@ -58,23 +53,6 @@ class VariableChangeSubscribeHelperTest {
         subscribe(variable.name) { value -> lastValue = value }
 
         Assert.assertEquals("non-initialized", lastValue)
-    }
-
-    @Test
-    fun `callback is invoked on main thread even if subscribe from bg`() = runBlocking {
-        var lastValue: String? = "non-initialized"
-        val variable = Variable.StringVariable("late_init_variable", "declared_value")
-        whenever(variableController.getMutableVariable(variable.name)).thenReturn(variable)
-
-        withContext(Dispatchers.IO) {
-            subscribe(variable.name, true) { value ->
-                Assert.assertEquals(Looper.getMainLooper(), Looper.myLooper())
-                lastValue = value
-            }
-        }
-
-        shadowOf(Looper.getMainLooper()).idle()
-        Assert.assertEquals("declared_value", lastValue)
     }
 
     private fun subscribe(

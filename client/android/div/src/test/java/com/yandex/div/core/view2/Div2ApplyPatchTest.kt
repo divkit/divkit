@@ -38,7 +38,7 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/container", "container-patch-transactional.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -53,8 +53,8 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/container", "container-broken-patch-transactional.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2View.bindOnAttachRunnable?.invoke()
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2View.bindOnAttachRunnable?.onAttach()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -68,7 +68,7 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/container", "container-patch-partial.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -82,7 +82,7 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/grid", "grid-patch-transactional.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -97,8 +97,8 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/grid", "grid-patch-transactional-broken.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2View.bindOnAttachRunnable?.invoke()
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2View.bindOnAttachRunnable?.onAttach()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -112,7 +112,7 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/grid", "grid-patch-partial.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -126,7 +126,7 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/gallery", "gallery-patch-transactional.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -141,8 +141,8 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/gallery", "gallery-patch-transactional-broken.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2View.bindOnAttachRunnable?.invoke()
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2View.bindOnAttachRunnable?.onAttach()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -156,7 +156,7 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/gallery", "gallery-patch-partial.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -170,7 +170,7 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/pager", "pager-patch-transactional.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -185,8 +185,8 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/pager", "pager-patch-transactional-broken.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2View.bindOnAttachRunnable?.invoke()
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2View.bindOnAttachRunnable?.onAttach()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }
@@ -200,7 +200,7 @@ class Div2ApplyPatchTest {
         val patch = UnitTestData("$PATCH_DIR/pager", "pager-patch-partial.json").patchWithTemplates
         div2View.applyPatch(patch)
 
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }

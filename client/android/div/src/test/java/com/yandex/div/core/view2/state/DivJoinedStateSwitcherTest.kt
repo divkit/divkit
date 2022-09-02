@@ -38,7 +38,7 @@ class DivJoinedStateSwitcherTest {
             DivData(logId = "id", states = listOf(divDataState)),
             DivDataTag("tag")
         )
-        bindOnAttachRunnable?.invoke()
+        bindOnAttachRunnable?.onAttach()
     }
 
     private val stateSwitcher = DivJoinedStateSwitcher(div2View, viewBinder)

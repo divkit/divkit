@@ -10,12 +10,12 @@ internal class ExpressionsRuntime(
     val variableController: VariableController,
     val triggersController: TriggersController,
 ) {
-    var activeBinding: DivViewFacade? = null
-        set(value) {
-            if (field == value) {
-                return
-            }
-            triggersController.setupBinding(value)
-            field = value
-        }
+
+    fun clearBinding() {
+        triggersController.clearBinding()
+    }
+
+    fun onAttachedToWindow(view: DivViewFacade) {
+        triggersController.onAttachedToWindow(view)
+    }
 }

@@ -7,12 +7,11 @@ import com.yandex.div.core.util.Assert
 import com.yandex.div.evaluable.types.Color
 import com.yandex.div.json.STRING_TO_COLOR_INT
 import com.yandex.div.json.toBoolean
-import com.yandex.div.util.SynchronizedList
 
 @Mockable
 sealed class Variable {
     abstract val name: String
-    private val observers = SynchronizedList<(Variable) -> Unit>()
+    private val observers = mutableSetOf<(Variable) -> Unit>()
 
     class StringVariable(
         override val name: String,

@@ -1,10 +1,10 @@
 package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.Disposable
+import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.json.missingVariable
-import com.yandex.div.util.UiThreadHandler
 
 internal fun <T> subscribeToVariable(
     variableName: String,
@@ -41,9 +41,8 @@ internal fun <T> subscribeToVariable(
 
     if (invokeChangeOnSubscription) {
         // Any on variable changed notify should be executed on main thread.
-        UiThreadHandler.executeOnMainThread {
-            onVariableChanged.invoke(variable)
-        }
+        Assert.assertMainThread()
+        onVariableChanged.invoke(variable)
     }
 
     return Disposable {

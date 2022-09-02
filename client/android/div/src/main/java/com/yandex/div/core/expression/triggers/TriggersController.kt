@@ -12,8 +12,6 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.util.SynchronizedList
-import com.yandex.div.util.UiThreadHandler
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger
 
@@ -62,7 +60,11 @@ internal class TriggersController(
         return null
     }
 
-    fun setupBinding(view: DivViewFacade?) {
+    fun clearBinding() {
+        executors.forEach { it.view = null }
+    }
+
+    fun onAttachedToWindow(view: DivViewFacade) {
         executors.forEach { it.view = view }
     }
 }
@@ -79,29 +81,33 @@ private class TriggerExecutor(
     private val errorCollector: ErrorCollector
 ) {
     private val changeTrigger = { _: Variable -> tryTriggerActions() }
-    private val observedVariables = SynchronizedList<Variable>()
+    private val observedVariables = mutableListOf<Variable>()
     private var modeObserver = mode.observeAndGet(resolver) { currentMode = it }
     private var currentMode = DivTrigger.Mode.ON_CONDITION
     private var wasConditionSatisfied = false
+    private var isInitialized = false
 
     var view: DivViewFacade? = null
         set(value) {
             field = value
-            startOrStopObserving()
-        }
-
-    private fun startOrStopObserving() {
-        modeObserver.close()
-
-        if (view == null) {
-            observedVariables.forEach { it.removeObserver(changeTrigger) }
-        } else {
-            observedVariables.forEach { it.addObserver(changeTrigger) }
-            modeObserver = mode.observeAndGet(resolver) { currentMode = it }
-            UiThreadHandler.executeOnMainThread {
-                tryTriggerActions()
+            if (value == null) {
+                stopObserving()
+            } else {
+                startObserving()
             }
         }
+
+    private fun stopObserving() {
+        modeObserver.close()
+        observedVariables.forEach { it.removeObserver(changeTrigger) }
+    }
+
+    private fun startObserving() {
+        initIfNeeded()
+        modeObserver.close()
+        observedVariables.forEach { it.addObserver(changeTrigger) }
+        modeObserver = mode.observeAndGet(resolver) { currentMode = it }
+        tryTriggerActions()
     }
 
     private fun tryTriggerActions() {
@@ -142,9 +148,12 @@ private class TriggerExecutor(
         return true
     }
 
-    init {
-        condition.variables.forEach { variableName ->
-            startTracking(variableName)
+    private fun initIfNeeded() {
+        if (!isInitialized) {
+            isInitialized = true
+            condition.variables.forEach { variableName ->
+                startTracking(variableName)
+            }
         }
     }
 

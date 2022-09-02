@@ -63,7 +63,7 @@ class Div2RebindTest {
     fun `find view by path works correctly`() {
         val divView = Div2View(div2Context)
         divView.setData(testData.data, DivDataTag("tag"))
-        divView.bindOnAttachRunnable?.invoke()
+        divView.bindOnAttachRunnable?.onAttach()
         val path = DivStatePath.parse("0/state_container/first")
 
         val divStateLayout: DivStateLayout? = divView.findStateLayout(path)
@@ -76,7 +76,7 @@ class Div2RebindTest {
     fun `find view by path works correctly for deep created stateLayouts`() {
         val divView = Div2View(div2Context)
         divView.setData(testData.data, DivDataTag("tag"))
-        divView.bindOnAttachRunnable?.invoke()
+        divView.bindOnAttachRunnable?.onAttach()
         val firstStateContainers = listOf("container_item_one", "container_item_two", "container_item_three")
 
         firstStateContainers.forEach { containerStateId: String ->
@@ -93,7 +93,7 @@ class Div2RebindTest {
     fun `find view by path works correctly for created stateLayouts but with differ from path selected state`() {
         val divView = Div2View(div2Context)
         divView.setData(testData.data, DivDataTag("tag"))
-        divView.bindOnAttachRunnable?.invoke()
+        divView.bindOnAttachRunnable?.onAttach()
         val notActiveState = DivStatePath.parse("0/state_container/second")
 
         val divStateLayout: DivStateLayout? = divView.findStateLayout(notActiveState)
@@ -107,7 +107,7 @@ class Div2RebindTest {
     fun `find view by path fails to receive not created state`() {
         val divView = Div2View(div2Context)
         divView.setData(testData.data, DivDataTag("tag"))
-        divView.bindOnAttachRunnable?.invoke()
+        divView.bindOnAttachRunnable?.onAttach()
         val notActiveState = DivStatePath.parse("0/state_container/second/second_state/hidden")
 
         val divStateLayout: DivStateLayout? = divView.findStateLayout(notActiveState)
@@ -118,7 +118,7 @@ class Div2RebindTest {
 
     private fun assertEqualsDivViews(newData: DivData) {
         div2ReferenceView.setData(newData, tag)
-        div2ReferenceView.bindOnAttachRunnable?.invoke()
+        div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
     }

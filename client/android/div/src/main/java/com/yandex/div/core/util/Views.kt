@@ -43,3 +43,23 @@ private fun View.farthestLayoutCaller(): View? {
     }
     return caller
 }
+
+internal class SingleTimeOnAttachCallback(
+    view: View,
+    private var onAttachAction: (() -> Unit)?
+) {
+    init {
+        if (view.isAttachedToWindow) {
+            onAttach()
+        }
+    }
+
+    fun onAttach() {
+        onAttachAction?.invoke()
+        onAttachAction = null
+    }
+
+    fun cancel() {
+        onAttachAction = null
+    }
+}

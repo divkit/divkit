@@ -36,6 +36,7 @@ import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.Assert
 import com.yandex.div.core.util.KAssert
+import com.yandex.div.core.util.SingleTimeOnAttachCallback
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
@@ -99,8 +100,9 @@ class Div2View private constructor(
 
     private val monitor = Any()
 
+    private var setActiveBindingRunnable: SingleTimeOnAttachCallback? = null
     @VisibleForTesting
-    internal var bindOnAttachRunnable: (() -> Unit)? = null
+    internal var bindOnAttachRunnable: SingleTimeOnAttachCallback? = null
 
     @VisibleForTesting
     internal var stateId = INVALID_STATE_ID
@@ -138,9 +140,11 @@ class Div2View private constructor(
         val newRuntime = div2Component.expressionsRuntimeProvider.getOrCreate(dataTag, data)
         _expressionsRuntime = newRuntime
         if (oldRuntime != newRuntime) {
-            oldRuntime?.let { it.activeBinding = null }
+            oldRuntime?.clearBinding()
         }
-        newRuntime.activeBinding = this
+        setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
+            newRuntime.onAttachedToWindow(this)
+        }
     }
 
     val logId: String
@@ -180,7 +184,7 @@ class Div2View private constructor(
         if (data == null || divData == data) {
             return false
         }
-        bindOnAttachRunnable = null
+        bindOnAttachRunnable?.cancel()
 
         histogramReporter.onRenderStarted()
 
@@ -219,7 +223,7 @@ class Div2View private constructor(
         if (data == null || divData == data) {
             return false
         }
-        bindOnAttachRunnable = null
+        bindOnAttachRunnable?.cancel()
 
         histogramReporter.onRenderStarted()
 
@@ -250,7 +254,7 @@ class Div2View private constructor(
         val oldData: DivData = divData ?: return false
         val newDivData = div2Component.patchManager.createPatchedDivData(oldData, dataTag, patch, expressionResolver)
         if (newDivData != null) {
-            bindOnAttachRunnable = null
+            bindOnAttachRunnable?.cancel()
             rebind(oldData, false)
             divData = newDivData
             div2Component.patchManager.removePatch(dataTag)
@@ -333,8 +337,8 @@ class Div2View private constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        bindOnAttachRunnable?.invoke()
-        bindOnAttachRunnable = null
+        setActiveBindingRunnable?.onAttach()
+        bindOnAttachRunnable?.onAttach()
     }
 
     override fun onDetachedFromWindow() {
@@ -373,7 +377,7 @@ class Div2View private constructor(
 
     override fun switchToState(stateId: Int, temporary: Boolean) = synchronized(monitor) {
         if (stateId != INVALID_STATE_ID) {
-            bindOnAttachRunnable = null
+            bindOnAttachRunnable?.cancel()
             forceSwitchToState(stateId, temporary)
         }
     }
@@ -390,7 +394,7 @@ class Div2View private constructor(
 
     override fun switchToState(path: DivStatePath, temporary: Boolean) = synchronized(monitor) {
         if (stateId == path.topLevelStateId) {
-            bindOnAttachRunnable = null
+            bindOnAttachRunnable?.cancel()
             val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
             bulkActionsHandler.switchState(state, path, temporary)
         } else if (path.topLevelStateId != INVALID_STATE_ID) {
@@ -557,16 +561,11 @@ class Div2View private constructor(
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
         val path = DivStatePath.fromState(newState.stateId)
         val view = divBuilder.createView(newState.div, this, path)
-        val bindAction = {
+        bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
             suppressExpressionErrors {
                 div2Component.divBinder.bind(view, newState.div, this, path)
             }
             div2Component.divBinder.attachIndicators()
-        }
-        if (isAttachedToWindow) {
-            bindAction.invoke()
-        } else {
-            bindOnAttachRunnable = bindAction
         }
         return view
     }
