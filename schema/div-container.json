@@ -37,6 +37,16 @@
           "default_value": "vertical",
           "$description": "translations.json#/div_container_orientation"
         },
+        "layout_mode": {
+          "type": "string",
+          "enum": [
+            "no_wrap",
+            "wrap"
+          ],
+          "default_value": "no_wrap",
+          "$description": "translations.json#/div_container_layout_mode",
+          "platforms": []
+        },
         "items": {
           "type": "array",
           "items": {

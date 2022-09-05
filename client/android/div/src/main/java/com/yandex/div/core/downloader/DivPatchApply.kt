@@ -85,6 +85,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 div.height,
                 div.id,
                 applyPatchForListOfDivs(div.items, resolver),
+                div.layoutMode,
                 div.longtapActions,
                 div.margins,
                 div.orientation,

@@ -351,6 +351,10 @@
     "en": "Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.",
     "ru": "Расположение элементов. Значение `overlap` накладывает элементы друг на друга в порядке перечисления. Ниже всего — нулевой элемент массива."
   },
+  "div_container_layout_mode": {
+    "en": "Method of placing elements. `wrap` value includes the transfer of elements to the next line if they did not fit in the previous one.",
+    "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей."
+  },
   "div_container_short": {
     "en": "Container.",
     "ru": "Контейнер."
