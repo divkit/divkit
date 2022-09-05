@@ -52,7 +52,7 @@ export type DivVariable = DivStrVariable | DivIntVariable | DivNumberVariable |
     DivBooleanVariable | DivColorVariable | DivUrlVariable;
 
 export interface VariableTrigger {
-    mode: 'on_condition' | 'on_variable';
+    mode?: 'on_condition' | 'on_variable';
     condition: BooleanInt | string;
     actions: Action[];
 }

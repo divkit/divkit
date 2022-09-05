@@ -776,10 +776,12 @@
                 return;
             }
 
-            if (trigger.mode !== 'on_variable' && trigger.mode !== 'on_condition') {
+            const mode = trigger.mode || 'on_condition';
+
+            if (mode !== 'on_variable' && mode !== 'on_condition') {
                 logError(wrapError(new Error('variable_trigger has an unsupported mode'), {
                     additional: {
-                        mode: trigger.mode
+                        mode
                     }
                 }));
                 return;
@@ -818,7 +820,7 @@
                             // if condition is truthy
                             conditionResult.value &&
                             // and trigger mode matches
-                            (trigger.mode === 'on_variable' || trigger.mode === 'on_condition' && prevConditionResult === false)
+                            (mode === 'on_variable' || mode === 'on_condition' && prevConditionResult === false)
                         ) {
                             trigger.actions.forEach(action => {
                                 const resultAction = getJsonWithVars(action);
