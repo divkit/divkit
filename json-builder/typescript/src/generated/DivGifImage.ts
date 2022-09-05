@@ -43,7 +43,7 @@ export class DivGifImage<T extends DivGifImageProps = DivGifImageProps> {
      */
     action?: Type<IDivAction>;
     /**
-     * Action animation. `Fade`, `scale`, and `set` are supported.
+     * Action animation. Web supports `fade`, `scale` and `set` only.
      */
     action_animation?: Type<IDivAnimation>;
     /**
@@ -137,7 +137,7 @@ export class DivGifImage<T extends DivGifImageProps = DivGifImageProps> {
      */
     preview?: Type<string> | DivExpression;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
@@ -249,7 +249,7 @@ interface DivGifImageProps {
      */
     action?: Type<IDivAction>;
     /**
-     * Action animation. `Fade`, `scale`, and `set` are supported.
+     * Action animation. Web supports `fade`, `scale` and `set` only.
      */
     action_animation?: Type<IDivAnimation>;
     /**
@@ -343,7 +343,7 @@ interface DivGifImageProps {
      */
     preview?: Type<string> | DivExpression;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**

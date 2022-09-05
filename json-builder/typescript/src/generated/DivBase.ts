@@ -82,7 +82,7 @@ export interface IDivBase {
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**

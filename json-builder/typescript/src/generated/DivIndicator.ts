@@ -115,7 +115,7 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
      */
     pager_id?: Type<string>;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
@@ -298,7 +298,7 @@ interface DivIndicatorProps {
      */
     pager_id?: Type<string>;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**

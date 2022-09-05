@@ -41,7 +41,7 @@ export class DivSeparator<T extends DivSeparatorProps = DivSeparatorProps> {
      */
     action?: Type<IDivAction>;
     /**
-     * Action animation. `Fade`, `scale`, and `set` are supported.
+     * Action animation. Web supports `fade`, `scale` and `set` only.
      */
     action_animation?: Type<IDivAnimation>;
     /**
@@ -113,7 +113,7 @@ export class DivSeparator<T extends DivSeparatorProps = DivSeparatorProps> {
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
@@ -213,7 +213,7 @@ interface DivSeparatorProps {
      */
     action?: Type<IDivAction>;
     /**
-     * Action animation. `Fade`, `scale`, and `set` are supported.
+     * Action animation. Web supports `fade`, `scale` and `set` only.
      */
     action_animation?: Type<IDivAnimation>;
     /**
@@ -285,7 +285,7 @@ interface DivSeparatorProps {
      */
     paddings?: Type<IDivEdgeInsets>;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**

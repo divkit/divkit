@@ -21,7 +21,7 @@ export class DivShapeDrawable<T extends DivShapeDrawableProps = DivShapeDrawable
      */
     color: Type<string> | DivExpression;
     /**
-     * Form.
+     * Shape.
      */
     shape: Type<DivShape>;
     /**
@@ -42,7 +42,7 @@ interface DivShapeDrawableProps {
      */
     color: Type<string> | DivExpression;
     /**
-     * Form.
+     * Shape.
      */
     shape: Type<DivShape>;
     /**

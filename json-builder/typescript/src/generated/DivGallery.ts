@@ -133,7 +133,7 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
      */
     restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
@@ -331,7 +331,7 @@ interface DivGalleryProps {
      */
     restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
     /**
-     * Merges cells in a string of the [grid](div-grid.dita) element.
+     * Merges cells in a string of the [grid](div-grid.md) element.
      */
     row_span?: Type<number> | DivExpression;
     /**
