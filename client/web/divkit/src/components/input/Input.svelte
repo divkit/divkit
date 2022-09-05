@@ -82,7 +82,7 @@
     }
 
     const jsonTextColor = rootCtx.getDerivedFromVars(json.text_color);
-    let textColor = '';
+    let textColor = '#000';
     $: {
         textColor = correctColor($jsonTextColor, 1, textColor);
     }
