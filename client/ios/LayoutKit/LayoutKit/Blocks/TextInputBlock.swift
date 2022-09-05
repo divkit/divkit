@@ -22,18 +22,6 @@ public final class TextInputBlock: BlockWithTraits {
     case asciiCapableNumberPad
   }
 
-  public enum ContentMode {
-    case center
-    case top
-    case bottom
-    case left
-    case right
-    case topLeft
-    case topRight
-    case bottomLeft
-    case bottomRight
-  }
-
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let hint: NSAttributedString
@@ -44,7 +32,6 @@ public final class TextInputBlock: BlockWithTraits {
   public let highlightColor: Color?
   public let maxVisibleLines: Int?
   public let selectAllOnFocus: Bool
-  public let contentMode: ContentMode
   public let path: UIElementPath
   public let onFocusActions: [UserInterfaceAction]
   public let onBlurActions: [UserInterfaceAction]
@@ -61,7 +48,6 @@ public final class TextInputBlock: BlockWithTraits {
     highlightColor: Color? = nil,
     maxVisibleLines: Int? = nil,
     selectAllOnFocus: Bool = false,
-    contentMode: ContentMode = .topLeft,
     path: UIElementPath,
     onFocusActions: [UserInterfaceAction] = [],
     onBlurActions: [UserInterfaceAction] = [],
@@ -77,7 +63,6 @@ public final class TextInputBlock: BlockWithTraits {
     self.highlightColor = highlightColor
     self.maxVisibleLines = maxVisibleLines
     self.selectAllOnFocus = selectAllOnFocus
-    self.contentMode = contentMode
     self.path = path
     self.onFocusActions = onFocusActions
     self.onBlurActions = onBlurActions
@@ -144,7 +129,6 @@ extension TextInputBlock {
       && lhs.maxVisibleLines == rhs.maxVisibleLines
       && lhs.keyboardType == rhs.keyboardType
       && lhs.selectAllOnFocus == rhs.selectAllOnFocus
-      && lhs.contentMode == rhs.contentMode
       && lhs.highlightColor == rhs.highlightColor
   }
 }

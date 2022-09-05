@@ -27,14 +27,6 @@ extension DivInput: DivBlockModeling {
     )
     var typo = Typo(font: font).allowHeightOverrun
 
-    let verticalAlignment = resolveAlignmentVertical(context.expressionResolver) ?? .top
-    let horizontalAlignment = resolveAlignmentHorizontal(context.expressionResolver) ?? .left
-
-    let textAlignment = horizontalAlignment.system
-    if textAlignment != .left {
-      typo = typo.with(alignment: textAlignment)
-    }
-
     let kern = CGFloat(resolveLetterSpacing(context.expressionResolver))
     if !kern.isApproximatelyEqualTo(0) {
       typo = typo.kerned(kern)
@@ -61,8 +53,6 @@ extension DivInput: DivBlockModeling {
 
     let selectAllOnFocus = resolveSelectAllOnFocus(context.expressionResolver)
 
-    let contentMode = makeContentMode(verticalAlignment: verticalAlignment,
-                                      horizontalAlignment: horizontalAlignment)
     let onFocusActions = (focus?.onFocus ?? []).map {
       $0.uiAction(context: context.actionContext)
     }
@@ -81,38 +71,11 @@ extension DivInput: DivBlockModeling {
       highlightColor: highlightColor,
       maxVisibleLines: maxVisibleLines,
       selectAllOnFocus: selectAllOnFocus,
-      contentMode: contentMode,
       path: context.parentPath,
       onFocusActions: onFocusActions,
       onBlurActions: onBlurActions,
       parentScrollView: context.parentScrollView
     )
-  }
-
-  private func makeContentMode(
-    verticalAlignment: DivAlignmentVertical,
-    horizontalAlignment: DivAlignmentHorizontal
-  ) -> TextInputBlock.ContentMode {
-    switch (verticalAlignment, horizontalAlignment) {
-    case (.top, .left):
-      return .topLeft
-    case (.center, .left):
-      return .left
-    case (.bottom, .left):
-      return .bottomLeft
-    case (.top, .center):
-      return .top
-    case (.center, .center):
-      return .center
-    case (.bottom, .center):
-      return .bottom
-    case (.top, .right):
-      return .topRight
-    case (.center, .right):
-      return .right
-    case (.bottom, .right):
-      return .bottomRight
-    }
   }
 }
 

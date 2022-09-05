@@ -21,7 +21,6 @@ extension TextInputBlock {
     inputView.setMultiLineMode(multiLineMode)
     inputView.setMaxVisibleLines(maxVisibleLines)
     inputView.setSelectAllOnFocus(selectAllOnFocus)
-    inputView.setContentMode(contentMode)
     inputView.setParentScrollView(parentScrollView)
     inputView.setOnFocusActions(onFocusActions)
     inputView.setOnBlurActions(onBlurActions)
@@ -43,16 +42,18 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private var scrollingWasDone = false
   private var textValue: Binding<String>? = nil
   private var selectAllOnFocus = false
-  private var inputContentMode: TextInputBlock.ContentMode = .topLeft
   private var onFocusActions: [UserInterfaceAction] = []
   private var onBlurActions: [UserInterfaceAction] = []
   private var path: UIElementPath? = nil
   private weak var observer: ElementStateObserver?
+  private var isRightToLeft = false
 
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
+
+    isRightToLeft = UIView.userInterfaceLayoutDirection(for: singleLineInput.semanticContentAttribute) == .rightToLeft
 
     multiLineInput.isEditable = true
     multiLineInput.isSelectable = true
@@ -134,10 +135,6 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     self.selectAllOnFocus = selectAllOnFocus
   }
 
-  func setContentMode(_ contentMode: TextInputBlock.ContentMode) {
-    self.inputContentMode = contentMode
-  }
-
   func setParentScrollView(_ parentScrollView: ScrollView?) {
     self.parentScrollView = parentScrollView
   }
@@ -159,8 +156,9 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   }
 
   func setText(value: Binding<String>, typo: Typo) {
+    let textTypo = isRightToLeft ? typo.with(alignment: .right) : typo
     self.textValue = value
-    let attributedText = value.wrappedValue.with(typo: typo)
+    let attributedText = value.wrappedValue.with(typo: textTypo)
     multiLineInput.attributedText = attributedText
     singleLineInput.attributedText = attributedText
     multiLineInput.typingAttributes = typo.attributes
@@ -334,48 +332,24 @@ extension TextInputBlockView: UITextFieldDelegate {
 
 extension TextInputBlockView {
   private var multiLineOffsetY: CGFloat {
-    switch inputContentMode {
-    case .top, .topLeft, .topRight:
-      return 0
-    case .bottom, .bottomLeft, .bottomRight:
-      let emptySpace = multiLineInput.bounds.size.height - multiLineInput.contentSize.height
-      guard emptySpace > 0 else { return 0 }
-      return emptySpace
-    case .center, .left, .right:
-      let emptySpace = multiLineInput.bounds.size.height - multiLineInput.contentSize.height
-      guard emptySpace > 0 else { return 0 }
-      return emptySpace / 2
-    }
+    let emptySpace = multiLineInput.bounds.size.height - multiLineInput.contentSize.height
+    guard emptySpace > 0 else { return 0 }
+    return emptySpace / 2
   }
 
   private func offsetX(_ view: UIView) -> CGFloat {
-    switch inputContentMode {
-    case .left, .topLeft, .bottomLeft:
-      return cusorOffset
-    case .right, .topRight, .bottomRight:
+    if (isRightToLeft) {
       let emptySpace = bounds.size.width - view.bounds.size.width
       guard emptySpace > 0 else { return 0 }
       return emptySpace - cusorOffset
-    case .center, .top, .bottom:
-      let emptySpace = bounds.size.width - view.bounds.size.width
-      guard emptySpace > 0 else { return 0 }
-      return emptySpace / 2
     }
+    return cusorOffset
   }
 
   private func offsetY(_ view: UIView) -> CGFloat {
-    switch inputContentMode {
-    case .top, .topLeft, .topRight:
-      return 0
-    case .bottom, .bottomLeft, .bottomRight:
-      let emptySpace = bounds.size.height - view.bounds.size.height
-      guard emptySpace > 0 else { return 0 }
-      return emptySpace
-    case .center, .left, .right:
-      let emptySpace = bounds.size.height - view.bounds.size.height
-      guard emptySpace > 0 else { return 0 }
-      return emptySpace / 2
-    }
+    let emptySpace = bounds.size.height - view.bounds.size.height
+    guard emptySpace > 0 else { return 0 }
+    return emptySpace / 2
   }
 
   private var cusorOffset: CGFloat {
