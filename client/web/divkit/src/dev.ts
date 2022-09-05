@@ -1,4 +1,4 @@
-import Root from './components/root.svelte';
+import Root from './components/Root.svelte';
 
 const json = {
     "templates": {},
