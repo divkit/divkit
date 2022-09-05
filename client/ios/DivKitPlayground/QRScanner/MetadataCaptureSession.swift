@@ -10,6 +10,8 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
   let result: ObservableProperty<String>
 
   var layer: CALayer { previewLayer }
+  
+  private var isInitialized = false
 
   init(result: ObservableProperty<String>) {
     self.result = result
@@ -28,7 +30,7 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
     do {
       videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
     } catch {
-      DemoAppLogger.error("Can't create video input with \(error)")
+      DemoAppLogger.error("Can't create video input: \(error)")
       return
     }
     
@@ -48,16 +50,18 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
       DemoAppLogger.error("Capture session can't add metadata output")
       return
     }
+    
+    isInitialized = true
   }
 
   func pause() {
-    if captureSession.isRunning == true {
+    if isInitialized, captureSession.isRunning == true {
       captureSession.stopRunning()
     }
   }
 
   func resume() {
-    if captureSession.isRunning == false {
+    if isInitialized, captureSession.isRunning == false {
       captureSession.startRunning()
     }
   }
