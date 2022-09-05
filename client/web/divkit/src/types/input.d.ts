@@ -3,7 +3,7 @@ import type { DivActionableData } from './actionable';
 import type { FontWeight } from './text';
 import type { BooleanInt } from '../../typings/common';
 
-export type KeyboardType = 'text' | 'phone' | 'number' | 'email' | 'uri';
+export type KeyboardType = 'single_line_text' | 'multi_line_text' | 'phone' | 'number' | 'email' | 'uri';
 
 export interface DivInputData extends DivBaseData, DivActionableData {
     type: 'type';
@@ -15,7 +15,7 @@ export interface DivInputData extends DivBaseData, DivActionableData {
     text_color?: string;
     text_variable: string;
     line_height?: number;
-    max_lines?: number;
+    max_visible_lines?: number;
     letter_spacing?: number;
     hint_text?: string;
     hint_color?: string;

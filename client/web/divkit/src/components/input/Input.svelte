@@ -98,24 +98,26 @@
         email: 'email',
         number: 'number',
         phone: 'tel',
-        text: 'text',
+        single_line_text: 'text',
+        multi_line_text: 'text',
         uri: 'url'
     };
-    let keyboard = 'text';
+    let keyboardType = 'multi_line_text';
+    let inputType = 'text';
     $: {
         if ($jsonKeyboardType && $jsonKeyboardType in KEYBOARD_MAP) {
-            keyboard = KEYBOARD_MAP[$jsonKeyboardType as KeyboardType];
+            inputType = KEYBOARD_MAP[$jsonKeyboardType as KeyboardType];
+            keyboardType = $jsonKeyboardType;
         }
     }
 
-    const jsonMaxLines = rootCtx.getDerivedFromVars(json.max_lines);
-    // text always multiline
-    $: isMultiline = keyboard === 'text'/* && isPositiveNumber($jsonMaxLines) && $jsonMaxLines > 1*/;
+    const jsonVisibleMaxLines = rootCtx.getDerivedFromVars(json.max_visible_lines);
+    $: isMultiline = keyboardType === 'multi_line_text'/* && isPositiveNumber($jsonVisibleMaxLines) && $jsonVisibleMaxLines > 1*/;
 
     let maxHeight = '';
     $: {
-        if (isPositiveNumber($jsonMaxLines)) {
-            maxHeight = $jsonMaxLines * (lineHeight || 1.25) + 'em';
+        if (isPositiveNumber($jsonVisibleMaxLines)) {
+            maxHeight = $jsonVisibleMaxLines * (lineHeight || 1.25) + 'em';
         }
     }
 
@@ -211,7 +213,7 @@
             {:else}
                 <input
                     bind:this={input}
-                    type={keyboard}
+                    type={inputType}
                     class={css.input__input}
                     autocomplete="off"
                     autocapitalize="off"
