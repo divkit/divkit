@@ -92,7 +92,8 @@ internal class DivBaseBinder @Inject constructor(
         if(!divAccessibilityBinder.enabled) {
             view.applyFocusableState(div)
         }
-        view.observeVisibility(div.visibility, resolver, subscriber, divView)
+        view.observeVisibility(div, resolver, subscriber, divView)
+        view.observeTransform(div, resolver, subscriber)
     }
 
     fun bindLayoutParams(view: View, div: DivBase, resolver: ExpressionResolver) {
@@ -103,8 +104,8 @@ internal class DivBaseBinder @Inject constructor(
 
         val subscriber = view.expressionSubscriber
 
-        view.observeWidth(div.width, resolver, subscriber)
-        view.observeHeight(div.height, resolver, subscriber)
+        view.observeWidth(div, resolver, subscriber)
+        view.observeHeight(div, resolver, subscriber)
         view.observeAlignment(div.alignmentHorizontal, div.alignmentVertical, resolver, subscriber)
 
         view.observeMargins(div.margins, resolver, subscriber)
@@ -147,26 +148,26 @@ internal class DivBaseBinder @Inject constructor(
         }
     }
 
-    private fun View.observeWidth(width: DivSize, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
-        applyWidth(width, resolver)
+    private fun View.observeWidth(div: DivBase, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
+        applyWidth(div, resolver)
 
-        when (width) {
+        when (val width = div.width) {
             is DivSize.Fixed -> {
-                subscriber.addSubscription(width.value.value.observe(resolver) { applyWidth(width, resolver) })
-                subscriber.addSubscription(width.value.unit.observe(resolver) { applyWidth(width, resolver) })
+                subscriber.addSubscription(width.value.value.observe(resolver) { applyWidth(div, resolver) })
+                subscriber.addSubscription(width.value.unit.observe(resolver) { applyWidth(div, resolver) })
             }
             is DivSize.MatchParent -> Unit
             else -> Unit
         }
     }
 
-    private fun View.observeHeight(height: DivSize, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
-        applyHeight(height, resolver)
+    private fun View.observeHeight(div: DivBase, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
+        applyHeight(div, resolver)
 
-        when (height) {
+        when (val height = div.height) {
             is DivSize.Fixed -> {
-                subscriber.addSubscription(height.value.value.observe(resolver) { applyHeight(height, resolver) })
-                subscriber.addSubscription(height.value.unit.observe(resolver) { applyHeight(height, resolver) })
+                subscriber.addSubscription(height.value.value.observe(resolver) { applyHeight(div, resolver) })
+                subscriber.addSubscription(height.value.unit.observe(resolver) { applyHeight(div, resolver) })
             }
             is DivSize.MatchParent -> Unit
             else -> Unit
@@ -429,13 +430,16 @@ internal class DivBaseBinder @Inject constructor(
     }
 
     private fun View.observeVisibility(
-        visibilityDiv: Expression<DivVisibility>,
+        div: DivBase,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber,
         divView: Div2View,
     ) {
-        applyVisibility(visibilityDiv.evaluate(resolver), divView)
-        subscriber.addSubscription(visibilityDiv.observeAndGet(resolver) { visibility ->
+        applyVisibility(div.visibility.evaluate(resolver), divView)
+        subscriber.addSubscription(div.visibility.observeAndGet(resolver) { visibility ->
+            if (visibility != DivVisibility.GONE) {
+                applyTransform(div, resolver)
+            }
             applyVisibility(visibility, divView)
         })
     }
@@ -450,6 +454,16 @@ internal class DivBaseBinder @Inject constructor(
             DivVisibility.INVISIBLE -> View.INVISIBLE
         }
         divView.trackChildrenVisibility()
+    }
+
+    private fun View.observeTransform(
+        div: DivBase,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber,
+    ) {
+        div.transform.rotation?.observe(resolver) {
+            applyTransform(div, resolver)
+        }?.let { subscriber.addSubscription(it) }
     }
 
     private fun List<DivBackground>?.toDrawable(

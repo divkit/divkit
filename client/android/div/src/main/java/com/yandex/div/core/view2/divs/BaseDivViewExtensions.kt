@@ -15,6 +15,7 @@ import androidx.core.graphics.withTranslation
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
+import androidx.core.view.doOnPreDraw
 import com.yandex.div.R
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.images.LoadReference
@@ -26,6 +27,8 @@ import com.yandex.div.core.widget.GridContainer
 import com.yandex.div.drawables.ScalingDrawable
 import com.yandex.div.font.DivTypefaceProvider
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.util.dpToPx
+import com.yandex.div.util.spToPx
 import com.yandex.div.util.fontHeight
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
@@ -40,7 +43,11 @@ import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivImageScale
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
+import com.yandex.div2.DivTransform
 import com.yandex.div2.DivVisibilityAction
+import com.yandex.div2.DivPivot
+import com.yandex.div2.DivPivotFixed
+import com.yandex.div2.DivPivotPercentage
 import kotlin.math.roundToInt
 
 fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
@@ -125,19 +132,52 @@ fun DivDimension.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): In
     }
 }
 
-fun View.applyHeight(divHeight: DivSize?, resolver: ExpressionResolver) {
-    val height = divHeight.toLayoutParamsSize(resources.displayMetrics, resolver)
+internal fun View.applyHeight(div: DivBase, resolver: ExpressionResolver) {
+    val height = div.height.toLayoutParamsSize(resources.displayMetrics, resolver)
     if (layoutParams.height != height) {
         ForceParentLayoutParams.setSizeFromChild(this, h = height)
         requestLayout()
     }
+    applyTransform(div, resolver)
 }
 
-fun View.applyWidth(divWidth: DivSize?, resolver: ExpressionResolver) {
-    val width = divWidth.toLayoutParamsSize(resources.displayMetrics, resolver)
+internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
+    val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver)
     if (layoutParams.width != width) {
         ForceParentLayoutParams.setSizeFromChild(this, w = width)
         requestLayout()
+    }
+    applyTransform(div, resolver)
+}
+
+internal fun View.applyTransform(
+    div: DivBase,
+    resolver: ExpressionResolver,
+) {
+    rotation = div.transform.rotation?.evaluate(resolver)?.toFloat() ?: 0f
+    if (width == 0 && height == 0) {
+        doOnPreDraw {
+            pivotX = getPivotValue(width, div.transform.pivotX, resolver)
+            pivotY = getPivotValue(height, div.transform.pivotY, resolver)
+        }
+    } else {
+        pivotX = getPivotValue(width, div.transform.pivotX, resolver)
+        pivotY = getPivotValue(height, div.transform.pivotY, resolver)
+    }
+}
+
+private fun getPivotValue(len: Int, divPivot: DivPivot, resolver: ExpressionResolver): Float {
+    return when (val pivot = divPivot.value()) {
+        is DivPivotFixed -> {
+            val offset = pivot.value?.evaluate(resolver)?.toFloat() ?: return len / 2f
+            when (pivot.unit.evaluate(resolver)) {
+                DivSizeUnit.DP -> dpToPx(offset)
+                DivSizeUnit.PX -> offset
+                DivSizeUnit.SP -> spToPx(offset)
+            }
+        }
+        is DivPivotPercentage -> pivot.value.evaluate(resolver).toFloat() / 100f * len
+        else ->  len / 2f
     }
 }
 
@@ -322,8 +362,8 @@ val DivBase.allVisibilityActions: List<DivVisibilityAction>
     get() = visibilityActions ?: visibilityAction?.let { listOf(it) }.orEmpty()
 
 fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) = suppressExpressionErrors {
-    applyWidth(div.width, resolver)
-    applyHeight(div.height, resolver)
+    applyWidth(div, resolver)
+    applyHeight(div, resolver)
     applyAlignment(div.alignmentHorizontal?.evaluate(resolver),
         div.alignmentVertical?.evaluate(resolver))
 }
