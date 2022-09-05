@@ -8,15 +8,23 @@ enum UserPreferences {
   }
 
   static var isQrScannerEnabled: Bool {
-    defaults.value(forKey: isQrScannerEnabledKey) as? Bool ?? true
+    defaults.value(forKey: isQrScannerEnabledKey) as? Bool ?? isQrScannerEnabledDefault
   }
 
-  static let isQrScannerEnabledBinding = boolBinding(key: isQrScannerEnabledKey)
+  static let isQrScannerEnabledBinding = boolBinding(key: isQrScannerEnabledKey, defaultValue: isQrScannerEnabledDefault)
 }
 
-private func boolBinding(key: String) -> Binding<Bool> {
+private let isQrScannerEnabledDefault = {
+#if targetEnvironment(simulator)
+  false
+#else
+  true
+#endif
+}()
+
+private func boolBinding(key: String, defaultValue: Bool) -> Binding<Bool> {
   Binding<Bool>(
-    get: { defaults.value(forKey: key) as? Bool ?? true },
+    get: { defaults.value(forKey: key) as? Bool ?? defaultValue },
     set: { defaults.set($0, forKey: key) }
   )
 }
