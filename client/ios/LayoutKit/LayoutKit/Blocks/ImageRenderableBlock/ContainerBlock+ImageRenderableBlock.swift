@@ -9,6 +9,7 @@ extension ContainerBlock: ImageRenderableBlock {
       children: children,
       gaps: gaps,
       layoutDirection: layoutDirection,
+      layoutMode: layoutMode,
       axialAlignment: axialAlignment,
       size: rect.size
     ).blockFrames

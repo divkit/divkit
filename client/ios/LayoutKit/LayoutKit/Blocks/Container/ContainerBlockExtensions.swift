@@ -6,6 +6,7 @@ import CommonCore
 extension ContainerBlock {
   public func modifying(
     layoutDirection: LayoutDirection? = nil,
+    layoutMode: LayoutMode? = nil,
     widthTrait: LayoutTrait? = nil,
     heightTrait: LayoutTrait? = nil,
     axialAlignment: Alignment? = nil,
@@ -19,6 +20,7 @@ extension ContainerBlock {
   ) throws -> ContainerBlock {
     try ContainerBlock(
       layoutDirection: layoutDirection ?? self.layoutDirection,
+      layoutMode: layoutMode ?? self.layoutMode,
       widthTrait: widthTrait ?? self.widthTrait,
       heightTrait: heightTrait ?? self.heightTrait,
       axialAlignment: axialAlignment ?? self.axialAlignment,
@@ -34,6 +36,7 @@ extension ContainerBlock {
 
   public convenience init(
     layoutDirection: LayoutDirection,
+    layoutMode: LayoutMode = .noWrap,
     widthTrait: LayoutTrait = .resizable,
     heightTrait: LayoutTrait = .intrinsic,
     horizontalChildrenAlignment: Alignment = .leading,
@@ -64,6 +67,7 @@ extension ContainerBlock {
 
     try self.init(
       layoutDirection: layoutDirection,
+      layoutMode: layoutMode,
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       axialAlignment: axialAlignment,

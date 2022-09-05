@@ -18,6 +18,11 @@ public final class ContainerBlock: BlockWithLayout {
     /// Child blocks are laid out vertically one after another
     case vertical
   }
+    
+  public enum LayoutMode {
+    case wrap
+    case noWrap
+  }
 
   public struct Child: Equatable {
     public var content: Block
@@ -44,6 +49,7 @@ public final class ContainerBlock: BlockWithLayout {
   }
 
   public let layoutDirection: LayoutDirection
+  public let layoutMode: LayoutMode
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let axialAlignment: Alignment
@@ -59,6 +65,7 @@ public final class ContainerBlock: BlockWithLayout {
 
   public init(
     layoutDirection: LayoutDirection,
+    layoutMode: LayoutMode = .noWrap,
     widthTrait: LayoutTrait = .resizable,
     heightTrait: LayoutTrait = .intrinsic,
     axialAlignment: Alignment = .leading,
@@ -80,6 +87,7 @@ public final class ContainerBlock: BlockWithLayout {
     }
 
     self.layoutDirection = layoutDirection
+      self.layoutMode = layoutMode
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     self.axialAlignment = axialAlignment
@@ -273,6 +281,7 @@ public final class ContainerBlock: BlockWithLayout {
       children: children,
       gaps: gaps,
       layoutDirection: layoutDirection,
+      layoutMode: layoutMode,
       axialAlignment: axialAlignment,
       size: size
     )

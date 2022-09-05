@@ -30,6 +30,7 @@ public struct ContainerBlockLayout {
   let children: [ContainerBlock.Child]
   let gaps: [CGFloat]
   let layoutDirection: ContainerBlock.LayoutDirection
+  let layoutMode: ContainerBlock.LayoutMode
   let axialAlignment: Alignment
   let size: CGSize
 
@@ -37,6 +38,7 @@ public struct ContainerBlockLayout {
     children: [ContainerBlock.Child],
     gaps: [CGFloat],
     layoutDirection: ContainerBlock.LayoutDirection,
+    layoutMode: ContainerBlock.LayoutMode,
     axialAlignment: Alignment,
     size: CGSize
   ) {
@@ -44,12 +46,22 @@ public struct ContainerBlockLayout {
     self.children = children
     self.gaps = gaps
     self.layoutDirection = layoutDirection
+    self.layoutMode = layoutMode
     self.axialAlignment = axialAlignment
     self.size = size
     self.blockFrames = calculateBlockFrames()
   }
 
   private func calculateBlockFrames() -> [CGRect] {
+    switch layoutMode {
+    case .noWrap:
+      return calculateNoWrapLayoutFrames()
+    case .wrap:
+      return calculateWrapLayoutFrames()
+    }
+  }
+
+  private func calculateNoWrapLayoutFrames() -> [CGRect] {
     var frames = [CGRect]()
     let gapsSize = gaps.reduce(0, +)
     var shift = CGPoint(x: 0, y: 0)
@@ -57,10 +69,11 @@ public struct ContainerBlockLayout {
     case .horizontal:
       let horizontallyResizableBlocks = children.map { $0.content }
         .filter { $0.isHorizontallyResizable }
-      let widthOfHorizontallyNonResizableBlocks = widthsOfHorizontallyNonResizableBlocks.reduce(
-        0,
-        +
-      )
+      let widthOfHorizontallyNonResizableBlocks = widthsOfHorizontallyNonResizableBlocks
+        .reduce(
+          0,
+          +
+        )
       let widthAvailableForResizableBlocks = (
         size.width - widthOfHorizontallyNonResizableBlocks - gapsSize
       )
@@ -134,11 +147,83 @@ public struct ContainerBlockLayout {
       }
       shift.y = axialAlignment.offset(forAvailableSpace: size.height, contentSize: y)
     }
+
     return frames.map {
       let frame = $0.offset(by: shift).roundedToScreenScale
       precondition(frame.isValidAndFinite)
       return frame
     }
+  }
+
+  private func calculateWrapLayoutFrames() -> [CGRect] {
+    #if INTERNAL_BUILD
+    assert(gaps.allSatisfy(0), "You cannot use gaps in wrap container.")
+    assert(
+      !children
+        .contains { $0.content.isHorizontallyResizable || $0.content.isVerticallyResizable
+        },
+      "You cannot use resizable blocks in wrap container."
+    )
+    #endif
+    var frames = [CGRect]()
+    let buildingDirectionKeyPath: KeyPath<CGSize, CGFloat>
+    let transferDirectionKeyPath: KeyPath<CGSize, CGFloat>
+
+    switch layoutDirection {
+    case .horizontal:
+      buildingDirectionKeyPath = \.width
+      transferDirectionKeyPath = \.height
+    case .vertical:
+      buildingDirectionKeyPath = \.height
+      transferDirectionKeyPath = \.width
+    }
+
+    let groups: [[(child: ContainerBlock.Child, childSize: CGSize, lineOffset: CGFloat)]] =
+      children.reduce([[]]) { result, child in
+        let offset = (result.last?.last?.2 ?? 0) +
+          (result.last?.last?.1[keyPath: buildingDirectionKeyPath] ?? 0)
+        let childSize = child.content.size(forResizableBlockSize: .zero)
+        if offset + childSize[keyPath: buildingDirectionKeyPath] >
+          size[keyPath: buildingDirectionKeyPath] {
+          return result + [[(child, childSize, 0)]]
+        } else {
+          return (result.dropLast()) + [(result.last ?? []) + [(child, childSize, offset)]]
+        }
+      }
+
+    var currentLineOffset = 0.0
+    groups.forEach {
+      let groupHeight = $0.map(\.childSize).map(to: transferDirectionKeyPath).max() ?? 0
+      let contentLength = $0.map(\.childSize).map(to: buildingDirectionKeyPath).reduce(0, +)
+
+      $0.forEach {
+        let alignmentSpace = groupHeight - $0.childSize[keyPath: transferDirectionKeyPath]
+        let alignedLineOffset = currentLineOffset + $0.child.crossAlignment
+          .offset(forAvailableSpace: alignmentSpace)
+        let alignedElementOffset = $0.lineOffset.advanced(by: axialAlignment.offset(
+          forAvailableSpace: size[keyPath: buildingDirectionKeyPath],
+          contentSize: contentLength
+        ).roundedToScreenScale)
+
+        switch layoutDirection {
+        case .horizontal:
+          frames
+            .append(CGRect(origin: CGPoint(
+              x: alignedElementOffset,
+              y: alignedLineOffset
+            ), size: $0.childSize))
+        case .vertical:
+          frames
+            .append(CGRect(origin: CGPoint(
+              x: alignedLineOffset,
+              y: alignedElementOffset
+            ), size: $0.childSize))
+        }
+      }
+
+      currentLineOffset += groupHeight
+    }
+    return frames
   }
 
   public private(set) var blockFrames: [CGRect] = []

@@ -26,6 +26,7 @@ extension ContainerBlock {
       children: children,
       gaps: gaps,
       layoutDirection: layoutDirection,
+      layoutMode: layoutMode,
       axialAlignment: axialAlignment,
       contentAnimation: contentAnimation,
       anchorPoint: anchorPoint,
@@ -49,6 +50,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     let children: [ContainerBlock.Child]
     let gaps: [CGFloat]
     let layoutDirection: ContainerBlock.LayoutDirection
+    let layoutMode: ContainerBlock.LayoutMode
     let axialAlignment: Alignment
     let contentAnimation: BlockAnimation?
     let anchorPoint: AnchorPoint
@@ -131,6 +133,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
       children: model.children,
       gaps: model.gaps,
       layoutDirection: model.layoutDirection,
+      layoutMode: model.layoutMode,
       axialAlignment: model.axialAlignment,
       size: bounds.size
     )

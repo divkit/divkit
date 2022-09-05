@@ -17,6 +17,7 @@ extension ContainerBlockLayout {
       children: blocks.map { .init(content: $0, crossAlignment: crossAlignment) },
       gaps: gaps,
       layoutDirection: layoutDirection,
+      layoutMode: .noWrap,
       axialAlignment: axialAlignment,
       size: size
     )
