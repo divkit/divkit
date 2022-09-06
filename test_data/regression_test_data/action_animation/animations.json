@@ -1,0 +1,440 @@
+{
+  "templates": {
+    "label_text": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 12,
+        "top": 16,
+        "right": 12,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 8,
+        "bottom": 8,
+        "left": 18,
+        "right": 18
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 14,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "action_animation",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "items": [
+            {
+              "type": "label_text",
+              "text": "Fade, interpolator: ease, duration: 500",
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.2,
+                "interpolator": "ease"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_fade",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Scale, interpolator: ease, duration: 500",
+              "action_animation": {
+                "name": "scale",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.6,
+                "interpolator": "ease"
+              },        
+              "actions": [
+                {
+                  "log_id": "animation_ease_scale",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Set, interpolator: ease, duration: 500",
+              "action_animation": {
+                "name": "set",
+                "items": [
+                  {
+                    "name": "fade",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.2
+                  },
+                  {
+                    "name": "scale",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.6
+                  }
+                ],
+                "interpolator": "ease"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_set",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Fade, interpolator: ease_in, duration: 500",
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.2,
+                "interpolator": "ease_in"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_in_fade",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Scale, interpolator: ease_in, duration: 500",
+              "action_animation": {
+                "name": "scale",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.6,
+                "interpolator": "ease_in"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_in_scale",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Set, interpolator: ease_in, duration: 500",
+              "action_animation": {
+                "name": "set",
+                "items": [
+                  {
+                    "name": "fade",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.2
+                  },
+                  {
+                    "name": "scale",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.6
+                  }
+                ],
+                "interpolator": "ease_in"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_in_set",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Fade, interpolator: ease_in_out, duration: 500",
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.2,
+                "interpolator": "ease_in_out"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_in_out_fade",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Scale, interpolator: ease_in_out, duration: 500",
+              "action_animation": {
+                "name": "scale",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.6,
+                "interpolator": "ease_in_out"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_in_out_scale",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Set, interpolator: ease_in_out, duration: 500",
+              "action_animation": {
+                "name": "set",
+                "items": [
+                  {
+                    "name": "fade",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.2
+                  },
+                  {
+                    "name": "scale",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.6
+                  }
+                ],
+                "interpolator": "ease_in_out"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_in_out_set",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Fade, interpolator: ease_out, duration: 500",
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.2,
+                "interpolator": "ease_out"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_out_fade",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Scale, interpolator: ease_out, duration: 500",
+              "action_animation": {
+                "name": "scale",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.6,
+                "interpolator": "ease_out"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_out_scale",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Set, interpolator: ease_out, duration: 500",
+              "action_animation": {
+                "name": "set",
+                "items": [
+                  {
+                    "name": "fade",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.2
+                  },
+                  {
+                    "name": "scale",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.6
+                  }
+                ],
+                "interpolator": "ease_out"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_ease_out_set",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Fade, interpolator: linear, duration: 500",
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.2,
+                "interpolator": "linear"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_linear_fade",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Scale, interpolator: linear, duration: 500",
+              "action_animation": {
+                "name": "scale",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.6,
+                "interpolator": "linear"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_linear_scale",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Set, interpolator: linear, duration: 500",
+              "action_animation": {
+                "name": "set",
+                "items": [
+                  {
+                    "name": "fade",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.2
+                  },
+                  {
+                    "name": "scale",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.6
+                  }
+                ],
+                "interpolator": "linear"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_linear_set",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Fade, interpolator: spring, duration: 500",
+              "action_animation": {
+                "name": "fade",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.2,
+                "interpolator": "spring"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_spring_fade",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Scale, interpolator: spring, duration: 500",
+              "action_animation": {
+                "name": "scale",
+                "start_value": 1,
+                "duration": 500,
+                "end_value": 0.6,
+                "interpolator": "spring"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_spring_scale",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "Set, interpolator: spring, duration: 500",
+              "action_animation": {
+                "name": "set",
+                "items": [
+                  {
+                    "name": "fade",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.2
+                  },
+                  {
+                    "name": "scale",
+                    "start_value": 1,
+                    "duration": 500,
+                    "end_value": 0.6
+                  }
+                ],
+                "interpolator": "spring"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_spring_set",
+                  "url": "fake"
+                }
+              ]
+            },
+            {
+              "type": "label_text",
+              "text": "No animation",
+              "action_animation": {
+                "name": "no_animation"
+              },
+              "actions": [
+                {
+                  "log_id": "animation_no_animation",
+                  "url": "fake"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -58,14 +58,11 @@ struct RegressionTestModel: Decodable, Hashable {
       throw DecodingError(key: .steps, title: title, error: error)
     }
 
-    let files: [String]
+    let file: String
     do {
-      files = try container.decode([String].self, forKey: .files)
+      file = try container.decode(String.self, forKey: .file)
     } catch {
-      throw DecodingError(key: .files, title: title, error: error)
-    }
-    guard let file = files.first else {
-      throw DecodingError("Empty files section in test '\(title)'")
+      throw DecodingError(key: .file, title: title, error: error)
     }
     if let url = makeFileUrl(file) {
       self.url = url
@@ -101,7 +98,7 @@ struct RegressionTestModel: Decodable, Hashable {
   
   private enum CodingKeys: String, CodingKey {
     case expectedResults = "expected_results"
-    case files
+    case file
     case platforms
     case steps
     case tags

@@ -19,7 +19,8 @@ enum TestData {
     return try! JSONDecoder()
       .decode(RegressionTestsModel.self, from: indexFileData)
       .tests
-      .filter({ $0.platforms.contains(.ios) })
+      .filter { $0.platforms.contains(.ios) }
+      .sorted { $0.title < $1.title }
   }()
 
   private static func getAllFiles(path: String) -> [(URL, String)] {
