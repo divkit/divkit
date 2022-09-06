@@ -2,8 +2,15 @@
   "templates": {
     "button": {
       "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 48
+      },
+      "width": {
+        "type": "match_parent"
+      },
       "border": {
-        "corner_radius": 8
+        "corner_radius": 16
       },
       "background": [
         {
@@ -11,15 +18,22 @@
           "$color": "background_color"
         }
       ],
-      "font_size": 18,
+      "font_size": 14,
       "font_weight": "medium",
       "text_alignment_vertical": "center",
       "text_alignment_horizontal": "center",
-      "text_color": "#34495E"
+      "text_color": "#000000"
     }
   },
   "card": {
     "log_id": "action_animations",
+    "variables": [
+      {
+        "name": "last_clicked",
+        "type": "string",
+        "value": "none"
+      }
+    ],
     "states": [
       {
         "state_id": 0,
@@ -31,49 +45,38 @@
             "right": 16,
             "bottom": 16
           },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#2C3E50"
-            }
-          ],
           "orientation": "vertical",
           "items": [
             {
               "type": "button",
-              "height": {
-                "type": "fixed",
-                "value": 48
-              },
               "margins": {
                 "bottom": 16
               },
-              "background_color": "#00CCCC",
-              "text": "NATIVE",
+              "background_color": "#0077FF",
+              "text_color": "#ffffff",
+              "text": "Native",
               "actions": [
                 {
                   "log_id": "native_button_press",
-                  "url": "div-action://animation/native"
+                  "url": "div-action://set_variable?name=last_clicked&value=native"
                 }
               ],
               "action_animation": {
                 "name": "native"
               }
-            },{
+            },
+            {
               "type": "button",
-              "height": {
-                "type": "fixed",
-                "value": 48
-              },
               "margins": {
                 "bottom": 16
               },
-              "background_color": "#1ABC9C",
-              "text": "FADE",
+              "background_color": "#00CCCC",
+              "text": "Fade",
+              "text_color": "#ffffff",
               "actions": [
                 {
                   "log_id": "fade_button_press",
-                  "url": "div-action://animation/fade"
+                  "url": "div-action://set_variable?name=last_clicked&value=fade"
                 }
               ],
               "action_animation": {
@@ -86,19 +89,16 @@
             },
             {
               "type": "button",
-              "height": {
-                "type": "fixed",
-                "value": 48
-              },
               "margins": {
                 "bottom": 16
               },
-              "background_color": "#2ECC71",
-              "text": "SCALE",
+              "background_color": "#00B341",
+              "text_color": "#ffffff",
+              "text": "Scale",
               "actions": [
                 {
                   "log_id": "scale_button_press",
-                  "url": "div-action://animation/scale"
+                  "url": "div-action://set_variable?name=last_clicked&value=scale"
                 }
               ],
               "action_animation": {
@@ -111,19 +111,16 @@
             },
             {
               "type": "button",
-              "height": {
-                "type": "fixed",
-                "value": 48
-              },
               "margins": {
                 "bottom": 16
               },
-              "background_color": "#F1C40F",
-              "text": "SET",
+              "background_color": "#FFCC00",
+              "text": "Set",
+              "text_color": "#000000",
               "actions": [
                 {
                   "log_id": "set_button_press",
-                  "url": "div-action://animation/set"
+                  "url": "div-action://set_variable?name=last_clicked&value=set"
                 }
               ],
               "action_animation": {
@@ -148,19 +145,15 @@
             },
             {
               "type": "button",
-              "height": {
-                "type": "fixed",
-                "value": 48
-              },
               "margins": {
                 "bottom": 16
               },
               "background_color": "#E67E22",
-              "text": "NO ANIMATION",
+              "text": "No animation",
               "actions": [
                 {
                   "log_id": "no_animation_button_press",
-                  "url": "div-action://animation/no_animation"
+                  "url": "div-action://set_variable?name=last_clicked&value=no_animation"
                 }
               ],
               "action_animation": {
@@ -169,12 +162,8 @@
             },
             {
               "type": "button",
-              "height": {
-                "type": "fixed",
-                "value": 48
-              },
               "background_color": "#E74C3C",
-              "text": "NO ACTION",
+              "text": "No action",
               "action_animation": {
                 "name": "fade",
                 "start_value": 1.0,

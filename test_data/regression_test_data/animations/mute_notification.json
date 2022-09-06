@@ -45,27 +45,18 @@
       }
     },
     "card_image": {
-      "type": "text",
-      "text":"  ",
+      "type": "image",
       "width": {
         "type": "match_parent"
       },
       "height": {
         "type": "fixed",
-        "value": 150
+        "value": 240
       },
       "border": {
         "$corner_radius": "card_image__border__corner_radius"
       },
-      "aspect": {
-        "ratio": 1.78
-      },
-      "background": [
-        {
-          "color": "#ff7518",
-          "type": "solid"
-        }
-      ]
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png"
     },
     "spacer_4": {
       "type": "separator",
@@ -97,10 +88,6 @@
     },
     "card_container": {
       "type": "container",
-      "margins": {
-        "left": 4,
-        "right": 4
-      },
       "background": [
         {
           "type": "solid",

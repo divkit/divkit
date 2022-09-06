@@ -1,5 +1,54 @@
 {
-  "templates": {},
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "image_block": {
+      "type": "image",
+      "border": {
+        "corner_radius": 16
+      },
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+      "placeholder_color": "#C0C0B0",
+      "preload_required": 1,
+      "visibility_actions": [
+        {
+          "log_id": "content_item_show:2",
+          "visibility_percentage": 80,
+          "visibility_duration": 0
+        }
+      ],
+      "alpha": 0.8,
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 240
+      }
+    }
+  },
   "card": {
     "log_id": "gallery",
     "states": [
@@ -41,265 +90,109 @@
                               },
                               "items": [
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
-                                  "placeholder_color": "#081010",
-                                  "preload_required": 1,
-                                  "preview": "/9j/4AAQSkZJRgABAQAASABIAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCAAgACADAREAAhEBAxEB/8QAGgABAAIDAQAAAAAAAAAAAAAABAUGAQIDCP/EAB0QAAEFAQEBAQAAAAAAAAAAAAEAAgMEESEFEjH/xAAYAQADAQEAAAAAAAAAAAAAAAAAAQIDBP/EABoRAQACAwEAAAAAAAAAAAAAAAABEQISEyH/2gAMAwEAAhEDEQA/APO3k12vb1aRLh1OfUb8lVadUbdhDQeotOqDtP8Al5CLEYLPQplrf1ZbF1KFUkHSUbF2FteeHNPCnsXZEWfJJJ4UWOyzxTQtGLNy+lwvic1JEzLWaSADCqgeyPIYHDQEF6rjLZJ0FOnXOJUXoFjelKmM4W4z3yTupxC8cGYb2jCU6KcH/9k=",
+                                  "type": "text_block",
+                                  "text": "Item 0",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:0",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
-                                  "placeholder_color": "#F0F0E8",
-                                  "preload_required": 1,
+                                  "type": "image_block",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:1",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
-                                  "placeholder_color": "#C0C0B0",
-                                  "preload_required": 1,
+                                  "type": "text_block",
+                                  "text": "Item 2",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:2",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
-                                  "placeholder_color": "#F8F8F8",
-                                  "preload_required": 1,
+                                  "type": "image_block",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:3",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
-                                  "placeholder_color": "#B8B8B8",
-                                  "preload_required": 1,
+                                  "type": "text_block",
+                                  "text": "Item 4",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:4",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
-                                  "placeholder_color": "#F8F8F8",
-                                  "preload_required": 1,
+                                  "type": "image_block",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:5",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
-                                  "placeholder_color": "#D0D0D0",
-                                  "preload_required": 1,
+                                  "type": "text_block",
+                                  "text": "Item 6",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:6",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
-                                  "placeholder_color": "#F8F8F8",
-                                  "preload_required": 1,
+                                  "type": "image_block",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:7",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
-                                  "placeholder_color": "#D0D0D0",
-                                  "preload_required": 1,
+                                  "type": "text_block",
+                                  "text": "Item 8",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:8",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 },
                                 {
-                                  "type": "image",
-                                  "aspect": {
-                                    "ratio": 1
-                                  },
-                                  "border": {
-                                    "corner_radius": 16,
-                                    "stroke": {
-                                      "color": "#1F000000",
-                                      "width": 1
-                                    }
-                                  },
-                                  "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
-                                  "placeholder_color": "#F8F8F8",
-                                  "preload_required": 1,
+                                  "type": "image_block",
                                   "visibility_actions": [
                                     {
                                       "log_id": "content_item_show:9",
                                       "visibility_percentage": 80,
                                       "visibility_duration": 0
                                     }
-                                  ],
-                                  "width": {
-                                    "type": "match_parent"
-                                  }
+                                  ]
                                 }
                               ],
                               "layout_mode": {

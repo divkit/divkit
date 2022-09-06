@@ -47,9 +47,9 @@
                             "state_id": "short",
                             "div": {
                               "type": "text_14_18_medium",
-                              "text": "👨‍🏭👨‍🏭👩‍💼👨‍💼👩‍🔬🧏‍♂️🙆‍♂️🧟‍♂️🧟‍♀️(¬‿¬)(⌐■_■)⪝⪘⪱⪺⪤⪛⪕⪫⪮“🥅🏓🪁🏓🏑🎸🔐\n\nThe Vizsla is a natural hunter endowed with an excellent nose and outstanding trainability.\nIt was bred to work in fields, forests or bodies of water. Although they are lively, gentle-mannered, demonstrably affectionate and sensitive, they are also fearless and possess a well-developed protective instinct.",
+                              "text": "\uD83D\uDC15❤\n❤The Vizsla❤ is a natural hunter endowed with an excellent nose and outstanding trainability.\n\nIt was bred to work in fields, forests or bodies of water. Although they are lively, gentle-mannered, demonstrably affectionate and sensitive, they are also fearless and possess a well-developed protective instinct.",
                               "text_color": "#333333",
-                              "max_lines": 5,
+                              "max_lines": 2,
                               "margin": 15,
                               "ellipsis": {
                                 "text": "… Expand",
@@ -74,7 +74,7 @@
                             "div": {
                               "type": "text_14_18_medium",
                               "margin": 15,
-                              "text": "👨‍🏭👨‍🏭👩‍💼👨‍💼👩‍🔬🧏‍♂️🙆‍♂️🧟‍♂️🧟‍♀️(¬‿¬)(⌐■_■)⪝⪘⪱⪺⪤⪛⪕⪫⪮“🥅🏓🪁🏓🏑🎸🔐\n\nThe Vizsla is a natural hunter endowed with an excellent nose and outstanding trainability.\nIt was bred to work in fields, forests or bodies of water. Although they are lively, gentle-mannered, demonstrably affectionate and sensitive, they are also fearless and possess a well-developed protective instinct.",
+                              "text": "\uD83D\uDC15❤\n❤The Vizsla❤ is a natural hunter endowed with an excellent nose and outstanding trainability.\n\nIt was bred to work in fields, forests or bodies of water. Although they are lively, gentle-mannered, demonstrably affectionate and sensitive, they are also fearless and possess a well-developed protective instinct.",
                               "text_color": "#333333",
                               "actions": [
                                 {
@@ -107,7 +107,7 @@
                         "background": [
                           {
                             "type": "solid",
-                            "color": "#ddeeff"
+                            "color": "#f1dff2"
                           }
                         ],
                         "visibility_action": {

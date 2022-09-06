@@ -2,29 +2,40 @@
   "templates": {
     "title_text": {
       "type": "text",
-      "font_size": 18,
-      "text_alignment_horizontal": "center",
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "margins": {
+        "left": 16,
+        "right": 16
+      },
       "text_alignment_vertical": "center",
-      "text_color": "#1ABC9C"
+      "text_color": "#000000"
     },
     "content_text": {
       "type": "text",
       "font_size": 14,
       "line_height": 20,
-      "text_color": "#ECF0F1"
+      "text_color": "#000000"
     },
     "comment_text": {
       "type": "text",
       "font_size": 14,
-      "text_color": "#ECF0F1"
+      "text_color": "#5e5e5e"
     },
     "comment": {
       "type": "grid",
-      "$id": "comment_id",
+      "visibility_actions": [
+        {
+          "log_id": "comment_grid",
+          "log_limit": 5,
+          "visibility_duration": 1000
+        }
+      ],
       "background": [
         {
           "type": "solid",
-          "color": "#2C3E50"
+          "color": "#0e000000"
         }
       ],
       "border": {
@@ -35,6 +46,13 @@
         {
           "type": "separator",
           "id": "separator",
+          "visibility_actions": [
+            {
+              "log_id": "separator",
+              "log_limit": 5,
+              "visibility_duration": 1000
+            }
+          ],
           "width": {
             "type": "fixed",
             "value": 4
@@ -55,6 +73,13 @@
         },
         {
           "type": "text",
+          "visibility_actions": [
+            {
+              "log_id": "text",
+              "log_limit": 5,
+              "visibility_duration": 1000
+            }
+          ],
           "width": {
             "type": "match_parent",
             "weight": 1
@@ -76,6 +101,13 @@
         },
         {
           "type": "text",
+          "visibility_actions": [
+            {
+              "log_id": "text2",
+              "log_limit": 5,
+              "visibility_duration": 1000
+            }
+          ],
           "width": {
             "type": "wrap_content"
           },
@@ -94,6 +126,13 @@
         },
         {
           "type": "state",
+          "visibility_actions": [
+            {
+              "log_id": "comment_state",
+              "log_limit": 5,
+              "visibility_duration": 1000
+            }
+          ],
           "margins": {
             "left": 8,
             "right": 8,
@@ -104,12 +143,17 @@
           "states": [
             {
               "state_id": "collapsed",
+              "animation_in": {
+                "name": "fade",
+                "interpolator": "ease",
+                "duration": 200
+              },
+              "animation_out": {
+                "name": "fade",
+                "interpolator": "ease_in_out",
+                "duration": 200
+              },
               "div": {
-                "id": "comment",
-                "transition_change": {
-                  "type": "change_bounds",
-                  "duration": 250
-                },
                 "type": "comment_text",
                 "max_lines": 2,
                 "$text": "comment",
@@ -130,12 +174,17 @@
             },
             {
               "state_id": "expanded",
+              "animation_in": {
+                "name": "fade",
+                "interpolator": "ease",
+                "duration": 200
+              },
+              "animation_out": {
+                "name": "fade",
+                "interpolator": "ease_in_out",
+                "duration": 200
+              },
               "div": {
-                "id": "comment",
-                "transition_change": {
-                  "type": "change_bounds",
-                  "duration": 250
-                },
                 "type": "comment_text",
                 "$text": "comment",
                 "$actions": "expanded_actions"
@@ -143,53 +192,28 @@
             }
           ]
         }
-      ],
-      "transition_in": {
-        "type": "slide",
-        "$edge": "transition_in_edge",
-        "duration": 250
-      },
-      "transition_out": {
-        "type": "set",
-        "items": [
-          {
-            "type": "fade",
-            "alpha": 0.33,
-            "duration": 250
-          },
-          {
-            "type": "slide",
-            "$edge": "transition_in_edge",
-            "duration": 250
-          }
-        ]
-      }
+      ]
     },
     "button": {
       "type": "text",
       "height": {
         "type": "fixed",
-        "value": 48
-      },
-      "paddings": {
-        "left": 16,
-        "right": 16
+        "value": 36
       },
       "background": [
         {
           "type": "solid",
-          "color": "#1ABC9C"
+          "color": "#f1dff2"
         }
       ],
       "border": {
-        "corner_radius": 4
+        "corner_radius": 8
       },
       "font_size": 16,
-      "font_weight": "medium",
       "max_lines": 1,
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
-      "text_color": "#2C3E50"
+      "text_color": "#000000"
     },
     "borderless_button": {
       "type": "text",
@@ -198,6 +222,10 @@
         "value": 40
       },
       "paddings": {
+        "left": 16,
+        "right": 16
+      },
+      "margins": {
         "left": 16,
         "right": 16
       },
@@ -227,15 +255,8 @@
         "right": 16,
         "bottom": 16
       },
-      "background": [
-        {
-          "type": "solid",
-          "color": "#34495E"
-        }
-      ],
       "border": {
-        "corner_radius": 8,
-        "has_shadow": 1
+        "corner_radius": 8
       },
       "orientation": "vertical"
     }
@@ -253,11 +274,10 @@
               "margins": {
                 "bottom": 8
               },
-              "text": "LOREM IPSUM",
+              "text": "Title",
               "width": {
                 "type": "wrap_content"
               },
-              "alignment_horizontal": "center",
               "action": {
                 "log_id": "show_tooltip",
                 "url": "div-action://show_tooltip?id=tooltip"
@@ -300,49 +320,6 @@
                           "type": "change_bounds",
                           "duration": 250
                         }
-                      },
-                      {
-                        "type": "state",
-                        "margins": {
-                          "bottom": 8
-                        },
-                        "div_id": "comments_button",
-                        "states": [
-                          {
-                            "state_id": "text_show_comments",
-                            "div": {
-                              "type": "borderless_button",
-                              "text": "SHOW COMMENTS",
-                              "actions": [
-                                {
-                                  "log_id": "show_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded"
-                                },
-                                {
-                                  "log_id": "button_text_hide_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_hide_comments"
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "state_id": "text_hide_comments",
-                            "div": {
-                              "type": "borderless_button",
-                              "text": "HIDE COMMENTS",
-                              "actions": [
-                                {
-                                  "log_id": "hide_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/collapsed"
-                                },
-                                {
-                                  "log_id": "button_text_show_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_show_comments"
-                                }
-                              ]
-                            }
-                          }
-                        ]
                       },
                       {
                         "type": "state",
@@ -461,6 +438,49 @@
                                     }
                                   ],
                                   "transition_in_edge": "right"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "state",
+                        "margins": {
+                          "bottom": 8
+                        },
+                        "div_id": "comments_button",
+                        "states": [
+                          {
+                            "state_id": "text_show_comments",
+                            "div": {
+                              "type": "borderless_button",
+                              "text": "SHOW COMMENTS",
+                              "actions": [
+                                {
+                                  "log_id": "show_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded"
+                                },
+                                {
+                                  "log_id": "button_text_hide_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_hide_comments"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "text_hide_comments",
+                            "div": {
+                              "type": "borderless_button",
+                              "text": "HIDE COMMENTS",
+                              "actions": [
+                                {
+                                  "log_id": "hide_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/collapsed"
+                                },
+                                {
+                                  "log_id": "button_text_show_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_show_comments"
                                 }
                               ]
                             }

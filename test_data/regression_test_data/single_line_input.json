@@ -29,15 +29,15 @@
             },
             "margins": {
               "left": 16,
-              "top": 16,
+              "top": 20,
               "right": 16,
               "bottom": 16
             },
             "paddings": {
               "left": 16,
-              "top": 16,
+              "top": 10,
               "right": 16,
-              "bottom": 16
+              "bottom": 10
             },
             "alpha": 1.0,
             "alignment_horizontal": "center",
@@ -45,21 +45,20 @@
             "background": [
               {
                 "type": "solid",
-                "color": "#FFFF00"
+                "color": "#0e000000"
               }
             ],
             "border": {
-              "corner_radius": 4,
-              "has_shadow": 1
+              "corner_radius": 8
             },
-            "font_size": 20,
+            "font_size": 16,
             "font_weight": "medium",
-            "text_color": "#1ABC9C",
+            "text_color": "#000000",
             "text_variable": "my_edit_text",
             "hint_text": "Hint",
-            "hint_color": "#F1C40F",
-            "highlight_color": "#E74C3C",
-            "line_height": 40,
+            "hint_color": "#888888",
+            "highlight_color": "#e0bae3",
+            "line_height": 22,
             "select_all_on_focus": 1,
             "keyboard_type": "single_line_text"
           },
@@ -71,37 +70,27 @@
             "height": {
               "type": "wrap_content"
             },
-            "margins": {
-              "left": 16,
-              "top": 16,
-              "right": 16,
-              "bottom": 16
-            },
             "paddings": {
-              "left": 16,
-              "top": 16,
+              "left": 18,
               "right": 16,
               "bottom": 16
             },
             "alpha": 1.0,
             "alignment_horizontal": "center",
             "alignment_vertical": "center",
-            "background": [
-              {
-                "type": "solid",
-                "color": "#34495E"
-              }
-            ],
-            "border": {
-              "corner_radius": 4,
-              "has_shadow": 1
-            },
-            "font_size": 20,
+            "font_size": 16,
             "font_weight": "medium",
-            "text_alignment_horizontal": "center",
+            "text_alignment_horizontal": "left",
             "text_alignment_vertical": "center",
-            "text_color": "#1ABC9C",
-            "text": "Text:\n@{my_edit_text}"
+            "text_color": "#000000",
+            "text": "Text: @{my_edit_text}",
+            "ranges": [
+              {
+                "start": 0,
+                "end": 5,
+                "text_color": "#777777"
+              }
+            ]
           }
         ]
       }

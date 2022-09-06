@@ -2,11 +2,8 @@
   "templates": {
     "text_block": {
       "type": "text",
-      "text_color": "#1ABC9C",
-      "font_size": 18,
-      "paddings": {
-        "top": 8
-      }
+      "text_color": "#000000",
+      "font_size": 18
     }
   },
   "card": {
@@ -20,16 +17,21 @@
           "margins": {
             "bottom": 48
           },
+          "height": {
+            "type": "fixed",
+            "value": 140
+          },
           "paddings": {
             "top": 16,
             "bottom": 16,
             "left": 16,
             "right": 16
           },
+          "content_alignment_vertical": "center",
           "background": [
             {
               "type": "solid",
-              "color": "#34495E"
+              "color": "#0e000000"
             }
           ],
           "items": [
@@ -40,7 +42,10 @@
             },
             {
               "type": "text_block",
-              "text": "This text is not selectable."
+              "text": "This text is not selectable.",
+              "paddings": {
+                "top": 14
+              }
             }
           ]
         }

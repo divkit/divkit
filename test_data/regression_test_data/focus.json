@@ -4,7 +4,7 @@
       "type": "text",
       "state_id": 0,
       "font_size": 24,
-      "font_weight": "bold",
+      "font_weight": "light",
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
       "text_color": "#000000",
@@ -12,9 +12,12 @@
       "background": [
         {
           "type": "solid",
-          "color": "#FFFFFF"
+          "color": "#0e000000"
         }
       ],
+      "border": {
+        "corner_radius": 6
+      },
       "height": {
         "type": "wrap_content"
       },
@@ -50,7 +53,7 @@
           "items": [
             {
               "type": "text",
-              "text": "Button is inactive - background is red\n\nButton is active - background is blue\n\nFORWARD - enumeration UP - DOWN - LEFT - RIGHT (if button is active, it changes the directions)\nUP, DOWN, LEFT, RIGHT - set button",
+              "text": "Button is inactive - background is red.\n\nButton is active - background is blue.\n\nFORWARD - enumeration Left - Right - Up - Down (if button is active, it changes the directions).\nUP, DOWN, LEFT, RIGHT - set button.",
               "text_color": "#000000",
               "margins": {
                 "top": 8,
@@ -61,74 +64,20 @@
               "font_size": 16
             },
             {
-              "type": "container",
-              "div_id": "container",
-              "orientation": "horizontal",
+              "type": "gallery",
+              "orientation": "vertical",
+              "column_count": 3,
+              "item_spacing": 10,
+              "height": {
+                "type": "match_parent"
+              },
+              "paddings": {
+                "left": 16,
+                "top": 60,
+                "right": 16,
+                "bottom": 16
+              },
               "items": [
-                {
-                  "type": "state",
-                  "div_id": "up",
-                  "states": [
-                    {
-                      "state_id": "not_tapped",
-                      "div": {
-                        "type": "button",
-                        "id": "up",
-                        "text": "up",
-                        "focus": {
-                          "background": [
-                            {
-                              "type": "solid",
-                              "color": "#ff7f50"
-                            }
-                          ],
-                          "next_focus_ids": {
-                            "forward": "down",
-                            "up": "up",
-                            "left": "left",
-                            "down": "down",
-                            "right": "right"
-                          }
-                        },
-                        "actions": [
-                          {
-                            "log_id": "not_tapped",
-                            "url": "div-action://set_state?state_id=0/up/tapped"
-                          }
-                        ]
-                      }
-                    },
-                    {
-                      "state_id": "tapped",
-                      "div": {
-                        "type": "button",
-                        "id": "up",
-                        "text": "*up*",
-                        "focus": {
-                          "background": [
-                            {
-                              "type": "solid",
-                              "color": "#4183d7"
-                            }
-                          ],
-                          "next_focus_ids": {
-                            "forward": "right",
-                            "up": "up",
-                            "left": "left",
-                            "down": "down",
-                            "right": "right"
-                          }
-                        },
-                        "actions": [
-                          {
-                            "log_id": "not_tapped",
-                            "url": "div-action://set_state?state_id=0/up/not_tapped"
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                },
                 {
                   "type": "state",
                   "div_id": "left",
@@ -138,7 +87,11 @@
                       "div": {
                         "type": "button",
                         "id": "left",
-                        "text": "left",
+                        "height": {
+                          "type": "fixed",
+                          "value": 70
+                        },
+                        "text": "Left",
                         "focus": {
                           "background": [
                             {
@@ -167,7 +120,12 @@
                       "div": {
                         "type": "button",
                         "id": "left",
-                        "text": "*left*",
+                        "text": "Left",
+                        "height": {
+                          "type": "fixed",
+                          "value": 70
+                        },
+                        "font_weight": "bold",
                         "focus": {
                           "background": [
                             {
@@ -195,14 +153,18 @@
                 },
                 {
                   "type": "state",
-                  "div_id": "down",
+                  "div_id": "up",
                   "states": [
                     {
                       "state_id": "not_tapped",
                       "div": {
                         "type": "button",
-                        "id": "down",
-                        "text": "down",
+                        "id": "up",
+                        "text": "Up",
+                        "height": {
+                          "type": "fixed",
+                          "value": 30
+                        },
                         "focus": {
                           "background": [
                             {
@@ -211,7 +173,7 @@
                             }
                           ],
                           "next_focus_ids": {
-                            "forward": "left",
+                            "forward": "down",
                             "up": "up",
                             "left": "left",
                             "down": "down",
@@ -221,7 +183,7 @@
                         "actions": [
                           {
                             "log_id": "not_tapped",
-                            "url": "div-action://set_state?state_id=0/down/tapped"
+                            "url": "div-action://set_state?state_id=0/up/tapped"
                           }
                         ]
                       }
@@ -230,8 +192,13 @@
                       "state_id": "tapped",
                       "div": {
                         "type": "button",
-                        "id": "down",
-                        "text": "*down*",
+                        "id": "up",
+                        "text": "Up",
+                        "height": {
+                          "type": "fixed",
+                          "value": 30
+                        },
+                        "font_weight": "bold",
                         "focus": {
                           "background": [
                             {
@@ -240,7 +207,7 @@
                             }
                           ],
                           "next_focus_ids": {
-                            "forward": "up",
+                            "forward": "right",
                             "up": "up",
                             "left": "left",
                             "down": "down",
@@ -250,7 +217,7 @@
                         "actions": [
                           {
                             "log_id": "not_tapped",
-                            "url": "div-action://set_state?state_id=0/down/not_tapped"
+                            "url": "div-action://set_state?state_id=0/up/not_tapped"
                           }
                         ]
                       }
@@ -266,7 +233,11 @@
                       "div": {
                         "type": "button",
                         "id": "right",
-                        "text": "right",
+                        "text": "Right",
+                        "height": {
+                          "type": "fixed",
+                          "value": 70
+                        },
                         "focus": {
                           "background": [
                             {
@@ -295,7 +266,12 @@
                       "div": {
                         "type": "button",
                         "id": "right",
-                        "text": "*right*",
+                        "text": "Right",
+                        "height": {
+                          "type": "fixed",
+                          "value": 70
+                        },
+                        "font_weight": "bold",
                         "focus": {
                           "background": [
                             {
@@ -315,6 +291,79 @@
                           {
                             "log_id": "not_tapped",
                             "url": "div-action://set_state?state_id=0/right/not_tapped"
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "state",
+                  "div_id": "down",
+                  "states": [
+                    {
+                      "state_id": "not_tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "down",
+                        "text": "Down",
+                        "height": {
+                          "type": "fixed",
+                          "value": 30
+                        },
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#ff7f50"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "left",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/down/tapped"
+                          }
+                        ]
+                      }
+                    },
+                    {
+                      "state_id": "tapped",
+                      "div": {
+                        "type": "button",
+                        "id": "down",
+                        "text": "Down",
+                        "height": {
+                          "type": "fixed",
+                          "value": 30
+                        },
+                        "font_weight": "bold",
+                        "focus": {
+                          "background": [
+                            {
+                              "type": "solid",
+                              "color": "#4183d7"
+                            }
+                          ],
+                          "next_focus_ids": {
+                            "forward": "up",
+                            "up": "up",
+                            "left": "left",
+                            "down": "down",
+                            "right": "right"
+                          }
+                        },
+                        "actions": [
+                          {
+                            "log_id": "not_tapped",
+                            "url": "div-action://set_state?state_id=0/down/not_tapped"
                           }
                         ]
                       }

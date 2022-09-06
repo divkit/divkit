@@ -1,132 +1,208 @@
 {
   "templates": {
-    "gallery_item": {
+    "tab": {
       "type": "container",
       "width": {
-        "type": "fixed",
-        "value": 240
+        "type": "match_parent"
       },
       "height": {
         "type": "fixed",
-        "value": 270
+        "value": 300
+      },
+      "border": {
+        "corner_radius": 6
       },
       "background": [
         {
-          "type": "solid",
-          "color": "#2C3E50"
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "items": [
+        {
+          "type": "image_block"
+        },
+        {
+          "type": "text_14_18_regular",
+          "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+          "max_lines": 2
+        }
+      ]
+    },
+    "image_block": {
+      "type": "image",
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "match_parent"
+      },
+      "extensions": [
+        {
+          "id": "pinch-to-zoom"
         }
       ],
       "border": {
-        "corner_radius": 8
+        "corner_radius": 4
       },
-      "items": [
-        {
-          "type": "image",
-          "height": {
-            "type": "fixed",
-            "value": 180
-          },
-          "$image_url": "image_url",
-          "$actions": "image_actions",
-          "extensions": [
-            {
-              "id": "pinch-to-zoom"
-            }
-          ]
-        },
-        {
-          "type": "text",
-          "paddings": {
-            "left": 8,
-            "top": 8,
-            "right": 8,
-            "bottom": 8
-          },
-          "font_size": 14,
-          "max_lines": 4,
-          "$text_color": "description_text_color",
-          "$text": "description_text"
-        }
-      ]
+      "height": {
+        "type": "fixed",
+        "value": 230
+      },
+      "margins": {
+        "left": 12,
+        "right": 12,
+        "top": 12,
+        "bottom": 12
+      },
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+      "placeholder_color": "#B8B8B8",
+      "preload_required": 1
+    },
+    "text_14_18_regular": {
+      "type": "text",
+      "font_size": 14,
+      "line_height": 18,
+      "$text": "text_14_18_regular__text",
+      "$text_color": "text_14_18_regular__text_color",
+      "margins": {
+        "left": 12,
+        "right": 12
+      }
     }
   },
   "card": {
-    "log_id": "actions",
+    "log_id": "gallery",
     "states": [
       {
         "state_id": 0,
         "div": {
-          "type": "gallery",
-          "margins": {
-            "left": 12,
-            "top": 12,
-            "right": 12,
-            "bottom": 12
-          },
+          "type": "container",
           "paddings": {
-            "left": 12,
-            "top": 12,
-            "right": 12,
-            "bottom": 12
+            "top": 16
           },
           "background": [
             {
               "type": "solid",
-              "color": "#34495E"
+              "color": "#FFFFFF"
             }
           ],
-          "border": {
-            "corner_radius": 12,
-            "has_shadow": 1
-          },
-          "item_spacing": 12,
-          "scroll_mode": "paging",
+          "visibility_actions": [
+            {
+              "log_id": "heartbeat",
+              "visibility_duration": 4000,
+              "visibility_percentage": 80
+            }
+          ],
           "items": [
             {
-              "type": "gallery_item",
-              "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2417786/-6824982346708162009/smart_crop_540x405",
-              "description_text_color": "#E67E22",
-              "description_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-              "image_actions": [
+              "type": "state",
+              "div_id": "body",
+              "states": [
                 {
-                  "log_id": "gallery_item_01_pressed",
-                  "url": "https://avatars.mds.yandex.net/get-zen_doc/2417786/-6824982346708162009/smart_crop_540x405"
-                }
-              ]
-            },
-            {
-              "type": "gallery_item",
-              "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290",
-              "description_text_color": "#3498DB",
-              "description_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-              "image_actions": [
-                {
-                  "log_id": "gallery_item_02_pressed",
-                  "url": "https://avatars.mds.yandex.net/get-zen_doc/2455156/-6559907909362846873/smart_crop_516x290"
-                }
-              ]
-            },
-            {
-              "type": "gallery_item",
-              "image_url": "https://avatars.mds.yandex.net/get-zen_doc/2458644/7063733708104094804/smart_crop_516x290",
-              "description_text_color": "#F1C40F",
-              "description_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-              "image_actions": [
-                {
-                  "log_id": "gallery_item_03_pressed",
-                  "url": "https://avatars.mds.yandex.net/get-zen_doc/2458644/7063733708104094804/smart_crop_516x290"
-                }
-              ]
-            },
-            {
-              "type": "gallery_item",
-              "image_url": "https://avatars.mds.yandex.net/get-zen_doc/1917356/-1151940982139903291/smart_crop_516x290",
-              "description_text_color": "#9B59B6",
-              "description_text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-              "image_actions": [
-                {
-                  "log_id": "gallery_item_03_pressed",
-                  "url": "https://avatars.mds.yandex.net/get-zen_doc/1917356/-1151940982139903291/smart_crop_516x290"
+                  "state_id": "card",
+                  "div": {
+                    "type": "container",
+                    "items": [
+                      {
+                        "type": "indicator",
+                        "paddings": {
+                          "bottom": 0
+                        },
+                        "margins": {
+                          "bottom": 0
+                        },
+                        "height": {
+                          "type": "fixed",
+                          "value": 2
+                        },
+                        "pager_id": "gallery",
+                        "inactive_item_color": "#D0D1D9",
+                        "active_item_color": "#000000",
+                        "shape": {
+                          "type": "rounded_rectangle",
+                          "item_width": {
+                            "type": "fixed",
+                            "value": 10
+                          },
+                          "item_height": {
+                            "type": "fixed",
+                            "value": 2
+                          },
+                          "corner_radius": {
+                            "type": "fixed",
+                            "value": 2
+                          }
+                        }
+                      },
+                      {
+                        "type": "pager",
+                        "id": "gallery",
+                        "paddings": {
+                          "right": 4,
+                          "left": 4
+                        },
+                        "margins": {
+                          "top": 8
+                        },
+                        "items": [
+                          {
+                            "type": "tab",
+                            "header": "Item 0",
+                            "visibility_actions": [
+                              {
+                                "log_id": "006",
+                                "log_limit": 0
+                              }
+                            ]
+                          },
+                          {
+                            "type": "tab",
+                            "header": "Item 1",
+                            "visibility_actions": [
+                              {
+                                "log_id": "106",
+                                "log_limit": 0
+                              }
+                            ]
+                          },
+                          {
+                            "type": "tab",
+                            "header": "Item 2",
+                            "visibility_actions": [
+                              {
+                                "log_id": "206",
+                                "log_limit": 0
+                              }
+                            ]
+                          },
+                          {
+                            "type": "tab",
+                            "header": "Item 3",
+                            "visibility_actions": [
+                              {
+                                "log_id": "306",
+                                "log_limit": 0
+                              }
+                            ]
+                          }
+                        ],
+                        "layout_mode": {
+                          "type": "fixed",
+                          "neighbour_page_width": {
+                            "type": "fixed",
+                            "value": 10
+                          }
+                        },
+                        "item_spacing": {
+                          "type": "fixed",
+                          "value": 4
+                        },
+                        "restrict_parent_scroll": 1
+                      }
+                    ]
+                  }
                 }
               ]
             }

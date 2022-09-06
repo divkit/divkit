@@ -5,10 +5,16 @@
       "state_id": 0,
       "div": {
         "type": "container",
+        "paddings": {
+          "top": 16,
+          "left": 16,
+          "right": 16
+        },
+        "content_alignment_horizontal": "center",
         "items": [
           {
             "type": "image",
-            "image_url": "file:///android_asset/images/lenna.png",
+            "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
             "extensions": [
               {
                 "id": "pinch-to-zoom"

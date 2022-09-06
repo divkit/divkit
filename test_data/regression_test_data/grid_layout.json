@@ -31,20 +31,41 @@
     },
     "button": {
       "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
       "border": {
         "corner_radius": 8
       },
       "background": [
         {
           "type": "solid",
-          "color": "#1ABC9C"
+          "color": "#0E000000"
         }
       ],
-      "font_size": 18,
+      "font_size": 16,
       "font_weight": "medium",
       "text_alignment_vertical": "center",
       "text_alignment_horizontal": "center",
-      "text_color": "#34495E"
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
     }
   },
   "card": {
@@ -66,12 +87,6 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "background": [
-            {
-              "type": "solid",
-              "color": "#2C3E50"
-            }
-          ],
           "orientation": "vertical",
           "items": [
             {
@@ -99,49 +114,77 @@
                 {
                   "type": "grid_element",
                   "row_span": "@{row_span_left}",
-                  "background_color": "#3498DB"
+                  "background_color": "#D098D3"
                 },
                 {
                   "type": "grid_element",
-                  "background_color": "#F1C40F"
+                  "background_color": "#FFCC00"
                 },
                 {
                   "type": "grid_element",
                   "row_span": "@{row_span_right}",
-                  "background_color": "#E67E22"
+                  "background_color": "#e1bae3"
                 },
                 {
                   "type": "grid_element",
                   "column_span": 2,
-                  "background_color": "#E74C3C"
+                  "background_color": "#ffe066"
                 }
               ]
             },
             {
-              "type": "button",
-              "width": {
-                "type": "match_parent"
-              },
-              "height": {
-                "type": "fixed",
-                "value": 48
-              },
-              "margins": {
-                "left": 16,
-                "top": 16,
-                "right": 16,
-                "bottom": 16
-              },
-              "alignment_vertical": "bottom",
-              "text": "UPDATE LAYOUT",
-              "actions": [
+              "type": "state",
+              "div_id": "button",
+              "states": [
                 {
-                  "log_id": "update_row_span_left",
-                  "url": "div-action://set_variable?name=row_span_left&value=1"
+                  "state_id": "state0",
+                  "div": {
+                    "type": "button",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "alignment_vertical": "bottom",
+                    "text": "Test button",
+                    "actions": [
+                      {
+                        "log_id": "update_row_span_left",
+                        "url": "div-action://set_variable?name=row_span_left&value=1"
+                      },
+                      {
+                        "log_id": "update_row_span_right",
+                        "url": "div-action://set_variable?name=row_span_right&value=2"
+                      },
+                      {
+                        "log_id": "update_button",
+                        "url": "div-action://set_state?state_id=0/button/state1"
+                      }
+                    ]
+                  }
                 },
                 {
-                  "log_id": "update_row_span_right",
-                  "url": "div-action://set_variable?name=row_span_right&value=2"
+                  "state_id": "state1",
+                  "div": {
+                    "type": "button",
+                    "width": {
+                      "type": "match_parent"
+                    },
+                    "alignment_vertical": "bottom",
+                    "text": "Test button",
+                    "actions": [
+                      {
+                        "log_id": "update_row_span_left",
+                        "url": "div-action://set_variable?name=row_span_left&value=2"
+                      },
+                      {
+                        "log_id": "update_row_span_right",
+                        "url": "div-action://set_variable?name=row_span_right&value=1"
+                      },
+                      {
+                        "log_id": "update_button",
+                        "url": "div-action://set_state?state_id=0/button/state0"
+                      }
+                    ]
+                  }
                 }
               ]
             }

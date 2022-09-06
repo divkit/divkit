@@ -1,146 +1,98 @@
 {
-  "type": "div2",
-  "log_id": "snapshot_test_card",
-  "states": [
-    {
-      "state_id": 0,
-      "div": {
-        "type": "gallery",
-        "orientation": "vertical",
-        "column_count": 2,
-        "item_spacing": 20,
-        "height": {
-          "type": "match_parent"
-        },
-        "items": [
-          {
-            "type": "text",
-            "text": "1",
-            "height": {
-              "type": "fixed",
-              "value": 300
-            },
-            "background": [
-              {
-                "color": "#AAAAAA",
-                "type": "solid"
-              }
-            ],
-            "border": {
-              "stroke": {
-                "color": "#BBFF0000",
-                "width": 2
-              },
-              "corner_radius": 10
-            }
-          },
-          {
-            "type": "text",
-            "text": "2",
-            "height": {
-              "type": "fixed",
-              "value": 100
-            },
-            "background": [
-              {
-                "color": "#AAAAAA",
-                "type": "solid"
-              }
-            ],
-            "border": {
-              "stroke": {
-                "color": "#BBFF0000",
-                "width": 2
-              },
-              "corner_radius": 10
-            }
-          },
-          {
-            "type": "text",
-            "text": "3",
-            "height": {
-              "type": "fixed",
-              "value": 100
-            },
-            "background": [
-              {
-                "color": "#AAAAAA",
-                "type": "solid"
-              }
-            ],
-            "border": {
-              "stroke": {
-                "color": "#BBFF0000",
-                "width": 2
-              },
-              "corner_radius": 10
-            }
-          },
-          {
-            "type": "text",
-            "text": "4",
-            "height": {
-              "type": "fixed",
-              "value": 100
-            },
-            "background": [
-              {
-                "color": "#AAAAAA",
-                "type": "solid"
-              }
-            ],
-            "border": {
-              "stroke": {
-                "color": "#BBFF0000",
-                "width": 2
-              },
-              "corner_radius": 10
-            }
-          },
-          {
-            "type": "text",
-            "text": "5",
-            "height": {
-              "type": "fixed",
-              "value": 100
-            },
-            "background": [
-              {
-                "color": "#AAAAAA",
-                "type": "solid"
-              }
-            ],
-            "border": {
-              "stroke": {
-                "color": "#BBFF0000",
-                "width": 2
-              },
-              "corner_radius": 10
-            }
-          },
-          {
-            "type": "text",
-            "text": "6",
-            "height": {
-              "type": "fixed",
-              "value": 100
-            },
-            "background": [
-              {
-                "color": "#AAAAAA",
-                "type": "solid"
-              }
-            ],
-            "border": {
-              "stroke": {
-                "color": "#BBFF0000",
-                "width": 2
-              },
-              "corner_radius": 10
-            }
-          }
-        ]
-      }
+  "templates": {
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "width": {
+        "type": "match_parent"
+      },
+      "border": {
+        "corner_radius": 6
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
     }
-  ]
+  },
+  "card": {
+    "type": "div2",
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "gallery",
+          "orientation": "vertical",
+          "column_count": 2,
+          "item_spacing": 20,
+          "height": {
+            "type": "match_parent"
+          },
+          "paddings": {
+            "left": 16,
+            "top": 16,
+            "right": 16,
+            "bottom": 16
+          },
+          "items": [
+            {
+              "type": "text_block",
+              "header": "Item 1",
+              "height": {
+                "type": "fixed",
+                "value": 340
+              }
+            },
+            {
+              "type": "text_block",
+              "header": "Item 2",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "text_block",
+              "header": "Item 3",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "text_block",
+              "header": "Item 4",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "text_block",
+              "header": "Item 5",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "text_block",
+              "header": "Item 6",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
 }

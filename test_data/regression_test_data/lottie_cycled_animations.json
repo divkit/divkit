@@ -1,102 +1,135 @@
 {
-    "templates": {
-        "lottie_image": {
-            "type": "image",
-            "aspect": {
-                "ratio": 0.8
-            },
-            "content_alignment_horizontal": "center",
-            "content_alignment_vertical": "center"
-        },
-        "lottie_gif": {
-            "type": "gif",
-            "aspect": {
-                "ratio": 0.8
-            },
-            "content_alignment_horizontal": "center",
-            "content_alignment_vertical": "center"
-        },
-        "card_title": {
-            "type": "text",
-            "text_alignment_horizontal": "center",
-            "text_alignment_vertical": "center",
-            "width": "div-match-parent-size",
-            "font_size": 14,
-            "font_weight": "medium",
-            "line_height": 18
-        },
-        "lottie_card": {
-            "type": "container",
-            "width": {
-                "type": "match_parent",
-                "weight": 1
-            },
-            "margins": {
-                "left": 4,
-                "right": 4,
-                "bottom": 4,
-                "top": 4
-            },
-            "paddings": {
-                "top": 4
-            },
-            "border": {
-                "corner_radius": 32,
-                "unit": "dp",
-                "stroke": {
-                    "width": 2,
-                    "color": "#dead00"
-                }
-            },
-            "orientation": "vertical"
-        },
-        "lottie_gif_card": {
-            "type": "lottie_card",
-            "items": [
-                {
-                    "type": "card_title",
-                    "$text": "lottie_image_text"
-                },
-                {
-                    "type": "lottie_gif",
-                    "$id": "image_id",
-                    "scale": "fit",
-                    "extensions": [
-                        {
-                            "id": "lottie",
-                            "$params": "lottie_params"
-                        }
-                    ],
-                    "gif_url": "https://i.gifer.com/VhdJ.gif"
-                }
-            ]
-        }
+  "templates": {
+    "lottie_image": {
+      "type": "image",
+      "aspect": {
+        "ratio": 0.8
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center"
     },
-    "card": {
-        "log_id": "root",
-        "states": [
+    "lottie_gif": {
+      "type": "gif",
+      "aspect": {
+        "ratio": 0.8
+      },
+      "content_alignment_horizontal": "center",
+      "content_alignment_vertical": "center"
+    },
+    "card_title": {
+      "type": "text",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "width": "div-match-parent-size",
+      "font_size": 22,
+      "paddings": {
+        "top": 20
+      },
+      "font_weight": "medium",
+      "line_height": 18
+    },
+    "lottie_card": {
+      "type": "container",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "margins": {
+        "left": 4,
+        "right": 4,
+        "bottom": 4,
+        "top": 4
+      },
+      "paddings": {
+        "top": 4,
+        "right": 2,
+        "left": 2
+      },
+      "border": {
+        "corner_radius": 32,
+        "unit": "dp"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "orientation": "vertical"
+    },
+    "lottie_image_card": {
+      "type": "lottie_card",
+      "items": [
+        {
+          "type": "card_title",
+          "$text": "lottie_image_text"
+        },
+        {
+          "type": "lottie_image",
+          "$id": "image_id",
+          "extensions": [
             {
-                "state_id": 0,
-                "div": {
-                    "type": "lottie_gif_card",
-                    "image_id": "cycled",
-                    "lottie_image_text": "Cycled",
-                    "lottie_params": {
-                        "lottie_url": "https://assets7.lottiefiles.com/packages/lf20_xsgvajuv.json",
-                        "repeats": [
-                            {
-                                "repeat_count": 0,
-                                "repeat_mode": "reverse"
-                            },
-                            {
-                                "repeat_count": -1,
-                                "repeat_mode": "restart",
-                                "min_frame": 110
-                            }
-                        ]
-                    }
-                }
+              "id": "lottie",
+              "$params": "lottie_params"
             }
-        ]
+          ],
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Johnrogershousemay2020.webp"
+        }
+      ]
+    },
+    "lottie_gif_card": {
+      "type": "lottie_card",
+      "margins": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "items": [
+        {
+          "type": "card_title",
+          "$text": "lottie_image_text"
+        },
+        {
+          "type": "lottie_gif",
+          "$id": "image_id",
+          "scale": "fit",
+          "extensions": [
+            {
+              "id": "lottie",
+              "$params": "lottie_params"
+            }
+          ],
+          "gif_url": "https://i.gifer.com/VhdJ.gif"
+        }
+      ]
     }
+  },
+  "card": {
+    "log_id": "root",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "lottie_gif_card",
+          "image_id": "cycled",
+          "lottie_image_text": "Cycled",
+          "lottie_params": {
+            "lottie_url": "https://assets7.lottiefiles.com/packages/lf20_xsgvajuv.json",
+            "repeats": [
+              {
+                "repeat_count": 0,
+                "repeat_mode": "reverse"
+              },
+              {
+                "repeat_count": -1,
+                "repeat_mode": "restart",
+                "min_frame": 110
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
 }

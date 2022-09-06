@@ -18,12 +18,14 @@
         "type": "match_parent"
       },
       "border": {
-        "corner_radius": 16,
-        "stroke": {
-          "color": "#50000000",
-          "width": 1
+        "corner_radius": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
         }
-      }
+      ]
     },
     "counter": {
       "type": "state",
@@ -132,73 +134,41 @@
         "state_id": 0,
         "div": {
           "type": "container",
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_vertical": "center",
           "margins": {
-            "top": 8,
-            "bottom": 8,
             "left": 8,
             "right": 8
           },
           "items": [
             {
               "type": "text",
-              "text": "Scroll up to find slider",
-              "margins": {
-                "top": 256,
-                "bottom": 256,
-                "left": 12,
-                "right": 12
-              },
-              "font_size": 24
-            },
-            {
-              "type": "text",
               "text": "Will you recommend Yandex to your friends and family?",
               "margins": {
-                "top": 8,
-                "bottom": 8,
-                "left": 12,
-                "right": 12
+                "left": 16,
+                "right": 16,
+                "bottom": 12
               },
               "font_size": 24
-            },
-            {
-              "type": "container",
-              "orientation": "overlap",
-              "margins": {
-                "top": 8,
-                "bottom": 8,
-                "left": 12,
-                "right": 12
-              },
-              "items": [
-                {
-                  "type": "text",
-                  "text": "always",
-                  "item_width": {
-                    "type": "match_parent"
-                  },
-                  "text_alignment_horizontal": "right",
-                  "text_alignment_vertical": "center",
-                  "text_color": "#a0000000"
-                },
-                {
-                  "type": "text",
-                  "text": "never",
-                  "text_color": "#a0000000"
-                }
-              ]
             },
             {
               "type": "slider",
               "width": {
                 "type": "match_parent"
               },
+              "paddings": {
+                "left": 8,
+                "right": 8,
+                "top": 16
+              },
               "max_value": 10,
               "min_value": 1,
               "thumb_value_variable": "my_thumb_value",
               "thumb_style": {
                 "type": "shape_drawable",
-                "color": "#ff0000",
+                "color": "#FFCC00",
                 "stroke": {
                   "color": "#ffffff",
                   "width": 3
@@ -221,7 +191,7 @@
               },
               "tick_mark_active_style": {
                 "type": "shape_drawable",
-                "color": "#ff0000",
+                "color": "#FFCC00",
                 "stroke": {
                   "color": "#ffffff",
                   "width": 2
@@ -267,7 +237,7 @@
               },
               "track_active_style": {
                 "type": "shape_drawable",
-                "color": "#ff0000",
+                "color": "#FFCC00",
                 "shape": {
                   "type": "rounded_rectangle",
                   "item_height": {
@@ -288,10 +258,35 @@
                 }
               },
               "thumb_text_style": {
-                "font_size": 16,
-                "text_color": "#00ff00",
+                "font_size": 14,
+                "text_color": "#FFFFFF",
                 "font_weight": "bold"
               }
+            },
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "margins": {
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "always",
+                  "item_width": {
+                    "type": "match_parent"
+                  },
+                  "text_alignment_horizontal": "right",
+                  "text_alignment_vertical": "center",
+                  "text_color": "#a0000000"
+                },
+                {
+                  "type": "text",
+                  "text": "never",
+                  "text_color": "#a0000000"
+                }
+              ]
             },
             {
               "type": "counter",

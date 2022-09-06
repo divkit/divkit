@@ -2,21 +2,26 @@
   "templates": {
     "title_text": {
       "type": "text",
-      "font_size": 18,
-      "text_alignment_horizontal": "center",
+      "font_size": 20,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "left",
+      "margins": {
+        "left": 16,
+        "right": 16
+      },
       "text_alignment_vertical": "center",
-      "text_color": "#1ABC9C"
+      "text_color": "#000000"
     },
     "content_text": {
       "type": "text",
       "font_size": 14,
       "line_height": 20,
-      "text_color": "#ECF0F1"
+      "text_color": "#000000"
     },
     "comment_text": {
       "type": "text",
       "font_size": 14,
-      "text_color": "#ECF0F1"
+      "text_color": "#5e5e5e"
     },
     "comment": {
       "type": "grid",
@@ -30,7 +35,7 @@
       "background": [
         {
           "type": "solid",
-          "color": "#2C3E50"
+          "color": "#0e000000"
         }
       ],
       "border": {
@@ -193,27 +198,22 @@
       "type": "text",
       "height": {
         "type": "fixed",
-        "value": 48
-      },
-      "paddings": {
-        "left": 16,
-        "right": 16
+        "value": 36
       },
       "background": [
         {
           "type": "solid",
-          "color": "#1ABC9C"
+          "color": "#f1dff2"
         }
       ],
       "border": {
-        "corner_radius": 4
+        "corner_radius": 8
       },
       "font_size": 16,
-      "font_weight": "medium",
       "max_lines": 1,
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
-      "text_color": "#2C3E50"
+      "text_color": "#000000"
     },
     "borderless_button": {
       "type": "text",
@@ -222,6 +222,10 @@
         "value": 40
       },
       "paddings": {
+        "left": 16,
+        "right": 16
+      },
+      "margins": {
         "left": 16,
         "right": 16
       },
@@ -251,15 +255,8 @@
         "right": 16,
         "bottom": 16
       },
-      "background": [
-        {
-          "type": "solid",
-          "color": "#34495E"
-        }
-      ],
       "border": {
-        "corner_radius": 8,
-        "has_shadow": 1
+        "corner_radius": 8
       },
       "orientation": "vertical"
     }
@@ -277,11 +274,10 @@
               "margins": {
                 "bottom": 8
               },
-              "text": "LOREM IPSUM",
+              "text": "Title",
               "width": {
                 "type": "wrap_content"
               },
-              "alignment_horizontal": "center",
               "tooltips": [
                 {
                   "id": "tooltip",
@@ -301,10 +297,10 @@
                       "type": "wrap_content"
                     },
                     "paddings": {
-                      "left": 8,
-                      "top": 8,
-                      "right": 8,
-                      "bottom": 8
+                      "left": 16,
+                      "top": 16,
+                      "right": 16,
+                      "bottom": 16
                     },
                     "background": [
                       {
@@ -313,10 +309,10 @@
                       }
                     ],
                     "border": {
-                      "corner_radius": 8
+                      "corner_radius": 6
                     },
                     "text_color": "#2C3E50",
-                    "text": "LOREM IPSUM",
+                    "text": "Title tooltip",
                     "action": {
                       "log_id": "hide_tooltip",
                       "url": "div-action://hide_tooltip?id=tooltip"
@@ -385,69 +381,6 @@
                           "bottom": 8
                         },
                         "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
-                      },
-                      {
-                        "type": "state",
-                        "margins": {
-                          "bottom": 8
-                        },
-                        "div_id": "comments_button",
-                        "states": [
-                          {
-                            "state_id": "text_show_comments",
-                            "animation_in": {
-                              "name": "fade",
-                              "start_delay": 200,
-                              "duration": 0
-                            },
-                            "animation_out": {
-                              "name": "fade",
-                              "start_delay": 200,
-                              "duration": 0
-                            },
-                            "div": {
-                              "type": "borderless_button",
-                              "text": "SHOW COMMENTS",
-                              "actions": [
-                                {
-                                  "log_id": "show_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded"
-                                },
-                                {
-                                  "log_id": "button_text_hide_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_hide_comments"
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "state_id": "text_hide_comments",
-                            "animation_in": {
-                              "name": "fade",
-                              "start_delay": 200,
-                              "duration": 0
-                            },
-                            "animation_out": {
-                              "name": "fade",
-                              "start_delay": 200,
-                              "duration": 0
-                            },
-                            "div": {
-                              "type": "borderless_button",
-                              "text": "HIDE COMMENTS",
-                              "actions": [
-                                {
-                                  "log_id": "hide_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/collapsed"
-                                },
-                                {
-                                  "log_id": "button_text_show_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_show_comments"
-                                }
-                              ]
-                            }
-                          }
-                        ]
                       },
                       {
                         "type": "state",
@@ -604,6 +537,69 @@
                                       "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded/comment_04/collapsed"
                                     }
                                   ]
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "state",
+                        "margins": {
+                          "bottom": 8
+                        },
+                        "div_id": "comments_button",
+                        "states": [
+                          {
+                            "state_id": "text_show_comments",
+                            "animation_in": {
+                              "name": "fade",
+                              "start_delay": 200,
+                              "duration": 0
+                            },
+                            "animation_out": {
+                              "name": "fade",
+                              "start_delay": 200,
+                              "duration": 0
+                            },
+                            "div": {
+                              "type": "borderless_button",
+                              "text": "SHOW COMMENTS",
+                              "actions": [
+                                {
+                                  "log_id": "show_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded"
+                                },
+                                {
+                                  "log_id": "button_text_hide_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_hide_comments"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "text_hide_comments",
+                            "animation_in": {
+                              "name": "fade",
+                              "start_delay": 200,
+                              "duration": 0
+                            },
+                            "animation_out": {
+                              "name": "fade",
+                              "start_delay": 200,
+                              "duration": 0
+                            },
+                            "div": {
+                              "type": "borderless_button",
+                              "text": "HIDE COMMENTS",
+                              "actions": [
+                                {
+                                  "log_id": "hide_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/collapsed"
+                                },
+                                {
+                                  "log_id": "button_text_show_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_show_comments"
                                 }
                               ]
                             }

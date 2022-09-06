@@ -62,23 +62,7 @@
         "value": 32,
         "unit": "sp",
         "type": "fixed"
-      },
-      "items": [
-        {
-          "width": {
-            "type": "fixed",
-            "unit": "sp",
-            "value": 18
-          },
-          "height": {
-            "unit": "sp",
-            "value": 18,
-            "type": "fixed"
-          },
-          "type": "image",
-          "$image_url": "addPlusImage"
-        }
-      ]
+      }
     },
     "bonuscardsIcon/21ad9283d0f87f76d18dd0067654810c": {
       "type": "image",
@@ -107,7 +91,7 @@
       "line_height": 14,
       "max_lines": 2,
       "text_color": "#99000000",
-      "font_size": 12,
+      "font_size": 10,
       "$text": "subtitle"
     },
     "pedometerShortcut/8a7a0b178bac6b329686519f192e09ab": {
@@ -181,10 +165,6 @@
         {
           "type": "solid",
           "$color": "colorBackground"
-        },
-        {
-          "$image_url": "imageBackground",
-          "type": "image"
         }
       ]
     },
@@ -366,9 +346,7 @@
           },
           "items": [
             {
-              "type": "image",
-              "placeholder_color": "#0000",
-              "$image_url": "icon",
+              "type": "text",
               "width": {
                 "type": "fixed",
                 "unit": "sp",
@@ -383,7 +361,17 @@
                 "unit": "sp",
                 "value": 36,
                 "type": "fixed"
-              }
+              },
+              "border": {
+                "corner_radius": 18
+              },
+              "text": " ",
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0eff0000"
+                }
+              ]
             },
             {
               "items": [
@@ -697,13 +685,11 @@
                               {
                                 "action": {
                                   "log_id": "shortcut/0/stack/0/bonuscards",
-                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Fbonus_cards_id",
                                   "log_url": "https://yabs.yandex.ru/count/WemejI_zO1y25HG0j296XomS6y2tm0K07mCGWY0ndgVXOG00000ulliXG0H80c2U6N2yxDg1pu3OaU41a068mRU3re20W0AO0OZ1juDMk068qxhD8y011jW1reh0eG7e0V81a0E0le5de0D4g0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O2Ujkt0fu3io739-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCbmBW3OA0WC20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__B_z6sEemc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7oB87wk5u50R03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut426DtIjcxke4gOYl85_-WR8q9eEAkTzmKbwTy3fIBKe_CM78kkbGNPICA~1"
                                 },
-                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_bc_2l.3.png",
-                                "title": "Бонусные карты",
+                                "title": "Bonus cards",
                                 "titleMarginsBottom": 0,
-                                "subtitle": "храните тут",
+                                "subtitle": "store here",
                                 "subtitleMaxLines": 1,
                                 "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
                                 "titleMaxLines": 2,
@@ -778,14 +764,12 @@
                                 "titleMaxLines": 1,
                                 "whiteBackground": "#ffffff",
                                 "subtitleMaxLines": 2,
-                                "subtitle": "перевод на 4 языка",
+                                "subtitle": "translation into 4 languages",
                                 "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
-                                "title": "Видео",
-                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/translate_video.3.png",
+                                "title": "Video",
                                 "titleMarginsBottom": 1,
                                 "action": {
                                   "log_id": "shortcut/0/stack/1/video_translate",
-                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Fvideotranslate_newlangs_shortcut",
                                   "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0L296XomSyY1ofmK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N3YnlgwvjAdjRe1a07ohzc3re20W0AO0VAlsODMk07unxxD8y011jW1reh0eG7e0V81a0EGYRffe0D2g0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O2nexsTi-dJcbt9-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCby20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__tt1aE0zkc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7o787wk5u50S03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut426DtIjcxke4gOYl8bt-m4E-7HzM102hkUiTDSNdAvq2vAFN8Z2NdeajrKJQY~1"
                                 }
                               },
@@ -830,7 +814,7 @@
                             "items": [
                               {
                                 "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
-                                "subtitle": "всегда под рукой",
+                                "subtitle": "always at hand",
                                 "subtitleMaxLines": 2,
                                 "whiteBackground": "#ffffff",
                                 "visibility_action": {
@@ -841,13 +825,11 @@
                                 "colorBackground": "#3399CCEE",
                                 "shortcutSize": 114,
                                 "action": {
-                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Falice_qr_id",
                                   "log_id": "shortcut/0/stack/2/qr_vaccinated",
                                   "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0H296XomSvie1mWK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N2WrgNQv8Vyyvm1a07shzc3re20W0AO0VQlsODMk07ynxxD8y011jW1reh0eG7e0V81a0EmoUHge0D0g0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O2GwvAjyeF-kSdu2e2r6AeB41EytK8Rr000oPpdTutLy0i3w0oNm82G43-bySYnxDRNbHsW3i24FO0GgyE88QWHm8Gzs1A7W1Zf4hA1iN4PQa-Sy1B__yWK0kWKZ0BO5S6AzkoZZxpyO_2G5kS3c1QkzuIF1g215vWNeFNHBQWN0S0Nj1A2621bE6CvEJaqD3WvCcKqCJGnOJKpP6DXC6KvCsCtOpHaCQ0O1B0OkxI6ZmRG60Bu6AheqzU4Y9FIUu0Pa1a1e1cg0xWP__y1qXaIUM5YSrzpPN9sPN8lSZOnCYqnw1c0mWFm6O320u4Q__zdHliTAbkO6lpmY0Am6h7MxfEiWiBCbW726YHaE31bEJCpCoqtCpGvBJGnC6GjOM8nOIqtOcPYOs8uE34pPJVr6W40002m6sIu6mNI6oGtH4L4DZ0nE2qpCJCtBJGmEJKjGaH1D2quEK55CpaqCqH6DJc270rkM44wQNHPGafKIbStwHo07Vz_cHse7W7O7lsD7w0VgyE88R0V8CWVguNWK1m0E8JmFcCLnX9PitnA7yLu36agWtRPJ7Cvpah964kRLGQRXiEd-6XlZSG8OtTAsRkwWIfYAyYNVx0GxuT7rO40AkvwnqrnzpMrPA1Pb7famP9pAQMwA1jH~1"
                                 },
                                 "titleMarginsBottom": 1,
-                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_light_qrcode.3.png",
-                                "title": "QR-код"
+                                "title": "QR-code"
                               },
                               {
                                 "type": "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8",
@@ -903,11 +885,9 @@
                             "items": [
                               {
                                 "titleMarginsBottom": 1,
-                                "title": "Читалка",
-                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_light_chitalka.3.png",
+                                "title": "Reader",
                                 "action": {
                                   "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0L296XomShMIYpWK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N2MiSJJYEdBvQq1a07whzc3re20W0AO0VglsODMk060oBxD8y011jW1reh0eG7e0V81a0EGj9rhe0C-g0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O3BcEAfnFJbybR9-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCby20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__4scxC9FVc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7n_87wk5u50S03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut426DtIjcxke4gOYl8bt-m4E-7HzM102hkUiTDSNdAvq2vAFN8Z2NdeajrKJQY~1",
-                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Freader_alice",
                                   "log_id": "shortcut/0/stack/3/book_reader_alice"
                                 },
                                 "whiteBackground": "#ffffff",
@@ -920,7 +900,7 @@
                                 },
                                 "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
                                 "subtitleMaxLines": 2,
-                                "subtitle": "читает Алиса, слушаете вы"
+                                "subtitle": "Alice is reading, you are listening"
                               },
                               {
                                 "type": "stackSlider/a8fb5fcdf771d72a901f4b1cad9481b8",
@@ -981,15 +961,13 @@
                                 "colorBackground": "#33FFAA99",
                                 "shortcutSize": 114,
                                 "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
-                                "subtitle": "с умными подсказками",
+                                "subtitle": "with smart tips",
                                 "subtitleMaxLines": 2,
                                 "titleMarginsBottom": 1,
-                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_keyboard_2l.3.png",
-                                "title": "Клавиатура",
+                                "title": "Keyboard",
                                 "action": {
                                   "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0L296XomSm05TNWK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N2I_FgvtQNhuES1a062iDc3re20W0AO0OAmsODMk068oBxD8y011jW1reh0eG7e0V81a0EWrF9he0Cyg0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O29lltSxjAry7F9-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCby20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__onkOWOYpc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7nx87wk5u50S03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut42Do0fUnTtK0LiHNaopzOYFV3e-f001LtlUEck3pbSw1Sb7fanf9pqQMwA1jH~1",
-                                  "log_id": "shortcut/0/stack/4/keyboard",
-                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Fkeyboard_ios_mistake_new"
+                                  "log_id": "shortcut/0/stack/4/keyboard"
                                 }
                               },
                               {
@@ -1046,10 +1024,8 @@
                             "items": [
                               {
                                 "titleMarginsBottom": 1,
-                                "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/promo/img_aon_2l.3.png",
-                                "title": "Кто звонит?",
+                                "title": "Who calls?",
                                 "action": {
-                                  "url": "yellowskin://?fullscreenHiddenBnt=true&fullscreenMode=fullscreen&url=https%3A%2F%2Fyandex.ru%2Fpromo%2Fsearchapp%2Ffullscreen%2Falice_aon_block_2",
                                   "log_id": "shortcut/0/stack/5/whocalls",
                                   "log_url": "https://yabs.yandex.ru/count/WeaejI_zO1y2_HC0L296XomSMTyp6mK07mCGWY0ndgVXOG00000ulliXG0H80c2U6N3izTBQkApylOS1a07-hzc3re20W0AO0VwlsODMk064oBxD8y011jW1reh0eG7e0V81a0E8khbke0Cwg0EM0R031AW6gWF11jtk6E_VJVIooGQbE3B6jbuh7Qa76zHuTiWZLVwm1u20c3Iu1xm80O3skgcjd9R-taF9-0g0jHYg2n0JlDr26zG00CcSvtUDrV0B0-WCby20a10_fV78iUpMrvKTe0x0X3s04Al3Y26e4S24FTWIXu0OwHAoWR5n6MfFdF0I___850Be58m2s1N1YlRieu-y_6Fma1Rd0vWMhlU4ZmQWWHUO5w3rqIse5m705xGIWXWWPJXZEJavD3GuEJ9bD34qCM4rCsHZOJ1bEJDZDsCqP36W60Im6BkqXey6q1W2-1YgwDFNX8YJqdk06P0P0Q0PgWEu6V__0T8P4dbXOdDVSsLoTcLoBt8sCJ8jCUWPWC83y1c0mWE16l__BvofrfDdc1hyy8W2i1gnrkwJh8B2p9O1mXeaP3WmPJapCpCjDpCqEIqqCJ1aBM5YCM4jDs9cOcDYE3WnCsKtzHe10000i1jak1i5qXiaDqH5H3OmCJWjCp4pDoqqC3arBK94GJGjE3b1HJCvD3D4HZKvWXmDRbX1EcbqMK9AL4fND-aSW1t_VvaTg1u1s1xzZH-W7wl3Y26m7nt87wk5u50S03Y4y3vZ5SOIMRDyIX_5U0nfAeDssKnpESvAoHXBcrK6cuR3f_XeRut426DtIjcxke4gOYl8bt-m4E-7HzM102hkUiTDSNdAvq2vAFN8Z2NdeajrKJQY~1"
                                 },
@@ -1062,7 +1038,7 @@
                                 "colorBackground": "#33BBBBBB",
                                 "shortcutSize": 114,
                                 "type": "shortcutSimpleStack/30487f6d1225bf4bb379aceed70fe7a8",
-                                "subtitle": "определитель номера",
+                                "subtitle": "caller ID",
                                 "subtitleMaxLines": 2
                               },
                               {
@@ -1093,7 +1069,7 @@
                 },
                 {
                   "subtitleMaxLines": 2,
-                  "subtitle": "ночью –2°\nутром –2°",
+                  "subtitle": "in the night –2°\nin the morning –2°",
                   "leftPadding": {
                     "type": "fixed",
                     "unit": "sp",
@@ -1114,11 +1090,9 @@
                     "type": "fixed"
                   },
                   "action": {
-                    "log_id": "shortcut/1/weather",
-                    "url": "https://yandex.ru/pogoda/213?utm_source=morda"
+                    "log_id": "shortcut/1/weather"
                   },
-                  "title": "Погода",
-                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/weather/bkn_n_new.3.png",
+                  "title": "Weather",
                   "titleMarginsBottom": 1
                 },
                 {
@@ -1126,12 +1100,10 @@
                 },
                 {
                   "action": {
-                    "log_id": "shortcut/2/mail",
-                    "url": "https://mail.yandex.ru"
+                    "log_id": "shortcut/2/mail"
                   },
                   "titleMarginsBottom": 1,
-                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/mail1.3.png",
-                  "title": "Почта",
+                  "title": "Mail",
                   "badge": [
                     {
                       "shadow": "https://yastatic.net/s3/home/div/geoblock_v2/badge/simple.3.png",
@@ -1155,11 +1127,9 @@
                   }
                 },
                 {
-                  "title": "Помощь рядом",
-                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/help_nearby2.3.png",
+                  "title": "Help is nearby",
                   "titleMarginsBottom": 1,
                   "action": {
-                    "url": "https://help.yandex.ru/?utm_source=ikonka-servisa-ppya&utm_campaign=persey_blago",
                     "log_id": "shortcut/3/help_nearby"
                   },
                   "colorBackground": "#33DDBBFF",
@@ -1169,7 +1139,7 @@
                   "titleMaxLines": 1,
                   "whiteBackground": "#ffffff",
                   "subtitleMaxLines": 2,
-                  "subtitle": "социальный проект",
+                  "subtitle": "social project",
                   "type": "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015",
                   "badge": [
                     {
@@ -1178,7 +1148,7 @@
                   ]
                 },
                 {
-                  "subtitle": "найдётся, что почитать",
+                  "subtitle": "there is something to read",
                   "subtitleMaxLines": 2,
                   "badge": [
                     {
@@ -1193,15 +1163,13 @@
                   "colorBackground": "#33EEDD66",
                   "whiteBackground": "#ffffff",
                   "action": {
-                    "log_id": "shortcut/4/my_books",
-                    "url": "books://library"
+                    "log_id": "shortcut/4/my_books"
                   },
-                  "title": "Читалка",
-                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/books_new_icon.3.png",
+                  "title": "Reader",
                   "titleMarginsBottom": 1
                 },
                 {
-                  "subtitle": "добавьте свои",
+                  "subtitle": "add your",
                   "subtitleMaxLines": 1,
                   "type": "bonusCard/c8b8aa3ab2fd3e3156ea7752ee31b34d",
                   "titleMaxLines": 2,
@@ -1212,21 +1180,15 @@
                   "colorBackground": "#33FFAA66",
                   "whiteBackground": "#ffffff",
                   "action": {
-                    "url": "bonuscards://cardlist?utm_source=nav_panel",
                     "log_id": "shortcut/5/bonuscards"
                   },
-                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/dummy.3.png",
                   "bonusCardsIcons": [
                     {
-                      "type": "bonuscardsIcon/21ad9283d0f87f76d18dd0067654810c",
-                      "image_url": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/bonuscards/bonuscards-icon.3.png"
-                    },
-                    {
-                      "addPlusImage": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/bonuscards/bonuscards-plus.3.png",
-                      "type": "bonuscardsAdd/cc2e466e5b19205a814043dbf00a35d0"
+                      "type": "text",
+                      "text": " "
                     }
                   ],
-                  "title": "Бонусные карты",
+                  "title": "Bonus cards",
                   "titleMarginsBottom": 0
                 },
                 {
@@ -1246,12 +1208,10 @@
                   },
                   "type": "pedometerShortcut/8a7a0b178bac6b329686519f192e09ab",
                   "subtitleMaxLines": 2,
-                  "subtitle": "сейчас шаги не считаются",
+                  "subtitle": "now the steps don't count",
                   "titleMarginsBottom": 1,
-                  "title": "Шагомер",
-                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/dummy.1.png",
+                  "title": "Step counter",
                   "action": {
-                    "url": "pedometer://home",
                     "log_id": "shortcut/6/pedometer"
                   }
                 },
@@ -1265,7 +1225,7 @@
                   },
                   "colorBackground": "#3399CCEE",
                   "whiteBackground": "#ffffff",
-                  "subtitle": "для общественных мест",
+                  "subtitle": "for public places",
                   "subtitleMaxLines": 2,
                   "type": "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015",
                   "badge": [
@@ -1273,20 +1233,16 @@
                       "type": "shortcutSpacer/8f093dc5f61e4a904864e42449ba611a"
                     }
                   ],
-                  "title": "QR-код",
-                  "icon": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/recent/ic_qrcode.3.png",
+                  "title": "QR-code",
                   "titleMarginsBottom": 1,
                   "action": {
-                    "log_id": "shortcut/7/covid_qr",
-                    "url": "covid-qr://show"
+                    "log_id": "shortcut/7/covid_qr"
                   }
                 },
                 {
-                  "title": "Диск",
-                  "icon": "https://yastatic.net/s3/home/yandex-app/bs_div_icons/disk1.3.png",
+                  "title": "Disk",
                   "titleMarginsBottom": 1,
                   "action": {
-                    "url": "https://disk.yandex.ru/",
                     "log_id": "shortcut/8/disk"
                   },
                   "titleMaxLines": 1,
@@ -1295,7 +1251,7 @@
                   },
                   "colorBackground": "#3399CCEE",
                   "whiteBackground": "#ffffff",
-                  "subtitle": "хранит ваши файлы",
+                  "subtitle": "stores your files",
                   "subtitleMaxLines": 2,
                   "type": "shortcutRecentWide/6ce20969a25e176badf3dcfcd9088015",
                   "badge": [
@@ -1311,20 +1267,18 @@
                   "colorBackground": "#3399CCEE",
                   "shortcutSize": 114,
                   "action": {
-                    "log_id": "shortcut/9/market",
-                    "url": "https://m.market.yandex.ru/my/cart?clid=992&wprid=1642178462222555-1563868591800007175-sas2-0212-sas-l7-balancer-8080-BAL-4910&src_pof=992&icookie=cO6sJSS4nrv3vLaMkrtwEoo%2Fj8gJQo0bqwDQKjBJiLUGYB9YwwIsIR%2BvNQIfRizXblk9jh8i0qPGWMN%2FPB%2FNqj3fQ8o%3D&utm_source_service=morda"
+                    "log_id": "shortcut/9/market"
                   },
                   "totalPriceLineHeight": 28,
                   "type": "shortcutMarket/09df7614ffcd30e4a4a15bb45e0a0343",
-                  "subtitle": "нет товаров в корзине",
+                  "subtitle": "no products in the cart",
                   "subtitleMaxLines": 2,
                   "titleMaxLines": 1,
                   "visibility_action": {
                     "log_id": "shortcut/9/market"
                   },
                   "titleMarginsBottom": 1,
-                  "imageBackground": "https://yastatic.net/s3/home/div/geoblock_v2/shortcuts/market/market_blackout2.3.png",
-                  "title": "Корзина",
+                  "title": "Cart",
                   "totalPriceFontSize": 26
                 },
                 {

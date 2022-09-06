@@ -10,12 +10,6 @@
         "right": 8,
         "bottom": 8
       },
-      "background": [
-        {
-          "type": "solid",
-          "color": "#edeada"
-        }
-      ],
       "column_count": 2
     },
     "lottie_image": {
@@ -40,6 +34,9 @@
       "text_alignment_vertical": "center",
       "width": "div-match-parent-size",
       "font_size": 14,
+      "paddings": {
+        "top": 8
+      },
       "font_weight": "medium",
       "line_height": 18
     },
@@ -56,16 +53,20 @@
         "top": 4
       },
       "paddings": {
-        "top": 4
+        "top": 4,
+        "right": 2,
+        "left": 2
       },
       "border": {
         "corner_radius": 32,
-        "unit": "dp",
-        "stroke": {
-          "width": 2,
-          "color": "#dead00"
-        }
+        "unit": "dp"
       },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
       "orientation": "vertical"
     },
     "lottie_image_card": {
@@ -121,8 +122,8 @@
           "items": [
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 1",
-              "lottie_image_text": "json via url divgif 1",
+              "image_id": "DivGif 1",
+              "lottie_image_text": "DivGif 1",
               "lottie_params": {
                 "lottie_url": "https://assets9.lottiefiles.com/packages/lf20_kl6ebx8f.json",
                 "repeat_count": 3,
@@ -131,8 +132,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 2",
-              "lottie_image_text": "json via url divgif 2",
+              "image_id": "DivGif 2",
+              "lottie_image_text": "DivGif 2",
               "lottie_params": {
                 "lottie_url": "https://assets9.lottiefiles.com/packages/lf20_edpg3c3s.json",
                 "repeat_count": 3,
@@ -141,8 +142,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 3",
-              "lottie_image_text": "json via url divgif 3",
+              "image_id": "DivGif 3",
+              "lottie_image_text": "DivGif 3",
               "lottie_params": {
                 "lottie_url": "https://assets9.lottiefiles.com/packages/lf20_gomzks5q.json",
                 "repeat_count": -1,
@@ -151,8 +152,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 4",
-              "lottie_image_text": "json via url divgif 4",
+              "image_id": "DivGif 4",
+              "lottie_image_text": "DivGif 4",
               "lottie_params": {
                 "lottie_url": "https://assets3.lottiefiles.com/packages/lf20_ukfgwgr8.json",
                 "repeat_count": -1,
@@ -161,8 +162,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 5",
-              "lottie_image_text": "json via url divgif 5",
+              "image_id": "DivGif 5",
+              "lottie_image_text": "DivGif 5",
               "lottie_params": {
                 "lottie_url": "res://love",
                 "repeat_count": -1,
@@ -171,16 +172,16 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 6",
-              "lottie_image_text": "json via url divgif 6",
+              "image_id": "DivGif 6",
+              "lottie_image_text": "DivGif 6",
               "lottie_params": {
                 "lottie_url": "res://hate"
               }
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 7",
-              "lottie_image_text": "json via url divgif 7",
+              "image_id": "DivGif 7",
+              "lottie_image_text": "DivGif 7",
               "lottie_params": {
                 "lottie_url": "asset://banana",
                 "repeat_count": -1,
@@ -189,16 +190,16 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 8",
-              "lottie_image_text": "json via url divgif 8",
+              "image_id": "DivGif 8",
+              "lottie_image_text": "DivGif 8",
               "lottie_params": {
                 "lottie_url": "asset://cat"
               }
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 9",
-              "lottie_image_text": "json via url divgif 9",
+              "image_id": "DivGif 9",
+              "lottie_image_text": "DivGif 9",
               "lottie_params": {
                 "lottie_url": "https://assets5.lottiefiles.com/packages/lf20_hw8vhaec.json",
                 "repeat_count": -1,
@@ -207,8 +208,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 10",
-              "lottie_image_text": "json via url divgif 10",
+              "image_id": "DivGif 10",
+              "lottie_image_text": "DivGif 10",
               "lottie_params": {
                 "lottie_url": "https://assets5.lottiefiles.com/packages/lf20_62sdnb1k.json",
                 "repeat_count": -1,
@@ -217,8 +218,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 11",
-              "lottie_image_text": "json via url divgif 11",
+              "image_id": "DivGif 11",
+              "lottie_image_text": "DivGif 11",
               "lottie_params": {
                 "lottie_url": "https://assets5.lottiefiles.com/packages/lf20_1w0mawxh.json",
                 "repeat_count": -1,
@@ -227,8 +228,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 12",
-              "lottie_image_text": "json via url divgif 12",
+              "image_id": "DivGif 12",
+              "lottie_image_text": "DivGif 12",
               "lottie_params": {
                 "lottie_url": "https://assets1.lottiefiles.com/packages/lf20_3ls8a1y5.json",
                 "repeat_count": -1,
@@ -237,8 +238,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 13",
-              "lottie_image_text": "json via url divgif 13",
+              "image_id": "DivGif 13",
+              "lottie_image_text": "DivGif 13",
               "lottie_params": {
                 "lottie_url": "https://assets1.lottiefiles.com/packages/lf20_2bwawdrb.json",
                 "repeat_count": -1,
@@ -247,8 +248,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 14",
-              "lottie_image_text": "json via url divgif 14",
+              "image_id": "DivGif 14",
+              "lottie_image_text": "DivGif 14",
               "lottie_params": {
                 "lottie_url": "https://assets10.lottiefiles.com/packages/lf20_5puu9o0n.json",
                 "repeat_count": -1,
@@ -257,8 +258,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 15",
-              "lottie_image_text": "json via url divgif 15",
+              "image_id": "DivGif 15",
+              "lottie_image_text": "DivGif 15",
               "lottie_params": {
                 "lottie_url": "https://assets3.lottiefiles.com/packages/lf20_afaeob90.json",
                 "repeat_count": -1,
@@ -267,8 +268,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 16",
-              "lottie_image_text": "json via url divgif 16",
+              "image_id": "DivGif 16",
+              "lottie_image_text": "DivGif 16",
               "lottie_params": {
                 "lottie_url": "https://assets1.lottiefiles.com/packages/lf20_fu0dfaqu.json",
                 "repeat_count": -1,
@@ -277,8 +278,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 17",
-              "lottie_image_text": "json via url divgif 17",
+              "image_id": "DivGif 17",
+              "lottie_image_text": "DivGif 17",
               "lottie_params": {
                 "lottie_url": "https://assets4.lottiefiles.com/packages/lf20_pgxl3p2l.json",
                 "repeat_count": -1,
@@ -287,8 +288,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 18",
-              "lottie_image_text": "json via url divgif 18",
+              "image_id": "DivGif 18",
+              "lottie_image_text": "DivGif 18",
               "lottie_params": {
                 "lottie_url": "https://assets8.lottiefiles.com/packages/lf20_g045ij3w.json",
                 "repeat_count": -1,
@@ -297,8 +298,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 19",
-              "lottie_image_text": "json via url divgif 19",
+              "image_id": "DivGif 19",
+              "lottie_image_text": "DivGif 19",
               "lottie_params": {
                 "lottie_url": "https://assets5.lottiefiles.com/packages/lf20_jtvduiqm.json",
                 "repeat_count": -1,
@@ -307,8 +308,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 20",
-              "lottie_image_text": "json via url divgif 20",
+              "image_id": "DivGif 20",
+              "lottie_image_text": "DivGif 20",
               "lottie_params": {
                 "lottie_url": "https://assets8.lottiefiles.com/packages/lf20_e3odbuvw.json",
                 "repeat_count": -1,
@@ -317,8 +318,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 21",
-              "lottie_image_text": "json via url divgif 21",
+              "image_id": "DivGif 21",
+              "lottie_image_text": "DivGif 21",
               "lottie_params": {
                 "lottie_url": "https://assets9.lottiefiles.com/temp/lf20_zLc23z.json",
                 "repeat_count": -1,
@@ -327,8 +328,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 22",
-              "lottie_image_text": "json via url divgif 22",
+              "image_id": "DivGif 22",
+              "lottie_image_text": "DivGif 22",
               "lottie_params": {
                 "lottie_url": "https://assets6.lottiefiles.com/packages/lf20_ye3gmrc8.json",
                 "repeat_count": -1,
@@ -337,8 +338,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 23",
-              "lottie_image_text": "json via url divgif 23",
+              "image_id": "DivGif 23",
+              "lottie_image_text": "DivGif 23",
               "lottie_params": {
                 "lottie_url": "https://assets7.lottiefiles.com/packages/lf20_xsgvajuv.json",
                 "repeat_count": -1,
@@ -347,8 +348,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 24",
-              "lottie_image_text": "json via url divgif 24",
+              "image_id": "DivGif 24",
+              "lottie_image_text": "DivGif 24",
               "lottie_params": {
                 "lottie_url": "https://assets7.lottiefiles.com/private_files/lf30_cub7jgwc.json",
                 "repeat_count": -1,
@@ -357,8 +358,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 25",
-              "lottie_image_text": "json via url divgif 25",
+              "image_id": "DivGif 25",
+              "lottie_image_text": "DivGif 25",
               "lottie_params": {
                 "lottie_url": "https://assets10.lottiefiles.com/private_files/lf30_sdx6dn7h.json",
                 "repeat_count": -1,
@@ -367,8 +368,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 26",
-              "lottie_image_text": "json via url divgif 26",
+              "image_id": "DivGif 26",
+              "lottie_image_text": "DivGif 26",
               "lottie_params": {
                 "lottie_url": "https://assets5.lottiefiles.com/private_files/lf30_7kkrnbpy.json",
                 "repeat_count": -1,
@@ -377,8 +378,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 27",
-              "lottie_image_text": "json via url divgif 27",
+              "image_id": "DivGif 27",
+              "lottie_image_text": "DivGif 27",
               "lottie_params": {
                 "lottie_url": "https://assets4.lottiefiles.com/packages/lf20_anwqesu5.json",
                 "repeat_count": -1,
@@ -387,8 +388,8 @@
             },
             {
               "type": "lottie_gif_card",
-              "image_id": "json via url divgif 28",
-              "lottie_image_text": "json via url divgif 28",
+              "image_id": "DivGif 28",
+              "lottie_image_text": "DivGif 28",
               "lottie_params": {
                 "lottie_url": "https://assets7.lottiefiles.com/packages/lf20_t403lzg3.json",
                 "repeat_count": -1,

@@ -17,7 +17,9 @@
           "$color": "background_color"
         }
       ],
-      "text_color": "#FFFFFF"
+      "border": {
+        "corner_radius": 8
+      }
     }
   },
   "card": {
@@ -28,19 +30,18 @@
         "div": {
           "type": "grid",
           "width": {
-            "type": "fixed",
-            "value": 240
+            "type": "match_parent"
           },
           "height": {
             "type": "wrap_content"
           },
-          "column_count": 2,
-          "border": {
-            "stroke": {
-              "width": 2,
-              "color": "#000000"
+          "background": [
+            {
+              "type": "solid",
+              "color": "#0e000000"
             }
-          },
+          ],
+          "column_count": 2,
           "items": [
             {
               "type": "item",
@@ -50,11 +51,11 @@
               },
               "height": {
                 "type": "fixed",
-                "value": 40
+                "value": 120
               },
-              "margin": 10,
-              "background_color": "#FF0000",
-              "text": "1"
+              "margin": 12,
+              "background_color": "#D098D3",
+              "text": "Item 1.\nweight = 2."
             },
             {
               "type": "item",
@@ -64,11 +65,11 @@
               },
               "height": {
                 "type": "fixed",
-                "value": 40
+                "value": 120
               },
-              "margin": 20,
-              "background_color": "#0000FF",
-              "text": "2"
+              "margin": 12,
+              "background_color": "#FFCC00",
+              "text": "Item 2.\nweight = 1."
             }
           ]
         }

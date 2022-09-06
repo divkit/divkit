@@ -2,47 +2,84 @@
   "templates": {
     "page": {
       "type": "text",
+      "$text": "header",
       "border": {
-        "corner_radius": 16,
-        "stroke": {
-          "color": "#1F000000",
-          "width": 1
-        }
+        "corner_radius": 6,
+        "stroke": "#10000000"
       },
-      "paddings": {
-        "right": 4,
-        "left": 4,
-        "top": 4,
-        "bottom": 4
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "match_parent"
       },
       "height": {
         "type": "fixed",
-        "value": 42
+        "value": 100
+      }
+    },
+    "presets_holder": {
+      "type": "gallery",
+      "orientation": "vertical",
+      "column_count": 3,
+      "item_spacing": 4,
+      "height": {
+        "type": "fixed",
+        "value": 28
+      },
+      "paddings": {
+        "top": 3,
+        "bottom": 3
+      }
+    },
+    "presets_header": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
       },
       "width": {
         "type": "match_parent"
       },
-      "text_alignment_horizontal": "center",
-      "text_alignment_vertical": "center"
-    },
-    "button": {
-      "type": "text",
+      "font_size": 14,
+      "text_color": "#888888",
+      "text_alignment_vertical": "center",
       "paddings": {
-        "right": 4,
         "left": 4,
-        "top": 4,
-        "bottom": 4
-      },
+        "right": 4
+      }
+    },
+    "presets_button": {
+      "type": "text",
       "height": {
-        "type": "wrap_content"
+        "type": "match_parent"
       },
-      "font_size": 18,
-      "actions": [
+      "width": {
+        "type": "match_parent"
+      },
+      "font_size": 14,
+      "text_color": "#000",
+      "background": [
         {
-          "log_id": "button_log_id",
-          "$url": "click_action"
+          "type": "solid",
+          "color": "#0e000000"
         }
-      ]
+      ],
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "border": {
+        "corner_radius": 6
+      }
     }
   },
   "card": {
@@ -64,6 +101,13 @@
                 "type": "fixed",
                 "value": "@{space_between_centers.value}",
                 "unit": "@{space_between_centers.unit}"
+              },
+              "margins": {
+                "top": 4
+              },
+              "paddings": {
+                "top": 2,
+                "bottom": 2
               },
               "animation": "@{indicator_animation}",
               "shape": {
@@ -87,8 +131,7 @@
               "pager_id": "pager_id",
               "alignment_horizontal": "center",
               "height": {
-                "type": "fixed",
-                "value": 30
+                "type": "wrap_content"
               },
               "width": {
                 "type": "fixed",
@@ -97,7 +140,7 @@
               "background": [
                 {
                   "type": "solid",
-                  "color": "#95A5A6"
+                  "color": "#0e000000"
                 }
               ],
               "border": {
@@ -128,128 +171,414 @@
               "items": [
                 {
                   "type": "page",
-                  "text": "Page 1"
+                  "text": "Item 1"
                 },
                 {
                   "type": "page",
-                  "text": "Page 2"
+                  "text": "Item 2"
                 },
                 {
                   "type": "page",
-                  "text": "Page 3"
+                  "text": "Item 3"
                 },
                 {
                   "type": "page",
-                  "text": "Page 4"
+                  "text": "Item 4"
                 },
                 {
                   "type": "page",
-                  "text": "Page 5"
+                  "text": "Item 5"
                 },
                 {
                   "type": "page",
-                  "text": "Page 6"
+                  "text": "Item 6"
                 },
                 {
                   "type": "page",
-                  "text": "Page 7"
+                  "text": "Item 7"
                 },
                 {
                   "type": "page",
-                  "text": "Page 8"
+                  "text": "Item 8"
                 },
                 {
                   "type": "page",
-                  "text": "Page 9"
+                  "text": "Item 9"
                 },
                 {
                   "type": "page",
-                  "text": "Page 10"
+                  "text": "Item 10"
                 },
                 {
                   "type": "page",
-                  "text": "Page 11"
+                  "text": "Item 11"
                 },
                 {
                   "type": "page",
-                  "text": "Page 12"
+                  "text": "Item 12"
                 }
               ]
             },
             {
-              "type": "button",
-              "text": "Active item color #ff00ff00",
-              "click_action": "div-action://set_variable?name=active_item_color&value=%23ff00ff00"
-            },
-            {
-              "type": "button",
-              "text": "Active item scale 2",
-              "click_action": "div-action://set_variable?name=active_item_size&value=2"
-            },
-            {
-              "type": "button",
-              "text": "Inactive item color #ff005500",
-              "click_action": "div-action://set_variable?name=inactive_item_color&value=%23ff005500"
-            },
-            {
-              "type": "button",
-              "text": "Scale of furthest items 0.3",
-              "click_action": "div-action://set_variable?name=minimum_item_size&value=0.3"
-            },
-            {
-              "type": "button",
-              "text": "Animation of page change 'worm'",
-              "click_action": "div-action://set_variable?name=indicator_animation&value=worm"
-            },
-            {
-              "type": "button",
-              "text": "Space between items 30",
-              "click_action": "div-action://set_variable?name=space_between_centers.value&value=30"
-            },
-            {
-              "type": "button",
-              "text": "Item's width 15",
-              "click_action": "div-action://set_variable?name=item_width.value&value=15"
-            },
-            {
-              "type": "button",
-              "text": "Item's height 15",
-              "click_action": "div-action://set_variable?name=item_height.value&value=15"
-            },
-            {
-              "type": "button",
-              "text": "Corners radius 8",
-              "click_action": "div-action://set_variable?name=corner_radius.value&value=8"
-            },
-            {
-              "type": "button",
-              "text": "Indicator width 300",
-              "click_action": "div-action://set_variable?name=indicator_width&value=300"
-            },
-            {
-              "type": "button",
-              "text": "Size in sp",
-              "actions": [
+              "type": "presets_holder",
+              "margins": {
+                "top": 16
+              },
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
                 {
-                  "log_id": "button_log_id",
-                  "url": "div-action://set_variable?name=space_between_centers.unit&value=sp"
+                  "type": "presets_header",
+                  "text": "Active item color"
                 },
                 {
-                  "log_id": "button_log_id",
-                  "url": "div-action://set_variable?name=item_width.unit&value=sp"
+                  "type": "presets_button",
+                  "text": "red",
+                  "action": {
+                    "url": "div-action://set_variable?name=active_item_color&value=%23ff0000",
+                    "log_id": "active_item_color=red"
+                  }
                 },
                 {
-                  "log_id": "button_log_id",
-                  "url": "div-action://set_variable?name=item_height.unit&value=sp"
-                },
-                {
-                  "log_id": "button_log_id",
-                  "url": "div-action://set_variable?name=corner_radius.unit&value=sp"
+                  "type": "presets_button",
+                  "text": "yellow",
+                  "action": {
+                    "url": "div-action://set_variable?name=active_item_color&value=%23ffcc00",
+                    "log_id": "active_item_color=yellow"
+                  }
                 }
               ]
             },
             {
-              "type": "button",
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Active item scale"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "x1.5",
+                  "action": {
+                    "url": "div-action://set_variable?name=active_item_size&value=1.5",
+                    "log_id": "active_item_scale=1"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "x2",
+                  "action": {
+                    "url": "div-action://set_variable?name=active_item_size&value=2",
+                    "log_id": "active_item_scale=2"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Inactive item color"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "red",
+                  "action": {
+                    "url": "div-action://set_variable?name=inactive_item_color&value=%23ffaa0000",
+                    "log_id": "active_item_scale=1"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "yellow",
+                  "action": {
+                    "url": "div-action://set_variable?name=inactive_item_color&value=%23ffccaa00",
+                    "log_id": "active_item_scale=2"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Scale of furthest items"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "x1",
+                  "action": {
+                    "url": "div-action://set_variable?name=minimum_item_size&value=1",
+                    "log_id": "active_item_scale=1"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "x0.3",
+                  "action": {
+                    "url": "div-action://set_variable?name=minimum_item_size&value=0.3",
+                    "log_id": "active_item_scale=2"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Animation of page change"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "scale",
+                  "action": {
+                    "url": "div-action://set_variable?name=indicator_animation&value=scale",
+                    "log_id": "indicator_animation=scale"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "worm",
+                  "action": {
+                    "url": "div-action://set_variable?name=indicator_animation&value=worm",
+                    "log_id": "indicator_animation=worm"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Space between items"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "20 @{item_width.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=space_between_centers.value&value=20",
+                    "log_id": "space_between_centers.value=20"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "30 @{item_width.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=space_between_centers.value&value=30",
+                    "log_id": "space_between_centers.value=30"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Item's width"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "10 @{item_width.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_width.value&value=10",
+                    "log_id": "item_width.value=10"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "15 @{item_width.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_width.value&value=15",
+                    "log_id": "item_width.value=15"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Item's height"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "10 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_height.value&value=10",
+                    "log_id": "item_height.value=10"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "15 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_height.value&value=15",
+                    "log_id": "item_height.value=15"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Corners radius"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "5 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=corner_radius.value&value=10",
+                    "log_id": "corner_radius.value=5"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "8 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=corner_radius.value&value=15",
+                    "log_id": "corner_radius=8"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Indicator width"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "150 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=indicator_width&value=150",
+                    "log_id": "indicator_width=5"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "300 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=indicator_width&value=300",
+                    "log_id": "indicator_width=8"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Size unit"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "dp",
+                  "actions": [
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=space_between_centers.unit&value=dp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=item_width.unit&value=dp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=item_height.unit&value=dp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=corner_radius.unit&value=dp"
+                    }
+                  ]
+                },
+                {
+                  "type": "presets_button",
+                  "text": "sp",
+                  "actions": [
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=space_between_centers.unit&value=sp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=item_width.unit&value=sp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=item_height.unit&value=sp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=corner_radius.unit&value=sp"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "presets_button",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "margins": {
+                "top": 4,
+                "bottom": 16
+              },
               "text": "Reset state",
               "actions": [
                 {
@@ -262,11 +591,11 @@
                 },
                 {
                   "log_id": "button_log_id",
-                  "url": "div-action://set_variable?name=inactive_item_color&value=%23ff550000"
+                  "url": "div-action://set_variable?name=inactive_item_color&value=%23ffaa0000"
                 },
                 {
                   "log_id": "button_log_id",
-                  "url": "div-action://set_variable?name=minimum_item_size&value=0.6"
+                  "url": "div-action://set_variable?name=minimum_item_size&value=1"
                 },
                 {
                   "log_id": "button_log_id",
@@ -328,12 +657,12 @@
       {
         "name": "inactive_item_color",
         "type": "color",
-        "value": "#ff550000"
+        "value": "#ffaa0000"
       },
       {
         "name": "minimum_item_size",
         "type": "number",
-        "value": 0.6
+        "value": 1
       },
       {
         "name": "indicator_animation",

@@ -1,17 +1,42 @@
 {
   "templates": {
-    "label_text": {
+    "button": {
       "type": "text",
-      "font_size": 24,
-      "font_weight": "bold",
-      "text_alignment_horizontal": "center",
-      "text_alignment_vertical": "center",
-      "height": {
-        "type": "match_parent"
-      },
       "width": {
         "type": "match_parent"
-      }
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
     }
   },
   "card": {
@@ -26,17 +51,11 @@
           "height": {
             "type": "match_parent"
           },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#9000ff00"
-            }
-          ],
           "states": [
             {
               "state_id": "not_tapped",
               "div": {
-                "type": "label_text",
+                "type": "button",
                 "text": "Click on me",
                 "actions": [
                   {
@@ -49,7 +68,7 @@
             {
               "state_id": "tapped",
               "div": {
-                "type": "label_text",
+                "type": "button",
                 "text": "You clicked on me :)",
                 "actions": [
                   {

@@ -13,52 +13,41 @@
         "height": {
           "type": "wrap_content"
         },
-        "margins": {
-          "left": 16,
-          "top": 16,
-          "right": 16,
-          "bottom": 16
-        },
         "paddings": {
           "left": 16,
           "top": 16,
           "right": 16,
           "bottom": 16
         },
-        "alpha": 1.0,
-        "alignment_horizontal": "center",
-        "alignment_vertical": "center",
+        "margins": {
+          "top": 36,
+          "bottom": 36,
+          "left": 18,
+          "right": 18
+        },
+        "border": {
+          "corner_radius": 8
+        },
         "background": [
           {
             "type": "solid",
-            "color": "#34495E"
+            "color": "#0E000000"
           }
         ],
-        "border": {
-          "corner_radius": 4,
-          "has_shadow": 1
-        },
-        "font_size": 20,
+        "font_size": 16,
         "font_weight": "medium",
-        "text_alignment_horizontal": "center",
         "text_alignment_vertical": "center",
-        "text_color": "#1ABC9C",
+        "text_alignment_horizontal": "center",
+        "text_color": "#000000",
+        "alpha": 1.0,
+        "alignment_horizontal": "center",
+        "alignment_vertical": "center",
         "text": "Long tap menu",
         "ranges": [
           {
             "start": 12,
-            "end": 17,
-            "text_color": "#F1C40F"
-          },
-          {
-            "start": 18,
-            "end": 21,
-            "text_color": "#E67E22"
-          },
-          {
-            "start": 22,
-            "end": 26,
-            "text_color": "#E74C3C"
+            "end": 13,
+            "text_color": "#ECC00A"
           }
         ],
         "longtap_actions": [

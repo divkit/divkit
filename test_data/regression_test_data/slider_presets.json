@@ -4,17 +4,14 @@
       "type": "text",
       "text": "text",
       "margins": {
-        "top": 16,
-        "bottom": 8,
+        "top": 20,
         "left": 12,
         "right": 12
       },
-      "font_size": 24
+      "font_size": 18
     },
     "settings_title": {
-      "type": "text",
-      "text": "text",
-      "font_size": 20,
+      "type": "title_preset",
       "margins": {
         "top": 0,
         "bottom": 0,
@@ -102,7 +99,7 @@
       "background": [
         {
           "type": "solid",
-          "color": "#ff0000"
+          "color": "#3e000000"
         }
       ]
     },
@@ -113,7 +110,7 @@
       "background": [
         {
           "type": "solid",
-          "color": "#6DD5FA"
+          "color": "#FFCC00"
         }
       ]
     },
@@ -122,13 +119,18 @@
       "width": {
         "type": "match_parent"
       },
-      "height": {
-        "type": "fixed",
-        "value": 32
+      "paddings": {
+        "left": 8,
+        "right": 8,
+        "top": 8,
+        "bottom": 8
       },
+      "max_value": 10,
+      "min_value": 1,
+      "thumb_value_variable": "first_thumb_value",
       "thumb_style": {
         "type": "shape_drawable",
-        "color": "#ff0000",
+        "color": "#FFCC00",
         "stroke": {
           "color": "#ffffff",
           "width": 3
@@ -151,7 +153,7 @@
       },
       "track_active_style": {
         "type": "shape_drawable",
-        "color": "#ff0000",
+        "color": "#FFCC00",
         "shape": {
           "type": "rounded_rectangle",
           "item_height": {
@@ -176,7 +178,7 @@
       "type": "slider_preset",
       "thumb_secondary_style": {
         "type": "shape_drawable",
-        "color": "#ff0000",
+        "color": "#FFCC00",
         "stroke": {
           "color": "#ffffff",
           "width": 3
@@ -202,7 +204,7 @@
       "type": "custom_slider",
       "tick_mark_active_style": {
         "type": "shape_drawable",
-        "color": "#ff0000",
+        "color": "#FFCC00",
         "stroke": {
           "color": "#ffffff",
           "width": 2
@@ -273,8 +275,8 @@
       },
       {
         "name": "max_value",
-        "type": "integer",
-        "value": 10
+        "type": "string",
+        "value": "10"
       },
       {
         "name": "first_thumb_value",
@@ -313,6 +315,11 @@
       },
       {
         "name": "sixth_thumb_value",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "sixth_thumb_secondary_value",
         "type": "integer",
         "value": 0
       },
@@ -442,7 +449,7 @@
           "items": [
             {
               "type": "title_preset",
-              "text": "Default slider"
+              "text": "Slider with one pointer"
             },
             {
               "type": "slider_preset",
@@ -454,7 +461,7 @@
             },
             {
               "type": "title_preset",
-              "text": "Min - 0, max - 10"
+              "text": "Slider with ticks. Scale from 0 to 10."
             },
             {
               "type": "slider_preset",
@@ -467,7 +474,7 @@
               },
               "tick_mark_active_style": {
                 "type": "shape_drawable",
-                "color": "#ff0000",
+                "color": "#FFCC00",
                 "stroke": {
                   "color": "#ffffff",
                   "width": 2
@@ -514,7 +521,7 @@
             },
             {
               "type": "title_preset",
-              "text": "Min - 0, max - 3"
+              "text": "Slider with ticks. Scale from 0 to 3."
             },
             {
               "type": "slider_preset",
@@ -527,7 +534,7 @@
               },
               "tick_mark_active_style": {
                 "type": "shape_drawable",
-                "color": "#ff0000",
+                "color": "#FFCC00",
                 "stroke": {
                   "color": "#ffffff",
                   "width": 2
@@ -574,7 +581,7 @@
             },
             {
               "type": "title_preset",
-              "text": "Double with or without ticks"
+              "text": "Sliders with two pointers."
             },
             {
               "type": "slider_preset",
@@ -588,7 +595,7 @@
               "thumb_secondary_value_variable": "fourth_thumb_secondary_value",
               "thumb_secondary_style": {
                 "type": "shape_drawable",
-                "color": "#ff0000",
+                "color": "#FFCC00",
                 "stroke": {
                   "color": "#ffffff",
                   "width": 3
@@ -611,7 +618,7 @@
               },
               "tick_mark_active_style": {
                 "type": "shape_drawable",
-                "color": "#ff0000",
+                "color": "#FFCC00",
                 "stroke": {
                   "color": "#ffffff",
                   "width": 2
@@ -666,7 +673,7 @@
               },
               "thumb_secondary_style": {
                 "type": "shape_drawable",
-                "color": "#ff0000",
+                "color": "#FFCC00",
                 "stroke": {
                   "color": "#ffffff",
                   "width": 3
@@ -690,7 +697,7 @@
             },
             {
               "type": "title_preset",
-              "text": "Custom preference"
+              "text": "Custom preferences"
             },
             {
               "type": "state",
@@ -701,7 +708,7 @@
                   "state_id": "no_tick_marks_1_thumb",
                   "div": {
                     "type": "custom_slider",
-                    "max_value": "@{max_value}",
+                    "max_value": "@{toInteger(max_value)}",
                     "thumb_value_variable": "sixth_thumb_value"
                   }
                 },
@@ -709,7 +716,7 @@
                   "state_id": "no_tick_marks_2_thumbs",
                   "div": {
                     "type": "custom_slider",
-                    "max_value": "@{max_value}",
+                    "max_value": "@{toInteger(max_value)}",
                     "thumb_value_variable": "sixth_thumb_value",
                     "thumb_secondary_value_variable": "sixth_thumb_secondary_value"
                   }
@@ -718,7 +725,7 @@
                   "state_id": "tick_marks_1_thumb",
                   "div": {
                     "type": "custom_slider_with_tick_marks",
-                    "max_value": "@{max_value}",
+                    "max_value": "@{toInteger(max_value)}",
                     "thumb_value_variable": "sixth_thumb_value"
                   }
                 },
@@ -726,7 +733,7 @@
                   "state_id": "tick_marks_2_thumbs",
                   "div": {
                     "type": "custom_slider_with_tick_marks",
-                    "max_value": "@{max_value}",
+                    "max_value": "@{toInteger(max_value}",
                     "thumb_value_variable": "sixth_thumb_value",
                     "thumb_secondary_value_variable": "sixth_thumb_secondary_value"
                   }
@@ -735,7 +742,7 @@
             },
             {
               "margins": {
-                "top": 30,
+                "top": 15,
                 "unit": "dp"
               },
               "type": "container",
@@ -790,7 +797,7 @@
             },
             {
               "margins": {
-                "top": 30,
+                "top": 12,
                 "unit": "dp"
               },
               "type": "container",
@@ -798,7 +805,7 @@
               "items": [
                 {
                   "type": "settings_title",
-                  "text": "tick marks"
+                  "text": "ticks"
                 },
                 {
                   "type": "container",
@@ -842,59 +849,60 @@
             },
             {
               "margins": {
-                "top": 30,
-                "left": 12,
+                "top": 12,
                 "unit": "dp"
               },
-              "type": "settings_title",
-              "text": "max value: @{max_value}"
-            },
-            {
               "type": "container",
               "orientation": "horizontal",
-              "width": {
-                "type": "match_parent"
-              },
+              "content_alignment_horizontal": "left",
               "items": [
                 {
-                  "type": "value_button",
-                  "value": "7",
-                  "actions": [
-                    {
-                      "log_id": "set_max_value",
-                      "url": "div-action://set_variable?name=max_value&value=7"
-                    }
-                  ]
+                  "margins": {
+                    "left": 12,
+                    "unit": "dp"
+                  },
+                  "width": {
+                    "type": "fixed",
+                    "value": 142
+                  },
+                  "type": "settings_title",
+                  "text": "max value: @{max_value}"
                 },
                 {
-                  "type": "value_button",
-                  "value": "8",
-                  "actions": [
+                  "type": "input",
+                  "width": {
+                    "type": "fixed",
+                    "value": 70
+                  },
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "margins": {
+                    "left": 16
+                  },
+                  "paddings": {
+                    "left": 8,
+                    "right": 8
+                  },
+                  "alpha": 1.0,
+                  "alignment_vertical": "center",
+                  "background": [
                     {
-                      "log_id": "set_max_value",
-                      "url": "div-action://set_variable?name=max_value&value=8"
+                      "type": "solid",
+                      "color": "#0e000000"
                     }
-                  ]
-                },
-                {
-                  "type": "value_button",
-                  "value": "9",
-                  "actions": [
-                    {
-                      "log_id": "set_max_value",
-                      "url": "div-action://set_variable?name=max_value&value=9"
-                    }
-                  ]
-                },
-                {
-                  "type": "value_button",
-                  "value": "10",
-                  "actions": [
-                    {
-                      "log_id": "set_max_value",
-                      "url": "div-action://set_variable?name=max_value&value=10"
-                    }
-                  ]
+                  ],
+                  "border": {
+                    "corner_radius": 8
+                  },
+                  "font_size": 16,
+                  "text_color": "#000000",
+                  "text_variable": "max_value",
+                  "hint_text": "10",
+                  "max_visible_lines": 1,
+                  "single_line": 1,
+                  "line_height": 30,
+                  "keyboard_type": "number"
                 }
               ]
             }

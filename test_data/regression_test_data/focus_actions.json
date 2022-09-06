@@ -1,10 +1,9 @@
 {
   "templates": {
-    "label": {
+    "button": {
       "type": "text",
       "state_id": 0,
       "font_size": 24,
-      "font_weight": "bold",
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
       "text_color": "#000000",
@@ -12,15 +11,35 @@
       "background": [
         {
           "type": "solid",
-          "color": "#FFFFFF"
+          "color": "#0e000000"
         }
       ],
+      "border": {
+        "corner_radius": 6
+      },
       "height": {
-        "type": "wrap_content"
+        "type": "fixed",
+        "value": 50
       },
       "width": {
-        "type": "match_parent"
+        "type": "match_parent",
+        "weight": 1
+      },
+      "margins": {
+        "left": 8,
+        "right": 8
       }
+    },
+    "label": {
+      "type": "button",
+      "focused_text_color": "#888888",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#ffffff"
+        }
+      ],
+      "text_color": "#888888"
     }
   },
   "card": {
@@ -37,6 +56,10 @@
             "top": 4,
             "bottom": 4
           },
+          "height": {
+            "type": "match_parent"
+          },
+          "content_alignment_vertical": "center",
           "border": {
             "corner_radius": 24
           },
@@ -52,9 +75,10 @@
               "type": "container",
               "div_id": "container",
               "orientation": "horizontal",
+              "content_horizontal_alignment": "center",
               "items": [
                 {
-                  "type": "label",
+                  "type": "button",
                   "div_id": "focus",
                   "text": "handler",
                   "focus": {
@@ -85,7 +109,7 @@
                   ]
                 },
                 {
-                  "type": "label",
+                  "type": "button",
                   "div_id": "focus",
                   "text": "idle",
                   "focus": {
@@ -117,6 +141,7 @@
                       "state_id": "not_tapped",
                       "div": {
                         "type": "label",
+                        "font_weight": "light",
                         "text": "init"
                       }
                     },
@@ -124,6 +149,7 @@
                       "state_id": "focus",
                       "div": {
                         "type": "label",
+                        "font_weight": "light",
                         "text": "focus"
                       }
                     },
@@ -131,6 +157,7 @@
                       "state_id": "blur",
                       "div": {
                         "type": "label",
+                        "font_weight": "light",
                         "text": "blur"
                       }
                     }

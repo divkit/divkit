@@ -1,5 +1,29 @@
 {
   "templates": {
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "border": {
+        "corner_radius": 6
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 300
+      }
+    },
     "text_14_18_regular": {
       "type": "text",
       "font_size": 14,
@@ -10,24 +34,6 @@
         "left": 12,
         "right": 12
       }
-    },
-    "placeholder": {
-      "type": "text",
-      "border": {
-        "corner_radius": 16,
-        "stroke": {
-          "color": "#1F000000",
-          "width": 1
-        }
-      },
-      "width": {
-        "type": "match_parent"
-      },
-      "height": {
-        "type": "fixed",
-        "value": 300
-      },
-      "text": "               "
     }
   },
   "card": {
@@ -106,13 +112,8 @@
                         },
                         "items": [
                           {
-                            "type": "placeholder",
-                            "background": [
-                              {
-                                "type": "solid",
-                                "color": "#f1f1ff"
-                              }
-                            ],
+                            "type": "text_block",
+                            "header": "Item 0",
                             "visibility_actions": [
                               {
                                 "log_id": "006",
@@ -128,13 +129,8 @@
                             ]
                           },
                           {
-                            "type": "placeholder",
-                            "background": [
-                              {
-                                "type": "solid",
-                                "color": "#f5f5ff"
-                              }
-                            ],
+                            "type": "text_block",
+                            "header":  "Item 1",
                             "visibility_actions": [
                               {
                                 "log_id": "106",
@@ -150,13 +146,8 @@
                             ]
                           },
                           {
-                            "type": "placeholder",
-                            "background": [
-                              {
-                                "type": "solid",
-                                "color": "#f9f9ff"
-                              }
-                            ],
+                            "type": "text_block",
+                            "header":  "Item 2",
                             "visibility_actions": [
                               {
                                 "log_id": "206",
@@ -172,13 +163,8 @@
                             ]
                           },
                           {
-                            "type": "placeholder",
-                            "background": [
-                              {
-                                "type": "solid",
-                                "color": "#fcfcff"
-                              }
-                            ],
+                            "type": "text_block",
+                            "header":  "Item 3",
                             "visibility_actions": [
                               {
                                 "log_id": "306",

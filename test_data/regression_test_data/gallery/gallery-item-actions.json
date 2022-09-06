@@ -1,348 +1,175 @@
-
 {
-  "log_id": "card",
-  "states": [
-    {
-      "div": {
-        "items": [
-          {
-            "font_size": 24,
-            "paddings": {
-              "bottom": 8,
-              "left": 8,
-              "right": 0,
-              "top": 8
-            },
-            "text": "My Gallery",
-            "text_color": "#A0000000",
-            "type": "text"
-          },
-          {
-            "id": "my_gallery",
-            "items": [
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "0",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "1",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "2",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "3",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "4",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "5",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "6",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "7",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "8",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              },
-              {
-                "background": [
-                  {
-                    "color": "#80ff0000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 150
-                },
-                "text": "9",
-                "text_alignment_horizontal": "center",
-                "text_alignment_vertical": "center",
-                "text_color": "#ffffff",
-                "type": "text",
-                "width": {
-                  "type": "fixed",
-                  "value": 320
-                }
-              }
-            ],
-            "scroll_mode": "default",
-            "type": "gallery"
-          },
-          {
-            "items": [
-              {
-                "actions": [
-                  {
-                    "log_id": "prev",
-                    "url": "div-action://set_current_item?id=my_gallery&item=0"
-                  }
-                ],
-                "background": [
-                  {
-                    "color": "#50000000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 80
-                },
-                "text": "<<",
-                "text_alignment_horizontal": "center",
-                "type": "text"
-              },
-              {
-                "actions": [
-                  {
-                    "log_id": "prev",
-                    "url": "div-action://set_previous_item?id=my_gallery"
-                  }
-                ],
-                "background": [
-                  {
-                    "color": "#50000000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 80
-                },
-                "text": "<",
-                "text_alignment_horizontal": "center",
-                "type": "text"
-              },
-              {
-                "actions": [
-                  {
-                    "log_id": "next",
-                    "url": "div-action://set_next_item?id=my_gallery"
-                  }
-                ],
-                "background": [
-                  {
-                    "color": "#50000000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 80
-                },
-                "text": ">",
-                "text_alignment_horizontal": "center",
-                "type": "text"
-              },
-              {
-                "actions": [
-                  {
-                    "log_id": "next",
-                    "url": "div-action://set_current_item?id=my_gallery&item=9"
-                  }
-                ],
-                "background": [
-                  {
-                    "color": "#50000000",
-                    "type": "solid"
-                  }
-                ],
-                "font_size": 24,
-                "height": {
-                  "type": "fixed",
-                  "value": 80
-                },
-                "text": ">>",
-                "text_alignment_horizontal": "center",
-                "type": "text"
-              }
-            ],
-            "orientation": "horizontal",
-            "type": "container"
-          }
-        ],
-        "orientation": "vertical",
-        "type": "container"
+  "templates": {
+    "button": {
+      "type": "text",
+      "height": {
+        "type": "fixed",
+        "value": 28
       },
-      "state_id": 0
+      "width": {
+        "type": "fixed",
+        "value": 56
+      },
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "font_size": 18,
+      "font_weight": "bold",
+      "text_color": "#ffffff",
+      "background": [
+        {
+          "color": "#D098D3",
+          "type": "solid"
+        }
+      ],
+      "margins": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "border": {
+        "corner_radius": 8
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "$text": "header",
+      "border": {
+        "corner_radius": 6
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "fixed",
+        "value": 300
+      }
     }
-  ]
+  },
+  "card": {
+    "log_id": "card",
+    "states": [
+      {
+        "div": {
+          "items": [
+            {
+              "id": "gallery",
+              "paddings": {
+                "right": 4,
+                "left": 4
+              },
+              "items": [
+                {
+                  "text": "Item 0",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 1",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 2",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 3",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 4",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 5",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 6",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 7",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 8",
+                  "type": "text_block"
+                },
+                {
+                  "text": "Item 9",
+                  "type": "text_block"
+                }
+              ],
+              "scroll_mode": "default",
+              "type": "gallery"
+            },
+            {
+              "items": [
+                {
+                  "actions": [
+                    {
+                      "log_id": "prev",
+                      "url": "div-action://set_current_item?id=gallery&item=0"
+                    }
+                  ],
+                  "text": "<<",
+                  "type": "button"
+                },
+                {
+                  "actions": [
+                    {
+                      "log_id": "prev",
+                      "url": "div-action://set_previous_item?id=gallery"
+                    }
+                  ],
+                  "text": "<",
+                  "type": "button"
+                },
+                {
+                  "actions": [
+                    {
+                      "log_id": "next",
+                      "url": "div-action://set_next_item?id=gallery"
+                    }
+                  ],
+                  "text": ">",
+                  "type": "button"
+                },
+                {
+                  "actions": [
+                    {
+                      "log_id": "next",
+                      "url": "div-action://set_current_item?id=gallery&item=9"
+                    }
+                  ],
+                  "text": ">>",
+                  "type": "button"
+                }
+              ],
+              "orientation": "horizontal",
+              "content_alignment_horizontal": "center",
+              "alignment_horizontal": "center",
+              "type": "container"
+            }
+          ],
+          "orientation": "vertical",
+          "type": "container",
+          "paddings": {
+            "top": 8
+          }
+        },
+        "state_id": 0
+      }
+    ]
+  }
 }

@@ -1,5 +1,5 @@
 {
-  "log_id": "transition/set_dst",
+  "log_id": "transition/fade_full_dst",
   "transition_animation_selector": "data_change",
   "states": [
     {
@@ -10,16 +10,54 @@
           "type": "fixed",
           "value": 320
         },
-        "background": [
-          {
-            "type": "solid",
-            "color": "#2C3E50"
-          }
-        ],
-        "orientation": "overlap",
+        "orientation": "vertical",
         "items": [
           {
-            "type": "image",
+            "type": "text",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "paddings": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "border": {
+              "corner_radius": 8
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#0E000000"
+              }
+            ],
+            "font_size": 16,
+            "font_weight": "medium",
+            "text_alignment_vertical": "center",
+            "text_alignment_horizontal": "center",
+            "text_color": "#000000",
+            "alpha": 1.0,
+            "text": "Hide",
+            "actions": [
+              {
+                "log_id": "perform_forward_transition",
+                "url": "div-demo-action://set_data?path=animations/transition/set_src.json"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": " ",
             "id": "lenna",
             "width": {
               "type": "fixed",
@@ -38,10 +76,14 @@
             "border": {
               "corner_radius": 12
             },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFCC00"
+              }
+            ],
             "alignment_vertical": "center",
             "alignment_horizontal": "center",
-            "image_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lenna.png",
-            "placeholder_color": "#3498DB",
             "transition_in": {
               "type": "set",
               "items": [
@@ -76,45 +118,6 @@
                 }
               ]
             }
-          },
-          {
-            "type": "text",
-            "width": {
-              "type": "match_parent"
-            },
-            "height": {
-              "type": "fixed",
-              "value": 48
-            },
-            "margins": {
-              "left": 16,
-              "top": 16,
-              "right": 16,
-              "bottom": 16
-            },
-            "border": {
-              "corner_radius": 8
-            },
-            "background": [
-              {
-                "type": "solid",
-                "color": "#1ABC9C"
-              }
-            ],
-            "alignment_vertical": "bottom",
-            "alignment_horizontal": "center",
-            "font_size": 18,
-            "font_weight": "medium",
-            "text_alignment_vertical": "center",
-            "text_alignment_horizontal": "center",
-            "text_color": "#34495E",
-            "text": "GO BACK",
-            "actions": [
-              {
-                "log_id": "perform_backward_transition",
-                "url": "div-demo-action://set_data?path=animations/transition/set_src.json"
-              }
-            ]
           }
         ]
       }

@@ -141,7 +141,7 @@
                         },
                         {
                           "type": "bubble_text",
-                          "text": "regression",
+                          "text": "examples",
                           "width": {
                             "type": "match_parent"
                           },

@@ -1,41 +1,41 @@
 {
   "templates": {
-    "label": {
-      "type": "text",
-      "font_size": 20,
-      "text_alignment_vertical": "center",
-      "text_alignment_horizontal": "center",
-      "text_color": "#1ABC9C"
-    },
     "button": {
       "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "top": 16,
+        "left": 12,
+        "right": 12
+      },
       "border": {
         "corner_radius": 8
       },
       "background": [
         {
           "type": "solid",
-          "color": "#1ABC9C"
+          "color": "#0E000000"
         }
       ],
-      "width": {
-        "type": "match_parent"
-      },
-      "height": {
-        "type": "fixed",
-        "value": 48
-      },
-      "margins": {
-        "left": 16,
-        "top": 8,
-        "right": 16,
-        "bottom": 8
-      },
-      "font_size": 18,
+      "font_size": 16,
       "font_weight": "medium",
       "text_alignment_vertical": "center",
       "text_alignment_horizontal": "center",
-      "text_color": "#34495E"
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
     }
   },
   "card": {
@@ -55,45 +55,65 @@
           "height": {
             "type": "wrap_content"
           },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#2C3E50"
-            }
-          ],
           "items": [
             {
-              "type": "label",
+              "type": "container",
               "alignment_horizontal": "center",
               "text": "Hi",
-
               "background": [
                 {
-                  "type": "solid",
-                  "color": "#ffffff"
+                  "type": "image",
+                  "image_url": "https://yastatic.net/s3/home/divkit/pattern.png",
+                  "scale": "fill"
                 }
               ],
-              "margins": {
-                "left": 16,
-                "top": 16,
-                "right": 16,
-                "bottom": 16
-              },
               "width": {
                 "type": "match_parent"
               },
               "height": {
-                "type": "fixed",
-                "value": 150
+                "type": "wrap_content"
               },
-              "visibility": "@{visibility}",
-              "visibility_action":
-              {
-                "log_id": "text_view",
-                "visibility_percentage": 80,
-                "visibility_duration": 0,
-                "log_limit": 100
-              }
+              "margins": {
+                "top": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "visibility": "@{visibility}",
+                  "visibility_action": {
+                    "log_id": "text_view",
+                    "visibility_percentage": 80,
+                    "visibility_duration": 0,
+                    "log_limit": 100
+                  },
+                  "background": [{
+                    "type": "solid",
+                    "color": "#f1f1f1"
+                  }],
+                  "text": "Visible item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  },
+                  "margins": {
+                    "left": 12,
+                    "top": 12,
+                    "right": 12,
+                    "bottom": 12
+                  },
+                  "font_size": 18,
+                  "font_weight": "medium",
+                  "text_alignment_vertical": "center",
+                  "text_alignment_horizontal": "center",
+                  "text_color": "#000000",
+                  "alpha": 1.0,
+                  "alignment_horizontal": "center",
+                  "alignment_vertical": "center"
+                }
+              ]
             },
             {
               "type": "button",

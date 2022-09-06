@@ -64,26 +64,49 @@ paths:
 ---
 title: Gallery columns
 tags: [ 'DivGallery' ]
+expect:
+  - Gallery has 2 columns. First column has 2 elements, second - 4 elements.
 paths:
   - 'regression_test_data/gallery/gallery-columns.json'
 ---
 title: Gallery item actions
 tags: [ 'DivGallery']
+steps:
+  - Horizontal swipe to left
+  - Horizontal swipe to right
+  - Click on buttons
+expect:
+  - Content is changes depending on scroll direction or clicked buttons
+  - Gallery scroll is logged
 paths:
   - 'regression_test_data/gallery/gallery-item-actions.json'
 ---
 title: Gallery default item states
 tags: [ 'DivGallery']
+steps:
+  - Click on button "Expand" in gallery item
+  - Click on button "Collpse" in expanded items
+expect:
+  - Only clicked gallery item change state
 paths:
   - 'regression_test_data/gallery/gallery_default_item_states.json'
 ---
 title: Gallery paging default item states
 tags: [ 'DivGallery']
+steps:
+  - Click on button "Expand" in gallery item
+  - Click on button "Collpse" in expanded items
+  - Scroll gallery
+expect:
+  - Only clicked gallery item change state
+  - Gallery scrolls page by page
 paths:
   - 'regression_test_data/gallery/gallery_paging_default_item_states.json'
 ---
 title: Zoomable gallery
 tags: [ 'DivGallery']
+expect:
+  - Image in gallery can be zoomed
 paths:
   - 'regression_test_data/gallery/zoomable-gallery.json'
 ---
@@ -171,7 +194,7 @@ expect:
 paths:
   - 'regression_test_data/slider_nps.json'
 ---
-title: Clider with two pointers
+title: Slider with two pointers
 tags: [ 'Slider' ]
 priority: critical
 steps:
@@ -292,7 +315,7 @@ expect:
 paths:
   - 'regression_test_data/accessibility/mode/exclude.json'
 ---
-title: 1299 Actions on tap
+title: Actions on tap
 steps:
   - Tap on top button
   - Double tap on top button
@@ -329,7 +352,7 @@ expect:
 paths:
   - 'regression_test_data/error_visual_monitor.json'
 ---
-title: 1256-1
+title: Synchronizing multiple change bounds animations. Fade full
 tags: [ 'Animations' ]
 steps:
  - Press button with text "GO"
@@ -339,7 +362,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/fade_full_src.json'
 ---
-title: 1256-2
+title: Synchronizing multiple change bounds animations. Fade part
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -349,7 +372,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/fade_part_src.json'
 ---
-title: 1256-3
+title: Synchronizing multiple change bounds animations. Scale full
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -359,7 +382,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/scale_full_src.json'
 ---
-title: 1256-4
+title: Synchronizing multiple change bounds animations. Scale part
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -369,7 +392,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/scale_part_src.json'
 ---
-title: 1256-5
+title: Synchronizing multiple change bounds animations. Slide full
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -379,7 +402,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/slide_full_src.json'
 ---
-title: 1256-6
+title: Synchronizing multiple change bounds animations. Slide part
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -389,7 +412,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/slide_part_src.json'
 ---
-title: 1256-7
+title: Synchronizing multiple change bounds animations. Set
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -399,7 +422,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/set_src.json'
 ---
-title: 1256-8
+title: Synchronizing multiple change bounds animations. Diff ids
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -409,7 +432,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/change_bounds_diff_ids_src.json'
 ---
-title: 1256-9
+title: Synchronizing multiple change bounds animations. Diff sizes
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -419,7 +442,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/change_bounds_diff_sizes_src.json'
 ---
-title: 1256-10
+title: Synchronizing multiple change bounds animations. Diff types
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -429,7 +452,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/change_bounds_diff_types_src.json'
 ---
-title: 1256-11
+title: Synchronizing multiple change bounds animations. Change bounds same ids
 tags: [ 'Animations' ]
 steps:
   - Press button with text "GO"
@@ -439,7 +462,7 @@ expect:
 paths:
   - 'regression_test_data/animations/transition/change_bounds_same_ids_src.json'
 ---
-title: 1256-12
+title: Synchronizing multiple change bounds animations. Article
 tags: [ 'Animations' ]
 steps:
  - Click on "EXPAND"
@@ -450,7 +473,7 @@ expect:
 paths:
   - 'regression_test_data/animations/article.json'
 ---
-title: 1256-13
+title: Synchronizing multiple change bounds animations. Article with transitions
 tags: [ 'Animations' ]
 steps:
  - Click on "EXPAND"
@@ -461,7 +484,7 @@ expect:
 paths:
   - 'regression_test_data/animations/article_with_transitions.json'
 ---
-title: 1256-14
+title: Synchronizing multiple change bounds animations. Blink
 tags: [ 'Animations' ]
 steps:
  - Click on "BLINK"
@@ -470,7 +493,7 @@ expect:
 paths:
   - 'regression_test_data/animations/blink.json'
 ---
-title: 1262 example of tooltip animation
+title: Example of tooltip animation
 tags: [ 'Animations' ]
 steps:
  - A few seconds after the card is shown, a tooltip should appear
@@ -479,7 +502,7 @@ expect:
 paths:
   - 'regression_test_data/animations/mute_notification.json'
 ---
-title: 1264 Scale transition ignore pivot_x/pivot_y
+title: Scale transition ignore pivot_x/pivot_y
 tags: [ 'Animations' ]
 steps:
  - Press on "GO"
@@ -488,7 +511,7 @@ expect:
 paths:
   - 'regression_test_data/animations/scale_pivot_src.json'
 ---
-title: 1265
+title: Change bounds transitions ignore start_delay
 tags: [ 'Animations' ]
 steps:
  - Click on notificattion
@@ -497,31 +520,31 @@ expect:
 paths:
   - 'regression_test_data/animations/mute_notification.json'
 ---
-title: 1269-1
+title: State transition any change
 paths:
   - 'regression_test_data/animations/transition/state_transition_any_change.json'
 ---
-title: 1269-2
+title: State transition data change
 paths:
   - 'regression_test_data/animations/transition/state_transition_data_change.json'
 ---
-title: 1269-3
+title: State transition state change
 paths:
   - 'regression_test_data/animations/transition/state_transition_state_change.json'
 ---
-title: 1269-4
+title: Inner state transition any change
 paths:
   - 'regression_test_data/animations/transition/inner_state_transition_any_change.json'
 ---
-title: 1269-5
+title: Inner state transition data change
 paths:
   - 'regression_test_data/animations/transition/inner_state_transition_data_change.json'
 ---
-title: 1269-6
+title: Inner state transition data change
 paths:
-  - 'regression_test_data/animations/transition/inner_state_transition_state_change.json'
+  - 'regression_test_data/animations/transition/inner_state_transition_data_change.json'
 ---
-title: 1271
+title: Lottie animation restart repeate_mode. Repeate count = 5
 tags: [ 'Animations', 'lottie' ]
 steps:
  - Spinner animation will continue 5 times and then stop
@@ -531,7 +554,7 @@ expect:
 paths:
  - 'regression_test_data/animations/lottie/spinner_restart_repeat_mode.json'
 ---
-title: 1272
+title: Lottie animation revese repeate_mode. Repeate count = 3
 tags: [ 'Animations', 'lottie' ]
 steps:
  - Spinner change spin dirrection 3 times and then stops
@@ -541,19 +564,19 @@ expect:
 paths:
  - 'regression_test_data/animations/lottie/spinner_reverse_repeat_mode.json'
 ---
-title: 1260
+title: Lottie animation restart repeate_mode. Repeate count = -1
 tags: [ 'Animations', 'lottie' ]
 expect:
-  - Появляется анимация спинера, которая не прерывается.
+  - Infinite spinner animation.
 paths:
   - 'regression_test_data/animations/lottie/spinner.json'
 ---
-title: 1270
+title: For the reverse animation of the action, a direct interpolator is used
 tags: [ 'Animations' ]
 paths:
   - 'regression_test_data/action_animation/button_press_action_animations.json'
 ---
-title: 1234 visibility_actions in gallery
+title: Visibility_actions in gallery
 tags: [ 'Visibility_actions' ]
 steps:
   - Scroll the gallery
@@ -564,7 +587,7 @@ expect:
 paths:
   - 'regression_test_data/gallery/gallery_swipe.json'
 ---
-title: 1235 visibility_actions in pager
+title: Visibility_actions in pager
 tags: [ 'Visibility_actions', 'DivPager' ]
 steps:
   - Scroll the pager
@@ -575,7 +598,7 @@ expect:
 paths:
   - 'regression_test_data/action_visibility/pager.json'
 ---
-title: 1250 visibility_actions on change page in pager
+title: Visibility_actions on change page in pager
 tags: [ 'Visibility_actions', 'DivPager' ]
 steps:
   - Swipe cards
@@ -586,7 +609,7 @@ expect:
 paths:
   - 'regression_test_data/action_visibility/swipe_div_pager.json'
 ---
-title: 1251 Visibility actions performed and logged in pager
+title: Visibility actions performed and logged in pager
 tags: [ 'Visibility_actions', 'DivPager' ]
 steps:
   - Swipe cards
@@ -599,7 +622,7 @@ expect:
 paths:
   - 'regression_test_data/action_visibility/swipe_div_pager.json'
 ---
-title: 1254-1 Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility
+title: Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility
 tags: [ 'Visibility_actions', 'DivPager' ]
 steps:
   - Check logs
@@ -610,12 +633,12 @@ expect:
 paths:
   - 'regression_test_data/action_visibility/pager.json'
 ---
-title: 1254-2 Send select Pager using Div2View.tryLogVisibility
+title: Send select Pager using Div2View.tryLogVisibility
 tags: [ 'Visibility_actions', 'DivPager' ]
 steps:
   - Check first item visibility logged
   - Swipe to the next item
-  - Check second ittem visibility logged
+  - Check second item visibility logged
 expect:
   - First element logged, example
     Ya:PagerSelectedActionsTracker onPageSelected(0)
@@ -628,7 +651,7 @@ expect:
 paths:
   - 'regression_test_data/action_visibility/pager_selected_actions.json'
 ---
-title: 1258 Grouped bulkActions logged in "dispatchActions:"
+title: Grouped bulkActions logged in "dispatchActions:"
 tags: [ 'Visibility_actions' ]
 steps:
   - Swipe to change tab
@@ -641,7 +664,7 @@ expect:
 paths:
   - 'regression_test_data/action_visibility/swipe_div_pager.json'
 ---
-title: 1267 visibility_actions for default_item
+title: visibility_actions for default_item
 tags: [ 'Visibility_actions' ]
 steps:
   - Check logs
@@ -652,7 +675,7 @@ expect:
 paths:
   - 'regression_test_data/action_visibility/default_item.json'
 ---
-title: 1288 nested visibility actions
+title: Nested visibility actions
 tags: [ 'Visibility_actions' ]
 steps:
   - Click on items
@@ -709,7 +732,7 @@ expect:
 paths:
   - 'regression_test_data/variables/div_tabs.json'
 ---
-title: 1315 Visibility in div-base
+title: Visibility in div-base
 steps:
   - Check different combinations of visibility properties
 expect:
@@ -718,7 +741,7 @@ expect:
 paths:
   - 'regression_test_data/action_visibility/set_visibility.json'
 ---
-title: 1317 showing animation on image loaded
+title: Showing animation on image loaded
 tags: [ 'Animations' ]
 expect:
   - Image appeares with described animation
@@ -760,7 +783,7 @@ expect:
 paths:
   - 'regression_test_data/variables/div_variable_trigger_modes.json'
 ---
-title: Variable triggers (замыкания)
+title: Variable triggers (closures)
 tags: [ 'DivInput', 'DivSlider', 'Triggers', 'Functions' ]
 expect:
   - Slider and input values should be synchronized

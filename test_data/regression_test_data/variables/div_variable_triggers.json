@@ -1,51 +1,42 @@
 {
   "templates": {
-    "round": {
-      "type": "separator",
-      "width": {
-        "type": "fixed",
-        "value": 64
-      },
-      "height": {
-        "type": "fixed",
-        "value": 64
-      },
-      "background": [
-        {
-          "type": "solid",
-          "color": "#E74C3C"
-        }
-      ],
-      "border": {
-        "corner_radius": 32
-      },
-      "delimiter_style": {
-        "color": "#0000"
-      }
-    },
     "button": {
       "type": "text",
-      "border": {
-        "corner_radius": 8
-      },
       "width": {
         "type": "match_parent"
       },
       "height": {
-        "type": "fixed",
-        "value": 48
+        "type": "wrap_content"
       },
-      "margins": {
+      "paddings": {
         "left": 16,
         "top": 16,
         "right": 16,
         "bottom": 16
       },
-      "font_size": 18,
+      "margins": {
+        "top": 16,
+        "bottom": 16,
+        "left": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
       "font_weight": "medium",
       "text_alignment_vertical": "center",
       "text_alignment_horizontal": "center",
-      "text_color": "#34495E"
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
     }
   },
   "card": {
@@ -64,7 +55,7 @@
       {
         "name": "text",
         "type": "string",
-        "value": "no buttons switched"
+        "value": "No buttons switched"
       }
     ],
     "variable_triggers": [
@@ -73,7 +64,7 @@
         "actions": [
           {
             "log_id": "left_switched_text",
-            "url": "div-action://set_variable?name=text&value=left%20switched"
+            "url": "div-action://set_variable?name=text&value=Left%20switched"
           }
         ]
       },
@@ -82,7 +73,7 @@
         "actions": [
           {
             "log_id": "right_switched_text",
-            "url": "div-action://set_variable?name=text&value=right%20switched"
+            "url": "div-action://set_variable?name=text&value=Right%20switched"
           }
         ]
       },
@@ -91,7 +82,7 @@
         "actions": [
           {
             "log_id": "both_switched_text",
-            "url": "div-action://set_variable?name=text&value=both%20switched"
+            "url": "div-action://set_variable?name=text&value=Both%20switched"
           }
         ]
       },
@@ -100,7 +91,7 @@
         "actions": [
           {
             "log_id": "no_switched_text",
-            "url": "div-action://set_variable?name=text&value=no%20buttons%20switched"
+            "url": "div-action://set_variable?name=text&value=No%20buttons%20switched"
           }
         ]
       }
@@ -112,14 +103,8 @@
           "type": "container",
           "height": {
             "type": "fixed",
-            "value": 320
+            "value": 200
           },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#2C3E50"
-            }
-          ],
           "orientation": "overlap",
           "items": [
             {
@@ -128,11 +113,11 @@
               "font_weight": "medium",
               "height": {
                 "type": "fixed",
-                "value": 260
+                "value": 140
               },
               "text_alignment_vertical": "center",
               "text_alignment_horizontal": "center",
-              "text_color": "#FFF",
+              "text_color": "#000",
               "text": "@{text}"
             },
             {
@@ -148,13 +133,7 @@
                       "state_id": "off",
                       "div": {
                         "type": "button",
-                        "text": "LEFT",
-                        "background": [
-                          {
-                            "type": "solid",
-                            "color": "#1ABC9C"
-                          }
-                        ],
+                        "text": "Left",
                         "actions": [
                           {
                             "log_id": "switch_left",
@@ -171,11 +150,11 @@
                       "state_id": "on",
                       "div": {
                         "type": "button",
-                        "text": "LEFT",
+                        "text": "Left",
                         "background": [
                           {
                             "type": "solid",
-                            "color": "#00BC00"
+                            "color": "#f1dff2"
                           }
                         ],
                         "actions": [
@@ -200,13 +179,7 @@
                       "state_id": "off",
                       "div": {
                         "type": "button",
-                        "text": "RIGHT",
-                        "background": [
-                          {
-                            "type": "solid",
-                            "color": "#1ABC9C"
-                          }
-                        ],
+                        "text": "Right",
                         "actions": [
                           {
                             "log_id": "switch_right",
@@ -223,11 +196,11 @@
                       "state_id": "on",
                       "div": {
                         "type": "button",
-                        "text": "RIGHT",
+                        "text": "Right",
                         "background": [
                           {
                             "type": "solid",
-                            "color": "#00BC00"
+                            "color": "#f1dff2"
                           }
                         ],
                         "actions": [

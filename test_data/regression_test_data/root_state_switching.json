@@ -10,10 +10,9 @@
         "value": 48
       },
       "margins": {
-        "left": 16,
+        "left": 12,
         "top": 16,
-        "right": 16,
-        "bottom": 16
+        "right": 12
       },
       "border": {
         "corner_radius": 8
@@ -21,16 +20,16 @@
       "background": [
         {
           "type": "solid",
-          "color": "#1ABC9C"
+          "color": "#0e000000"
         }
       ],
       "alignment_vertical": "bottom",
       "alignment_horizontal": "center",
-      "font_size": 18,
+      "font_size": 16,
       "font_weight": "medium",
       "text_alignment_vertical": "center",
       "text_alignment_horizontal": "center",
-      "text_color": "#34495E",
+      "text_color": "#000000",
       "&text": "text",
       "&actions": "actions"
     }
@@ -47,48 +46,43 @@
             "weight": 1
           },
           "height": {
-            "type": "fixed",
-            "unit": "dp",
-            "value": 384
+            "type": "wrap_content"
           },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#2C3E50"
-            }
-          ],
           "orientation": "vertical",
           "content_alignment_horizontal": "center",
           "content_alignment_vertical": "bottom",
           "items": [
             {
               "type": "text",
-              "text": "circle",
+              "text": "Circle",
+              "margins": {
+                "top": 70,
+                "bottom": 44
+              },
               "width": {
                 "type": "fixed",
-                "value": 100
+                "value": 120
               },
               "height": {
                 "type": "fixed",
-                "value": 100
+                "value": 120
               },
               "border": {
-                "corner_radius": 50
+                "corner_radius": 60
               },
               "background": [
                 {
                   "type": "solid",
-                  "color": "#6DD5FA"
+                  "color": "#FFCC00"
                 }
               ],
               "text_alignment_vertical": "center",
               "text_alignment_horizontal": "center",
-              "font_size": 20,
-              "font_weight": "bold"
+              "font_size": 18
             },
             {
               "type": "action_button",
-              "text": "CHANGE STATE (TEMPORARY)",
+              "text": "Change state (temporary)",
               "actions": [
                 {
                   "log_id": "change_state",
@@ -98,7 +92,7 @@
             },
             {
               "type": "action_button",
-              "text": "CHANGE STATE",
+              "text": "Change state",
               "actions": [
                 {
                   "log_id": "change_state",
@@ -118,45 +112,40 @@
             "weight": 1
           },
           "height": {
-            "type": "fixed",
-            "unit": "dp",
-            "value": 384
+            "type": "wrap_content"
           },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#2C3E50"
-            }
-          ],
           "orientation": "vertical",
           "content_alignment_horizontal": "center",
           "content_alignment_vertical": "bottom",
           "items": [
             {
               "type": "text",
-              "text": "square",
+              "text": "Square",
               "width": {
                 "type": "fixed",
-                "value": 100
+                "value": 120
               },
               "height": {
                 "type": "fixed",
-                "value": 100
+                "value": 120
+              },
+              "margins": {
+                "top": 70,
+                "bottom": 44
               },
               "background": [
                 {
                   "type": "solid",
-                  "color": "#6DD5FA"
+                  "color": "#e1bae3"
                 }
               ],
               "text_alignment_vertical": "center",
               "text_alignment_horizontal": "center",
-              "font_weight": "bold",
-              "font_size": 20
+              "font_size": 18
             },
             {
               "type": "action_button",
-              "text": "CHANGE STATE (TEMPORARY)",
+              "text": "Change state (temporary)",
               "actions": [
                 {
                   "log_id": "change_state",
@@ -166,7 +155,7 @@
             },
             {
               "type": "action_button",
-              "text": "CHANGE STATE",
+              "text": "Change state",
               "actions": [
                 {
                   "log_id": "change_state",

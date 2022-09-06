@@ -2,37 +2,26 @@
   "templates": {
     "text_block": {
       "type": "text",
-      "font_size": 14,
-      "text_alignment_horizontal": "center",
-      "text_alignment_vertical": "center",
-      "alignment_horizontal": "center",
-      "text_color": "#1ABC9C",
-      "paddings": {
-        "top": 4,
-        "bottom": 4,
-        "left": 8,
-        "right": 8
-      },
-      "margins": {
-        "left": 8,
-        "right": 8
-      },
-      "width": {
-        "type": "fixed",
-        "value": 80
-      },
-      "height": {
-        "type": "fixed",
-        "value": 50
+      "border": {
+        "corner_radius": 8,
+        "stroke": {
+          "color": "#ffffff",
+          "width": 2
+        }
       },
       "background": [
         {
-          "type": "solid",
-          "color": "#34495E"
+          "color": "#0e000000",
+          "type": "solid"
         }
       ],
-      "border": {
-        "corner_radius": 6
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "height": {
+        "type": "fixed",
+        "value": 80
       }
     },
     "tabs_preset": {
@@ -49,14 +38,15 @@
         "item_spacing": 5
       },
       "margins": {
-        "bottom": 50
+        "top": 4,
+        "bottom": 28
       },
       "items": [
         {
           "title": "Tab 1",
           "div": {
             "type": "text_block",
-            "text": "Item0",
+            "text": "Item 0",
             "width": {
               "type": "match_parent"
             }
@@ -66,7 +56,7 @@
           "title": "Tab 2",
           "div": {
             "type": "text_block",
-            "text": "Item1",
+            "text": "Item 1",
             "width": {
               "type": "match_parent"
             }
@@ -76,7 +66,7 @@
           "title": "Tab 3",
           "div": {
             "type": "text_block",
-            "text": "Item3",
+            "text": "Item 3",
             "width": {
               "type": "match_parent"
             }
@@ -86,7 +76,7 @@
           "title": "Tab 4",
           "div": {
             "type": "text_block",
-            "text": "Item4",
+            "text": "Item 4",
             "width": {
               "type": "match_parent"
             }

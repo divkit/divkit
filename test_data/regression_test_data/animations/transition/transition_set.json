@@ -5,7 +5,16 @@
       "orientation": "overlap",
       "items": [
         {
-          "type": "image",
+          "type": "separator",
+          "paddings": {
+            "top": 16,
+            "bottom": 16,
+            "left": 16,
+            "right": 16
+          },
+          "delimiter_style": {
+            "color": "#00000000"
+          },
           "width": {
             "type": "match_parent"
           },
@@ -13,9 +22,12 @@
             "type": "match_parent"
           },
           "border": {
-            "corner_radius": 14
+            "corner_radius": 8
           },
-          "placeholder_color": "#33FFFFFF",
+          "background": [{
+            "type": "solid",
+            "color": "#e0bae3"
+          }],
           "$image_url": "album_cover_url",
           "action_animation": {
             "name": "no_animation"
@@ -113,6 +125,10 @@
           "height": {
             "type": "fixed",
             "value": 240
+          },
+          "alignment_horizontal": "center",
+          "margins": {
+            "top": 16
           },
           "row_span": 4,
           "album_cover_url": "https://avatars.yandex.net/get-music-content/49876/c5a39142.a.77947-1/400x400",
