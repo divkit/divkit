@@ -38,7 +38,7 @@ class VisibilityActionsTest {
     @Test
     fun galleryVisibilityActionsLog() {
         gallery {
-            testAsset = "scenarios/gallery/gallery_swipe.json"
+            testAsset = "regression_test_data/gallery/gallery_swipe.json"
             activityRule.buildContainer()
         }
         visibilityActions { awaitViewShown() }
@@ -59,7 +59,7 @@ class VisibilityActionsTest {
     @Test
     fun pagerVisibilityActionsLog() {
         pager {
-            testAsset = "scenarios/action_visibility/pager.json"
+            testAsset = "regression_test_data/action_visibility/pager.json"
             activityRule.buildContainer()
 
             swipeLeft()
@@ -71,7 +71,7 @@ class VisibilityActionsTest {
     @Test
     fun pagerSwipeVisibilityActionsLog() {
         pager {
-            testAsset = "scenarios/action_visibility/swipe_div_pager.json"
+            testAsset = "regression_test_data/action_visibility/swipe_div_pager.json"
             activityRule.buildContainer()
 
             swipeLeft()
@@ -85,7 +85,7 @@ class VisibilityActionsTest {
     @Test
     fun pagerSwipeVisibilityActions() {
         pager {
-            testAsset = "scenarios/action_visibility/swipe_div_pager.json"
+            testAsset = "regression_test_data/action_visibility/swipe_div_pager.json"
             activityRule.buildContainer()
 
             swipeLeft()
@@ -98,7 +98,7 @@ class VisibilityActionsTest {
     @Test
     fun firstPagePagerVisibilityActions() {
         pager {
-            testAsset = "scenarios/action_visibility/pager.json"
+            testAsset = "regression_test_data/action_visibility/pager.json"
             activityRule.buildContainer()
         }
 
@@ -113,7 +113,7 @@ class VisibilityActionsTest {
     @Test
     fun defaultItemPagerVisibilityActions() {
         pager {
-            testAsset = "scenarios/action_visibility/default_item.json"
+            testAsset = "regression_test_data/action_visibility/default_item.json"
             activityRule.buildContainer()
         }
         visibilityActions {

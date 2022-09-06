@@ -25,7 +25,7 @@ internal fun testClicks(f: ClickHandlingTestSteps.() -> Unit) = f(ClickHandlingT
 @StepsDsl
 internal open class ClickHandlingTestSteps : DivTestAssetSteps() {
     init {
-        testAsset = "scenarios/button_actions.json"
+        testAsset = "regression_test_data/button_actions.json"
     }
 
     private val actions = LinkedBlockingQueue<Pair<String, String>>()

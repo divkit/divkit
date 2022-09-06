@@ -18,7 +18,7 @@ class TabsSwipeTest {
     @Test
     fun tabChangesOnSwipe() {
         tabSwipe {
-            testAsset = "scenarios/tabs_max_height.json"
+            testAsset = "regression_test_data/tabs_max_height.json"
             activityTestRule.buildContainer()
             swipeTabLeft()
             swipeTabLeft()
@@ -39,7 +39,7 @@ class TabsSwipeTest {
     @Test
     fun tabScrollLogging() {
         tabSwipe {
-            testAsset = "scenarios/tabs_max_height.json"
+            testAsset = "regression_test_data/tabs_max_height.json"
             activityTestRule.buildContainer()
 
             swipeTabLeft()
@@ -53,7 +53,7 @@ class TabsSwipeTest {
     @Test
     fun tabTitlesScrollLogging() {
         tabSwipe {
-            testAsset = "scenarios/tabs_max_height.json"
+            testAsset = "regression_test_data/tabs_max_height.json"
             activityTestRule.buildContainer()
 
             swipeHeadersLeft()
@@ -64,7 +64,7 @@ class TabsSwipeTest {
     @Test
     fun tabSwipeRestricted() {
         tabSwipe {
-            testAsset = "scenarios/tabs_disabled_switch_tabs_by_swipe.json"
+            testAsset = "regression_test_data/tabs_disabled_switch_tabs_by_swipe.json"
             activityTestRule.buildContainer()
 
             swipeTabLeft()

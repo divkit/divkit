@@ -37,7 +37,7 @@ class GalleryAndPagerScrollTest {
     @Test
     fun galleryScrollTest() {
         gallery {
-            testAsset = "scenarios/gallery/gallery_swipe.json"
+            testAsset = "regression_test_data/gallery/gallery_swipe.json"
             activityRule.buildContainer()
 
             swipeLeft()
@@ -54,7 +54,7 @@ class GalleryAndPagerScrollTest {
     @Test
     fun galleryScrollPagedTest() {
         gallery {
-            testAsset = "scenarios/gallery/gallery_swipe_paged.json"
+            testAsset = "regression_test_data/gallery/gallery_swipe_paged.json"
             activityRule.buildContainer()
 
             swipeLeft()
@@ -71,7 +71,7 @@ class GalleryAndPagerScrollTest {
     @Test
     fun pagerScrollTest() {
         pager {
-            testAsset = "scenarios/pager/pager.json"
+            testAsset = "regression_test_data/pager/pager.json"
             activityRule.buildContainer()
 
             swipeLeft()

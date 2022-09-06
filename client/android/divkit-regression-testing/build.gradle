@@ -2,6 +2,12 @@ apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 
 android {
+    sourceSets {
+        main {
+            assets.srcDirs += '../../test_data/regression_test_data'
+        }
+    }
+
     buildFeatures {
         viewBinding true
     }

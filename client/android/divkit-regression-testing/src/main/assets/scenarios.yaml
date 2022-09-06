@@ -6,7 +6,7 @@ expect:
   - Text "Click on me" changed to "You clicked on me"
   - Second click chande text to "Click on me"
 paths:
-  - 'scenarios/simple_tap.json'
+  - 'regression_test_data/simple_tap.json'
 ---
 title: Long tap
 tags: [ 'DivAction' ]
@@ -16,7 +16,7 @@ expect:
   - Menu with butons "show" and "hide" is appearing
   - longtap_actions logged
 paths:
-  - 'scenarios/long_tap.json'
+  - 'regression_test_data/long_tap.json'
 ---
 title: Tab swipe
 tags: [ 'DivTabs', 'swipe' ]
@@ -27,7 +27,7 @@ expect:
   - Tab changes depending on the swipe direction
   - Tabs changes is logged
 paths:
-  - 'scenarios/tabs_max_height.json'
+  - 'regression_test_data/tabs_max_height.json'
 ---
 title: Tab swipe restricted
 tags: [ 'DivTabs', 'swipe' ]
@@ -38,7 +38,7 @@ expect:
   - Tab not changed
   - Tab changes on header click
 paths:
-  - 'scenarios/tabs_disabled_switch_tabs_by_swipe.json'
+  - 'regression_test_data/tabs_disabled_switch_tabs_by_swipe.json'
 ---
 title: Gallery scroll
 tags: [ 'DivGallery', 'scroll' ]
@@ -49,7 +49,7 @@ expect:
   - Content is changes depending on scroll direction
   - Gallery scroll is logged
 paths:
-  - 'scenarios/gallery/gallery_swipe.json'
+  - 'regression_test_data/gallery/gallery_swipe.json'
 ---
 title: Paged gallery scroll
 tags: [ 'DivGallery', 'scroll' ]
@@ -60,52 +60,52 @@ expect:
   - Content is changes page by page
   - Gallery scroll is logged
 paths:
-  - 'scenarios/gallery/gallery_swipe_paged.json'
+  - 'regression_test_data/gallery/gallery_swipe_paged.json'
 ---
 title: Gallery columns
 tags: [ 'DivGallery' ]
 paths:
-  - 'scenarios/gallery/gallery-columns.json'
+  - 'regression_test_data/gallery/gallery-columns.json'
 ---
 title: Gallery item actions
 tags: [ 'DivGallery']
 paths:
-  - 'scenarios/gallery/gallery-item-actions.json'
+  - 'regression_test_data/gallery/gallery-item-actions.json'
 ---
 title: Gallery default item states
 tags: [ 'DivGallery']
 paths:
-  - 'scenarios/gallery/gallery_default_item_states.json'
+  - 'regression_test_data/gallery/gallery_default_item_states.json'
 ---
 title: Gallery paging default item states
 tags: [ 'DivGallery']
 paths:
-  - 'scenarios/gallery/gallery_paging_default_item_states.json'
+  - 'regression_test_data/gallery/gallery_paging_default_item_states.json'
 ---
 title: Zoomable gallery
 tags: [ 'DivGallery']
 paths:
-  - 'scenarios/gallery/zoomable-gallery.json'
+  - 'regression_test_data/gallery/zoomable-gallery.json'
 ---
 title: Gallery bottom multiline
 tags: [ 'DivGallery' ]
 paths:
-  - 'scenarios/gallery/gallery-bottom-multiline.json'
+  - 'regression_test_data/gallery/gallery-bottom-multiline.json'
 ---
 title: Gallery bottom multiline selected actions
 tags: [ 'DivGallery' ]
 paths:
-  - 'scenarios/gallery/gallery-bottom-multiline-selected-action.json'
+  - 'regression_test_data/gallery/gallery-bottom-multiline-selected-action.json'
 ---
 title: Gallery bottom singleline
 tags: [ 'DivGallery' ]
 paths:
-  - 'scenarios/gallery/gallery-bottom-singleline.json'
+  - 'regression_test_data/gallery/gallery-bottom-singleline.json'
 ---
 title: Gallery top multiline
 tags: [ 'DivGallery' ]
 paths:
-  - 'scenarios/gallery/gallery-top-multiline.json'
+  - 'regression_test_data/gallery/gallery-top-multiline.json'
 ---
 title: Pager scroll
 tags: [ 'DivPager', 'scroll' ]
@@ -116,22 +116,22 @@ expect:
   - Content is changes page by page
   - Page change is logged
 paths:
-  - 'scenarios/pager/pager.json'
+  - 'regression_test_data/pager/pager.json'
 ---
 title: Pager item actions
 tags: [ 'DivPager']
 paths:
-  - 'scenarios/pager/pager-item-actions.json'
+  - 'regression_test_data/pager/pager-item-actions.json'
 ---
 title: Pager selected actions
 tags: [ 'DivPager']
 paths:
-  - 'scenarios/pager/pager-selected-actions.json'
+  - 'regression_test_data/pager/pager-selected-actions.json'
 ---
 title: Pager default item states
 tags: [ 'DivPager']
 paths:
-  - 'scenarios/pager/pager_default_item_states.json'
+  - 'regression_test_data/pager/pager_default_item_states.json'
 ---
 title: Action animations
 tags: [ 'DivAnimation' ]
@@ -141,25 +141,25 @@ expect:
   - The animation written on the button appears
   - Animation finished on long click finish
 paths:
-  - 'scenarios/action_animation/interpolator_linear/scale.json'
-  - 'scenarios/action_animation/interpolator_linear/fade.json'
-  - 'scenarios/action_animation/interpolator_linear/set.json'
-  - 'scenarios/action_animation/interpolator_ease/scale.json'
-  - 'scenarios/action_animation/interpolator_ease/fade.json'
-  - 'scenarios/action_animation/interpolator_ease/set.json'
-  - 'scenarios/action_animation/interpolator_ease_in/scale.json'
-  - 'scenarios/action_animation/interpolator_ease_in/fade.json'
-  - 'scenarios/action_animation/interpolator_ease_in/set.json'
-  - 'scenarios/action_animation/interpolator_ease_out/scale.json'
-  - 'scenarios/action_animation/interpolator_ease_out/fade.json'
-  - 'scenarios/action_animation/interpolator_ease_out/set.json'
-  - 'scenarios/action_animation/interpolator_ease_in_out/scale.json'
-  - 'scenarios/action_animation/interpolator_ease_in_out/fade.json'
-  - 'scenarios/action_animation/interpolator_ease_in_out/set.json'
-  - 'scenarios/action_animation/interpolator_spring/scale.json'
-  - 'scenarios/action_animation/interpolator_spring/fade.json'
-  - 'scenarios/action_animation/interpolator_spring/set.json'
-  - 'scenarios/action_animation/no_animation.json'
+  - 'regression_test_data/action_animation/interpolator_linear/scale.json'
+  - 'regression_test_data/action_animation/interpolator_linear/fade.json'
+  - 'regression_test_data/action_animation/interpolator_linear/set.json'
+  - 'regression_test_data/action_animation/interpolator_ease/scale.json'
+  - 'regression_test_data/action_animation/interpolator_ease/fade.json'
+  - 'regression_test_data/action_animation/interpolator_ease/set.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in/scale.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in/fade.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in/set.json'
+  - 'regression_test_data/action_animation/interpolator_ease_out/scale.json'
+  - 'regression_test_data/action_animation/interpolator_ease_out/fade.json'
+  - 'regression_test_data/action_animation/interpolator_ease_out/set.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in_out/scale.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in_out/fade.json'
+  - 'regression_test_data/action_animation/interpolator_ease_in_out/set.json'
+  - 'regression_test_data/action_animation/interpolator_spring/scale.json'
+  - 'regression_test_data/action_animation/interpolator_spring/fade.json'
+  - 'regression_test_data/action_animation/interpolator_spring/set.json'
+  - 'regression_test_data/action_animation/no_animation.json'
 ---
 title: Recomendation slider
 tags: [ 'Slider' ]
@@ -169,7 +169,7 @@ steps:
 expect:
   - Pointer position is changes and change button text
 paths:
-  - 'scenarios/slider_nps.json'
+  - 'regression_test_data/slider_nps.json'
 ---
 title: Clider with two pointers
 tags: [ 'Slider' ]
@@ -179,7 +179,7 @@ steps:
 expect:
   - Pointer position is changes and change button text
 paths:
-  - 'scenarios/double_slider.json'
+  - 'regression_test_data/double_slider.json'
 ---
 title: Slider preferences
 tags: [ 'Slider' ]
@@ -188,11 +188,11 @@ steps:
 expect:
   - Slider poiner shange it's position
 paths:
-  - 'scenarios/slider_presets.json'
+  - 'regression_test_data/slider_presets.json'
 ---
 title: Root state switching
 paths:
-  - 'scenarios/root_state_switching.json'
+  - 'regression_test_data/root_state_switching.json'
 steps:
   - Press "CHANGE STATE (TEMPORARY)"
   - Restart the app
@@ -210,7 +210,7 @@ steps:
 expect:
   - Elements focus changes in order to switch
 paths:
-  - 'scenarios/focus.json'
+  - 'regression_test_data/focus.json'
 ---
 title: Focus events
 steps:
@@ -221,7 +221,7 @@ expect:
   - When handler gets focus, state of the right element is "focus"
   - When handler lost focus, state of the right element is "blur"
 paths:
-  - 'scenarios/focus_actions.json'
+  - 'regression_test_data/focus_actions.json'
 ---
 title: "Accessibility descriptions"
 tags: [ 'Accessibility' ]
@@ -240,7 +240,7 @@ expect:
   - On "Элемент 2" TalkBack should say "Элемент 2; Кнопка; Нажмите на кнопку, чтобы что-то произошло"
   - On "Элемент 3" TalkBack should say "Элемент 3; Кнопка"
 paths:
-  - 'scenarios/accessibility/descriptions.json'
+  - 'regression_test_data/accessibility/descriptions.json'
 ---
 title: "Accessibility types"
 tags: [ 'Accessibility' ]
@@ -253,7 +253,7 @@ expect:
   - On each elements will be text "Тип - X", you should hear "Тип - X; X"; For example "Тип - кнопка; кнопка"
   - For "Тип - текст" and "Без типа" you will hear "Тип - текст" and "Без типа".
 paths:
-  - 'scenarios/accessibility/types.json'
+  - 'regression_test_data/accessibility/types.json'
 ---
 title: "Default Accessibility mode"
 tags: [ 'Accessibility' ]
@@ -265,7 +265,7 @@ expect:
   - When focusing on group of 2 and 3 items you will hear "Это Элемент 2, Это Элемент 3"
   - Can't focus 4 element
 paths:
-  - 'scenarios/accessibility/mode/default.json'
+  - 'regression_test_data/accessibility/mode/default.json'
 ---
 title: "Merge Accessibility mode"
 tags: [ 'Accessibility' ]
@@ -278,7 +278,7 @@ expect:
   - On activation menu with text "Элемент 1, Элемент 2, Элемент 3" appears
   - On focus TalkBack should not say "Коснитесь дважды и удерживайте"
 paths:
-  - 'scenarios/accessibility/mode/merge.json'
+  - 'regression_test_data/accessibility/mode/merge.json'
 ---
 title: "Exclude Accessibility mode"
 tags: [ 'Accessibility' ]
@@ -290,7 +290,7 @@ expect:
   - Услышим "Это Элемент 5"
   - При выключенном TalkBack на каждой кнопке при тапе должно появляться меню с названием этой кнопки
 paths:
-  - 'scenarios/accessibility/mode/exclude.json'
+  - 'regression_test_data/accessibility/mode/exclude.json'
 ---
 title: 1299 Actions on tap
 steps:
@@ -312,11 +312,11 @@ expect:
   - Menu with text "Single tap on child" appears
   - Menu with text "Long tap on container" appears for container
 paths:
-  - 'scenarios/button_actions.json'
+  - 'regression_test_data/button_actions.json'
 ---
 title: Longtap actions
 paths:
-  - 'scenarios/pinch-to-zoom-longtap-actions.json'
+  - 'regression_test_data/pinch-to-zoom-longtap-actions.json'
 ---
 title: Div errors visualization
 priority: critical
@@ -327,7 +327,7 @@ expect:
   - Click on save button copy json with errors
   - Click on text 'Generate error!' add errors 'Value 'wrong_value' for key 'alignment_horizontal' at path '@{alignment}' is not valid'
 paths:
-  - 'scenarios/error_visual_monitor.json'
+  - 'regression_test_data/error_visual_monitor.json'
 ---
 title: 1256-1
 tags: [ 'Animations' ]
@@ -337,7 +337,7 @@ steps:
 expect:
  - Image should appears and desapears changing the transparency
 paths:
-  - 'scenarios/animations/transition/fade_full_src.json'
+  - 'regression_test_data/animations/transition/fade_full_src.json'
 ---
 title: 1256-2
 tags: [ 'Animations' ]
@@ -347,7 +347,7 @@ steps:
 expect:
   - Image should appears and desapears changing the transparency starting or ending with transparency = 0.5
 paths:
-  - 'scenarios/animations/transition/fade_part_src.json'
+  - 'regression_test_data/animations/transition/fade_part_src.json'
 ---
 title: 1256-3
 tags: [ 'Animations' ]
@@ -357,7 +357,7 @@ steps:
 expect:
   - Image should appears and desapears changing the scale
 paths:
-  - 'scenarios/animations/transition/scale_full_src.json'
+  - 'regression_test_data/animations/transition/scale_full_src.json'
 ---
 title: 1256-4
 tags: [ 'Animations' ]
@@ -367,7 +367,7 @@ steps:
 expect:
   - Image should appears and desapears changing the scale starting or ending with scale = 0.75
 paths:
-  - 'scenarios/animations/transition/scale_part_src.json'
+  - 'regression_test_data/animations/transition/scale_part_src.json'
 ---
 title: 1256-5
 tags: [ 'Animations' ]
@@ -377,7 +377,7 @@ steps:
 expect:
   - Image should appears and desapears sliding from under the top edge of the card
 paths:
-  - 'scenarios/animations/transition/slide_full_src.json'
+  - 'regression_test_data/animations/transition/slide_full_src.json'
 ---
 title: 1256-6
 tags: [ 'Animations' ]
@@ -387,7 +387,7 @@ steps:
 expect:
   - Image should appears and desapears sliding from under the top edge of the card, but not reaching it
 paths:
-  - 'scenarios/animations/transition/slide_part_src.json'
+  - 'regression_test_data/animations/transition/slide_part_src.json'
 ---
 title: 1256-7
 tags: [ 'Animations' ]
@@ -397,7 +397,7 @@ steps:
 expect:
   - Image should appears and desapears changing trancparency and sliding from center to edge
 paths:
-  - 'scenarios/animations/transition/set_src.json'
+  - 'regression_test_data/animations/transition/set_src.json'
 ---
 title: 1256-8
 tags: [ 'Animations' ]
@@ -407,7 +407,7 @@ steps:
 expect:
   - Image should appears from diffrent edges of card
 paths:
-  - 'scenarios/animations/transition/change_bounds_diff_ids_src.json'
+  - 'regression_test_data/animations/transition/change_bounds_diff_ids_src.json'
 ---
 title: 1256-9
 tags: [ 'Animations' ]
@@ -417,7 +417,7 @@ steps:
 expect:
   - Image should change it's size
 paths:
-  - 'scenarios/animations/transition/change_bounds_diff_sizes_src.json'
+  - 'regression_test_data/animations/transition/change_bounds_diff_sizes_src.json'
 ---
 title: 1256-10
 tags: [ 'Animations' ]
@@ -427,7 +427,7 @@ steps:
 expect:
   - Image should change text moving across the screen
 paths:
-  - 'scenarios/animations/transition/change_bounds_diff_types_src.json'
+  - 'regression_test_data/animations/transition/change_bounds_diff_types_src.json'
 ---
 title: 1256-11
 tags: [ 'Animations' ]
@@ -437,7 +437,7 @@ steps:
 expect:
   - Image should move horizontally across the screen
 paths:
-  - 'scenarios/animations/transition/change_bounds_same_ids_src.json'
+  - 'regression_test_data/animations/transition/change_bounds_same_ids_src.json'
 ---
 title: 1256-12
 tags: [ 'Animations' ]
@@ -448,7 +448,7 @@ steps:
 expect:
  - Expanding end collapsing the elements shoud be with animation
 paths:
-  - 'scenarios/animations/article.json'
+  - 'regression_test_data/animations/article.json'
 ---
 title: 1256-13
 tags: [ 'Animations' ]
@@ -459,7 +459,7 @@ steps:
 expect:
  - Expanding end collapsing the elements shoud be with animation
 paths:
-  - 'scenarios/animations/article_with_transitions.json'
+  - 'regression_test_data/animations/article_with_transitions.json'
 ---
 title: 1256-14
 tags: [ 'Animations' ]
@@ -468,7 +468,7 @@ steps:
 expect:
  - Red sircle should appear and disappear
 paths:
-  - 'scenarios/animations/blink.json'
+  - 'regression_test_data/animations/blink.json'
 ---
 title: 1262 example of tooltip animation
 tags: [ 'Animations' ]
@@ -477,7 +477,7 @@ steps:
 expect:
  - Toolip hides a few seconds later
 paths:
-  - 'scenarios/animations/mute_notification.json'
+  - 'regression_test_data/animations/mute_notification.json'
 ---
 title: 1264 Scale transition ignore pivot_x/pivot_y
 tags: [ 'Animations' ]
@@ -486,7 +486,7 @@ steps:
 expect:
  - Image should scale from left edge to right one
 paths:
-  - 'scenarios/animations/scale_pivot_src.json'
+  - 'regression_test_data/animations/scale_pivot_src.json'
 ---
 title: 1265
 tags: [ 'Animations' ]
@@ -495,31 +495,31 @@ steps:
 expect:
  - The text should disappear first, and the background after a short delay
 paths:
-  - 'scenarios/animations/mute_notification.json'
+  - 'regression_test_data/animations/mute_notification.json'
 ---
 title: 1269-1
 paths:
-  - 'scenarios/animations/transition/state_transition_any_change.json'
+  - 'regression_test_data/animations/transition/state_transition_any_change.json'
 ---
 title: 1269-2
 paths:
-  - 'scenarios/animations/transition/state_transition_data_change.json'
+  - 'regression_test_data/animations/transition/state_transition_data_change.json'
 ---
 title: 1269-3
 paths:
-  - 'scenarios/animations/transition/state_transition_state_change.json'
+  - 'regression_test_data/animations/transition/state_transition_state_change.json'
 ---
 title: 1269-4
 paths:
-  - 'scenarios/animations/transition/inner_state_transition_any_change.json'
+  - 'regression_test_data/animations/transition/inner_state_transition_any_change.json'
 ---
 title: 1269-5
 paths:
-  - 'scenarios/animations/transition/inner_state_transition_data_change.json'
+  - 'regression_test_data/animations/transition/inner_state_transition_data_change.json'
 ---
 title: 1269-6
 paths:
-  - 'scenarios/animations/transition/inner_state_transition_state_change.json'
+  - 'regression_test_data/animations/transition/inner_state_transition_state_change.json'
 ---
 title: 1271
 tags: [ 'Animations', 'lottie' ]
@@ -529,7 +529,7 @@ steps:
 expect:
  - Spinner animation will continue 5 times and then stop
 paths:
- - 'scenarios/animations/lottie/spinner_restart_repeat_mode.json'
+ - 'regression_test_data/animations/lottie/spinner_restart_repeat_mode.json'
 ---
 title: 1272
 tags: [ 'Animations', 'lottie' ]
@@ -539,19 +539,19 @@ steps:
 expect:
  - Spinner change spin dirrection 3 times and then stops
 paths:
- - 'scenarios/animations/lottie/spinner_reverse_repeat_mode.json'
+ - 'regression_test_data/animations/lottie/spinner_reverse_repeat_mode.json'
 ---
 title: 1260
 tags: [ 'Animations', 'lottie' ]
 expect:
   - Появляется анимация спинера, которая не прерывается.
 paths:
-  - 'scenarios/animations/lottie/spinner.json'
+  - 'regression_test_data/animations/lottie/spinner.json'
 ---
 title: 1270
 tags: [ 'Animations' ]
 paths:
-  - 'scenarios/action_animation/button_press_action_animations.json'
+  - 'regression_test_data/action_animation/button_press_action_animations.json'
 ---
 title: 1234 visibility_actions in gallery
 tags: [ 'Visibility_actions' ]
@@ -562,7 +562,7 @@ expect:
   - Gallery data was opened
   - items visibility logged, for example "logViewShown(cardId = ..., id = ...item_changed0)"
 paths:
-  - 'scenarios/gallery/gallery_swipe.json'
+  - 'regression_test_data/gallery/gallery_swipe.json'
 ---
 title: 1235 visibility_actions in pager
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -573,7 +573,7 @@ expect:
   - Pager data was opened
   - items visibility logged, for example "logViewShown(cardId = ..., id = content_item_show:1)"
 paths:
-  - 'scenarios/action_visibility/pager.json'
+  - 'regression_test_data/action_visibility/pager.json'
 ---
 title: 1250 visibility_actions on change page in pager
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -584,7 +584,7 @@ expect:
   - Pager data is logged
   - items visibility logged, for example "logViewShown(cardId = ..., id = content_item_show:1)"
 paths:
-  - 'scenarios/action_visibility/swipe_div_pager.json'
+  - 'regression_test_data/action_visibility/swipe_div_pager.json'
 ---
 title: 1251 Visibility actions performed and logged in pager
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -597,7 +597,7 @@ expect:
     logViewShown(cardId = ..., id = container)
   - Cards description was changed
 paths:
-  - 'scenarios/action_visibility/swipe_div_pager.json'
+  - 'regression_test_data/action_visibility/swipe_div_pager.json'
 ---
 title: 1254-1 Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -608,7 +608,7 @@ expect:
     logViewShown(cardId = ..., id = content_item_show:0)
     logViewShown(cardId = ..., id = goose_shown)
 paths:
-  - 'scenarios/action_visibility/pager.json'
+  - 'regression_test_data/action_visibility/pager.json'
 ---
 title: 1254-2 Send select Pager using Div2View.tryLogVisibility
 tags: [ 'Visibility_actions', 'DivPager' ]
@@ -626,7 +626,7 @@ expect:
     DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next)
     Ya:PagerSelectedActionsTracker dispatch selected actions for page 1
 paths:
-  - 'scenarios/action_visibility/pager_selected_actions.json'
+  - 'regression_test_data/action_visibility/pager_selected_actions.json'
 ---
 title: 1258 Grouped bulkActions logged in "dispatchActions:"
 tags: [ 'Visibility_actions' ]
@@ -639,7 +639,7 @@ expect:
     logViewShown(cardId = ..., id = content_item_show)
     logViewShown(cardId = ..., id = container)
 paths:
-  - 'scenarios/action_visibility/swipe_div_pager.json'
+  - 'regression_test_data/action_visibility/swipe_div_pager.json'
 ---
 title: 1267 visibility_actions for default_item
 tags: [ 'Visibility_actions' ]
@@ -650,7 +650,7 @@ expect:
   - Card visibility logged, example
     logViewShown(cardId = ..., id = comments_counter_show:4)
 paths:
-  - 'scenarios/action_visibility/default_item.json'
+  - 'regression_test_data/action_visibility/default_item.json'
 ---
 title: 1288 nested visibility actions
 tags: [ 'Visibility_actions' ]
@@ -670,7 +670,7 @@ expect:
     logViewShown(cardId = ..., id = comment_03)
     logViewShown(cardId = ..., id = comment_04)
 paths:
-  - 'scenarios/action_visibility/article.json'
+  - 'regression_test_data/action_visibility/article.json'
 ---
 title: 'Variables in tabs'
 tags: [ 'DivTabs' ]
@@ -707,7 +707,7 @@ expect:
   - '"title_paddings.right=0" - padding of tabs container: right - 0'
   - '"title_paddings.right=50" - padding of tabs container: right - 50'
 paths:
-  - 'scenarios/variables/div_tabs.json'
+  - 'regression_test_data/variables/div_tabs.json'
 ---
 title: 1315 Visibility in div-base
 steps:
@@ -716,14 +716,14 @@ expect:
   - On click on test button text field set correct visibility.
   - Showing text field is logged.
 paths:
-  - 'scenarios/action_visibility/set_visibility.json'
+  - 'regression_test_data/action_visibility/set_visibility.json'
 ---
 title: 1317 showing animation on image loaded
 tags: [ 'Animations' ]
 expect:
   - Image appeares with described animation
 paths:
-  - 'scenarios/action_animation/image_loading_animation.json'
+  - 'regression_test_data/action_animation/image_loading_animation.json'
 ---
 title: Variables in DivIndicator
 steps:
@@ -735,7 +735,7 @@ steps:
 expect:
   - Indicator appearence changes and it changes according to the clicked buttin description
 paths:
-  - 'scenarios/variables/div_indicator.json'
+  - 'regression_test_data/variables/div_indicator.json'
 ---
 title: Variables triggers
 tags: [ 'Triggers' ]
@@ -747,7 +747,7 @@ steps:
 expect:
   - Text changes according to the button description
 paths:
-  - 'scenarios/variables/div_variable_triggers.json'
+  - 'regression_test_data/variables/div_variable_triggers.json'
 ---
 title: Variable triggers (modes)
 tags: [ 'Triggers' ]
@@ -758,7 +758,7 @@ steps:
 expect:
   - The layout corresponds to switching buttons
 paths:
-  - 'scenarios/variables/div_variable_trigger_modes.json'
+  - 'regression_test_data/variables/div_variable_trigger_modes.json'
 ---
 title: Variable triggers (замыкания)
 tags: [ 'DivInput', 'DivSlider', 'Triggers', 'Functions' ]
@@ -766,7 +766,7 @@ expect:
   - Slider and input values should be synchronized
   - When entering an incorrect value in text input - error shows
 paths:
-  - 'scenarios/variables/div_variable_trigger_loops.json'
+  - 'regression_test_data/variables/div_variable_trigger_loops.json'
 ---
 title: Sequential animations
 steps:
@@ -774,7 +774,7 @@ steps:
 expect:
   - Heart will increase by 2 times in 2 seconds, then will increase by 4 times in 2 seconds
 paths:
-  - 'scenarios/animations/transition/transition_set.json'
+  - 'regression_test_data/animations/transition/transition_set.json'
 ---
 title: 'Animations of switching tabs headers'
 tags: [ 'DivTabs', 'Animations' ]
@@ -787,7 +787,7 @@ expect:
   - 2 tab has fade animation
   - 3 tab has no animation
 paths:
-  - 'scenarios/animations/tab_titles_animations.json'
+  - 'regression_test_data/animations/tab_titles_animations.json'
 ---
 title: Text copying
 tags: [ 'DivText' ]
@@ -797,12 +797,12 @@ steps:
 expect:
   - First text has a system highlighting, you can copy it. Second text has no highlighting.
 paths:
-  - 'scenarios/selectable_text.json'
+  - 'regression_test_data/selectable_text.json'
 ---
 title: DivText
 tags: [ 'DivText' ]
 paths:
-  - 'scenarios/div-text.json'
+  - 'regression_test_data/div-text.json'
 ---
 title: 'Nested change bounds transitions'
 steps:
@@ -812,7 +812,7 @@ expect:
   - After first click image appers with animation, the container extendes with animation.
   - After second click extendes buton, text changes, container extendes again.
 paths:
-  - 'scenarios/action_animation/nested_change_bounds.json'
+  - 'regression_test_data/action_animation/nested_change_bounds.json'
 ---
 title: Text input
 tags: [ 'DivInput' ]
@@ -822,7 +822,7 @@ steps:
 expect:
   - Text under the input should be equal to text in input and change on input changes.
 paths:
-  - 'scenarios/input.json'
+  - 'regression_test_data/input.json'
 ---
 title: Text input (single line)
 tags: [ 'DivInput' ]
@@ -833,7 +833,7 @@ expect:
   - Text under the input should be equal to text in input and change on input changes.
   - Max lines = 1. Line break is unavailable.
 paths:
-  - 'scenarios/single_line_input.json'
+  - 'regression_test_data/single_line_input.json'
 ---
 title: Manage VideoCustom
 tags: [ 'VideoCustom' ]
@@ -846,7 +846,7 @@ expect:
   - If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused
   - If video wasn't paused, on tap on 'reset' the video starts playing from beginnging
 paths:
-  - 'scenarios/video/video_controls.json'
+  - 'regression_test_data/video/video_controls.json'
 ---
 title: 'State transition trigger'
 steps:
@@ -856,7 +856,7 @@ expect:
   - Second - there should be no animation, the old "state_change" is rubbed with an empty list of new ones
   - Third - there should be animation, old and new are allowed by default
 paths:
-  - 'scenarios/animations/transition/transition_triggers_state_change.json'
+  - 'regression_test_data/animations/transition/transition_triggers_state_change.json'
 ---
 title: 'Data transition trigger'
 steps:
@@ -866,7 +866,7 @@ expect:
   - Second - there should be no animation, the old "state_change" is rubbed with an empty list of new ones
   - Third - there should be an animation, the old "none" is rubbed by the new "state_change"
 paths:
-  - 'scenarios/animations/transition/transition_triggers_data_change_src.json'
+  - 'regression_test_data/animations/transition/transition_triggers_data_change_src.json'
 ---
 title: 'Actions logging'
 steps:
@@ -879,55 +879,55 @@ expect:
   - Double click logged 2 times
   - Long click logged 2 times
 paths:
-  - 'scenarios/logging.json'
+  - 'regression_test_data/logging.json'
 
 ---
 title: 'Shortcuts'
 paths:
-  - 'scenarios/shortcuts.json'
+  - 'regression_test_data/shortcuts.json'
 ---
 title: 'Auto ellipsize'
 paths:
-  - 'scenarios/auto-ellipsize.json'
+  - 'regression_test_data/auto-ellipsize.json'
 ---
 title: 'Expand cutout 1'
 paths:
-  - 'scenarios/expand-cutout-1.json'
+  - 'regression_test_data/expand-cutout-1.json'
 ---
 title: 'Expand cutout 2'
 paths:
-  - 'scenarios/expand-cutout-2.json'
+  - 'regression_test_data/expand-cutout-2.json'
 ---
 title: 'Lottie animations'
 paths:
-  - 'scenarios/lottie_animations.json'
+  - 'regression_test_data/lottie_animations.json'
 ---
 title: 'Lottie cycled animations'
 expect:
   - Red circle appears with animation, then blink
 paths:
-  - 'scenarios/lottie_cycled_animations.json'
+  - 'regression_test_data/lottie_cycled_animations.json'
 ---
 title: 'States default state'
 paths:
-  - 'scenarios/states_default_state.json'
+  - 'regression_test_data/states_default_state.json'
 ---
 title: 'Tabs item actions'
 paths:
-  - 'scenarios/tabs-item-actions.json'
+  - 'regression_test_data/tabs-item-actions.json'
 ---
 title: 'Grid layout'
 paths:
-  - 'scenarios/grid_layout.json'
+  - 'regression_test_data/grid_layout.json'
 ---
 title: 'Grid with weights'
 paths:
-  - 'scenarios/grid-with-weights.json'
+  - 'regression_test_data/grid-with-weights.json'
 ---
 title: 'Custom container'
 paths:
-  - 'scenarios/custom-container.json'
+  - 'regression_test_data/custom-container.json'
 ---
 title: 'Custom card'
 paths:
-  - 'scenarios/custom-card.json'
+  - 'regression_test_data/custom-card.json'

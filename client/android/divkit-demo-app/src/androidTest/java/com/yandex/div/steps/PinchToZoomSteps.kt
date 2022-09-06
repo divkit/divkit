@@ -33,7 +33,7 @@ internal fun pinchToZoom(f: PinchToZoomSteps.() -> Unit) = f(PinchToZoomSteps())
 internal class PinchToZoomSteps : DivTestAssetSteps() {
 
     init {
-        testAsset = "scenarios/pinch-to-zoom-longtap-actions.json"
+        testAsset = "regression_test_data/pinch-to-zoom-longtap-actions.json"
     }
 
     fun withIntending(block: () -> Unit) {

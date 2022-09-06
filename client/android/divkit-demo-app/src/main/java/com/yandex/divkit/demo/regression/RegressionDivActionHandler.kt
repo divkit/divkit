@@ -39,7 +39,9 @@ class RegressionDivActionHandler(
         if (url.host == SET_DATA_HOST) {
             val assetName = url.getQueryParameter(PATH_PARAM)
             if (assetName != null && view is Div2View) {
-                val divData = divAssetReader.read(assetName).parseToDiv2()
+                val divData = divAssetReader
+                    .read("regression_test_data/$assetName")
+                    .parseToDiv2()
                 setDivData(view, divData)
             }
         }

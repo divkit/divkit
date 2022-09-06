@@ -265,7 +265,7 @@ class Div2ScenarioActivity : AppCompatActivity() {
             val url = action.url?.evaluate(view.expressionResolver) ?: return false
             if (url.scheme == "div-demo-action" && url.host == "set_data") {
                 val assetName = url.getQueryParameter("path")
-                editorPresenter.readAsset("asset:///$assetName")
+                editorPresenter.readAsset("asset:///regression_test_data/$assetName")
                 return true
             }
             return super.handleAction(action, view)

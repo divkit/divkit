@@ -18,7 +18,7 @@ class IncludedActionsTestSteps: DivTestAssetSteps() {
     private val commentsButton = onView(withText("SHOW COMMENTS"))
 
     fun ActivityTestRule<*>.buildContainer(): Unit = allureStep("Build container") {
-        testAsset = "scenarios/action_visibility/article.json"
+        testAsset = "regression_test_data/action_visibility/article.json"
         buildContainer(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
     }
 

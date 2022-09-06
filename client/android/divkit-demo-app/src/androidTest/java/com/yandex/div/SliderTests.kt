@@ -18,7 +18,7 @@ class SliderTests {
     @Test
     fun sliderThumbValue() {
         slider {
-            testAsset = "scenarios/slider_nps.json"
+            testAsset = "regression_test_data/slider_nps.json"
             activityTestRule.buildContainer()
             assert { checkThumbValue(6) }
         }
@@ -27,7 +27,7 @@ class SliderTests {
     @Test
     fun recommendationSlider() {
         slider {
-            testAsset = "scenarios/slider_nps.json"
+            testAsset = "regression_test_data/slider_nps.json"
             activityTestRule.buildContainer()
 
             scrollToText(BUTTON_VALUE_NOT_SURE)
@@ -49,7 +49,7 @@ class SliderTests {
     @Test
     fun doubleSlider() {
         slider {
-            testAsset = "scenarios/double_slider.json"
+            testAsset = "regression_test_data/double_slider.json"
             activityTestRule.buildContainer()
 
             scrollToText(BUTTON_VALUE_NOT_SURE)
@@ -80,7 +80,7 @@ class SliderTests {
         sliderPreferences {
             val slider = defaultSlider
             slider {
-                testAsset = "scenarios/slider_presets.json"
+                testAsset = "regression_test_data/slider_presets.json"
                 activityTestRule.buildContainer()
 
                 setTo(5, slider)
@@ -94,7 +94,7 @@ class SliderTests {
         sliderPreferences {
             val slider = max10Slider
             slider {
-                testAsset = "scenarios/slider_presets.json"
+                testAsset = "regression_test_data/slider_presets.json"
                 activityTestRule.buildContainer()
 
                 setTo(9, slider)
@@ -108,7 +108,7 @@ class SliderTests {
         sliderPreferences {
             val slider = max3Slider
             slider {
-                testAsset = "scenarios/slider_presets.json"
+                testAsset = "regression_test_data/slider_presets.json"
                 activityTestRule.buildContainer()
 
                 setTo(2, slider)
@@ -122,7 +122,7 @@ class SliderTests {
         sliderPreferences {
             val slider = doubleDefaultSlider
             slider {
-                testAsset = "scenarios/slider_presets.json"
+                testAsset = "regression_test_data/slider_presets.json"
                 activityTestRule.buildContainer()
 
                 setTo(9, slider)
@@ -140,7 +140,7 @@ class SliderTests {
         sliderPreferences {
             val slider = doubleWithDivisionsSlider
             slider {
-                testAsset = "scenarios/slider_presets.json"
+                testAsset = "regression_test_data/slider_presets.json"
                 activityTestRule.buildContainer()
 
                 setTo(1, slider)

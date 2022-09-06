@@ -17,7 +17,7 @@ class DivTouchInteractivityTest {
     @Test
     fun singleTapScenarioSingleTapIsHandled() {
         testClicks {
-            testAsset = "scenarios/simple_tap.json"
+            testAsset = "regression_test_data/simple_tap.json"
             activityTestRule.buildContainer()
             click("Click on me")
             assert {
@@ -29,7 +29,7 @@ class DivTouchInteractivityTest {
     @Test
     fun longTapScenarioLongTapIsHandled() {
         testClicks {
-            testAsset = "scenarios/long_tap.json"
+            testAsset = "regression_test_data/long_tap.json"
             activityTestRule.buildContainer()
             longClick("Long tap menu")
             assert {

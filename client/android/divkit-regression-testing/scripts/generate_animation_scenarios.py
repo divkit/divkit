@@ -124,7 +124,7 @@ def _cwd(path: str) -> str:
 
 
 def _animation_dir(path: str) -> str:
-    return _cwd(f'../src/main/assets/scenarios/action_animation/{path}')
+    return _cwd(f'../../../test_data/regression_test_data/action_animation/{path}')
 
 
 def main():
@@ -138,7 +138,7 @@ def main():
         with open(_animation_dir(filename), 'w') as f:
             json.dump(cardjson, f, ensure_ascii=False, indent=2)
             f.write('\n')
-        print(f"  - 'scenarios/action_animation/{filename}'")
+        print(f"  - 'regression_test_data/action_animation/{filename}'")
     print('DONE.')
 
 
