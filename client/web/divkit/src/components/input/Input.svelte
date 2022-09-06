@@ -8,7 +8,7 @@
     import type { DivInputData, KeyboardType } from '../../types/input';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
-    import { pxToEm } from '../../utils/pxToEm';
+    import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { wrapError } from '../../utils/wrapError';
     import { correctColor } from '../../utils/correctColor';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
@@ -17,6 +17,7 @@
     import { isNumber } from '../../utils/isNumber';
     import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
+    import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
 
     export let json: Partial<DivInputData> = {};
     export let templateContext: TemplateContext;
@@ -114,10 +115,11 @@
     const jsonVisibleMaxLines = rootCtx.getDerivedFromVars(json.max_visible_lines);
     $: isMultiline = keyboardType === 'multi_line_text'/* && isPositiveNumber($jsonVisibleMaxLines) && $jsonVisibleMaxLines > 1*/;
 
+    $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
     let maxHeight = '';
     $: {
         if (isPositiveNumber($jsonVisibleMaxLines)) {
-            maxHeight = $jsonVisibleMaxLines * (lineHeight || 1.25) + 'em';
+            maxHeight = `calc(${$jsonVisibleMaxLines * (lineHeight || 1.25) + 'em'} + ${pxToEmWithUnits(correctNonNegativeNumber($jsonPaddings?.top, 0) + correctNonNegativeNumber($jsonPaddings?.bottom, 0))})`;
         }
     }
 

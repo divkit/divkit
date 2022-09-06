@@ -79,7 +79,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=input_value&value=2-multi_line_height\nline_2\nline_3\nline_4",
+          "url": "div-action://set_variable?name=input_value&value=2-multi_line_height%0Aline_2%0Aline_3%0Aline_4",
           "log_id": "changing_text"
         }
       ]
@@ -87,7 +87,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=input_value&value=3-max_visible_lines\nline_2\nline_3\nline_4",
+          "url": "div-action://set_variable?name=input_value&value=3-max_visible_lines%0Aline_2%0Aline_3%0Aline_4",
           "log_id": "changing_text"
         },
         {

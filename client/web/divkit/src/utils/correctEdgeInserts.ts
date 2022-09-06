@@ -1,5 +1,4 @@
 import type { EdgeInsets } from '../types/edgeInserts';
-import { isPositiveNumber } from './isPositiveNumber';
 import { edgeInsertsToCss } from './edgeInsertsToCss';
 import { isNonNegativeNumber } from './isNonNegativeNumber';
 
