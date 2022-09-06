@@ -678,6 +678,12 @@
         },
         hasTransitionChange(_id?: string): boolean {
             return false;
+        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        registerChild(_id: string) {
+        },
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        unregisterChild(_id: string) {
         }
     });
 

@@ -42,4 +42,7 @@ export interface StateCtxValue {
         node: HTMLElement,
         direction: 'in' | 'out'
     ): Promise<void>;
+
+    registerChild(id: string): void;
+    unregisterChild(id: string): void;
 }

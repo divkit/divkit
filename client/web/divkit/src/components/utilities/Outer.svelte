@@ -17,7 +17,7 @@
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { visibilityAction } from '../../use/visibilityAction';
     import { genClassName } from '../../utils/genClassName';
-    import { devtool } from '../../use/devtool';
+    import { devtool, DevtoolResult } from '../../use/devtool';
     import { STATE_CTX, StateCtxValue } from '../../context/state';
     import { correctBorderRadius } from '../../utils/correctBorderRadius';
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
@@ -268,8 +268,8 @@
     }
 
     const jsonTransitionTriggers = json.transition_triggers || ['state_change', 'visibility_change'];
-    const hasStateChangeTrigger = jsonTransitionTriggers.indexOf('state_change') !== -1;
-    const hasVisibilityChangeTrigger = jsonTransitionTriggers.indexOf('visibility_change') !== -1;
+    const hasStateChangeTrigger = jsonTransitionTriggers.indexOf('state_change') !== -1 && json.id;
+    const hasVisibilityChangeTrigger = jsonTransitionTriggers.indexOf('visibility_change') !== -1 && json.id;
 
     let stateChangingInProgress: boolean | undefined;
     let visibilityChangingInProgress: boolean | undefined;
@@ -484,20 +484,32 @@
             rootCtx
         });
 
+        const id = json.id;
+        if (id) {
+            stateCtx.registerChild(id);
+        }
+
+        let dev: DevtoolResult | null = null;
+
         if (devtool) {
-            const dev = devtool(node, {
+            dev = devtool(node, {
                 json,
                 origJson,
                 rootCtx,
                 templateContext
             });
+        }
 
-            return {
-                destroy() {
+        return {
+            destroy() {
+                if (id) {
+                    stateCtx.unregisterChild(id);
+                }
+                if (dev) {
                     dev.destroy();
                 }
-            };
-        }
+            }
+        };
     }
 </script>
 

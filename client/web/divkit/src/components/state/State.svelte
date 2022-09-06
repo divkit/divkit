@@ -25,6 +25,11 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     let animationRoot: HTMLElement | undefined;
     let transitionChangeBoxes: Map<string, DOMRect> = new Map();
+    let childrenIds = new Set<string>();
+
+    $: if (json) {
+        childrenIds = new Set<string>();
+    }
 
     let hasError = false;
     $: items = json.states || [];
@@ -144,6 +149,8 @@
 
                 rootCtx.setRunning('stateChange', true);
 
+                const wasIds = new Set(childrenIds);
+
                 animationList.forEach(it => {
                     if (it.resolvePromise) {
                         it.resolvePromise();
@@ -153,7 +160,8 @@
                 let transitionsOutToRun: AnimationItem[] = [];
                 if (animationRoot) {
                     const rootBbox = animationRoot.getBoundingClientRect();
-                    transitionsOutToRun = childrenWithTransitionOut.map(it => getItemAnimation(rootBbox, it, 'out'));
+                    transitionsOutToRun = childrenWithTransitionOut
+                        .map(it => getItemAnimation(rootBbox, it, 'out'));
                 }
                 childrenWithTransitionChange.forEach(child => {
                     transitionChangeBoxes.set(child.id, child.node.getBoundingClientRect());
@@ -182,7 +190,22 @@
                 const rootBbox = animationRoot.getBoundingClientRect();
 
                 let transitionsInToRun: AnimationItem[] =
-                    childrenWithTransitionIn.map(it => getItemAnimation(rootBbox, it, 'in'));
+                    childrenWithTransitionIn.filter(it => {
+                        if (it.json.id && !wasIds.has(it.json.id)) {
+                            return true;
+                        }
+                        it.resolvePromise?.();
+                        return false;
+                    })
+                        .map(it => getItemAnimation(rootBbox, it, 'in'));
+
+                transitionsOutToRun = transitionsOutToRun.filter(it => {
+                    if (it.json.id && !childrenIds.has(it.json.id)) {
+                        return true;
+                    }
+                    it.resolvePromise?.();
+                    return false;
+                });
 
                 const inOutList: AnimationItem[] = transitionsOutToRun.concat(transitionsInToRun);
                 const maxDuration = inOutList.reduce((acc: number, item: AnimationItem) => {
@@ -366,6 +389,12 @@
                 }
 
                 return transitionChangeBoxes.has(id);
+            },
+            registerChild(id: string): void {
+                childrenIds.add(id);
+            },
+            unregisterChild(id: string): void {
+                childrenIds.delete(id);
             }
         });
     }
