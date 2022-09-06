@@ -23,11 +23,7 @@ private let exclusions = [
   "div-gif-image/aspect-wrap_content.json",
   "div-pager/vertical-pager-fixed-width.json",
   "div-pager/vertical-pager-resizable-width.json",
-
-  "div-input/all-attributes.json",
-  "div-input/with-native-interface-no-background.json",
-  "div-input/without-selection.json",
-  "div-input/without-text.json"
+  
 ]
 
 private let casesWithPlaceholerOnly = [
