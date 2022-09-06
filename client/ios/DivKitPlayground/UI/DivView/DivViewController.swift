@@ -60,9 +60,12 @@ open class DivViewController: UIViewController {
   public override func viewDidLoad() {
     super.viewDidLoad()
 
-    divKitComponents.extensionHandlers = [
-      PinchToZoomExtensionHandler(overlayView: view),
-    ]
+    let pinchToZoomExtensionHandler = PinchToZoomExtensionHandler(overlayView: view)
+    divKitComponents.extensionHandlers = divKitComponents.extensionHandlers.filter {
+      $0.id != pinchToZoomExtensionHandler.id
+    }
+    divKitComponents.extensionHandlers.append(pinchToZoomExtensionHandler)
+
 
     blockProvider.parentScrollView = scrollView
     blockProvider.$block

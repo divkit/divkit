@@ -20,7 +20,7 @@ public final class DivKitComponents {
   public let urlOpener: UrlOpener
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
-
+  
   public init(
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
     extensionHandlers: [DivExtensionHandler] = [],

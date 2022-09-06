@@ -3,7 +3,7 @@ import Foundation
 private var externalLogger: (String) -> Void = { _ in }
 
 public enum DivKitLogger {
-  static func error(_ message: String) {
+  public static func error(_ message: String) {
     #if INTERNAL_BUILD
     print("[DivKit] [ERROR] \(message)")
     externalLogger(message)

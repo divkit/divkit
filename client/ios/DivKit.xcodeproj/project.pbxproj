@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
+		0AB41A8D28BDEC0600FDAAD5 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0AB41A8C28BDEC0600FDAAD5 /* Lottie */; };
 		8C0149982873297900BA5402 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0149972873297900BA5402 /* DivKit */; };
 		8C01499A2873297D00BA5402 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0149992873297D00BA5402 /* DivKit */; };
 		8C01499C287329D000BA5402 /* unit_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C01499B287329D000BA5402 /* unit_test_data */; };
@@ -215,6 +217,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
 		8C01499B287329D000BA5402 /* unit_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unit_test_data; path = ../../../test_data/unit_test_data; sourceTree = "<group>"; };
 		8C01499D287329D700BA5402 /* expression_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = expression_test_data; path = ../../../test_data/expression_test_data; sourceTree = "<group>"; };
 		8C035199288EC5AB0016A747 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -426,6 +429,7 @@
 			files = (
 				8C01499A2873297D00BA5402 /* DivKit in Frameworks */,
 				8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */,
+				0AB41A8D28BDEC0600FDAAD5 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -686,6 +690,7 @@
 		8C7B187B2864CA1F0036EF4C /* DivKit */ = {
 			isa = PBXGroup;
 			children = (
+				0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */,
 				8CE1B1CC28882F200003D64F /* DemoDivCustomBlockFactory.swift */,
 				8C7B187E2864CA1F0036EF4C /* DemoPatchProvider.swift */,
 				8C7B187C2864CA1F0036EF4C /* DivBlockProvider.swift */,
@@ -1015,6 +1020,7 @@
 			packageProductDependencies = (
 				8C0149992873297D00BA5402 /* DivKit */,
 				8CA382DE287C5CF000C99F4F /* DivKitExtensions */,
+				0AB41A8C28BDEC0600FDAAD5 /* Lottie */,
 			);
 			productName = DivKitPlayground;
 			productReference = 8C4409ED2864C4D200EF4175 /* DivKit Playground.app */;
@@ -1176,6 +1182,7 @@
 			);
 			mainGroup = 8C9844F22864C2CC001ED5F3;
 			packageReferences = (
+				0AB41A8B28BDEC0600FDAAD5 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 			);
 			productRefGroup = 8C4409D22864C3A900EF4175 /* Products */;
 			projectDirPath = "";
@@ -1339,6 +1346,7 @@
 				8C7B18962864CA380036EF4C /* UrlOpener.swift in Sources */,
 				8C7915D028B177CE00A4642A /* ViewWithHeader.swift in Sources */,
 				8C7B18732864C9C70036EF4C /* RegressionFolderView.swift in Sources */,
+				0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */,
 				8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */,
 				8CF1296528B0036F00351F65 /* Themes.swift in Sources */,
 				8C1A376928B41BA100A047C8 /* DemoAppLogger.swift in Sources */,
@@ -1840,7 +1848,23 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		0AB41A8B28BDEC0600FDAAD5 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		0AB41A8C28BDEC0600FDAAD5 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0AB41A8B28BDEC0600FDAAD5 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
+		};
 		8C01498F2873296000BA5402 /* DivKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DivKit;

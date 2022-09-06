@@ -1,0 +1,30 @@
+{
+  "card": {
+    "log_id": "lottie_card",
+    "states": [
+      {
+        "div": {
+          "extensions": [
+            {
+              "id": "lottie",
+              "params": {
+                "lottie_url": "https://storage.yandexcloud.net/obj-yagamayunov/keyboard.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
+              }
+            }
+          ],
+          "gif_url": "https://none",
+          "height": {
+            "type": "fixed",
+            "value": 294
+          },
+          "placeholder_color": "#0000",
+          "scale": "fit",
+          "type": "gif"
+        },
+        "state_id": 0
+      }
+    ]
+  }
+}

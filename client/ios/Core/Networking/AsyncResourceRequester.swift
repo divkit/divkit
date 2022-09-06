@@ -2,20 +2,20 @@
 
 import Base
 
-final class AsyncResourceRequester<Resource> {
-  typealias Completion = (Resource?) -> Void
-  typealias Request = (@escaping Completion) -> Cancellable?
+public final class AsyncResourceRequester<Resource> {
+  public typealias Completion = (Resource?) -> Void
+  public typealias Request = (@escaping Completion) -> Cancellable?
 
   private let request: Request
   private var completions: [RequestToken: Completion] = [:]
   private var currentRequestToken: Cancellable?
 
-  init(request: @escaping Request) {
+  public init(request: @escaping Request) {
     self.request = request
   }
 
   @discardableResult
-  func requestResource(completion: @escaping Completion) -> Cancellable? {
+  public func requestResource(completion: @escaping Completion) -> Cancellable? {
     if currentRequestToken == nil {
       guard let currentRequestToken = request({ [weak self] resource in
         self?.complete(resource: resource) }) else {
