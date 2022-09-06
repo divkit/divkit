@@ -606,7 +606,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
   public let textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? // default value: left
   public let textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: top
   public let textColor: Field<Expression<Color>>? // default value: #FF000000
-  public let textGradient: Field<DivGradientBackgroundTemplate>?
+  public let textGradient: Field<DivTextGradientTemplate>?
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?
   public let transitionChange: Field<DivChangeTransitionTemplate>?
@@ -724,7 +724,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     textAlignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     textAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     textColor: Field<Expression<Color>>? = nil,
-    textGradient: Field<DivGradientBackgroundTemplate>? = nil,
+    textGradient: Field<DivTextGradientTemplate>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
     transitionChange: Field<DivChangeTransitionTemplate>? = nil,
@@ -1003,7 +1003,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     var textAlignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.textAlignmentHorizontal?.value() ?? .noValue
     var textAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.textAlignmentVertical?.value() ?? .noValue
     var textColorValue: DeserializationResult<Expression<Color>> = parent?.textColor?.value() ?? .noValue
-    var textGradientValue: DeserializationResult<DivGradientBackground> = .noValue
+    var textGradientValue: DeserializationResult<DivTextGradient> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
@@ -1096,7 +1096,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       case "text_color":
         textColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator).merged(with: textColorValue)
       case "text_gradient":
-        textGradientValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textGradientValidator, type: DivGradientBackgroundTemplate.self).merged(with: textGradientValue)
+        textGradientValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textGradientValidator, type: DivTextGradientTemplate.self).merged(with: textGradientValue)
       case "tooltips":
         tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
       case "transform":
@@ -1198,7 +1198,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       case parent?.textColor?.link:
         textColorValue = textColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.textColorValidator))
       case parent?.textGradient?.link:
-        textGradientValue = textGradientValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textGradientValidator, type: DivGradientBackgroundTemplate.self))
+        textGradientValue = textGradientValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.textGradientValidator, type: DivTextGradientTemplate.self))
       case parent?.tooltips?.link:
         tooltipsValue = tooltipsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self))
       case parent?.transform?.link:

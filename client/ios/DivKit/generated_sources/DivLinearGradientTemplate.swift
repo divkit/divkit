@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
-public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeserializable {
+public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializable {
   public static let type: String = "gradient"
   public let parent: String? // at least 1 char
   public let angle: Field<Expression<Int>>? // constraint: number >= 0 && number <= 360; default value: 0
@@ -22,7 +22,7 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
         colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:))
       )
     } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-gradient-background_template." + field, representation: representation)
+      throw DeserializationError.invalidFieldRepresentation(field: "div-linear-gradient_template." + field, representation: representation)
     }
   }
 
@@ -36,7 +36,7 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
     self.colors = colors
   }
 
-  private static func resolveOnlyLinks(context: Context, parent: DivGradientBackgroundTemplate?) -> DeserializationResult<DivGradientBackground> {
+  private static func resolveOnlyLinks(context: Context, parent: DivLinearGradientTemplate?) -> DeserializationResult<DivLinearGradient> {
     let angleValue = parent?.angle?.resolveOptionalValue(context: context, validator: ResolvedValue.angleValidator) ?? .noValue
     let colorsValue = parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue
     var errors = mergeErrors(
@@ -51,14 +51,14 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
     else {
       return .failure(NonEmptyArray(errors)!)
     }
-    let result = DivGradientBackground(
+    let result = DivLinearGradient(
       angle: angleValue.value,
       colors: colorsNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  public static func resolveValue(context: Context, parent: DivGradientBackgroundTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivGradientBackground> {
+  public static func resolveValue(context: Context, parent: DivLinearGradientTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivLinearGradient> {
     if useOnlyLinks {
       return resolveOnlyLinks(context: context, parent: parent)
     }
@@ -89,28 +89,28 @@ public final class DivGradientBackgroundTemplate: TemplateValue, TemplateDeseria
     else {
       return .failure(NonEmptyArray(errors)!)
     }
-    let result = DivGradientBackground(
+    let result = DivLinearGradient(
       angle: angleValue.value,
       colors: colorsNonNil
     )
     return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
   }
 
-  private func mergedWithParent(templates: Templates) throws -> DivGradientBackgroundTemplate {
+  private func mergedWithParent(templates: Templates) throws -> DivLinearGradientTemplate {
     guard let parent = parent, parent != Self.type else { return self }
-    guard let parentTemplate = templates[parent] as? DivGradientBackgroundTemplate else {
+    guard let parentTemplate = templates[parent] as? DivLinearGradientTemplate else {
       throw DeserializationError.unknownType(type: parent)
     }
     let mergedParent = try parentTemplate.mergedWithParent(templates: templates)
 
-    return DivGradientBackgroundTemplate(
+    return DivLinearGradientTemplate(
       parent: nil,
       angle: angle ?? mergedParent.angle,
       colors: colors ?? mergedParent.colors
     )
   }
 
-  public func resolveParent(templates: Templates) throws -> DivGradientBackgroundTemplate {
+  public func resolveParent(templates: Templates) throws -> DivLinearGradientTemplate {
     return try mergedWithParent(templates: templates)
   }
 }

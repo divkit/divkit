@@ -10,15 +10,20 @@ extension DivBackground {
   func makeBlockBackground(
     with imageHolderFactory: ImageHolderFactory,
     expressionResolver: ExpressionResolver
-  ) -> LayoutKit.Background {
+  ) -> LayoutKit.Background? {
     switch self {
-    case let .divGradientBackground(gradientBackground):
+    case let .divLinearGradient(gradient):
       return .gradient(
-        .linear(.init(
-          colors: gradientBackground.resolveColors(expressionResolver) ?? [],
-          angle: gradientBackground.resolveAngle(expressionResolver)
-        ))
+        .linear(
+          Gradient.Linear(
+            colors: gradient.resolveColors(expressionResolver) ?? [],
+            angle: gradient.resolveAngle(expressionResolver)
+          )
+        )
       )
+    case .divRadialGradient:
+      DivKitLogger.error("DivRadialGradient not supported")
+      return nil
     case let .divImageBackground(imageBackground):
       let image = BackgroundImage(
         imageHolder: imageHolderFactory.make(

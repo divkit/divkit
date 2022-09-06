@@ -230,23 +230,24 @@ extension DivBase {
 
     // optimization for the most common case: saves Array alloc/dealloc
     if backgrounds.count == 1 {
-      let background = backgrounds[0].makeBlockBackground(
+      guard let background = backgrounds[0].makeBlockBackground(
         with: imageHolderFactory,
         expressionResolver: expressionResolver
-      )
+      ) else {
+        return block
+      }
       if case let .solidColor(color) = background {
         return block.addingDecorations(backgroundColor: color)
       }
       return BackgroundBlock(background: background, child: block)
     }
 
-    let blockBackgrounds = backgrounds.map {
+    let blockBackgrounds = backgrounds.compactMap {
       $0.makeBlockBackground(
         with: imageHolderFactory,
         expressionResolver: expressionResolver
       )
     }
-
     guard let background = blockBackgrounds.composite() else {
       return block
     }

@@ -257,7 +257,7 @@ public final class DivText: DivBase {
   public let textAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: left
   public let textAlignmentVertical: Expression<DivAlignmentVertical> // default value: top
   public let textColor: Expression<Color> // default value: #FF000000
-  public let textGradient: DivGradientBackground?
+  public let textGradient: DivTextGradient?
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
   public let transitionChange: DivChangeTransition?
@@ -476,7 +476,7 @@ public final class DivText: DivBase {
   static let textColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
 
-  static let textGradientValidator: AnyValueValidator<DivGradientBackground> =
+  static let textGradientValidator: AnyValueValidator<DivTextGradient> =
     makeNoOpValueValidator()
 
   static let tooltipsValidator: AnyArrayValueValidator<DivTooltip> =
@@ -552,7 +552,7 @@ public final class DivText: DivBase {
     textAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     textAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
     textColor: Expression<Color>? = nil,
-    textGradient: DivGradientBackground? = nil,
+    textGradient: DivTextGradient? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
     transitionChange: DivChangeTransition? = nil,

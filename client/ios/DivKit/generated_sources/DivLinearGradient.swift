@@ -5,7 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
-public final class DivGradientBackground {
+public final class DivLinearGradient {
   public static let type: String = "gradient"
   public let angle: Expression<Int> // constraint: number >= 0 && number <= 360; default value: 0
   public let colors: [Expression<Color>] // at least 2 elements
@@ -34,8 +34,8 @@ public final class DivGradientBackground {
 }
 
 #if DEBUG
-extension DivGradientBackground: Equatable {
-  public static func ==(lhs: DivGradientBackground, rhs: DivGradientBackground) -> Bool {
+extension DivLinearGradient: Equatable {
+  public static func ==(lhs: DivLinearGradient, rhs: DivLinearGradient) -> Bool {
     guard
       lhs.angle == rhs.angle,
       lhs.colors == rhs.colors
@@ -47,7 +47,7 @@ extension DivGradientBackground: Equatable {
 }
 #endif
 
-extension DivGradientBackground: Serializable {
+extension DivLinearGradient: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["type"] = Self.type
