@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.R;
 import com.yandex.div.core.experiments.Experiment;
+import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
 import com.yandex.div.core.view.tabs.TabTextStyleProvider;
 import com.yandex.div.font.DivTypefaceProvider;
 import com.yandex.div.view.pooling.AdvanceViewPool;
@@ -30,8 +31,11 @@ abstract class Div2Module {
     @Named(Names.THEMED_CONTEXT)
     @DivScope
     @NonNull
-    static Context provideThemedContext(@NonNull ContextThemeWrapper baseContext) {
-        return new ContextThemeWrapper(baseContext, R.style.Div_Theme);
+    static Context provideThemedContext(@NonNull ContextThemeWrapper baseContext,
+                                        @ExperimentFlag(experiment = Experiment.RESOURCE_CACHE_ENABLED) boolean resourceCacheEnabled) {
+        return resourceCacheEnabled
+                ? new ContextThemeWrapperWithResourceCache(baseContext, R.style.Div_Theme)
+                : new ContextThemeWrapper(baseContext, R.style.Div_Theme);
     }
 
     @Provides

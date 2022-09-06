@@ -69,6 +69,7 @@ public class DivConfiguration {
     private final boolean mAccessibilityEnabled;
     private boolean mViewPoolEnabled;
     private boolean mViewPoolProfilingEnabled;
+    private boolean mResourceCacheEnabled;
     private boolean mMultipleStateChangeEnabled;
 
     private DivConfiguration(
@@ -97,6 +98,7 @@ public class DivConfiguration {
             boolean accessibilityEnabled,
             boolean viewPoolEnabled,
             boolean viewPoolProfilingEnabled,
+            boolean resourceCacheEnabled,
             boolean multipleStateChangeEnabled
     ) {
         mImageLoader = imageLoader;
@@ -124,6 +126,7 @@ public class DivConfiguration {
         mAccessibilityEnabled = accessibilityEnabled;
         mViewPoolEnabled = viewPoolEnabled;
         mViewPoolProfilingEnabled = viewPoolProfilingEnabled;
+        mResourceCacheEnabled = resourceCacheEnabled;
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
     }
 
@@ -245,6 +248,12 @@ public class DivConfiguration {
     }
 
     @Provides
+    @ExperimentFlag(experiment = Experiment.RESOURCE_CACHE_ENABLED)
+    public boolean isResourceCacheEnabled() {
+        return mResourceCacheEnabled;
+    }
+
+    @Provides
     @ExperimentFlag(experiment = Experiment.MULTIPLE_STATE_CHANGE_ENABLED)
     public boolean isMultipleStateChangeEnabled() {
         return mMultipleStateChangeEnabled;
@@ -331,8 +340,8 @@ public class DivConfiguration {
         private boolean mAcccessibilityEnabled = Experiment.ACCESSIBILITY_ENABLED.getDefaultValue();
         private boolean mViewPoolEnabled = Experiment.VIEW_POOL_ENABLED.getDefaultValue();
         private boolean mViewPoolProfilingEnabled = Experiment.VIEW_POOL_PROFILING_ENABLED.getDefaultValue();
+        private boolean mResourceCacheEnabled = Experiment.RESOURCE_CACHE_ENABLED.getDefaultValue();
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
-
 
         public Builder(@NonNull DivImageLoader imageLoader) {
             mImageLoader = imageLoader;
@@ -512,6 +521,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder enableResourceCache(boolean enable) {
+            mResourceCacheEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         public Builder enableMultipleStateChange(boolean enable) {
             mMultipleStateChangeEnabled = enable;
             return this;
@@ -548,6 +563,7 @@ public class DivConfiguration {
                     mAcccessibilityEnabled,
                     mViewPoolEnabled,
                     mViewPoolProfilingEnabled,
+                    mResourceCacheEnabled,
                     mMultipleStateChangeEnabled);
         }
     }

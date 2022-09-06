@@ -29,6 +29,10 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     VIEW_POOL_PROFILING_ENABLED(
         "view_pool_profiling_enabled"
     ),
+    RESOURCE_CACHE_ENABLED(
+        "resource_cache_enabled",
+        defaultValue = true
+    ),
     MULTIPLE_STATE_CHANGE_ENABLED(
         "multiple_state_change_enabled"
     )
