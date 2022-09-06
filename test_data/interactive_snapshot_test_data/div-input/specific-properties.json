@@ -1,0 +1,94 @@
+{
+  "div_data": {
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "input_value",
+          "type": "string",
+          "value": "initial_text"
+        },
+        {
+          "name": "highlight_color",
+          "type": "color",
+          "value": "#CCCCFF"
+        },
+        {
+          "name": "underline_color",
+          "type": "color",
+          "value": "#0000FF"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "input",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "paddings": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "alignment_horizontal": "center",
+            "alignment_vertical": "center",
+            "text_variable": "input_value",
+            "font_size": 20,
+            "text_color": "#444444",
+            "highlight_color": "@{highlight_color}",
+            "native_interface": {
+              "color": "@{underline_color}"
+            },
+            "select_all_on_focus": 1
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=highlight_color&value=%23CCFFCC",
+          "log_id": "highlight_color"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=underline_color&value=%23FF0000",
+          "log_id": "underline_color"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=highlight_color&value=%23CCCCFF",
+          "log_id": "restore: highlight_color"
+        },
+        {
+          "url": "div-action://set_variable?name=underline_color&value=%230000FF",
+          "log_id": "underline_color"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

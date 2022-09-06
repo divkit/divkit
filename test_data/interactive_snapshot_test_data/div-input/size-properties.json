@@ -1,0 +1,133 @@
+{
+  "div_data": {
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "input_value",
+          "type": "string",
+          "value": "initial_text"
+        },
+        {
+          "name": "line_height",
+          "type": "integer",
+          "value": 40
+        },
+        {
+          "name": "max_lines",
+          "type": "integer",
+          "value": 5
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "input",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "paddings": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "alignment_horizontal": "center",
+            "alignment_vertical": "center",
+            "border": {
+              "corner_radius": 8,
+              "stroke": {
+                "color": "#0000FF"
+              }
+            },
+            "text_variable": "input_value",
+            "font_size": 20,
+            "text_color": "#444444",
+            "line_height": "@{line_height}",
+            "max_visible_lines": "@{max_lines}"
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input_value&value=1-line_height",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=line_height&value=60",
+          "log_id": "line_height"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input_value&value=2-multi_line_height\nline_2\nline_3\nline_4",
+          "log_id": "changing_text"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input_value&value=3-max_visible_lines\nline_2\nline_3\nline_4",
+          "log_id": "changing_text"
+        },
+        {
+          "url": "div-action://set_variable?name=max_lines&value=2",
+          "log_id": "max_visible_lines"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input_value&value=4-long-long-long-long-long-long-long-long-long-long-one-line-text",
+          "log_id": "changing_text"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input_value&value=5-one-line-text-that-is-longer-than-max-visible-lines-can-contain-------------------------------------------------------------------------------",
+          "log_id": "changing_text"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=input_value&value=initial_text",
+          "log_id": "restore: text"
+        },
+        {
+          "url": "div-action://set_variable?name=line_height&value=40",
+          "log_id": "restore: line_height"
+        },
+        {
+          "url": "div-action://set_variable?name=max_lines&value=5",
+          "log_id": "restore: max_visible_lines"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

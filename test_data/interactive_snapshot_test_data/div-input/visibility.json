@@ -1,0 +1,83 @@
+{
+  "div_data": {
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "input_value",
+          "type": "string",
+          "value": "initial_text"
+        },
+        {
+          "name": "visibility",
+          "type": "string",
+          "value": "visible"
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "input",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "paddings": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "border": {
+              "corner_radius": 8,
+              "stroke": {
+                "color": "#0000FF"
+              }
+            },
+            "visibility": "@{visibility}",
+            "text_variable": "input_value"
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility&value=invisible",
+          "log_id": "invisible"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility&value=gone",
+          "log_id": "gone"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=visibility&value=visible",
+          "log_id": "restore: visible"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}
