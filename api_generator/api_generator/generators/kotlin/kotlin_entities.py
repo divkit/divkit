@@ -607,7 +607,7 @@ class KotlinPropertyType(PropertyType):
                     return None
                 obj_name = self.object.resolved_prefixed_declaration
                 self.object.__class__ = KotlinEntityEnumeration
-                case_name = cast(KotlinEntityEnumeration, self.object).case_naming.format_case_name(
+                case_name = cast(KotlinEntityEnumeration, self.object).format_case_naming(
                     utils.capitalize_camel_case(enum_case[0])
                 )
                 return wrap(f'{obj_name}.{case_name}({case_constructor})')
@@ -758,21 +758,21 @@ class RemoveCommonPart(CaseNaming):
 
 
 class KotlinEntityEnumeration(EntityEnumeration):
-    @property
-    def case_naming(self) -> CaseNaming:
-        components = utils.name_components(self.name)
-        entity_name_components = list(map(utils.name_components, self.entity_names))
 
+    def format_case_naming(self, entity_name: str) -> str:
+        return self.__case_naming(entity_name).format_case_name(entity_name)
+
+    def __case_naming(self, entity_name: str) -> CaseNaming:
         def find_common_prefix(a: List[str], b: List[str]) -> List[str]:
             common = []
             for a_el, b_el in zip(a, b):
-                if a_el == b_el:
+                if a_el.lower() == b_el.lower():
                     common.append(a_el)
                 else:
                     break
             return common
 
-        names = [components] + entity_name_components
+        names = [utils.name_components(self.name), utils.name_components(entity_name)]
         common_prefix = reduce(find_common_prefix, names)
         for element in names:
             element.reverse()

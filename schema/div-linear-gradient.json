@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "$description": "translations.json#/div_gradient_background",
+  "$description": "translations.json#/div_gradient_linear",
   "properties": {
     "colors": {
       "type": "array",
@@ -9,20 +9,20 @@
       },
       "minItems": 2,
       "clientMinItems": 2,
-      "$description": "translations.json#/div_gradient_background_colors"
+      "$description": "translations.json#/div_gradient_colors"
     },
     "angle": {
       "type": "integer",
       "constraint": "number >= 0 && number <= 360",
       "default_value": "0",
-      "$description": "translations.json#/div_gradient_background_angle"
+      "$description": "translations.json#/div_gradient_linear_angle"
     },
     "type": {
       "type": "string",
       "enum": [
         "gradient"
       ]
-    }   
+    }
   },
   "required": [
     "colors",

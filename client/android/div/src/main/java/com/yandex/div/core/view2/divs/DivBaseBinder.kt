@@ -37,7 +37,7 @@ import com.yandex.div2.DivBorder
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFocus
-import com.yandex.div2.DivGradientBackground
+import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivImageBackground
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSolidBackground
@@ -412,7 +412,7 @@ internal class DivBaseBinder @Inject constructor(
                     subscriber.addSubscription(divBackground.color.observe(resolver, callback))
                 }
 
-                is DivGradientBackground -> {
+                is DivLinearGradient -> {
                     subscriber.addSubscription(divBackground.angle.observe(resolver, callback))
                     subscriber.addSubscription(divBackground.colors.observe(resolver, callback))
                 }
@@ -492,7 +492,7 @@ internal class DivBaseBinder @Inject constructor(
     ): Drawable? {
         return when (val divBackground = background.value()) {
             is DivImageBackground -> getDivImageBackground(divBackground, divView, target, resolver)
-            is DivGradientBackground -> {
+            is DivLinearGradient -> {
                 LinearGradientDrawable(
                     divBackground.angle.evaluate(resolver).toFloat(),
                     divBackground.colors.evaluate(resolver).toIntArray()

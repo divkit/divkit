@@ -240,7 +240,7 @@
           ]
         },
         "text_gradient": {
-          "$ref": "div-gradient-background.json",
+          "$ref": "div-text-gradient.json",
           "$description": "translations.json#/div_text_text_gradient"
         },
         "text": {

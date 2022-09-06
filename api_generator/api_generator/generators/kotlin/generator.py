@@ -163,7 +163,6 @@ class KotlinGenerator(Generator):
         entity_enumeration.__class__ = KotlinEntityEnumeration
         declaration_name = utils.capitalize_camel_case(entity_enumeration.name)
         entity_declarations = list(map(utils.capitalize_camel_case, entity_enumeration.entity_names))
-        naming = entity_enumeration.case_naming
         result = Text()
         for annotation in self.kotlin_annotations:
             result += annotation
@@ -174,14 +173,16 @@ class KotlinGenerator(Generator):
 
         result += f'sealed class {declaration_name} : {interfaces} {{'
         for decl in entity_declarations:
-            decl = f'class {naming.format_case_name(decl)}(val value: {decl}) : {declaration_name}()'
+            naming = entity_enumeration.format_case_naming(decl)
+            decl = f'class {naming}(val value: {decl}) : {declaration_name}()'
             result += Text(indent_width=4, init_lines=decl)
         result += EMPTY
 
         result += f'    fun value(): {entity_enumeration.common_interface(GeneratedLanguage.KOTLIN) or "Any"} {{'
         result += '        return when (this) {'
         for decl in entity_declarations:
-            decl = f'is {naming.format_case_name(decl)} -> value'
+            naming = entity_enumeration.format_case_naming(decl)
+            decl = f'is {naming} -> value'
             result += Text(indent_width=12, init_lines=decl)
         result += '        }'
         result += '    }'
@@ -190,7 +191,8 @@ class KotlinGenerator(Generator):
         result += '    override fun writeToJSON(): JSONObject {'
         result += '        return when (this) {'
         for decl in entity_declarations:
-            decl = f'is {naming.format_case_name(decl)} -> value.writeToJSON()'
+            naming = entity_enumeration.format_case_naming(decl)
+            decl = f'is {naming} -> value.writeToJSON()'
             result += Text(indent_width=12, init_lines=decl)
         result += '        }'
         result += '    }'
@@ -202,7 +204,7 @@ class KotlinGenerator(Generator):
             result += f'    override fun resolve(env: ParsingEnvironment, data: JSONObject): {self_name} {{'
             result += '        return when (this) {'
             for decl in entity_declarations:
-                case_name = naming.format_case_name(decl)
+                case_name = entity_enumeration.format_case_naming(decl)
                 line = f'is {case_name} -> {self_name}.{case_name}(value.resolve(env, data))'
                 result += Text(indent_width=12, init_lines=line)
             result += '        }'
@@ -213,7 +215,8 @@ class KotlinGenerator(Generator):
             result += '        get() {'
             result += '            return when (this) {'
             for decl in entity_declarations:
-                line = f'is {naming.format_case_name(decl)} -> {decl}.TYPE'
+                naming = entity_enumeration.format_case_naming(decl)
+                line = f'is {naming} -> {decl}.TYPE'
                 result += Text(indent_width=16, init_lines=line)
             result += '            }'
             result += '        }'
@@ -259,7 +262,8 @@ class KotlinGenerator(Generator):
             result += f'            val type: String = {read_type_expr}'
         result += '            when (type) {'
         for decl in entity_declarations:
-            line = f'{decl}.TYPE -> return {naming.format_case_name(decl)}({decl}({deserialization_args(decl)}))'
+            naming = entity_enumeration.format_case_naming(decl)
+            line = f'{decl}.TYPE -> return {naming}({decl}({deserialization_args(decl)}))'
             result += Text(indent_width=16, init_lines=line)
 
         if entity_enumeration.mode is GenerationMode.NORMAL_WITH_TEMPLATES:

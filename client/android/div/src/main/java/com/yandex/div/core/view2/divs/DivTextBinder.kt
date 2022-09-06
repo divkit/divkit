@@ -47,9 +47,10 @@ import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivFontFamily
 import com.yandex.div2.DivFontWeight
-import com.yandex.div2.DivGradientBackground
+import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivLineStyle
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTextGradient
 import javax.inject.Inject
 import kotlin.math.min
 
@@ -294,27 +295,35 @@ internal class DivTextBinder @Inject constructor(
 
     private fun DivLineHeightTextView.observeTextGradient(
         resolver: ExpressionResolver,
-        textGradient: DivGradientBackground?
+        textGradient: DivTextGradient?
     ) {
         applyTextGradientColor(resolver, textGradient)
         if (textGradient == null) return
 
         val callback = { _: Any -> applyTextGradientColor(resolver, textGradient) }
-        addSubscription(textGradient.angle.observe(resolver, callback))
+        when (val gradient = textGradient.value()) {
+            is DivLinearGradient -> {
+                addSubscription(gradient.angle.observe(resolver, callback))
+            }
+        }
+
     }
 
-    private fun TextView.applyTextGradientColor(resolver: ExpressionResolver, gradient: DivGradientBackground?) {
+    private fun TextView.applyTextGradientColor(resolver: ExpressionResolver, gradient: DivTextGradient?) {
         doOnLayout {
             if (gradient == null) {
                 this.paint.shader = null
                 return@doOnLayout
             }
-            this.paint.shader = LinearGradientDrawable.createLinearGradient(
-                gradient.angle.evaluate(resolver).toFloat(),
-                gradient.colors.evaluate(resolver).toIntArray(),
-                width,
-                height
-            )
+            this.paint.shader = when(val textGradient = gradient.value()) {
+                is DivLinearGradient -> LinearGradientDrawable.createLinearGradient(
+                    textGradient.angle.evaluate(resolver).toFloat(),
+                    textGradient.colors.evaluate(resolver).toIntArray(),
+                    width,
+                    height
+                )
+                else -> null
+            }
         }
     }
 

@@ -171,9 +171,13 @@
     "en": "`ratio = width / height`.",
     "ru": "`ratio = width / height`."
   },
-  "div_background_gradient": {
-    "en": "Gradient.",
-    "ru": "Градиент."
+  "div_gradient_linear": {
+    "en": "Linear gradient.",
+    "ru": "Линейный градиент."
+  },
+  "div_gradient_radial": {
+    "en": "Radial gradient.",
+    "ru": "Радиальный градиент."
   },
   "div_background_image": {
     "en": "Image.",
@@ -611,17 +615,25 @@
     "en": "Gif image.",
     "ru": "Gif-изображение."
   },
-  "div_gradient_background": {
-    "en": "Gradient background.",
-    "ru": "Градиентный фон."
+  "div_gradient_colors": {
+    "en": "Colors. Gradient points will be located at an equal distance from each other.",
+    "ru": "Цвета. Точки градиента будут расположены на равном расстоянии друг от друга."
   },
-  "div_gradient_background_angle": {
+  "div_gradient_linear_angle": {
     "en": "Angle of gradient direction.",
     "ru": "Угол направления градиента."
   },
-  "div_gradient_background_colors": {
-    "en": "Colors. Gradient points will be located at an equal distance from each other.",
-    "ru": "Цвета. Точки градиента будут расположены на равном расстоянии друг от друга."
+  "div_gradient_radial_radius":{
+    "en": "Radius of the gradient transition in `dp`.",
+    "ru": "Радиус градиентного перехода в `dp`."
+  },
+  "div_gradient_radial_center_x": {
+    "en": "Shift of the central point of the gradient relative to the left edge along the X axis in the range `0..1`.",
+    "ru": "Сдвиг центральной точки градиента относительно левого края по оси X в диапозоне `0..1`."
+  },
+  "div_gradient_radial_center_y":{
+    "en": "Shift of the central point of the gradient relative to the upper edge along the Y axis in the range `0..1`.",
+    "ru": "Сдвиг центральной точки градиента относительно верхнего края по оси Y в диапозоне `0..1`."
   },
   "div_grid": {
     "en": "A grid with an option to merge cells vertically and horizontally.",

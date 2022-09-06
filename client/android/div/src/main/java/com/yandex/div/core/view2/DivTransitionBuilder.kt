@@ -127,7 +127,7 @@ internal class DivTransitionBuilder @Inject constructor(
     private fun DivAppearanceTransition.toAndroidTransition(@Visibility.Mode transitionMode: Int,
                                                             resolver: ExpressionResolver): Transition {
         return when (this) {
-            is DivAppearanceTransition.AppearanceSet -> {
+            is DivAppearanceTransition.Set -> {
                 TransitionSet().apply {
                     value.items.forEach { transition ->
                         val androidTransaction = transition.toAndroidTransition(transitionMode, resolver)
