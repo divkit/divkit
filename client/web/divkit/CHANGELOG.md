@@ -1,3 +1,10 @@
+## 6.0.0 (September 6, 2022)
+Changes:
+* Updated `input` to sync with the schema, also fixed `text_color` and height
+* Fixed the behavior of `transition_in` / `transition_out` (when to start and when not to start animation)
+* Fixed the default value of `variable_trigger.mode`
+
+
 ## 5.0.0 (September 5, 2022)
 
 Changes and additions:

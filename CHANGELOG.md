@@ -1,3 +1,28 @@
+## 6.0.0 (September 6, 2022)
+### Android Client:
+Additions and changes:
+* Supported rotation transformation
+* Switched to new API Generator
+Fixes:
+* Fixed build configuration
+
+### iOS Client:
+* Added LottieExceptionHandler
+* Added focus support in DivInput
+* Renamed DivKit Demo to DivKit Playground
+* Fixed DivData states transition
+* Fixed visibility actions for transitioning blocks
+* Fixed text alignment in DivInput
+* Fixed camera initialization in DivKit Playground
+* Improved parseDivData methods in DivKitComponents
+* Improved Sample app
+
+### Web Client:
+* Updated `input` to sync with the schema, also fixed `text_color` and height
+* Fixed the behavior of `transition_in` / `transition_out` (when to start and when not to start animation)
+* Fixed the default value of `variable_trigger.mode`
+
+
 ## 5.0.0 (September 5, 2022)
 
 ### JSON Schema
