@@ -1,0 +1,1433 @@
+{
+  "tests": [
+    {
+      "title": "Simple tap",
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "Tap on text 'Click on me'"
+      ],
+      "expected_results": [
+        "Text 'Click on me' changed to 'You clicked on me'",
+        "Second click chande text to 'Click on me'"
+      ],
+      "files": [
+        "simple_tap.json"
+      ]
+    },
+    {
+      "title": "Long tap",
+      "tags": [
+        "DivAction"
+      ],
+      "steps": [
+        "Long tap on button 'Long tap menu'"
+      ],
+      "expected_results": [
+        "Menu with butons 'show' and 'hide' is appearing",
+        "longtap_actions logged"
+      ],
+      "files": [
+        "long_tap.json"
+      ]
+    },
+    {
+      "title": "Tab swipe",
+      "tags": [
+        "DivTabs",
+        "swipe"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Tab changes depending on the swipe direction",
+        "Tabs changes is logged"
+      ],
+      "files": [
+        "tabs_max_height.json"
+      ]
+    },
+    {
+      "title": "Tab swipe restricted",
+      "tags": [
+        "DivTabs",
+        "swipe"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Tab not changed",
+        "Tab changes on header click"
+      ],
+      "files": [
+        "tabs_disabled_switch_tabs_by_swipe.json"
+      ]
+    },
+    {
+      "title": "Gallery scroll",
+      "tags": [
+        "DivGallery",
+        "scroll"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes depending on scroll direction",
+        "Gallery scroll is logged"
+      ],
+      "files": [
+        "gallery/gallery_swipe.json"
+      ]
+    },
+    {
+      "title": "Paged gallery scroll",
+      "tags": [
+        "DivGallery",
+        "scroll"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "Gallery scroll is logged"
+      ],
+      "files": [
+        "gallery/gallery_swipe_paged.json"
+      ]
+    },
+    {
+      "title": "Gallery columns",
+      "tags": [
+        "DivGallery"
+      ],
+      "expected_results": [
+        "Gallery has 2 columns. First column has 2 elements, second - 4 elements."
+      ],
+      "files": [
+        "gallery/gallery-columns.json"
+      ]
+    },
+    {
+      "title": "Gallery item actions",
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right",
+        "Click on buttons"
+      ],
+      "expected_results": [
+        "Content is changes depending on scroll direction or clicked buttons",
+        "Gallery scroll is logged"
+      ],
+      "files": [
+        "gallery/gallery-item-actions.json"
+      ]
+    },
+    {
+      "title": "Gallery default item states",
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Click on button 'Expand' in gallery item",
+        "Click on button 'Collpse' in expanded items"
+      ],
+      "expected_results": [
+        "Only clicked gallery item change state"
+      ],
+      "files": [
+        "gallery/gallery_default_item_states.json"
+      ]
+    },
+    {
+      "title": "Gallery paging default item states",
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Click on button 'Expand' in gallery item",
+        "Click on button 'Collpse' in expanded items",
+        "Scroll gallery"
+      ],
+      "expected_results": [
+        "Only clicked gallery item change state",
+        "Gallery scrolls page by page"
+      ],
+      "files": [
+        "gallery/gallery_paging_default_item_states.json"
+      ]
+    },
+    {
+      "title": "Zoomable gallery",
+      "tags": [
+        "DivGallery"
+      ],
+      "expected_results": [
+        "Image in gallery can be zoomed"
+      ],
+      "files": [
+        "gallery/zoomable-gallery.json"
+      ]
+    },
+    {
+      "title": "Gallery bottom multiline",
+      "tags": [
+        "DivGallery"
+      ],
+      "files": [
+        "gallery/gallery-bottom-multiline.json"
+      ]
+    },
+    {
+      "title": "Gallery bottom multiline selected actions",
+      "tags": [
+        "DivGallery"
+      ],
+      "files": [
+        "gallery/gallery-bottom-multiline-selected-action.json"
+      ]
+    },
+    {
+      "title": "Gallery bottom singleline",
+      "tags": [
+        "DivGallery"
+      ],
+      "files": [
+        "gallery/gallery-bottom-singleline.json"
+      ]
+    },
+    {
+      "title": "Gallery top multiline",
+      "tags": [
+        "DivGallery"
+      ],
+      "files": [
+        "gallery/gallery-top-multiline.json"
+      ]
+    },
+    {
+      "title": "Pager scroll",
+      "tags": [
+        "DivPager",
+        "scroll"
+      ],
+      "steps": [
+        "Horizontal swipe to left",
+        "Horizontal swipe to right"
+      ],
+      "expected_results": [
+        "Content is changes page by page",
+        "Page change is logged"
+      ],
+      "files": [
+        "pager/pager.json"
+      ]
+    },
+    {
+      "title": "Pager item actions",
+      "tags": [
+        "DivPager"
+      ],
+      "files": [
+        "pager/pager-item-actions.json"
+      ]
+    },
+    {
+      "title": "Pager selected actions",
+      "tags": [
+        "DivPager"
+      ],
+      "files": [
+        "pager/pager-selected-actions.json"
+      ]
+    },
+    {
+      "title": "Pager default item states",
+      "tags": [
+        "DivPager"
+      ],
+      "files": [
+        "pager/pager_default_item_states.json"
+      ]
+    },
+    {
+      "title": "Action animations",
+      "tags": [
+        "DivAnimation"
+      ],
+      "steps": [
+        "Click on each button with animations"
+      ],
+      "expected_results": [
+        "The animation written on the button appears",
+        "Animation finished on long click finish"
+      ],
+      "files": [
+        "action_animation/interpolator_linear/scale.json",
+        "action_animation/interpolator_linear/fade.json",
+        "action_animation/interpolator_linear/set.json",
+        "action_animation/interpolator_ease/scale.json",
+        "action_animation/interpolator_ease/fade.json",
+        "action_animation/interpolator_ease/set.json",
+        "action_animation/interpolator_ease_in/scale.json",
+        "action_animation/interpolator_ease_in/fade.json",
+        "action_animation/interpolator_ease_in/set.json",
+        "action_animation/interpolator_ease_out/scale.json",
+        "action_animation/interpolator_ease_out/fade.json",
+        "action_animation/interpolator_ease_out/set.json",
+        "action_animation/interpolator_ease_in_out/scale.json",
+        "action_animation/interpolator_ease_in_out/fade.json",
+        "action_animation/interpolator_ease_in_out/set.json",
+        "action_animation/interpolator_spring/scale.json",
+        "action_animation/interpolator_spring/fade.json",
+        "action_animation/interpolator_spring/set.json",
+        "action_animation/no_animation.json"
+      ]
+    },
+    {
+      "title": "Recomendation slider",
+      "tags": [
+        "Slider"
+      ],
+      "priority": "blocker",
+      "steps": [
+        "Interact with the slider"
+      ],
+      "expected_results": [
+        "Pointer position is changes and change button text"
+      ],
+      "files": [
+        "slider_nps.json"
+      ]
+    },
+    {
+      "title": "Slider with two pointers",
+      "tags": [
+        "Slider"
+      ],
+      "priority": "critical",
+      "steps": [
+        "Interact with the slider"
+      ],
+      "expected_results": [
+        "Pointer position is changes and change button text"
+      ],
+      "files": [
+        "double_slider.json"
+      ]
+    },
+    {
+      "title": "Slider preferences",
+      "tags": [
+        "Slider"
+      ],
+      "steps": [
+        "Interact with slider"
+      ],
+      "expected_results": [
+        "Slider poiner shange it's position"
+      ],
+      "files": [
+        "slider_presets.json"
+      ]
+    },
+    {
+      "title": "Root state switching",
+      "files": [
+        "root_state_switching.json"
+      ],
+      "steps": [
+        "Press 'CHANGE STATE (TEMPORARY)'",
+        "Restart the app",
+        "Turn back to this scenario",
+        "Press 'CHANGE STATE'",
+        "Restart the app",
+        "Turn back to this scenario"
+      ],
+      "expected_results": [
+        "button 'CHANGE STATE (TEMPORARY)' change state and save it between app restart",
+        "button 'CHANGE STATE' change state, but state resets after app restart"
+      ]
+    },
+    {
+      "title": "Focus",
+      "steps": [
+        "Switch focus"
+      ],
+      "expected_results": [
+        "Elements focus changes in order to switch"
+      ],
+      "files": [
+        "focus.json"
+      ]
+    },
+    {
+      "title": "Focus events",
+      "steps": [
+        "Switch focus to handler",
+        "Switch focus to idle"
+      ],
+      "expected_results": [
+        "Start state of the right evement is 'init'",
+        "When handler gets focus, state of the right element is 'focus'",
+        "When handler lost focus, state of the right element is 'blur'"
+      ],
+      "files": [
+        "focus_actions.json"
+      ]
+    },
+    {
+      "title": "Accessibility descriptions",
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Set russian language on device",
+        "Turn on TalkBack and set order of elements description to '\u0421\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435,\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435,\u0442\u0438\u043f'",
+        "Set focus on '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 1'",
+        "Listen to TalkBack",
+        "Double tap on screen",
+        "Set focus on '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 2'",
+        "Listen to TalkBack",
+        "Set focus on '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 3'"
+      ],
+      "expected_results": [
+        "On '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 1' TalkBack should say 'C\u0435\u0439\u0447\u0430\u0441 \u0432 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0438 0; \u042d\u043b\u0435\u043c\u0435\u043d\u0442 1; \u041a\u043d\u043e\u043f\u043a\u0430; \u041a\u043e\u0441\u043d\u0438\u0442\u0435\u0441\u044c \u0434\u0432\u0430\u0436\u0434\u044b, \u0447\u0442\u043e\u0431\u044b \u0430\u043a\u0442\u0438\u0432\u0438\u0440\u043e\u0432\u0430\u0442\u044c'",
+        "After double tap TalkBack should say '\u0421\u0435\u0439\u0447\u0430\u0441 \u0432 \u0441\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0438 1'",
+        "On '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 2' TalkBack should say '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 2; \u041a\u043d\u043e\u043f\u043a\u0430; \u041d\u0430\u0436\u043c\u0438\u0442\u0435 \u043d\u0430 \u043a\u043d\u043e\u043f\u043a\u0443, \u0447\u0442\u043e\u0431\u044b \u0447\u0442\u043e-\u0442\u043e \u043f\u0440\u043e\u0438\u0437\u043e\u0448\u043b\u043e'",
+        "On '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 3' TalkBack should say '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 3; \u041a\u043d\u043e\u043f\u043a\u0430'"
+      ],
+      "files": [
+        "accessibility/descriptions.json"
+      ]
+    },
+    {
+      "title": "Accessibility types",
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Set russian language on device",
+        "Turn on TalkBack and set order of elements description to '\u0421\u043e\u0441\u0442\u043e\u044f\u043d\u0438\u0435,\u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435,\u0442\u0438\u043f'",
+        "Focus on top button",
+        "Move focuse rom one button to another"
+      ],
+      "expected_results": [
+        "On each elements will be text '\u0422\u0438\u043f - X', you should hear '\u0422\u0438\u043f - X; X'; For example '\u0422\u0438\u043f - \u043a\u043d\u043e\u043f\u043a\u0430; \u043a\u043d\u043e\u043f\u043a\u0430'",
+        "For '\u0422\u0438\u043f - \u0442\u0435\u043a\u0441\u0442' and '\u0411\u0435\u0437 \u0442\u0438\u043f\u0430' you will hear '\u0422\u0438\u043f - \u0442\u0435\u043a\u0441\u0442' and '\u0411\u0435\u0437 \u0442\u0438\u043f\u0430'."
+      ],
+      "files": [
+        "accessibility/types.json"
+      ]
+    },
+    {
+      "title": "Default Accessibility mode",
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on TalkBack",
+        "Focus on items from top to bottom"
+      ],
+      "expected_results": [
+        "When focusing on 1 item you'll hear '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 1'",
+        "When focusing on group of 2 and 3 items you will hear '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 2, \u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 3'",
+        "Can't focus 4 element"
+      ],
+      "files": [
+        "accessibility/mode/default.json"
+      ]
+    },
+    {
+      "title": "Merge Accessibility mode",
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on TalkBack",
+        "Focus on items from top to bottom"
+      ],
+      "expected_results": [
+        "Focusing on all card",
+        "You will hear '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 1, \u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 2, \u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 3'",
+        "On activation menu with text '\u042d\u043b\u0435\u043c\u0435\u043d\u0442 1, \u042d\u043b\u0435\u043c\u0435\u043d\u0442 2, \u042d\u043b\u0435\u043c\u0435\u043d\u0442 3' appears",
+        "On focus TalkBack should not say '\u041a\u043e\u0441\u043d\u0438\u0442\u0435\u0441\u044c \u0434\u0432\u0430\u0436\u0434\u044b \u0438 \u0443\u0434\u0435\u0440\u0436\u0438\u0432\u0430\u0439\u0442\u0435'"
+      ],
+      "files": [
+        "accessibility/mode/merge.json"
+      ]
+    },
+    {
+      "title": "Exclude Accessibility mode",
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on TalkBack",
+        "Focus on items from top to bottom"
+      ],
+      "expected_results": [
+        "Focuse on 5-th item",
+        "\u0423\u0441\u043b\u044b\u0448\u0438\u043c '\u042d\u0442\u043e \u042d\u043b\u0435\u043c\u0435\u043d\u0442 5'",
+        "\u041f\u0440\u0438 \u0432\u044b\u043a\u043b\u044e\u0447\u0435\u043d\u043d\u043e\u043c TalkBack \u043d\u0430 \u043a\u0430\u0436\u0434\u043e\u0439 \u043a\u043d\u043e\u043f\u043a\u0435 \u043f\u0440\u0438 \u0442\u0430\u043f\u0435 \u0434\u043e\u043b\u0436\u043d\u043e \u043f\u043e\u044f\u0432\u043b\u044f\u0442\u044c\u0441\u044f \u043c\u0435\u043d\u044e \u0441 \u043d\u0430\u0437\u0432\u0430\u043d\u0438\u0435\u043c \u044d\u0442\u043e\u0439 \u043a\u043d\u043e\u043f\u043a\u0438"
+      ],
+      "files": [
+        "accessibility/mode/exclude.json"
+      ]
+    },
+    {
+      "title": "Actions on tap",
+      "steps": [
+        "Tap on top button",
+        "Double tap on top button",
+        "Long click on top button",
+        "Tap on middle button",
+        "Double tap on middle button",
+        "Long click on middle button",
+        "Tap on image on he bottom button",
+        "Long click between buttons"
+      ],
+      "expected_results": [
+        "Menu with text 'Single tap' appears with delay",
+        "Menu with text 'Double tap' appears",
+        "Menu with text 'Long tap' appears",
+        "Menu with text 'Single tap' appears without delay",
+        "Menu with text 'Single tap' appears and than desappears",
+        "Menu with text 'Long tap on container' appears for container",
+        "Menu with text 'Single tap on child' appears",
+        "Menu with text 'Long tap on container' appears for container"
+      ],
+      "files": [
+        "button_actions.json"
+      ]
+    },
+    {
+      "title": "Longtap actions",
+      "files": [
+        "pinch-to-zoom-longtap-actions.json"
+      ]
+    },
+    {
+      "title": "Div errors visualization",
+      "priority": "critical",
+      "expected_results": [
+        "The card displays a red button with the number 1",
+        "Click on red button shows error INVALID_VALUE",
+        "Click on the cross hide screen with error details",
+        "Click on save button copy json with errors",
+        "Click on text 'Generate error!' add errors 'Value 'wrong_value' for key 'alignment_horizontal' at path '@{alignment}' is not valid'"
+      ],
+      "files": [
+        "error_visual_monitor.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Fade full",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and desapears changing the transparency"
+      ],
+      "files": [
+        "animations/transition/fade_full_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Fade part",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and desapears changing the transparency starting or ending with transparency = 0.5"
+      ],
+      "files": [
+        "animations/transition/fade_part_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Scale full",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and desapears changing the scale"
+      ],
+      "files": [
+        "animations/transition/scale_full_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Scale part",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and desapears changing the scale starting or ending with scale = 0.75"
+      ],
+      "files": [
+        "animations/transition/scale_part_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Slide full",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and desapears sliding from under the top edge of the card"
+      ],
+      "files": [
+        "animations/transition/slide_full_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Slide part",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and desapears sliding from under the top edge of the card, but not reaching it"
+      ],
+      "files": [
+        "animations/transition/slide_part_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Set",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears and desapears changing trancparency and sliding from center to edge"
+      ],
+      "files": [
+        "animations/transition/set_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Diff ids",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should appears from diffrent edges of card"
+      ],
+      "files": [
+        "animations/transition/change_bounds_diff_ids_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Diff sizes",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should change it's size"
+      ],
+      "files": [
+        "animations/transition/change_bounds_diff_sizes_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Diff types",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should change text moving across the screen"
+      ],
+      "files": [
+        "animations/transition/change_bounds_diff_types_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Change bounds same ids",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press button with text 'GO'",
+        "After image appears press 'GO BACK'"
+      ],
+      "expected_results": [
+        "Image should move horizontally across the screen"
+      ],
+      "files": [
+        "animations/transition/change_bounds_same_ids_src.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Article",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on 'EXPAND'",
+        "Click on 'SHOW COMMENTS'",
+        "After expanding of elements click on 'COLLAPSE'"
+      ],
+      "expected_results": [
+        "Expanding end collapsing the elements shoud be with animation"
+      ],
+      "files": [
+        "animations/article.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Article with transitions",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on 'EXPAND'",
+        "Click on 'SHOW COMMENTS'",
+        "After expanding of elements click on 'COLLAPSE'"
+      ],
+      "expected_results": [
+        "Expanding end collapsing the elements shoud be with animation"
+      ],
+      "files": [
+        "animations/article_with_transitions.json"
+      ]
+    },
+    {
+      "title": "Synchronizing multiple change bounds animations. Blink",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on 'BLINK'"
+      ],
+      "expected_results": [
+        "Red sircle should appear and disappear"
+      ],
+      "files": [
+        "animations/blink.json"
+      ]
+    },
+    {
+      "title": "Example of tooltip animation",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "A few seconds after the card is shown, a tooltip should appear"
+      ],
+      "expected_results": [
+        "Toolip hides a few seconds later"
+      ],
+      "files": [
+        "animations/mute_notification.json"
+      ]
+    },
+    {
+      "title": "Scale transition ignore pivot_x/pivot_y",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Press on 'GO'"
+      ],
+      "expected_results": [
+        "Image should scale from left edge to right one"
+      ],
+      "files": [
+        "animations/scale_pivot_src.json"
+      ]
+    },
+    {
+      "title": "Change bounds transitions ignore start_delay",
+      "tags": [
+        "Animations"
+      ],
+      "steps": [
+        "Click on notificattion"
+      ],
+      "expected_results": [
+        "The text should disappear first, and the background after a short delay"
+      ],
+      "files": [
+        "animations/mute_notification.json"
+      ]
+    },
+    {
+      "title": "State transition any change",
+      "files": [
+        "animations/transition/state_transition_any_change.json"
+      ]
+    },
+    {
+      "title": "State transition data change",
+      "files": [
+        "animations/transition/state_transition_data_change.json"
+      ]
+    },
+    {
+      "title": "State transition state change",
+      "files": [
+        "animations/transition/state_transition_state_change.json"
+      ]
+    },
+    {
+      "title": "Inner state transition any change",
+      "files": [
+        "animations/transition/inner_state_transition_any_change.json"
+      ]
+    },
+    {
+      "title": "Inner state transition data change",
+      "files": [
+        "animations/transition/inner_state_transition_data_change.json"
+      ]
+    },
+    {
+      "title": "Inner state transition data change",
+      "files": [
+        "animations/transition/inner_state_transition_data_change.json"
+      ]
+    },
+    {
+      "title": "Lottie animation restart repeate_mode. Repeate count = 5",
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "steps": [
+        "Spinner animation will continue 5 times and then stop",
+        "Press RESET"
+      ],
+      "expected_results": [
+        "Spinner animation will continue 5 times and then stop"
+      ],
+      "files": [
+        "animations/lottie/spinner_restart_repeat_mode.json"
+      ]
+    },
+    {
+      "title": "Lottie animation revese repeate_mode. Repeate count = 3",
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "steps": [
+        "Spinner change spin dirrection 3 times and then stops",
+        "\u041d\u0430\u0436\u0430\u0442\u044c RESET"
+      ],
+      "expected_results": [
+        "Spinner change spin dirrection 3 times and then stops"
+      ],
+      "files": [
+        "animations/lottie/spinner_reverse_repeat_mode.json"
+      ]
+    },
+    {
+      "title": "Lottie animation restart repeate_mode. Repeate count = -1",
+      "tags": [
+        "Animations",
+        "lottie"
+      ],
+      "expected_results": [
+        "Infinite spinner animation."
+      ],
+      "files": [
+        "animations/lottie/spinner.json"
+      ]
+    },
+    {
+      "title": "For the reverse animation of the action, a direct interpolator is used",
+      "tags": [
+        "Animations"
+      ],
+      "files": [
+        "action_animation/button_press_action_animations.json"
+      ]
+    },
+    {
+      "title": "Visibility_actions in gallery",
+      "tags": [
+        "Visibility_actions"
+      ],
+      "steps": [
+        "Scroll the gallery",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Gallery data was opened",
+        "items visibility logged, for example 'logViewShown(cardId = ..., id = ...item_changed0)'"
+      ],
+      "files": [
+        "gallery/gallery_swipe.json"
+      ]
+    },
+    {
+      "title": "Visibility_actions in pager",
+      "tags": [
+        "Visibility_actions",
+        "DivPager"
+      ],
+      "steps": [
+        "Scroll the pager",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Pager data was opened",
+        "items visibility logged, for example 'logViewShown(cardId = ..., id = content_item_show:1)'"
+      ],
+      "files": [
+        "action_visibility/pager.json"
+      ]
+    },
+    {
+      "title": "Visibility_actions on change page in pager",
+      "tags": [
+        "Visibility_actions",
+        "DivPager"
+      ],
+      "steps": [
+        "Swipe cards",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Pager data is logged",
+        "items visibility logged, for example 'logViewShown(cardId = ..., id = content_item_show:1)'"
+      ],
+      "files": [
+        "action_visibility/swipe_div_pager.json"
+      ]
+    },
+    {
+      "title": "Visibility actions performed and logged in pager",
+      "tags": [
+        "Visibility_actions",
+        "DivPager"
+      ],
+      "steps": [
+        "Swipe cards",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Logged evens logViewShown(cardId = ..., id = content_item_show0) logViewShown(cardId = ..., id = container)",
+        "Cards description was changed"
+      ],
+      "files": [
+        "action_visibility/swipe_div_pager.json"
+      ]
+    },
+    {
+      "title": "Send visiblity_actions for first page in Pager using Div2View.tryLogVisibility",
+      "tags": [
+        "Visibility_actions",
+        "DivPager"
+      ],
+      "steps": [
+        "Check logs"
+      ],
+      "expected_results": [
+        "First element logged, example logViewShown(cardId = ..., id = content_item_show:0) logViewShown(cardId = ..., id = goose_shown)"
+      ],
+      "files": [
+        "action_visibility/pager.json"
+      ]
+    },
+    {
+      "title": "Send select Pager using Div2View.tryLogVisibility",
+      "tags": [
+        "Visibility_actions",
+        "DivPager"
+      ],
+      "steps": [
+        "Check first item visibility logged",
+        "Swipe to the next item",
+        "Check second item visibility logged"
+      ],
+      "expected_results": [
+        "First element logged, example Ya:PagerSelectedActionsTracker onPageSelected(0) Ya:PagerSelectedActionsTracker dispatch selected actions for page 0",
+        "Second element logged, exapmle logViewShown(cardId = ..., currentPageIndex = 1) Logcat Ya:PagerSelectedActionsTracker onPageSelected(1) DemoDiv2Logger logPagerChangePage(cardId = card, currentPageIndex = 1), scrollDirection = next) Ya:PagerSelectedActionsTracker dispatch selected actions for page 1"
+      ],
+      "files": [
+        "action_visibility/pager_selected_actions.json"
+      ]
+    },
+    {
+      "title": "Grouped bulkActions logged in 'dispatchActions:'",
+      "tags": [
+        "Visibility_actions"
+      ],
+      "steps": [
+        "Swipe to change tab",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Tabs changes on swipe",
+        "Logged item's visibility, exaple logViewShown(cardId = ..., id = content_item_show) logViewShown(cardId = ..., id = container)"
+      ],
+      "files": [
+        "action_visibility/swipe_div_pager.json"
+      ]
+    },
+    {
+      "title": "visibility_actions for default_item",
+      "tags": [
+        "Visibility_actions"
+      ],
+      "steps": [
+        "Check logs"
+      ],
+      "expected_results": [
+        "Card is opened",
+        "Card visibility logged, example logViewShown(cardId = ..., id = comments_counter_show:4)"
+      ],
+      "files": [
+        "action_visibility/default_item.json"
+      ]
+    },
+    {
+      "title": "Nested visibility actions",
+      "tags": [
+        "Visibility_actions"
+      ],
+      "steps": [
+        "Click on items",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Card article.json is opened",
+        "Elements are expanded",
+        "Visibility actions logged, example logViewShown(cardId = ..., id = separator) logViewShown(cardId = ..., id = text) logViewShown(cardId = ..., id = text2) logViewShown(cardId = ..., id = comment_state) logViewShown(cardId = ..., id = comment_01) logViewShown(cardId = ..., id = comment_02) logViewShown(cardId = ..., id = comment_03) logViewShown(cardId = ..., id = comment_04)"
+      ],
+      "files": [
+        "action_visibility/article.json"
+      ]
+    },
+    {
+      "title": "Variables in tabs",
+      "tags": [
+        "DivTabs"
+      ],
+      "steps": [
+        "Check different combinations of tabs properties"
+      ],
+      "expected_results": [
+        "'dynamic_height=DYNAMIC' - each tab has height equals content height",
+        "'dynamic_height=MAX_HEIGHT(for non-first-page)' - from the second tab each tab has height equals max tabs content height",
+        "'tab.line_height=10' - line spacing of tabs text equals 10",
+        "'tab.line_height=30' - line spacing of tabs text equals 30",
+        "'tab.theme=GREEN' - tabs become green",
+        "'tab.theme=RED' - tabs become red",
+        "'selected_tab=0' - set first tab",
+        "'selected_tab=1' - set second tab",
+        "'selected_tab=6' - set 'Page index 6' tab",
+        "'has_separator=0' - turn off horizontal delimiter",
+        "'has_separator=1' - turn on horizontal delimiter",
+        "'separator.color=RED' - set red delimiter color",
+        "'separator.color=BLUE' - set blue delimiter color",
+        "'separator_paddings.top=0' - padding of horizontal delimiter: top - 0",
+        "'separator_paddings.top=50' - padding of horizontal delimiter: top - 50",
+        "'separator_paddings.bottom=0' - padding of horizontal delimiter: bottom - 0",
+        "'separator_paddings.bottom=50' - padding of horizontal delimiter: bottom - 50",
+        "'separator_paddings.left=0' - padding of horizontal delimiter: left - 0",
+        "'separator_paddings.left=50' - padding of horizontal delimiter: left - 50",
+        "'separator_paddings.right=0' - padding of horizontal delimiter: right - 0",
+        "'separator_paddings.right=50' - padding of horizontal delimiter: right - 50",
+        "'title_paddings.top=0' - padding of tabs container: top - 0",
+        "'title_paddings.top=50' - padding of tabs container: top - 50",
+        "'title_paddings.bottom=0' - padding of tabs container: bottom - 0",
+        "'title_paddings.bottom=50' - padding of tabs container: bottom - 50",
+        "'title_paddings.left=0' - padding of tabs container: left - 0",
+        "'title_paddings.left=50' - padding of tabs container: left - 50",
+        "'title_paddings.right=0' - padding of tabs container: right - 0",
+        "'title_paddings.right=50' - padding of tabs container: right - 50"
+      ],
+      "files": [
+        "variables/div_tabs.json"
+      ]
+    },
+    {
+      "title": "Visibility in div-base",
+      "steps": [
+        "Check different combinations of visibility properties"
+      ],
+      "expected_results": [
+        "On click on test button text field set correct visibility.",
+        "Showing text field is logged."
+      ],
+      "files": [
+        "action_visibility/set_visibility.json"
+      ]
+    },
+    {
+      "title": "Showing animation on image loaded",
+      "tags": [
+        "Animations"
+      ],
+      "expected_results": [
+        "Image appeares with described animation"
+      ],
+      "files": [
+        "action_animation/image_loading_animation.json"
+      ]
+    },
+    {
+      "title": "Variables in DivIndicator",
+      "steps": [
+        "Click on buttons, check the indicator appearance and animation",
+        "Click on last button to reset",
+        "Scroll pager to the center, click on buttons, check the indicator",
+        "Click on last button to reset",
+        "Scroll pager to the end, click on buttons, check the indicator"
+      ],
+      "expected_results": [
+        "Indicator appearence changes and it changes according to the clicked buttin description"
+      ],
+      "files": [
+        "variables/div_indicator.json"
+      ]
+    },
+    {
+      "title": "Variables triggers",
+      "tags": [
+        "Triggers"
+      ],
+      "steps": [
+        "When only left button clicked, text changes to 'left switched'",
+        "When only right button clicked, text changes to 'right switched'",
+        "When both button clicked, text changes to 'both switched'",
+        "When both buttons is inactive text state changes to initial"
+      ],
+      "expected_results": [
+        "Text changes according to the button description"
+      ],
+      "files": [
+        "variables/div_variable_triggers.json"
+      ]
+    },
+    {
+      "title": "Variable triggers (modes)",
+      "tags": [
+        "Triggers"
+      ],
+      "steps": [
+        "'Thumb value' show current thumb position",
+        "'First selected positive position' show first selected positive thumb value",
+        "'Last selected positive position' show last selected positive value or move with thumb, if value > 0"
+      ],
+      "expected_results": [
+        "The layout corresponds to switching buttons"
+      ],
+      "files": [
+        "variables/div_variable_trigger_modes.json"
+      ]
+    },
+    {
+      "title": "Variable triggers (closures)",
+      "tags": [
+        "DivInput",
+        "DivSlider",
+        "Triggers",
+        "Functions"
+      ],
+      "expected_results": [
+        "Slider and input values should be synchronized",
+        "When entering an incorrect value in text input - error shows"
+      ],
+      "files": [
+        "variables/div_variable_trigger_loops.json"
+      ]
+    },
+    {
+      "title": "Sequential animations",
+      "steps": [
+        "Click on image"
+      ],
+      "expected_results": [
+        "Heart will increase by 2 times in 2 seconds, then will increase by 4 times in 2 seconds"
+      ],
+      "files": [
+        "animations/transition/transition_set.json"
+      ]
+    },
+    {
+      "title": "Animations of switching tabs headers",
+      "tags": [
+        "DivTabs",
+        "Animations"
+      ],
+      "steps": [
+        "Switch items on each tab by clicking on the tab headers",
+        "Slowly swipe each tab"
+      ],
+      "expected_results": [
+        "Look at the headers animation",
+        "1 tab has slide animation",
+        "2 tab has fade animation",
+        "3 tab has no animation"
+      ],
+      "files": [
+        "animations/tab_titles_animations.json"
+      ]
+    },
+    {
+      "title": "Text copying",
+      "tags": [
+        "DivText"
+      ],
+      "steps": [
+        "Double tap or long click on first text",
+        "Double tap or long click on second text"
+      ],
+      "expected_results": [
+        "First text has a system highlighting, you can copy it. Second text has no highlighting."
+      ],
+      "files": [
+        "selectable_text.json"
+      ]
+    },
+    {
+      "title": "DivText",
+      "tags": [
+        "DivText"
+      ],
+      "files": [
+        "div-text.json"
+      ]
+    },
+    {
+      "title": "Nested change bounds transitions",
+      "steps": [
+        "Click 'PRESS HERE'",
+        "Click 'PRESS AGAIN'"
+      ],
+      "expected_results": [
+        "After first click image appers with animation, the container extendes with animation.",
+        "After second click extendes buton, text changes, container extendes again."
+      ],
+      "files": [
+        "action_animation/nested_change_bounds.json"
+      ]
+    },
+    {
+      "title": "Text input",
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Change text"
+      ],
+      "expected_results": [
+        "Text under the input should be equal to text in input and change on input changes."
+      ],
+      "files": [
+        "input.json"
+      ]
+    },
+    {
+      "title": "Text input (single line)",
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Change text"
+      ],
+      "expected_results": [
+        "Text under the input should be equal to text in input and change on input changes.",
+        "Max lines = 1. Line break is unavailable."
+      ],
+      "files": [
+        "single_line_input.json"
+      ]
+    },
+    {
+      "title": "Manage VideoCustom",
+      "tags": [
+        "VideoCustom"
+      ],
+      "steps": [
+        "Tap on 'play', 'pause', 'reset'"
+      ],
+      "expected_results": [
+        "On tap on 'play' video continue",
+        "On tap on 'pause' video pause",
+        "On tap on 'reset' video starts from the beginning",
+        "If video was paused using button 'pause', on tap on 'reset' rewind to the beginning, but still paused",
+        "If video wasn't paused, on tap on 'reset' the video starts playing from beginnging"
+      ],
+      "files": [
+        "video/video_controls.json"
+      ]
+    },
+    {
+      "title": "State transition trigger",
+      "steps": [
+        "Press 'To liked'"
+      ],
+      "expected_results": [
+        "First - there should be animation, there are only old triggers",
+        "Second - there should be no animation, the old 'state_change' is rubbed with an empty list of new ones",
+        "Third - there should be animation, old and new are allowed by default"
+      ],
+      "files": [
+        "animations/transition/transition_triggers_state_change.json"
+      ]
+    },
+    {
+      "title": "Data transition trigger",
+      "steps": [
+        "Press 'Change data'"
+      ],
+      "expected_results": [
+        "First - there should be animation, there are only old triggers",
+        "Second - there should be no animation, the old 'state_change' is rubbed with an empty list of new ones",
+        "Third - there should be an animation, the old 'none' is rubbed by the new 'state_change'"
+      ],
+      "files": [
+        "animations/transition/transition_triggers_data_change_src.json"
+      ]
+    },
+    {
+      "title": "Actions logging",
+      "steps": [
+        "Click on Test button",
+        "Double click Test button",
+        "Long click on Test button",
+        "Check logs"
+      ],
+      "expected_results": [
+        "Click logged 2 times",
+        "Double click logged 2 times",
+        "Long click logged 2 times"
+      ],
+      "files": [
+        "logging.json"
+      ]
+    },
+    {
+      "title": "Shortcuts",
+      "files": [
+        "shortcuts.json"
+      ]
+    },
+    {
+      "title": "Auto ellipsize",
+      "files": [
+        "auto-ellipsize.json"
+      ]
+    },
+    {
+      "title": "Expand cutout 1",
+      "files": [
+        "expand-cutout-1.json"
+      ]
+    },
+    {
+      "title": "Expand cutout 2",
+      "files": [
+        "expand-cutout-2.json"
+      ]
+    },
+    {
+      "title": "Lottie animations",
+      "files": [
+        "lottie_animations.json"
+      ]
+    },
+    {
+      "title": "Lottie cycled animations",
+      "expected_results": [
+        "Red circle appears with animation, then blink"
+      ],
+      "files": [
+        "lottie_cycled_animations.json"
+      ]
+    },
+    {
+      "title": "States default state",
+      "files": [
+        "states_default_state.json"
+      ]
+    },
+    {
+      "title": "Tabs item actions",
+      "files": [
+        "tabs-item-actions.json"
+      ]
+    },
+    {
+      "title": "Grid layout",
+      "files": [
+        "grid_layout.json"
+      ]
+    },
+    {
+      "title": "Grid with weights",
+      "files": [
+        "grid-with-weights.json"
+      ]
+    },
+    {
+      "title": "Custom container",
+      "files": [
+        "custom-container.json"
+      ]
+    },
+    {
+      "title": "Custom card",
+      "files": [
+        "custom-card.json"
+      ]
+    }
+  ]
+}

@@ -29,7 +29,7 @@ struct DemoPatchProvider: DivPatchProvider {
     let url = Bundle.main.url(
       forResource: fileName,
       withExtension: "json",
-      subdirectory: Samples.patchesPath
+      subdirectory: TestData.patchesPath
     )!
     do {
       let data = try Data(contentsOf: url)

@@ -13,8 +13,8 @@ enum ThemeSize {
 }
 
 enum ThemeFont {
-  static let button: Font = makeRegular(size: 24)
-  static let text: Font = makeRegular(size: 18)
+  static let button = makeRegular(size: 24)
+  static let text = makeRegular(size: 18)
 
   static func makeRegular(size: CGFloat) -> Font {
     .custom(YSFontProvider.regularFontName, size: size)
@@ -22,6 +22,15 @@ enum ThemeFont {
 
   static func makeMedium(size: CGFloat) -> Font {
     .custom(YSFontProvider.mediumFontName, size: size)
+  }
+}
+
+struct ScaleAnimationButtonStyle: ButtonStyle {
+  func makeBody(configuration: Self.Configuration) -> some View {
+    configuration
+      .label
+      .scaleEffect(configuration.isPressed ? 0.95 : 1.0)
+      .animation(.easeInOut, value: configuration.isPressed)
   }
 }
 

@@ -64,13 +64,7 @@ private struct NavigationButton<Destination>: View where Destination: View {
   }
   
   var body: some View {
-    NavigationLink(
-      destination: {
-        destination()
-          .navigationBarTitleDisplayMode(.inline)
-          .navigationTitle(title)
-      }
-    ) {
+    NavigationLink(destination: destination) {
       switch shape {
       case .circle:
         label.clipShape(Circle())
@@ -78,7 +72,7 @@ private struct NavigationButton<Destination>: View where Destination: View {
         label.cornerRadius(ThemeSize.cornerRadius)
       }
     }
-    .buttonStyle(ScaleAnimationStyle())
+    .buttonStyle(ScaleAnimationButtonStyle())
   }
   
   private var label: some View {
@@ -88,17 +82,4 @@ private struct NavigationButton<Destination>: View where Destination: View {
       .frame(maxWidth: .infinity, maxHeight: .infinity)
       .background(color)
   }
-}
-
-private struct ScaleAnimationStyle: ButtonStyle {
-  func makeBody(configuration: Self.Configuration) -> some View {
-    configuration
-      .label
-      .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
-  }
-}
-
-private struct AlertInfo: Identifiable {
-  let id: Int
-  let text: String
 }

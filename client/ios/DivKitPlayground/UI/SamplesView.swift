@@ -40,7 +40,7 @@ final class SamplesModel {
   private(set) var items: [SampleModel]!
   
   init() {
-    items = Samples.allSamples
+    items = TestData.samples
       .map {
         SampleModel(url: $0, divKitComponents: divKitComponents)
       }
