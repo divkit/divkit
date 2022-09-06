@@ -22,7 +22,7 @@ ext.versions = [
         mockitoKotlin                   : '3.2.0',
         okhttp                          : '4.9.1',
         passport                        : '7.26.4',
-        perftests                       : '1.6.2',
+        perftests                       : '1.6.3',
         picasso                         : '2.8',
         pulse                           : '1.0.10',
         robolectric                     : '4.4',
