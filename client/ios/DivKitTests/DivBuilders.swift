@@ -77,6 +77,7 @@ func makeDivContainer(
     height: height,
     id: nil,
     items: items,
+    layoutMode: nil,
     longtapActions: nil,
     margins: nil,
     orientation: nil,

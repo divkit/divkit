@@ -6,6 +6,11 @@ import Serialization
 import TemplatesSupport
 
 public final class DivContainer: DivBase {
+  public enum LayoutMode: String, CaseIterable {
+    case noWrap = "no_wrap"
+    case wrap = "wrap"
+  }
+
   public enum Orientation: String, CaseIterable {
     case vertical = "vertical"
     case horizontal = "horizontal"
@@ -31,6 +36,7 @@ public final class DivContainer: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String? // at least 1 char
   public let items: [Div] // at least 1 elements
+  public let layoutMode: Expression<LayoutMode> // default value: no_wrap
   public let longtapActions: [DivAction]? // at least 1 elements
   public let margins: DivEdgeInsets
   public let orientation: Expression<Orientation> // default value: vertical
@@ -70,6 +76,10 @@ public final class DivContainer: DivBase {
 
   public func resolveContentAlignmentVertical(_ resolver: ExpressionResolver) -> DivAlignmentVertical {
     resolver.resolveStringBasedValue(expression: contentAlignmentVertical, initializer: DivAlignmentVertical.init(rawValue:)) ?? DivAlignmentVertical.top
+  }
+
+  public func resolveLayoutMode(_ resolver: ExpressionResolver) -> LayoutMode {
+    resolver.resolveStringBasedValue(expression: layoutMode, initializer: LayoutMode.init(rawValue:)) ?? LayoutMode.noWrap
   }
 
   public func resolveOrientation(_ resolver: ExpressionResolver) -> Orientation {
@@ -138,6 +148,9 @@ public final class DivContainer: DivBase {
   static let itemsValidator: AnyArrayValueValidator<Div> =
     makeArrayValidator(minItems: 1)
 
+  static let layoutModeValidator: AnyValueValidator<DivContainer.LayoutMode> =
+    makeNoOpValueValidator()
+
   static let longtapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -205,6 +218,7 @@ public final class DivContainer: DivBase {
     height: DivSize?,
     id: String?,
     items: [Div],
+    layoutMode: Expression<LayoutMode>?,
     longtapActions: [DivAction]?,
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
@@ -240,6 +254,7 @@ public final class DivContainer: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.items = items
+    self.layoutMode = layoutMode ?? .value(.noWrap)
     self.longtapActions = longtapActions
     self.margins = margins ?? DivEdgeInsets()
     self.orientation = orientation ?? .value(.vertical)
@@ -305,41 +320,42 @@ extension DivContainer: Equatable {
       return false
     }
     guard
+      lhs.layoutMode == rhs.layoutMode,
       lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -371,6 +387,7 @@ extension DivContainer: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["items"] = items.map { $0.toDictionary() }
+    result["layout_mode"] = layoutMode.toValidSerializationValue()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()

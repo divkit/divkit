@@ -98,6 +98,7 @@ extension DivContainer {
       height: height,
       id: id,
       items: patchedItems,
+      layoutMode: layoutMode,
       longtapActions: longtapActions,
       margins: margins,
       orientation: orientation,

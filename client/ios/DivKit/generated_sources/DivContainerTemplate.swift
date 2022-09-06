@@ -6,6 +6,8 @@ import Serialization
 import TemplatesSupport
 
 public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
+  public typealias LayoutMode = DivContainer.LayoutMode
+
   public typealias Orientation = DivContainer.Orientation
 
   public static let type: String = "container"
@@ -28,6 +30,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>? // at least 1 char
   public let items: Field<[DivTemplate]>? // at least 1 elements
+  public let layoutMode: Field<Expression<LayoutMode>>? // default value: no_wrap
   public let longtapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let orientation: Field<Expression<Orientation>>? // default value: vertical
@@ -70,6 +73,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         height: try dictionary.getOptionalField("height", templateToType: templateToType),
         id: try dictionary.getOptionalField("id"),
         items: try dictionary.getOptionalArray("items", templateToType: templateToType),
+        layoutMode: try dictionary.getOptionalExpressionField("layout_mode"),
         longtapActions: try dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
         margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
         orientation: try dictionary.getOptionalExpressionField("orientation"),
@@ -112,6 +116,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     items: Field<[DivTemplate]>? = nil,
+    layoutMode: Field<Expression<LayoutMode>>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     orientation: Field<Expression<Orientation>>? = nil,
@@ -148,6 +153,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     self.height = height
     self.id = id
     self.items = items
+    self.layoutMode = layoutMode
     self.longtapActions = longtapActions
     self.margins = margins
     self.orientation = orientation
@@ -185,6 +191,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
+    let layoutModeValue = parent?.layoutMode?.resolveOptionalValue(context: context, validator: ResolvedValue.layoutModeValidator) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.longtapActionsValidator, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true) ?? .noValue
     let orientationValue = parent?.orientation?.resolveOptionalValue(context: context, validator: ResolvedValue.orientationValidator) ?? .noValue
@@ -220,6 +227,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       heightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "height", level: .warning)) },
       idValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "id", level: .warning)) },
       itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .error)) },
+      layoutModeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "layout_mode", level: .warning)) },
       longtapActionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "longtap_actions", level: .warning)) },
       marginsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "margins", level: .warning)) },
       orientationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "orientation", level: .warning)) },
@@ -264,6 +272,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       height: heightValue.value,
       id: idValue.value,
       items: itemsNonNil,
+      layoutMode: layoutModeValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
@@ -306,6 +315,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
+    var layoutModeValue: DeserializationResult<Expression<DivContainer.LayoutMode>> = parent?.layoutMode?.value() ?? .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var orientationValue: DeserializationResult<Expression<DivContainer.Orientation>> = parent?.orientation?.value() ?? .noValue
@@ -360,6 +370,8 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
       case "items":
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self).merged(with: itemsValue)
+      case "layout_mode":
+        layoutModeValue = deserialize(__dictValue, validator: ResolvedValue.layoutModeValidator).merged(with: layoutModeValue)
       case "longtap_actions":
         longtapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.longtapActionsValidator, type: DivActionTemplate.self).merged(with: longtapActionsValue)
       case "margins":
@@ -428,6 +440,8 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
       case parent?.items?.link:
         itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self))
+      case parent?.layoutMode?.link:
+        layoutModeValue = layoutModeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.layoutModeValidator))
       case parent?.longtapActions?.link:
         longtapActionsValue = longtapActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.longtapActionsValidator, type: DivActionTemplate.self))
       case parent?.margins?.link:
@@ -507,6 +521,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       heightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "height", level: .warning)) },
       idValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "id", level: .warning)) },
       itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .error)) },
+      layoutModeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "layout_mode", level: .warning)) },
       longtapActionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "longtap_actions", level: .warning)) },
       marginsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "margins", level: .warning)) },
       orientationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "orientation", level: .warning)) },
@@ -551,6 +566,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       height: heightValue.value,
       id: idValue.value,
       items: itemsNonNil,
+      layoutMode: layoutModeValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
@@ -598,6 +614,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       items: items ?? mergedParent.items,
+      layoutMode: layoutMode ?? mergedParent.layoutMode,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
       margins: margins ?? mergedParent.margins,
       orientation: orientation ?? mergedParent.orientation,
@@ -640,6 +657,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       items: try merged.items?.resolveParent(templates: templates),
+      layoutMode: merged.layoutMode,
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       orientation: merged.orientation,
