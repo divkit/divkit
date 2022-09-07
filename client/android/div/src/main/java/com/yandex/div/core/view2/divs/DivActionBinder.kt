@@ -75,21 +75,33 @@ internal class DivActionBinder @Inject constructor(
     ) {
         val clickableState = target.isClickable
         val longClickableState = target.isLongClickable
-        val divGestureListener = DivGestureListener()
-        val gestureDetector = GestureDetectorCompat(target.context, divGestureListener)
+
         val touchAnimations = tryConvertToTouchListener(
             divView, actions, longTapActions, doubleTapActions, actionAnimation, target)
 
-        //noinspection ClickableViewAccessibility
-        target.setOnTouchListener { v, event ->
-            touchAnimations?.invoke(v, event)
-            gestureDetector.onTouchEvent(event)
-        }
-
+        val divGestureListener = DivGestureListener()
         bindLongTapActions(divView, target, longTapActions, actions.isNullOrEmpty())
         bindDoubleTapActions(divView, target, divGestureListener, doubleTapActions)
         // Order is urgent: tap actions depend on double tap actions
         bindTapActions(divView, target, divGestureListener, actions, shouldIgnoreActionMenuItems)
+
+        // Avoid creating GestureDetector if unnecessary cause it's expensive.
+        val gestureDetector = if (divGestureListener.onSingleTapListener != null ||
+            divGestureListener.onDoubleTapListener != null) {
+            GestureDetectorCompat(target.context, divGestureListener)
+        } else {
+            null
+        }
+
+        if (touchAnimations != null || gestureDetector != null) {
+            //noinspection ClickableViewAccessibility
+            target.setOnTouchListener { v, event ->
+                touchAnimations?.invoke(v, event)
+                gestureDetector?.onTouchEvent(event) ?: false
+            }
+        } else {
+            target.setOnTouchListener(null)
+        }
 
         if (accessibilityEnabled &&
             DivAccessibility.Mode.MERGE == divView.getPropagatedAccessibilityMode(target) &&
@@ -152,7 +164,6 @@ internal class DivActionBinder @Inject constructor(
     ) {
         if (actions.isNullOrEmpty()) {
             clearLongClickListener(target, longtapActionsPassToChild, noClickAction)
-
             return
         }
 
@@ -357,15 +368,19 @@ internal class DivActionBinder @Inject constructor(
         actions: List<DivAction>?,
         longTapActions: List<DivAction>?,
         doubleTapActions: List<DivAction>?,
-        actionAnimation: DivAnimation?,
+        actionAnimation: DivAnimation,
         view: View,
     ): ((View, MotionEvent) -> Unit)? {
         val expressionResolver = divView.expressionResolver
 
-        val directAnimation = actionAnimation?.toAnimation(expressionResolver, view = view)
-        val reverseAnimation = actionAnimation?.toAnimation(expressionResolver, reverse = true)
-
         if (allIsNullOrEmpty(actions, longTapActions, doubleTapActions)) {
+            return null
+        }
+
+        val directAnimation = actionAnimation.toAnimation(expressionResolver, view = view)
+        val reverseAnimation = actionAnimation.toAnimation(expressionResolver, reverse = true)
+
+        if (directAnimation == null && reverseAnimation == null) {
             return null
         }
 
