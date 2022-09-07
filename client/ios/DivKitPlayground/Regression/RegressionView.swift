@@ -4,8 +4,11 @@ struct RegressionFolderView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
 
+  @State
+  private var query = ""
+
   private let divViewProvider: DivViewProvider
-  
+
   init(
     divViewProvider: DivViewProvider
   ) {
@@ -18,8 +21,12 @@ struct RegressionFolderView: View {
       background: ThemeColor.regression,
       presentationMode: presentationMode
     ) {
+      TextField("Input filter", text: $query)
+        .textFieldStyle(.roundedBorder)
+        .font(ThemeFont.text)
+        .padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 20))
       ScrollView {
-        ForEach(TestData.regressionTests, id: \.self) { testModel in
+        ForEach(tests, id: \.self) { testModel in
           NavigationButton(testModel.title) {
             RegressionTestView(
               model: testModel,
@@ -28,8 +35,17 @@ struct RegressionFolderView: View {
           }
           .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
         }
-        .padding(EdgeInsets(top: 20, leading: 20, bottom: 10, trailing: 20))
+        .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
       }
+    }
+  }
+  
+  private var tests: [RegressionTestModel] {
+    if query.isEmpty {
+      return TestData.regressionTests
+    }
+    return TestData.regressionTests.filter {
+      $0.title.range(of: query, options: .caseInsensitive) != nil
     }
   }
 }
