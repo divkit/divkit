@@ -157,7 +157,7 @@ public struct ContainerBlockLayout {
 
   private func calculateWrapLayoutFrames() -> [CGRect] {
     #if INTERNAL_BUILD
-    assert(gaps.allSatisfy(0), "You cannot use gaps in wrap container.")
+    assert(gaps.allSatisfy { $0.isApproximatelyEqualTo(0) }, "You cannot use gaps in wrap container.")
     assert(
       !children
         .contains { $0.content.isHorizontallyResizable || $0.content.isVerticallyResizable
