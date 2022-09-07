@@ -12,7 +12,7 @@ public enum ExpressionError: Error {
   case calculating(
     expression: String,
     scriptInject: String,
-    calcExpressionError: CalcExpression.Error
+    description: String
   )
   case validating(
     expression: String,

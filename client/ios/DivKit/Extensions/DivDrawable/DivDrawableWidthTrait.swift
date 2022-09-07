@@ -1,6 +1,6 @@
 import Foundation
 
-public enum DivDrawableWidthTrait {
+enum DivDrawableWidthTrait {
   case resizable
   case fixed
 }

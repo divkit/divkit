@@ -2,7 +2,7 @@ import Foundation
 
 import CommonCoreTiny
 
-public protocol Function {
+protocol Function {
   var arity: CalcExpression.Arity { get }
   func invoke(args: [Any]) throws -> Any
   func verify(signature: FunctionSignature) throws
@@ -209,7 +209,7 @@ struct OverloadedFunction: Function {
   }
 }
 
-public struct FunctionSignature: Decodable {
+struct FunctionSignature: Decodable {
   let arguments: [Argument]
   let resultType: ArgumentType
 
@@ -226,7 +226,7 @@ public struct FunctionSignature: Decodable {
     }
   }
 
-  public enum ArgumentType: String, Decodable, CaseIterable {
+  enum ArgumentType: String, Decodable, CaseIterable {
     case string
     case number
     case integer

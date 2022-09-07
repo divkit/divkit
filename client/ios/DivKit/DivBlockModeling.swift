@@ -10,7 +10,7 @@ public protocol DivBlockModeling {
 public struct DivBlockModelingError: Error, CustomStringConvertible, Equatable {
   public let description: String
 
-  public init(_ message: String, path: UIElementPath) {
+  init(_ message: String, path: UIElementPath) {
     description = "\(message) [\(path)]"
     DivKitLogger.error(description)
   }

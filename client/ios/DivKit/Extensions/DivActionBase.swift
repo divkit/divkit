@@ -18,7 +18,7 @@ public protocol DivActionBase: Serializable {
 }
 
 extension DivActionBase {
-  public func makeDivActionParams(
+  func makeDivActionParams(
     cardId: DivCardID,
     source: UserInterfaceAction.DivActionSource
   ) -> UserInterfaceAction.DivActionParams {
@@ -34,14 +34,14 @@ extension DivActionBase {
     )
   }
 
-  public func makeDivActionPayload(
+  func makeDivActionPayload(
     cardId: DivCardID,
     source: UserInterfaceAction.DivActionSource
   ) -> UserInterfaceAction.Payload? {
     .divAction(params: makeDivActionParams(cardId: cardId, source: source))
   }
 
-  public func makeJsonPayload() -> UserInterfaceAction.Payload? {
+  func makeJsonPayload() -> UserInterfaceAction.Payload? {
     guard let payload = payload else {
       return nil
     }

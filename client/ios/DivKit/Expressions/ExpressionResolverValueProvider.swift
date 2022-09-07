@@ -1,5 +1,5 @@
 import Foundation
 
-public protocol ExpressionResolverValueProvider {
+protocol ExpressionResolverValueProvider {
   func typedValue<T>() -> T?
 }

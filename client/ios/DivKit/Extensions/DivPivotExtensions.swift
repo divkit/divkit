@@ -3,7 +3,7 @@ import CoreGraphics
 import LayoutKit
 
 extension DivPivot {
-  public func makeAnchorValue(expressionResolver: ExpressionResolver) -> AnchorValue {
+  func makeAnchorValue(expressionResolver: ExpressionResolver) -> AnchorValue {
     switch self {
     case let .divPivotPercentage(value):
       return .relative(value: value.resolveValue(expressionResolver) ?? 50)

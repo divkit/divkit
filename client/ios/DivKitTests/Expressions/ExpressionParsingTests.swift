@@ -1,6 +1,6 @@
 import XCTest
 
-import DivKit
+@testable import DivKit
 
 final class ExpressionParsingTests: XCTestCase {
   func test_ParseStringExpression() {

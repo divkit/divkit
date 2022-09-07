@@ -4,7 +4,7 @@ import CommonCore
 import LayoutKit
 
 extension DivShapeDrawable {
-  public func makeBlock(
+  func makeBlock(
     context: DivBlockModelingContext,
     widthTrait: DivDrawableWidthTrait,
     corners: CGRect.Corners
@@ -46,14 +46,14 @@ extension DivShapeDrawable {
     }
   }
 
-  public func getWidth(context: DivBlockModelingContext) -> CGFloat {
+  func getWidth(context: DivBlockModelingContext) -> CGFloat {
     switch shape {
     case let .divRoundedRectangleShape(rectangle):
       return CGFloat(rectangle.itemWidth.resolveValue(context.expressionResolver) ?? 0)
     }
   }
 
-  public func getHeight(context: DivBlockModelingContext) -> CGFloat {
+  func getHeight(context: DivBlockModelingContext) -> CGFloat {
     switch shape {
     case let .divRoundedRectangleShape(rectangle):
       let stroke = stroke?.resolveWidth(context.expressionResolver) ?? 0

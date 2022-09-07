@@ -29,11 +29,11 @@ extension DivContainer: ActionsHolder, DoubleTapActionsHolder, LongTapActionsHol
 extension DivGrid: ActionsHolder, DoubleTapActionsHolder, LongTapActionsHolder {}
 
 extension DivText.Ellipsis: ActionsHolder {
-  public var action: DivAction? { nil }
+  var action: DivAction? { nil }
 }
 
 extension DivText.Range: ActionsHolder {
-  public var action: DivAction? { nil }
+  var action: DivAction? { nil }
 }
 
 extension ActionHolder {

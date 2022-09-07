@@ -1,8 +1,8 @@
+@testable import DivKit
+
 import XCTest
 
 import BaseUI
-import CommonCore
-import DivKit
 import LayoutKit
 
 final class DivGalleryExtensionsTests: XCTestCase {

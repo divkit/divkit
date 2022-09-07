@@ -5,7 +5,7 @@ public struct DivCustomData {
   public let data: [String: Any]
   public let children: [Block]
 
-  public init(name: String, data: [String: Any], children: [Block] = []) {
+  init(name: String, data: [String: Any], children: [Block] = []) {
     self.name = name
     self.data = data
     self.children = children

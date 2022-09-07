@@ -36,27 +36,27 @@ import Foundation
 import CommonCore
 
 /// Wrapper for Expression that works with any type of value
-public struct AnyCalcExpression: CustomStringConvertible {
+struct AnyCalcExpression: CustomStringConvertible {
   private let expression: CalcExpression
   private let describer: () -> String
   @usableFromInline
   let evaluator: () throws -> Any
 
   /// Evaluator for individual symbols
-  public typealias SymbolEvaluator = (_ args: [Any]) throws -> Any
+  typealias SymbolEvaluator = (_ args: [Any]) throws -> Any
 
   /// Symbols that make up an expression
-  public typealias Symbol = CalcExpression.Symbol
+  typealias Symbol = CalcExpression.Symbol
 
   /// Runtime error when parsing or evaluating an expression
-  public typealias Error = CalcExpression.Error
+  typealias Error = CalcExpression.Error
 
   /// Options for configuring an expression
-  public typealias Options = CalcExpression.Options
+  typealias Options = CalcExpression.Options
 
   /// Constructor that accepts parsed expression and constants lookup function
   /// Used in Yandex DivKit Expressions
-  public init(
+  init(
     _ expression: ParsedCalcExpression,
     options: Options = [.boolSymbols],
     constants: @escaping (String) -> ExpressionResolverValueProvider?
@@ -78,7 +78,7 @@ public struct AnyCalcExpression: CustomStringConvertible {
 
   /// Constructor that accepts parsed expression,
   /// constants lookup function and SymbolEvaluators
-  public init(
+  init(
     _ expression: ParsedCalcExpression,
     options: Options = [.boolSymbols],
     constants: @escaping (String) -> ExpressionResolverValueProvider?,
@@ -407,7 +407,7 @@ public struct AnyCalcExpression: CustomStringConvertible {
 
   /// Evaluate the expression
   @inlinable
-  public func evaluate<T>() throws -> T {
+  func evaluate<T>() throws -> T {
     let anyValue = try evaluator()
     guard let value: T = AnyCalcExpression.cast(anyValue) else {
       switch T.self {
@@ -434,11 +434,11 @@ public struct AnyCalcExpression: CustomStringConvertible {
   }
 
   /// All symbols used in the expression
-  public var symbols: Set<Symbol> { expression.symbols }
+  var symbols: Set<Symbol> { expression.symbols }
 
   /// Returns the optmized, pretty-printed expression if it was valid
   /// Otherwise, returns the original (invalid) expression string
-  public var description: String { describer() }
+  var description: String { describer() }
 }
 
 // MARK: Internal API
@@ -655,15 +655,15 @@ extension AnyCalcExpression {
     }
 
     // Literal values
-    public static let nilValue = Double(bitPattern: nilBits)
-    public static let trueValue = Double(bitPattern: trueBits)
-    public static let falseValue = Double(bitPattern: falseBits)
+    static let nilValue = Double(bitPattern: nilBits)
+    static let trueValue = Double(bitPattern: trueBits)
+    static let falseValue = Double(bitPattern: falseBits)
 
     // The values stored in the box
-    public var values = [Any]()
+    var values = [Any]()
 
     // Store a value in the box
-    public func store(_ value: Any) throws -> CalcExpression.Value {
+    func store(_ value: Any) throws -> CalcExpression.Value {
       switch value {
       case let doubleValue as Double:
         return .number(doubleValue)

@@ -46,7 +46,7 @@ extension DivData: DivBlockModeling {
     #endif
   }
 
-  public func getCurrentState(stateManager: DivStateManager) -> DivData.State? {
+  private func getCurrentState(stateManager: DivStateManager) -> DivData.State? {
     guard let item = stateManager.get(stateBlockPath: DivData.rootPath) else {
       return states.first
     }

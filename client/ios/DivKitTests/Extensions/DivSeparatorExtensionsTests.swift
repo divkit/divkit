@@ -1,9 +1,7 @@
+@testable import DivKit
 @testable import LayoutKit
 
 import XCTest
-
-import CommonCore
-import DivKit
 
 final class DivSeparatorExtensionsTests: XCTestCase {
   func test_WhenDivHasAction_CreatesBlockWithIt() throws {

@@ -3,7 +3,7 @@ import Foundation
 import CommonCore
 
 extension CalcExpression {
-  public enum Value {
+  enum Value {
     case integer(Int)
     case number(Double)
     case datetime(Date)

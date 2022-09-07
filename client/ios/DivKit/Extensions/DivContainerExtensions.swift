@@ -15,7 +15,7 @@ extension DivContainer: DivBlockModeling {
     )
   }
 
-  public func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
+  private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     let childContext = modified(context) {
       $0.parentPath = $0.parentPath + (id ?? DivContainer.type)
     }

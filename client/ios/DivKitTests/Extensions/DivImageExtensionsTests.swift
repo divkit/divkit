@@ -1,9 +1,7 @@
+@testable import DivKit
 @testable import LayoutKit
 
 import XCTest
-
-import CommonCore
-import DivKit
 
 final class DivImageExtensionsTests: XCTestCase {
   func test_WhenDivHasAction_CreatesBlockWithIt() throws {

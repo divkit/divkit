@@ -242,11 +242,13 @@ extension ExpressionResolver {
       ).evaluate()
       return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
     } catch let error as CalcExpression.Error {
-      errorTracker(.calculating(
-        expression: link.rawValue,
-        scriptInject: parsedExpression.description,
-        calcExpressionError: error
-      ))
+      errorTracker(
+        .calculating(
+          expression: link.rawValue,
+          scriptInject: parsedExpression.description,
+          description: error.description
+        )
+      )
       return nil
     } catch {
       errorTracker(.unknown(error: error))
@@ -272,11 +274,13 @@ extension ExpressionResolver {
           ).evaluate()
           stringValue += value
         } catch let error as CalcExpression.Error {
-          errorTracker(.calculating(
-            expression: link.rawValue,
-            scriptInject: parsedExpression.description,
-            calcExpressionError: error
-          ))
+          errorTracker(
+            .calculating(
+              expression: link.rawValue,
+              scriptInject: parsedExpression.description,
+              description: error.description
+            )
+          )
           return nil
         } catch {
           errorTracker(.unknown(error: error))
