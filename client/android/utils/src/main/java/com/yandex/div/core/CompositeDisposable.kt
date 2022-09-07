@@ -10,7 +10,7 @@ class CompositeDisposable : Disposable {
 
     fun add(disposable: Disposable) {
         require(!closed) { "close() method was called" }
-        if (disposable != Disposable.NULL) {
+        if (disposable !== Disposable.NULL) {
             disposables += disposable
         }
     }
