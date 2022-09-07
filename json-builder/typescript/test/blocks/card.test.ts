@@ -2,9 +2,9 @@ import {
     divCard,
     DivContainer,
     DivGallery,
-    DivGradientBackground,
     DivImage,
     DivImageBackground,
+    DivLinearGradient,
     DivSolidBackground,
     DivTabs,
     DivText,
@@ -101,7 +101,7 @@ describe('DivCard tests', (): void => {
                         content_alignment_vertical: 'top',
                         image_url: reference('background_url'),
                     }),
-                    new DivGradientBackground({
+                    new DivLinearGradient({
                         angle: 270,
                         colors: ['#00293445', '#293445'],
                     }),

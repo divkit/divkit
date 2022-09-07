@@ -114,6 +114,11 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
      */
     items: Type<NonEmptyArray<Div>>;
     /**
+     * Method of placing elements. `wrap` value includes the transfer of elements to the next line if
+     * they did not fit in the previous one.
+     */
+    layout_mode?: Type<DivContainerLayoutMode> | DivExpression;
+    /**
      * Action when long-clicking on an element.
      */
     longtap_actions?: Type<NonEmptyArray<IDivAction>>;
@@ -205,6 +210,7 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
         this.height = props.height;
         this.id = props.id;
         this.items = props.items;
+        this.layout_mode = props.layout_mode;
         this.longtap_actions = props.longtap_actions;
         this.margins = props.margins;
         this.orientation = props.orientation;
@@ -304,6 +310,11 @@ interface DivContainerProps {
      */
     items: Type<NonEmptyArray<Div>>;
     /**
+     * Method of placing elements. `wrap` value includes the transfer of elements to the next line if
+     * they did not fit in the previous one.
+     */
+    layout_mode?: Type<DivContainerLayoutMode> | DivExpression;
+    /**
      * Action when long-clicking on an element.
      */
     longtap_actions?: Type<NonEmptyArray<IDivAction>>;
@@ -376,6 +387,10 @@ interface DivContainerProps {
      */
     width?: Type<DivSize>;
 }
+
+export type DivContainerLayoutMode =
+    | 'no_wrap'
+    | 'wrap';
 
 export type DivContainerOrientation =
     | 'vertical'

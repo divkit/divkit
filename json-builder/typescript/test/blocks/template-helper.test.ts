@@ -1,9 +1,9 @@
 import {
     DivContainer,
-    DivGradientBackground,
+    DivGallery,
     DivImage,
     DivImageBackground,
-    DivGallery,
+    DivLinearGradient,
     DivSolidBackground,
     DivText,
     fixed,
@@ -67,7 +67,7 @@ describe('templateHelper', () => {
                         image_url: reference('img'),
                         scale: reference('imgScale'),
                     }),
-                    new DivGradientBackground({
+                    new DivLinearGradient({
                         angle: reference('bgAngle'),
                         colors: ['#99000000', '#66000000', '#33000000', '#00000000'],
                     }),

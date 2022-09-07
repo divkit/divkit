@@ -13,10 +13,10 @@ import {
     DivFixedSize,
     DivFontFamily,
     DivFontWeight,
-    DivGradientBackground,
     DivLineStyle,
     DivSize,
     DivSizeUnit,
+    DivTextGradient,
     DivTransitionTrigger,
     DivVisibility,
     IDivAccessibility,
@@ -201,7 +201,7 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     /**
      * Gradient text color.
      */
-    text_gradient?: Type<DivGradientBackground>;
+    text_gradient?: Type<DivTextGradient>;
     /**
      * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
      * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -479,7 +479,7 @@ interface DivTextProps {
     /**
      * Gradient text color.
      */
-    text_gradient?: Type<DivGradientBackground>;
+    text_gradient?: Type<DivTextGradient>;
     /**
      * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
      * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.

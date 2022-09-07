@@ -5,10 +5,10 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../expression';
 
 /**
- * Gradient background.
+ * Linear gradient.
  */
-export class DivGradientBackground<T extends DivGradientBackgroundProps = DivGradientBackgroundProps> {
-    readonly _props?: Exact<DivGradientBackgroundProps, T>;
+export class DivLinearGradient<T extends DivLinearGradientProps = DivLinearGradientProps> {
+    readonly _props?: Exact<DivLinearGradientProps, T>;
 
     readonly type = 'gradient';
     /**
@@ -20,13 +20,13 @@ export class DivGradientBackground<T extends DivGradientBackgroundProps = DivGra
      */
     colors: Type<NonEmptyArray<string | DivExpression>>;
 
-    constructor(props: Exact<DivGradientBackgroundProps, T>) {
+    constructor(props: Exact<DivLinearGradientProps, T>) {
         this.angle = props.angle;
         this.colors = props.colors;
     }
 }
 
-interface DivGradientBackgroundProps {
+interface DivLinearGradientProps {
     /**
      * Angle of gradient direction.
      */
