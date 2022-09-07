@@ -3,6 +3,7 @@ import Foundation
 import CommonCore
 import Serialization
 
+@inlinable
 public func expressionTransform<T, U>(
   _ value: Any?,
   transform: (U) -> T?,
@@ -32,6 +33,7 @@ public func expressionTransform<T, U>(
   return nil
 }
 
+@inlinable
 public func deserialize<T: ValidSerializationValue>(
   _ value: Any,
   validator: AnyValueValidator<T>? = nil
@@ -51,6 +53,7 @@ public func deserialize(
   )
 }
 
+@inlinable
 public func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> U?,
@@ -75,6 +78,7 @@ public func deserialize<T: ValidSerializationValue, U>(
   return .success(result)
 }
 
+@inlinable
 public func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> U?,
@@ -93,6 +97,7 @@ public func deserialize<T: ValidSerializationValue, U>(
   )
 }
 
+@inlinable
 public func deserialize<T: RawRepresentable>(
   _ value: Any,
   validator: AnyValueValidator<T>? = nil

@@ -8,6 +8,7 @@ public protocol BlockError: Error {
 }
 
 // Workaround for swift compiler bug, when protocol is not conforming parent protocol
+@inlinable
 public func modifyError<T: Error, R>(
   _ modificator: (BlockError) -> T,
   _ block: () throws -> R

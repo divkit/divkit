@@ -15,6 +15,7 @@ public enum DivVariableValue: Equatable {
 }
 
 extension DivVariableValue: ExpressionResolverValueProvider {
+  @inlinable
   public func typedValue<T>() -> T? {
     switch self {
     case let .string(value):

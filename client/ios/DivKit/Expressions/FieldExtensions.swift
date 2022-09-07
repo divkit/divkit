@@ -5,6 +5,7 @@ import Serialization
 import TemplatesSupport
 
 extension Field {
+  @inlinable
   public func resolveValue<E: ValidSerializationValue>(
     context: Context
   ) -> DeserializationResult<T> where T == Expression<E> {
@@ -14,6 +15,7 @@ extension Field {
     )
   }
 
+  @inlinable
   public func resolveValue<E: ValidSerializationValue>(
     context: Context,
     validator: AnyValueValidator<E>
@@ -25,6 +27,7 @@ extension Field {
     )
   }
 
+  @inlinable
   public func resolveValue<E: RawRepresentable>(
     context: Context,
     validator: AnyValueValidator<E>? = nil
@@ -45,6 +48,7 @@ extension Field {
     )
   }
 
+  @inlinable
   public func resolveValue<U: ValidSerializationValue, E>(
     context: Context,
     transform: (U) -> E?,
@@ -66,6 +70,7 @@ extension Field {
     )
   }
 
+  @inlinable
   public func resolveValue<U: ValidSerializationValue, E>(
     context: Context,
     transform: (U) -> E?,
@@ -91,6 +96,7 @@ extension Field {
     }
   }
 
+  @inlinable
   public func resolveOptionalValue<E: ValidSerializationValue>(
     context: Context
   ) -> DeserializationResult<T> where T == Expression<E> {
@@ -100,6 +106,7 @@ extension Field {
     )
   }
 
+  @inlinable
   public func resolveOptionalValue<E: ValidSerializationValue>(
     context: Context,
     validator: AnyValueValidator<E>
@@ -111,6 +118,7 @@ extension Field {
     )
   }
 
+  @inlinable
   public func resolveOptionalValue<E: RawRepresentable>(
     context: Context,
     validator: AnyValueValidator<E>? = nil
@@ -127,6 +135,7 @@ extension Field {
     return result
   }
 
+  @inlinable
   public func resolveOptionalValue<U: ValidSerializationValue, E>(
     context: Context,
     transform: (U) -> E?,
@@ -145,7 +154,8 @@ extension Field {
     return result
   }
 
-  fileprivate func resolveExpression<E>(
+  @usableFromInline
+  func resolveExpression<E>(
     valueForLink: (Link) -> DeserializationResult<T>
   ) -> DeserializationResult<T> where T == Expression<E> {
     switch self {

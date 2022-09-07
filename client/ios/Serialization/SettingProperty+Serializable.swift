@@ -3,7 +3,8 @@ import Foundation
 import CommonCore
 
 extension SettingProperty where T: Serializable & Deserializable {
-  fileprivate static func serializableStorage(
+  @usableFromInline
+  static func serializableStorage(
     _ storage: KeyValueStorage,
     key: String
   ) -> Property<T?> {
@@ -18,11 +19,13 @@ extension SettingProperty where T: Serializable & Deserializable {
 }
 
 extension KeyValueStorage {
+  @inlinable
   public func makeField<T>(key: String) -> Property<T?>
     where T: Serializable, T: Deserializable {
     SettingProperty.serializableStorage(self, key: key)
   }
 
+  @inlinable
   public func makeField<T>(key: String, default: T) -> Property<T>
     where T: Serializable, T: Deserializable {
     SettingProperty.serializableStorage(self, key: key).withDefault(`default`)

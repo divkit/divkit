@@ -10,6 +10,7 @@ public final class DivBlockStateStorage {
     self.states = states
   }
 
+  @inlinable
   public func getState<T: ElementState>(_ path: UIElementPath) -> T? {
     getStateUntyped(path) as? T
   }
@@ -18,6 +19,7 @@ public final class DivBlockStateStorage {
     statesById[path.leaf] ?? states[path]
   }
 
+  @inlinable
   public func getState<T: ElementState>(_ id: String) -> T? {
     getStateUntyped(id) as? T
   }

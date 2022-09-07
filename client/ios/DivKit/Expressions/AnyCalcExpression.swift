@@ -39,7 +39,8 @@ import CommonCore
 public struct AnyCalcExpression: CustomStringConvertible {
   private let expression: CalcExpression
   private let describer: () -> String
-  private let evaluator: () throws -> Any
+  @usableFromInline
+  let evaluator: () throws -> Any
 
   /// Evaluator for individual symbols
   public typealias SymbolEvaluator = (_ args: [Any]) throws -> Any
@@ -405,6 +406,7 @@ public struct AnyCalcExpression: CustomStringConvertible {
   }
 
   /// Evaluate the expression
+  @inlinable
   public func evaluate<T>() throws -> T {
     let anyValue = try evaluator()
     guard let value: T = AnyCalcExpression.cast(anyValue) else {
@@ -526,7 +528,8 @@ extension AnyCalcExpression.Error {
   }
 
   /// Standard error message for mismatched return type
-  fileprivate static func resultTypeMismatch(_ type: Any.Type, _ value: Any) -> AnyCalcExpression
+  @usableFromInline
+  static func resultTypeMismatch(_ type: Any.Type, _ value: Any) -> AnyCalcExpression
     .Error {
     let valueType = AnyCalcExpression
       .stringifyOrNil(AnyCalcExpression.unwrap(value).map { Swift.type(of: $0) } as Any)
@@ -538,7 +541,8 @@ extension AnyCalcExpression.Error {
 
 extension AnyCalcExpression {
   // Cast a value to the specified type
-  fileprivate static func cast<T>(_ anyValue: Any) -> T? {
+  @usableFromInline
+  static func cast<T>(_ anyValue: Any) -> T? {
     if let value = anyValue as? T {
       return value
     }
@@ -564,7 +568,8 @@ extension AnyCalcExpression {
   }
 
   // Convert any value to a printable string
-  fileprivate static func stringify(_ value: Any) -> String? {
+  @usableFromInline
+  static func stringify(_ value: Any) -> String? {
     switch value {
     case let number as NSNumber:
       // https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/ObjCRuntimeGuide/Articles/ocrtTypeEncodings.html
@@ -616,7 +621,8 @@ extension AnyCalcExpression {
   }
 
   // Test if a value is nil
-  fileprivate static func isNil(_ value: Any) -> Bool {
+  @usableFromInline
+  static func isNil(_ value: Any) -> Bool {
     if let optional = value as? _Optional {
       guard let value = optional.value else {
         return true
@@ -758,24 +764,28 @@ extension Double: _Numeric {}
 extension Float: _Numeric {}
 
 // Used for string values
-private protocol _String {
+@usableFromInline
+protocol _String {
   var substring: Substring { get }
 }
 
 extension String: _String {
-  fileprivate var substring: Substring {
+  @usableFromInline
+  var substring: Substring {
     Substring(self)
   }
 }
 
 extension Substring: _String {
-  fileprivate var substring: Substring {
+  @usableFromInline
+  var substring: Substring {
     self
   }
 }
 
 extension NSString: _String {
-  fileprivate var substring: Substring {
+  @usableFromInline
+  var substring: Substring {
     Substring("\(self)")
   }
 }

@@ -52,6 +52,7 @@ extension DivTemplates {
     )
   }
 
+  @inlinable
   public func parseValue<T: TemplateDeserializable & TemplateValue>(
     type _: T.Type,
     from dict: [String: Any]

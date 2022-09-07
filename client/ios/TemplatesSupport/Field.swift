@@ -9,7 +9,8 @@ public indirect enum Field<T> {
 }
 
 extension Field {
-  fileprivate func resolveValue(
+  @usableFromInline
+  func resolveValue(
     validator: AnyValueValidator<T>? = nil,
     valueForLink: (Link) -> DeserializationResult<T>
   ) -> DeserializationResult<T> {
@@ -26,6 +27,7 @@ extension Field {
 }
 
 extension Field {
+  @inlinable
   public func value(
     validatedBy validator: AnyValueValidator<T>? = nil
   ) -> DeserializationResult<T> {
@@ -42,6 +44,7 @@ extension Field {
     }
   }
 
+  @inlinable
   public func resolveValue<U: ValidSerializationValue>(
     context: Context,
     transform: (U) -> T?,
@@ -58,6 +61,7 @@ extension Field {
     )
   }
 
+  @inlinable
   public func resolveOptionalValue<U: ValidSerializationValue>(
     context: Context,
     transform: (U) -> T?
@@ -78,6 +82,7 @@ extension Field {
     )
   }
 
+  @inlinable
   public func resolveOptionalValue<U: ValidSerializationValue>(
     context: Context,
     transform: (U) -> T?,
@@ -97,6 +102,7 @@ extension Field {
     return result
   }
 
+  @inlinable
   public func resolveValue<U: ValidSerializationValue, C>(
     context: Context,
     transform: (U) -> C?,
@@ -118,6 +124,7 @@ extension Field {
 }
 
 extension Field where T == CFString {
+  @inlinable
   public func resolveValue(
     context: Context,
     validator: AnyValueValidator<T>? = nil
@@ -135,10 +142,12 @@ extension Field where T == CFString {
 }
 
 extension Field where T: ValidSerializationValue {
+  @inlinable
   public func resolveValue(context: Context) -> DeserializationResult<T> {
     resolveValue(context: context, transform: { $0 as T })
   }
 
+  @inlinable
   public func resolveValue(
     context: Context,
     validator: AnyValueValidator<T>
@@ -146,10 +155,12 @@ extension Field where T: ValidSerializationValue {
     resolveValue(context: context, transform: { $0 as T }, validator: validator)
   }
 
+  @inlinable
   public func resolveOptionalValue(context: Context) -> DeserializationResult<T> {
     resolveOptionalValue(context: context, transform: { $0 as T })
   }
 
+  @inlinable
   public func resolveOptionalValue(
     context: Context,
     validator: AnyValueValidator<T>
@@ -159,10 +170,12 @@ extension Field where T: ValidSerializationValue {
 }
 
 extension Field where T: RawRepresentable, T.RawValue: ValidSerializationValue {
+  @inlinable
   public func resolveValue(context: Context) -> DeserializationResult<T> {
     resolveValue(context: context, transform: T.init(rawValue:))
   }
 
+  @inlinable
   public func resolveValue(
     context: Context,
     validator: AnyValueValidator<T>
@@ -170,10 +183,12 @@ extension Field where T: RawRepresentable, T.RawValue: ValidSerializationValue {
     resolveValue(context: context, transform: T.init(rawValue:), validator: validator)
   }
 
+  @inlinable
   public func resolveOptionalValue(context: Context) -> DeserializationResult<T> {
     resolveOptionalValue(context: context, transform: T.init(rawValue:))
   }
 
+  @inlinable
   public func resolveOptionalValue(
     context: Context,
     validator: AnyValueValidator<T>
@@ -183,6 +198,7 @@ extension Field where T: RawRepresentable, T.RawValue: ValidSerializationValue {
 }
 
 extension Field {
+  @inlinable
   public func resolveParent<U: TemplateValue>(
     templates: Templates,
     validator: AnyArrayValueValidator<U>? = nil
@@ -213,6 +229,7 @@ extension Field {
     }
   }
 
+  @inlinable
   public func tryResolveParent<U: TemplateValue>(templates: Templates) -> Field<[U]>?
     where T == [U] {
     try? resolveParent(templates: templates)
@@ -222,6 +239,7 @@ extension Field {
 extension Field where T: TemplateValue, T: TemplateDeserializable {
   public typealias ResolvedValue = T.ResolvedValue
 
+  @inlinable
   public func resolveParent(templates: Templates) throws -> Field<T> {
     switch self {
     case let .link(link):
@@ -231,6 +249,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
     }
   }
 
+  @inlinable
   public func resolveValue(
     context: Context,
     useOnlyLinks: Bool
@@ -256,6 +275,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
     }
   }
 
+  @inlinable
   public func tryResolveParent(templates: Templates) -> Field<T>? {
     switch self {
     case .link:
@@ -267,6 +287,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
 }
 
 extension Field where T: Deserializable {
+  @inlinable
   public func resolveValue(context: Context) -> DeserializationResult<T> {
     switch self {
     case let .value(value):
@@ -281,6 +302,7 @@ extension Field where T: Deserializable {
 }
 
 extension Field where T: TemplateValue, T: TemplateDeserializable {
+  @inlinable
   public func resolveOptionalValue(
     context: Context,
     useOnlyLinks: Bool
@@ -288,6 +310,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
     resolveValue(context: context, useOnlyLinks: useOnlyLinks)
   }
 
+  @inlinable
   public func resolveValue(
     context: Context,
     validator: AnyValueValidator<T.ResolvedValue>,
@@ -300,6 +323,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
     return result
   }
 
+  @inlinable
   public func resolveOptionalValue(
     context: Context,
     validator: AnyValueValidator<T.ResolvedValue>,
@@ -315,6 +339,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
     return result
   }
 
+  @inlinable
   public func value(
     validatedBy validator: AnyValueValidator<T.ResolvedValue>? = nil,
     templates: Templates,
@@ -344,6 +369,7 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
 }
 
 extension Field {
+  @inlinable
   public func resolveValue<U: TemplateDeserializable & TemplateValue>(
     context: Context,
     validator: AnyArrayValueValidator<U.ResolvedValue>?,
@@ -364,6 +390,7 @@ extension Field {
     }
   }
 
+  @inlinable
   public func resolveOptionalValue<U: TemplateDeserializable & TemplateValue>(
     context: Context,
     validator: AnyArrayValueValidator<U.ResolvedValue>? = nil,
@@ -377,6 +404,7 @@ extension Field {
     return result
   }
 
+  @inlinable
   public func value<U: TemplateDeserializable & TemplateValue>(
     validatedBy validator: AnyArrayValueValidator<U.ResolvedValue>? = nil,
     templates: Templates,
@@ -396,6 +424,7 @@ extension Field {
 }
 
 extension Field {
+  @inlinable
   public func resolveValue<U: Deserializable>(context: Context) -> DeserializationResult<T>
     where T == [U] {
     switch self {
@@ -409,6 +438,7 @@ extension Field {
     }
   }
 
+  @inlinable
   public func resolveValue<U: Deserializable>(
     context: Context,
     validator: AnyValueValidator<T>
@@ -425,6 +455,7 @@ extension Field {
   }
 }
 
+@inlinable
 public func safeValueForLink<T>(
   _ valueForLink: (Link) throws -> T,
   link: Link

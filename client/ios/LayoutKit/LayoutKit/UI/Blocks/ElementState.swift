@@ -19,6 +19,7 @@ public protocol ElementStateObserver: AnyObject {
 }
 
 extension Dictionary where Key == UIElementPath, Value == ElementState {
+  @inlinable
   public func getState<T: ElementState>(at path: Key) -> T? {
     guard let value = self[path] else {
       return nil

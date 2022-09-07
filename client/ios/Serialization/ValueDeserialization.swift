@@ -2,6 +2,7 @@ import CoreFoundation
 
 import CommonCore
 
+@inlinable
 public func deserialize<T: ValidSerializationValue>(
   _ value: Any,
   validator: AnyValueValidator<T>? = nil
@@ -9,6 +10,7 @@ public func deserialize<T: ValidSerializationValue>(
   deserialize(value, transform: { $0 }, validator: validator)
 }
 
+@inlinable
 public func deserialize(
   _ value: Any,
   validator: AnyValueValidator<CFString>? = nil
@@ -24,6 +26,7 @@ public func deserialize(
   return .success(result)
 }
 
+@inlinable
 public func deserialize<T: RawRepresentable>(
   _ value: Any,
   validator: AnyValueValidator<T>? = nil
@@ -31,6 +34,7 @@ public func deserialize<T: RawRepresentable>(
   deserialize(value, transform: T.init, validator: validator)
 }
 
+@inlinable
 public func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> U?,
@@ -45,6 +49,7 @@ public func deserialize<T: ValidSerializationValue, U>(
   return deserialize(value, transform: transformWithResult, validator: validator)
 }
 
+@inlinable
 public func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> DeserializationResult<U>,
@@ -69,6 +74,7 @@ public func deserialize<T: ValidSerializationValue, U>(
   return result
 }
 
+@inlinable
 public func deserialize<T: ValidSerializationValue>(
   _ value: Any,
   validator: AnyArrayValueValidator<T>? = nil
@@ -76,6 +82,7 @@ public func deserialize<T: ValidSerializationValue>(
   deserialize(value, transform: { $0 } as ((T) -> T?), validator: validator)
 }
 
+@inlinable
 public func deserialize<T: RawRepresentable>(
   _ value: Any,
   validator: AnyArrayValueValidator<T>? = nil
@@ -83,6 +90,7 @@ public func deserialize<T: RawRepresentable>(
   deserialize(value, transform: T.init, validator: validator)
 }
 
+@inlinable
 public func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> U?,
@@ -97,6 +105,7 @@ public func deserialize<T: ValidSerializationValue, U>(
   return deserialize(value, transform: transformWithResult, validator: validator)
 }
 
+@inlinable
 public func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> DeserializationResult<U>,

@@ -161,7 +161,8 @@ public typealias ExpressionValueValidator<T> = (T) -> Bool
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
 
 public final class ExpressionResolver {
-  private let variables: DivVariables
+  @usableFromInline
+  let variables: DivVariables
   private let errorTracker: ExpressionErrorTracker
 
   public init(
@@ -175,6 +176,7 @@ public final class ExpressionResolver {
     }
   }
 
+  @inlinable
   public func resolveStringBasedValue<T>(
     expression: Expression<T>?,
     initializer: (String) -> T?
@@ -192,6 +194,7 @@ public final class ExpressionResolver {
     }
   }
 
+  @inlinable
   public func resolveNumericValue<T>(
     expression: Expression<T>?
   ) -> T? {
@@ -222,7 +225,8 @@ extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.Sy
 }
 
 extension ExpressionResolver {
-  private func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
+  @usableFromInline
+  func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
     guard link.items.count == 1,
           case let .calcExpression(parsedExpression) = link.items.first
     else {
@@ -250,7 +254,8 @@ extension ExpressionResolver {
     }
   }
 
-  private func evaluateStringBasedValue<T>(
+  @usableFromInline
+  func evaluateStringBasedValue<T>(
     link: ExpressionLink<T>,
     initializer: (String) -> T?
   ) -> T? {
@@ -326,6 +331,7 @@ extension ExpressionResolver {
     return value
   }
 
+  @inlinable
   public func getVariableValue<T>(name: String) -> T? {
     guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
       assertionFailure("Can't get variable from context")

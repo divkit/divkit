@@ -38,7 +38,8 @@ public final class AnyArrayValueValidator<U>: AnyValueValidator<[U]>, ArrayValue
   }
 }
 
-private func alwaysTrueValidator<T>() -> ((T) -> Bool) {
+@usableFromInline
+func alwaysTrueValidator<T>() -> ((T) -> Bool) {
   return { _ in true }
 }
 
@@ -72,16 +73,19 @@ public func makeURLValidator(schemes: [String]) -> AnyValueValidator<URL> {
   AnyValueValidator(isValid: { $0.scheme.map(schemes.contains) ?? false })
 }
 
+@inlinable
 public func makeValueValidator<T>(
   valueValidator: @escaping (T) -> Bool
 ) -> AnyValueValidator<T> {
   AnyValueValidator(isValid: valueValidator)
 }
 
+@inlinable
 public func makeNoOpValueValidator<T>() -> AnyValueValidator<T> {
   AnyValueValidator(isValid: alwaysTrueValidator())
 }
 
+@inlinable
 public func makeArrayValidator<T>(minItems: Int) -> AnyArrayValueValidator<T> {
   AnyArrayValueValidator(
     arrayValidator: { $0.count >= minItems },
@@ -89,6 +93,7 @@ public func makeArrayValidator<T>(minItems: Int) -> AnyArrayValueValidator<T> {
   )
 }
 
+@inlinable
 public func makeStrictArrayValidator<T>(minItems: Int) -> AnyArrayValueValidator<T> {
   AnyArrayValueValidator(
     arrayValidator: { $0.count >= minItems },
@@ -96,6 +101,7 @@ public func makeStrictArrayValidator<T>(minItems: Int) -> AnyArrayValueValidator
   )
 }
 
+@inlinable
 public func makeNoOpArrayValidator<T>() -> AnyArrayValueValidator<T> {
   AnyArrayValueValidator(
     arrayValidator: alwaysTrueValidator(),

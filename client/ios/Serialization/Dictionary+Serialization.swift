@@ -12,7 +12,8 @@ extension Dictionary {
   }
 }
 
-private func invalidFieldErrorForKey<T, U>(
+@usableFromInline
+func invalidFieldErrorForKey<T, U>(
   _ key: [T],
   element: Int? = nil,
   representation: U?
@@ -25,7 +26,8 @@ private func invalidFieldErrorForKey<T, U>(
 }
 
 extension Dictionary where Key == String {
-  fileprivate func enclosedDictForKeySequence(_ keys: [Key]) throws -> Self {
+  @usableFromInline
+  func enclosedDictForKeySequence(_ keys: [Key]) throws -> Self {
     guard !keys.isEmpty else {
       throw DeserializationError.noData
     }
@@ -46,7 +48,8 @@ extension Dictionary where Key == String {
 // MARK: Required values (private interface)
 
 extension Dictionary where Key == String {
-  fileprivate func getField<T, U>(
+  @usableFromInline
+  func getField<T, U>(
     _ key: [Key],
     transform: (T) throws -> U,
     validator: AnyValueValidator<U>?
@@ -64,7 +67,8 @@ extension Dictionary where Key == String {
     return transformed
   }
 
-  fileprivate func getArray<T, U>(
+  @usableFromInline
+  func getArray<T, U>(
     _ key: [Key],
     transform: (T) throws -> U,
     validator: AnyArrayValueValidator<U>?
@@ -114,7 +118,8 @@ extension Dictionary where Key == String {
 // MARK: Optional values (private interface)
 
 extension Dictionary where Key == String {
-  fileprivate func getOptionalField<T, U>(
+  @usableFromInline
+  func getOptionalField<T, U>(
     _ key: [Key],
     transform: (T) throws -> U,
     validator: AnyValueValidator<U>?
@@ -132,7 +137,8 @@ extension Dictionary where Key == String {
     return result
   }
 
-  fileprivate func getOptionalArray<T, U>(
+  @usableFromInline
+  func getOptionalArray<T, U>(
     _ key: [Key],
     transform: (T) throws -> U,
     validator: AnyArrayValueValidator<U>?
@@ -180,7 +186,8 @@ extension Dictionary where Key == String {
 // MARK: Adapters for transform
 
 extension Dictionary where Key == String {
-  fileprivate func getField<T, U>(
+  @usableFromInline
+  func getField<T, U>(
     _ key: [Key],
     transform: (T) -> U?,
     validator: AnyValueValidator<U>?
@@ -197,7 +204,8 @@ extension Dictionary where Key == String {
     )
   }
 
-  fileprivate func getArray<T, U>(
+  @usableFromInline
+  func getArray<T, U>(
     _ key: [Key],
     transform: (T) -> U?,
     validator: AnyArrayValueValidator<U>?
@@ -214,7 +222,8 @@ extension Dictionary where Key == String {
     )
   }
 
-  fileprivate func getOptionalField<T, U>(
+  @usableFromInline
+  func getOptionalField<T, U>(
     _ key: [Key],
     transform: (T) -> U?,
     validator: AnyValueValidator<U>?
@@ -227,7 +236,8 @@ extension Dictionary where Key == String {
     }, validator: validator)
   }
 
-  fileprivate func getOptionalArray<T, U>(
+  @usableFromInline
+  func getOptionalArray<T, U>(
     _ key: [Key],
     transform: (T) -> U?,
     validator: AnyArrayValueValidator<U>?
@@ -262,6 +272,7 @@ extension Dictionary where Key == String {
     return try getField(key, transform: transform, validator: validator)
   }
 
+  @inlinable
   public func getField<T: ValidSerializationValue>(
     _ key: Key...,
     validator: AnyValueValidator<T>? = nil
@@ -269,6 +280,7 @@ extension Dictionary where Key == String {
     try getField(key, transform: { $0 as T }, validator: validator)
   }
 
+  @inlinable
   public func getField<T: RawRepresentable>(
     _ key: Key...,
     validator: AnyValueValidator<T>? = nil
@@ -276,6 +288,7 @@ extension Dictionary where Key == String {
     try getField(key, transform: T.init(rawValue:), validator: validator)
   }
 
+  @inlinable
   public func getField<T: Deserializable>(
     _ key: Key...,
     validator: AnyValueValidator<T>? = nil
@@ -287,6 +300,7 @@ extension Dictionary where Key == String {
     )
   }
 
+  @inlinable
   public func getArray(
     _ key: Key...,
     validator: AnyArrayValueValidator<Any>? = nil
@@ -294,6 +308,7 @@ extension Dictionary where Key == String {
     try getArray(key, transform: { (value: Any) throws -> Any in value }, validator: validator)
   }
 
+  @inlinable
   public func getArray<T: ValidSerializationValue, U>(
     _ key: Key...,
     transform: (T) throws -> U,
@@ -302,6 +317,7 @@ extension Dictionary where Key == String {
     try getArray(key, transform: transform, validator: validator)
   }
 
+  @inlinable
   public func getArray<T: ValidSerializationValue, U>(
     _ key: Key...,
     transform: (T) -> U?,
@@ -310,6 +326,7 @@ extension Dictionary where Key == String {
     try getArray(key, transform: transform, validator: validator)
   }
 
+  @inlinable
   public func getArray<T: ValidSerializationValue>(
     _ key: Key...,
     validator: AnyArrayValueValidator<T>? = nil
@@ -320,6 +337,7 @@ extension Dictionary where Key == String {
     )
   }
 
+  @inlinable
   public func getArray<T: Deserializable>(
     _ key: Key...,
     validator: AnyArrayValueValidator<T>? = nil
@@ -331,6 +349,7 @@ extension Dictionary where Key == String {
     )
   }
 
+  @inlinable
   public func getField<T, U>(
     _ key: Key...,
     transform: (T) throws -> U,
@@ -339,6 +358,7 @@ extension Dictionary where Key == String {
     try getField(key, transform: transform, validator: validator)
   }
 
+  @inlinable
   public func getField<T, U>(
     _ key: Key...,
     transform: (T) -> U?,
@@ -374,6 +394,7 @@ extension Dictionary where Key == String {
     try getOptionalField(key, transform: safeCFCast, validator: validator)
   }
 
+  @inlinable
   public func getOptionalField<T: ValidSerializationValue>(
     _ key: Key...,
     validator: AnyValueValidator<T>? = nil
@@ -381,6 +402,7 @@ extension Dictionary where Key == String {
     try getOptionalField(key, transform: { $0 as T }, validator: validator)
   }
 
+  @inlinable
   public func getOptionalField<T: RawRepresentable>(
     _ key: Key...,
     validator: AnyValueValidator<T>? = nil
@@ -388,6 +410,7 @@ extension Dictionary where Key == String {
     try getOptionalField(key, transform: T.init(rawValue:), validator: validator)
   }
 
+  @inlinable
   public func getOptionalField<T, U>(
     _ key: Key...,
     transform: (T) -> U?,
@@ -396,6 +419,7 @@ extension Dictionary where Key == String {
     try getOptionalField(key, transform: transform, validator: validator)
   }
 
+  @inlinable
   public func getOptionalField<T, U>(
     _ key: Key...,
     transform: (T) throws -> U,
@@ -404,6 +428,7 @@ extension Dictionary where Key == String {
     try getOptionalField(key, transform: transform, validator: validator)
   }
 
+  @inlinable
   public func getOptionalField<T: Deserializable>(
     _ key: Key...,
     validator: AnyValueValidator<T>? = nil
@@ -426,6 +451,7 @@ extension Dictionary where Key == String {
     )
   }
 
+  @inlinable
   public func getOptionalArray<T: ValidSerializationValue>(
     _ key: Key...,
     validator: AnyArrayValueValidator<T>? = nil
@@ -437,6 +463,7 @@ extension Dictionary where Key == String {
     )
   }
 
+  @inlinable
   public func getOptionalArray<T: RawRepresentable>(
     _ key: Key...,
     validator: AnyArrayValueValidator<T>? = nil
@@ -448,6 +475,7 @@ extension Dictionary where Key == String {
     )
   }
 
+  @inlinable
   public func getOptionalArray<T, U>(
     _ key: Key...,
     transform: (T) throws -> U,
@@ -456,6 +484,7 @@ extension Dictionary where Key == String {
     try getOptionalArray(key, transform: transform, validator: validator)
   }
 
+  @inlinable
   public func getOptionalArray<T, U>(
     _ key: Key...,
     transform: (T) -> U?,
@@ -464,6 +493,7 @@ extension Dictionary where Key == String {
     try getOptionalArray(key, transform: transform, validator: validator)
   }
 
+  @inlinable
   public func getOptionalArray<T: Deserializable>(
     _ key: Key...,
     validator: AnyArrayValueValidator<T>? = nil
