@@ -232,7 +232,12 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     guard let scrollView = parentScrollView else { return }
     let frameInWindow = scrollView.convert(scrollView.frame, to: nil)
     var visibleY = frameInWindow.maxY + scrollView.contentOffset.y
-    visibleY = visibleY - keyboardHeight
+    let scrollViewBottomOffset = UIScreen.main.bounds.height - visibleY
+    var hiddenScrollViewHeight =  keyboardHeight - scrollViewBottomOffset
+    if hiddenScrollViewHeight < 0 {
+      hiddenScrollViewHeight = 0
+    }
+    visibleY = visibleY - hiddenScrollViewHeight
     if targetY > visibleY {
       let scrollPoint = CGPoint(
         x: 0,
