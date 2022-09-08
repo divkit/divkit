@@ -88,10 +88,9 @@ final class DivBlockProvider {
         return
       }
       
-      let palette: [String: Any]? = try json.getOptionalField("palette")
-      let paletteVariables = palette?.makePalette(themeName: "light") ?? [:]
+      let palette = Palette(json: try json.getOptionalField("palette") ?? [:])
       divKitComponents.variablesStorage
-        .set(variables: paletteVariables, triggerUpdate: false)
+        .set(variables: palette.makeVariables(theme: UserPreferences.playgroundTheme), triggerUpdate: false)
 
       let result = try divKitComponents.parseDivDataWithTemplates(json, cardId: cardId)
       divData = result.value
@@ -109,23 +108,6 @@ final class DivBlockProvider {
     }
 
     update(patch: nil)
-  }
-}
-
-extension Dictionary where Key == String, Value == Any {
-  fileprivate func makePalette(themeName: String) -> DivVariables {
-    guard let palette = try? self.getArray(themeName) as? [[String: String]] else {
-      return [:]
-    }
-
-    var result: [String: Color] = [:]
-    palette.forEach {
-      guard let name = $0["name"],
-            let colorStr = $0["color"],
-            let color = Color.color(withHexString: colorStr) else { return }
-      result[name] = color
-    }
-    return result.mapToDivVariables()
   }
 }
 

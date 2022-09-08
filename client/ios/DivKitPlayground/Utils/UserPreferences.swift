@@ -2,36 +2,31 @@ import Foundation
 import SwiftUI
 
 enum UserPreferences {
-  static var lastUrl: String {
-    get { defaults.string(forKey: lastUrlKey) ?? "" }
-    set { defaults.set(newValue, forKey: lastUrlKey) }
+  static let isQrScannerEnabledKey = "isQrScannerEnabled"
+  static let lastUrlKey = "lastUrl"
+  static let playgroundThemeKey = "playgroundTheme"
+
+  static let isQrScannerEnabledDefault = {
+  #if targetEnvironment(simulator)
+    false
+  #else
+    true
+  #endif
+  }()
+
+  static let playgroundThemeDefault = Theme.system
+
+  static var playgroundTheme: Theme {
+    let value =  Theme(rawValue: defaults.value(forKey: playgroundThemeKey) as? String ?? "") ?? playgroundThemeDefault
+    switch value {
+    case .system:
+      return UIViewController().traitCollection.userInterfaceStyle == .light ? .light : .dark
+    default:
+      return value
+    }
   }
-
-  static var isQrScannerEnabled: Bool {
-    defaults.value(forKey: isQrScannerEnabledKey) as? Bool ?? isQrScannerEnabledDefault
-  }
-
-  static let isQrScannerEnabledBinding = boolBinding(key: isQrScannerEnabledKey, defaultValue: isQrScannerEnabledDefault)
-}
-
-private let isQrScannerEnabledDefault = {
-#if targetEnvironment(simulator)
-  false
-#else
-  true
-#endif
-}()
-
-private func boolBinding(key: String, defaultValue: Bool) -> Binding<Bool> {
-  Binding<Bool>(
-    get: { defaults.value(forKey: key) as? Bool ?? defaultValue },
-    set: { defaults.set($0, forKey: key) }
-  )
 }
 
 private var defaults: UserDefaults {
   UserDefaults.standard
 }
-
-private let isQrScannerEnabledKey = "isQrScannerEnabled"
-private let lastUrlKey = "lastUrl"

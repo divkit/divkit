@@ -4,8 +4,10 @@ struct UrlInputView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
 
-  @State
+  @AppStorage(UserPreferences.lastUrlKey)
   private var urlString = ""
+  @AppStorage(UserPreferences.isQrScannerEnabledKey)
+  private var isQrScannerEnabled = UserPreferences.isQrScannerEnabledDefault
 
   let divViewProvider: DivViewProvider
   
@@ -35,7 +37,7 @@ struct UrlInputView: View {
           .cornerRadius(ThemeSize.cornerRadius)
       }
       
-      if UserPreferences.isQrScannerEnabled {
+      if isQrScannerEnabled {
         ScannerView(result: $urlString)
           .cornerRadius(ThemeSize.cornerRadius)
           .frame(height: 260)
@@ -51,12 +53,6 @@ struct UrlInputView: View {
         }
       }
       .padding(EdgeInsets(top: 0, leading: 20, bottom: 20, trailing: 20))
-    }
-    .onAppear {
-      urlString = UserPreferences.lastUrl
-    }
-    .onDisappear {
-      UserPreferences.lastUrl = urlString
     }
   }
 }

@@ -44,3 +44,9 @@ extension Image {
       .foregroundColor(.white)
   }
 }
+
+enum Theme: String, CaseIterable {
+  case system
+  case light
+  case dark
+}
