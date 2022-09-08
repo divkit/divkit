@@ -152,21 +152,6 @@ class Div2Activity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menu?.add(Menu.NONE, DIV2_BENDER_ITEM, Menu.NONE, "Div2 Bender")
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            DIV2_BENDER_ITEM -> {
-                Div2BenderActivity.launch(this)
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     private inner class Div2ActionHandler(
         uriHandler: DivkitDemoUriHandler
     ) : DemoDivActionHandler(uriHandler) {
