@@ -36,7 +36,7 @@ extension Expression where T == Bool {
   func toValidSerializationValue() -> ValidSerializationValue {
     switch self {
     case let .value(value):
-      return value ? 1 : 0
+      return value
     case let .link(link):
       return link.rawValue
     }

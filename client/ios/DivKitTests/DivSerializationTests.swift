@@ -85,15 +85,15 @@ final class DivSerializationTests: XCTestCase {
     XCTAssertEqual(123.45, dictionary["value"] as! Double)
   }
 
-  func test_Serialize_BoolIntValue() {
+  func test_Serialize_BooleanIntValue() {
     let size = DivWrapContentSize(
       constrained: .value(true)
     )
     let dictionary = size.toDictionary()
-    XCTAssertEqual(1, dictionary["constrained"] as! Int)
+    XCTAssertTrue(dictionary["constrained"] as! Bool)
   }
 
-  func test_Serialize_BoolIntExpression() {
+  func test_Serialize_BooleanIntExpression() {
     let size = DivWrapContentSize(
       constrained: makeLink("@{some_var}")
     )

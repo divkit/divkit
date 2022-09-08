@@ -1,0 +1,7 @@
+{
+  "description": "boolean_int property represented by boolean value must be parsed correctly",
+  "entity": {
+    "type": "entity_with_simple_properties",
+    "boolean_int": true
+  }
+}
