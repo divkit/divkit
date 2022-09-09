@@ -24,7 +24,7 @@ struct ViewWithHeader<Content>: View where Content: View {
         .font(ThemeFont.makeMedium(size: 28))
         .foregroundColor(.white)
         .lineLimit(1)
-        .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 18))
+        .padding(EdgeInsets(top: 0, leading: 48, bottom: 0, trailing: 48))
         .frame(maxWidth: .infinity, minHeight: ThemeSize.header)
         .background(background)
         .overlay(backButton, alignment: .leading)

@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct RegressionFolderView: View {
+struct RegressionView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
 
@@ -17,7 +17,7 @@ struct RegressionFolderView: View {
 
   var body: some View {
     ViewWithHeader(
-      "Regression",
+      "Testing",
       background: ThemeColor.regression,
       presentationMode: presentationMode
     ) {

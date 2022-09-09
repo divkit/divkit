@@ -18,8 +18,8 @@ struct MainView: View {
               NavigationButton("playground", color: ThemeColor.divKit) {
                 UrlInputView(divViewProvider: makeDivViewProvider())
               }
-              NavigationButton("regression", color: ThemeColor.regression, shape: .circle) {
-                RegressionFolderView(divViewProvider: makeDivViewProvider())
+              NavigationButton("testing", color: ThemeColor.regression, shape: .circle) {
+                RegressionView(divViewProvider: makeDivViewProvider())
               }
               .frame(height: geometry.size.width)
             }
