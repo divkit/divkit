@@ -5,19 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.yandex.div.util.dpToPx
 import com.yandex.divkit.regression.data.Scenario
 import com.yandex.divkit.regression.databinding.ScenarioActivityBinding
 import com.yandex.divkit.regression.di.provideDiv2ViewCreator
@@ -149,59 +143,16 @@ class ScenarioActivity : AppCompatActivity(), MetadataBottomSheet.ScenarioHost {
                 state = BottomSheetBehavior.STATE_EXPANDED
             }
         }
-        when (scenario.paths.size) {
-            1 -> showPath(scenario.paths.first())
-            else -> showPaths(scenario.paths)
-        }
-        initLogging()
-    }
-
-    private fun showPath(path: String) {
         binding.singleContainer.isVisible = true
         binding.singleContainer.addView(
             div2ViewCreator.createDiv2View(
                 this,
-                path,
+                "regression_test_data/${scenario.file}",
                 binding.singleContainer,
                 logDelegate,
             )
         )
-    }
-
-    private fun showPaths(paths: List<String>) {
-        binding.multiContainer.isVisible = true
-        binding.multiContainer.layoutManager = LinearLayoutManager(this)
-        binding.multiContainer.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
-        binding.multiContainer.adapter = object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-            override fun onCreateViewHolder(
-                parent: ViewGroup,
-                viewType: Int
-            ): RecyclerView.ViewHolder {
-                val itemView = FrameLayout(parent.context).apply {
-                    layoutParams = ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        80.dpToPx()
-                    )
-                }
-                return object : RecyclerView.ViewHolder(itemView) {}
-            }
-
-            override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-                (holder.itemView as FrameLayout).run {
-                    removeAllViews()
-                    addView(
-                        div2ViewCreator.createDiv2View(
-                            this@ScenarioActivity,
-                            paths[position],
-                            binding.multiContainer,
-                            logDelegate,
-                        )
-                    )
-                }
-            }
-
-            override fun getItemCount(): Int = paths.size
-        }
+        initLogging()
     }
 
     companion object {

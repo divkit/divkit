@@ -2,31 +2,29 @@
 
 Модуль ручного регрессионого тестирования DivKit. Содержит сценарии и сопутсвующие файлы версток для ручного прогона сценариев.
 
-
 ## Прогон сценариев
 
-Осуществляется в `divkit-demo-app`:
+Осуществляется в `DivKit Playground`:
 
-- Запустить `divkit-demo-app`
-- Выбрать раздел Regression. Загрузится список сценариев
+- Запустить `DivKit Playground`
+- Выбрать раздел Testing. Загрузится список сценариев
 - При выборе каждого из сценариев загрузиться Div2View с заданными для сценария параметрами и описание сценария (шаги и ожидаемый результат). Перейти на следующий сценарий можно прямо с этого экрана по кнопкам в тулбаре.
 
-Начиная с Android 5.0+ доступна возможность записи экрана во время работы над сценарием. Её можно отключить на главном экрана Regression, в случае возникновения проблем.
+Начиная с Android 5.0+ доступна возможность записи экрана во время работы над сценарием. Её можно отключить на главном экрана Testing, в случае возникновения проблем.
 
 ## Добавление нового сценария
 
 Для добавления нового сценария требуется:
 
-1. Добавить файл `*.json` с версткой `Div2` в [`assets/scenarios`](src/main/assets/scenarios), которая будет отражать будущий сценарий
-1. Добавить сценарий в файл [`assets/scenarios.yaml`](src/main/assets/scenarios.yaml):
+1. Добавить файл json-файл с версткой в [`../../../test_data/regression_test_data`](divkit/public/test_data/regression_test_data).
+1. Добавить сценарий в файл [`../../../test_data/regression_test_data/index.json`](divkit/public/test_data/regression_test_data/index.json):
     - Задать заголовок в поле `title`
     - Перечислить шаги сценария в поле `steps`
-    - Перечислить ожидаемые результаты в поле `expect`
+    - Перечислить ожидаемые результаты в поле `expected_results`
     - Опционально указать `tags` для группировки и фильтрации сценариев
     - Опционально указать `priority`, один из `blocker`, `critical`, `normal` и `minor`. По-умолчанию `normal`.
-    - Задать `path` к ранее добавленному файлу верстки
+    - Задать `file` - путь к ранее добавленному файлу верстки
 1. Проверить работу сценария. См. **Прогон сценария**
-
 
 ## Development
 
@@ -40,14 +38,3 @@
 Данные сценариев отображаются в списке [`ScenarioListAdapter`](src/main/java/com/yandex/divkit/regression/ScenarioListAdapter.kt).
 
 Данные каждого сценария отображаются в [`ScenarioActivity`](src/main/java/com/yandex/divkit/regression/ScenarioActivity.kt). За создание `Div2View` отвечает реализация в `divkit-demo-app` [`Div2ViewCreator`](src/main/java/com/yandex/divkit/regression/Div2ViewCreator.kt)
-
-
-### Генерация сценариев
-
-**Генерация сценариев анимаций**
-
-```bash
-$ ./path/to/div/divkit-regression-testing/scripts/generate_animation_scenarios.py
-```
-
-Скопировать вывод `paths` в [`assets/scenarios.yaml`](src/main/assets/scenarios.yaml).

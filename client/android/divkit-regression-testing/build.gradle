@@ -35,8 +35,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$versions.androidx.lifecycle"
     implementation "androidx.lifecycle:lifecycle-common-java8:$versions.androidx.lifecycle"
     implementation "com.google.android.material:material:$versions.androidx.material"
-
-    implementation 'org.yaml:snakeyaml:1.29'
+    implementation 'com.google.code.gson:gson:2.8.7'
 
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.coroutines"
 }

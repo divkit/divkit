@@ -4,8 +4,8 @@ data class Scenario(
     var title: String = "",
     var tags: List<String> = emptyList(),
     var steps: List<String> = emptyList(),
-    var expect: List<String> = emptyList(),
-    var paths: List<String> = emptyList(),
+    var expected_results: List<String> = emptyList(),
+    var file: String = "",
     var priority: Priority = Priority.normal,
     var position: Int = 0
 )

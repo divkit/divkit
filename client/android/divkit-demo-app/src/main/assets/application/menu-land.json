@@ -164,7 +164,7 @@
                             },
                             {
                               "type": "bubble_text",
-                              "text": "examples",
+                              "text": "testing",
                               "width": {
                                 "type": "match_parent"
                               },

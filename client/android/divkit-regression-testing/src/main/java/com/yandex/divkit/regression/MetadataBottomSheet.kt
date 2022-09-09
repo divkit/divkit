@@ -39,8 +39,8 @@ class MetadataBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun bindScenarioMetadata(scenario: Scenario) {
-        binding.scenarioSteps.text = scenario.steps.formatList()
-        binding.scenarioExpectations.text = scenario.expect.formatList()
+        binding.scenarioSteps.text = scenario.steps?.formatList()
+        binding.scenarioExpectations.text = scenario.expected_results?.formatList()
         bindLogging()
         binding.clearLoggingButton.setOnClickListener { clearLogging() }
         binding.toggleScenarioButton.setOnClickListener { toggleScenario() }

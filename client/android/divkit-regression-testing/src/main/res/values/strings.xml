@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="regression_label" translatable="false">Examples</string>
+    <string name="regression_label" translatable="false">Testing</string>
     <string name="scenario_steps" translatable="false">Steps:</string>
     <string name="scenario_expectations" translatable="false">Expected result:</string>
     <string name="scenario_label" translatable="false">Scenario</string>
