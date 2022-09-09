@@ -22,7 +22,7 @@ class ScenariosRepositoryTest {
     }
 
     @Test
-    fun `load scenarios sorted by priority`() = testCoroutineDispatcher.runBlockingTest {
+    fun `load scenarios sorted by priority and title`() = testCoroutineDispatcher.runBlockingTest {
         dataSource.addScenario(Scenario(title = "foo", priority = Priority.normal))
         dataSource.addScenario(Scenario(title = "fuz", priority = Priority.minor))
         dataSource.addScenario(Scenario(title = "bar", priority = Priority.blocker))
@@ -32,7 +32,7 @@ class ScenariosRepositoryTest {
         launch {
             val scenarios = underTest.loadScenarios()
             Assert.assertEquals(
-                listOf("bar", "buc", "foo", "buz", "fuz"),
+                listOf("bar", "buc", "buz", "foo", "fuz"),
                 scenarios.map { it.title }
             )
         }

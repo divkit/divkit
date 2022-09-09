@@ -35,8 +35,10 @@ abstract class DivTestAssetSteps {
     fun ActivityTestRule<*>.setTestData(dataTag: DivDataTag? = null) {
         val divJson = DivAssetReader(activity).read(testAsset)
         val cardJson = if (divJson.has("card")) {
-            val templates = divJson.getJSONObject("templates")
-            parsingEnvironment.parseTemplates(templates)
+            val templates = divJson.optJSONObject("templates")
+            templates?.let {
+                parsingEnvironment.parseTemplates(it)
+            }
             divJson.getJSONObject("card")
         } else {
             divJson

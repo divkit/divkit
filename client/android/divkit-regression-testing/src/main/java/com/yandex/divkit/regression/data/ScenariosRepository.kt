@@ -26,7 +26,7 @@ class ScenariosRepository @Inject constructor(
     }
 
     private fun loadScenariosInternal(): List<Scenario> {
-        return dataSource.loadScenarios().sortedBy { it.priority }.also {
+        return dataSource.loadScenarios().sortedBy { it.title }.sortedBy { it.priority }.also {
             it.forEachIndexed { index, scenario -> scenario.position = index }
             cache = it
         }
