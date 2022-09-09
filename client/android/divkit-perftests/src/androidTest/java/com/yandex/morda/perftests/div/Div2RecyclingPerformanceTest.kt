@@ -77,7 +77,7 @@ class Div2RecyclingPerformanceTest {
     }
 
     private fun readCardAssets(): Array<String> {
-        val cardAssets = utils.withSettings {
+        val cardAssets = utils.withOptions {
             getStringOrNull(KEY_CARD_ASSETS)
         }
         return if (cardAssets == null) {
