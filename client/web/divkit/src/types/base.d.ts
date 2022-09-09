@@ -63,6 +63,24 @@ export type TransitionChange = ChangeBoundsTransition | {
     items: TransitionChange[];
 }
 
+export interface PivotFixedValue {
+    type: 'pivot-fixed';
+    value: number;
+}
+
+export interface PivotPercentageValue {
+    type: 'pivot-percentage';
+    value: number;
+}
+
+export type PivotValue = PivotFixedValue | PivotPercentageValue;
+
+export interface Transform {
+    pivot_x?: PivotValue;
+    pivot_y?: PivotValue;
+    rotation?: number;
+}
+
 export interface DivBaseData {
     type: string;
     id?: string;
@@ -89,4 +107,5 @@ export interface DivBaseData {
     transition_triggers?: TransitionTrigger[];
     // selected_actions;
     // focus;
+    transform?: Transform;
 }

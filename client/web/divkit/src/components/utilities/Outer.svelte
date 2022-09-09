@@ -30,6 +30,7 @@
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
     import { correctCSSInterpolator } from '../../utils/correctCSSInterpolator';
+    import { correctNumber } from '../../utils/correctNumber';
 
     export let json: Partial<DivBaseData & DivActionableData> = {};
     export let origJson: DivBase | undefined = undefined;
@@ -421,6 +422,30 @@
         'has-action-animation': Boolean(actionAnimationTransition)
     };
 
+    $: jsonTransform = rootCtx.getDerivedFromVars(json.transform);
+    let pivotXNum = 0;
+    let pivotYNum = 0;
+    let transformOrigin: string | undefined;
+    let transform: string | undefined;
+    $: {
+        if ($jsonTransform && $jsonTransform.rotation !== undefined) {
+            const pivotX = $jsonTransform.pivot_x || {
+                type: 'pivot-percentage',
+                value: 50
+            };
+            pivotXNum = correctNumber(pivotX.value, pivotXNum);
+            const pivotXCSSValue = pivotX.type === 'pivot-fixed' ? pxToEm(pivotXNum) : `${pivotXNum}%`;
+            const pivotY = $jsonTransform.pivot_y || {
+                type: 'pivot-percentage',
+                value: 50
+            };
+            pivotYNum = correctNumber(pivotY.value, pivotYNum);
+            const pivotYCSSValue = pivotY.type === 'pivot-fixed' ? pxToEm(pivotYNum) : `${pivotYNum}%`;
+            transformOrigin = `${pivotXCSSValue} ${pivotYCSSValue}`;
+            transform = `rotate(${$jsonTransform.rotation}deg)`;
+        }
+    }
+
     $: stl = {
         ...style,
         ...backgroundStyle,
@@ -432,6 +457,8 @@
         margin,
         opacity,
         transition: actionAnimationTransition,
+        'transform-origin': transformOrigin,
+        transform,
         '--divkit-animation-opacity-start': animationOpacityStart,
         '--divkit-animation-opacity-end': animationOpacityEnd,
         '--divkit-animation-scale-start': animationScaleStart,

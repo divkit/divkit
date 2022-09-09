@@ -156,7 +156,8 @@
       "$ref": "div-transform.json",
       "$description": "translations.json#/div_base_transform",
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     }
   }
