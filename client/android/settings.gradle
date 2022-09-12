@@ -1,5 +1,6 @@
 includeBuild('screenshot-test-plugin')
 
+include ':api-generator-test'
 include ':assertion'
 include ':beacon'
 include ':div'

@@ -676,7 +676,7 @@ class KotlinPropertyType(PropertyType):
         elif isinstance(self, Color):
             return 'STRING_TO_COLOR_INT'
         elif isinstance(self, (Bool, BoolInt)):
-            return 'NUMBER_TO_BOOLEAN'
+            return 'ANY_TO_BOOLEAN'
         elif isinstance(self, Object) and isinstance(self.object, StringEnumeration):
             if string_enum_prefixed:
                 typename = self.object.resolved_prefixed_declaration
@@ -719,9 +719,7 @@ class KotlinPropertyType(PropertyType):
 
     def serialization_transform(self, string_enum_prefixed: bool) -> str:
         prefix = ', converter = '
-        if isinstance(self, (Bool, BoolInt)):
-            return f'{prefix}BOOLEAN_TO_INT'
-        elif isinstance(self, String):
+        if isinstance(self, String):
             return f'{prefix}SPANNED_TO_HTML' if self.formatted else ''
         elif isinstance(self, Url):
             return f'{prefix}URI_TO_STRING'

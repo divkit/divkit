@@ -34,8 +34,8 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         json: JSONObject
     ) {
         val logger = env.logger
-        boolean = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean", topLevel, parent?.boolean, NUMBER_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
-        booleanInt = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean_int", topLevel, parent?.booleanInt, NUMBER_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
+        boolean = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean", topLevel, parent?.boolean, ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
+        booleanInt = JsonTemplateParser.readOptionalFieldWithExpression(json, "boolean_int", topLevel, parent?.booleanInt, ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN)
         color = JsonTemplateParser.readOptionalFieldWithExpression(json, "color", topLevel, parent?.color, STRING_TO_COLOR_INT, logger, env, TYPE_HELPER_COLOR)
         double = JsonTemplateParser.readOptionalFieldWithExpression(json, "double", topLevel, parent?.double, NUMBER_TO_DOUBLE, logger, env, TYPE_HELPER_DOUBLE)
         id = JsonTemplateParser.readOptionalField(json, "id", topLevel, parent?.id, NUMBER_TO_INT, logger, env)
@@ -61,8 +61,8 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.writeFieldWithExpression(key = "boolean", field = boolean, converter = BOOLEAN_TO_INT)
-        json.writeFieldWithExpression(key = "boolean_int", field = booleanInt, converter = BOOLEAN_TO_INT)
+        json.writeFieldWithExpression(key = "boolean", field = boolean)
+        json.writeFieldWithExpression(key = "boolean_int", field = booleanInt)
         json.writeFieldWithExpression(key = "color", field = color, converter = COLOR_INT_TO_STRING)
         json.writeFieldWithExpression(key = "double", field = double)
         json.writeField(key = "id", field = id)
@@ -82,8 +82,8 @@ class EntityWithSimplePropertiesTemplate : JSONSerializable, JsonTemplate<Entity
         private val STRING_TEMPLATE_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
         private val STRING_VALIDATOR = ValueValidator<String> { it: String -> it.length >= 1 }
 
-        val BOOLEAN_READER: Reader<Expression<Boolean>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN) }
-        val BOOLEAN_INT_READER: Reader<Expression<Boolean>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN) }
+        val BOOLEAN_READER: Reader<Expression<Boolean>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN) }
+        val BOOLEAN_INT_READER: Reader<Expression<Boolean>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, ANY_TO_BOOLEAN, env.logger, env, TYPE_HELPER_BOOLEAN) }
         val COLOR_READER: Reader<Expression<Int>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_COLOR_INT, env.logger, env, TYPE_HELPER_COLOR) }
         val DOUBLE_READER: Reader<Expression<Double>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_DOUBLE, env.logger, env, TYPE_HELPER_DOUBLE) }
         val ID_READER: Reader<Int?> = { key, json, env -> JsonParser.readOptional(json, key, NUMBER_TO_INT, env.logger, env) }

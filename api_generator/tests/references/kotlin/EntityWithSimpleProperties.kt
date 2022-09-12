@@ -30,8 +30,8 @@ class EntityWithSimpleProperties(
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.writeExpression(key = "boolean", value = boolean, converter = BOOLEAN_TO_INT)
-        json.writeExpression(key = "boolean_int", value = booleanInt, converter = BOOLEAN_TO_INT)
+        json.writeExpression(key = "boolean", value = boolean)
+        json.writeExpression(key = "boolean_int", value = booleanInt)
         json.writeExpression(key = "color", value = color, converter = COLOR_INT_TO_STRING)
         json.writeExpression(key = "double", value = double)
         json.write(key = "id", value = id)
@@ -51,8 +51,8 @@ class EntityWithSimpleProperties(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithSimpleProperties {
             val logger = env.logger
             return EntityWithSimpleProperties(
-                boolean = JsonParser.readOptionalExpression(json, "boolean", NUMBER_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN),
-                booleanInt = JsonParser.readOptionalExpression(json, "boolean_int", NUMBER_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN),
+                boolean = JsonParser.readOptionalExpression(json, "boolean", ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN),
+                booleanInt = JsonParser.readOptionalExpression(json, "boolean_int", ANY_TO_BOOLEAN, logger, env, TYPE_HELPER_BOOLEAN),
                 color = JsonParser.readOptionalExpression(json, "color", STRING_TO_COLOR_INT, logger, env, TYPE_HELPER_COLOR),
                 double = JsonParser.readOptionalExpression(json, "double", NUMBER_TO_DOUBLE, logger, env, TYPE_HELPER_DOUBLE),
                 id = JsonParser.readOptional(json, "id", NUMBER_TO_INT, logger, env),

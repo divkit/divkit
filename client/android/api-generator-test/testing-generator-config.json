@@ -1,0 +1,8 @@
+{
+  "lang": "kotlin",
+  "header": "// Generated code. Do not modify.\n\npackage com.yandex.testing\n\nimport android.graphics.Color\nimport android.net.Uri\nimport androidx.annotation.ColorInt\nimport com.yandex.div.json.*\nimport com.yandex.div.json.expressions.Expression\nimport com.yandex.div.json.expressions.ExpressionsList\nimport com.yandex.div.json.schema.*\nimport com.yandex.div.core.annotations.Mockable\nimport java.io.IOException\nimport java.util.BitSet\nimport org.json.JSONObject\n",
+  "kotlinAnnotations": [
+    "@Mockable"
+  ],
+  "generateEquality": true
+}
