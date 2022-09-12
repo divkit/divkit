@@ -43,11 +43,18 @@ final class DivBlockProvider {
 
   init(
     json: Signal<JsonProvider>,
-    divKitComponents: DivKitComponents
+    divKitComponents: DivKitComponents,
+    shouldResetOnDataChange: Bool
   ) {
     self.divKitComponents = divKitComponents
 
-    json.addObserver { [weak self] in self?.update(jsonProvider: $0) }
+    json
+      .addObserver { [weak self] in
+        if shouldResetOnDataChange {
+          self?.divKitComponents.reset()
+        }
+        self?.update(jsonProvider: $0)
+      }
       .dispose(in: disposePool)
   }
 
@@ -80,7 +87,6 @@ final class DivBlockProvider {
     divData = nil
     block = noDataBlock
     errors = []
-    divKitComponents.reset()
     
     do {
       let json = try jsonProvider()

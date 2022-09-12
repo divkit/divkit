@@ -44,7 +44,8 @@ private struct WebPreviewModel {
     )
     blockProvider = DivBlockProvider(
       json: socket.response,
-      divKitComponents: divKitComponents
+      divKitComponents: divKitComponents,
+      shouldResetOnDataChange: false
     )
     payloadFactory = UIStatePayloadFactory(
       deviceInfo: DeviceInfo(),

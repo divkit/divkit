@@ -76,6 +76,7 @@ public final class DivKitComponents {
 
     blockStateStorage.reset()
     stateManagement.reset()
+    variablesStorage.reset()
     visibilityCounter.reset()
   }
 

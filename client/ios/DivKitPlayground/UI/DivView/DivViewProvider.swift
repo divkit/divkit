@@ -17,7 +17,8 @@ final class DivViewProvider {
 
     blockProvider = DivBlockProvider(
       json: jsonProvider.signal,
-      divKitComponents: divKitComponents
+      divKitComponents: divKitComponents,
+      shouldResetOnDataChange: true
     )
   }
 

@@ -158,6 +158,10 @@ public final class DivVariablesStorage {
   public func makeVariables(for cardId: DivCardID) -> DivVariables {
     storage.makeVariables(for: cardId)
   }
+  
+  public func reset() {
+    storage = Variables()
+  }
 
   private func update(with event: ChangeEvent) {
     changeEventsPipe.send(event)
