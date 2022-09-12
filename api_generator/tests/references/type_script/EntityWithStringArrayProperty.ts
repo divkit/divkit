@@ -15,6 +15,6 @@ export class EntityWithStringArrayProperty<T extends EntityWithStringArrayProper
     }
 }
 
-interface EntityWithStringArrayPropertyProps {
+export interface EntityWithStringArrayPropertyProps {
     array: Type<NonEmptyArray<string | DivExpression>>;
 }

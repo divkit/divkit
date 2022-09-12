@@ -236,7 +236,7 @@ export class DivTabs<T extends DivTabsProps = DivTabsProps> {
     }
 }
 
-interface DivTabsProps {
+export interface DivTabsProps {
     /**
      * Accessibility for disabled people.
      */

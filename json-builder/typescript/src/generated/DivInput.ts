@@ -255,7 +255,7 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
     }
 }
 
-interface DivInputProps {
+export interface DivInputProps {
     /**
      * Accessibility for disabled people.
      */

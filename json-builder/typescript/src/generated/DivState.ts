@@ -202,7 +202,7 @@ export class DivState<T extends DivStateProps = DivStateProps> {
     }
 }
 
-interface DivStateProps {
+export interface DivStateProps {
     /**
      * Accessibility for disabled people.
      */

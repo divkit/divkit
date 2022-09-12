@@ -23,7 +23,7 @@ export class EntityWithPropertyWithDefaultValue<T extends EntityWithPropertyWith
     }
 }
 
-interface EntityWithPropertyWithDefaultValueProps {
+export interface EntityWithPropertyWithDefaultValueProps {
     int?: Type<number> | DivExpression;
     /**
      * non_optional is used to suppress auto-generation of default value for object with all-optional

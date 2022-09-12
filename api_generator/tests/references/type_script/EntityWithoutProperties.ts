@@ -13,5 +13,5 @@ export class EntityWithoutProperties<T extends EntityWithoutPropertiesProps = En
     }
 }
 
-interface EntityWithoutPropertiesProps {
+export interface EntityWithoutPropertiesProps {
 }

@@ -19,6 +19,6 @@ export class EntityWithStrictArray<T extends EntityWithStrictArrayProps = Entity
     }
 }
 
-interface EntityWithStrictArrayProps {
+export interface EntityWithStrictArrayProps {
     array: Type<NonEmptyArray<Entity>>;
 }

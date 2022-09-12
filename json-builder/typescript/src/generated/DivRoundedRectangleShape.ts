@@ -35,7 +35,7 @@ export class DivRoundedRectangleShape<T extends DivRoundedRectangleShapeProps = 
     }
 }
 
-interface DivRoundedRectangleShapeProps {
+export interface DivRoundedRectangleShapeProps {
     /**
      * Corner rounding radius.
      */

@@ -52,7 +52,7 @@ export class DivImageBackground<T extends DivImageBackgroundProps = DivImageBack
     }
 }
 
-interface DivImageBackgroundProps {
+export interface DivImageBackgroundProps {
     /**
      * Image transparency.
      */

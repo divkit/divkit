@@ -25,7 +25,7 @@ export class DivPageSize<T extends DivPageSizeProps = DivPageSizeProps> {
     }
 }
 
-interface DivPageSizeProps {
+export interface DivPageSizeProps {
     /**
      * Page width as a percentage of the parent element width.
      */

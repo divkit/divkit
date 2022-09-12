@@ -26,7 +26,7 @@ export class IntegerVariable<T extends IntegerVariableProps = IntegerVariablePro
     }
 }
 
-interface IntegerVariableProps {
+export interface IntegerVariableProps {
     /**
      * Variable name.
      */

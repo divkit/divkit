@@ -15,7 +15,7 @@ export class EntityWithComplexPropertyWithDefaultValue<T extends EntityWithCompl
     }
 }
 
-interface EntityWithComplexPropertyWithDefaultValueProps {
+export interface EntityWithComplexPropertyWithDefaultValueProps {
     property?: Type<IEntityWithComplexPropertyWithDefaultValueProperty>;
 }
 

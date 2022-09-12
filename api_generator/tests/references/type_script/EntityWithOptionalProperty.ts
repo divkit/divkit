@@ -15,6 +15,6 @@ export class EntityWithOptionalProperty<T extends EntityWithOptionalPropertyProp
     }
 }
 
-interface EntityWithOptionalPropertyProps {
+export interface EntityWithOptionalPropertyProps {
     property?: Type<string> | DivExpression;
 }

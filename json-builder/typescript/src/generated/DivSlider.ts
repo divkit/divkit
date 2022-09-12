@@ -241,7 +241,7 @@ export class DivSlider<T extends DivSliderProps = DivSliderProps> {
     }
 }
 
-interface DivSliderProps {
+export interface DivSliderProps {
     /**
      * Accessibility for disabled people.
      */

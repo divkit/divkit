@@ -315,7 +315,7 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     }
 }
 
-interface DivTextProps {
+export interface DivTextProps {
     /**
      * Accessibility for disabled people.
      */

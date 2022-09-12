@@ -16,5 +16,5 @@ export class DivInfinityCount<T extends DivInfinityCountProps = DivInfinityCount
     }
 }
 
-interface DivInfinityCountProps {
+export interface DivInfinityCountProps {
 }

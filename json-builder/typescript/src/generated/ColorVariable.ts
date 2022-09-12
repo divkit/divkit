@@ -26,7 +26,7 @@ export class ColorVariable<T extends ColorVariableProps = ColorVariableProps> {
     }
 }
 
-interface ColorVariableProps {
+export interface ColorVariableProps {
     /**
      * Variable name.
      */

@@ -51,7 +51,7 @@ export class DivScaleTransition<T extends DivScaleTransitionProps = DivScaleTran
     }
 }
 
-interface DivScaleTransitionProps {
+export interface DivScaleTransitionProps {
     /**
      * Animation duration in milliseconds.
      */

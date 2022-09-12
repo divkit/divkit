@@ -25,7 +25,7 @@ export class DivChangeSetTransition<T extends DivChangeSetTransitionProps = DivC
     }
 }
 
-interface DivChangeSetTransitionProps {
+export interface DivChangeSetTransitionProps {
     /**
      * List of animations.
      */

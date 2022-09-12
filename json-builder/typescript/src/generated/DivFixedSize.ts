@@ -31,7 +31,7 @@ export class DivFixedSize<T extends DivFixedSizeProps = DivFixedSizeProps> {
     }
 }
 
-interface DivFixedSizeProps {
+export interface DivFixedSizeProps {
     /**
      * Unit of measurement. To learn more about units of size measurement, see [Layout inside the
      * card](../../layout.dita).

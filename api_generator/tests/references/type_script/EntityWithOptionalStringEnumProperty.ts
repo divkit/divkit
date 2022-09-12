@@ -15,7 +15,7 @@ export class EntityWithOptionalStringEnumProperty<T extends EntityWithOptionalSt
     }
 }
 
-interface EntityWithOptionalStringEnumPropertyProps {
+export interface EntityWithOptionalStringEnumPropertyProps {
     property?: Type<EntityWithOptionalStringEnumPropertyProperty> | DivExpression;
 }
 

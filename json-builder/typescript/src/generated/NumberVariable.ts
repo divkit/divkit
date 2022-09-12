@@ -26,7 +26,7 @@ export class NumberVariable<T extends NumberVariableProps = NumberVariableProps>
     }
 }
 
-interface NumberVariableProps {
+export interface NumberVariableProps {
     /**
      * Variable name.
      */

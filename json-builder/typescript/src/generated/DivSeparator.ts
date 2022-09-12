@@ -203,7 +203,7 @@ export class DivSeparator<T extends DivSeparatorProps = DivSeparatorProps> {
     }
 }
 
-interface DivSeparatorProps {
+export interface DivSeparatorProps {
     /**
      * Accessibility for disabled people.
      */

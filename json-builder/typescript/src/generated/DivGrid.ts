@@ -219,7 +219,7 @@ export class DivGrid<T extends DivGridProps = DivGridProps> {
     }
 }
 
-interface DivGridProps {
+export interface DivGridProps {
     /**
      * Accessibility for disabled people.
      */

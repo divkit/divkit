@@ -153,7 +153,7 @@ class TypeScriptEntity(Entity):
             result += constructor_declaration
         result += '}'
         result += EMPTY
-        result += f'interface {prop_name} {{'
+        result += f'export interface {prop_name} {{'
         dynamic_properties_declaration = self.dynamic_properties_declaration
         if dynamic_properties_declaration.lines:
             result += dynamic_properties_declaration

@@ -35,7 +35,7 @@ export class DivChangeBoundsTransition<T extends DivChangeBoundsTransitionProps 
     }
 }
 
-interface DivChangeBoundsTransitionProps {
+export interface DivChangeBoundsTransitionProps {
     /**
      * Animation duration in milliseconds.
      */

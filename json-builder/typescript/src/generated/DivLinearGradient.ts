@@ -26,7 +26,7 @@ export class DivLinearGradient<T extends DivLinearGradientProps = DivLinearGradi
     }
 }
 
-interface DivLinearGradientProps {
+export interface DivLinearGradientProps {
     /**
      * Angle of gradient direction.
      */

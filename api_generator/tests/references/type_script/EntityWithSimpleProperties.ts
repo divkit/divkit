@@ -60,7 +60,7 @@ export class EntityWithSimpleProperties<T extends EntityWithSimplePropertiesProp
     }
 }
 
-interface EntityWithSimplePropertiesProps {
+export interface EntityWithSimplePropertiesProps {
     /**
      * Boolean property.
      */

@@ -21,7 +21,7 @@ export class DivPercentageSize<T extends DivPercentageSizeProps = DivPercentageS
     }
 }
 
-interface DivPercentageSizeProps {
+export interface DivPercentageSizeProps {
     /**
      * Element size value.
      */

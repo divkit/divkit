@@ -21,7 +21,7 @@ export class DivFixedCount<T extends DivFixedCountProps = DivFixedCountProps> {
     }
 }
 
-interface DivFixedCountProps {
+export interface DivFixedCountProps {
     /**
      * Number of repetitions.
      */

@@ -15,7 +15,7 @@ export class EntityWithStringEnumProperty<T extends EntityWithStringEnumProperty
     }
 }
 
-interface EntityWithStringEnumPropertyProps {
+export interface EntityWithStringEnumPropertyProps {
     property: Type<EntityWithStringEnumPropertyProperty> | DivExpression;
 }
 

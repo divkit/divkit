@@ -229,7 +229,7 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
     }
 }
 
-interface DivGalleryProps {
+export interface DivGalleryProps {
     /**
      * Accessibility for disabled people.
      */

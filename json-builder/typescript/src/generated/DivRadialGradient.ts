@@ -38,7 +38,7 @@ export class DivRadialGradient<T extends DivRadialGradientProps = DivRadialGradi
     }
 }
 
-interface DivRadialGradientProps {
+export interface DivRadialGradientProps {
     /**
      * Shift of the central point of the gradient relative to the left edge along the X axis in the
      * range `0..1`.

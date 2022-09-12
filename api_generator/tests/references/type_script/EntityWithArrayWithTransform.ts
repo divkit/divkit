@@ -15,6 +15,6 @@ export class EntityWithArrayWithTransform<T extends EntityWithArrayWithTransform
     }
 }
 
-interface EntityWithArrayWithTransformProps {
+export interface EntityWithArrayWithTransformProps {
     array: Type<NonEmptyArray<string | DivExpression>>;
 }

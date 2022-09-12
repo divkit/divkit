@@ -21,7 +21,7 @@ export class DivPivotPercentage<T extends DivPivotPercentageProps = DivPivotPerc
     }
 }
 
-interface DivPivotPercentageProps {
+export interface DivPivotPercentageProps {
     /**
      * Location of the element.
      */

@@ -257,7 +257,7 @@ export class DivImage<T extends DivImageProps = DivImageProps> {
     }
 }
 
-interface DivImageProps {
+export interface DivImageProps {
     /**
      * Accessibility for disabled people.
      */

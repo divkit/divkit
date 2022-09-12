@@ -15,7 +15,7 @@ export class EntityWithComplexProperty<T extends EntityWithComplexPropertyProps 
     }
 }
 
-interface EntityWithComplexPropertyProps {
+export interface EntityWithComplexPropertyProps {
     property: Type<IEntityWithComplexPropertyProperty>;
 }
 

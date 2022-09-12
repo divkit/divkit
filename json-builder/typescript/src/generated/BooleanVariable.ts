@@ -26,7 +26,7 @@ export class BooleanVariable<T extends BooleanVariableProps = BooleanVariablePro
     }
 }
 
-interface BooleanVariableProps {
+export interface BooleanVariableProps {
     /**
      * Variable name.
      */

@@ -26,7 +26,7 @@ export class UrlVariable<T extends UrlVariableProps = UrlVariableProps> {
     }
 }
 
-interface UrlVariableProps {
+export interface UrlVariableProps {
     /**
      * Variable name.
      */

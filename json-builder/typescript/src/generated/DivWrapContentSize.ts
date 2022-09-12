@@ -22,7 +22,7 @@ export class DivWrapContentSize<T extends DivWrapContentSizeProps = DivWrapConte
     }
 }
 
-interface DivWrapContentSizeProps {
+export interface DivWrapContentSizeProps {
     /**
      * The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On
      * Android always `true`.

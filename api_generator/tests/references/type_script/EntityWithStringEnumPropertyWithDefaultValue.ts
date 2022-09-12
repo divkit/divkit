@@ -15,7 +15,7 @@ export class EntityWithStringEnumPropertyWithDefaultValue<T extends EntityWithSt
     }
 }
 
-interface EntityWithStringEnumPropertyWithDefaultValueProps {
+export interface EntityWithStringEnumPropertyWithDefaultValueProps {
     value?: Type<EntityWithStringEnumPropertyWithDefaultValueValue> | DivExpression;
 }
 

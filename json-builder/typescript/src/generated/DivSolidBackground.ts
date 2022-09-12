@@ -21,7 +21,7 @@ export class DivSolidBackground<T extends DivSolidBackgroundProps = DivSolidBack
     }
 }
 
-interface DivSolidBackgroundProps {
+export interface DivSolidBackgroundProps {
     /**
      * Color.
      */

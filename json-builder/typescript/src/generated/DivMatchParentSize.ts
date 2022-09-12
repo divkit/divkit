@@ -22,7 +22,7 @@ export class DivMatchParentSize<T extends DivMatchParentSizeProps = DivMatchPare
     }
 }
 
-interface DivMatchParentSizeProps {
+export interface DivMatchParentSizeProps {
     /**
      * Weight when distributing free space between elements with the size type `match_parent` inside
      * an element. If the weight isn't specified, the elements will divide the place equally.

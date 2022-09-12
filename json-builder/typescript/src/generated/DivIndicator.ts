@@ -215,7 +215,7 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
     }
 }
 
-interface DivIndicatorProps {
+export interface DivIndicatorProps {
     /**
      * Accessibility for disabled people.
      */

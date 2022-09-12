@@ -49,7 +49,7 @@ export class DivSlideTransition<T extends DivSlideTransitionProps = DivSlideTran
     }
 }
 
-interface DivSlideTransitionProps {
+export interface DivSlideTransitionProps {
     /**
      * A fixed value of an offset which the element starts appearing from or at which it finishes
      * disappearing. If no value is specified, the distance to the selected edge of a parent element

@@ -19,7 +19,7 @@ export class EntityWithArrayOfNestedItems<T extends EntityWithArrayOfNestedItems
     }
 }
 
-interface EntityWithArrayOfNestedItemsProps {
+export interface EntityWithArrayOfNestedItemsProps {
     items: Type<NonEmptyArray<IEntityWithArrayOfNestedItemsItem>>;
 }
 

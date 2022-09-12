@@ -189,7 +189,7 @@ export class DivCustom<T extends DivCustomProps = DivCustomProps> {
     }
 }
 
-interface DivCustomProps {
+export interface DivCustomProps {
     /**
      * Accessibility for disabled people.
      */

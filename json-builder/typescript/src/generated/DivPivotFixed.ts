@@ -31,7 +31,7 @@ export class DivPivotFixed<T extends DivPivotFixedProps = DivPivotFixedProps> {
     }
 }
 
-interface DivPivotFixedProps {
+export interface DivPivotFixedProps {
     /**
      * Unit of size measurement. To learn more about units of size measurement, see [Layout inside
      * the card](../../layout.dita).

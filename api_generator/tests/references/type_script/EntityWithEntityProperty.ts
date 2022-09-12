@@ -19,6 +19,6 @@ export class EntityWithEntityProperty<T extends EntityWithEntityPropertyProps = 
     }
 }
 
-interface EntityWithEntityPropertyProps {
+export interface EntityWithEntityPropertyProps {
     entity?: Type<Entity>;
 }

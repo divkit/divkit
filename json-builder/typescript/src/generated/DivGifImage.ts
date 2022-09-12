@@ -239,7 +239,7 @@ export class DivGifImage<T extends DivGifImageProps = DivGifImageProps> {
     }
 }
 
-interface DivGifImageProps {
+export interface DivGifImageProps {
     /**
      * Accessibility for disabled people.
      */

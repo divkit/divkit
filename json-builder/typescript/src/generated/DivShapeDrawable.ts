@@ -36,7 +36,7 @@ export class DivShapeDrawable<T extends DivShapeDrawableProps = DivShapeDrawable
     }
 }
 
-interface DivShapeDrawableProps {
+export interface DivShapeDrawableProps {
     /**
      * Fill color.
      */

@@ -216,7 +216,7 @@ export class DivPager<T extends DivPagerProps = DivPagerProps> {
     }
 }
 
-interface DivPagerProps {
+export interface DivPagerProps {
     /**
      * Accessibility for disabled people.
      */

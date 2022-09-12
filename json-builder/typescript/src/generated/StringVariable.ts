@@ -26,7 +26,7 @@ export class StringVariable<T extends StringVariableProps = StringVariableProps>
     }
 }
 
-interface StringVariableProps {
+export interface StringVariableProps {
     /**
      * Variable name.
      */

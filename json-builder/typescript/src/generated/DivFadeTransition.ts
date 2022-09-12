@@ -41,7 +41,7 @@ export class DivFadeTransition<T extends DivFadeTransitionProps = DivFadeTransit
     }
 }
 
-interface DivFadeTransitionProps {
+export interface DivFadeTransitionProps {
     /**
      * Value of the alpha channel which the element starts appearing from or at which it finishes
      * disappearing.

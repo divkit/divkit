@@ -115,7 +115,8 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
     items: Type<NonEmptyArray<Div>>;
     /**
      * Method of placing elements. `wrap` value includes the transfer of elements to the next line if
-     * they did not fit in the previous one.
+     * they did not fit in the previous one. If the value is set to `wrap`, then a separate line will
+     * be allocated for all elements with a size value of match_parent along the main axis.
      */
     layout_mode?: Type<DivContainerLayoutMode> | DivExpression;
     /**
@@ -230,7 +231,7 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
     }
 }
 
-interface DivContainerProps {
+export interface DivContainerProps {
     /**
      * Accessibility for disabled people.
      */
@@ -311,7 +312,8 @@ interface DivContainerProps {
     items: Type<NonEmptyArray<Div>>;
     /**
      * Method of placing elements. `wrap` value includes the transfer of elements to the next line if
-     * they did not fit in the previous one.
+     * they did not fit in the previous one. If the value is set to `wrap`, then a separate line will
+     * be allocated for all elements with a size value of match_parent along the main axis.
      */
     layout_mode?: Type<DivContainerLayoutMode> | DivExpression;
     /**

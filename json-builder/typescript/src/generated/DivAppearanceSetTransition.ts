@@ -25,7 +25,7 @@ export class DivAppearanceSetTransition<T extends DivAppearanceSetTransitionProp
     }
 }
 
-interface DivAppearanceSetTransitionProps {
+export interface DivAppearanceSetTransitionProps {
     /**
      * An array of animations.
      */

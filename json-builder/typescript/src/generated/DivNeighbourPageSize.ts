@@ -25,7 +25,7 @@ export class DivNeighbourPageSize<T extends DivNeighbourPageSizeProps = DivNeigh
     }
 }
 
-interface DivNeighbourPageSizeProps {
+export interface DivNeighbourPageSizeProps {
     /**
      * Width of the visible part of a neighbouring page.
      */

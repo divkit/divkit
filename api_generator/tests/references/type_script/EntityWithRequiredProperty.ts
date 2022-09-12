@@ -15,6 +15,6 @@ export class EntityWithRequiredProperty<T extends EntityWithRequiredPropertyProp
     }
 }
 
-interface EntityWithRequiredPropertyProps {
+export interface EntityWithRequiredPropertyProps {
     property: Type<string> | DivExpression;
 }
