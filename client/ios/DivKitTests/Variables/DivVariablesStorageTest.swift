@@ -104,7 +104,7 @@ final class DivVariablesStorageTest: XCTestCase {
     storage.set(variables: globalVariables, triggerUpdate: false)
     storage.set(cardId: cardId, variables: variables)
 
-    XCTAssertEqual(.string("value"), makeVariables()["string_var"])
+    XCTAssertEqual(.string("value"), getVariable("string_var"))
   }
 
   func test_LocalVaraibleShadowsGlobalVariable_LocalsSetBeforeGlobals() {
@@ -115,21 +115,42 @@ final class DivVariablesStorageTest: XCTestCase {
     ]
     storage.set(variables: globalVariables, triggerUpdate: false)
 
-    XCTAssertEqual(.string("value"), makeVariables()["string_var"])
+    XCTAssertEqual(.string("value"), getVariable("string_var"))
   }
 
   func test_update_UpdatesStringVariable() {
     storage.set(cardId: cardId, variables: variables)
     storage.update(cardId: cardId, name: "string_var", value: "new value")
 
-    XCTAssertEqual(.string("new value"), makeVariables()["string_var"])
+    XCTAssertEqual(.string("new value"), getVariable("string_var"))
   }
 
   func test_update_UpdatesNumberVariable() {
     storage.set(cardId: cardId, variables: variables)
     storage.update(cardId: cardId, name: "number_var", value: "234.567")
 
-    XCTAssertEqual(.number(234.567), makeVariables()["number_var"])
+    XCTAssertEqual(.number(234.567), getVariable("number_var"))
+  }
+
+  func test_update_UpdatesBoolVariable_BoolValue() {
+    storage.set(cardId: cardId, variables: [ "bool_var": .bool(false) ])
+    storage.update(cardId: cardId, name: "bool_var", value: "true")
+
+    XCTAssertEqual(.bool(true), getVariable("bool_var"))
+  }
+
+  func test_update_UpdatesBoolVariable_MixedCase() {
+    storage.set(cardId: cardId, variables: [ "bool_var": .bool(false) ])
+    storage.update(cardId: cardId, name: "bool_var", value: "tRuE")
+
+    XCTAssertEqual(.bool(true), getVariable("bool_var"))
+  }
+
+  func test_update_UpdatesBoolVariable_IntValue() {
+    storage.set(cardId: cardId, variables: [ "bool_var": .bool(false) ])
+    storage.update(cardId: cardId, name: "bool_var", value: "1")
+
+    XCTAssertEqual(.bool(true), getVariable("bool_var"))
   }
 
   func test_update_DoesNothing_ForUnknownVariable() {
@@ -175,7 +196,7 @@ final class DivVariablesStorageTest: XCTestCase {
 
     storage.update(cardId: cardId, name: "global_var", value: "new value")
 
-    XCTAssertEqual(.string("new value"), makeVariables()["global_var"])
+    XCTAssertEqual(.string("new value"), getVariable("global_var"))
   }
 
   func test_update_DoesNotUpdateShadowedGlobalVariable() {
@@ -248,6 +269,10 @@ final class DivVariablesStorageTest: XCTestCase {
 
   private func makeVariables(cardId: DivCardID = cardId) -> DivVariables {
     storage.makeVariables(for: cardId)
+  }
+
+  private func getVariable(_ name: DivVariableName) -> DivVariableValue? {
+    storage.makeVariables(for: cardId)[name]
   }
 }
 

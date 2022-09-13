@@ -235,16 +235,12 @@ extension Dictionary where Key == DivVariableName, Value == DivVariableValue {
         newValue = nil
       }
     case .bool:
-      if let newBool = Int(value) {
-        switch newBool {
-        case 0:
-          newValue = .bool(false)
-        case 1:
-          newValue = .bool(true)
-        default:
-          newValue = nil
-        }
-      } else {
+      switch value.lowercased() {
+      case "0", "false":
+        newValue = .bool(false)
+      case "1", "true":
+        newValue = .bool(true)
+      default:
         newValue = nil
       }
     case .color:
