@@ -1,6 +1,5 @@
 import Foundation
 
-import CommonCore
 import DivKit
 import LayoutKit
 
@@ -14,30 +13,26 @@ public final class BlurExtensionHandler: DivExtensionHandler {
     div: DivBase,
     context: DivBlockModelingContext
   ) -> Block {
-    block.addingDecorations(blurEffect: div.blurStyle(with: context.expressionResolver))
+    block.addingDecorations(blurEffect: div.resolveBlurEffect(context.expressionResolver))
   }
 }
 
 extension DivBase {
-  func blurStyle(
-    with expressionResolver: ExpressionResolver
+  fileprivate func resolveBlurEffect(
+    _ expressionResolver: ExpressionResolver
   ) -> BlurEffect? {
     guard
       let blurThemeExtension = extensions?.first(where: { $0.id == extensionID }),
-      let string = blurThemeExtension.params?[styleKey] as? String
+      let styleExpression = blurThemeExtension.params?[styleKey] as? String
     else {
       return nil
     }
 
-    guard let expressionLink = ExpressionLink<InternalBlurEffect>(rawValue: string, validator: nil)
-    else {
-      return InternalBlurEffect(rawValue: string).flatMap(BlurEffect.init)
+    if let blur: InternalBlurEffect = expressionResolver.resolveEnum(expression: styleExpression) {
+      return BlurEffect(internalBlurEffect: blur)
     }
 
-    return expressionResolver.resolveStringBasedValue(
-      expression: .link(expressionLink),
-      initializer: InternalBlurEffect.init(rawValue:)
-    ).flatMap(BlurEffect.init)
+    return nil
   }
 }
 

@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCoreTiny
+import Base
 
 protocol Function {
   var arity: CalcExpression.Arity { get }

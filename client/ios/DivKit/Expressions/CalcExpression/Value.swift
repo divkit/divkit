@@ -1,7 +1,5 @@
 import Foundation
 
-import CommonCore
-
 extension CalcExpression {
   enum Value {
     case integer(Int)

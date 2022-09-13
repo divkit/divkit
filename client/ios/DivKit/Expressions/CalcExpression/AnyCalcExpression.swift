@@ -35,6 +35,10 @@ import Foundation
 
 import CommonCore
 
+protocol ConstantsProvider {
+  func getValue(_ name: String) -> Any?
+}
+
 /// Wrapper for Expression that works with any type of value
 struct AnyCalcExpression: CustomStringConvertible {
   private let expression: CalcExpression
@@ -59,7 +63,7 @@ struct AnyCalcExpression: CustomStringConvertible {
   init(
     _ expression: ParsedCalcExpression,
     options: Options = [.boolSymbols],
-    constants: @escaping (String) -> ExpressionResolverValueProvider?
+    constants: ConstantsProvider
   ) throws {
     try self.init(
       expression,
@@ -68,7 +72,7 @@ struct AnyCalcExpression: CustomStringConvertible {
       pureSymbols: { symbol in
         switch symbol {
         case let .variable(name):
-          return constants(name)?.typedValue().map { value in { _ in value } }
+          return constants.getValue(name).map { value in { _ in value } }
         default:
           return nil
         }
@@ -81,7 +85,7 @@ struct AnyCalcExpression: CustomStringConvertible {
   init(
     _ expression: ParsedCalcExpression,
     options: Options = [.boolSymbols],
-    constants: @escaping (String) -> ExpressionResolverValueProvider?,
+    constants: ConstantsProvider,
     symbols: [Symbol: SymbolEvaluator]
   ) throws {
     // Options
@@ -93,7 +97,7 @@ struct AnyCalcExpression: CustomStringConvertible {
       impureSymbols: { symbol in
         switch symbol {
         case let .variable(name):
-          if constants(name) == nil {
+          if constants.getValue(name) == nil {
             return symbols[symbol]
           }
         default:
@@ -106,7 +110,7 @@ struct AnyCalcExpression: CustomStringConvertible {
       pureSymbols: { symbol in
         switch symbol {
         case let .variable(name):
-          return constants(name)?.typedValue().map { value in { _ in value } }
+          return constants.getValue(name).map { value in { _ in value } }
         default:
           return symbols[symbol]
         }

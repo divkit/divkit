@@ -2,160 +2,6 @@ import Foundation
 
 import CommonCore
 
-extension ParsedCalcExpression {
-  var variablesNames: [String] {
-    symbols.filter {
-      guard case .variable = $0 else { return false }
-      return true
-    }.map { $0.name }
-  }
-}
-
-public struct ExpressionLink<T> {
-  public enum Item {
-    case string(String)
-    case calcExpression(ParsedCalcExpression)
-    case nestedCalcExpression(ExpressionLink<String>)
-  }
-
-  public let items: [Item]
-  public let variablesNames: [String]
-  public let rawValue: String
-  public let validator: ExpressionValueValidator<T>?
-  public let errorTracker: ExpressionErrorTracker?
-  public init?(
-    expression: String,
-    validator: ExpressionValueValidator<T>?,
-    errorTracker: ExpressionErrorTracker? = nil,
-    resolveNested: Bool = true
-  ) {
-    self.init(
-      rawValue: "@{\(expression)}",
-      validator: validator,
-      errorTracker: errorTracker,
-      resolveNested: resolveNested
-    )
-  }
-
-  public init?(
-    rawValue: String,
-    validator: ExpressionValueValidator<T>?,
-    errorTracker: ExpressionErrorTracker? = nil,
-    resolveNested: Bool = true
-  ) {
-    guard !rawValue.isEmpty else {
-      errorTracker?(.emptyValue)
-      return nil
-    }
-    guard rawValue.contains(expressionPrefix) else { return nil }
-    var index = rawValue.startIndex
-    var items = [Item]()
-    var variablesNames = [String]()
-    var currentString = ""
-    let endIndex = rawValue.endIndex
-    while index < endIndex {
-      let currentValue = rawValue[index..<endIndex]
-      if rawValue.hasExpression(at: index) {
-        guard let (start, end) = currentValue.makeLinkIndices() else {
-          errorTracker?(.incorrectExpression(expression: rawValue))
-          return nil
-        }
-        if !currentString.isEmpty {
-          items.append(.string(currentString))
-          currentString = ""
-        }
-        if start > end {
-          items.append(.string(""))
-        } else {
-          let value = String(currentValue[start...end])
-          if resolveNested, let link = ExpressionLink<String>(
-            rawValue: value,
-            validator: nil,
-            errorTracker: errorTracker
-          ) {
-            items.append(.nestedCalcExpression(link))
-          } else {
-            let parsedCalcExpression = CalcExpression.parse(value)
-            items.append(.calcExpression(parsedCalcExpression))
-            variablesNames.append(contentsOf: parsedCalcExpression.variablesNames)
-          }
-        }
-        index = currentValue.index(end, offsetBy: 2)
-      } else {
-        currentString = currentString + String(currentValue[index])
-        index = currentValue.index(after: index)
-        if index == endIndex {
-          items.append(.string(currentString))
-        }
-      }
-    }
-    self.items = items
-    self.variablesNames = variablesNames
-    self.rawValue = rawValue
-    self.validator = validator
-    self.errorTracker = errorTracker
-  }
-}
-
-private let expressionPrefix = "@{"
-
-extension StringProtocol {
-  fileprivate func makeLinkIndices() -> (String.Index, String.Index)? {
-    guard hasPrefix(expressionPrefix), let end = findExpressionPostfix() else { return nil }
-    return (index(startIndex, offsetBy: expressionPrefix.count), index(before: end))
-  }
-
-  fileprivate func findExpressionPostfix() -> String.Index? {
-    var nestedExpressionCounter = 0
-    var stringStarted = [0: false]
-    for i in self.indices {
-      if i != startIndex, self.hasExpression(at: i) {
-        nestedExpressionCounter += 1
-        stringStarted[nestedExpressionCounter] = false
-      }
-      let char = self[i]
-      if char == "}", !stringStarted[nestedExpressionCounter]! {
-        if nestedExpressionCounter > 0 {
-          nestedExpressionCounter -= 1
-        } else {
-          return i
-        }
-      }
-      if char == "'" {
-        if i == startIndex || self[index(before: i)] != "\\" {
-          stringStarted[nestedExpressionCounter] = !stringStarted[nestedExpressionCounter]!
-        }
-      }
-    }
-    return nil
-  }
-
-  fileprivate func hasExpression(at i: String.Index) -> Bool {
-    self[i...].hasPrefix(expressionPrefix) && (i == startIndex || self[index(before: i)] != "\\")
-  }
-}
-
-extension ExpressionLink: Equatable {
-  public static func ==(lhs: Self, rhs: Self) -> Bool {
-    type(of: lhs) == type(of: rhs) && lhs.rawValue == rhs.rawValue
-  }
-}
-
-extension ExpressionLink.Item: Equatable {
-  public static func ==(lhs: ExpressionLink.Item, rhs: ExpressionLink.Item) -> Bool {
-    switch (lhs, rhs) {
-    case let (.calcExpression(left), .calcExpression(right)):
-      return left.description == right.description
-    case let (.string(left), .string(right)):
-      return left == right
-    case let (.nestedCalcExpression(left), .nestedCalcExpression(right)):
-      return left == right
-    case (.calcExpression, _), (.string, _), (.nestedCalcExpression, _):
-      return false
-    }
-  }
-}
-
 public typealias ExpressionValueValidator<T> = (T) -> Bool
 
 public typealias ExpressionErrorTracker = (ExpressionError) -> Void
@@ -176,8 +22,38 @@ public final class ExpressionResolver {
     }
   }
 
+  public func resolveString(expression: String) -> String {
+    resolveStringBasedValue(
+      expression: expression,
+      initializer: { $0 }
+    ) ?? expression
+  }
+
+  public func resolveUrl(expression: String) -> URL? {
+    resolveStringBasedValue(
+      expression: expression,
+      initializer: URL.init(string:)
+    ) ?? URL(string: expression)
+  }
+
+  public func resolveColor(expression: String) -> Color? {
+    resolveStringBasedValue(
+      expression: expression,
+      initializer: Color.color(withHexString:)
+    ) ?? Color.color(withHexString: expression)
+  }
+
+  public func resolveEnum<T: RawRepresentable>(
+    expression: String
+  ) -> T? where T.RawValue == String {
+    resolveStringBasedValue(
+      expression: expression,
+      initializer: T.init(rawValue:)
+    ) ?? T(rawValue: expression)
+  }
+
   @inlinable
-  public func resolveStringBasedValue<T>(
+  func resolveStringBasedValue<T>(
     expression: Expression<T>?,
     initializer: (String) -> T?
   ) -> T? {
@@ -195,7 +71,7 @@ public final class ExpressionResolver {
   }
 
   @inlinable
-  public func resolveNumericValue<T>(
+  func resolveNumericValue<T>(
     expression: Expression<T>?
   ) -> T? {
     switch expression {
@@ -209,22 +85,7 @@ public final class ExpressionResolver {
       return nil
     }
   }
-}
 
-private let supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
-  CastFunctions.allCases.map(\.declaration).flat()
-    + StringFunctions.allCases.map(\.declaration).flat()
-    + ColorFunctions.allCases.map(\.declaration).flat()
-    + DatetimeFunctions.allCases.map(\.declaration).flat()
-    + MathFunctions.allCases.map(\.declaration).flat()
-
-extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-  fileprivate func flat() -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
-    reduce([:], +)
-  }
-}
-
-extension ExpressionResolver {
   @usableFromInline
   func evaluateSingleItem<T>(link: ExpressionLink<T>) -> T? {
     guard link.items.count == 1,
@@ -234,10 +95,9 @@ extension ExpressionResolver {
       return nil
     }
     do {
-      let constants = { [variables] in variables[DivVariableName(rawValue: $0)] }
       let result: T = try AnyCalcExpression(
         parsedExpression,
-        constants: constants,
+        constants: self,
         symbols: supportedFunctions
       ).evaluate()
       return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
@@ -266,10 +126,9 @@ extension ExpressionResolver {
       switch item {
       case let .calcExpression(parsedExpression):
         do {
-          let constants = { [variables] in variables[DivVariableName(rawValue: $0)] }
           let value: String = try AnyCalcExpression(
             parsedExpression,
-            constants: constants,
+            constants: self,
             symbols: supportedFunctions
           ).evaluate()
           stringValue += value
@@ -319,6 +178,15 @@ extension ExpressionResolver {
     return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
   }
 
+  @inlinable
+  func getVariableValue<T>(_ name: String) -> T? {
+    guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
+      DivKitLogger.error("No variable: \(name)")
+      return nil
+    }
+    return value
+  }
+
   private func validatedValue<T>(
     value: T?,
     validator: ExpressionValueValidator<T>?,
@@ -334,13 +202,36 @@ extension ExpressionResolver {
     }
     return value
   }
-
-  @inlinable
-  public func getVariableValue<T>(name: String) -> T? {
-    guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
-      assertionFailure("Can't get variable from context")
+  
+  private func resolveStringBasedValue<T>(
+    expression: String,
+    initializer: (String) -> T?
+  ) -> T? {
+    guard let expressionLink = ExpressionLink<T>(rawValue: expression, validator: nil) else {
       return nil
     }
-    return value
+    return resolveStringBasedValue(
+      expression: .link(expressionLink),
+      initializer: initializer
+    )
+  }
+}
+
+extension ExpressionResolver: ConstantsProvider {
+  func getValue(_ name: String) -> Any? {
+    getVariableValue(name)
+  }
+}
+
+private let supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] =
+  CastFunctions.allCases.map(\.declaration).flat()
+    + StringFunctions.allCases.map(\.declaration).flat()
+    + ColorFunctions.allCases.map(\.declaration).flat()
+    + DatetimeFunctions.allCases.map(\.declaration).flat()
+    + MathFunctions.allCases.map(\.declaration).flat()
+
+extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
+  fileprivate func flat() -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
+    reduce([:], +)
   }
 }

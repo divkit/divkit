@@ -11,7 +11,7 @@ extension Div {
       if let url = divImage.resolveImageUrl(expressionResolver) {
         urls.append(url)
       }
-      divImage.getDarkThemeImageURL(with: expressionResolver).map { urls.append($0) }
+      divImage.resolveDarkThemeImageURL(expressionResolver).map { urls.append($0) }
     case let .divGifImage(divGifImage):
       if let url = divGifImage.resolveGifUrl(expressionResolver) {
         urls.append(url)

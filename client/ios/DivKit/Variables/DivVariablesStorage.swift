@@ -12,9 +12,7 @@ public enum DivVariableValue: Equatable {
   case bool(Bool)
   case color(Color)
   case url(URL)
-}
 
-extension DivVariableValue: ExpressionResolverValueProvider {
   @inlinable
   public func typedValue<T>() -> T? {
     switch self {
@@ -30,25 +28,6 @@ extension DivVariableValue: ExpressionResolverValueProvider {
       return value as? T
     case let .url(value):
       return value as? T
-    }
-  }
-}
-
-extension DivVariableValue {
-  fileprivate var typeName: String {
-    switch self {
-    case .string:
-      return "string"
-    case .number:
-      return "number"
-    case .integer:
-      return "integer"
-    case .bool:
-      return "bool"
-    case .color:
-      return "color"
-    case .url:
-      return "url"
     }
   }
 }

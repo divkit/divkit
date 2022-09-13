@@ -4,16 +4,13 @@ import CommonCore
 import Serialization
 
 @inlinable
-public func expressionTransform<T, U>(
+func expressionTransform<T, U>(
   _ value: Any?,
   transform: (U) -> T?,
   validator: ExpressionValueValidator<T>? = nil
 ) -> Expression<T>? {
   if let rawValue = value as? String,
-     let resolver = ExpressionLink<T>(
-       rawValue: rawValue,
-       validator: validator
-     ) {
+     let resolver = ExpressionLink<T>(rawValue: rawValue, validator: validator) {
     return .link(resolver)
   }
 
@@ -34,14 +31,15 @@ public func expressionTransform<T, U>(
 }
 
 @inlinable
-public func deserialize<T: ValidSerializationValue>(
+func deserialize<T: ValidSerializationValue>(
   _ value: Any,
   validator: AnyValueValidator<T>? = nil
 ) -> DeserializationResult<Expression<T>> {
   deserialize(value, transform: { $0 }, validator: validator)
 }
 
-public func deserialize(
+@inlinable
+func deserialize(
   _ value: Any,
   validator: AnyValueValidator<CFString>? = nil
 ) -> DeserializationResult<Expression<CFString>> {
@@ -54,7 +52,7 @@ public func deserialize(
 }
 
 @inlinable
-public func deserialize<T: ValidSerializationValue, U>(
+func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> U?,
   validator: AnyValueValidator<U>? = nil,
@@ -79,7 +77,7 @@ public func deserialize<T: ValidSerializationValue, U>(
 }
 
 @inlinable
-public func deserialize<T: ValidSerializationValue, U>(
+func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> U?,
   validator: AnyArrayValueValidator<Expression<U>>? = nil
@@ -98,7 +96,7 @@ public func deserialize<T: ValidSerializationValue, U>(
 }
 
 @inlinable
-public func deserialize<T: RawRepresentable>(
+func deserialize<T: RawRepresentable>(
   _ value: Any,
   validator: AnyValueValidator<T>? = nil
 ) -> DeserializationResult<Expression<T>> where T.RawValue == String {

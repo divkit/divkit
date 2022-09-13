@@ -584,12 +584,12 @@ extension CalcExpression {
 }
 
 /// An opaque wrapper for a parsed expression
-public struct ParsedCalcExpression: CustomStringConvertible {
+struct ParsedCalcExpression: CustomStringConvertible {
   fileprivate let root: Subexpression
 
   /// Returns the pretty-printed expression if it was valid
   /// Otherwise, returns the original (invalid) expression string
-  public var description: String { root.description }
+  var description: String { root.description }
 
   /// All symbols used in the expression
   var symbols: Set<CalcExpression.Symbol> { root.symbols }
@@ -600,6 +600,15 @@ public struct ParsedCalcExpression: CustomStringConvertible {
       return error
     }
     return nil
+  }
+  
+  var variablesNames: [String] {
+    symbols
+      .filter {
+        guard case .variable = $0 else { return false }
+        return true
+      }
+      .map { $0.name }
   }
 }
 

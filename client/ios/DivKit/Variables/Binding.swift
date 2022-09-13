@@ -15,7 +15,7 @@ extension Binding where T: AdditiveArithmetic & CustomStringConvertible {
   init(context: DivBlockModelingContext, name: String) {
     self.init(
       name: name,
-      getValue: { context.expressionResolver.getVariableValue(name: $0) ?? .zero },
+      getValue: { context.expressionResolver.getVariableValue($0) ?? .zero },
       userInterfaceActionFactory: { name, value in
         URL(string: "div-action://set_variable?name=\(name)&value=\(value.description)").flatMap {
           DivAction(logId: "binding", url: .value($0))
@@ -29,7 +29,7 @@ extension Binding where T == String {
   init(context: DivBlockModelingContext, name: String) {
     self.init(
       name: name,
-      getValue: { context.expressionResolver.getVariableValue(name: $0) ?? "" },
+      getValue: { context.expressionResolver.getVariableValue($0) ?? "" },
       userInterfaceActionFactory: { name, value in
        URL(string: "div-action://set_variable?name=\(name)&value=\(value.percentEncodedURLString)").flatMap {
          DivAction(logId: "binding", url: .value($0))

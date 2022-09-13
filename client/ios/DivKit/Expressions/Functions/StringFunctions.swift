@@ -1,7 +1,5 @@
 import Foundation
 
-import BaseTiny
-
 enum StringFunctions: String, CaseIterable {
   enum Error {
     case cast

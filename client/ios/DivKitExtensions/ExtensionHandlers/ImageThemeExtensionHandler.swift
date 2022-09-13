@@ -41,61 +41,43 @@ public final class ImageThemeExtensionHandler: DivExtensionHandler {
     divImage: DivImage,
     context: DivBlockModelingContext
   ) -> ImageBlock {
-    let darkThemeImageURL = divImage.getDarkThemeImageURL(with: context.expressionResolver)
-    let placeholder = divImage.makeDarkThemePlaceholder(with: context.expressionResolver)
-
-    if darkThemeImageURL == nil, placeholder == nil {
+    let imageURL = divImage.resolveDarkThemeImageURL(context.expressionResolver)
+    let placeholder = divImage.resolveDarkThemePlaceholder(context.expressionResolver)
+    if imageURL == nil, placeholder == nil {
       return initialBlock
     }
 
-    let imageHolder = context.imageHolderFactory.make(
-      darkThemeImageURL,
-      placeholder
-    )
-
+    let imageHolder = context.imageHolderFactory.make(imageURL, placeholder)
     return initialBlock.makeCopy(with: imageHolder)
   }
 }
 
 extension DivImage {
-  func getDarkThemeImageURL(
-    with expressionResolver: ExpressionResolver
+  func resolveDarkThemeImageURL(
+    _ expressionResolver: ExpressionResolver
   ) -> URL? {
     guard
       let imageThemeExtension = extensions?.first(where: { $0.id == extensionID }),
-      let string = imageThemeExtension.params?[darkUrlKey] as? String
+      let urlExpression = imageThemeExtension.params?[darkUrlKey] as? String
     else {
       return nil
     }
 
-    guard
-      let expressionLink = ExpressionLink<URL>(rawValue: string, validator: nil)
-    else {
-      return URL(string: string)
-    }
-
-    return expressionResolver.resolveStringBasedValue(
-      expression: .link(expressionLink),
-      initializer: URL.init(string:)
-    )
+    return expressionResolver.resolveUrl(expression: urlExpression)
   }
 
-  func makeDarkThemePlaceholder(
-    with expressionResolver: ExpressionResolver
+  fileprivate func resolveDarkThemePlaceholder(
+    _ expressionResolver: ExpressionResolver
   ) -> ImagePlaceholder? {
     guard
       let imageThemeExtension = extensions?.first(where: { $0.id == extensionID }),
-      let string = imageThemeExtension.params?[darkPreviewKey] as? String
+      let previewExpression = imageThemeExtension.params?[darkPreviewKey] as? String
     else {
       return nil
     }
 
-    let base64EncodedString = ExpressionLink<String>(rawValue: string, validator: nil)
-      .flatMap {
-        expressionResolver.resolveStringBasedValue(expression: .link($0), initializer: { $0 })
-      } ?? string
-
-    if let data = Data(base64Encoded: base64EncodedString),
+    let preview = expressionResolver.resolveString(expression: previewExpression)
+    if let data = Data(base64Encoded: preview),
        let image = Image(data: data) {
       return .image(image)
     }
