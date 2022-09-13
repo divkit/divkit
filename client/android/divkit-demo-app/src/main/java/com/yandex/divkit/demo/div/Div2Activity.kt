@@ -46,7 +46,6 @@ import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
-import java.net.URI
 import java.net.URL
 
 private const val DIV2_BENDER_ITEM = 42
@@ -199,8 +198,7 @@ class Div2Activity : AppCompatActivity() {
         if (paste == null) {
             Toast.makeText(this@Div2Activity, "Clipboard is empty", Toast.LENGTH_LONG).show()
         } else {
-            variable.setValue(Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE,
-                variable.getValue().toString() + paste))
+            variable.setValue(Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, paste.toString()))
         }
     }
 
