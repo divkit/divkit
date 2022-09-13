@@ -1,3 +1,9 @@
+## 7.0.0 (September 13, 2022)
+
+Addition:
+* `transform` is now supported for the `base` component
+
+
 ## 6.0.0 (September 6, 2022)
 Changes:
 * Updated `input` to sync with the schema, also fixed `text_color` and height

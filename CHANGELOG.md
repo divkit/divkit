@@ -1,3 +1,24 @@
+## 7.0.0 (September 13, 2022)
+### Android Client:
+Additions and changes:
+* improve actions binding
+* cover generator with tests
+Fixes:
+* use public gradle distribution url
+
+### iOS Client:
+* Added test data into DivKit Playground
+* Added color themes support in DivKit Playground
+* Added DivInput tests
+* Improved public API
+* Fixed DivInput keyboard behavior
+* Fixed boolean values serialization
+
+### Web Client:
+Addition:
+* `transform` is now supported for the `base` component
+
+
 ## 6.0.0 (September 6, 2022)
 ### Android Client:
 Additions and changes:
