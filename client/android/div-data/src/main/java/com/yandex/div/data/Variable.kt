@@ -171,7 +171,7 @@ sealed class Variable {
 
     private fun String.parseAsBoolean(): Boolean {
         try {
-            return parseAsInt().toBoolean()
+            return toBooleanStrictOrNull() ?: parseAsInt().toBoolean()
         } catch (e: IllegalArgumentException) {
             throw VariableMutationException(cause = e)
         }

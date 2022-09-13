@@ -13,9 +13,14 @@ class DivVariablesParserTest {
     private val json = """
             [
                 {
-                    "name": "logic_var",
+                    "name": "logic_int_var",
                     "type": "boolean",
                     "value": 1
+                },
+                {
+                    "name": "logic_var",
+                    "type": "boolean",
+                    "value": true
                 },
                 {
                     "name": "int_var",
@@ -40,38 +45,46 @@ class DivVariablesParserTest {
     fun `all types of variables parsed`() {
         val variables = DivVariablesParser.parse(JSONArray(json), logger)
 
-        Assert.assertEquals(4, variables.size)
+        Assert.assertEquals(5, variables.size)
+    }
+
+    @Test
+    fun `logic int variable variable parsed`() {
+        val variables = DivVariablesParser.parse(JSONArray(json), logger)
+
+        val intLogicVariable = variables[0] as Variable.BooleanVariable
+        Assert.assertTrue(intLogicVariable.getValue() as Boolean)
     }
 
     @Test
     fun `logic variable variable parsed`() {
         val variables = DivVariablesParser.parse(JSONArray(json), logger)
 
-        val colorVariable = variables[0] as Variable.BooleanVariable
-        Assert.assertTrue(colorVariable.getValue() as Boolean)
+        val logicVariable = variables[1] as Variable.BooleanVariable
+        Assert.assertTrue(logicVariable.getValue() as Boolean)
     }
 
     @Test
     fun `integer variable variable parsed`() {
         val variables = DivVariablesParser.parse(JSONArray(json), logger)
 
-        val variable = variables[1] as Variable.IntegerVariable
-        Assert.assertEquals(100, variable.getValue() as Int)
+        val intVariable = variables[2] as Variable.IntegerVariable
+        Assert.assertEquals(100, intVariable.getValue() as Int)
     }
 
     @Test
     fun `color variable parsed`() {
         val variables = DivVariablesParser.parse(JSONArray(json), logger)
 
-        val variable = variables[2] as Variable.ColorVariable
-        Assert.assertEquals(Color.rgb(0, 0, 0), variable.getValue())
+        val colorVariable = variables[3] as Variable.ColorVariable
+        Assert.assertEquals(Color.rgb(0, 0, 0), colorVariable.getValue())
     }
 
     @Test
     fun `string variable variable parsed`() {
         val variables = DivVariablesParser.parse(JSONArray(json), logger)
 
-        val stringVariable = variables[3] as Variable.StringVariable
+        val stringVariable = variables[4] as Variable.StringVariable
         Assert.assertEquals("???", stringVariable.getValue())
     }
 }
