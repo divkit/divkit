@@ -83,7 +83,8 @@
             );
         });
 
-        childStore = derived(children, val => val);
+        // Create a new array every time so that it is not equal to the previous one
+        childStore = derived(children, val => [...val]);
     }
 
     let resultItems: {
