@@ -50,8 +50,7 @@
             "highlight_color": "@{highlight_color}",
             "native_interface": {
               "color": "@{underline_color}"
-            },
-            "select_all_on_focus": 1
+            }
           }
         }
       ]

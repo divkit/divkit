@@ -83,7 +83,6 @@
       "highlight_color": "#CCCCFF",
       "max_visible_lines": 2,
       "line_height": 60,
-      "select_all_on_focus": 1,
       "keyboard_type": "multi_line_text",
       "native_interface": {
         "color": "#88FFFF"
