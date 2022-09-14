@@ -1,4 +1,3 @@
-#if INTERNAL_BUILD
 final class ExpressionErrorsStorage {
   private(set) var errors: [ExpressionError] = []
 
@@ -6,4 +5,3 @@ final class ExpressionErrorsStorage {
     errors.append(error)
   }
 }
-#endif

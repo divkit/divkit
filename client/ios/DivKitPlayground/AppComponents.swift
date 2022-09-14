@@ -21,4 +21,8 @@ enum AppComponents {
       urlOpener: DemoUrlOpener.openUrl(_:)
     )
   }
+  
+  static var debugParams: DebugParams {
+    DebugParams(isDebugInfoEnabled: true)
+  }
 }

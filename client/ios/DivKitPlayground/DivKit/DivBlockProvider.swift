@@ -73,6 +73,7 @@ final class DivBlockProvider {
         context: divKitComponents.makeContext(
           cardId: cardId,
           cachedImageHolders: block.getImageHolders(),
+          debugParams: AppComponents.debugParams,
           parentScrollView: parentScrollView
         )
       )

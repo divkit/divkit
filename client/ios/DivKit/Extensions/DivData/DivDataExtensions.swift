@@ -37,13 +37,11 @@ extension DivData: DivBlockModeling {
       .addingStateBlock(
         ids: stateManager.getVisibleIds(statePath: statePath)
       )
-    #if INTERNAL_BUILD
-      .addingErrorsButton(
-        debugInfoParams: divContext.debugInfoParams,
-        errors: divContext.blockModelingErrorsStorage.errors,
+      .addingDebugInfo(
+        debugParams: divContext.debugParams,
+        errors: divContext.expressionErrorsStorage.errors,
         parentPath: divContext.parentPath
       )
-    #endif
   }
 
   private func getCurrentState(stateManager: DivStateManager) -> DivData.State? {

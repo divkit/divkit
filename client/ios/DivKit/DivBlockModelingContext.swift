@@ -21,13 +21,10 @@ public struct DivBlockModelingContext {
   public let extensionHandlers: [String: DivExtensionHandler]
   public let stateInterceptors: [String: DivStateInterceptor]
   public let expressionResolver: ExpressionResolver
-  public let debugInfoParams: DebugInfoParams?
+  public let debugParams: DebugParams
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
-
-  #if INTERNAL_BUILD
-  let blockModelingErrorsStorage: ExpressionErrorsStorage
-  #endif
+  let expressionErrorsStorage = ExpressionErrorsStorage()
 
   public init(
     cardId: DivCardID,
@@ -45,7 +42,7 @@ public struct DivBlockModelingContext {
     extensionHandlers: [DivExtensionHandler] = [],
     stateInterceptors: [DivStateInterceptor] = [],
     variables: DivVariables = [:],
-    debugInfoParams: DebugInfoParams? = nil,
+    debugParams: DebugParams = DebugParams(),
     childrenA11yDescription: String? = nil,
     parentScrollView: ScrollView? = nil
   ) {
@@ -61,22 +58,20 @@ public struct DivBlockModelingContext {
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
     self.fontSpecifiers = fontSpecifiers
-    self.debugInfoParams = debugInfoParams
+    self.debugParams = debugParams
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
 
-    #if INTERNAL_BUILD
-    let blockModelingErrorsStorage = ExpressionErrorsStorage()
-    self.expressionResolver = ExpressionResolver(
-      variables: variables,
-      errorTracker: { [weak blockModelingErrorsStorage] error in
-        blockModelingErrorsStorage?.add(error: error)
-      }
-    )
-    self.blockModelingErrorsStorage = blockModelingErrorsStorage
-    #else
-    self.expressionResolver = ExpressionResolver(variables: variables)
-    #endif
+    if debugParams.isDebugInfoEnabled {
+      self.expressionResolver = ExpressionResolver(
+        variables: variables,
+        errorTracker: { [weak expressionErrorsStorage] error in
+          expressionErrorsStorage?.add(error: error)
+        }
+      )
+    } else {
+      self.expressionResolver = ExpressionResolver(variables: variables)
+    }
 
     var extensionsHandlersDictionary = [String: DivExtensionHandler]()
     extensionHandlers.forEach {

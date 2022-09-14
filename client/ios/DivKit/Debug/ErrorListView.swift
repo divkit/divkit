@@ -4,13 +4,13 @@ import UIKit
 import BaseUI
 import LayoutKit
 
-internal final class ErrorListView: UIView {
+final class ErrorListView: UIView {
   private let listView: UIView
   private let errorString: String
 
-  public init(errorList: [String]) {
-    errorString = errorList.joined(separator: "\n")
-    self.listView = makeErrorListView(errorsString: errorString, errorsCount: errorList.count)
+  init(errors: [String]) {
+    errorString = errors.joined(separator: "\n")
+    self.listView = makeErrorListView(errorsString: errorString, errorsCount: errors.count)
     super.init(frame: .zero)
 
     backgroundColor = .white
@@ -34,7 +34,7 @@ internal final class ErrorListView: UIView {
 }
 
 extension ErrorListView: UIActionEventPerforming {
-  public func perform(uiActionEvent event: LayoutKit.UIActionEvent, from _: AnyObject) {
+  func perform(uiActionEvent event: LayoutKit.UIActionEvent, from _: AnyObject) {
     guard case let .url(url) = event.payload else {
       event.sendFrom(self)
       return
@@ -47,7 +47,7 @@ extension ErrorListView: UIActionEventPerforming {
   }
 }
 
-fileprivate func makeErrorListView(errorsString: String, errorsCount: Int) -> UIView {
+private func makeErrorListView(errorsString: String, errorsCount: Int) -> UIView {
   try! ContainerBlock(
     layoutDirection: .vertical,
     widthTrait: .resizable,
@@ -59,7 +59,7 @@ fileprivate func makeErrorListView(errorsString: String, errorsCount: Int) -> UI
   ).addingDecorations(backgroundColor: .white).makeBlockView()
 }
 
-fileprivate func makeCopyButtonBlock() -> Block {
+private func makeCopyButtonBlock() -> Block {
   let copyText = "Copy".with(typo: headerTypo)
 
   let copyTextBlock = TextBlock(
@@ -74,7 +74,7 @@ fileprivate func makeCopyButtonBlock() -> Block {
   return copyTextBlock
 }
 
-fileprivate func makeCloseButtonBlock() -> Block {
+private func makeCloseButtonBlock() -> Block {
   TextBlock(
     widthTrait: .intrinsic,
     heightTrait: .fixed(headerHeight),
@@ -86,7 +86,7 @@ fileprivate func makeCloseButtonBlock() -> Block {
   )
 }
 
-fileprivate func makeTitleBlock(errorsCount: Int) -> Block {
+private func makeTitleBlock(errorsCount: Int) -> Block {
   let titleText = ("\(errorsCount) " + (errorsCount == 1 ? "error" : "errors"))
     .with(typo: headerTypo)
 
@@ -107,7 +107,7 @@ fileprivate func makeTitleBlock(errorsCount: Int) -> Block {
   )
 }
 
-fileprivate func makeHeaderBlock(errorsCount: Int) -> Block {
+private func makeHeaderBlock(errorsCount: Int) -> Block {
   try! ContainerBlock(
     layoutDirection: .horizontal,
     widthTrait: .resizable,
@@ -122,7 +122,7 @@ fileprivate func makeHeaderBlock(errorsCount: Int) -> Block {
   )
 }
 
-fileprivate func makeErrorListBlock(errorString: String) -> Block {
+private func makeErrorListBlock(errorString: String) -> Block {
   let textBlock = TextBlock(
     widthTrait: .resizable,
     heightTrait: .intrinsic,

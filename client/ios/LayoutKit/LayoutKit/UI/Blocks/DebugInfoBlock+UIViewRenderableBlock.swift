@@ -80,12 +80,10 @@ extension DebugInfoBlockView: VisibleBoundsTrackingContainer {
 
 extension DebugInfoBlockView: UIActionEventPerforming {
   public func perform(uiActionEvent event: LayoutKit.UIActionEvent, from _: AnyObject) {
-    guard case let .url(url) = event.payload, url == overlayShowURL else {
+    guard case let .url(url) = event.payload, url == DebugInfoBlock.showOverlayURL else {
       event.sendFrom(self)
       return
     }
     showInfo()
   }
 }
-
-fileprivate let overlayShowURL = URL(string: "debugInfo://show")!

@@ -1,10 +1,13 @@
 import SwiftUI
 
 import BaseUI
+import DivKit
 
 @main
 struct DivKitPlaygroundApp: App {
   init() {
+    DivKitLogger.isEnabled = true
+    
     let fontProvider = YSFontProvider()
     fontSpecifiers = FontSpecifiers(
       text: fontProvider,

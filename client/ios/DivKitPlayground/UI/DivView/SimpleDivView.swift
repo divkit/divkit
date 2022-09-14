@@ -88,7 +88,8 @@ private final class SimpleDivUIView: UIView {
         block = try divData.makeBlock(
           context: divKitComponents.makeContext(
             cardId: cardId,
-            cachedImageHolders: block.getImageHolders()
+            cachedImageHolders: block.getImageHolders(),
+            debugParams: AppComponents.debugParams
           )
         )
       } catch {

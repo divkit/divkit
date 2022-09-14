@@ -1,4 +1,3 @@
-#if INTERNAL_BUILD
 import CoreGraphics
 import Foundation
 
@@ -7,11 +6,15 @@ import CommonCore
 import LayoutKit
 
 extension Block {
-  func addingErrorsButton(
-    debugInfoParams: DebugInfoParams?,
+  func addingDebugInfo(
+    debugParams: DebugParams,
     errors: [ExpressionError],
     parentPath: UIElementPath
   ) -> Block {
+    guard debugParams.isDebugInfoEnabled else {
+      return self
+    }
+    
     let errorsCount = errors.count
     guard errorsCount > 0 else {
       return self
@@ -25,7 +28,7 @@ extension Block {
       .with(color: .white)
 
     let action = UserInterfaceAction(
-      payload: .url(showOverlayURL),
+      payload: .url(DebugInfoBlock.showOverlayURL),
       path: parentPath + "div_errors_indicator",
       accessibilityElement: nil
     )
@@ -42,30 +45,25 @@ extension Block {
         boundary: .clipCorner(radius: 10),
         backgroundColor: .red
       )
-      .addingEdgeInsets(debugInfoParams?.safeAreaInsets ?? .zero)
+      .addingEdgeInsets(debugParams.errorCounterInsets)
       .addingEdgeGaps(2)
       .addingDecorations(action: action)
-
-    let buttonBlock: Block
-    if let showDebugInfo = debugInfoParams?.show {
-      buttonBlock = DebugInfoBlock(
-        child: indicator,
-        showDebugInfo: {
-          #if os(iOS)
-          showDebugInfo(ErrorListView(errorList: errors.map { $0.description }))
-          #else
-          return
-          #endif
-        }
-      )
-    } else {
-      buttonBlock = indicator
-    }
+    
+    let debugInfoBlock = DebugInfoBlock(
+      child: indicator,
+      showDebugInfo: {
+        #if os(iOS)
+        debugParams.showDebugInfo(ErrorListView(errors: errors.map { $0.description }))
+        #else
+        return
+        #endif
+      }
+    )
 
     let block = LayeredBlock(
       widthTrait: calculatedWidthTrait,
       heightTrait: calculatedHeightTrait,
-      children: [self, buttonBlock]
+      children: [self, debugInfoBlock]
     )
 
     return block
@@ -82,6 +80,3 @@ private func calculateCounterHorizontalGaps(counter: Block) -> CGFloat {
 
 private let errorsButtonCounterGaps: CGFloat = 4
 private let maxCount = 9999
-
-private let showOverlayURL = URL(string: "debugInfo://show")!
-#endif

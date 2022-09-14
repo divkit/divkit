@@ -1,8 +1,10 @@
-import CoreGraphics
+import Foundation
 
 import CommonCore
 
 public final class DebugInfoBlock: WrapperBlock, LayoutCachingDefaultImpl {
+  public static let showOverlayURL = URL(string: "debugInfo://show")!
+
   public let child: Block
   public let showDebugInfo: Action
 
