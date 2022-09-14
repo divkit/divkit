@@ -13,17 +13,17 @@ export abstract class Variable<ValueType = any, TypeName = VariableType> {
     protected store?: Writable<ValueType>;
 
     constructor(name: string, value: ValueType) {
-        this.checkValue(value);
+        const val = this.convertValue(value);
 
         this.name = name;
-        this.value = value;
+        this.value = val;
     }
 
     getName(): string {
         return this.name;
     }
 
-    protected abstract checkValue(value: unknown): asserts value is ValueType;
+    protected abstract convertValue(value: unknown): ValueType;
 
     subscribe(cb: Subscriber<ValueType>): Unsubscriber {
         if (!this.store) {
@@ -42,12 +42,12 @@ export abstract class Variable<ValueType = any, TypeName = VariableType> {
     protected abstract fromString(val: string): ValueType;
 
     setValue(val: ValueType): void {
-        this.checkValue(val);
+        const converted = this.convertValue(val);
 
-        this.value = val;
+        this.value = converted;
 
         if (this.store) {
-            this.store.set(val);
+            this.store.set(converted);
         }
     }
 
@@ -59,10 +59,11 @@ export abstract class Variable<ValueType = any, TypeName = VariableType> {
 }
 
 export class StringVariable extends Variable<string, 'string'> {
-    protected checkValue(value: unknown) {
+    protected convertValue(value: unknown) {
         if (typeof value !== 'string') {
             throw new Error('Incorrect variable value');
         }
+        return value;
     }
 
     protected fromString(val: string) {
@@ -75,7 +76,7 @@ export class StringVariable extends Variable<string, 'string'> {
 }
 
 export class IntegerVariable extends Variable<number, 'integer'> {
-    protected checkValue(value: unknown) {
+    protected convertValue(value: unknown) {
         if (
             typeof value !== 'number' ||
             isNaN(value) ||
@@ -85,14 +86,14 @@ export class IntegerVariable extends Variable<number, 'integer'> {
         ) {
             throw new Error('Incorrect variable value');
         }
+
+        return value;
     }
 
     protected fromString(val: string) {
         const res = Number(val);
 
-        this.checkValue(res);
-
-        return res;
+        return this.convertValue(res);
     }
 
     getType(): 'integer' {
@@ -101,7 +102,7 @@ export class IntegerVariable extends Variable<number, 'integer'> {
 }
 
 export class NumberVariable extends Variable<number, 'number'> {
-    protected checkValue(value: unknown) {
+    protected convertValue(value: unknown) {
         if (
             typeof value !== 'number' ||
             isNaN(value) ||
@@ -109,14 +110,14 @@ export class NumberVariable extends Variable<number, 'number'> {
         ) {
             throw new Error('Incorrect variable value');
         }
+
+        return value;
     }
 
     protected fromString(val: string) {
         const res = Number(val);
 
-        this.checkValue(res);
-
-        return res;
+        return this.convertValue(res);
     }
 
     getType(): 'number' {
@@ -125,16 +126,18 @@ export class NumberVariable extends Variable<number, 'number'> {
 }
 
 export class BooleanVariable extends Variable<number, 'boolean'> {
-    protected checkValue(value: unknown) {
-        if (value !== 1 && value !== 0) {
+    protected convertValue(value: unknown) {
+        if (value !== 1 && value !== 0 && value !== true && value !== false) {
             throw new Error('Incorrect variable value');
         }
+
+        return Number(value);
     }
 
     protected fromString(val: string) {
-        if (val === '1') {
+        if (val === '1' || val === 'true') {
             return 1;
-        } else if (val === '0') {
+        } else if (val === '0' || val === 'false') {
             return 0;
         }
 
@@ -147,16 +150,16 @@ export class BooleanVariable extends Variable<number, 'boolean'> {
 }
 
 export class ColorVariable extends Variable<string, 'color'> {
-    protected checkValue(value: unknown) {
+    protected convertValue(value: unknown) {
         if (typeof value !== 'string' || !parseColor(value)) {
             throw new Error('Incorrect variable value');
         }
+
+        return value;
     }
 
     protected fromString(val: string) {
-        this.checkValue(val);
-
-        return val;
+        return this.convertValue(val);
     }
 
     getType(): 'color' {
@@ -165,10 +168,12 @@ export class ColorVariable extends Variable<string, 'color'> {
 }
 
 export class UrlVariable extends Variable<string, 'url'> {
-    protected checkValue(value: unknown) {
+    protected convertValue(value: unknown) {
         if (typeof value !== 'string') {
             throw new Error('Incorrect variable value');
         }
+
+        return value;
     }
 
     protected fromString(val: string) {
