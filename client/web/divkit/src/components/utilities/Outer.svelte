@@ -320,10 +320,10 @@
     }
 
     function parseActionAnimation(animation: MaybeMissing<ActionAnimation>): string {
-        const startValue = animation.start_value || 1;
-        const endValue = animation.end_value || 1;
-        const delay = animation.start_delay || 0;
-        const duration = animation.duration || 300;
+        const startValue = correctNumber(animation.start_value, 1);
+        const endValue = correctNumber(animation.end_value, 1);
+        const delay = correctNonNegativeNumber(animation.start_delay, 0);
+        const duration = correctNonNegativeNumber(animation.duration, 300);
         const interpolator = correctCSSInterpolator(animation.interpolator, 'ease_in_out').replace(/_/g, '-');
 
         switch (animation.name) {
