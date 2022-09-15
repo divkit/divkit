@@ -13,16 +13,6 @@ public final class DivTriggersStorage {
 
   private let autodisposePool = AutodisposePool()
 
-  #if INTERNAL_BUILD
-
-  public init() {
-    variablesStorage = DivVariablesStorage()
-    actionHandler = nil
-    urlOpener = { _ in }
-  }
-
-  #endif
-
   public init(
     variablesStorage: DivVariablesStorage,
     actionHandler: DivActionHandler,

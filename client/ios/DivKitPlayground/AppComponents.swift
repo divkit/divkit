@@ -8,7 +8,7 @@ enum AppComponents {
     updateCardAction: DivActionURLHandler.UpdateCardAction? = nil
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
-    let lottieExtensionHanlder = LottiesExtensionHandler(
+    let lottieExtensionHanlder = LottieExtensionHandler(
       factory: LottieAnimationFactory(),
       requester: NetworkURLResourceRequester(performer: performer)
     )

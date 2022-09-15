@@ -5,8 +5,9 @@ import Foundation
 import Network
 import Networking
 
-public final class LottiesExtensionHandler: DivExtensionHandler {
+public final class LottieExtensionHandler: DivExtensionHandler {
   public let id = "lottie"
+  
   private let factory: AnimatableViewFactory
   private let requester: URLResourceRequesting
   private let localAnimationDataProvider: ((URL) -> Data?)?
