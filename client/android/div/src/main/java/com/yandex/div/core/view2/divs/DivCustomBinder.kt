@@ -21,6 +21,11 @@ internal class DivCustomBinder @Inject constructor(
 ) : DivViewBinder<DivCustom, View> {
 
     override fun bindView(view: View, div: DivCustom, divView: Div2View) {
+        val oldDiv = view.getTag(R.id.div_custom_tag) as? DivCustom
+
+        if (oldDiv == div) return
+
+        if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
         baseBinder.bindView(view, div, null, divView)
 
         if (divCustomViewAdapter?.isCustomTypeSupported(div.customType) == true) {
@@ -42,6 +47,7 @@ internal class DivCustomBinder @Inject constructor(
         if (previousView != customView) {
             replaceInParent(previousView, customView, div, divView)
         }
+        extensionController.bindView(divView, customView, div)
     }
 
     @Deprecated(message = "for backward compat only", replaceWith = ReplaceWith("DivCustomViewAdapter.newBind"))
@@ -55,6 +61,7 @@ internal class DivCustomBinder @Inject constructor(
                 return@create
             }
             replaceInParent(previousView, newCustomView, div, divView)
+            extensionController.bindView(divView, newCustomView, div)
         }
     }
 
@@ -77,7 +84,6 @@ internal class DivCustomBinder @Inject constructor(
                 parent.addView(newCustomView, index)
             }
             baseBinder.bindView(newCustomView, div, null, divView)
-            extensionController.bindView(divView, newCustomView, div)
         }
     }
 
