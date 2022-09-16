@@ -44,6 +44,7 @@ internal class DivInputBinder @Inject constructor(
         view.apply {
             isFocusable = true
             isFocusableInTouchMode = true
+            textAlignment = TextView.TEXT_ALIGNMENT_VIEW_START
 
             observeBackground(div, divView, expressionResolver, nativeBackground)
 
