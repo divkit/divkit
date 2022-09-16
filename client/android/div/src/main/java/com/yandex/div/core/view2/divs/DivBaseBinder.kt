@@ -4,6 +4,7 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.StateListDrawable
+import android.net.Uri
 import android.util.StateSet
 import android.view.View
 import android.view.ViewGroup.LayoutParams
@@ -39,6 +40,7 @@ import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivImageBackground
+import com.yandex.div2.DivImageScale
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivVisibility
@@ -301,8 +303,18 @@ internal class DivBaseBinder @Inject constructor(
 
         if (focusedBackgroundList == null) {
             val callback = { _: Any ->
-                updateBackground(defaultBackgroundList.toDrawable(this, divView, resolver,
-                    additionalLayer))
+                val newDefaultDivBackground = defaultBackgroundList?.map { it.toBackgroundState(resolver) } ?: emptyList()
+
+                val currentDefaultDivBackground = getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
+
+                val backgroundChanged = currentDefaultDivBackground != newDefaultDivBackground
+
+                if (backgroundChanged) {
+                    updateBackground(newDefaultDivBackground.toDrawable(this, divView, additionalLayer))
+
+                    setTag(R.id.div_default_background_list_tag, newDefaultDivBackground)
+                    setTag(R.id.div_focused_background_list_tag, null)
+                }
             }
 
             callback(Unit)
@@ -310,21 +322,34 @@ internal class DivBaseBinder @Inject constructor(
             addBackgroundSubscriptions(defaultBackgroundList, resolver, subscriber, callback)
         } else {
             val callback = { _: Any ->
-                val stateList = StateListDrawable()
+                val newDefaultDivBackground = defaultBackgroundList?.map { it.toBackgroundState(resolver) } ?: emptyList()
+                val newFocusedDivBackground =  focusedBackgroundList.map { it.toBackgroundState(resolver) }
 
-                stateList.addState(
-                    intArrayOf(android.R.attr.state_focused),
-                    focusedBackgroundList.toDrawable(this, divView, resolver, additionalLayer)
-                )
+                val currentDefaultDivBackground = getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
+                val currentFocusedDivBackground = getTag(R.id.div_focused_background_list_tag) as? List<DivBackgroundState>
 
-                if (defaultBackgroundList != null || additionalLayer != null) {
+                val backgroundChanged = (currentDefaultDivBackground != newDefaultDivBackground)
+                    || (currentFocusedDivBackground != newFocusedDivBackground)
+
+                if (backgroundChanged) {
+                    val stateList = StateListDrawable()
+
                     stateList.addState(
-                        StateSet.WILD_CARD,
-                        defaultBackgroundList.toDrawable(this, divView, resolver, additionalLayer)
+                        intArrayOf(android.R.attr.state_focused),
+                        newFocusedDivBackground.toDrawable(this, divView, additionalLayer)
                     )
-                }
 
-                updateBackground(stateList)
+                    if (defaultBackgroundList != null || additionalLayer != null) {
+                        stateList.addState(
+                            StateSet.WILD_CARD,
+                            newDefaultDivBackground.toDrawable(this, divView, additionalLayer))
+                    }
+
+                    updateBackground(stateList)
+
+                    setTag(R.id.div_default_background_list_tag, newDefaultDivBackground)
+                    setTag(R.id.div_focused_background_list_tag, newFocusedDivBackground)
+                }
             }
 
             callback(Unit)
@@ -466,10 +491,35 @@ internal class DivBaseBinder @Inject constructor(
         }?.let { subscriber.addSubscription(it) }
     }
 
-    private fun List<DivBackground>?.toDrawable(
+    private fun DivBackground.toBackgroundState(resolver: ExpressionResolver): DivBackgroundState {
+        return when (this) {
+            is DivBackground.LinearGradient -> DivBackgroundState.LinearGradient(
+                value.angle.evaluate(resolver),
+                value.colors.evaluate(resolver),
+            )
+            is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
+                value.centerX.evaluate(resolver),
+                value.centerY.evaluate(resolver),
+                value.colors.evaluate(resolver),
+                value.radius.evaluate(resolver)
+            )
+            is DivBackground.Image -> DivBackgroundState.Image(
+                value.alpha.evaluate(resolver),
+                value.contentAlignmentHorizontal.evaluate(resolver),
+                value.contentAlignmentVertical.evaluate(resolver),
+                value.imageUrl.evaluate(resolver),
+                value.preloadRequired.evaluate(resolver),
+                value.scale.evaluate(resolver)
+            )
+            is DivBackground.Solid -> DivBackgroundState.Solid(
+                value.color.evaluate(resolver)
+            )
+        }
+    }
+
+    private fun List<DivBackgroundState>?.toDrawable(
         view: View,
         divView: Div2View,
-        resolver: ExpressionResolver,
         additionalLayer: Drawable?
     ): Drawable? {
         additionalLayer?.mutate()
@@ -477,7 +527,7 @@ internal class DivBaseBinder @Inject constructor(
         this ?: return additionalLayer?.let { LayerDrawable(arrayOf(it)) }
 
         val listDrawable = mapNotNull {
-            divBackgroundToDrawable(it, divView, view, resolver)?.mutate()
+            divBackgroundToDrawable(it, divView, view)?.mutate()
         }.toMutableList()
         additionalLayer?.let { listDrawable.add(it) }
 
@@ -485,41 +535,39 @@ internal class DivBaseBinder @Inject constructor(
     }
 
     private fun divBackgroundToDrawable(
-        background: DivBackground,
+        background: DivBackgroundState,
         divView: Div2View,
-        target: View,
-        resolver: ExpressionResolver
+        target: View
     ): Drawable? {
-        return when (val divBackground = background.value()) {
-            is DivImageBackground -> getDivImageBackground(divBackground, divView, target, resolver)
-            is DivLinearGradient -> {
+        return when (background) {
+            is DivBackgroundState.Image -> getDivImageBackground(background, divView, target)
+            is DivBackgroundState.LinearGradient -> {
                 LinearGradientDrawable(
-                    divBackground.angle.evaluate(resolver).toFloat(),
-                    divBackground.colors.evaluate(resolver).toIntArray()
+                    background.angle.toFloat(),
+                    background.colors.toIntArray()
                 )
             }
-            is DivSolidBackground -> ColorDrawable(divBackground.color.evaluate(resolver))
-            else -> null
+            is DivBackgroundState.RadialGradient -> null
+            is DivBackgroundState.Solid -> ColorDrawable(background.color)
         }
     }
 
     private fun getDivImageBackground(
-        background: DivImageBackground,
+        background: DivBackgroundState.Image,
         divView: Div2View,
-        target: View,
-        resolver: ExpressionResolver
+        target: View
     ): Drawable {
         val scaleDrawable = ScalingDrawable()
 
-        val url = background.imageUrl.evaluate(resolver).toString()
+        val url = background.imageUrl.toString()
         val loadReference = imageLoader.loadImage(url, object : DivIdLoggingImageDownloadCallback(divView) {
             @UiThread
             override fun onSuccess(cachedBitmap: CachedBitmap) {
                 scaleDrawable.setBitmap(cachedBitmap.bitmap)
-                scaleDrawable.alpha = (background.alpha.evaluate(resolver) * 255).toInt()
-                scaleDrawable.customScaleType = background.scale.evaluate(resolver).toScaleType()
-                scaleDrawable.alignmentHorizontal = background.contentAlignmentHorizontal.evaluate(resolver).toHorizontalAlignment()
-                scaleDrawable.alignmentVertical = background.contentAlignmentVertical.evaluate(resolver).toVerticalAlignment()
+                scaleDrawable.alpha = (background.alpha * 255).toInt()
+                scaleDrawable.customScaleType = background.scale.toScaleType()
+                scaleDrawable.alignmentHorizontal = background.contentAlignmentHorizontal.toHorizontalAlignment()
+                scaleDrawable.alignmentVertical = background.contentAlignmentVertical.toVerticalAlignment()
             }
         })
         divView.addLoadReference(loadReference, target)
@@ -538,5 +586,32 @@ internal class DivBaseBinder @Inject constructor(
 
     private fun View.applyFocusableState(div: DivBase) {
         isFocusable = div.focus != null
+    }
+
+    sealed class DivBackgroundState {
+        data class LinearGradient(
+            val angle: Int,
+            val colors: List<Int>
+        ): DivBackgroundState()
+
+        data class RadialGradient(
+            val centerX: Double,
+            val centerY: Double,
+            val colors: List<Int>,
+            val radius: Int
+        ): DivBackgroundState()
+
+        data class Image(
+            val alpha: Double,
+            val contentAlignmentHorizontal: DivAlignmentHorizontal,
+            val contentAlignmentVertical: DivAlignmentVertical,
+            val imageUrl: Uri,
+            val preloadRequired: Boolean,
+            val scale: DivImageScale
+        ): DivBackgroundState()
+
+        data class Solid(
+            val color: Int
+        ): DivBackgroundState()
     }
 }

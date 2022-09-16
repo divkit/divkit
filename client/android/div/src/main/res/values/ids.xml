@@ -8,6 +8,8 @@
 
     <item name="bitmap_load_references_tag" type="id"/>
     <item name="image_loaded_flag" type="id"/>
+    <item name="div_default_background_list_tag" type="id"/>
+    <item name="div_focused_background_list_tag" type="id"/>
     <item name="div_tooltips_tag" type="id"/>
     <item name="div_custom_tag" type="id"/>
     <item name="div_penetrating_longtap_tag" type="id"/>
