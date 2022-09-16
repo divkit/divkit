@@ -33,46 +33,22 @@ private let casesWithPlaceholerOnly = [
   "div-gif-image/preview.json",
 ]
 
+private let testDirectory = "snapshot_test_data"
+
 final class DivSnapshotTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
-    makeSuite(input: jsons.map { (name: $0.path, data: $0) }, test: doTest)
+    let jsonFiles = loadJsonFiles(testDirectory, exclusions: exclusions)
+    return makeSuite(input: jsonFiles.map { (name: $0.path, data: $0) }, test: doTest)
   }
 }
 
 private func doTest(_ file: JsonFile) {
   let test = DivKitSnapshotTestCase()
-  test.rootDirectory = "snapshot_test_data"
+  test.rootDirectory = testDirectory
   test.subdirectory = file.subdirectory
   test.testDivs(
     file.name,
     customCaseName: file.name.removingFileExtension,
     imageHolderFactory: casesWithPlaceholerOnly.contains(file.path) ? .placeholderOnly : nil
   )
-}
-
-private struct JsonFile {
-  let path: String
-  let name: String
-  let subdirectory: String
-}
-
-private var jsons: [JsonFile] {
-  let testBundle = Bundle(for: DivKitSnapshotTestCase.self)
-  let snapshotsPath = testBundle.bundleURL.appendingPathComponent("snapshot_test_data").path
-
-  guard let paths = try? FileManager.default.subpathsOfDirectory(atPath: snapshotsPath) else {
-    return []
-  }
-
-  return paths.compactMap { path -> JsonFile? in
-    guard let index = path.lastIndex(of: "/") else {
-      return nil
-    }
-    return JsonFile(
-      path: path,
-      name: String(path[path.index(after: index)...]),
-      subdirectory: String(path[..<index])
-    )
-  }
-  .filter { $0.name.contains(".json") && !exclusions.contains($0.path) }
 }

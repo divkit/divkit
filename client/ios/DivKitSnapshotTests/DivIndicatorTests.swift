@@ -10,10 +10,6 @@ final class DivIndicatorTests: DivKitSnapshotTestCase {
     super.setUp()
     rootDirectory = "snapshot_test_data"
     subdirectory = "div-indicator"
-
-    blocksState = [
-      pagerPath: PagerViewState(numberOfPages: 11, currentPage: 1),
-    ]
   }
 
   func test_ActiveSize() {
@@ -70,24 +66,35 @@ final class DivIndicatorTests: DivKitSnapshotTestCase {
 }
 
 extension DivIndicatorTests {
+  fileprivate func testDivs(
+    _ fileName: String,
+    functionName: String = #function
+  ) {
+    testDivs(fileName, testName: functionName, blocksState: defaultPagerViewState)
+  }
+
   fileprivate func testDivsForDifferentStates(
     _ fileName: String,
     functionName: String = #function
   ) {
     for state in testPagerViewStates {
-      blocksState = [
+      let blocksState = [
         pagerPath: state,
       ]
 
       var testName = functionName
       testName.removeLast(2)
       testName += "_\(state.currentPage)()"
-      testDivs(fileName, testName: testName)
+      testDivs(fileName, testName: testName, blocksState: blocksState)
     }
   }
 }
 
 private let pagerPath = UIElementPath(testCardId) + "pager_id"
+
+private let defaultPagerViewState = [
+  pagerPath: PagerViewState(numberOfPages: 11, currentPage: 1),
+]
 
 private let testPagerViewStates = [
   PagerViewState(numberOfPages: 11, floatCurrentPage: 0),

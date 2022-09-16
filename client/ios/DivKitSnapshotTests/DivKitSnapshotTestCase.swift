@@ -7,12 +7,12 @@ import LayoutKit
 import Networking
 
 let testCardId = "test_card_id"
+let testDivCardId = DivCardID(rawValue: testCardId)
 
 internal class DivKitSnapshotTestCase: XCTestCase {
   final var mode = TestMode.verify
   final var subdirectory = ""
   final var rootDirectory = "json"
-  final var blocksState = BlocksState()
 
   override func setUp() {
     super.setUp()
@@ -23,9 +23,25 @@ internal class DivKitSnapshotTestCase: XCTestCase {
     _ fileName: String,
     testName: String = #function,
     customCaseName: String? = nil,
-    imageHolderFactory: ImageHolderFactory? = nil
+    imageHolderFactory: ImageHolderFactory? = nil,
+    blocksState: BlocksState = [:]
   ) {
-    let dataWithErrors = loadDivData(fileName: fileName)
+    guard let jsonData = jsonData(fileName: fileName, subdirectory: rootDirectory + "/" + subdirectory),
+          let dictionary = jsonDict(data: jsonData) else {
+      XCTFail("Data could not be created from json \(fileName): \(DivTestingErrors.invalidData.localizedDescription)")
+      return
+    }
+
+    let divKitComponents = DivKitComponents(
+      imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
+      updateCardAction: nil,
+      urlOpener: { _ in }
+    )
+    for (path, state) in blocksState {
+      divKitComponents.blockStateStorage.setState(path: path, state: state)
+    }
+
+    let dataWithErrors = loadDivData(dictionary: dictionary, divKitComponents: divKitComponents)
     guard let data = dataWithErrors.0 else {
       XCTFail(
         "Data could not be created from json \(fileName), try to set breakpoint on the following errors: \(dataWithErrors.1.map { type(of: $0) })"
@@ -36,24 +52,27 @@ internal class DivKitSnapshotTestCase: XCTestCase {
     do {
       try testDivs(
         data: data,
-        imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
+        divKitComponents: divKitComponents,
         caseName: customCaseName ??
-          (fileName.removingFileExtension + "_" + testName.extractingDescription)
+          (fileName.removingFileExtension + "_" + testName.extractingDescription),
+        steps: loadSteps(dictionary: dictionary)
       )
     } catch {
       XCTFail("Testing div failed with error: \(error.localizedDescription)")
     }
   }
 
-  private func loadDivData(fileName: String) -> (DivData?, [Error]) {
-    guard let data = jsonData(fileName: fileName, subdirectory: rootDirectory + "/" + subdirectory),
-          let dict = jsonDict(data: data) else {
-      return (nil, [DivTestingErrors.invalidData])
-    }
+  private func loadSteps(dictionary: [String: Any]) throws -> [TestStep]? {
+    return try? dictionary.getOptionalArray("steps", transform: {
+      try TestStep(dictionary: $0 as [String: Any])
+    }).unwrap()
+  }
 
+  private func loadDivData(dictionary: [String: Any], divKitComponents: DivKitComponents) -> (DivData?, [Error]) {
     var errors = [Error]()
     do {
-      let result = try RawDivData(dictionary: dict).resolve()
+      let divData = try dictionary.getOptionalField("div_data") ?? dictionary
+      let result = try divKitComponents.parseDivDataWithTemplates(divData, cardId: testDivCardId)
       if let data = result.value {
         return (data, errors)
       } else {
@@ -67,67 +86,130 @@ internal class DivKitSnapshotTestCase: XCTestCase {
 
   private func testDivs(
     data: DivData,
-    imageHolderFactory: ImageHolderFactory,
-    caseName: String
+    divKitComponents: DivKitComponents,
+    caseName: String,
+    steps: [TestStep]? = nil
+  ) throws {
+    if let steps = steps {
+      for (index, step) in steps.enumerated() {
+        step.divActions?.forEach { divAction in
+          divKitComponents.actionHandler.handle(
+            divAction,
+            cardId: testDivCardId,
+            source: .custom,
+            urlOpener: divKitComponents.urlOpener
+          )
+        }
+        try checkSnapshots(
+          data: data,
+          divKitComponents: divKitComponents,
+          caseName: caseName,
+          stepName: step.name ?? "step\(index)"
+        )
+      }
+    } else {
+      try checkSnapshots(
+        data: data,
+        divKitComponents: divKitComponents,
+        caseName: caseName
+      )
+    }
+  }
+
+  private func checkSnapshots(
+    data: DivData,
+    divKitComponents: DivKitComponents,
+    caseName: String,
+    stepName: String? = nil
   ) throws {
     let currentScale = UIScreen.main.scale
     let devices = ScreenSize.portrait.filter { $0.scale == currentScale }
     let widths = devices.uniqueWidths
-    let views = try makeDivViews(
-      data: data,
-      imageHolderFactory: imageHolderFactory,
-      widths: widths
-    )
-    let snapshots = try views.map { view -> UIImage in
-      guard let snapshot = view.makeSnapshot() else {
+    try widths.forEach { width in
+      let view = try makeDivView(
+        data: data,
+        divKitComponents: divKitComponents,
+        width: width
+      )
+      guard let image = view.makeSnapshot() else {
         throw DivTestingErrors.snapshotCouldNotBeCreated
       }
-      return snapshot
+      let referenceUrl = referenceFileURL(
+        width: width,
+        scale: currentScale,
+        caseName: caseName,
+        stepName: stepName
+      )
+
+      SnapshotTestKit.testSnapshot(
+        image,
+        referenceURL: referenceUrl,
+        diffDirPath: referenceUrl.path,
+        mode: mode
+      )
+      checkSnapshotsForAnotherScales(currentScale, caseName: caseName, stepName: stepName)
     }
+  }
+
+  private func checkSnapshotsForAnotherScales(
+    _ scale: CGFloat,
+    caseName: String,
+    stepName: String?
+  ) {
+    let scaleToCheck: CGFloat = scale == 2 ? 3 : 2
+    let devices = ScreenSize.portrait.filter { $0.scale == scaleToCheck }
+    let widthsToCheck = devices.uniqueWidths
+    let fileManager = FileManager.default
+    widthsToCheck.forEach { width in
+      let referenceUrl = referenceFileURL(
+        width: width,
+        scale: scaleToCheck,
+        caseName: caseName,
+        stepName: stepName
+      )
+      let path = referenceUrl.path
+      XCTAssertTrue(
+        fileManager.fileExists(atPath: path),
+        "Don't forget to add file with scale \(scaleToCheck) and path \(path)"
+      )
+    }
+  }
+
+  private func referenceFileURL(
+    width: CGFloat,
+    scale: CGFloat,
+    caseName: String,
+    stepName: String?
+  ) -> URL {
     let referencesURL = URL(
       fileURLWithPath: ReferenceSet.path,
       isDirectory: true
     ).appendingPathComponent(subdirectory)
-    func referenceFileURL(forWidth width: CGFloat, scale: CGFloat) -> URL {
-      let fileName = caseName + "_\(Int(width))" + scale.imageSuffix + ".png"
-      return referencesURL.appendingPathComponent(fileName, isDirectory: false)
+    var stepDescription = ""
+    if let stepName = stepName {
+      stepDescription = "_" + stepName
     }
-    let referenceURLs = widths.map {
-      referenceFileURL(forWidth: $0, scale: currentScale)
-    }
-    zip(snapshots, referenceURLs).forEach { snapshot, referenceURL in
-      SnapshotTestKit.testSnapshot(
-        snapshot,
-        referenceURL: referenceURL,
-        diffDirPath: referencesURL.path,
-        mode: mode
-      )
-    }
-    checkSnapshotsForAnotherScales(currentScale, nameForWidth: referenceFileURL(forWidth:scale:))
+    let fileName = caseName + "_\(Int(width))" + scale.imageSuffix + "\(stepDescription).png"
+    return referencesURL.appendingPathComponent(fileName, isDirectory: false)
   }
 
-  private func makeDivViews(
+  private func makeDivView(
     data: DivData,
-    imageHolderFactory: ImageHolderFactory,
-    widths: [CGFloat]
-  ) throws -> [UIView] {
-    var views = [UIView]()
-    try widths.forEach { width in
-      guard let block = data.makeBlock(
-        blocksState: blocksState,
-        imageHolderFactory: imageHolderFactory
-      ) else {
-        throw DivTestingErrors.blockCouldNotBeCreatedFromData
-      }
-      let blockWidth = block.isHorizontallyResizable ? width : block
-        .widthOfHorizontallyNonResizableBlock
-      let height = block.heightOfVerticallyNonResizableBlock(forWidth: blockWidth)
-      let divView = block.makeBlockView()
-      divView.frame = CGRect(origin: .zero, size: CGSize(width: blockWidth, height: height))
-      divView.layoutIfNeeded()
-      views.append(divView)
+    divKitComponents: DivKitComponents,
+    width: CGFloat
+  ) throws -> UIView {
+    guard let block = data.makeBlock(
+      divKitComponents: divKitComponents
+    ) else {
+      throw DivTestingErrors.blockCouldNotBeCreatedFromData
     }
-    return views
+    let blockWidth = block.isHorizontallyResizable ? width : block
+      .widthOfHorizontallyNonResizableBlock
+    let height = block.heightOfVerticallyNonResizableBlock(forWidth: blockWidth)
+    let divView = block.makeBlockView()
+    divView.frame = CGRect(origin: .zero, size: CGSize(width: blockWidth, height: height))
+    divView.layoutIfNeeded()
+    return divView
   }
 }
 
@@ -160,23 +242,6 @@ private enum DivTestingErrors: LocalizedError {
   }
 }
 
-private func checkSnapshotsForAnotherScales(
-  _ scale: CGFloat,
-  nameForWidth: (CGFloat, CGFloat) -> URL
-) {
-  let scaleToCheck: CGFloat = scale == 2 ? 3 : 2
-  let devices = ScreenSize.portrait.filter { $0.scale == scaleToCheck }
-  let widthsToCheck = devices.uniqueWidths
-  let fileManager = FileManager.default
-  widthsToCheck.forEach { width in
-    let path = nameForWidth(width, scaleToCheck).path
-    XCTAssertTrue(
-      fileManager.fileExists(atPath: path),
-      "Don't forget to add file with scale \(scaleToCheck) and path \(path)"
-    )
-  }
-}
-
 extension String {
   fileprivate var extractingDescription: String {
     let removedPrefix = "test_"
@@ -202,18 +267,12 @@ private let testBundle = Bundle(for: DivKitSnapshotTestCase.self)
 
 extension DivData {
   fileprivate func makeBlock(
-    blocksState: BlocksState,
-    imageHolderFactory: ImageHolderFactory
+    divKitComponents: DivKitComponents
   ) -> Block? {
-    let context = DivBlockModelingContext(
-      cardId: DivCardID(rawValue: testCardId),
-      stateManager: DivStateManager(),
-      blockStateStorage: DivBlockStateStorage(states: blocksState),
-      imageHolderFactory: imageHolderFactory,
-      fontSpecifiers: fontSpecifiers,
-      variables: variables.flatMap { $0.extractDivVariableValues() } ?? [:]
+    let context = divKitComponents.makeContext(
+      cardId: testDivCardId,
+      cachedImageHolders: []
     )
-
     do {
       return try makeBlock(context: context)
     } catch {
@@ -264,4 +323,17 @@ private func makeImageHolderFactory() -> ImageHolderFactory {
       return UIImage()
     }
   )
+}
+
+private struct TestStep {
+  let name: String?
+  let divActions: [DivActionBase]?
+
+  public init(dictionary: [String: Any]) throws {
+    let expectedScreenshot: String? = try dictionary.getOptionalField("expected_screenshot")
+    name = expectedScreenshot?.replacingOccurrences(of: ".png", with: "")
+    divActions = try? dictionary.getOptionalArray("div_actions", transform: { (actionDictionary: [String: Any]) -> DivActionBase in
+      try DivTemplates.empty.parseValue(type: DivActionTemplate.self, from: actionDictionary).unwrap()
+    }).unwrap()
+  }
 }
