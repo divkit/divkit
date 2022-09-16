@@ -82,7 +82,7 @@ final class DivContainerExtensionsTests: XCTestCase {
     XCTAssertThrowsError(
       try makeBlock(fromFile: "horizontal_wrap_content_height_match_parent_items"),
       DivBlockModelingError(
-        "All items in DivContainer with wrap_content height has match_parent width",
+        "All items in DivContainer with wrap_content height has match_parent height",
         path: .root + "container"
       )
     )
@@ -122,7 +122,7 @@ final class DivContainerExtensionsTests: XCTestCase {
     XCTAssertThrowsError(
       try makeBlock(fromFile: "overlap_wrap_content_height_match_parent_items"),
       DivBlockModelingError(
-        "All items in DivContainer with wrap_content height has match_parent width",
+        "All items in DivContainer with wrap_content height has match_parent height",
         path: .root + "container"
       )
     )

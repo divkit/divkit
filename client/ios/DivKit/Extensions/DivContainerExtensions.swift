@@ -72,7 +72,7 @@ extension DivContainer: DivBlockModeling {
       case .horizontal, .overlap:
         if children.allVerticallyResizable {
           throw DivBlockModelingError(
-            "All items in DivContainer with wrap_content height has match_parent width",
+            "All items in DivContainer with wrap_content height has match_parent height",
             path: path
           )
         }
