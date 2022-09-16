@@ -86,6 +86,7 @@ class PythonGenerator(Generator):
 
     def __inner_entity_classes(self, entity: PythonEntity) -> List[str]:
         result = []
+
         def sort_predicate(d: Declarable):
             return d.name
 

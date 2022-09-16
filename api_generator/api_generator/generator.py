@@ -31,7 +31,7 @@ def __build_generator(config: Config) -> Generator:
     return generator(config)
 
 
-def generate_api(config: Config, save_hash_files: bool = True):
+def generate_api(config: Config, check_hash_files: bool = False, save_hash_files: bool = False):
     root_directory = schema_preprocessing(config)
     objects = build_objects(root_directory, config.generation)
 
@@ -40,9 +40,10 @@ def generate_api(config: Config, save_hash_files: bool = True):
     filenames = list(map(lambda obj: generator.filename(obj.name), objects))
     expected_output_hash = sha256_for_filenames(filenames)
 
-    if not config.generator_changed and \
+    if check_hash_files and \
+            not config.generator_changed and \
             not config.config_changed and \
-            config.stored_input_hash == root_directory.hash and\
+            config.stored_input_hash == root_directory.hash and \
             config.stored_output_hash == expected_output_hash:
         print('Input and output were not changed, won\'t write anything to the disk')
         return
@@ -56,5 +57,6 @@ def generate_api(config: Config, save_hash_files: bool = True):
 
         save_hash_file('input_hash', root_directory.hash)
         save_hash_file('output_hash', expected_output_hash)
-        save_hash_file('generator_hash', config.generator_hash)
+        if config.generator_hash:
+            save_hash_file('generator_hash', config.generator_hash)
         save_hash_file('config_hash', config.config_hash)

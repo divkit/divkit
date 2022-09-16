@@ -1,14 +1,4 @@
 {
-  "lang": "kotlinDsl",
-  "imports": [
-    "java.net.URI",
-    "com.fasterxml.jackson.annotation.*",
-    "com.yandex.div.dsl.*",
-    "com.yandex.div.dsl.context.*",
-    "com.yandex.div.dsl.type.*",
-    "com.yandex.div.dsl.util.*"
-  ],
-  "java": {
-    "package": "com.yandex.div.dsl.model"
-  }
+    "lang": "kotlinDsl",
+    "header": "// Generated code. Do not modify.\n\npackage com.yandex.div.dsl.model\n\nimport java.net.URI\nimport com.fasterxml.jackson.annotation.*\nimport com.yandex.div.dsl.*\nimport com.yandex.div.dsl.context.*\nimport com.yandex.div.dsl.type.*\nimport com.yandex.div.dsl.util.*\n"
 }

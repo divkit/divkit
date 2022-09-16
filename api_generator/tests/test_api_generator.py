@@ -89,7 +89,7 @@ def assert_test_generator(config_filename: str, schema_path: str, references_fol
                     output_path=OUTPUT_PATH)
     if not os.path.exists(OUTPUT_PATH):
         os.makedirs(OUTPUT_PATH)
-    generate_api(config, save_hash_files=False)
+    generate_api(config, check_hash_files=False, save_hash_files=False)
     references_path = utils.path_generator_tests(os.path.join('references', references_folder_name))
 
     if SHOULD_UPDATE_REFERENCES:

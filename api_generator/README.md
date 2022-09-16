@@ -22,12 +22,18 @@ pip install -r dev_requirements.txt
 
 Run generator:
 ```shell
-python -m api_generator -c /config/file/name.json -s /path/to/schema -o /output/path
+python3 -m api_generator -c /config/file/name.json -s /path/to/schema -o /output/path [--checkhash] [--savehash]
 ```
+
+```shell
+./api_generator.sh /config/file/name.json /path/to/schema /output/path [--checkhash] [--savehash]
+```
+- `--checkhash` Check the hash files in the output directory before generating
+- `--savehash` Save the hash files of the generator, config and schema to the output directory
 
 Run tests:
 ```shell
-python -m pytest
+python3 -m pytest
 ```
 
 ### With ya make
@@ -39,8 +45,11 @@ ya make
 
 Run generator:
 ```shell
-./api_generator -c /config/file/name.json -s /path/to/schema -o /output/path
+./api_generator_script -c /config/file/name.json -s /path/to/schema -o /output/path [--checkhash] [--savehash]
 ```
+
+- `--checkhash` Check the hash files in the output directory before generating
+- `--savehash` Save the hash files of the generator, config and schema to the output directory
 
 Run tests:
 ```shell

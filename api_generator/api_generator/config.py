@@ -58,15 +58,19 @@ class Config:
             self.kotlin_annotations: List[str] = dictionary.get('kotlinAnnotations') or []
             self.generate_equality: bool = dictionary.get('generateEquality') or False
 
-    def __init__(self, generator_path: str, config_path: str, schema_path: str, output_path: str):
+    def __init__(self, generator_path: Optional[str], config_path: str, schema_path: str, output_path: str):
         self.schema_path: str = schema_path
         self.output_path: str = output_path
         with open(config_path) as f:
             self.generation: Config.GenerationConfig = json.loads(f.read(), object_hook=Config.GenerationConfig)
 
-        self.generator_hash = sha256_dir(generator_path)
-        stored_generator_hash = _stored_sha256(os.path.join(output_path, 'generator_hash'))
-        self.generator_changed = self.generator_hash != stored_generator_hash
+        if generator_path:
+            self.generator_hash = sha256_dir(generator_path)
+            stored_generator_hash = _stored_sha256(os.path.join(output_path, 'generator_hash'))
+            self.generator_changed = self.generator_hash != stored_generator_hash
+        else:
+            self.generator_hash = None
+            self.generator_changed = True
 
         self.config_hash = sha256_file(config_path)
         stored_config_hash = _stored_sha256(os.path.join(output_path, 'config_hash'))
