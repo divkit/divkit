@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.annotation.VisibleForTesting
 import androidx.core.view.ViewCompat
+import androidx.core.view.doOnAttach
 import androidx.core.view.doOnLayout
 import androidx.transition.Scene
 import androidx.transition.Transition
@@ -75,7 +76,7 @@ class Div2View private constructor(
     defStyleAttr: Int = 0,
     private val constructorCallTime: Long,
 ) : FrameLayout(context, attrs, defStyleAttr), DivViewFacade {
-
+    private val bindOnAttachEnabled = false //TODO(https://st.yandex-team.ru/DIVKIT-580)
     internal val div2Component: Div2Component = context.div2Component
     internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()
         .divView(this)
@@ -142,7 +143,12 @@ class Div2View private constructor(
         if (oldRuntime != newRuntime) {
             oldRuntime?.clearBinding()
         }
-        setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
+
+        if (bindOnAttachEnabled) {
+            setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
+                newRuntime.onAttachedToWindow(this)
+            }
+        } else {
             newRuntime.onAttachedToWindow(this)
         }
     }
@@ -561,11 +567,18 @@ class Div2View private constructor(
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
         val path = DivStatePath.fromState(newState.stateId)
         val view = divBuilder.createView(newState.div, this, path)
-        bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
-            suppressExpressionErrors {
-                div2Component.divBinder.bind(view, newState.div, this, path)
+        if (bindOnAttachEnabled) {
+            bindOnAttachRunnable = SingleTimeOnAttachCallback(this) {
+                suppressExpressionErrors {
+                    div2Component.divBinder.bind(view, newState.div, this, path)
+                }
+                div2Component.divBinder.attachIndicators()
             }
-            div2Component.divBinder.attachIndicators()
+        } else {
+            div2Component.divBinder.bind(view, newState.div, this, path)
+            doOnAttach {
+                div2Component.divBinder.attachIndicators()
+            }
         }
         return view
     }
