@@ -475,13 +475,13 @@ extension DivVariable: Decodable {
       let value = try container.decode(Int.self, forKey: .value)
       self = .integerVariable(IntegerVariable(name: name, value: value))
     case BooleanVariable.type:
-      let value = try container.decode(Int.self, forKey: .value)
-      switch value {
-      case 0:
-        self = .booleanVariable(BooleanVariable(name: name, value: false))
-      case 1:
+      let boolValue = try? container.decode(Bool.self, forKey: .value)
+      let intValue = try? container.decode(Int.self, forKey: .value)
+      if boolValue == true || intValue == 1 {
         self = .booleanVariable(BooleanVariable(name: name, value: true))
-      default:
+      } else if boolValue == false || intValue == 0 {
+        self = .booleanVariable(BooleanVariable(name: name, value: false))
+      } else {
         throw DecodingError.typeMismatch(
           Bool.self,
           DecodingError.Context(
