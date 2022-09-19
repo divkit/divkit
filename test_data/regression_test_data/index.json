@@ -765,7 +765,7 @@
       ],
       "expected_results": [
         "Gallery data was opened",
-        "items visibility logged, for example 'logViewShown(cardId = ..., id = ...item_changed0)'"
+        "items visibility logged, for example 'logViewShown(cardId = ..., id = item/01)'"
       ],
       "file": "gallery/gallery_swipe.json"
     },
