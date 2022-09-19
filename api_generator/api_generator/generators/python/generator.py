@@ -172,6 +172,7 @@ class PythonGenerator(Generator):
             inner_types_decl = Text()
             inner_types = sorted(filter(lambda t: isinstance(t, decl_type), entity.inner_types), key=sort_predicate)
             for ind, inner_type in enumerate(inner_types):
+                update_base(inner_type)
                 inner_types_decl += decl_method(inner_type)
                 if ind != (len(inner_types) - 1):
                     inner_types_decl += EMPTY

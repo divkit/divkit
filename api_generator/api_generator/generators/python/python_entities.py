@@ -95,8 +95,6 @@ class PythonEntity(Entity):
         for prop in self.properties:
             prop.__class__ = PythonProperty
             cast(PythonProperty, prop).update_base()
-        for inner_type in self.inner_types:
-            update_base(inner_type)
 
     @property
     def static_properties(self) -> List[Property]:
