@@ -1,130 +1,131 @@
 {
   "div_data": {
-    "type": "div2",
-    "log_id": "tests",
-    "variables": [
-      {
-        "name": "thumb_style_color",
-        "type": "color",
-        "value": "#FF0000"
-      },
-      {
-        "name": "thumb_style_stroke_color",
-        "type": "color",
-        "value": "#000000"
-      },
-      {
-        "name": "thumb_style_stroke_width",
-        "type": "integer",
-        "value": 3
-      },
-      {
-        "name": "thumb_style_shape_height",
-        "type": "integer",
-        "value": 32
-      },
-      {
-        "name": "thumb_style_shape_width",
-        "type": "integer",
-        "value": 32
-      },
-      {
-        "name": "thumb_style_shape_radius",
-        "type": "integer",
-        "value": 100
-      },
-      {
-        "name": "thumb_text_style_font_size",
-        "type": "integer",
-        "value": 15
-      },
-      {
-        "name": "thumb_text_style_font_weight",
-        "type": "string",
-        "value": "regular"
-      },
-      {
-        "name": "thumb_text_style_text_color",
-        "type": "color",
-        "value": "#000000"
-      },
-      {
-        "name": "my_thumb_value",
-        "type": "integer",
-        "value": 40
-      }
-    ],
-    "states": [
-      {
-        "state_id": 1,
-        "div": {
-          "type": "slider",
-          "thumb_style": {
-            "type": "shape_drawable",
-            "color": "@{thumb_style_color}",
-            "stroke": {
-              "color": "@{thumb_style_stroke_color}",
-              "width": "@{thumb_style_stroke_width}"
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "thumb_style_color",
+          "type": "color",
+          "value": "#FF0000"
+        },
+        {
+          "name": "thumb_style_stroke_color",
+          "type": "color",
+          "value": "#000000"
+        },
+        {
+          "name": "thumb_style_stroke_width",
+          "type": "integer",
+          "value": 3
+        },
+        {
+          "name": "thumb_style_shape_height",
+          "type": "integer",
+          "value": 32
+        },
+        {
+          "name": "thumb_style_shape_width",
+          "type": "integer",
+          "value": 32
+        },
+        {
+          "name": "thumb_style_shape_radius",
+          "type": "integer",
+          "value": 100
+        },
+        {
+          "name": "thumb_text_style_font_size",
+          "type": "integer",
+          "value": 15
+        },
+        {
+          "name": "thumb_text_style_font_weight",
+          "type": "string",
+          "value": "regular"
+        },
+        {
+          "name": "thumb_text_style_text_color",
+          "type": "color",
+          "value": "#000000"
+        },
+        {
+          "name": "my_thumb_value",
+          "type": "integer",
+          "value": 40
+        }
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "slider",
+            "thumb_style": {
+              "type": "shape_drawable",
+              "color": "@{thumb_style_color}",
+              "stroke": {
+                "color": "@{thumb_style_stroke_color}",
+                "width": "@{thumb_style_stroke_width}"
+              },
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": "@{thumb_style_shape_height}"
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": "@{thumb_style_shape_width}"
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": "@{thumb_style_shape_radius}"
+                }
+              }
             },
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": "@{thumb_style_shape_height}"
-              },
-              "item_width": {
-                "type": "fixed",
-                "value": "@{thumb_style_shape_width}"
-              },
-              "corner_radius": {
-                "type": "fixed",
-                "value": "@{thumb_style_shape_radius}"
+            "thumb_text_style": {
+              "font_size": "@{thumb_text_style_font_size}",
+              "font_weight": "@{thumb_text_style_font_weight}",
+              "text_color": "@{thumb_text_style_text_color}"
+            },
+            "paddings": {
+              "bottom": 10,
+              "left": 10,
+              "right": 10,
+              "top": 10
+            },
+            "margins": {
+              "bottom": 5,
+              "left": 5,
+              "right": 5,
+              "top": 5
+            },
+            "thumb_value_variable": "my_thumb_value",
+            "track_active_style": {
+              "type": "shape_drawable",
+              "color": "#ff0000",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 6
+                }
               }
-            }
-          },
-          "thumb_text_style": {
-            "font_size": "@{thumb_text_style_font_size}",
-            "font_weight": "@{thumb_text_style_font_weight}",
-            "text_color": "@{thumb_text_style_text_color}"
-          },
-          "paddings": {
-            "bottom": 10,
-            "left": 10,
-            "right": 10,
-            "top": 10
-          },
-          "margins": {
-            "bottom": 5,
-            "left": 5,
-            "right": 5,
-            "top": 5
-          },
-          "thumb_value_variable": "my_thumb_value",
-          "track_active_style": {
-            "type": "shape_drawable",
-            "color": "#ff0000",
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 6
-              }
-            }
-          },
-          "track_inactive_style": {
-            "type": "shape_drawable",
-            "color": "#20000000",
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 6
+            },
+            "track_inactive_style": {
+              "type": "shape_drawable",
+              "color": "#20000000",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 6
+                }
               }
             }
           }
         }
-      }
-    ]
+      ]
+    }
   },
   "steps": [
     {

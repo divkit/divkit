@@ -1,157 +1,158 @@
 {
   "div_data": {
-    "type": "div2",
-    "log_id": "tests",
-    "variables": [
-      {
-        "name": "max_value",
-        "type": "integer",
-        "value": 10
-      },
-      {
-        "name": "min_value",
-        "type": "integer",
-        "value": 0
-      },
-      {
-        "name": "thumb_value",
-        "type": "integer",
-        "value": 3
-      },
-      {
-        "name": "thumb_secondary_value",
-        "type": "integer",
-        "value": 7
-      }
-    ],
-    "states": [
-      {
-        "state_id": 1,
-        "div": {
-          "type": "slider",
-          "max_value": "@{max_value}",
-          "min_value": "@{min_value}",
-          "thumb_value_variable": "thumb_value",
-          "thumb_secondary_value_variable": "thumb_secondary_value",
-          "paddings": {
-            "bottom": 10,
-            "left": 10,
-            "right": 10,
-            "top": 10
-          },
-          "margins": {
-            "bottom": 5,
-            "left": 5,
-            "right": 5,
-            "top": 5
-          },
-          "width": {
-            "type": "match_parent"
-          },
-          "height": {
-            "type": "match_parent"
-          },
-          "thumb_style": {
-            "type": "shape_drawable",
-            "color": "#ff0000",
-            "stroke": {
-              "color": "#ffffff",
-              "width": 3
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "max_value",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "min_value",
+          "type": "integer",
+          "value": 0
+        },
+        {
+          "name": "thumb_value",
+          "type": "integer",
+          "value": 3
+        },
+        {
+          "name": "thumb_secondary_value",
+          "type": "integer",
+          "value": 7
+        }
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "slider",
+            "max_value": "@{max_value}",
+            "min_value": "@{min_value}",
+            "thumb_value_variable": "thumb_value",
+            "thumb_secondary_value_variable": "thumb_secondary_value",
+            "paddings": {
+              "bottom": 10,
+              "left": 10,
+              "right": 10,
+              "top": 10
             },
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 32
-              },
-              "item_width": {
-                "type": "fixed",
-                "value": 32
-              },
-              "corner_radius": {
-                "type": "fixed",
-                "value": 100
-              }
-            }
-          },
-          "thumb_secondary_style": {
-            "type": "shape_drawable",
-            "color": "#00ff00",
-            "stroke": {
-              "color": "#ffffff",
-              "width": 3
+            "margins": {
+              "bottom": 5,
+              "left": 5,
+              "right": 5,
+              "top": 5
             },
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 32
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "thumb_style": {
+              "type": "shape_drawable",
+              "color": "#ff0000",
+              "stroke": {
+                "color": "#ffffff",
+                "width": 3
               },
-              "item_width": {
-                "type": "fixed",
-                "value": 32
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 32
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 32
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 100
+                }
+              }
+            },
+            "thumb_secondary_style": {
+              "type": "shape_drawable",
+              "color": "#00ff00",
+              "stroke": {
+                "color": "#ffffff",
+                "width": 3
               },
-              "corner_radius": {
-                "type": "fixed",
-                "value": 100
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 32
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 32
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 100
+                }
               }
-            }
-          },
-          "track_active_style": {
-            "type": "shape_drawable",
-            "color": "#0000ff",
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 6
+            },
+            "track_active_style": {
+              "type": "shape_drawable",
+              "color": "#0000ff",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 6
+                }
               }
-            }
-          },
-          "track_inactive_style": {
-            "type": "shape_drawable",
-            "color": "#20000000",
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 6
+            },
+            "track_inactive_style": {
+              "type": "shape_drawable",
+              "color": "#20000000",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 6
+                }
               }
-            }
-          },
-          "tick_mark_active_style": {
-            "type": "shape_drawable",
-            "color": "#ff0000",
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 10
-              },
-              "item_width": {
-                "type": "fixed",
-                "value": 5
+            },
+            "tick_mark_active_style": {
+              "type": "shape_drawable",
+              "color": "#ff0000",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 5
+                }
               }
-            }
-          },
-          "tick_mark_inactive_style": {
-            "type": "shape_drawable",
-            "color": "#50000000",
-            "shape": {
-              "type": "rounded_rectangle",
-              "item_height": {
-                "type": "fixed",
-                "value": 10
-              },
-              "item_width": {
-                "type": "fixed",
-                "value": 5
+            },
+            "tick_mark_inactive_style": {
+              "type": "shape_drawable",
+              "color": "#50000000",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_height": {
+                  "type": "fixed",
+                  "value": 10
+                },
+                "item_width": {
+                  "type": "fixed",
+                  "value": 5
+                }
               }
             }
           }
         }
-      }
-    ]
+      ]
+    }
   },
   "steps": [
     {

@@ -1,113 +1,114 @@
 {
   "div_data": {
-    "type": "div2",
-    "log_id": "tests",
-    "variables": [
-      {
-        "name": "text",
-        "type": "string",
-        "value": "initial_text"
-      },
-      {
-        "name": "font_size",
-        "type": "integer",
-        "value": 24
-      },
-      {
-        "name": "font_size_unit",
-        "type": "string",
-        "value": "sp"
-      },
-      {
-        "name": "font_weight",
-        "type": "string",
-        "value": "medium"
-      },
-      {
-        "name": "font_family",
-        "type": "string",
-        "value": "text"
-      },
-      {
-        "name": "letter_spacing",
-        "type": "number",
-        "value": 0
-      },
-      {
-        "name": "text_alignment_horizontal",
-        "type": "string",
-        "value": "left"
-      },
-      {
-        "name": "text_alignment_vertical",
-        "type": "string",
-        "value": "top"
-      },
-      {
-        "name": "text_color",
-        "type": "color",
-        "value": "#FF000000"
-      },
-      {
-        "name": "line_height",
-        "type": "number",
-        "value": 4
-      },
-      {
-        "name": "max_lines",
-        "type": "integer",
-        "value": 3
-      }
-    ],
-    "states": [
-      {
-        "state_id": 1,
-        "div": {
-          "type": "container",
-          "orientation": "vertical",
-          "width": {
-            "type": "match_parent"
-          },
-          "height": {
-            "type": "match_parent"
-          },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#fff"
-            }
-          ],
-          "paddings": {
-            "left": 16,
-            "right": 16
-          },
-          "items": [
-            {
-              "type": "text",
-              "text": "@{text}",
-              "font_size": "@{font_size}",
-              "font_size_unit": "@{font_size_unit}",
-              "font_family": "@{font_family}",
-              "font_weight": "@{font_weight}",
-              "letter_spacing":"@{letter_spacing}",
-              "line_height": "@{line_height}",
-              "max_lines": "@{max_lines}",
-              "text_alignment_horizontal": "@{text_alignment_horizontal}",
-              "text_alignment_vertical": "@{text_alignment_vertical}",
-              "text_color": "@{text_color}",
-              "width": {
-                "type": "match_parent"
-              },
-              "height": {
-                "type": "match_parent"
-              },
-              "horizontal_alignment": "center",
-              "vertical_alignment": "center"
-            }
-          ]
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "text",
+          "type": "string",
+          "value": "initial_text"
+        },
+        {
+          "name": "font_size",
+          "type": "integer",
+          "value": 24
+        },
+        {
+          "name": "font_size_unit",
+          "type": "string",
+          "value": "sp"
+        },
+        {
+          "name": "font_weight",
+          "type": "string",
+          "value": "medium"
+        },
+        {
+          "name": "font_family",
+          "type": "string",
+          "value": "text"
+        },
+        {
+          "name": "letter_spacing",
+          "type": "number",
+          "value": 0
+        },
+        {
+          "name": "text_alignment_horizontal",
+          "type": "string",
+          "value": "left"
+        },
+        {
+          "name": "text_alignment_vertical",
+          "type": "string",
+          "value": "top"
+        },
+        {
+          "name": "text_color",
+          "type": "color",
+          "value": "#FF000000"
+        },
+        {
+          "name": "line_height",
+          "type": "number",
+          "value": 4
+        },
+        {
+          "name": "max_lines",
+          "type": "integer",
+          "value": 3
         }
-      }
-    ]
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#fff"
+              }
+            ],
+            "paddings": {
+              "left": 16,
+              "right": 16
+            },
+            "items": [
+              {
+                "type": "text",
+                "text": "@{text}",
+                "font_size": "@{font_size}",
+                "font_size_unit": "@{font_size_unit}",
+                "font_family": "@{font_family}",
+                "font_weight": "@{font_weight}",
+                "letter_spacing": "@{letter_spacing}",
+                "line_height": "@{line_height}",
+                "max_lines": "@{max_lines}",
+                "text_alignment_horizontal": "@{text_alignment_horizontal}",
+                "text_alignment_vertical": "@{text_alignment_vertical}",
+                "text_color": "@{text_color}",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "match_parent"
+                },
+                "horizontal_alignment": "center",
+                "vertical_alignment": "center"
+              }
+            ]
+          }
+        }
+      ]
+    }
   },
   "steps": [
     {

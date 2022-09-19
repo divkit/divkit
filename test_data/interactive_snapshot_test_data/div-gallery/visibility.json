@@ -99,7 +99,6 @@
       }
     },
     "card": {
-      "type": "div2",
       "log_id": "tests",
       "variables": [
         {
