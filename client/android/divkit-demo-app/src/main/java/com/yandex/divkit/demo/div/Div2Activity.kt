@@ -48,8 +48,6 @@ import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
 import java.net.URL
 
-private const val DIV2_BENDER_ITEM = 42
-
 private const val AUTHORITY_DEMO_ACTIVITY = "demo_activity"
 private const val PARAM_ACTION = "action"
 private const val OPEN_FILE = "open_file"

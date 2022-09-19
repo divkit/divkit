@@ -29,7 +29,6 @@ import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2ScenarioBinding
 import com.yandex.divkit.demo.div.editor.*
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
-import com.yandex.divkit.demo.screenshot.Div2ViewFactory
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.loadText
@@ -37,6 +36,7 @@ import com.yandex.divkit.demo.utils.longToast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONException
 import org.json.JSONObject
 
 class Div2ScenarioActivity : AppCompatActivity() {
@@ -191,22 +191,31 @@ class Div2ScenarioActivity : AppCompatActivity() {
     }
 
     private fun showDownloadDialog() {
-        val editText = EditText(this)
+        val editText = layoutInflater.inflate(R.layout.apply_patch_edit_text, null) as EditText
         preferences.getString(DIV2_PATCH_KEY_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
         val adb = AlertDialog.Builder(this)
             .setView(editText)
-            .setPositiveButton("Load") { _, _ ->
-                val url = editText.text.toString()
-                preferences.edit().putString(DIV2_PATCH_KEY_URL, url).apply()
-                lifecycleScope.launch {
-                    val divPatch = withContext(Dispatchers.IO) {
-                        val loadedJson = loadJson(Uri.parse(url))
-                        loadedJson.asDivPatchWithTemplates(errorLogger.apply { clear() })
-                    }
+            .setPositiveButton("Apply") { _, _ ->
+                try {
+                    val divPatch = JSONObject(editText.text.toString())
+                        .asDivPatchWithTemplates(errorLogger.apply { clear() })
                     div2Adapter.applyPath(
                         divPatch,
-                        errorCallback = { longToast("Error while applied patch!") }
+                        errorCallback = { longToast("Error while applied JSON patch!") }
                     )
+                } catch (e: JSONException) {
+                    val url = editText.text.toString()
+                    preferences.edit().putString(DIV2_PATCH_KEY_URL, url).apply()
+                    lifecycleScope.launch {
+                        val divPatch = withContext(Dispatchers.IO) {
+                            val loadedJson = loadJson(Uri.parse(url))
+                            loadedJson.asDivPatchWithTemplates(errorLogger.apply { clear() })
+                        }
+                        div2Adapter.applyPath(
+                            divPatch,
+                            errorCallback = { longToast("Error while applied loaded patch!") }
+                        )
+                    }
                 }
             }
         adb.create().show()

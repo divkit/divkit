@@ -86,10 +86,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
-            android:name=".div.Div2BenderActivity"
-            android:configChanges="orientation|screenSize" />
-
-        <activity
             android:name=".DummyActivity"
             android:configChanges="orientation|screenSize" />
 

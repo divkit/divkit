@@ -86,6 +86,8 @@
         <item name="colorPrimary">@color/demo_orange</item>
         <item name="colorPrimaryDark">@color/demo_orange</item>
         <item name="colorSecondary">@color/demo_orange</item>
+        <item name="colorControlNormal">#ffaf47</item>
+        <item name="colorAccent">#ffaf47</item>
         <item name="android:windowLightStatusBar" tools:ignore="NewApi">true</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarColor">@color/white</item>
