@@ -1,4 +1,4 @@
-export type BooleanInt = 0 | 1;
+export type BooleanInt = 0 | 1 | false | true;
 
 export type TemplateContext = Record<string, unknown>;
 
