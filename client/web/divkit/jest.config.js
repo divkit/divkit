@@ -30,7 +30,7 @@ module.exports = {
         [
             'jest-html-reporter',
             {
-                outputPath: '<rootDir>/reports/units/index.html',
+                outputPath: '<rootDir>/ci/jest-report/units/index.html',
                 pageTitle: 'DivKit report',
                 includeFailureMsg: true,
                 includeConsoleLog: true,

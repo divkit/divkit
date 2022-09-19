@@ -61,7 +61,7 @@
         "./server/": "./server/"
     },
     "scripts": {
-        "test:unit": "jest",
+        "test:unit": "cd ./tests/bundles && npm install --no-package-lock  && cd ../.. && jest",
         "test:hermione": "cd ci && ./node_modules/.bin/hermione",
         "test:hermione:gui": "cd ci && ./node_modules/.bin/hermione gui",
         "test:hermione:update": "cd ci && ./node_modules/.bin/hermione --update-refs",
@@ -110,6 +110,7 @@
         "eslint-plugin-svelte3": "3.4.1",
         "html-webpack-plugin": "5.5.0",
         "jest": "28.1.3",
+        "jest-environment-jsdom": "28.0.0",
         "jest-html-reporter": "3.6.0",
         "mini-css-extract-plugin": "2.6.1",
         "peggy": "2.0.1",
