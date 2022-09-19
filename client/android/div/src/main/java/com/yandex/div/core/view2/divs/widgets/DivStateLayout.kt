@@ -19,6 +19,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBorder
@@ -102,13 +103,7 @@ internal class DivStateLayout @JvmOverloads constructor(
     }
 
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
-        if (border == borderDrawer?.border) return
-
-        borderDrawer?.release()
-        borderDrawer = border?.let {
-            DivBorderDrawer(resources.displayMetrics, this, resolver, border)
-        }
-        invalidate()
+        borderDrawer = updateBorderDrawer(border, resolver)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

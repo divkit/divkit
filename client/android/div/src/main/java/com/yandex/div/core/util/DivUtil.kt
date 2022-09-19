@@ -69,13 +69,10 @@ internal fun requestHierarchyLayout(v : View) {
     }
 }
 
-internal fun DivBorder?.getCornerRadii(
+internal fun DivBorder.getCornerRadii(
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
-): FloatArray? {
-    if (this == null) {
-        return null
-    }
+): FloatArray {
     val topLeft = (cornersRadius?.topLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
     val topRight = (cornersRadius?.topRight ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()
     val bottomLeft = (cornersRadius?.bottomLeft ?: cornerRadius)?.evaluate(resolver).dpToPx(metrics).toFloat()

@@ -7,6 +7,7 @@ import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,6 +22,7 @@ import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.util.Log
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectImageView
 import com.yandex.div.core.widget.GridContainer
@@ -30,24 +32,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.dpToPx
 import com.yandex.div.util.spToPx
 import com.yandex.div.util.fontHeight
-import com.yandex.div2.Div
-import com.yandex.div2.DivAction
-import com.yandex.div2.DivAlignmentHorizontal
-import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivAnimation
-import com.yandex.div2.DivBase
-import com.yandex.div2.DivDimension
-import com.yandex.div2.DivEdgeInsets
-import com.yandex.div2.DivFixedSize
-import com.yandex.div2.DivFontWeight
-import com.yandex.div2.DivImageScale
-import com.yandex.div2.DivSize
-import com.yandex.div2.DivSizeUnit
-import com.yandex.div2.DivTransform
-import com.yandex.div2.DivVisibilityAction
-import com.yandex.div2.DivPivot
-import com.yandex.div2.DivPivotFixed
-import com.yandex.div2.DivPivotPercentage
+import com.yandex.div2.*
 import kotlin.math.roundToInt
 
 fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
@@ -423,4 +408,31 @@ fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
             }
         }
     }
+}
+
+internal fun <T> T.updateBorderDrawer(
+        border: DivBorder?,
+        resolver: ExpressionResolver
+): DivBorderDrawer? where T : DivBorderSupports, T : View {
+    val currentDrawer = getDivBorderDrawer()
+    if (border == currentDrawer?.border) {
+        return currentDrawer
+    }
+
+    var newDrawer: DivBorderDrawer? = null
+    if (border == null) {
+        currentDrawer?.release()
+
+        // Reset outline because it could have been set by DivBorderDrawer.
+        clipToOutline = false
+        outlineProvider = ViewOutlineProvider.BACKGROUND
+    } else if (currentDrawer == null) {
+        newDrawer = DivBorderDrawer(resources.displayMetrics, this, resolver, border)
+    } else {
+        // Try to reuse DivBorderDrawer if possible.
+        currentDrawer.setBorder(resolver, border)
+        newDrawer = currentDrawer
+    }
+    invalidate()
+    return newDrawer
 }

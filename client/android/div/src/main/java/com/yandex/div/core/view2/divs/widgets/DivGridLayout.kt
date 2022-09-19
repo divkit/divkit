@@ -7,6 +7,7 @@ import android.view.View
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.divs.drawChildrenShadows
+import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.GridContainer
 import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -39,13 +40,7 @@ internal class DivGridLayout @JvmOverloads constructor(
     private var isDrawing = false
 
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
-        if (border == borderDrawer?.border) return
-
-        borderDrawer?.release()
-        borderDrawer = border?.let {
-            DivBorderDrawer(resources.displayMetrics, this, resolver, border)
-        }
-        invalidate()
+        borderDrawer = updateBorderDrawer(border, resolver)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

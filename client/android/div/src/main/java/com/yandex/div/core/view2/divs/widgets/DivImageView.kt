@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.extension.DivExtensionView
+import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.LoadableImageView
 import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -55,13 +56,7 @@ internal open class DivImageView @JvmOverloads constructor(
     override fun canResizeWidth(widthMeasureSpec: Int) = false
 
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
-        if (border == borderDrawer?.border) return
-
-        borderDrawer?.release()
-        borderDrawer = border?.let {
-            DivBorderDrawer(resources.displayMetrics, this, resolver, border)
-        }
-        invalidate()
+        borderDrawer = updateBorderDrawer(border, resolver)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {

@@ -16,6 +16,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view.tabs.TabTitlesLayoutView
 import com.yandex.div.core.view2.divs.tabs.DivTabsAdapter
+import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.drawClipped
@@ -109,13 +110,7 @@ internal class TabsLayout
     }
 
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
-        if (border == borderDrawer?.border) return
-
-        borderDrawer?.release()
-        borderDrawer = border?.let {
-            DivBorderDrawer(resources.displayMetrics, this, resolver, border)
-        }
-        invalidate()
+        borderDrawer = updateBorderDrawer(border, resolver)
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
