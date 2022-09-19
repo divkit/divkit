@@ -20,11 +20,12 @@ extension DivContainer: DivBlockModeling {
       $0.parentPath = $0.parentPath + (id ?? DivContainer.type)
     }
     let orientation = resolveOrientation(context.expressionResolver)
+    let layoutMode = resolveLayoutMode(context.expressionResolver)
     switch orientation {
     case .overlap:
       return try makeLayeredBlock(with: childContext, orientation: orientation)
     case .horizontal, .vertical:
-      return try makeContainerBlock(with: childContext, orientation: orientation)
+      return try makeContainerBlock(with: childContext, orientation: orientation, layoutMode: layoutMode)
     }
   }
 
@@ -124,7 +125,8 @@ extension DivContainer: DivBlockModeling {
 
   private func makeContainerBlock(
     with childContext: DivBlockModelingContext,
-    orientation: Orientation
+    orientation: Orientation,
+    layoutMode: LayoutMode
   ) throws -> ContainerBlock {
     let layoutDirection = orientation.layoutDirection
     let axialAlignment: Alignment
@@ -167,6 +169,7 @@ extension DivContainer: DivBlockModeling {
 
     return try ContainerBlock(
       layoutDirection: layoutDirection,
+      layoutMode: layoutMode.system,
       widthTrait: makeContentWidthTrait(with: childContext.expressionResolver),
       heightTrait: makeContentHeightTrait(with: childContext.expressionResolver),
       axialAlignment: axialAlignment,
@@ -222,6 +225,17 @@ extension DivAlignmentVertical {
       return .center
     case .bottom:
       return .trailing
+    }
+  }
+}
+
+extension DivContainer.LayoutMode {
+  fileprivate var system: ContainerBlock.LayoutMode {
+    switch self {
+    case .noWrap:
+      return .noWrap
+    case .wrap:
+      return .wrap
     }
   }
 }
