@@ -51,7 +51,7 @@
                 {
                     "name": "isTrue",
                     "type": "boolean",
-                    "value": 0
+                    "value": false
                 }
             ],
             "platforms": [
@@ -71,7 +71,7 @@
                 {
                     "name": "isTrue",
                     "type": "boolean",
-                    "value": 1
+                    "value": true
                 }
             ],
             "platforms": [

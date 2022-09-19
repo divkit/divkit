@@ -77,12 +77,12 @@
       {
         "name": "change_state",
         "type": "boolean",
-        "value": 0
+        "value": false
       },
       {
         "name": "state",
         "type": "boolean",
-        "value": 0
+        "value": false
       }
     ],
     "variable_triggers": [
@@ -92,11 +92,11 @@
         "actions": [
           {
             "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=change_state&value=0"
+            "url": "div-action://set_variable?name=change_state&value=false"
           },
           {
             "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=state&value=0"
+            "url": "div-action://set_variable?name=state&value=false"
           },
           {
             "log_id": "change state",
@@ -110,11 +110,11 @@
         "actions": [
           {
             "log_id": "update change_state flag",
-            "url": "div-action://set_variable?name=change_state&value=0"
+            "url": "div-action://set_variable?name=change_state&value=false"
           },
           {
             "log_id": "update state variable",
-            "url": "div-action://set_variable?name=state&value=1"
+            "url": "div-action://set_variable?name=state&value=true"
           },
           {
             "log_id": "change state",
@@ -194,7 +194,7 @@
               "actions": [
                 {
                   "log_id": "set_state1",
-                  "url": "div-action://set_variable?name=change_state&value=1"
+                  "url": "div-action://set_variable?name=change_state&value=true"
                 }
               ]
             }

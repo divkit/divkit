@@ -256,22 +256,22 @@
       {
         "name": "secondary_thumb",
         "type": "boolean",
-        "value": 0
+        "value": false
       },
       {
         "name": "invert_secondary_thumb",
         "type": "boolean",
-        "value": 0
+        "value": false
       },
       {
         "name": "tick_marks",
         "type": "boolean",
-        "value": 0
+        "value": false
       },
       {
         "name": "invert_tick_marks",
         "type": "boolean",
-        "value": 0
+        "value": false
       },
       {
         "name": "max_value",
@@ -335,7 +335,7 @@
         "actions": [
           {
             "log_id": "reset_invert_secondary_thumb",
-            "url": "div-action://set_variable?name=invert_secondary_thumb&value=0"
+            "url": "div-action://set_variable?name=invert_secondary_thumb&value=false"
           },
           {
             "log_id": "update_secondary_thumb_switch",
@@ -343,7 +343,7 @@
           },
           {
             "log_id": "change_secondary_thumb",
-            "url": "div-action://set_variable?name=secondary_thumb&value=1"
+            "url": "div-action://set_variable?name=secondary_thumb&value=true"
           }
         ]
       },
@@ -352,7 +352,7 @@
         "actions": [
           {
             "log_id": "reset_invert_secondary_thumb",
-            "url": "div-action://set_variable?name=invert_secondary_thumb&value=0"
+            "url": "div-action://set_variable?name=invert_secondary_thumb&value=false"
           },
           {
             "log_id": "update_secondary_thumb_switch",
@@ -360,7 +360,7 @@
           },
           {
             "log_id": "change_secondary_thumb",
-            "url": "div-action://set_variable?name=secondary_thumb&value=0"
+            "url": "div-action://set_variable?name=secondary_thumb&value=false"
           }
         ]
       },
@@ -369,7 +369,7 @@
         "actions": [
           {
             "log_id": "reset_invert_tick_marks",
-            "url": "div-action://set_variable?name=invert_tick_marks&value=0"
+            "url": "div-action://set_variable?name=invert_tick_marks&value=false"
           },
           {
             "log_id": "update_tick_marks_switch",
@@ -377,7 +377,7 @@
           },
           {
             "log_id": "change_tick_marks",
-            "url": "div-action://set_variable?name=tick_marks&value=1"
+            "url": "div-action://set_variable?name=tick_marks&value=true"
           }
         ]
       },
@@ -386,15 +386,15 @@
         "actions": [
           {
             "log_id": "reset_invert_tick_marks",
-            "url": "div-action://set_variable?name=invert_tick_marks&value=0"
+            "url": "div-action://set_variable?name=invert_tick_marks&value=false"
           },
           {
             "log_id": "update_tick_marks_switch",
-            "url": "div-action://set_state?state_id=0/tick_marks_switch/0"
+            "url": "div-action://set_state?state_id=0/tick_marks_switch/false"
           },
           {
             "log_id": "change_tick_marks",
-            "url": "div-action://set_variable?name=tick_marks&value=0"
+            "url": "div-action://set_variable?name=tick_marks&value=true"
           }
         ]
       },
@@ -789,7 +789,7 @@
                   "actions": [
                     {
                       "log_id": "change_secondary_thumb",
-                      "url": "div-action://set_variable?name=invert_secondary_thumb&value=1"
+                      "url": "div-action://set_variable?name=invert_secondary_thumb&value=true"
                     }
                   ]
                 }
@@ -841,7 +841,7 @@
                   "actions": [
                     {
                       "log_id": "change_tick_marks",
-                      "url": "div-action://set_variable?name=invert_tick_marks&value=1"
+                      "url": "div-action://set_variable?name=invert_tick_marks&value=true"
                     }
                   ]
                 }

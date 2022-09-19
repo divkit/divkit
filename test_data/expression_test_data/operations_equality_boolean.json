@@ -10,12 +10,12 @@
       "variables": [
         {
           "type": "boolean",
-          "value": 1,
+          "value": true,
           "name": "var_a"
         },
         {
           "type": "boolean",
-          "value": 1,
+          "value": true,
           "name": "var_b"
         }
       ],
@@ -35,12 +35,12 @@
       "variables": [
         {
           "type": "boolean",
-          "value": 1,
+          "value": true,
           "name": "var_a"
         },
         {
           "type": "boolean",
-          "value": 1,
+          "value": true,
           "name": "var_b"
         }
       ],
@@ -60,12 +60,12 @@
       "variables": [
         {
           "type": "boolean",
-          "value": 0,
+          "value": false,
           "name": "var_a"
         },
         {
           "type": "boolean",
-          "value": 0,
+          "value": false,
           "name": "var_b"
         }
       ],
@@ -85,12 +85,12 @@
       "variables": [
         {
           "type": "boolean",
-          "value": 0,
+          "value": false,
           "name": "var_a"
         },
         {
           "type": "boolean",
-          "value": 0,
+          "value": false,
           "name": "var_b"
         }
       ],
@@ -110,12 +110,12 @@
       "variables": [
         {
           "type": "boolean",
-          "value": 1,
+          "value": true,
           "name": "var_a"
         },
         {
           "type": "boolean",
-          "value": 0,
+          "value": false,
           "name": "var_b"
         }
       ],
@@ -135,12 +135,12 @@
       "variables": [
         {
           "type": "boolean",
-          "value": 1,
+          "value": true,
           "name": "var_a"
         },
         {
           "type": "boolean",
-          "value": 0,
+          "value": false,
           "name": "var_b"
         }
       ],
@@ -160,12 +160,12 @@
       "variables": [
         {
           "type": "boolean",
-          "value": 1,
+          "value": true,
           "name": "var_a"
         },
         {
           "type": "boolean",
-          "value": 0,
+          "value": false,
           "name": "var_b"
         }
       ],
@@ -185,12 +185,12 @@
       "variables": [
         {
           "type": "boolean",
-          "value": 1,
+          "value": true,
           "name": "var_a"
         },
         {
           "type": "boolean",
-          "value": 0,
+          "value": false,
           "name": "var_b"
         }
       ],

@@ -270,6 +270,26 @@
             "variables": [
                 {
                     "type": "boolean",
+                    "value": true,
+                    "name": "var"
+                }
+            ],
+            "platforms": [
+                "android",
+                "ios",
+                "web"
+            ]
+        },
+        {
+            "name": "boolean int variable",
+            "expression": "@{var}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "variables": [
+                {
+                    "type": "boolean",
                     "value": 1,
                     "name": "var"
                 }

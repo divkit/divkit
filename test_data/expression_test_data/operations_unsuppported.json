@@ -1107,12 +1107,12 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "a"
                 },
                 {
                     "type": "boolean",
-                    "value": 0,
+                    "value": false,
                     "name": "b"
                 }
             ],
@@ -1132,12 +1132,12 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "a"
                 },
                 {
                     "type": "boolean",
-                    "value": 0,
+                    "value": false,
                     "name": "b"
                 }
             ],
@@ -1157,12 +1157,12 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "a"
                 },
                 {
                     "type": "boolean",
-                    "value": 0,
+                    "value": false,
                     "name": "b"
                 }
             ],
@@ -1182,12 +1182,12 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "a"
                 },
                 {
                     "type": "boolean",
-                    "value": 0,
+                    "value": false,
                     "name": "b"
                 }
             ],
@@ -1207,12 +1207,12 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "a"
                 },
                 {
                     "type": "boolean",
-                    "value": 0,
+                    "value": false,
                     "name": "b"
                 }
             ],
@@ -1232,12 +1232,12 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "a"
                 },
                 {
                     "type": "boolean",
-                    "value": 0,
+                    "value": false,
                     "name": "b"
                 }
             ],
@@ -1257,12 +1257,12 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "a"
                 },
                 {
                     "type": "boolean",
-                    "value": 0,
+                    "value": false,
                     "name": "b"
                 }
             ],
@@ -1282,12 +1282,12 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "a"
                 },
                 {
                     "type": "boolean",
-                    "value": 0,
+                    "value": false,
                     "name": "b"
                 }
             ],

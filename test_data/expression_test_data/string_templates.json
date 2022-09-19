@@ -250,7 +250,7 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "var"
                 }
             ],
@@ -269,7 +269,7 @@
             "variables": [
                 {
                     "type": "boolean",
-                    "value": 1,
+                    "value": true,
                     "name": "var"
                 }
             ],

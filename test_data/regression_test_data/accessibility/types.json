@@ -45,7 +45,7 @@
       {
         "name": "button_1_active",
         "type": "boolean",
-        "value": 0
+        "value": false
       }
     ],
     "states": [

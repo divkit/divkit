@@ -101,12 +101,12 @@
       {
         "name": "dynamic_height",
         "type": "boolean",
-        "value": 0
+        "value": false
       },
       {
         "name": "has_separator",
         "type": "boolean",
-        "value": 0
+        "value": false
       },
       {
         "name": "separator_paddings.top",
@@ -3887,7 +3887,7 @@
                   "type": "presets_button",
                   "text": "false",
                   "action": {
-                    "url": "div-action://set_variable?name=has_separator&value=0",
+                    "url": "div-action://set_variable?name=has_separator&value=false",
                     "log_id": "has_separator=0"
                   }
                 },
@@ -3895,7 +3895,7 @@
                   "type": "presets_button",
                   "text": "true",
                   "action": {
-                    "url": "div-action://set_variable?name=has_separator&value=1",
+                    "url": "div-action://set_variable?name=has_separator&value=true",
                     "log_id": "has_separator=1"
                   }
                 }

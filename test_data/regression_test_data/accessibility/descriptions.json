@@ -45,7 +45,7 @@
       {
         "name": "button_1_active",
         "type": "boolean",
-        "value": 0
+        "value": false
       }
     ],
     "states": [
@@ -72,7 +72,7 @@
               "actions": [
                 {
                   "log_id": "change_button_1_state",
-                  "url": "div-action://set_variable?name=button_1_active&value=1"
+                  "url": "div-action://set_variable?name=button_1_active&value=true"
                 }
               ]
             },
