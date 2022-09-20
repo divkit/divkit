@@ -2,6 +2,8 @@ package com.yandex.div.video.custom
 
 import android.content.Context
 import android.graphics.Color
+import android.graphics.PixelFormat
+import android.view.SurfaceView
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -28,23 +30,26 @@ internal class VideoView(
     var viewModel: VideoViewModel? = null
         private set
 
-    private val playerView = PlayerView(context)
+    private val playerView = PlayerView(context).apply {
+        useController = false
+        setShutterBackgroundColor(Color.TRANSPARENT)
+        (videoSurfaceView as? SurfaceView)?.apply {
+            setZOrderOnTop(true)
+            setBackgroundColor(Color.TRANSPARENT)
+            holder.setFormat(PixelFormat.TRANSPARENT)
+        }
+    }
 
     private val stubImageView: ImageView = ImageView(context).apply {
         layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
         scaleType = ImageView.ScaleType.FIT_CENTER
         isVisible = false
+        setBackgroundColor(Color.TRANSPARENT)
     }
 
     init {
-        playerView.apply {
-            useController = false
-            setShutterBackgroundColor(Color.TRANSPARENT)
-        }.also {
-            addView(it)
-        }
-
         addView(stubImageView)
+        addView(playerView)
     }
 
     private val playerListener = object : Player.Listener {
@@ -79,7 +84,6 @@ internal class VideoView(
         viewModel = model
 
         if (isAttachedToWindow) {
-            playerView.player = model.player
             resumeObservingViewModel(model)
         }
     }
@@ -95,7 +99,6 @@ internal class VideoView(
             model.stubImageIfVisible.collect { image ->
                 stubImageView.setImageBitmap(image)
                 stubImageView.isVisible = image != null
-                playerView.alpha = if (image != null) 0f else 1f
             }
         }
 
