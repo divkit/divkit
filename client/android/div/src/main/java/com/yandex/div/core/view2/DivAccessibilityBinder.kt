@@ -12,6 +12,7 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
+import com.yandex.div2.DivInput
 import com.yandex.div2.DivSeparator
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
@@ -74,6 +75,7 @@ class DivAccessibilityBinder @Inject constructor(
 
         when (div) {
             is DivImage -> bindType(view, DivAccessibility.Type.IMAGE)
+            is DivInput -> bindType(view, DivAccessibility.Type.EDIT_TEXT)
             is DivGifImage -> bindType(view, DivAccessibility.Type.IMAGE)
             is DivText -> bindType(view, DivAccessibility.Type.TEXT)
             is DivTabs -> bindType(view, DivAccessibility.Type.TAB_BAR)
