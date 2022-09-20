@@ -306,14 +306,17 @@ internal class DivBaseBinder @Inject constructor(
                 val newDefaultDivBackground = defaultBackgroundList?.map { it.toBackgroundState(resolver) } ?: emptyList()
 
                 val currentDefaultDivBackground = getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
+                val currentAdditionalLayer = getTag(R.id.div_additional_background_layer_tag) as? Drawable?
 
-                val backgroundChanged = currentDefaultDivBackground != newDefaultDivBackground
+                val backgroundChanged = (currentDefaultDivBackground != newDefaultDivBackground) ||
+                        (currentAdditionalLayer != additionalLayer)
 
                 if (backgroundChanged) {
                     updateBackground(newDefaultDivBackground.toDrawable(this, divView, additionalLayer))
 
                     setTag(R.id.div_default_background_list_tag, newDefaultDivBackground)
                     setTag(R.id.div_focused_background_list_tag, null)
+                    setTag(R.id.div_additional_background_layer_tag, additionalLayer)
                 }
             }
 
@@ -327,9 +330,12 @@ internal class DivBaseBinder @Inject constructor(
 
                 val currentDefaultDivBackground = getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
                 val currentFocusedDivBackground = getTag(R.id.div_focused_background_list_tag) as? List<DivBackgroundState>
+                val currentAdditionalLayer = getTag(R.id.div_additional_background_layer_tag) as? Drawable?
 
-                val backgroundChanged = (currentDefaultDivBackground != newDefaultDivBackground)
-                    || (currentFocusedDivBackground != newFocusedDivBackground)
+                val backgroundChanged = (currentDefaultDivBackground != newDefaultDivBackground) ||
+                        (currentFocusedDivBackground != newFocusedDivBackground) ||
+                        (currentAdditionalLayer != additionalLayer)
+
 
                 if (backgroundChanged) {
                     val stateList = StateListDrawable()
@@ -349,6 +355,7 @@ internal class DivBaseBinder @Inject constructor(
 
                     setTag(R.id.div_default_background_list_tag, newDefaultDivBackground)
                     setTag(R.id.div_focused_background_list_tag, newFocusedDivBackground)
+                    setTag(R.id.div_additional_background_layer_tag, additionalLayer)
                 }
             }
 
