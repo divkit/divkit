@@ -61,7 +61,7 @@
         "./server/": "./server/"
     },
     "scripts": {
-        "test:unit": "cd ./tests/bundles && npm install --no-package-lock  && cd ../.. && jest",
+        "test:unit": "jest",
         "test:hermione": "cd ci && ./node_modules/.bin/hermione",
         "test:hermione:gui": "cd ci && ./node_modules/.bin/hermione gui",
         "test:hermione:update": "cd ci && ./node_modules/.bin/hermione --update-refs",

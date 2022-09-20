@@ -75,10 +75,6 @@
         }
     }
 
-    const childLayoutParams: LayoutParams = {
-        scrollSnap: 'center'
-    };
-
     let orientation: Orientation = 'horizontal';
     $: jsonOrientation = rootCtx.getDerivedFromVars(json.orientation);
     $: {
@@ -250,12 +246,13 @@
             on:scroll={onScrollDebounced}
         >
             {#each items as item}
-                <Unknown
-                    layoutParams={childLayoutParams}
-                    div={item.json}
-                    templateContext={item.templateContext}
-                    origJson={item.origJson}
-                />
+                <div class={css.pager__item}>
+                    <Unknown
+                        div={item.json}
+                        templateContext={item.templateContext}
+                        origJson={item.origJson}
+                    />
+                </div>
             {/each}
         </div>
     </Outer>
