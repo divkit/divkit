@@ -87,6 +87,7 @@ internal class DivImageBinder @Inject constructor(
     private fun DivImageView.applyImage(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
         val newImageUrl = div.imageUrl.evaluate(resolver)
         if (isImageLoaded && newImageUrl == imageUrl) {
+            observeTintColor(resolver, div.tintColor)
             return
         }
         // Ignore high priority preview if image was previously loaded.
