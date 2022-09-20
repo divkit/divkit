@@ -1,3 +1,18 @@
+## 8.0.0 (September 20, 2022)
+
+Changes and additions:
+* BooleanInt props now accepts booleans too
+* Implemented boolean values for boolean variables
+* Reworked `container` layout
+* Added package tests
+* Downgraded `babel-preset-jest`, so it is possible to run divkit tests with an older version of the node.js
+
+Fixes:
+* Fixed zero-values in `action_animation`
+* Fixed `grid` recalculation
+* Fixed layout of `pager` child elements when their size is too small
+
+
 ## 7.0.0 (September 13, 2022)
 
 Addition:

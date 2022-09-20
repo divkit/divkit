@@ -1,3 +1,50 @@
+## 8.0.0 (September 20, 2022)
+### Android Client:
+Additions and changes:
+* Added image change subscription
+* Moved `observeTintColor` into `bind` method
+* Refactored `DivBorderDrawer`
+* Parsing patch from JSON
+* Changed host tag
+* Disabled bind on attach
+* Implemented replacing of link or json when paste from buffer in demo-app
+* Supported `true`/`false` literals into variables
+* Bind `input` type for accessibility
+Fixes:
+* Fixed regression screen at release builds of demo-app
+* Fixed image blinking on rebind
+* Fixed text alignment in `input` when rtl enabled
+* Fixed extensions reuse
+
+### iOS Client:
+Additions and changes:
+* Added `true`/`false` values support in `set_variable` actions
+* Added `wrap` mode in DivContainer
+* Added interactive snapshot tests
+* Improved public API
+* Improved dark mode in DivKit Playground
+* Updated bool values parsing in set_variable actions
+Fixes:
+* Fixed transition animations
+* Fixed DivContainer error messages
+
+### Web Client:
+Additions and changes:
+* BooleanInt props now accepts booleans too
+* Implemented boolean values for boolean variables
+* Reworked `container` layout
+* Added package tests
+* Downgraded `babel-preset-jest`, so it is possible to run divkit tests with an older version of the node.js
+Fixes:
+* Fixed zero-values in `action_animation`
+* Fixed `grid` recalculation
+* Fixed layout of `pager` child elements when their size is too small
+
+### Kotlin JSON builder
+Addition:
+* Implemented flags for hash files
+
+
 ## 7.0.0 (September 13, 2022)
 ### Android Client:
 Additions and changes:
