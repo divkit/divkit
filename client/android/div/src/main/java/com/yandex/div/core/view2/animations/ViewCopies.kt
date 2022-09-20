@@ -6,11 +6,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.MainThread
 import androidx.core.view.ViewCompat
+import androidx.core.view.children
+import androidx.core.view.doOnDetach
 import androidx.core.view.drawToBitmap
 import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.R
 import com.yandex.div.core.util.Assert
+import com.yandex.div.core.view2.divs.widgets.DivImageView
 
 @MainThread
 internal fun createOrGetVisualCopy(
@@ -43,6 +46,12 @@ internal fun createOrGetVisualCopy(
     view.setTag(R.id.save_overlay_view, copy)
 
     view.replace(copy, transition, sceneRoot)
+
+    view.setHierarchyImageChangeCallback {
+        copy.setImageBitmap(view.drawToBitmap())
+    }
+
+    copy.doOnDetach { view.setHierarchyImageChangeCallback(null) }
 
     return copy
 }
@@ -82,4 +91,11 @@ private fun View.replace(viewCopy: View, transition: Transition, sceneRoot: View
             transition.removeListener(this)
         }
     })
+}
+
+fun View.setHierarchyImageChangeCallback(callback: (() -> Unit)? = null) {
+    when (this) {
+        is DivImageView -> setImageChangeCallback(callback)
+        is ViewGroup -> children.forEach { it.setHierarchyImageChangeCallback(callback) }
+    }
 }

@@ -23,6 +23,8 @@ open class LoadableImageView(
     defStyleAttr: Int = 0
 ) : AspectImageView(context, attrs, defStyleAttr), LoadableImage, DivExtendableView {
 
+    private var imageChangeCallback: (() -> Unit)? = null
+
     override var delegate: DivViewDelegate? = null
     var externalImage: Drawable? = null
         set(value) {
@@ -65,11 +67,13 @@ open class LoadableImageView(
     override fun setImageDrawable(drawable: Drawable?) {
         if (externalImage == null) {
             super.setImageDrawable(drawable?.scaleAccordingToDensity())
+            imageChangeCallback?.invoke()
             return
         }
         if (this.drawable !== externalImage) {
             super.setImageDrawable(externalImage)
         }
+        imageChangeCallback?.invoke()
     }
 
     @CallSuper
@@ -79,11 +83,13 @@ open class LoadableImageView(
                 bm?.density = DisplayMetrics.DENSITY_DEFAULT
             }
             super.setImageBitmap(bm)
+            imageChangeCallback?.invoke()
             return
         }
         if (this.drawable !== externalImage) {
             super.setImageDrawable(externalImage)
         }
+        imageChangeCallback?.invoke()
     }
 
     override fun invalidateDrawable(dr: Drawable) {
@@ -141,5 +147,9 @@ open class LoadableImageView(
         val wrapsContent = layoutParams.width == ViewGroup.LayoutParams.WRAP_CONTENT &&
                 layoutParams.height == ViewGroup.LayoutParams.WRAP_CONTENT
         return wrapsContent || imageScale == Scale.NO_SCALE
+    }
+
+    fun setImageChangeCallback(callback: (() -> Unit)? = null) {
+        imageChangeCallback = callback
     }
 }
