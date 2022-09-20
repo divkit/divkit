@@ -5,7 +5,10 @@
     /* test tabs/fixed-width */
     /*max-width: 100%;*/
     /*max-height: 100%;*/
+    min-width: 0;
+    min-height: 0;
     overflow: hidden;
+    flex-shrink: 0;
     text-decoration: none;
 }
 
@@ -23,21 +26,7 @@
     visibility: hidden;
 }
 
-.outer_valign-self_top,
-.outer_valign-self_default {
-    align-self: start;
-}
-
-.outer_valign-self_center {
-    align-self: center;
-}
-
-.outer_valign-self_bottom {
-    align-self: end;
-}
-
-.outer_halign-self_left,
-.outer_halign-self_default {
+.outer_halign-self_start {
     justify-self: start;
 }
 
@@ -45,17 +34,59 @@
     justify-self: center;
 }
 
-.outer_halign-self_right {
+.outer_halign-self_end {
     justify-self: end;
 }
 
-.outer_width_parent {
-    /* width: 100% is not used because of margins */
+.outer_halign-self_stretch {
     justify-self: stretch;
 }
 
-.outer_height_parent {
-    /* height: 100% is not used because of margins */
+.outer_valign-self_start {
+    align-self: start;
+}
+
+.outer_valign-self_center {
+    align-self: center;
+}
+
+.outer_valign-self_end {
+    align-self: end;
+}
+
+.outer_valign-self_stretch {
+    align-self: stretch;
+}
+
+.outer_parent-flex_vertical.outer_halign-self_start {
+    align-self: flex-start;
+}
+
+.outer_parent-flex_vertical.outer_halign-self_center {
+    align-self: center;
+}
+
+.outer_parent-flex_vertical.outer_halign-self_end {
+    align-self: flex-end;
+}
+
+.outer_parent-flex_vertical.outer_halign-self_stretch {
+    align-self: stretch;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_start {
+    align-self: flex-start;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_center {
+    align-self: center;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_end {
+    align-self: flex-end;
+}
+
+.outer_parent-flex_horizontal.outer_valign-self_stretch {
     align-self: stretch;
 }
 
@@ -65,30 +96,6 @@
 
 .outer_height-constrained {
     max-height: 100%;
-}
-
-.outer_parent-halign_start {
-    justify-self: start;
-}
-
-.outer_parent-halign_center {
-    justify-self: center;
-}
-
-.outer_parent-halign_end {
-    justify-self: end;
-}
-
-.outer_parent-valign_start {
-    align-self: start;
-}
-
-.outer_parent-valign_center {
-    align-self: center;
-}
-
-.outer_parent-valign_end {
-    align-self: end;
 }
 
 .outer_parent-overlap {

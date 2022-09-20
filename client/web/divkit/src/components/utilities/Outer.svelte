@@ -44,6 +44,18 @@
     export let forceWidth = false;
     export let forceHeight = false;
 
+    const HORIZONTAL_ALIGN_TO_GENERAL = {
+        left: 'start',
+        center: 'center',
+        right: 'end'
+    };
+
+    const VERTICAL_ALIGN_TO_GENERAL = {
+        top: 'start',
+        center: 'center',
+        bottom: 'end'
+    };
+
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const stateCtx = getContext<StateCtxValue>(STATE_CTX);
 
@@ -111,34 +123,45 @@
     let widthMods: Mods = {};
     let width: string | undefined;
     let widthNum = 0;
-    let hAlignSelf = 'default';
+    let widthFlexGrow = 0;
+    let widthFlexShrink = 0;
     $: {
         let widthType: 'parent' | 'content' | undefined = undefined;
         let newWidth: string | undefined = undefined;
         let newWidthMods: Mods = {};
-        if ($jsonWidth) {
-            if ($jsonWidth.type === 'fixed') {
-                widthNum = correctNonNegativeNumber($jsonWidth.value, widthNum);
-                newWidth = pxToEm(widthNum);
-            } else if (
-                $jsonWidth.type === 'wrap_content' ||
-                !layoutParams.overlapParent && $jsonWidth.type === 'match_parent' && layoutParams.parentHorizontalWrapContent
+        let newFlexGrow = 0;
+        let newFlexShrink = 0;
+
+        const type = $jsonWidth?.type;
+
+        if (type === 'fixed') {
+            widthNum = correctNonNegativeNumber($jsonWidth?.value, widthNum);
+            newWidth = pxToEm(widthNum);
+        } else if (
+            type === 'wrap_content' ||
+            !layoutParams.overlapParent && type === 'match_parent' && layoutParams.parentHorizontalWrapContent
+        ) {
+            widthType = 'content';
+            if (
+                type === 'wrap_content' && $jsonWidth?.constrained ||
+                type === 'match_parent' && layoutParams.parentHorizontalWrapContent
             ) {
-                widthType = 'content';
-                if (
-                    $jsonWidth.type === 'wrap_content' && $jsonWidth.constrained ||
-                    $jsonWidth.type === 'match_parent' && layoutParams.parentHorizontalWrapContent
-                ) {
-                    newWidthMods['width-constrained'] = true;
-                }
-            } else if ($jsonWidth.type === 'match_parent') {
-                widthType = 'parent';
-                if (layoutParams.parentLayoutOrientation === 'vertical') {
-                    newWidth = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.left || 0) + ($jsonMargins?.right || 0))})`;
-                }
+                newWidthMods['width-constrained'] = true;
+                newFlexShrink = 1;
+            }
+
+            if (type === 'match_parent') {
+                rootCtx.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                    level: 'warn'
+                }));
             }
         } else {
             widthType = 'parent';
+            if (layoutParams.parentLayoutOrientation === 'vertical') {
+                newWidth = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.left || 0) + ($jsonMargins?.right || 0))})`;
+            } else if (layoutParams.parentContainerOrientation === 'horizontal') {
+                newFlexGrow = $jsonWidth && 'weight' in $jsonWidth && $jsonWidth.weight || 1;
+            }
         }
 
         if (widthType === 'content' && forceWidth) {
@@ -148,19 +171,24 @@
             }));
         }
 
+        if (widthType === 'parent') {
+            newWidthMods['halign-self'] = 'stretch';
+        } else {
+            const align = $jsonAlignmentHorizontal;
+            if (align === 'left' || align === 'center' || align === 'right') {
+                newWidthMods['halign-self'] = HORIZONTAL_ALIGN_TO_GENERAL[align];
+            } else {
+                newWidthMods['halign-self'] = layoutParams.parentHAlign || 'start';
+            }
+        }
+
         if (widthType) {
             newWidthMods.width = widthType;
         }
-        const newHalignSelf = $jsonAlignmentHorizontal;
-        if (newHalignSelf === 'left' || newHalignSelf === 'center' || newHalignSelf === 'right') {
-            newWidthMods['halign-self'] = hAlignSelf = newHalignSelf;
-        } else {
-            newWidthMods['halign-self'] = hAlignSelf;
-            if (widthType !== 'parent' && layoutParams.parentHAlign) {
-                newWidthMods['parent-halign'] = layoutParams.parentHAlign;
-            }
-        }
+
         width = newWidth;
+        widthFlexGrow = newFlexGrow;
+        widthFlexShrink = newFlexShrink;
         widthMods = assignIfDifferent(newWidthMods, widthMods);
     }
 
@@ -169,34 +197,42 @@
     let heightMods: Mods = {};
     let height: string | undefined;
     let heightNum = 0;
-    let vAlignSelf = 'default';
+    let heightFlexGrow = 0;
+    let heightFlexShrink = 0;
     $: {
         let heightType: 'parent' | 'content' | undefined = undefined;
         let newHeight: string | undefined = undefined;
         let newHeightMods: Mods = {};
-        if ($jsonHeight) {
-            if ($jsonHeight.type === 'fixed') {
-                heightNum = correctNonNegativeNumber($jsonHeight.value, heightNum);
-                newHeight = pxToEm(heightNum);
-            } else if (
-                $jsonHeight.type === 'wrap_content' ||
-                !layoutParams.overlapParent && $jsonHeight.type === 'match_parent' && layoutParams.parentVerticalWrapContent
-            ) {
-                heightType = 'content';
-                if (
-                    $jsonHeight.type === 'wrap_content' && $jsonHeight.constrained ||
-                    $jsonHeight.type === 'match_parent' && layoutParams.parentVerticalWrapContent
-                ) {
-                    newHeightMods['height-constrained'] = true;
-                }
-            } else if ($jsonHeight.type === 'match_parent') {
-                heightType = 'parent';
-                if (layoutParams.parentLayoutOrientation === 'horizontal') {
-                    newHeight = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.top || 0) + ($jsonMargins?.bottom || 0))})`;
-                }
+        let newFlexGrow = 0;
+        let newFlexShrink = 0;
+
+        const type = $jsonHeight?.type;
+
+        if (type === 'fixed') {
+            heightNum = correctNonNegativeNumber($jsonHeight?.value, heightNum);
+            newHeight = pxToEm(heightNum);
+        } else if (type === 'match_parent' && (layoutParams.overlapParent || !layoutParams.parentVerticalWrapContent)) {
+            heightType = 'parent';
+            if (layoutParams.parentLayoutOrientation === 'horizontal') {
+                newHeight = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.top || 0) + ($jsonMargins?.bottom || 0))})`;
+            } else if (layoutParams.parentContainerOrientation === 'vertical') {
+                newFlexGrow = $jsonHeight?.weight || 1;
             }
         } else {
             heightType = 'content';
+            if (
+                type === 'wrap_content' && $jsonHeight?.constrained ||
+                type === 'match_parent' && layoutParams.parentVerticalWrapContent
+            ) {
+                newHeightMods['height-constrained'] = true;
+                newFlexShrink = 1;
+            }
+
+            if (type === 'match_parent') {
+                rootCtx.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
+                    level: 'warn'
+                }));
+            }
         }
 
         if (heightType === 'content' && forceHeight) {
@@ -206,19 +242,24 @@
             }));
         }
 
+        if (heightType === 'parent') {
+            newHeightMods['valign-self'] = 'stretch';
+        } else {
+            const align = $jsonAlignmentVertical;
+            if (align === 'top' || align === 'center' || align === 'bottom') {
+                newHeightMods['valign-self'] = VERTICAL_ALIGN_TO_GENERAL[align];
+            } else {
+                newHeightMods['valign-self'] = layoutParams.parentVAlign || 'start';
+            }
+        }
+
         if (heightType) {
             newHeightMods.height = heightType;
         }
-        const newValignSelf = $jsonAlignmentVertical;
-        if (newValignSelf === 'top' || newValignSelf === 'center' || newValignSelf === 'bottom') {
-            newHeightMods['valign-self'] = vAlignSelf = newValignSelf;
-        } else {
-            newHeightMods['valign-self'] = vAlignSelf;
-            if (heightType !== 'parent' && layoutParams.parentVAlign) {
-                newHeightMods['parent-valign'] = layoutParams.parentVAlign;
-            }
-        }
+
         height = newHeight;
+        heightFlexGrow = newFlexGrow;
+        heightFlexShrink = newFlexShrink;
         heightMods = assignIfDifferent(newHeightMods, heightMods);
     }
 
@@ -419,7 +460,8 @@
             visibilityChangingInProgress ||
             transitionChangeInProgress,
         visibility,
-        'has-action-animation': Boolean(actionAnimationTransition)
+        'has-action-animation': Boolean(actionAnimationTransition),
+        'parent-flex': layoutParams.parentContainerOrientation || undefined
     };
 
     $: jsonTransform = rootCtx.getDerivedFromVars(json.transform);
@@ -459,6 +501,9 @@
         transition: actionAnimationTransition,
         'transform-origin': transformOrigin,
         transform,
+        'flex-grow': widthFlexGrow || heightFlexGrow || undefined,
+        'flex-shrink': (widthFlexShrink || heightFlexShrink) ? 1 : undefined,
+        'flex-basis': (widthFlexGrow || heightFlexGrow) ? 0 : undefined,
         '--divkit-animation-opacity-start': animationOpacityStart,
         '--divkit-animation-opacity-end': animationOpacityEnd,
         '--divkit-animation-scale-start': animationScaleStart,

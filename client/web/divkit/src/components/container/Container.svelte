@@ -1,17 +1,13 @@
 <script lang="ts">
     import { getContext } from 'svelte';
-    import { derived, Readable } from 'svelte/store';
 
     import css from './Container.module.css';
 
-    import type { Style } from '../../types/general';
     import type { ContainerOrientation, DivContainerData } from '../../types/container';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivBase, TemplateContext } from '../../../typings/common';
-    import type { Size } from '../../types/sizes';
     import type { DivBaseData } from '../../types/base';
     import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
-    import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -98,79 +94,31 @@
         }
         if (orientation !== 'horizontal') {
             newChildLayoutParams.parentHAlign = HALIGN_MAP[contentHAlign];
-            if ($jsonHeight?.type === 'wrap_content' || !$jsonHeight) {
+            if (
+                !$jsonHeight ||
+                $jsonHeight.type === 'wrap_content' ||
+                $jsonHeight.type === 'match_parent' && layoutParams?.parentVerticalWrapContent
+            ) {
                 newChildLayoutParams.parentVerticalWrapContent = true;
             }
         }
         if (orientation !== 'vertical') {
             newChildLayoutParams.parentVAlign = VALIGN_MAP[contentVAlign];
-            if ($jsonWidth?.type === 'wrap_content') {
+            if (
+                $jsonWidth?.type === 'wrap_content' ||
+                $jsonWidth?.type === 'match_parent' && layoutParams?.parentHorizontalWrapContent
+            ) {
                 newChildLayoutParams.parentHorizontalWrapContent = true;
             }
         }
         if (orientation === 'horizontal') {
-            newChildLayoutParams.parentLayoutOrientation = 'horizontal';
+            newChildLayoutParams.parentContainerOrientation = 'horizontal';
         }
         if (orientation === 'vertical') {
-            newChildLayoutParams.parentLayoutOrientation = 'vertical';
+            newChildLayoutParams.parentContainerOrientation = 'vertical';
         }
 
         childLayoutParams = assignIfDifferent(newChildLayoutParams, childLayoutParams);
-    }
-
-    let sizesStore: Readable<(MaybeMissing<Size> | undefined)[]>;
-    $: {
-        let sizes: Readable<(MaybeMissing<Size> | undefined)>[] = [];
-
-        if (orientation !== 'overlap') {
-            const sizeProp = orientation === 'vertical' ? 'height' : 'width';
-
-            items.forEach(item => {
-                const size = rootCtx.getDerivedFromVars(item.json[sizeProp] as Size);
-                sizes.push(size);
-            });
-        }
-
-        sizesStore = derived(sizes, vals => vals);
-    }
-
-    let style: Style = {};
-    $: {
-        let newStyle: Style = {};
-
-        if (orientation !== 'overlap') {
-            const sizeProp = orientation === 'vertical' ? 'height' : 'width';
-            const isWrapContentOnAxis = orientation === 'vertical' ? ($jsonHeight?.type === 'wrap_content' || !$jsonHeight) : $jsonWidth?.type === 'wrap_content';
-            let sizes = $sizesStore;
-
-            let sizeTemplate = sizes
-                .map(size => {
-                    if (!size && sizeProp === 'width' || size?.type === 'match_parent') {
-                        if (isWrapContentOnAxis) {
-                            rootCtx.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
-                                level: 'warn'
-                            }));
-                            return 'minmax(0, auto)';
-                        }
-
-                        return (Number(size?.weight) || 1) + 'fr';
-                    } else if (
-                        size &&
-                        size.type === 'wrap_content' &&
-                        size.constrained
-                    ) {
-                        return 'minmax(0, auto)';
-                    }
-
-                    return 'auto';
-                })
-                .join(' ');
-
-            const templateRule = orientation === 'vertical' ? 'grid-template-rows' : 'grid-template-columns';
-            newStyle[templateRule] = sizeTemplate;
-        }
-
-        style = assignIfDifferent(newStyle, style);
     }
 
     $: mods = {
@@ -186,7 +134,6 @@
         {json}
         {origJson}
         {templateContext}
-        {style}
         {layoutParams}
     >
         {#each items as item}

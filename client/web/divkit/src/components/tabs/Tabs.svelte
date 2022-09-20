@@ -26,6 +26,7 @@
     import { correctFontWeight } from '../../utils/correctFontWeight';
     import { TabItem } from '../../types/tabs';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
+    import { assignIfDifferent } from '../../utils/assignIfDifferent';
 
     export let json: Partial<DivTabsData> = {};
     export let templateContext: TemplateContext;
@@ -44,6 +45,22 @@
         } else {
             hasError = false;
         }
+    }
+
+    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
+    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
+    let childLayoutParams: LayoutParams = {};
+    $: {
+        let newLayoutParams: LayoutParams = {};
+
+        if ($jsonWidth?.type === 'wrap_content') {
+            newLayoutParams.parentHorizontalWrapContent = true;
+        }
+        if (!$jsonHeight || $jsonHeight.type === 'wrap_content') {
+            newLayoutParams.parentVerticalWrapContent = true;
+        }
+
+        childLayoutParams = assignIfDifferent(newLayoutParams, childLayoutParams);
     }
 
     let tabsElem: HTMLElement;
@@ -542,7 +559,7 @@
                         style="left: {index * 100}%"
                     >
                         {#if showedPanels[index]}
-                            <Unknown div={item.div} templateContext={templateContext} />
+                            <Unknown div={item.div} {templateContext} layoutParams={childLayoutParams} />
                         {/if}
                     </div>
                 {/each}

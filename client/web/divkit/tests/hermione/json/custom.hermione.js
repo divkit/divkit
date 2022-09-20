@@ -10,4 +10,10 @@ describe('custom', () => {
 
         await this.browser.assertView('recursive', '#root');
     });
+
+    it('container and margins', async function() {
+        await this.browser.yaOpenJson('../../../tests/hermione/json/custom/containerAndMargins.json');
+
+        await this.browser.assertView('margins', '#root');
+    });
 });

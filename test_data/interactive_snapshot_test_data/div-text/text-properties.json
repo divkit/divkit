@@ -51,7 +51,7 @@
         {
           "name": "line_height",
           "type": "number",
-          "value": 4
+          "value": 20
         },
         {
           "name": "max_lines",
@@ -66,9 +66,6 @@
             "type": "container",
             "orientation": "vertical",
             "width": {
-              "type": "match_parent"
-            },
-            "height": {
               "type": "match_parent"
             },
             "background": [
@@ -96,9 +93,6 @@
                 "text_alignment_vertical": "@{text_alignment_vertical}",
                 "text_color": "@{text_color}",
                 "width": {
-                  "type": "match_parent"
-                },
-                "height": {
                   "type": "match_parent"
                 },
                 "horizontal_alignment": "center",
@@ -181,7 +175,7 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=text&value=5-max_lines\nline_2\nline_3\nline_4",
+          "url": "div-action://set_variable?name=text&value=5-max_lines%0Aline_2%0Aline_3%0Aline_4",
           "log_id": "changing_text"
         },
         {
@@ -193,11 +187,11 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=text&value=6-line_height\nline_2\nline_3",
+          "url": "div-action://set_variable?name=text&value=6-line_height%0Aline_2%0Aline_3",
           "log_id": "changing_text"
         },
         {
-          "url": "div-action://set_variable?name=line_height&value=24",
+          "url": "div-action://set_variable?name=line_height&value=40",
           "log_id": "line_height"
         },
         {
@@ -245,7 +239,7 @@
           "log_id": "restore: text_color"
         },
         {
-          "url": "div-action://set_variable?name=line_height&value=4",
+          "url": "div-action://set_variable?name=line_height&value=20",
           "log_id": "restore: line_height"
         },
         {
