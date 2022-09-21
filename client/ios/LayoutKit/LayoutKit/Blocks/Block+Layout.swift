@@ -180,6 +180,10 @@ public struct ContainerBlockLayout {
 
     let groups: [[(child: ContainerBlock.Child, childSize: CGSize, lineOffset: CGFloat)]] =
       children.reduce([[]]) { result, child in
+        if child.isResizable(for: layoutDirection) {
+          let childSize = child.content.size(forResizableBlockSize: size)
+          return result + [[(child, childSize, 0)]]
+        }
         let offset = (result.last?.last?.2 ?? 0) +
           (result.last?.last?.1[keyPath: buildingDirectionKeyPath] ?? 0)
         let childSize = child.content.size(forResizableBlockSize: .zero)
@@ -277,5 +281,16 @@ extension Block {
 
   fileprivate var verticalMeasure: ResizableBlockMeasure.Measure {
     isVerticallyResizable ? .resizable(weightOfVerticallyResizableBlock) : .nonResizable
+  }
+}
+
+fileprivate extension ContainerBlock.Child {
+  func isResizable(for layoutDirection: ContainerBlock.LayoutDirection) -> Bool {
+    switch layoutDirection {
+    case .horizontal:
+      return content.isHorizontallyResizable
+    case .vertical:
+      return content.isVerticallyResizable
+    }
   }
 }

@@ -43,10 +43,32 @@ extension DivContainer: DivBlockModeling {
   private func checkConstraints(
     for children: [Block],
     path: UIElementPath,
-    orientation: Orientation
+    orientation: Orientation,
+    layoutMode: LayoutMode = .noWrap
   ) throws {
     guard !children.isEmpty else {
       throw DivBlockModelingError("DivContainer is empty", path: path)
+    }
+
+    if layoutMode == .wrap {
+      switch orientation {
+      case .horizontal:
+        if children.hasVerticallyResizable {
+          throw DivBlockModelingError(
+            "Horizontal DivContainer with wrap layout mode contains item with match_parent height",
+            path: path
+          )
+        }
+      case .vertical:
+        if children.hasHorizontallyResizable {
+          throw DivBlockModelingError(
+            "Vertical DivContainer with wrap layout mode contains item with match_parent width",
+            path: path
+          )
+        }
+      case .overlap:
+        break
+      }
     }
 
     if width.isIntrinsic {
@@ -164,7 +186,8 @@ extension DivContainer: DivBlockModeling {
     try checkConstraints(
       for: children.map { $0.content },
       path: childContext.parentPath,
-      orientation: orientation
+      orientation: orientation,
+      layoutMode: layoutMode
     )
 
     return try ContainerBlock(
