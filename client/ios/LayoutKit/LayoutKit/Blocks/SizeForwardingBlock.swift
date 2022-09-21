@@ -13,6 +13,8 @@ extension SizeForwardingBlock {
   public var isVerticallyConstrained: Bool { sizeProvider.isVerticallyConstrained }
   public var isHorizontallyConstrained: Bool { sizeProvider.isHorizontallyConstrained }
 
+  public var calculateWidthFirst: Bool { sizeProvider.calculateWidthFirst }
+
   public var intrinsicContentWidth: CGFloat {
     sizeProvider.intrinsicContentWidth
   }
@@ -27,6 +29,14 @@ extension SizeForwardingBlock {
 
   public func heightOfVerticallyNonResizableBlock(forWidth width: CGFloat) -> CGFloat {
     sizeProvider.heightOfVerticallyNonResizableBlock(forWidth: width)
+  }
+
+  public func widthOfHorizontallyNonResizableBlock(forHeight height: CGFloat) -> CGFloat {
+    sizeProvider.widthOfHorizontallyNonResizableBlock(forHeight: height)
+  }
+
+  public var heightOfVerticallyNonResizableBlock: CGFloat {
+    sizeProvider.heightOfVerticallyNonResizableBlock
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {

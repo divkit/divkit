@@ -23,8 +23,11 @@ public protocol Block: AnyObject,
   var isHorizontallyConstrained: Bool { get }
 
   var widthOfHorizontallyNonResizableBlock: CGFloat { get }
+  var heightOfVerticallyNonResizableBlock: CGFloat { get }
+  func widthOfHorizontallyNonResizableBlock(forHeight: CGFloat) -> CGFloat
   func heightOfVerticallyNonResizableBlock(forWidth: CGFloat) -> CGFloat
 
+  var calculateWidthFirst: Bool { get }
   var intrinsicContentWidth: CGFloat { get }
   func intrinsicContentHeight(forWidth: CGFloat) -> CGFloat
 
@@ -35,15 +38,35 @@ public protocol Block: AnyObject,
 }
 
 extension Block {
+  public var calculateWidthFirst: Bool { true }
+
+  public func widthOfHorizontallyNonResizableBlock(forHeight: CGFloat) -> CGFloat {
+    assertionFailure("Method should be overridden when calculateWidthFirst was set to false")
+    return .zero
+  }
+  
+  public var heightOfVerticallyNonResizableBlock: CGFloat {
+    assertionFailure("Method should be overridden when calculateWidthFirst was set to false")
+    return .zero
+  }
+
   public func sizeFor(
     widthOfHorizontallyResizableBlock: CGFloat,
     heightOfVerticallyResizableBlock: CGFloat
   ) -> CGSize {
-    let width = isHorizontallyResizable ? widthOfHorizontallyResizableBlock :
-      widthOfHorizontallyNonResizableBlock
-    let height = isVerticallyResizable ? heightOfVerticallyResizableBlock :
-      heightOfVerticallyNonResizableBlock(forWidth: width)
-    return CGSize(width: width, height: height)
+    if (calculateWidthFirst) {
+      let width = isHorizontallyResizable ? widthOfHorizontallyResizableBlock :
+        widthOfHorizontallyNonResizableBlock
+      let height = isVerticallyResizable ? heightOfVerticallyResizableBlock :
+        heightOfVerticallyNonResizableBlock(forWidth: width)
+      return CGSize(width: width, height: height)
+    } else {
+      let height = isVerticallyResizable ? heightOfVerticallyResizableBlock :
+        heightOfVerticallyNonResizableBlock
+      let width = isHorizontallyResizable ? widthOfHorizontallyResizableBlock :
+      widthOfHorizontallyNonResizableBlock(forHeight: height)
+      return CGSize(width: width, height: height)
+    }
   }
 
   public func size(forResizableBlockSize resizableBlockSize: CGSize) -> CGSize {
