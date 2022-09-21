@@ -124,19 +124,17 @@ internal class DivKitSnapshotTestCase: XCTestCase {
   ) throws {
     let currentScale = UIScreen.main.scale
     let devices = ScreenSize.portrait.filter { $0.scale == currentScale }
-    let widths = devices.uniqueWidths
-    try widths.forEach { width in
+    try devices.forEach { device in
       let view = try makeDivView(
         data: data,
         divKitComponents: divKitComponents,
-        width: width
+        size: device.size
       )
       guard let image = view.makeSnapshot() else {
         throw DivTestingErrors.snapshotCouldNotBeCreated
       }
       let referenceUrl = referenceFileURL(
-        width: width,
-        scale: currentScale,
+        device: device,
         caseName: caseName,
         stepName: stepName
       )
@@ -158,12 +156,10 @@ internal class DivKitSnapshotTestCase: XCTestCase {
   ) {
     let scaleToCheck: CGFloat = scale == 2 ? 3 : 2
     let devices = ScreenSize.portrait.filter { $0.scale == scaleToCheck }
-    let widthsToCheck = devices.uniqueWidths
     let fileManager = FileManager.default
-    widthsToCheck.forEach { width in
+    devices.forEach { device in
       let referenceUrl = referenceFileURL(
-        width: width,
-        scale: scaleToCheck,
+        device: device,
         caseName: caseName,
         stepName: stepName
       )
@@ -176,8 +172,7 @@ internal class DivKitSnapshotTestCase: XCTestCase {
   }
 
   private func referenceFileURL(
-    width: CGFloat,
-    scale: CGFloat,
+    device: ScreenSize,
     caseName: String,
     stepName: String?
   ) -> URL {
@@ -189,25 +184,23 @@ internal class DivKitSnapshotTestCase: XCTestCase {
     if let stepName = stepName {
       stepDescription = "_" + stepName
     }
-    let fileName = caseName + "_\(Int(width))" + scale.imageSuffix + "\(stepDescription).png"
+    let fileName = caseName + "_\(Int(device.size.width))" + device.scale.imageSuffix + "\(stepDescription).png"
     return referencesURL.appendingPathComponent(fileName, isDirectory: false)
   }
 
   private func makeDivView(
     data: DivData,
     divKitComponents: DivKitComponents,
-    width: CGFloat
+    size: CGSize
   ) throws -> UIView {
     guard let block = data.makeBlock(
       divKitComponents: divKitComponents
     ) else {
       throw DivTestingErrors.blockCouldNotBeCreatedFromData
     }
-    let blockWidth = block.isHorizontallyResizable ? width : block
-      .widthOfHorizontallyNonResizableBlock
-    let height = block.heightOfVerticallyNonResizableBlock(forWidth: blockWidth)
+    let blockSize = block.size(forResizableBlockSize: size)
     let divView = block.makeBlockView()
-    divView.frame = CGRect(origin: .zero, size: CGSize(width: blockWidth, height: height))
+    divView.frame = CGRect(origin: .zero, size: blockSize)
     divView.layoutIfNeeded()
     return divView
   }

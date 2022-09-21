@@ -7,12 +7,10 @@ public struct ScreenSize {
 
   public static let portrait = [
     ScreenSize(size: CGSize(width: 320, height: 480), scale: 2),
-    ScreenSize(size: CGSize(width: 320, height: 568), scale: 2),
     ScreenSize(size: CGSize(width: 375, height: 667), scale: 2),
     ScreenSize(size: CGSize(width: 375, height: 812), scale: 3),
-    ScreenSize(size: CGSize(width: 414, height: 736), scale: 3),
     ScreenSize(size: CGSize(width: 414, height: 896), scale: 2),
-    ScreenSize(size: CGSize(width: 414, height: 896), scale: 3),
+    ScreenSize(size: CGSize(width: 414, height: 736), scale: 3),
   ]
 }
 
