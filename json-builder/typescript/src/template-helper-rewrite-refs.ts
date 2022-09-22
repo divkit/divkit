@@ -14,8 +14,8 @@ function rewriteRefsTemplate(template: unknown): void {
                     if (objChild instanceof TemplatePropertyReference) {
                         obj[key] = undefined; // delete ломает валидатор
 
-                        if (objChild.name !== key) {
-                            obj['$' + key] = objChild.name;
+                        if (objChild.templatePropertyName !== key) {
+                            obj['$' + key] = objChild.templatePropertyName;
                         }
                     } else {
                         stack.push(objChild);

@@ -12,10 +12,10 @@ export interface ITemplates {
 export type Type<U, V extends string = string> = U | TemplatePropertyReference<V, U>;
 
 export class TemplatePropertyReference<V extends string = string, U = {}> {
-    public name: V;
+    public templatePropertyName: V;
     private _value?: U;
     public constructor(name: V) {
-        this.name = name;
+        this.templatePropertyName = name;
     }
 }
 
