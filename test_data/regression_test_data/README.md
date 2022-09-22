@@ -1,25 +1,25 @@
-# DivKit Regression Test Data
+# DivKit Test Data
 
-Данные для регрессионого тестирования DivKit. Содержит сценарии и сопутсвующие файлы версток для ручного прогона сценариев.
+JSON data for framework testing inside `DivKit Playground` apps. Theese test cases can be found in `DivKit Playground` -> `Testing` screen.
 
-## Прогон сценариев
+## How to add new test case
 
-Осуществляется в `DivKit Playground`:
+1. Add JSON data file into this folder.
+2. Add test case information into `index.json` file.
+3. Rebuild `DivKit Playground` app and check new test case.
 
-- Запустить `DivKit Playground`
-- Выбрать раздел Testing. Загрузится список сценариев
-- При выборе сценария загрузится необходимая верстка с заданными для сценария параметрами и описание сценария (шаги и ожидаемый результат).
+## index.json format
 
-## Добавление нового сценария
+`title` – test case title.
 
-Для добавления нового сценария требуется:
+`steps` – actions required to complete the test case.
 
-1. Добавить файл json-файл с новым сценарием в текущую папку.
-2. Добавить сценарий в файл [`index.json`]:
-    - Задать заголовок в поле `title`
-    - Перечислить шаги сценария в поле `steps`
-    - Перечислить ожидаемые результаты в поле `expected_results`
-    - Опционально указать `tags` для группировки и фильтрации сценариев
-    - Опционально указать `priority`, один из `blocker`, `critical`, `normal` и `minor`. По-умолчанию `normal`.
-    - Задать `file` - путь к ранее добавленному файлу верстки
-3. Проверить работу сценария в приложении `DivKit Playground`.
+`expected_results` – what is expected to happen after performing actions from `steps` section.
+
+`tags` – tags that are used to filter scenarios.
+
+`priority` – test case priority. Possible values: `blocker`, `critical`, `normal`, `minor`. Default value is `normal`.
+
+`file` – relative path to JSON data.
+
+`platforms` – list of platforms where the test case is available. Possible values: `android`, `ios`, `web`.
