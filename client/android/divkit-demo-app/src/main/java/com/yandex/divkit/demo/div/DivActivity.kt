@@ -26,8 +26,6 @@ import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.lottie.DivLottieLogger
-import com.yandex.div.lottie.DivLottieRawResProvider
-import com.yandex.div.util.dpToPx
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.divkit.demo.R
@@ -96,25 +94,6 @@ open class DivActivity : AppCompatActivity() {
             }
         }
 
-        val rawResProvider = object : DivLottieRawResProvider {
-            override fun provideRes(url: String): Int? {
-                return when (url) {
-                    "res://love" -> R.raw.love_anim
-                    else -> null
-                }
-            }
-
-            override fun provideAssetFile(url: String): String? {
-                return when (url) {
-                   "asset://banana" -> "lottie/lottie_1.json"
-                   "asset://spinner" -> "lottie/spinner.json"
-                    else -> null
-                }
-            }
-
-            override fun provideAssetFolder(): String = "lottie/"
-        }
-
         val logger = object : DivLottieLogger {
             override fun log(message: String) {
                 android.util.Log.d("4444", message)
@@ -126,7 +105,7 @@ open class DivActivity : AppCompatActivity() {
         }
         val configuration = DivUtils.createDivConfiguration(this, stateChangeListener)
             .extension(DivPinchToZoomExtensionHandler(DivPinchToZoomConfiguration.Builder(this).build()))
-            .extension(DivLottieExtensionHandler(rawResProvider, logger))
+            .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider, logger))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
             .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
             .build()

@@ -12,6 +12,7 @@ import com.yandex.div.video.custom.VideoCustomAdapter
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.divkit.demo.Container
+import com.yandex.divkit.demo.div.DemoDivLottieRawResProvider
 import com.yandex.divkit.demo.div.Div2Activity
 import com.yandex.divkit.demo.div.DivUtils
 import com.yandex.divkit.demo.screenshot.Div2ViewFactory
@@ -47,7 +48,7 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
                     )
                 )
                 .divCustomViewAdapter(VideoCustomAdapter(Container.videoCustomViewController))
-                .extension(DivLottieExtensionHandler())
+                .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider))
                 .divDataChangeListener(transitionScheduler)
                 .divStateCache(divStateStorage.cache)
                 .typefaceProvider(YandexSansDivTypefaceProvider(activity))
