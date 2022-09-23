@@ -76,7 +76,9 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
 
         divView.apply {
-            layoutParams = ViewGroup.LayoutParams(matchParent, wrapContent)
+            val divViewHeight = if (getChildAt(0)?.layoutParams?.height == matchParent)
+                matchParent else wrapContent
+            layoutParams = ViewGroup.LayoutParams(matchParent, divViewHeight)
             id = R.id.morda_screenshot_div
         }
         setContentView(divView)
