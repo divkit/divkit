@@ -22,6 +22,8 @@ internal class ReleaseViewVisitor @Inject constructor(
     private val divExtensionController: DivExtensionController
 ) : DivViewVisitor() {
 
+    override fun visit(view: DivWrapLayout) = releaseInternal(view, view.div)
+
     override fun visit(view: DivFrameLayout) = releaseInternal(view, view.div)
 
     override fun visit(view: DivGifImageView) = releaseInternal(view, view.div)

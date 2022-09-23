@@ -10,6 +10,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view.layout.TabsLayout
+import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
@@ -28,7 +29,7 @@ import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.view.pooling.ViewPool
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
-import com.yandex.div2.DivContainer.Orientation.OVERLAP
+import com.yandex.div2.DivContainer.Orientation
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGallery.ScrollMode.PAGING
@@ -60,6 +61,7 @@ internal class DivViewCreator @Inject constructor(
         viewPool.register(TAG_GIF_IMAGE, { DivGifImageView(context) }, 3)
         viewPool.register(TAG_OVERLAP_CONTAINER, { DivFrameLayout(context) }, 8)
         viewPool.register(TAG_LINEAR_CONTAINER, { DivLinearLayout(context) }, 12)
+        viewPool.register(TAG_WRAP_CONTAINER, { DivWrapLayout(context) }, 4)
         viewPool.register(TAG_GRID, { DivGridLayout(context) }, 4)
         viewPool.register(TAG_GALLERY, { DivRecyclerView(context) }, 4)
         viewPool.register(TAG_SNAPPY_GALLERY, { DivSnappyRecyclerView(context) }, 2)
@@ -89,10 +91,12 @@ internal class DivViewCreator @Inject constructor(
     override fun visit(data: DivSeparator, resolver: ExpressionResolver): View = DivSeparatorView(context)
 
     override fun visit(data: DivContainer, resolver: ExpressionResolver): View {
-        val view: ViewGroup = if (OVERLAP == data.orientation.evaluate(resolver)) {
-            viewPool.obtain(TAG_OVERLAP_CONTAINER)
-        } else {
-            viewPool.obtain(TAG_LINEAR_CONTAINER)
+        val mode = data.layoutMode.evaluate(resolver)
+        val orientation = data.orientation.evaluate(resolver)
+        val view: ViewGroup = when {
+            mode == DivContainer.LayoutMode.WRAP -> viewPool.obtain(TAG_WRAP_CONTAINER)
+            orientation == Orientation.OVERLAP -> viewPool.obtain(TAG_OVERLAP_CONTAINER)
+            else -> viewPool.obtain(TAG_LINEAR_CONTAINER)
         }
         data.items.forEach { childData ->
             view.addView(create(childData, resolver))
@@ -137,6 +141,7 @@ internal class DivViewCreator @Inject constructor(
         const val TAG_GIF_IMAGE = "DIV2.IMAGE_GIF_VIEW"
         const val TAG_OVERLAP_CONTAINER = "DIV2.OVERLAP_CONTAINER_VIEW"
         const val TAG_LINEAR_CONTAINER = "DIV2.LINEAR_CONTAINER_VIEW"
+        const val TAG_WRAP_CONTAINER = "DIV2.WRAP_CONTAINER_VIEW"
         const val TAG_GRID = "DIV2.GRID_VIEW"
         const val TAG_GALLERY = "DIV2.GALLERY_VIEW"
         const val TAG_SNAPPY_GALLERY = "DIV2.SNAPPY_GALLERY_VIEW"

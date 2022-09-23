@@ -17,7 +17,9 @@ import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
+import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -37,7 +39,13 @@ internal class DivContainerBinder @Inject constructor(
 ) : DivViewBinder<DivContainer, ViewGroup> {
 
     override fun bindView(view: ViewGroup, div: DivContainer, divView: Div2View, path: DivStatePath) {
-        var oldDiv = (view as? DivLinearLayout)?.div ?: (view as? DivFrameLayout)?.div
+        var oldDiv = when (view) {
+            is DivWrapLayout -> view.div
+            is DivLinearLayout -> view.div
+            is DivFrameLayout -> view.div
+            else -> null
+        }
+
         if (div == oldDiv) {
             // todo MORDAANDROID-636
             // return
@@ -53,25 +61,10 @@ internal class DivContainerBinder @Inject constructor(
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
 
         val areDivsReplaceable = DivComparator.areDivsReplaceable(oldDiv, div, resolver)
-        if (view is DivLinearLayout) {
-            expressionSubscriber.addSubscription(div.orientation.observeAndGet(resolver) {
-                if (it == DivContainer.Orientation.VERTICAL) {
-                    view.orientation = LinearLayout.VERTICAL
-                } else {
-                    view.orientation = LinearLayout.HORIZONTAL
-                }
-            })
-            expressionSubscriber.addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
-                view.gravity = evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver))
-            })
-            expressionSubscriber.addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
-                view.gravity = evaluateGravity(div.contentAlignmentHorizontal.evaluate(resolver), it)
-            })
-
-            val firstBind = oldDiv == null || oldDiv == div
-            view.div = div
-        } else if (view is DivFrameLayout) {
-            view.div = div
+        when (view) {
+            is DivLinearLayout -> bindLinearProperties(view, div, resolver, expressionSubscriber)
+            is DivWrapLayout -> bindWrapProperties(view, div, resolver, expressionSubscriber)
+            is DivFrameLayout -> view.div = div
         }
 
         for (childView in view.children) {
@@ -122,6 +115,40 @@ internal class DivContainerBinder @Inject constructor(
         view.trackVisibilityActions(div.items, oldDiv?.items, divView)
     }
 
+    private fun bindLinearProperties(
+        view: DivLinearLayout,
+        div: DivContainer,
+        resolver: ExpressionResolver,
+        subscriber: ExpressionSubscriber
+    ) {
+        subscriber.addSubscription(div.orientation.observeAndGet(resolver) {
+            view.orientation = if (div.isHorizontal(resolver))
+                LinearLayout.HORIZONTAL else LinearLayout.VERTICAL
+        })
+        subscriber.addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
+            view.gravity = evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver))
+        })
+        subscriber.addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
+            view.gravity = evaluateGravity(div.contentAlignmentHorizontal.evaluate(resolver), it)
+        })
+
+        view.div = div
+    }
+
+    private fun bindWrapProperties(
+            view: DivWrapLayout,
+            div: DivContainer,
+            resolver: ExpressionResolver,
+            subscriber: ExpressionSubscriber
+    ) {
+        subscriber.addSubscription(div.orientation.observeAndGet(resolver) {
+            view.wrapDirection =
+                    if (div.isHorizontal(resolver)) WrapDirection.ROW else WrapDirection.COLUMN
+        })
+
+        view.div = div
+    }
+
     private fun observeChildViewAlignment(
         div: DivContainer,
         childDivValue: DivBase,
@@ -136,16 +163,16 @@ internal class DivContainerBinder @Inject constructor(
             childView.applyAlignment(alignmentHorizontal.evaluate(resolver),
                 alignmentVertical.evaluate(resolver))
 
-            if (div.orientation.evaluate(resolver) == DivContainer.Orientation.VERTICAL &&
-                childDivValue.height is DivSize.MatchParent
-            ) {
+            if (div.isVertical(resolver) && childDivValue.height is DivSize.MatchParent) {
                 childView.applyWeight(childDivValue.height.value() as DivMatchParentSize, resolver)
-                ForceParentLayoutParams.setSizeFromParent(childView, h = 0)
-            } else if (div.orientation.evaluate(resolver) == DivContainer.Orientation.HORIZONTAL &&
-                childDivValue.width is DivSize.MatchParent
-            ) {
+                if (!div.isWrapContainer(resolver)) {
+                    ForceParentLayoutParams.setSizeFromParent(childView, h = 0)
+                }
+            } else if (div.isHorizontal(resolver) && childDivValue.width is DivSize.MatchParent) {
                 childView.applyWeight(childDivValue.width.value() as DivMatchParentSize, resolver)
-                ForceParentLayoutParams.setSizeFromParent(childView, w = 0)
+                if (!div.isWrapContainer(resolver)) {
+                    ForceParentLayoutParams.setSizeFromParent(childView, w = 0)
+                }
             }
         }
 
@@ -159,15 +186,13 @@ internal class DivContainerBinder @Inject constructor(
             div.orientation.observe(resolver, applyAlignments)
         )
 
-        if ((div.orientation.evaluate(resolver) == DivContainer.Orientation.VERTICAL &&
-            childDivValue.height is DivSize.MatchParent)) {
+        if ((div.isVertical(resolver) && childDivValue.height is DivSize.MatchParent)) {
             (childDivValue.height.value() as DivMatchParentSize).weight?.let {
                 expressionSubscriber.addSubscription(
                     it.observe(resolver, applyAlignments)
                 )
             }
-        } else if(div.orientation.evaluate(resolver) == DivContainer.Orientation.HORIZONTAL &&
-            childDivValue.width is DivSize.MatchParent) {
+        } else if(div.isHorizontal(resolver) && childDivValue.width is DivSize.MatchParent) {
             (childDivValue.width.value() as DivMatchParentSize).weight?.let {
                 expressionSubscriber.addSubscription(
                     it.observe(resolver, applyAlignments)
@@ -184,4 +209,13 @@ internal class DivContainerBinder @Inject constructor(
             params.weight = size.weight?.evaluate(resolver)?.toFloat() ?: 1.0f
         }
     }
+
+    private fun DivContainer.isHorizontal(resolver: ExpressionResolver) =
+            orientation.evaluate(resolver) == DivContainer.Orientation.HORIZONTAL
+
+    private fun DivContainer.isVertical(resolver: ExpressionResolver) =
+            orientation.evaluate(resolver) == DivContainer.Orientation.VERTICAL
+
+    private fun DivContainer.isWrapContainer(resolver: ExpressionResolver) =
+            layoutMode.evaluate(resolver) == DivContainer.LayoutMode.WRAP
 }

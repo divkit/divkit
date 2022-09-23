@@ -6,6 +6,7 @@ import androidx.core.view.children
 import com.yandex.div.core.view.layout.TabsLayout
 
 internal abstract class DivViewVisitor {
+    open fun visit(view: DivWrapLayout) {}
     open fun visit(view: DivFrameLayout) {}
     open fun visit(view: DivGifImageView) {}
     open fun visit(view: DivGridLayout) {}
@@ -25,6 +26,10 @@ internal abstract class DivViewVisitor {
 
 internal fun DivViewVisitor.visitViewTree(view: View) {
     when (view) {
+        is DivWrapLayout -> {
+            visit(view)
+            view.visitChild(this::visitViewTree)
+        }
         is DivFrameLayout -> {
             visit(view)
             view.visitChild(this::visitViewTree)
