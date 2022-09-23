@@ -5,9 +5,12 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.R
@@ -80,9 +83,21 @@ class DivScreenshotActivity : AppCompatActivity() {
                 matchParent else wrapContent
             layoutParams = ViewGroup.LayoutParams(matchParent, divViewHeight)
             id = R.id.morda_screenshot_div
+            hideCursor()
         }
         setContentView(divView)
         ScreenshotTestState.notifyTestCompleted(cardAssetName)
+    }
+
+    private fun ViewGroup.hideCursor() {
+        for (child in children) {
+            if (child is EditText) {
+                child.isCursorVisible = false
+                child.inputType = child.inputType or InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS
+            } else {
+                (child as? ViewGroup)?.hideCursor()
+            }
+        }
     }
 
     override fun onResume() {

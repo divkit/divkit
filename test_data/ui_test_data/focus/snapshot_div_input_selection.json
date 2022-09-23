@@ -28,7 +28,8 @@
             {
               "id": "bottom_input",
               "type": "test_input",
-              "text_variable": "bottom_input"
+              "text_variable": "bottom_input",
+              "select_all_on_focus": 1
             }
           ]
         }
@@ -61,8 +62,7 @@
         "stroke": {
           "color": "#0000FF"
         }
-      },
-      "select_all_on_focus": 1
+      }
     }
   }
 }

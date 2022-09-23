@@ -9,11 +9,6 @@
           "value": "initial_text"
         },
         {
-          "name": "highlight_color",
-          "type": "color",
-          "value": "#CCCCFF"
-        },
-        {
           "name": "underline_color",
           "type": "color",
           "value": "#0000FF"
@@ -47,7 +42,7 @@
             "text_variable": "input_value",
             "font_size": 20,
             "text_color": "#444444",
-            "highlight_color": "@{highlight_color}",
+            "highlight_color": "#CCCCFF",
             "native_interface": {
               "color": "@{underline_color}"
             }
@@ -63,14 +58,6 @@
     {
       "div_actions": [
         {
-          "url": "div-action://set_variable?name=highlight_color&value=%23CCFFCC",
-          "log_id": "highlight_color"
-        }
-      ]
-    },
-    {
-      "div_actions": [
-        {
           "url": "div-action://set_variable?name=underline_color&value=%23FF0000",
           "log_id": "underline_color"
         }
@@ -78,10 +65,6 @@
     },
     {
       "div_actions": [
-        {
-          "url": "div-action://set_variable?name=highlight_color&value=%23CCCCFF",
-          "log_id": "restore: highlight_color"
-        },
         {
           "url": "div-action://set_variable?name=underline_color&value=%230000FF",
           "log_id": "underline_color"
