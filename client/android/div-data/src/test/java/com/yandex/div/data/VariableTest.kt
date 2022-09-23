@@ -8,6 +8,8 @@ import org.robolectric.RobolectricTestRunner
 import kotlin.random.Random
 import kotlin.reflect.KClass
 
+private const val VARIABLE_NAME_1 = "variable#1"
+
 /**
  * Tests for [Variable].
  */
@@ -55,6 +57,32 @@ class VariableTest {
         }
     }
 
+    @Test
+    fun `remove observer during set value iteration does not cause error`() {
+        val v = Variable.BooleanVariable(VARIABLE_NAME_1, true)
+        val observers = ArrayList<(Variable) -> Unit>().apply {
+            add {  }
+            add { v.removeObserver(get(0)) }
+            add {  }
+        }
+        observers.forEach { v.addObserver(it) }
+
+        v.setValue(Variable.BooleanVariable(VARIABLE_NAME_1, false))
+    }
+
+    @Test
+    fun `add observer during set value iteration does not cause error`() {
+        val v = Variable.BooleanVariable(VARIABLE_NAME_1, true)
+        val observers = ArrayList<(Variable) -> Unit>().apply {
+            add {  }
+            add { v.addObserver { } }
+            add {  }
+        }
+        observers.forEach { v.addObserver(it) }
+
+        v.setValue(Variable.BooleanVariable(VARIABLE_NAME_1, false))
+    }
+
     private fun generateAllTypesOfRandomVariables(): List<Variable> {
         return setOf(
             Variable.StringVariable("string_var", Random.nextBytes(4).toString()),
@@ -66,3 +94,4 @@ class VariableTest {
         ).toList()
     }
 }
+
