@@ -103,6 +103,25 @@ public final class ContainerBlock: BlockWithLayout {
   }
 
   private func validateLayoutTraits() throws {
+    if layoutMode == .wrap {
+      switch layoutDirection {
+      case .horizontal:
+        guard (children.map { $0.content }.allVerticallyNonResizable) else {
+          throw Error
+            .inconsistentChildLayoutTraits(
+              details: "failed to build horizontal wrap container with vertically resizable children"
+            )
+        }
+      case .vertical:
+        guard (children.map { $0.content }.allHorizontallyNonResizable) else {
+          throw Error
+            .inconsistentChildLayoutTraits(
+              details: "failed to build vertical wrap container with horizontally resizable children"
+            )
+        }
+      }
+    }
+    
     if widthTrait == .intrinsic {
       switch layoutDirection {
       case .horizontal:

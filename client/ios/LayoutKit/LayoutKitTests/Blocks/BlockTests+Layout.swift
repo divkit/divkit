@@ -9,6 +9,7 @@ extension ContainerBlockLayout {
     blocks: [Block],
     gaps: [CGFloat],
     layoutDirection: ContainerBlock.LayoutDirection,
+    layoutMode: ContainerBlock.LayoutMode = .noWrap,
     crossAlignment: Alignment = .leading,
     axialAlignment: Alignment = .leading,
     size: CGSize
@@ -17,7 +18,7 @@ extension ContainerBlockLayout {
       children: blocks.map { .init(content: $0, crossAlignment: crossAlignment) },
       gaps: gaps,
       layoutDirection: layoutDirection,
-      layoutMode: .noWrap,
+      layoutMode: layoutMode,
       axialAlignment: axialAlignment,
       size: size
     )
@@ -92,6 +93,94 @@ final class BlockTests_Layout: XCTestCase {
     let block = SwitchBlock(on: true, enabled: true, action: nil)
 
     XCTAssertEqual(block.intrinsicContentWidth, uiSwitchSize.width)
+  }
+
+  func test_calculateWidthFirstForHorizontalWrapContainer_EqualsTrue() {
+    let block = try! ContainerBlock(
+      layoutDirection: .horizontal,
+      layoutMode: .wrap,
+      children: [TextBlock(widthTrait: .intrinsic, text: text)]
+    )
+
+    XCTAssertEqual(block.calculateWidthFirst, true)
+  }
+
+  func test_calculateWidthFirstForVerticalWrapContainer_EqualsFalse() {
+    let block = try! ContainerBlock(
+      layoutDirection: .vertical,
+      layoutMode: .wrap,
+      children: [TextBlock(widthTrait: .intrinsic, text: text)]
+    )
+
+    XCTAssertEqual(block.calculateWidthFirst, false)
+  }
+
+  func test_HeightOfVerticalWrapContainer_EqualsSumHeightOfChildrenWithGaps() {
+    let block = try! ContainerBlock(
+      layoutDirection: .vertical,
+      layoutMode: .wrap,
+      heightTrait: .intrinsic,
+      gaps: threeGaps,
+      children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
+    )
+
+    let expectedHeight = imageSize.height + intrinsicTextSize.height + threeGapsSize
+    XCTAssertEqual(block.heightOfVerticallyNonResizableBlock, expectedHeight)
+  }
+
+  func test_FixedHeightOfVerticalWrapContainer_IsEqualToAssociatedValue() {
+    let anyHeight = intrinsicTextSize.width / 2
+    let block = try! ContainerBlock(
+      layoutDirection: .vertical,
+      layoutMode: .wrap,
+      heightTrait: .fixed(anyHeight),
+      gaps: threeGaps,
+      children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
+    )
+
+    XCTAssertEqual(block.heightOfVerticallyNonResizableBlock, anyHeight)
+  }
+
+  func test_FixedWidthOfHorizontalWrapContainer_IsEqualToAssociatedValue() {
+    let anyWidth = intrinsicTextSize.width / 2
+    let block = try! ContainerBlock(
+      layoutDirection: .horizontal,
+      layoutMode: .wrap,
+      widthTrait: .fixed(anyWidth),
+      gaps: threeGaps,
+      children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
+    )
+
+    XCTAssertEqual(block.widthOfHorizontallyNonResizableBlock, anyWidth)
+  }
+
+  func test_WidthOfHorizontalWrapContainerWithHorizontallyNonResizableBlocks_EqualsSumOfChildrenWidthsPlusGaps(
+  ) {
+    let block = try! ContainerBlock(
+      layoutDirection: .horizontal,
+      layoutMode: .wrap,
+      widthTrait: .intrinsic,
+      gaps: threeGaps,
+      children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
+    )
+
+    let expectedWidth = imageSize.width + intrinsicTextSize.width + threeGapsSize
+    XCTAssertEqual(block.widthOfHorizontallyNonResizableBlock, expectedWidth)
+  }
+
+  func test_WidthOfHorizontalWrapContainerWithHorizontallyResizableBlocks_EqualsToSumOfGaps() {
+    let block = try! ContainerBlock(
+      layoutDirection: .horizontal,
+      layoutMode: .wrap,
+      widthTrait: .resizable,
+      gaps: threeGaps,
+      children: [
+        ImageBlock(imageHolder: image, widthTrait: .resizable),
+        TextBlock(widthTrait: .resizable, text: text),
+      ]
+    )
+
+    XCTAssertEqual(block.intrinsicContentWidth, threeGapsSize)
   }
 
   func test_WidthOfVerticalContainer_EqualsMaxWidthOfChildren() {
@@ -226,6 +315,38 @@ final class BlockTests_Layout: XCTestCase {
         children: [TextBlock(widthTrait: .resizable, text: text)]
       ),
       ContainerBlock.Error.childAndGapCountMismatch
+    )
+  }
+
+  func test_WhenMakingHorizontalWrapContainer_WithVerticallyResizableChildren_Throws(
+  ) {
+    XCTAssertThrowsError(
+      try ContainerBlock(
+        layoutDirection: .horizontal,
+        layoutMode: .wrap,
+        children: [
+          TextBlock(widthTrait: .intrinsic, heightTrait: .resizable, text: text),
+        ]
+      ),
+      ContainerBlock.Error.inconsistentChildLayoutTraits(
+        details: "failed to build horizontal wrap container with vertically resizable children"
+      )
+    )
+  }
+
+  func test_WhenMakingVerticalWrapContainer_WithHorizontallyResizableChildren_Throws(
+  ) {
+    XCTAssertThrowsError(
+      try ContainerBlock(
+        layoutDirection: .vertical,
+        layoutMode: .wrap,
+        children: [
+          TextBlock(widthTrait: .resizable, text: text),
+        ]
+      ),
+      ContainerBlock.Error.inconsistentChildLayoutTraits(
+        details: "failed to build vertical wrap container with horizontally resizable children"
+      )
     )
   }
 
@@ -1203,6 +1324,58 @@ final class BlockTests_Layout: XCTestCase {
     XCTAssertEqual(layout.rightInset, 10)
   }
 
+  func test_HorizontalWrapContainer_OneLine() {
+    let block = block(withSize: blockSize)
+    let layout = ContainerBlockLayout(
+      blocks: [block, block],
+      gaps: [0, 0, 0],
+      layoutDirection: .horizontal,
+      layoutMode: .wrap,
+      size: CGSize(width: blockSize.width * 3, height: blockSize.height * 3)
+    )
+
+    XCTAssertEqual(layout.contentSize.height, blockSize.height)
+  }
+
+  func test_HorizontalWrapContainer_TwoLine() {
+    let block = block(withSize: blockSize)
+    let layout = ContainerBlockLayout(
+      blocks: [block, block],
+      gaps: [0, 0, 0],
+      layoutDirection: .horizontal,
+      layoutMode: .wrap,
+      size: CGSize(width: blockSize.width, height: blockSize.height * 3)
+    )
+
+    XCTAssertEqual(layout.contentSize.height, blockSize.height * 2)
+  }
+
+  func test_VerticalWrapContainer_OneLine() {
+    let block = block(withSize: blockSize)
+    let layout = ContainerBlockLayout(
+      blocks: [block, block],
+      gaps: [0, 0, 0],
+      layoutDirection: .vertical,
+      layoutMode: .wrap,
+      size: CGSize(width: blockSize.width * 3, height: blockSize.height * 3)
+    )
+
+    XCTAssertEqual(layout.contentSize.width, blockSize.width)
+  }
+
+  func test_VerticalWrapContainer_TwoLine() {
+    let block = block(withSize: blockSize)
+    let layout = ContainerBlockLayout(
+      blocks: [block, block],
+      gaps: [0, 0, 0],
+      layoutDirection: .vertical,
+      layoutMode: .wrap,
+      size: CGSize(width: blockSize.width * 3, height: blockSize.height)
+    )
+
+    XCTAssertEqual(layout.contentSize.width, blockSize.width * 2)
+  }
+
   func test_ContentWidthEqualsRightmostMaxXOfAllFrames() {
     let layout = ContainerBlockLayout(
       blocks: [
@@ -1391,3 +1564,4 @@ private let intrinsicTextSize = text.sizeForWidth(.infinity)
 private let multilineTextSize = text.sizeForWidth(imageSize.width)
 private let imageSize = CGSize(width: 80, height: 60)
 private let image = Image.imageWithSolidColor(.black, size: imageSize)!
+private let blockSize = CGSize(width: 10, height: 5)

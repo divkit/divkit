@@ -57,6 +57,28 @@ final class DivContainerExtensionsTests: XCTestCase {
     )
   }
 
+  func test_HorizontalWrapContainer_HasVerticallyResizableItem_ThrowsError(
+  ) {
+    XCTAssertThrowsError(
+      try makeBlock(fromFile: "horizontal_wrap_container_match_parent_height_item"),
+      DivBlockModelingError(
+        "Horizontal DivContainer with wrap layout mode contains item with match_parent height",
+        path: .root + "container"
+      )
+    )
+  }
+
+  func test_VerticalWrapContainer_HasHorizontallyResizableItem_ThrowsError(
+  ) {
+    XCTAssertThrowsError(
+      try makeBlock(fromFile: "vertical_wrap_container_match_parent_width_item"),
+      DivBlockModelingError(
+        "Vertical DivContainer with wrap layout mode contains item with match_parent width",
+        path: .root + "container"
+      )
+    )
+  }
+
   func test_HorizontalContainer_WithIntrinsicWidth_AndHasSingleHorizontallyResizableItem_ThrowsError(
   ) {
     XCTAssertThrowsError(

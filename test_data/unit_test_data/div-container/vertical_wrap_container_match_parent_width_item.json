@@ -1,0 +1,17 @@
+{
+  "type": "container",
+  "orientation": "vertical",
+  "layout_mode": "wrap",
+  "items": [
+    {
+      "type": "text",
+      "text": "Item with match_parent width",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      }
+    }
+  ]
+}
