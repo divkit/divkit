@@ -38,4 +38,95 @@ describe('background', () => {
             image_url: '"<script&'
         }])).toMatchSnapshot();
     });
+
+    test('radial', () => {
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00']
+        }])).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00'],
+            radius: {
+                type: 'fixed',
+                value: 100
+            }
+        }])).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00'],
+            radius: {
+                type: 'relative',
+                value: 'nearest_corner'
+            }
+        }])).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00'],
+            radius: {
+                type: 'relative',
+                value: 'nearest_side'
+            }
+        }])).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00'],
+            radius: {
+                type: 'relative',
+                value: 'farthest_side'
+            }
+        }])).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00'],
+            radius: {
+                type: 'relative',
+                value: 'farthest_corner'
+            }
+        }])).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00'],
+            center_x: {
+                type: 'fixed',
+                value: 100
+            }
+        }])).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00'],
+            center_x: {
+                type: 'relative',
+                value: .7
+            },
+            center_y: {
+                type: 'fixed',
+                value: 150
+            }
+        }])).toMatchSnapshot();
+
+        expect(getBackground([{
+            type: 'radial',
+            colors: ['#fc0', '#f00'],
+            center_x: {
+                type: 'relative',
+                value: 1
+            },
+            center_y: {
+                type: 'relative',
+                value: 1
+            },
+            radius: {
+                type: 'relative',
+                value: 'nearest_side'
+            }
+        }])).toMatchSnapshot();
+    });
 });

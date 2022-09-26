@@ -47,3 +47,75 @@ Object {
   "size": "contain",
 }
 `;
+
+exports[`background radial 1`] = `
+Object {
+  "image": "radial-gradient(circle farthest-corner at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background radial 2`] = `
+Object {
+  "image": "radial-gradient(circle 10em at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background radial 3`] = `
+Object {
+  "image": "radial-gradient(circle closest-corner at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background radial 4`] = `
+Object {
+  "image": "radial-gradient(circle closest-side at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background radial 5`] = `
+Object {
+  "image": "radial-gradient(circle farthest-side at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background radial 6`] = `
+Object {
+  "image": "radial-gradient(circle farthest-corner at 50% 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background radial 7`] = `
+Object {
+  "image": "radial-gradient(circle farthest-corner at 10em 50%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background radial 8`] = `
+Object {
+  "image": "radial-gradient(circle farthest-corner at 70% 15em,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;
+
+exports[`background radial 9`] = `
+Object {
+  "image": "radial-gradient(circle closest-side at 100% 100%,#ffcc00,#ff0000)",
+  "position": "50% 50%",
+  "size": "auto",
+}
+`;

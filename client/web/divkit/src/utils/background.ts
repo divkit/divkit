@@ -1,10 +1,18 @@
 import type { AlignmentHorizontal, AlignmentVertical } from '../types/alignment';
-import type { Background, GradientBackground, ImageBackground, SolidBackground } from '../types/background';
+import type {
+    Background,
+    GradientBackground,
+    ImageBackground,
+    SolidBackground,
+    RadialBackground,
+    RadialGradientCenter
+} from '../types/background';
 import type { ImageScale } from '../types/imageScale';
 import type { MaybeMissing } from '../expressions/json';
 import { correctColor } from './correctColor';
 import { htmlFilter } from './htmlFilter';
 import { Truthy } from './truthy';
+import { pxToEmWithUnits } from './pxToEm';
 
 export function getBackground(bgs: MaybeMissing<Background>[]): {
     color?: string;
@@ -30,6 +38,10 @@ export function getBackground(bgs: MaybeMissing<Background>[]): {
                 });
             } else if (bg.type === 'image') {
                 return image({
+                    bg
+                });
+            } else if (bg.type === 'radial') {
+                return radial({
                     bg
                 });
             }
@@ -109,6 +121,68 @@ function gradient(opts: {
         image:
             'linear-gradient(' +
             (90 - Number(opts.bg.angle || 0) + 'deg') +
+            ',' +
+            colors
+                .map(color => correctColor(color))
+                .join(',') +
+            ')'
+    };
+}
+
+const RELATIVE_SIZE_MAP = {
+    nearest_corner: 'closest-corner',
+    farthest_corner: 'farthest-corner',
+    nearest_side: 'closest-side',
+    farthest_side: 'farthest-side'
+};
+
+function radialCenterToCss(center: MaybeMissing<RadialGradientCenter> | undefined): string {
+    if (center && typeof center === 'object' && 'type' in center && center.value !== undefined) {
+        if (center.type === 'fixed') {
+            return pxToEmWithUnits(center.value);
+        } else if (center.type === 'relative') {
+            return `${Number(center.value) * 100}%`;
+        }
+    }
+
+    return '50%';
+}
+
+function radial(opts: {
+    bg: MaybeMissing<RadialBackground>;
+}): {
+    size: string | undefined;
+    pos: string | undefined;
+    image: string;
+} | undefined {
+    if (!Array.isArray(opts.bg?.colors)) {
+        return;
+    }
+
+    const colors = opts.bg.colors.filter(Truthy) as string[];
+    if (!colors.length) {
+        return;
+    }
+
+    const sizeVal = opts.bg.radius;
+    let size;
+    if (sizeVal && typeof sizeVal === 'object' && 'type' in sizeVal && sizeVal.value !== undefined) {
+        if (sizeVal.type === 'fixed') {
+            size = pxToEmWithUnits(sizeVal.value);
+        } else if (sizeVal.type === 'relative') {
+            size = RELATIVE_SIZE_MAP[sizeVal.value];
+        }
+    }
+
+    const centerX = radialCenterToCss(opts.bg.center_x);
+    const centerY = radialCenterToCss(opts.bg.center_y);
+
+    return {
+        size: undefined,
+        pos: undefined,
+        image:
+            'radial-gradient(' +
+            `circle ${size || 'farthest-corner'} at ${centerX} ${centerY}` +
             ',' +
             colors
                 .map(color => correctColor(color))
