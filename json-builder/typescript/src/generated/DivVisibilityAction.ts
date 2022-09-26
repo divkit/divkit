@@ -23,7 +23,7 @@ export interface IDivVisibilityAction {
     /**
      * Limit on the number of loggings. If `0`, the limit is removed.
      */
-    log_limit?: Type<number> | DivExpression;
+    log_limit?: Type<number | DivExpression>;
     /**
      * Additional parameters, passed to the host application.
      */
@@ -31,18 +31,18 @@ export interface IDivVisibilityAction {
     /**
      * Referer URL for logging.
      */
-    referer?: Type<string> | DivExpression;
+    referer?: Type<string | DivExpression>;
     /**
      * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with
      * elements](../../interaction.dita).
      */
-    url?: Type<string> | DivExpression;
+    url?: Type<string | DivExpression>;
     /**
      * Time in milliseconds during which an element must be visible to trigger `visibility-action`.
      */
-    visibility_duration?: Type<number> | DivExpression;
+    visibility_duration?: Type<number | DivExpression>;
     /**
      * Percentage of the visible part of an element that triggers `visibility-action`.
      */
-    visibility_percentage?: Type<number> | DivExpression;
+    visibility_percentage?: Type<number | DivExpression>;
 }

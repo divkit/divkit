@@ -18,15 +18,15 @@ export class DivChangeBoundsTransition<T extends DivChangeBoundsTransitionProps 
     /**
      * Animation duration in milliseconds.
      */
-    duration?: Type<number> | DivExpression;
+    duration?: Type<number | DivExpression>;
     /**
      * Transition speed nature.
      */
-    interpolator?: Type<DivAnimationInterpolator> | DivExpression;
+    interpolator?: Type<DivAnimationInterpolator | DivExpression>;
     /**
      * Delay in milliseconds before animation starts.
      */
-    start_delay?: Type<number> | DivExpression;
+    start_delay?: Type<number | DivExpression>;
 
     constructor(props?: Exact<DivChangeBoundsTransitionProps, T>) {
         this.duration = props?.duration;
@@ -39,13 +39,13 @@ export interface DivChangeBoundsTransitionProps {
     /**
      * Animation duration in milliseconds.
      */
-    duration?: Type<number> | DivExpression;
+    duration?: Type<number | DivExpression>;
     /**
      * Transition speed nature.
      */
-    interpolator?: Type<DivAnimationInterpolator> | DivExpression;
+    interpolator?: Type<DivAnimationInterpolator | DivExpression>;
     /**
      * Delay in milliseconds before animation starts.
      */
-    start_delay?: Type<number> | DivExpression;
+    start_delay?: Type<number | DivExpression>;
 }

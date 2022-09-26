@@ -8,7 +8,7 @@ export class EntityWithOptionalProperty<T extends EntityWithOptionalPropertyProp
     readonly _props?: Exact<EntityWithOptionalPropertyProps, T>;
 
     readonly type = 'entity_with_optional_property';
-    property?: Type<string> | DivExpression;
+    property?: Type<string | DivExpression>;
 
     constructor(props?: Exact<EntityWithOptionalPropertyProps, T>) {
         this.property = props?.property;
@@ -16,5 +16,5 @@ export class EntityWithOptionalProperty<T extends EntityWithOptionalPropertyProp
 }
 
 export interface EntityWithOptionalPropertyProps {
-    property?: Type<string> | DivExpression;
+    property?: Type<string | DivExpression>;
 }

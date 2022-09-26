@@ -15,7 +15,7 @@ export class DivMatchParentSize<T extends DivMatchParentSizeProps = DivMatchPare
      * Weight when distributing free space between elements with the size type `match_parent` inside
      * an element. If the weight isn't specified, the elements will divide the place equally.
      */
-    weight?: Type<number> | DivExpression;
+    weight?: Type<number | DivExpression>;
 
     constructor(props?: Exact<DivMatchParentSizeProps, T>) {
         this.weight = props?.weight;
@@ -27,5 +27,5 @@ export interface DivMatchParentSizeProps {
      * Weight when distributing free space between elements with the size type `match_parent` inside
      * an element. If the weight isn't specified, the elements will divide the place equally.
      */
-    weight?: Type<number> | DivExpression;
+    weight?: Type<number | DivExpression>;
 }

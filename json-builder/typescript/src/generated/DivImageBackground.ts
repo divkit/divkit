@@ -20,27 +20,27 @@ export class DivImageBackground<T extends DivImageBackgroundProps = DivImageBack
     /**
      * Image transparency.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Horizontal image alignment.
      */
-    content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    content_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical image alignment.
      */
-    content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    content_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Image URL.
      */
-    image_url: Type<string> | DivExpression;
+    image_url: Type<string | DivExpression>;
     /**
      * Background image must be loaded before the display.
      */
-    preload_required?: Type<IntBoolean> | DivExpression;
+    preload_required?: Type<IntBoolean | DivExpression>;
     /**
      * Image scaling.
      */
-    scale?: Type<DivImageScale> | DivExpression;
+    scale?: Type<DivImageScale | DivExpression>;
 
     constructor(props: Exact<DivImageBackgroundProps, T>) {
         this.alpha = props.alpha;
@@ -56,25 +56,25 @@ export interface DivImageBackgroundProps {
     /**
      * Image transparency.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Horizontal image alignment.
      */
-    content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    content_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical image alignment.
      */
-    content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    content_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Image URL.
      */
-    image_url: Type<string> | DivExpression;
+    image_url: Type<string | DivExpression>;
     /**
      * Background image must be loaded before the display.
      */
-    preload_required?: Type<IntBoolean> | DivExpression;
+    preload_required?: Type<IntBoolean | DivExpression>;
     /**
      * Image scaling.
      */
-    scale?: Type<DivImageScale> | DivExpression;
+    scale?: Type<DivImageScale | DivExpression>;
 }

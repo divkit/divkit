@@ -125,5 +125,14 @@ describe('templateHelper', () => {
         helper.template6({
             imgUrl: 'imgUrl',
         });
+
+        // expression into the reference
+        helper.template2({
+            action1: {
+                log_id: '123',
+                log_url: expression('//ya.ru'),
+            },
+            text2: expression('1'),
+        });
     });
 });

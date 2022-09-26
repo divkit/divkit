@@ -15,12 +15,12 @@ export class DivRadialGradient<T extends DivRadialGradientProps = DivRadialGradi
      * Shift of the central point of the gradient relative to the left edge along the X axis in the
      * range `0..1`.
      */
-    center_x?: Type<number> | DivExpression;
+    center_x?: Type<number | DivExpression>;
     /**
      * Shift of the central point of the gradient relative to the upper edge along the Y axis in the
      * range `0..1`.
      */
-    center_y?: Type<number> | DivExpression;
+    center_y?: Type<number | DivExpression>;
     /**
      * Colors. Gradient points will be located at an equal distance from each other.
      */
@@ -28,7 +28,7 @@ export class DivRadialGradient<T extends DivRadialGradientProps = DivRadialGradi
     /**
      * Radius of the gradient transition in `dp`.
      */
-    radius: Type<number> | DivExpression;
+    radius: Type<number | DivExpression>;
 
     constructor(props: Exact<DivRadialGradientProps, T>) {
         this.center_x = props.center_x;
@@ -43,12 +43,12 @@ export interface DivRadialGradientProps {
      * Shift of the central point of the gradient relative to the left edge along the X axis in the
      * range `0..1`.
      */
-    center_x?: Type<number> | DivExpression;
+    center_x?: Type<number | DivExpression>;
     /**
      * Shift of the central point of the gradient relative to the upper edge along the Y axis in the
      * range `0..1`.
      */
-    center_y?: Type<number> | DivExpression;
+    center_y?: Type<number | DivExpression>;
     /**
      * Colors. Gradient points will be located at an equal distance from each other.
      */
@@ -56,5 +56,5 @@ export interface DivRadialGradientProps {
     /**
      * Radius of the gradient transition in `dp`.
      */
-    radius: Type<number> | DivExpression;
+    radius: Type<number | DivExpression>;
 }

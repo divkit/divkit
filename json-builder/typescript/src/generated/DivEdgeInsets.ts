@@ -15,18 +15,18 @@ export interface IDivEdgeInsets {
     /**
      * Bottom margin.
      */
-    bottom?: Type<number> | DivExpression;
+    bottom?: Type<number | DivExpression>;
     /**
      * Left margin.
      */
-    left?: Type<number> | DivExpression;
+    left?: Type<number | DivExpression>;
     /**
      * Right margin.
      */
-    right?: Type<number> | DivExpression;
+    right?: Type<number | DivExpression>;
     /**
      * Top margin.
      */
-    top?: Type<number> | DivExpression;
-    unit?: Type<DivSizeUnit> | DivExpression;
+    top?: Type<number | DivExpression>;
+    unit?: Type<DivSizeUnit | DivExpression>;
 }

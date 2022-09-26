@@ -41,15 +41,15 @@ export class DivState<T extends DivStateProps = DivStateProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -61,12 +61,12 @@ export class DivState<T extends DivStateProps = DivStateProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * ID of the status that will be set by default. If the parameter isnt set, the first state of
      * the `states` will be set.
      */
-    default_state_id?: Type<string> | DivExpression;
+    default_state_id?: Type<string | DivExpression>;
     /**
      * ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
      *
@@ -104,7 +104,7 @@ export class DivState<T extends DivStateProps = DivStateProps> {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -131,7 +131,7 @@ export class DivState<T extends DivStateProps = DivStateProps> {
      *
      * @deprecated
      */
-    transition_animation_selector?: Type<DivTransitionSelector> | DivExpression;
+    transition_animation_selector?: Type<DivTransitionSelector | DivExpression>;
     /**
      * Change animation. It is played when the position or size of an element changes in the new
      * layout.
@@ -154,7 +154,7 @@ export class DivState<T extends DivStateProps = DivStateProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -210,15 +210,15 @@ export interface DivStateProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -230,12 +230,12 @@ export interface DivStateProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * ID of the status that will be set by default. If the parameter isnt set, the first state of
      * the `states` will be set.
      */
-    default_state_id?: Type<string> | DivExpression;
+    default_state_id?: Type<string | DivExpression>;
     /**
      * ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
      *
@@ -273,7 +273,7 @@ export interface DivStateProps {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -300,7 +300,7 @@ export interface DivStateProps {
      *
      * @deprecated
      */
-    transition_animation_selector?: Type<DivTransitionSelector> | DivExpression;
+    transition_animation_selector?: Type<DivTransitionSelector | DivExpression>;
     /**
      * Change animation. It is played when the position or size of an element changes in the new
      * layout.
@@ -323,7 +323,7 @@ export interface DivStateProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.

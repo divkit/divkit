@@ -41,15 +41,15 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -61,7 +61,7 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -75,21 +75,21 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
      * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
      * size.
      */
-    font_family?: Type<DivFontFamily> | DivExpression;
+    font_family?: Type<DivFontFamily | DivExpression>;
     /**
      * Font size.
      */
-    font_size?: Type<number> | DivExpression;
+    font_size?: Type<number | DivExpression>;
     /**
      * Unit of measurement:`px` — a physical pixel.`dp` — a logical pixel that doesn't depend on
      * screen density.`sp` — a logical pixel that depends on the font size on a device. Specify
      * height in `sp`. Only available on Android.
      */
-    font_size_unit?: Type<DivSizeUnit> | DivExpression;
+    font_size_unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Style.
      */
-    font_weight?: Type<DivFontWeight> | DivExpression;
+    font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Element height. For Android: if there is text in this or in a child element, specify height in
      * `sp` to scale the element together with the text. To learn more about units of size
@@ -100,15 +100,15 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
      * Text highlight color. If the value isn't set, the color set in the client will be used
      * instead.
      */
-    highlight_color?: Type<string> | DivExpression;
+    highlight_color?: Type<string | DivExpression>;
     /**
      * Text color.
      */
-    hint_color?: Type<string> | DivExpression;
+    hint_color?: Type<string | DivExpression>;
     /**
      * Tooltip text.
      */
-    hint_text?: Type<string> | DivExpression;
+    hint_text?: Type<string | DivExpression>;
     /**
      * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
      * on iOS.
@@ -117,16 +117,16 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
     /**
      * Keyboard type.
      */
-    keyboard_type?: Type<DivInputKeyboardType> | DivExpression;
+    keyboard_type?: Type<DivInputKeyboardType | DivExpression>;
     /**
      * Spacing between characters.
      */
-    letter_spacing?: Type<number> | DivExpression;
+    letter_spacing?: Type<number | DivExpression>;
     /**
      * Line spacing of the text range. The count is taken from the font baseline. Measured in units
      * specified in `font_size_unit`.
      */
-    line_height?: Type<number> | DivExpression;
+    line_height?: Type<number | DivExpression>;
     /**
      * External margins from the element stroke.
      */
@@ -134,7 +134,7 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
     /**
      * Maximum number of lines that will be visible in the input view.
      */
-    max_visible_lines?: Type<number> | DivExpression;
+    max_visible_lines?: Type<number | DivExpression>;
     /**
      * Text input line used in the native interface.
      */
@@ -146,11 +146,11 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Highlighting input text when focused.
      */
-    select_all_on_focus?: Type<IntBoolean> | DivExpression;
+    select_all_on_focus?: Type<IntBoolean | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -159,7 +159,7 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
     /**
      * Text color.
      */
-    text_color?: Type<string> | DivExpression;
+    text_color?: Type<string | DivExpression>;
     /**
      * Name of text storage variable.
      */
@@ -196,7 +196,7 @@ export class DivInput<T extends DivInputProps = DivInputProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -263,15 +263,15 @@ export interface DivInputProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -283,7 +283,7 @@ export interface DivInputProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -297,21 +297,21 @@ export interface DivInputProps {
      * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
      * size.
      */
-    font_family?: Type<DivFontFamily> | DivExpression;
+    font_family?: Type<DivFontFamily | DivExpression>;
     /**
      * Font size.
      */
-    font_size?: Type<number> | DivExpression;
+    font_size?: Type<number | DivExpression>;
     /**
      * Unit of measurement:`px` — a physical pixel.`dp` — a logical pixel that doesn't depend on
      * screen density.`sp` — a logical pixel that depends on the font size on a device. Specify
      * height in `sp`. Only available on Android.
      */
-    font_size_unit?: Type<DivSizeUnit> | DivExpression;
+    font_size_unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Style.
      */
-    font_weight?: Type<DivFontWeight> | DivExpression;
+    font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Element height. For Android: if there is text in this or in a child element, specify height in
      * `sp` to scale the element together with the text. To learn more about units of size
@@ -322,15 +322,15 @@ export interface DivInputProps {
      * Text highlight color. If the value isn't set, the color set in the client will be used
      * instead.
      */
-    highlight_color?: Type<string> | DivExpression;
+    highlight_color?: Type<string | DivExpression>;
     /**
      * Text color.
      */
-    hint_color?: Type<string> | DivExpression;
+    hint_color?: Type<string | DivExpression>;
     /**
      * Tooltip text.
      */
-    hint_text?: Type<string> | DivExpression;
+    hint_text?: Type<string | DivExpression>;
     /**
      * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
      * on iOS.
@@ -339,16 +339,16 @@ export interface DivInputProps {
     /**
      * Keyboard type.
      */
-    keyboard_type?: Type<DivInputKeyboardType> | DivExpression;
+    keyboard_type?: Type<DivInputKeyboardType | DivExpression>;
     /**
      * Spacing between characters.
      */
-    letter_spacing?: Type<number> | DivExpression;
+    letter_spacing?: Type<number | DivExpression>;
     /**
      * Line spacing of the text range. The count is taken from the font baseline. Measured in units
      * specified in `font_size_unit`.
      */
-    line_height?: Type<number> | DivExpression;
+    line_height?: Type<number | DivExpression>;
     /**
      * External margins from the element stroke.
      */
@@ -356,7 +356,7 @@ export interface DivInputProps {
     /**
      * Maximum number of lines that will be visible in the input view.
      */
-    max_visible_lines?: Type<number> | DivExpression;
+    max_visible_lines?: Type<number | DivExpression>;
     /**
      * Text input line used in the native interface.
      */
@@ -368,11 +368,11 @@ export interface DivInputProps {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Highlighting input text when focused.
      */
-    select_all_on_focus?: Type<IntBoolean> | DivExpression;
+    select_all_on_focus?: Type<IntBoolean | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -381,7 +381,7 @@ export interface DivInputProps {
     /**
      * Text color.
      */
-    text_color?: Type<string> | DivExpression;
+    text_color?: Type<string | DivExpression>;
     /**
      * Name of text storage variable.
      */
@@ -418,7 +418,7 @@ export interface DivInputProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -449,5 +449,5 @@ export interface IDivInputNativeInterface {
     /**
      * Text input line color.
      */
-    color: Type<string> | DivExpression;
+    color: Type<string | DivExpression>;
 }

@@ -44,15 +44,15 @@ export class DivTabs<T extends DivTabsProps = DivTabsProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -64,11 +64,11 @@ export class DivTabs<T extends DivTabsProps = DivTabsProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Updating height when changing the active element. In the browser, the value is always `true`.
      */
-    dynamic_height?: Type<IntBoolean> | DivExpression;
+    dynamic_height?: Type<IntBoolean | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -81,7 +81,7 @@ export class DivTabs<T extends DivTabsProps = DivTabsProps> {
     /**
      * A separating line between tabs and contents.
      */
-    has_separator?: Type<IntBoolean> | DivExpression;
+    has_separator?: Type<IntBoolean | DivExpression>;
     /**
      * Element height. For Android: if there is text in this or in a child element, specify height in
      * `sp` to scale the element together with the text. To learn more about units of size
@@ -116,11 +116,11 @@ export class DivTabs<T extends DivTabsProps = DivTabsProps> {
     /**
      * If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
      */
-    restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
+    restrict_parent_scroll?: Type<IntBoolean | DivExpression>;
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -129,11 +129,11 @@ export class DivTabs<T extends DivTabsProps = DivTabsProps> {
     /**
      * Ordinal number of the tab that will be opened by default.
      */
-    selected_tab?: Type<number> | DivExpression;
+    selected_tab?: Type<number | DivExpression>;
     /**
      * Separator color.
      */
-    separator_color?: Type<string> | DivExpression;
+    separator_color?: Type<string | DivExpression>;
     /**
      * Indents from the separating line. Not used if `has_separator = false`.
      */
@@ -141,7 +141,7 @@ export class DivTabs<T extends DivTabsProps = DivTabsProps> {
     /**
      * Switching tabs by scrolling through the contents.
      */
-    switch_tabs_by_content_swipe_enabled?: Type<IntBoolean> | DivExpression;
+    switch_tabs_by_content_swipe_enabled?: Type<IntBoolean | DivExpression>;
     /**
      * Design style of tab titles.
      */
@@ -182,7 +182,7 @@ export class DivTabs<T extends DivTabsProps = DivTabsProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -244,15 +244,15 @@ export interface DivTabsProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -264,11 +264,11 @@ export interface DivTabsProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Updating height when changing the active element. In the browser, the value is always `true`.
      */
-    dynamic_height?: Type<IntBoolean> | DivExpression;
+    dynamic_height?: Type<IntBoolean | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -281,7 +281,7 @@ export interface DivTabsProps {
     /**
      * A separating line between tabs and contents.
      */
-    has_separator?: Type<IntBoolean> | DivExpression;
+    has_separator?: Type<IntBoolean | DivExpression>;
     /**
      * Element height. For Android: if there is text in this or in a child element, specify height in
      * `sp` to scale the element together with the text. To learn more about units of size
@@ -316,11 +316,11 @@ export interface DivTabsProps {
     /**
      * If the parameter is enabled, tabs won't transmit the scroll gesture to the parent element.
      */
-    restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
+    restrict_parent_scroll?: Type<IntBoolean | DivExpression>;
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -329,11 +329,11 @@ export interface DivTabsProps {
     /**
      * Ordinal number of the tab that will be opened by default.
      */
-    selected_tab?: Type<number> | DivExpression;
+    selected_tab?: Type<number | DivExpression>;
     /**
      * Separator color.
      */
-    separator_color?: Type<string> | DivExpression;
+    separator_color?: Type<string | DivExpression>;
     /**
      * Indents from the separating line. Not used if `has_separator = false`.
      */
@@ -341,7 +341,7 @@ export interface DivTabsProps {
     /**
      * Switching tabs by scrolling through the contents.
      */
-    switch_tabs_by_content_swipe_enabled?: Type<IntBoolean> | DivExpression;
+    switch_tabs_by_content_swipe_enabled?: Type<IntBoolean | DivExpression>;
     /**
      * Design style of tab titles.
      */
@@ -382,7 +382,7 @@ export interface DivTabsProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -409,7 +409,7 @@ export interface IDivTabsItem {
     /**
      * Tab title.
      */
-    title: Type<string> | DivExpression;
+    title: Type<string | DivExpression>;
     /**
      * Action when clicking on the active tab title.
      */
@@ -423,28 +423,28 @@ export interface IDivTabsTabTitleStyle {
     /**
      * Background color of the active tab title.
      */
-    active_background_color?: Type<string> | DivExpression;
+    active_background_color?: Type<string | DivExpression>;
     /**
      * Active tab title style.
      */
-    active_font_weight?: Type<DivFontWeight> | DivExpression;
+    active_font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Color of the active tab title text.
      */
-    active_text_color?: Type<string> | DivExpression;
+    active_text_color?: Type<string | DivExpression>;
     /**
      * Duration of active title change animation.
      */
-    animation_duration?: Type<number> | DivExpression;
+    animation_duration?: Type<number | DivExpression>;
     /**
      * Active title change animation.
      */
-    animation_type?: Type<TabTitleStyleAnimationType> | DivExpression;
+    animation_type?: Type<TabTitleStyleAnimationType | DivExpression>;
     /**
      * Title corner rounding radius. If the parameter isn't specified, the rounding is maximum (half
      * of the smallest size). Not used if the `corners_radius` parameter is set.
      */
-    corner_radius?: Type<number> | DivExpression;
+    corner_radius?: Type<number | DivExpression>;
     /**
      * Rounding radii of corners of multiple titles. Empty values are replaced by `corner_radius`.
      */
@@ -453,45 +453,45 @@ export interface IDivTabsTabTitleStyle {
      * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
      * size.
      */
-    font_family?: Type<DivFontFamily> | DivExpression;
+    font_family?: Type<DivFontFamily | DivExpression>;
     /**
      * Title font size.
      */
-    font_size?: Type<number> | DivExpression;
+    font_size?: Type<number | DivExpression>;
     /**
      * Units of title font size measurement.
      */
-    font_size_unit?: Type<DivSizeUnit> | DivExpression;
+    font_size_unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Style. Use `active_font_weight` and `inactive_font_weight` instead.
      *
      * @deprecated
      */
-    font_weight?: Type<DivFontWeight> | DivExpression;
+    font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Background color of the inactive tab title.
      */
-    inactive_background_color?: Type<string> | DivExpression;
+    inactive_background_color?: Type<string | DivExpression>;
     /**
      * Inactive tab title style.
      */
-    inactive_font_weight?: Type<DivFontWeight> | DivExpression;
+    inactive_font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Color of the inactive tab title text.
      */
-    inactive_text_color?: Type<string> | DivExpression;
+    inactive_text_color?: Type<string | DivExpression>;
     /**
      * Spacing between neighbouring tab titles.
      */
-    item_spacing?: Type<number> | DivExpression;
+    item_spacing?: Type<number | DivExpression>;
     /**
      * Spacing between title characters.
      */
-    letter_spacing?: Type<number> | DivExpression;
+    letter_spacing?: Type<number | DivExpression>;
     /**
      * Line spacing of the text range. The count is taken from the font baseline.
      */
-    line_height?: Type<number> | DivExpression;
+    line_height?: Type<number | DivExpression>;
     /**
      * Indents around the tab title.
      */

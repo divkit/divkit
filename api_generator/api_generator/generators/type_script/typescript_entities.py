@@ -240,7 +240,7 @@ class TypeScriptProperty(Property):
     def make_declaration(self, is_templatable: bool) -> str:
         optional_mark = '?' if self.optional else ''
         type_name = _type_script_type_name(self.property_type, self.supports_expressions)
-        type_decl = f'Type<{type_name}>' if is_templatable else type_name
         if self.supports_expressions and not isinstance(self.property_type, Array):
-            type_decl += ' | DivExpression'
+            type_name += ' | DivExpression'
+        type_decl = f'Type<{type_name}>' if is_templatable else type_name
         return f'{self.escaped_name}{optional_mark}: {type_decl}'

@@ -57,19 +57,19 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Automatic text cropping to fit the container size.
      */
-    auto_ellipsize?: Type<IntBoolean> | DivExpression;
+    auto_ellipsize?: Type<IntBoolean | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -81,7 +81,7 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Action when double-clicking on an element.
      */
@@ -102,21 +102,21 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     /**
      * Text color when focusing on the element.
      */
-    focused_text_color?: Type<string> | DivExpression;
+    focused_text_color?: Type<string | DivExpression>;
     /**
      * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
      * size.
      */
-    font_family?: Type<DivFontFamily> | DivExpression;
+    font_family?: Type<DivFontFamily | DivExpression>;
     /**
      * Font size.
      */
-    font_size?: Type<number> | DivExpression;
-    font_size_unit?: Type<DivSizeUnit> | DivExpression;
+    font_size?: Type<number | DivExpression>;
+    font_size_unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Style.
      */
-    font_weight?: Type<DivFontWeight> | DivExpression;
+    font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Element height. For Android: if there is text in this or in a child element, specify height in
      * `sp` to scale the element together with the text. To learn more about units of size
@@ -135,11 +135,11 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     /**
      * Spacing between characters.
      */
-    letter_spacing?: Type<number> | DivExpression;
+    letter_spacing?: Type<number | DivExpression>;
     /**
      * Line spacing of the text range. The count is taken from the font baseline.
      */
-    line_height?: Type<number> | DivExpression;
+    line_height?: Type<number | DivExpression>;
     /**
      * Action when long-clicking on an element.
      */
@@ -151,11 +151,11 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     /**
      * Maximum number of lines not to be cropped when breaking the limits.
      */
-    max_lines?: Type<number> | DivExpression;
+    max_lines?: Type<number | DivExpression>;
     /**
      * Minimum number of cropped lines when breaking the limits.
      */
-    min_hidden_lines?: Type<number> | DivExpression;
+    min_hidden_lines?: Type<number | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -168,11 +168,11 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Selecting and copying text.
      */
-    selectable?: Type<IntBoolean> | DivExpression;
+    selectable?: Type<IntBoolean | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -181,23 +181,23 @@ export class DivText<T extends DivTextProps = DivTextProps> {
     /**
      * Strikethrough.
      */
-    strike?: Type<DivLineStyle> | DivExpression;
+    strike?: Type<DivLineStyle | DivExpression>;
     /**
      * Text.
      */
-    text: Type<string> | DivExpression;
+    text: Type<string | DivExpression>;
     /**
      * Horizontal text alignment.
      */
-    text_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    text_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical text alignment.
      */
-    text_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    text_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Text color. Not used if the `text_gradient` parameter is set.
      */
-    text_color?: Type<string> | DivExpression;
+    text_color?: Type<string | DivExpression>;
     /**
      * Gradient text color.
      */
@@ -236,15 +236,15 @@ export class DivText<T extends DivTextProps = DivTextProps> {
      *
      * @deprecated
      */
-    truncate?: Type<DivTextTruncate> | DivExpression;
+    truncate?: Type<DivTextTruncate | DivExpression>;
     /**
      * Underline.
      */
-    underline?: Type<DivLineStyle> | DivExpression;
+    underline?: Type<DivLineStyle | DivExpression>;
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -335,19 +335,19 @@ export interface DivTextProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Automatic text cropping to fit the container size.
      */
-    auto_ellipsize?: Type<IntBoolean> | DivExpression;
+    auto_ellipsize?: Type<IntBoolean | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -359,7 +359,7 @@ export interface DivTextProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Action when double-clicking on an element.
      */
@@ -380,21 +380,21 @@ export interface DivTextProps {
     /**
      * Text color when focusing on the element.
      */
-    focused_text_color?: Type<string> | DivExpression;
+    focused_text_color?: Type<string | DivExpression>;
     /**
      * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
      * size.
      */
-    font_family?: Type<DivFontFamily> | DivExpression;
+    font_family?: Type<DivFontFamily | DivExpression>;
     /**
      * Font size.
      */
-    font_size?: Type<number> | DivExpression;
-    font_size_unit?: Type<DivSizeUnit> | DivExpression;
+    font_size?: Type<number | DivExpression>;
+    font_size_unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Style.
      */
-    font_weight?: Type<DivFontWeight> | DivExpression;
+    font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Element height. For Android: if there is text in this or in a child element, specify height in
      * `sp` to scale the element together with the text. To learn more about units of size
@@ -413,11 +413,11 @@ export interface DivTextProps {
     /**
      * Spacing between characters.
      */
-    letter_spacing?: Type<number> | DivExpression;
+    letter_spacing?: Type<number | DivExpression>;
     /**
      * Line spacing of the text range. The count is taken from the font baseline.
      */
-    line_height?: Type<number> | DivExpression;
+    line_height?: Type<number | DivExpression>;
     /**
      * Action when long-clicking on an element.
      */
@@ -429,11 +429,11 @@ export interface DivTextProps {
     /**
      * Maximum number of lines not to be cropped when breaking the limits.
      */
-    max_lines?: Type<number> | DivExpression;
+    max_lines?: Type<number | DivExpression>;
     /**
      * Minimum number of cropped lines when breaking the limits.
      */
-    min_hidden_lines?: Type<number> | DivExpression;
+    min_hidden_lines?: Type<number | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -446,11 +446,11 @@ export interface DivTextProps {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Selecting and copying text.
      */
-    selectable?: Type<IntBoolean> | DivExpression;
+    selectable?: Type<IntBoolean | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -459,23 +459,23 @@ export interface DivTextProps {
     /**
      * Strikethrough.
      */
-    strike?: Type<DivLineStyle> | DivExpression;
+    strike?: Type<DivLineStyle | DivExpression>;
     /**
      * Text.
      */
-    text: Type<string> | DivExpression;
+    text: Type<string | DivExpression>;
     /**
      * Horizontal text alignment.
      */
-    text_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    text_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical text alignment.
      */
-    text_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    text_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Text color. Not used if the `text_gradient` parameter is set.
      */
-    text_color?: Type<string> | DivExpression;
+    text_color?: Type<string | DivExpression>;
     /**
      * Gradient text color.
      */
@@ -514,15 +514,15 @@ export interface DivTextProps {
      *
      * @deprecated
      */
-    truncate?: Type<DivTextTruncate> | DivExpression;
+    truncate?: Type<DivTextTruncate | DivExpression>;
     /**
      * Underline.
      */
-    underline?: Type<DivLineStyle> | DivExpression;
+    underline?: Type<DivLineStyle | DivExpression>;
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -563,7 +563,7 @@ export interface IDivTextEllipsis {
     /**
      * Marker text.
      */
-    text: Type<string> | DivExpression;
+    text: Type<string | DivExpression>;
 }
 
 /**
@@ -578,15 +578,15 @@ export interface IDivTextImage {
      * A symbol to insert prior to an image. To insert an image at the end of the text, specify the
      * number of the last character plus one.
      */
-    start: Type<number> | DivExpression;
+    start: Type<number | DivExpression>;
     /**
      * New color of a contour image.
      */
-    tint_color?: Type<string> | DivExpression;
+    tint_color?: Type<string | DivExpression>;
     /**
      * Image URL.
      */
-    url: Type<string> | DivExpression;
+    url: Type<string | DivExpression>;
     /**
      * Image width.
      */
@@ -604,54 +604,54 @@ export interface IDivTextRange {
     /**
      * Ordinal number of the last character to be included in the range.
      */
-    end: Type<number> | DivExpression;
+    end: Type<number | DivExpression>;
     /**
      * Font family:`text` — a standard text font;`display` — a family of fonts with a large font
      * size.
      */
-    font_family?: Type<DivFontFamily> | DivExpression;
+    font_family?: Type<DivFontFamily | DivExpression>;
     /**
      * Font size.
      */
-    font_size?: Type<number> | DivExpression;
+    font_size?: Type<number | DivExpression>;
     /**
      * Unit of measurement:`px` — a physical pixel.`dp` — a logical pixel that doesn't depend on
      * screen density.`sp` — a logical pixel that depends on the font size on a device. Specify
      * height in `sp`. Only available on Android.
      */
-    font_size_unit?: Type<DivSizeUnit> | DivExpression;
+    font_size_unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Style.
      */
-    font_weight?: Type<DivFontWeight> | DivExpression;
+    font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Spacing between characters.
      */
-    letter_spacing?: Type<number> | DivExpression;
+    letter_spacing?: Type<number | DivExpression>;
     /**
      * Line spacing of the text range. The count is taken from the font baseline. Measured in units
      * specified in `font_size_unit`.
      */
-    line_height?: Type<number> | DivExpression;
+    line_height?: Type<number | DivExpression>;
     /**
      * Ordinal number of a character which the range begins from. The first character has a number
      * `0`.
      */
-    start: Type<number> | DivExpression;
+    start: Type<number | DivExpression>;
     /**
      * Strikethrough.
      */
-    strike?: Type<DivLineStyle> | DivExpression;
+    strike?: Type<DivLineStyle | DivExpression>;
     /**
      * Text color.
      */
-    text_color?: Type<string> | DivExpression;
+    text_color?: Type<string | DivExpression>;
     /**
      * The top margin of the text range. Measured in units specified in `font_size_unit`.
      */
-    top_offset?: Type<number> | DivExpression;
+    top_offset?: Type<number | DivExpression>;
     /**
      * Underline.
      */
-    underline?: Type<DivLineStyle> | DivExpression;
+    underline?: Type<DivLineStyle | DivExpression>;
 }

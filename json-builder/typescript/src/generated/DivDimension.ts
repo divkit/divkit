@@ -12,9 +12,9 @@ import {
  * Element dimension value.
  */
 export interface IDivDimension {
-    unit?: Type<DivSizeUnit> | DivExpression;
+    unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Value.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 }

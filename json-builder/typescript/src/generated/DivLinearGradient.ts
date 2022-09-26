@@ -14,7 +14,7 @@ export class DivLinearGradient<T extends DivLinearGradientProps = DivLinearGradi
     /**
      * Angle of gradient direction.
      */
-    angle?: Type<number> | DivExpression;
+    angle?: Type<number | DivExpression>;
     /**
      * Colors. Gradient points will be located at an equal distance from each other.
      */
@@ -30,7 +30,7 @@ export interface DivLinearGradientProps {
     /**
      * Angle of gradient direction.
      */
-    angle?: Type<number> | DivExpression;
+    angle?: Type<number | DivExpression>;
     /**
      * Colors. Gradient points will be located at an equal distance from each other.
      */

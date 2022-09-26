@@ -52,15 +52,15 @@ export class DivGrid<T extends DivGridProps = DivGridProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -72,19 +72,19 @@ export class DivGrid<T extends DivGridProps = DivGridProps> {
     /**
      * Number of columns.
      */
-    column_count: Type<number> | DivExpression;
+    column_count: Type<number | DivExpression>;
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Horizontal alignment of grid contents.
      */
-    content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    content_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of grid contents.
      */
-    content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    content_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Action when double-clicking on an element.
      */
@@ -128,7 +128,7 @@ export class DivGrid<T extends DivGridProps = DivGridProps> {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -166,7 +166,7 @@ export class DivGrid<T extends DivGridProps = DivGridProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -239,15 +239,15 @@ export interface DivGridProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -259,19 +259,19 @@ export interface DivGridProps {
     /**
      * Number of columns.
      */
-    column_count: Type<number> | DivExpression;
+    column_count: Type<number | DivExpression>;
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Horizontal alignment of grid contents.
      */
-    content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    content_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of grid contents.
      */
-    content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    content_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Action when double-clicking on an element.
      */
@@ -315,7 +315,7 @@ export interface DivGridProps {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -353,7 +353,7 @@ export interface DivGridProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.

@@ -42,15 +42,15 @@ export class DivPager<T extends DivPagerProps = DivPagerProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -62,11 +62,11 @@ export class DivPager<T extends DivPagerProps = DivPagerProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Ordinal number of the pager element that will be opened by default.
      */
-    default_item?: Type<number> | DivExpression;
+    default_item?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -115,7 +115,7 @@ export class DivPager<T extends DivPagerProps = DivPagerProps> {
     /**
      * Pager orientation.
      */
-    orientation?: Type<DivPagerOrientation> | DivExpression;
+    orientation?: Type<DivPagerOrientation | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -124,11 +124,11 @@ export class DivPager<T extends DivPagerProps = DivPagerProps> {
      * If the parameter is enabled, the pager won't transmit the scroll gesture to the parent
      * element.
      */
-    restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
+    restrict_parent_scroll?: Type<IntBoolean | DivExpression>;
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -166,7 +166,7 @@ export class DivPager<T extends DivPagerProps = DivPagerProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -224,15 +224,15 @@ export interface DivPagerProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -244,11 +244,11 @@ export interface DivPagerProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Ordinal number of the pager element that will be opened by default.
      */
-    default_item?: Type<number> | DivExpression;
+    default_item?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -297,7 +297,7 @@ export interface DivPagerProps {
     /**
      * Pager orientation.
      */
-    orientation?: Type<DivPagerOrientation> | DivExpression;
+    orientation?: Type<DivPagerOrientation | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -306,11 +306,11 @@ export interface DivPagerProps {
      * If the parameter is enabled, the pager won't transmit the scroll gesture to the parent
      * element.
      */
-    restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
+    restrict_parent_scroll?: Type<IntBoolean | DivExpression>;
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -348,7 +348,7 @@ export interface DivPagerProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.

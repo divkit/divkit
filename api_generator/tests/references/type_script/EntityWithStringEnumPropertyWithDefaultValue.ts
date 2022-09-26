@@ -8,7 +8,7 @@ export class EntityWithStringEnumPropertyWithDefaultValue<T extends EntityWithSt
     readonly _props?: Exact<EntityWithStringEnumPropertyWithDefaultValueProps, T>;
 
     readonly type = 'entity_with_string_enum_property_with_default_value';
-    value?: Type<EntityWithStringEnumPropertyWithDefaultValueValue> | DivExpression;
+    value?: Type<EntityWithStringEnumPropertyWithDefaultValueValue | DivExpression>;
 
     constructor(props?: Exact<EntityWithStringEnumPropertyWithDefaultValueProps, T>) {
         this.value = props?.value;
@@ -16,7 +16,7 @@ export class EntityWithStringEnumPropertyWithDefaultValue<T extends EntityWithSt
 }
 
 export interface EntityWithStringEnumPropertyWithDefaultValueProps {
-    value?: Type<EntityWithStringEnumPropertyWithDefaultValueValue> | DivExpression;
+    value?: Type<EntityWithStringEnumPropertyWithDefaultValueValue | DivExpression>;
 }
 
 export type EntityWithStringEnumPropertyWithDefaultValueValue =

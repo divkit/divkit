@@ -33,7 +33,7 @@ export interface IDivTooltip {
      * Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip
      * will be visible until the user hides it.
      */
-    duration?: Type<number> | DivExpression;
+    duration?: Type<number | DivExpression>;
     /**
      * Tooltip ID. It is used to avoid re-showing. It must be unique for all element tooltips.
      */
@@ -45,7 +45,7 @@ export interface IDivTooltip {
     /**
      * The position of a tooltip relative to an element it belongs to.
      */
-    position: Type<DivTooltipPosition> | DivExpression;
+    position: Type<DivTooltipPosition | DivExpression>;
 }
 
 export type DivTooltipPosition =

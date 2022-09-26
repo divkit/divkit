@@ -51,15 +51,15 @@ export class DivSeparator<T extends DivSeparatorProps = DivSeparatorProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -71,7 +71,7 @@ export class DivSeparator<T extends DivSeparatorProps = DivSeparatorProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Separator display settings.
      */
@@ -115,7 +115,7 @@ export class DivSeparator<T extends DivSeparatorProps = DivSeparatorProps> {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -153,7 +153,7 @@ export class DivSeparator<T extends DivSeparatorProps = DivSeparatorProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -223,15 +223,15 @@ export interface DivSeparatorProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -243,7 +243,7 @@ export interface DivSeparatorProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Separator display settings.
      */
@@ -287,7 +287,7 @@ export interface DivSeparatorProps {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -325,7 +325,7 @@ export interface DivSeparatorProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -349,11 +349,11 @@ export interface IDivSeparatorDelimiterStyle {
      * Separator color. To prevent the separator from being displayed, set transparency in the alpha
      * channel. For example, `#00FFFFFF`.
      */
-    color?: Type<string> | DivExpression;
+    color?: Type<string | DivExpression>;
     /**
      * Separator orientation:`vertical` — vertical;`horizontal` — horizontal.<
      */
-    orientation?: Type<DelimiterStyleOrientation> | DivExpression;
+    orientation?: Type<DelimiterStyleOrientation | DivExpression>;
 }
 
 export type DelimiterStyleOrientation =

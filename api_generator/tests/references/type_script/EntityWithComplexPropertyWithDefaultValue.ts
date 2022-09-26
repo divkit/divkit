@@ -20,5 +20,5 @@ export interface EntityWithComplexPropertyWithDefaultValueProps {
 }
 
 export interface IEntityWithComplexPropertyWithDefaultValueProperty {
-    value: Type<string> | DivExpression;
+    value: Type<string | DivExpression>;
 }

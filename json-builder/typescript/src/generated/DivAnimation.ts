@@ -16,11 +16,11 @@ export interface IDivAnimation {
     /**
      * Animation duration in milliseconds.
      */
-    duration?: Type<number> | DivExpression;
+    duration?: Type<number | DivExpression>;
     /**
      * Final value of an animation.
      */
-    end_value?: Type<number> | DivExpression;
+    end_value?: Type<number | DivExpression>;
     /**
      * Animation speed nature. When the value is set to `spring` — animation of damping fluctuations
      * cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier
@@ -28,7 +28,7 @@ export interface IDivAnimation {
      * — cubic-bezier(0.42, 0, 1, 1);`ease_out` — cubic-bezier(0, 0, 0.58, 1);`ease_in_out` —
      * cubic-bezier(0.42, 0, 0.58, 1).
      */
-    interpolator?: Type<DivAnimationInterpolator> | DivExpression;
+    interpolator?: Type<DivAnimationInterpolator | DivExpression>;
     /**
      * Animation elements.
      */
@@ -36,7 +36,7 @@ export interface IDivAnimation {
     /**
      * Animation type.
      */
-    name: Type<DivAnimationName> | DivExpression;
+    name: Type<DivAnimationName | DivExpression>;
     /**
      * Number of animation repetitions.
      */
@@ -44,11 +44,11 @@ export interface IDivAnimation {
     /**
      * Delay in milliseconds before animation starts.
      */
-    start_delay?: Type<number> | DivExpression;
+    start_delay?: Type<number | DivExpression>;
     /**
      * Starting value of an animation.
      */
-    start_value?: Type<number> | DivExpression;
+    start_value?: Type<number | DivExpression>;
 }
 
 export type DivAnimationName =

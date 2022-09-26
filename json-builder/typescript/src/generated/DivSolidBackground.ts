@@ -14,7 +14,7 @@ export class DivSolidBackground<T extends DivSolidBackgroundProps = DivSolidBack
     /**
      * Color.
      */
-    color: Type<string> | DivExpression;
+    color: Type<string | DivExpression>;
 
     constructor(props: Exact<DivSolidBackgroundProps, T>) {
         this.color = props.color;
@@ -25,5 +25,5 @@ export interface DivSolidBackgroundProps {
     /**
      * Color.
      */
-    color: Type<string> | DivExpression;
+    color: Type<string | DivExpression>;
 }

@@ -19,13 +19,13 @@ export interface IDivTrigger {
     /**
      * Condition for activating a trigger. For example, `liked && subscribed`.
      */
-    condition: Type<IntBoolean> | DivExpression;
+    condition: Type<IntBoolean | DivExpression>;
     /**
      * Trigger activation mode:`on_condition` — a trigger is activated when the condition changes
      * from `false` to `true`;`on_variable` — a trigger is activated when the condition is met and
      * the variable value changes.
      */
-    mode?: Type<DivTriggerMode> | DivExpression;
+    mode?: Type<DivTriggerMode | DivExpression>;
 }
 
 export type DivTriggerMode =

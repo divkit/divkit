@@ -18,28 +18,28 @@ export class DivScaleTransition<T extends DivScaleTransitionProps = DivScaleTran
     /**
      * Animation duration in milliseconds.
      */
-    duration?: Type<number> | DivExpression;
+    duration?: Type<number | DivExpression>;
     /**
      * Transition speed nature.
      */
-    interpolator?: Type<DivAnimationInterpolator> | DivExpression;
+    interpolator?: Type<DivAnimationInterpolator | DivExpression>;
     /**
      * Relative coordinate `X` of the point that won't change its position in case of scaling.
      */
-    pivot_x?: Type<number> | DivExpression;
+    pivot_x?: Type<number | DivExpression>;
     /**
      * Relative coordinate `Y` of the point that won't change its position in case of scaling.
      */
-    pivot_y?: Type<number> | DivExpression;
+    pivot_y?: Type<number | DivExpression>;
     /**
      * Value of the scale  from which the element starts appearing or at which it finishes
      * disappearing.
      */
-    scale?: Type<number> | DivExpression;
+    scale?: Type<number | DivExpression>;
     /**
      * Delay in milliseconds before animation starts.
      */
-    start_delay?: Type<number> | DivExpression;
+    start_delay?: Type<number | DivExpression>;
 
     constructor(props?: Exact<DivScaleTransitionProps, T>) {
         this.duration = props?.duration;
@@ -55,26 +55,26 @@ export interface DivScaleTransitionProps {
     /**
      * Animation duration in milliseconds.
      */
-    duration?: Type<number> | DivExpression;
+    duration?: Type<number | DivExpression>;
     /**
      * Transition speed nature.
      */
-    interpolator?: Type<DivAnimationInterpolator> | DivExpression;
+    interpolator?: Type<DivAnimationInterpolator | DivExpression>;
     /**
      * Relative coordinate `X` of the point that won't change its position in case of scaling.
      */
-    pivot_x?: Type<number> | DivExpression;
+    pivot_x?: Type<number | DivExpression>;
     /**
      * Relative coordinate `Y` of the point that won't change its position in case of scaling.
      */
-    pivot_y?: Type<number> | DivExpression;
+    pivot_y?: Type<number | DivExpression>;
     /**
      * Value of the scale  from which the element starts appearing or at which it finishes
      * disappearing.
      */
-    scale?: Type<number> | DivExpression;
+    scale?: Type<number | DivExpression>;
     /**
      * Delay in milliseconds before animation starts.
      */
-    start_delay?: Type<number> | DivExpression;
+    start_delay?: Type<number | DivExpression>;
 }

@@ -15,7 +15,7 @@ export class DivWrapContentSize<T extends DivWrapContentSizeProps = DivWrapConte
      * The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On
      * Android always `true`.
      */
-    constrained?: Type<IntBoolean> | DivExpression;
+    constrained?: Type<IntBoolean | DivExpression>;
 
     constructor(props?: Exact<DivWrapContentSizeProps, T>) {
         this.constrained = props?.constrained;
@@ -27,5 +27,5 @@ export interface DivWrapContentSizeProps {
      * The final size mustn't exceed the parent one. On iOS and in a default browser `false`. On
      * Android always `true`.
      */
-    constrained?: Type<IntBoolean> | DivExpression;
+    constrained?: Type<IntBoolean | DivExpression>;
 }

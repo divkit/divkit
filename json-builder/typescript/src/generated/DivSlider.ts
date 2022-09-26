@@ -42,15 +42,15 @@ export class DivSlider<T extends DivSliderProps = DivSliderProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -62,7 +62,7 @@ export class DivSlider<T extends DivSliderProps = DivSliderProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -90,11 +90,11 @@ export class DivSlider<T extends DivSliderProps = DivSliderProps> {
     /**
      * Maximum value. It must be greater than the minimum value.
      */
-    max_value?: Type<number> | DivExpression;
+    max_value?: Type<number | DivExpression>;
     /**
      * Minimum value.
      */
-    min_value?: Type<number> | DivExpression;
+    min_value?: Type<number | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -102,7 +102,7 @@ export class DivSlider<T extends DivSliderProps = DivSliderProps> {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Accessibility for the secondary thumb.
      */
@@ -184,7 +184,7 @@ export class DivSlider<T extends DivSliderProps = DivSliderProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -249,15 +249,15 @@ export interface DivSliderProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -269,7 +269,7 @@ export interface DivSliderProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -297,11 +297,11 @@ export interface DivSliderProps {
     /**
      * Maximum value. It must be greater than the minimum value.
      */
-    max_value?: Type<number> | DivExpression;
+    max_value?: Type<number | DivExpression>;
     /**
      * Minimum value.
      */
-    min_value?: Type<number> | DivExpression;
+    min_value?: Type<number | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -309,7 +309,7 @@ export interface DivSliderProps {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Accessibility for the secondary thumb.
      */
@@ -391,7 +391,7 @@ export interface DivSliderProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -411,12 +411,12 @@ export interface IDivSliderTextStyle {
     /**
      * Font size.
      */
-    font_size: Type<number> | DivExpression;
-    font_size_unit?: Type<DivSizeUnit> | DivExpression;
+    font_size: Type<number | DivExpression>;
+    font_size_unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Style.
      */
-    font_weight?: Type<DivFontWeight> | DivExpression;
+    font_weight?: Type<DivFontWeight | DivExpression>;
     /**
      * Shift relative to the center.
      */
@@ -424,5 +424,5 @@ export interface IDivSliderTextStyle {
     /**
      * Text color.
      */
-    text_color?: Type<string> | DivExpression;
+    text_color?: Type<string | DivExpression>;
 }

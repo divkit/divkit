@@ -14,7 +14,7 @@ export class DivPercentageSize<T extends DivPercentageSizeProps = DivPercentageS
     /**
      * Element size value.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 
     constructor(props: Exact<DivPercentageSizeProps, T>) {
         this.value = props.value;
@@ -25,5 +25,5 @@ export interface DivPercentageSizeProps {
     /**
      * Element size value.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 }

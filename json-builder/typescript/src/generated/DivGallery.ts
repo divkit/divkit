@@ -39,15 +39,15 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -59,25 +59,25 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
     /**
      * Number of columns for block layout.
      */
-    column_count?: Type<number> | DivExpression;
+    column_count?: Type<number | DivExpression>;
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Aligning elements in the direction perpendicular to the scroll direction. In horizontal
      * galleries:`start` — alignment to the top of the card;`center` — to the center;`end` — to the
      * bottom.</p><p>In vertical galleries:`start` — alignment to the left of the card;`center` — to
      * the center;`end` — to the right.
      */
-    cross_content_alignment?: Type<DivGalleryCrossContentAlignment> | DivExpression;
+    cross_content_alignment?: Type<DivGalleryCrossContentAlignment | DivExpression>;
     /**
      * Ordinal number of the gallery element to be scrolled to by default. For
      * `scroll_mode`:`default` — the scroll position is set to the beginning of the element, without
      * taking into account `item_spacing`;`paging` — the scroll position is set to the center of the
      * element.
      */
-    default_item?: Type<number> | DivExpression;
+    default_item?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -101,7 +101,7 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
     /**
      * Spacing between elements.
      */
-    item_spacing?: Type<number> | DivExpression;
+    item_spacing?: Type<number | DivExpression>;
     /**
      * Gallery elements. Scrolling to elements can be implemented
      * using:`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal
@@ -122,7 +122,7 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
     /**
      * Gallery orientation.
      */
-    orientation?: Type<DivGalleryOrientation> | DivExpression;
+    orientation?: Type<DivGalleryOrientation | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -131,15 +131,15 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
      * If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent
      * element.
      */
-    restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
+    restrict_parent_scroll?: Type<IntBoolean | DivExpression>;
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Scroll type: `default` — continuous, `paging` — page-by-page.
      */
-    scroll_mode?: Type<DivGalleryScrollMode> | DivExpression;
+    scroll_mode?: Type<DivGalleryScrollMode | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -177,7 +177,7 @@ export class DivGallery<T extends DivGalleryProps = DivGalleryProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -237,15 +237,15 @@ export interface DivGalleryProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -257,25 +257,25 @@ export interface DivGalleryProps {
     /**
      * Number of columns for block layout.
      */
-    column_count?: Type<number> | DivExpression;
+    column_count?: Type<number | DivExpression>;
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Aligning elements in the direction perpendicular to the scroll direction. In horizontal
      * galleries:`start` — alignment to the top of the card;`center` — to the center;`end` — to the
      * bottom.</p><p>In vertical galleries:`start` — alignment to the left of the card;`center` — to
      * the center;`end` — to the right.
      */
-    cross_content_alignment?: Type<DivGalleryCrossContentAlignment> | DivExpression;
+    cross_content_alignment?: Type<DivGalleryCrossContentAlignment | DivExpression>;
     /**
      * Ordinal number of the gallery element to be scrolled to by default. For
      * `scroll_mode`:`default` — the scroll position is set to the beginning of the element, without
      * taking into account `item_spacing`;`paging` — the scroll position is set to the center of the
      * element.
      */
-    default_item?: Type<number> | DivExpression;
+    default_item?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -299,7 +299,7 @@ export interface DivGalleryProps {
     /**
      * Spacing between elements.
      */
-    item_spacing?: Type<number> | DivExpression;
+    item_spacing?: Type<number | DivExpression>;
     /**
      * Gallery elements. Scrolling to elements can be implemented
      * using:`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal
@@ -320,7 +320,7 @@ export interface DivGalleryProps {
     /**
      * Gallery orientation.
      */
-    orientation?: Type<DivGalleryOrientation> | DivExpression;
+    orientation?: Type<DivGalleryOrientation | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -329,15 +329,15 @@ export interface DivGalleryProps {
      * If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent
      * element.
      */
-    restrict_parent_scroll?: Type<IntBoolean> | DivExpression;
+    restrict_parent_scroll?: Type<IntBoolean | DivExpression>;
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Scroll type: `default` — continuous, `paging` — page-by-page.
      */
-    scroll_mode?: Type<DivGalleryScrollMode> | DivExpression;
+    scroll_mode?: Type<DivGalleryScrollMode | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -375,7 +375,7 @@ export interface DivGalleryProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.

@@ -54,15 +54,15 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -74,17 +74,17 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Default alignment of elements. Not used if the `alignment_horizontal` parameter is set from
      * the element field.
      */
-    content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    content_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Default alignment of elements. Not used if the `alignment_vertical` parameter is set from the
      * element field.
      */
-    content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    content_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Action when double-clicking on an element.
      */
@@ -118,7 +118,7 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
      * they did not fit in the previous one. If the value is set to `wrap`, then a separate line will
      * be allocated for all elements with a size value of match_parent along the main axis.
      */
-    layout_mode?: Type<DivContainerLayoutMode> | DivExpression;
+    layout_mode?: Type<DivContainerLayoutMode | DivExpression>;
     /**
      * Action when long-clicking on an element.
      */
@@ -131,7 +131,7 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
      * Location of elements. `overlap` value overlays elements on top of each other in the order of
      * enumeration. The lowest is the zero element of an array.
      */
-    orientation?: Type<DivContainerOrientation> | DivExpression;
+    orientation?: Type<DivContainerOrientation | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -139,7 +139,7 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -177,7 +177,7 @@ export class DivContainer<T extends DivContainerProps = DivContainerProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -251,15 +251,15 @@ export interface DivContainerProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -271,17 +271,17 @@ export interface DivContainerProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Default alignment of elements. Not used if the `alignment_horizontal` parameter is set from
      * the element field.
      */
-    content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    content_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Default alignment of elements. Not used if the `alignment_vertical` parameter is set from the
      * element field.
      */
-    content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    content_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Action when double-clicking on an element.
      */
@@ -315,7 +315,7 @@ export interface DivContainerProps {
      * they did not fit in the previous one. If the value is set to `wrap`, then a separate line will
      * be allocated for all elements with a size value of match_parent along the main axis.
      */
-    layout_mode?: Type<DivContainerLayoutMode> | DivExpression;
+    layout_mode?: Type<DivContainerLayoutMode | DivExpression>;
     /**
      * Action when long-clicking on an element.
      */
@@ -328,7 +328,7 @@ export interface DivContainerProps {
      * Location of elements. `overlap` value overlays elements on top of each other in the order of
      * enumeration. The lowest is the zero element of an array.
      */
-    orientation?: Type<DivContainerOrientation> | DivExpression;
+    orientation?: Type<DivContainerOrientation | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -336,7 +336,7 @@ export interface DivContainerProps {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -374,7 +374,7 @@ export interface DivContainerProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.

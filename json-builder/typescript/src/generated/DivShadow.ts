@@ -15,15 +15,15 @@ export interface IDivShadow {
     /**
      * Shadow transparency.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Blur intensity.
      */
-    blur?: Type<number> | DivExpression;
+    blur?: Type<number | DivExpression>;
     /**
      * Shadow color.
      */
-    color?: Type<string> | DivExpression;
+    color?: Type<string | DivExpression>;
     /**
      * Shadow offset.
      */

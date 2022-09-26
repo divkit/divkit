@@ -17,7 +17,7 @@ export interface IDivBorder {
     /**
      * One radius of element and stroke corner rounding. Has a lower priority than `corners_radius`.
      */
-    corner_radius?: Type<number> | DivExpression;
+    corner_radius?: Type<number | DivExpression>;
     /**
      * Multiple radii of element and stroke corner rounding.
      */
@@ -25,7 +25,7 @@ export interface IDivBorder {
     /**
      * Adding shadow.
      */
-    has_shadow?: Type<IntBoolean> | DivExpression;
+    has_shadow?: Type<IntBoolean | DivExpression>;
     /**
      * Shadow parameters.
      */

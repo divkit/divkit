@@ -12,5 +12,5 @@ export interface IDivAspect {
     /**
      * `ratio = width / height`.
      */
-    ratio: Type<number> | DivExpression;
+    ratio: Type<number | DivExpression>;
 }

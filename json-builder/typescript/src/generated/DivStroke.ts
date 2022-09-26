@@ -15,10 +15,10 @@ export interface IDivStroke {
     /**
      * Stroke color.
      */
-    color: Type<string> | DivExpression;
-    unit?: Type<DivSizeUnit> | DivExpression;
+    color: Type<string | DivExpression>;
+    unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Stroke width.
      */
-    width?: Type<number> | DivExpression;
+    width?: Type<number | DivExpression>;
 }

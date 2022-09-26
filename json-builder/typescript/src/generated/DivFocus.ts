@@ -40,9 +40,9 @@ export interface IDivFocus {
  * IDs of elements that will be next to get focus.
  */
 export interface IDivFocusNextFocusIds {
-    down?: Type<string> | DivExpression;
-    forward?: Type<string> | DivExpression;
-    left?: Type<string> | DivExpression;
-    right?: Type<string> | DivExpression;
-    up?: Type<string> | DivExpression;
+    down?: Type<string | DivExpression>;
+    forward?: Type<string | DivExpression>;
+    left?: Type<string | DivExpression>;
+    right?: Type<string | DivExpression>;
+    up?: Type<string | DivExpression>;
 }

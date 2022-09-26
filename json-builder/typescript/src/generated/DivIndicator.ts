@@ -40,27 +40,27 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
     /**
      * Active indicator color.
      */
-    active_item_color?: Type<string> | DivExpression;
+    active_item_color?: Type<string | DivExpression>;
     /**
      * A size multiplier for an active indicator.
      */
-    active_item_size?: Type<number> | DivExpression;
+    active_item_size?: Type<number | DivExpression>;
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Animation of switching between indicators.
      */
-    animation?: Type<DivIndicatorAnimation> | DivExpression;
+    animation?: Type<DivIndicatorAnimation | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -72,7 +72,7 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -96,7 +96,7 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
     /**
      * Indicator color.
      */
-    inactive_item_color?: Type<string> | DivExpression;
+    inactive_item_color?: Type<string | DivExpression>;
     /**
      * External margins from the element stroke.
      */
@@ -105,7 +105,7 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
      * A size multiplier for a minimal indicator. It is used when the required number of indicators
      * don't fit on the screen.
      */
-    minimum_item_size?: Type<number> | DivExpression;
+    minimum_item_size?: Type<number | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -117,7 +117,7 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -163,7 +163,7 @@ export class DivIndicator<T extends DivIndicatorProps = DivIndicatorProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -223,27 +223,27 @@ export interface DivIndicatorProps {
     /**
      * Active indicator color.
      */
-    active_item_color?: Type<string> | DivExpression;
+    active_item_color?: Type<string | DivExpression>;
     /**
      * A size multiplier for an active indicator.
      */
-    active_item_size?: Type<number> | DivExpression;
+    active_item_size?: Type<number | DivExpression>;
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Animation of switching between indicators.
      */
-    animation?: Type<DivIndicatorAnimation> | DivExpression;
+    animation?: Type<DivIndicatorAnimation | DivExpression>;
     /**
      * Element background. It can contain multiple layers.
      */
@@ -255,7 +255,7 @@ export interface DivIndicatorProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Extensions for additional processing of an element. The list of extensions is given in 
      * [DivExtension](../../extensions.dita).
@@ -279,7 +279,7 @@ export interface DivIndicatorProps {
     /**
      * Indicator color.
      */
-    inactive_item_color?: Type<string> | DivExpression;
+    inactive_item_color?: Type<string | DivExpression>;
     /**
      * External margins from the element stroke.
      */
@@ -288,7 +288,7 @@ export interface DivIndicatorProps {
      * A size multiplier for a minimal indicator. It is used when the required number of indicators
      * don't fit on the screen.
      */
-    minimum_item_size?: Type<number> | DivExpression;
+    minimum_item_size?: Type<number | DivExpression>;
     /**
      * Internal margins from the element stroke.
      */
@@ -300,7 +300,7 @@ export interface DivIndicatorProps {
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -346,7 +346,7 @@ export interface DivIndicatorProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.

@@ -8,7 +8,7 @@ export class EntityWithOptionalStringEnumProperty<T extends EntityWithOptionalSt
     readonly _props?: Exact<EntityWithOptionalStringEnumPropertyProps, T>;
 
     readonly type = 'entity_with_optional_string_enum_property';
-    property?: Type<EntityWithOptionalStringEnumPropertyProperty> | DivExpression;
+    property?: Type<EntityWithOptionalStringEnumPropertyProperty | DivExpression>;
 
     constructor(props?: Exact<EntityWithOptionalStringEnumPropertyProps, T>) {
         this.property = props?.property;
@@ -16,7 +16,7 @@ export class EntityWithOptionalStringEnumProperty<T extends EntityWithOptionalSt
 }
 
 export interface EntityWithOptionalStringEnumPropertyProps {
-    property?: Type<EntityWithOptionalStringEnumPropertyProperty> | DivExpression;
+    property?: Type<EntityWithOptionalStringEnumPropertyProperty | DivExpression>;
 }
 
 export type EntityWithOptionalStringEnumPropertyProperty =

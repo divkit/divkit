@@ -25,20 +25,20 @@ export class DivSlideTransition<T extends DivSlideTransitionProps = DivSlideTran
     /**
      * Animation duration in milliseconds.
      */
-    duration?: Type<number> | DivExpression;
+    duration?: Type<number | DivExpression>;
     /**
      * Edge of a parent element for one of the action types:where the element will move from when
      * appearing;where the element will move to when disappearing.
      */
-    edge?: Type<DivSlideTransitionEdge> | DivExpression;
+    edge?: Type<DivSlideTransitionEdge | DivExpression>;
     /**
      * Transition speed nature.
      */
-    interpolator?: Type<DivAnimationInterpolator> | DivExpression;
+    interpolator?: Type<DivAnimationInterpolator | DivExpression>;
     /**
      * Delay in milliseconds before animation starts.
      */
-    start_delay?: Type<number> | DivExpression;
+    start_delay?: Type<number | DivExpression>;
 
     constructor(props?: Exact<DivSlideTransitionProps, T>) {
         this.distance = props?.distance;
@@ -59,20 +59,20 @@ export interface DivSlideTransitionProps {
     /**
      * Animation duration in milliseconds.
      */
-    duration?: Type<number> | DivExpression;
+    duration?: Type<number | DivExpression>;
     /**
      * Edge of a parent element for one of the action types:where the element will move from when
      * appearing;where the element will move to when disappearing.
      */
-    edge?: Type<DivSlideTransitionEdge> | DivExpression;
+    edge?: Type<DivSlideTransitionEdge | DivExpression>;
     /**
      * Transition speed nature.
      */
-    interpolator?: Type<DivAnimationInterpolator> | DivExpression;
+    interpolator?: Type<DivAnimationInterpolator | DivExpression>;
     /**
      * Delay in milliseconds before animation starts.
      */
-    start_delay?: Type<number> | DivExpression;
+    start_delay?: Type<number | DivExpression>;
 }
 
 export type DivSlideTransitionEdge =

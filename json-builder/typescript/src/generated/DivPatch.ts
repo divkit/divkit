@@ -21,7 +21,7 @@ export interface IDivPatch {
      * least one element, the changes aren't applied.`partial` — all possible changes are applied. If
      * there are errors, they are reported.
      */
-    mode?: Type<DivPatchMode> | DivExpression;
+    mode?: Type<DivPatchMode | DivExpression>;
 }
 
 export type DivPatchMode =

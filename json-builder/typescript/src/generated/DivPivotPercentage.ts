@@ -14,7 +14,7 @@ export class DivPivotPercentage<T extends DivPivotPercentageProps = DivPivotPerc
     /**
      * Location of the element.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 
     constructor(props: Exact<DivPivotPercentageProps, T>) {
         this.value = props.value;
@@ -25,5 +25,5 @@ export interface DivPivotPercentageProps {
     /**
      * Location of the element.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 }

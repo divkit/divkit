@@ -19,11 +19,11 @@ export class DivFixedSize<T extends DivFixedSizeProps = DivFixedSizeProps> {
      * Unit of measurement. To learn more about units of size measurement, see [Layout inside the
      * card](../../layout.dita).
      */
-    unit?: Type<DivSizeUnit> | DivExpression;
+    unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Element size.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 
     constructor(props: Exact<DivFixedSizeProps, T>) {
         this.unit = props.unit;
@@ -36,9 +36,9 @@ export interface DivFixedSizeProps {
      * Unit of measurement. To learn more about units of size measurement, see [Layout inside the
      * card](../../layout.dita).
      */
-    unit?: Type<DivSizeUnit> | DivExpression;
+    unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Element size.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 }

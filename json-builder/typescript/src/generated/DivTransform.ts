@@ -24,5 +24,5 @@ export interface IDivTransform {
      * The number of degrees by which the element must be rotated. A positive value describes a
      * clockwise rotation.
      */
-    rotation?: Type<number> | DivExpression;
+    rotation?: Type<number | DivExpression>;
 }

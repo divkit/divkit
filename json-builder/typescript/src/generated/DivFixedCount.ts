@@ -14,7 +14,7 @@ export class DivFixedCount<T extends DivFixedCountProps = DivFixedCountProps> {
     /**
      * Number of repetitions.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 
     constructor(props: Exact<DivFixedCountProps, T>) {
         this.value = props.value;
@@ -25,5 +25,5 @@ export interface DivFixedCountProps {
     /**
      * Number of repetitions.
      */
-    value: Type<number> | DivExpression;
+    value: Type<number | DivExpression>;
 }

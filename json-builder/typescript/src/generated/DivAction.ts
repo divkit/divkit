@@ -23,7 +23,7 @@ export interface IDivAction {
     /**
      * URL for logging.
      */
-    log_url?: Type<string> | DivExpression;
+    log_url?: Type<string | DivExpression>;
     /**
      * Context menu.
      */
@@ -35,16 +35,16 @@ export interface IDivAction {
     /**
      * Referer URL for logging.
      */
-    referer?: Type<string> | DivExpression;
+    referer?: Type<string | DivExpression>;
     /**
      * The tab in which the URL must be opened.
      */
-    target?: Type<DivActionTarget> | DivExpression;
+    target?: Type<DivActionTarget | DivExpression>;
     /**
      * URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with
      * elements](../../interaction.dita).
      */
-    url?: Type<string> | DivExpression;
+    url?: Type<string | DivExpression>;
 }
 
 export type DivActionTarget =
@@ -63,5 +63,5 @@ export interface IDivActionMenuItem {
     /**
      * Menu item title.
      */
-    text: Type<string> | DivExpression;
+    text: Type<string | DivExpression>;
 }

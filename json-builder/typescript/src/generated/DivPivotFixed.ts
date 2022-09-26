@@ -19,11 +19,11 @@ export class DivPivotFixed<T extends DivPivotFixedProps = DivPivotFixedProps> {
      * Unit of size measurement. To learn more about units of size measurement, see [Layout inside
      * the card](../../layout.dita).
      */
-    unit?: Type<DivSizeUnit> | DivExpression;
+    unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Offset.
      */
-    value?: Type<number> | DivExpression;
+    value?: Type<number | DivExpression>;
 
     constructor(props?: Exact<DivPivotFixedProps, T>) {
         this.unit = props?.unit;
@@ -36,9 +36,9 @@ export interface DivPivotFixedProps {
      * Unit of size measurement. To learn more about units of size measurement, see [Layout inside
      * the card](../../layout.dita).
      */
-    unit?: Type<DivSizeUnit> | DivExpression;
+    unit?: Type<DivSizeUnit | DivExpression>;
     /**
      * Offset.
      */
-    value?: Type<number> | DivExpression;
+    value?: Type<number | DivExpression>;
 }

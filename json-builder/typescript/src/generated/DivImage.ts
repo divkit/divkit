@@ -54,15 +54,15 @@ export class DivImage<T extends DivImageProps = DivImageProps> {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Transparency animation when loading an image.
      */
@@ -79,15 +79,15 @@ export class DivImage<T extends DivImageProps = DivImageProps> {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Horizontal image alignment.
      */
-    content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    content_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical image alignment.
      */
-    content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    content_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Action when double-clicking on an element.
      */
@@ -112,7 +112,7 @@ export class DivImage<T extends DivImageProps = DivImageProps> {
      * displayed as the first frame. Use the parameter carefully — it will worsen the preview display
      * time and can worsen the application launch time.
      */
-    high_priority_preview_show?: Type<IntBoolean> | DivExpression;
+    high_priority_preview_show?: Type<IntBoolean | DivExpression>;
     /**
      * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
      * on iOS.
@@ -121,7 +121,7 @@ export class DivImage<T extends DivImageProps = DivImageProps> {
     /**
      * Direct URL to an image.
      */
-    image_url: Type<string> | DivExpression;
+    image_url: Type<string | DivExpression>;
     /**
      * Action when long-clicking on an element.
      */
@@ -137,25 +137,25 @@ export class DivImage<T extends DivImageProps = DivImageProps> {
     /**
      * Placeholder background before the image is loaded.
      */
-    placeholder_color?: Type<string> | DivExpression;
+    placeholder_color?: Type<string | DivExpression>;
     /**
      * Background image must be loaded before the display.
      */
-    preload_required?: Type<IntBoolean> | DivExpression;
+    preload_required?: Type<IntBoolean | DivExpression>;
     /**
      * Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the
      * image is loaded. Format `data url`: `data:[;base64],<data>`
      */
-    preview?: Type<string> | DivExpression;
+    preview?: Type<string | DivExpression>;
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Image scaling:`fit` places the entire image into the element (free space is filled with
      * background);`fill` scales the image to the element size and cuts off the excess.
      */
-    scale?: Type<DivImageScale> | DivExpression;
+    scale?: Type<DivImageScale | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -164,7 +164,7 @@ export class DivImage<T extends DivImageProps = DivImageProps> {
     /**
      * New color of a contour image.
      */
-    tint_color?: Type<string> | DivExpression;
+    tint_color?: Type<string | DivExpression>;
     /**
      * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
      * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -197,7 +197,7 @@ export class DivImage<T extends DivImageProps = DivImageProps> {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
@@ -277,15 +277,15 @@ export interface DivImageProps {
     /**
      * Horizontal alignment of an element inside the parent element.
      */
-    alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical alignment of an element inside the parent element.
      */
-    alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
      */
-    alpha?: Type<number> | DivExpression;
+    alpha?: Type<number | DivExpression>;
     /**
      * Transparency animation when loading an image.
      */
@@ -302,15 +302,15 @@ export interface DivImageProps {
     /**
      * Merges cells in a column of the [grid](div-grid.md) element.
      */
-    column_span?: Type<number> | DivExpression;
+    column_span?: Type<number | DivExpression>;
     /**
      * Horizontal image alignment.
      */
-    content_alignment_horizontal?: Type<DivAlignmentHorizontal> | DivExpression;
+    content_alignment_horizontal?: Type<DivAlignmentHorizontal | DivExpression>;
     /**
      * Vertical image alignment.
      */
-    content_alignment_vertical?: Type<DivAlignmentVertical> | DivExpression;
+    content_alignment_vertical?: Type<DivAlignmentVertical | DivExpression>;
     /**
      * Action when double-clicking on an element.
      */
@@ -335,7 +335,7 @@ export interface DivImageProps {
      * displayed as the first frame. Use the parameter carefully — it will worsen the preview display
      * time and can worsen the application launch time.
      */
-    high_priority_preview_show?: Type<IntBoolean> | DivExpression;
+    high_priority_preview_show?: Type<IntBoolean | DivExpression>;
     /**
      * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier`
      * on iOS.
@@ -344,7 +344,7 @@ export interface DivImageProps {
     /**
      * Direct URL to an image.
      */
-    image_url: Type<string> | DivExpression;
+    image_url: Type<string | DivExpression>;
     /**
      * Action when long-clicking on an element.
      */
@@ -360,25 +360,25 @@ export interface DivImageProps {
     /**
      * Placeholder background before the image is loaded.
      */
-    placeholder_color?: Type<string> | DivExpression;
+    placeholder_color?: Type<string | DivExpression>;
     /**
      * Background image must be loaded before the display.
      */
-    preload_required?: Type<IntBoolean> | DivExpression;
+    preload_required?: Type<IntBoolean | DivExpression>;
     /**
      * Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the
      * image is loaded. Format `data url`: `data:[;base64],<data>`
      */
-    preview?: Type<string> | DivExpression;
+    preview?: Type<string | DivExpression>;
     /**
      * Merges cells in a string of the [grid](div-grid.md) element.
      */
-    row_span?: Type<number> | DivExpression;
+    row_span?: Type<number | DivExpression>;
     /**
      * Image scaling:`fit` places the entire image into the element (free space is filled with
      * background);`fill` scales the image to the element size and cuts off the excess.
      */
-    scale?: Type<DivImageScale> | DivExpression;
+    scale?: Type<DivImageScale | DivExpression>;
     /**
      * List of [actions](div-action.md) to be executed when selecting an element in
      * [pager](div-pager.md).
@@ -387,7 +387,7 @@ export interface DivImageProps {
     /**
      * New color of a contour image.
      */
-    tint_color?: Type<string> | DivExpression;
+    tint_color?: Type<string | DivExpression>;
     /**
      * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`,
      * hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -420,7 +420,7 @@ export interface DivImageProps {
     /**
      * Element visibility.
      */
-    visibility?: Type<DivVisibility> | DivExpression;
+    visibility?: Type<DivVisibility | DivExpression>;
     /**
      * Tracking visibility of a single element. Not used if the `visibility_actions` parameter is
      * set.
