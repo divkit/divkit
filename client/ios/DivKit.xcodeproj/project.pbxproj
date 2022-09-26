@@ -376,6 +376,7 @@
 		8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		8C87CF1D28AD05BC00D262E1 /* Default.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Default.xcconfig; sourceTree = "<group>"; };
 		8C88636028AB802C00D04928 /* ReferenceSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReferenceSet.swift; sourceTree = "<group>"; };
+		8C896C8A28E199EC00D864DB /* Version.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Version.xcconfig; sourceTree = "<group>"; };
 		8C8C6D8628CA2E5600DC16F4 /* SimplePropertiesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePropertiesTests.swift; sourceTree = "<group>"; };
 		8C9284C5288ACCBA00BEA1FA /* DivKitSnapshotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitSnapshotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C9284CF288ACCE400BEA1FA /* Diff.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diff.swift; sourceTree = "<group>"; };
@@ -846,6 +847,7 @@
 				8C87CF1B28AD059600D262E1 /* Debug.xcconfig */,
 				8C87CF1D28AD05BC00D262E1 /* Default.xcconfig */,
 				8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */,
+				8C896C8A28E199EC00D864DB /* Version.xcconfig */,
 			);
 			path = Configurations;
 			sourceTree = "<group>";
