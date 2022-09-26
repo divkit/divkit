@@ -1,12 +1,7 @@
 import XCTest
 
 private let exclusions: [String] = [
-  "div-container/visibility.json",
   "div-gallery/visibility.json",
-  "div-input/visibility.json",
-  "div-pager/visibility.json",
-  "div-slider/visibility.json",
-  "div-state/visibility.json",
   
   "div-slider/thumb-style/thumb-primary-style-properties.json",
   "div-slider/thumb-style/thumb-secondary-style-properties.json",

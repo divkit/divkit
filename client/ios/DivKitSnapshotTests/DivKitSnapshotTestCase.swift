@@ -125,11 +125,14 @@ internal class DivKitSnapshotTestCase: XCTestCase {
     let currentScale = UIScreen.main.scale
     let devices = ScreenSize.portrait.filter { $0.scale == currentScale }
     try devices.forEach { device in
-      let view = try makeDivView(
+      var view = try makeDivView(
         data: data,
         divKitComponents: divKitComponents,
         size: device.size
       )
+      if view.bounds.isEmpty {
+        view = makeEmptyView()
+      }
       guard let image = view.makeSnapshot() else {
         throw DivTestingErrors.snapshotCouldNotBeCreated
       }
@@ -216,6 +219,13 @@ private func jsonData(fileName: String, subdirectory: String) -> Data? {
 
 private func jsonDict(data: Data) -> [String: Any]? {
   (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+}
+
+private func makeEmptyView() -> UIView {
+  let label = UILabel()
+  label.text = "<empty view>"
+  label.frame = CGRect(origin: .zero, size: label.intrinsicContentSize)
+  return label
 }
 
 private enum DivTestingErrors: LocalizedError {
