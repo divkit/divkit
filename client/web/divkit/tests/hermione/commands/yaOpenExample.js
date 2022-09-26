@@ -36,6 +36,14 @@ module.exports = async function(example, params = {}) {
         timeoutMsg: 'expected json to render 5s'
     });
 
+    await this.executeAsync(done => {
+        if (document.readyState === 'complete') {
+            done();
+        } else {
+            document.addEventListener('load', done);
+        }
+    });
+
     await expectations(this, params.expectations);
 };
 
