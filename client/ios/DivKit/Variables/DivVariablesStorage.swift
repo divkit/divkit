@@ -173,30 +173,30 @@ extension DivVariablesStorage: DivVariableUpdater {
     name: DivVariableName,
     value: String
   ) {
-    var cardVariables = rwLock.read { storage.local[cardId] }
-    if let localValue = cardVariables?[name] {
-      let oldStorage = storage
-      let isUpdated = cardVariables?.update(name: name, oldValue: localValue, value: value) ?? false
-      rwLock.write {
+    rwLock.write {
+      var cardVariables = storage.local[cardId]
+      if let localValue = cardVariables?[name] {
+        let oldStorage = storage
+        let isUpdated = cardVariables?.update(name: name, oldValue: localValue, value: value) ?? false
         storage.local[cardId] = cardVariables
+        if isUpdated {
+          update(with: ChangeEvent(
+            kind: .local(cardId, [name]),
+            variables: ChangeEvent.VariablesValues(old: oldStorage, new: storage)
+          ))
+        }
+      } else if let globalValue = storage.global[name] {
+        let oldVariables = storage
+        let isUpdated = storage.global.update(name: name, oldValue: globalValue, value: value)
+        if isUpdated {
+          update(with: ChangeEvent(
+            kind: .global([name]),
+            variables: ChangeEvent.VariablesValues(old: oldVariables, new: storage)
+          ))
+        }
+      } else {
+        DivKitLogger.error("Variable is not declared: \(name)")
       }
-      if isUpdated {
-        update(with: ChangeEvent(
-          kind: .local(cardId, [name]),
-          variables: ChangeEvent.VariablesValues(old: oldStorage, new: storage)
-        ))
-      }
-    } else if let globalValue = storage.global[name] {
-      let oldVariables = storage
-      let isUpdated = storage.global.update(name: name, oldValue: globalValue, value: value)
-      if isUpdated {
-        update(with: ChangeEvent(
-          kind: .global([name]),
-          variables: ChangeEvent.VariablesValues(old: oldVariables, new: storage)
-        ))
-      }
-    } else {
-      DivKitLogger.error("Variable is not declared: \(name)")
     }
   }
 }
