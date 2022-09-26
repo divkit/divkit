@@ -12,17 +12,18 @@
       "$description": "translations.json#/div_gradient_colors"
     },
     "radius": {
-      "$ref": "common.json#/positive_integer",
+      "$ref": "div-radial-gradient-radius.json",
+      "default_value": "{\"type\": \"relative\", \"value\": \"farthest_corner\" }",
       "$description": "translations.json#/div_gradient_radial_radius"
     },
     "center_x": {
-      "type": "number",
-      "default_value": "0.5",
+      "$ref": "div-radial-gradient-center.json",
+      "default_value": "{\"type\": \"relative\", \"value\": 0.5 }",
       "$description": "translations.json#/div_gradient_radial_center_x"
     },
     "center_y": {
-      "type": "number",
-      "default_value": "0.5",
+      "$ref": "div-radial-gradient-center.json",
+      "default_value": "{\"type\": \"relative\", \"value\": 0.5 }",
       "$description": "translations.json#/div_gradient_radial_center_y"
     },
     "type": {
@@ -34,7 +35,6 @@
   },
   "required": [
     "colors",
-    "radius",
     "type"
   ]
 }

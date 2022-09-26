@@ -1,0 +1,25 @@
+{
+    "type": "object",
+    "$description": "translations.json#/div_radial_gradient_fixed_center",
+    "properties": {
+        "value": {
+            "type": "integer",
+            "$description": "translations.json#/div_radial_gradient_fixed_center_value"
+        },
+        "unit": {
+            "$ref": "div-size-unit.json",
+            "$description": "translations.json#/div_fixed_size_unit",
+            "default_value": "dp"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "fixed"
+            ]
+        }
+    },
+    "required": [
+        "value",
+        "type"
+    ]
+}

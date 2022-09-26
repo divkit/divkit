@@ -623,17 +623,41 @@
     "en": "Angle of gradient direction.",
     "ru": "Угол направления градиента."
   },
-  "div_gradient_radial_radius":{
-    "en": "Radius of the gradient transition in `dp`.",
-    "ru": "Радиус градиентного перехода в `dp`."
+  "div_gradient_radial_radius": {
+    "en": "Radius of the gradient transition.",
+    "ru": "Радиус градиентного перехода."
+  },
+  "div_radial_gradient_relative_radius": {
+    "en": "Relative radius of the gradient transition.",
+    "ru": "Относительный радиус градиентного перехода."
+  },
+  "div_radial_gradient_relative_radius_value": {
+    "en": "Type of relative radius of the gradient transition.",
+    "ru": "Тип относительного радиуса градиентного перехода."
+  },
+  "div_radial_gradient_fixed_center": {
+    "en": "Fixed central point of the gradient.",
+    "ru": "Фиксированная центральная точка градиента."
+  },
+  "div_radial_gradient_fixed_center_value": {
+    "en": "Shift value of the fixed central point of the gradient.",
+    "ru": "Значение сдвига фиксированной центральной точки градиента."
+  },
+  "div_radial_gradient_relative_center": {
+    "en": "Relative central point of the gradient.",
+    "ru": "Относительная центральная точка градиента."
+  },
+  "div_radial_gradient_relative_center_value": {
+    "en": "Shift value of the central relative point of the gradient in the range `0..1`.",
+    "ru": "Значение сдвига относительной центральной точки градиента в диапозоне `0..1`."
   },
   "div_gradient_radial_center_x": {
-    "en": "Shift of the central point of the gradient relative to the left edge along the X axis in the range `0..1`.",
-    "ru": "Сдвиг центральной точки градиента относительно левого края по оси X в диапозоне `0..1`."
+    "en": "Shift of the central point of the gradient relative to the left edge along the X axis.",
+    "ru": "Сдвиг центральной точки градиента относительно левого края по оси X."
   },
   "div_gradient_radial_center_y":{
-    "en": "Shift of the central point of the gradient relative to the upper edge along the Y axis in the range `0..1`.",
-    "ru": "Сдвиг центральной точки градиента относительно верхнего края по оси Y в диапозоне `0..1`."
+    "en": "Shift of the central point of the gradient relative to the upper edge along the Y axis.",
+    "ru": "Сдвиг центральной точки градиента относительно верхнего края по оси Y."
   },
   "div_grid": {
     "en": "A grid with an option to merge cells vertically and horizontally.",

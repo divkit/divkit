@@ -38,10 +38,14 @@ import com.yandex.div2.DivBorder
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFocus
-import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivImageBackground
 import com.yandex.div2.DivImageScale
+import com.yandex.div2.DivLinearGradient
+import com.yandex.div2.DivRadialGradientCenter
+import com.yandex.div2.DivRadialGradientRadius
+import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivSize
+import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivVisibility
 import javax.inject.Inject
@@ -504,12 +508,34 @@ internal class DivBaseBinder @Inject constructor(
                 value.angle.evaluate(resolver),
                 value.colors.evaluate(resolver),
             )
-            is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
-                value.centerX.evaluate(resolver),
-                value.centerY.evaluate(resolver),
-                value.colors.evaluate(resolver),
-                value.radius.evaluate(resolver)
-            )
+            is DivBackground.RadialGradient -> {
+                fun DivRadialGradientCenter.toBackgroundState() = when (this) {
+                    is DivRadialGradientCenter.Fixed -> DivBackgroundState.RadialGradient.Center.Fixed(
+                        value.value.evaluate(resolver),
+                        value.unit.evaluate(resolver)
+                    )
+                    is DivRadialGradientCenter.Relative -> DivBackgroundState.RadialGradient.Center.Relative(
+                        value.value.evaluate(resolver)
+                    )
+                }
+
+                fun DivRadialGradientRadius.toBackgroundState() = when (this) {
+                    is DivRadialGradientRadius.FixedSize -> DivBackgroundState.RadialGradient.Radius.Fixed(
+                        value.value.evaluate(resolver),
+                        value.unit.evaluate(resolver)
+                    )
+                    is DivRadialGradientRadius.Relative -> DivBackgroundState.RadialGradient.Radius.Relative(
+                        value.value.evaluate(resolver)
+                    )
+                }
+
+                DivBackgroundState.RadialGradient(
+                    value.centerX.toBackgroundState(),
+                    value.centerY.toBackgroundState(),
+                    value.colors.evaluate(resolver),
+                    value.radius.toBackgroundState()
+                )
+            }
             is DivBackground.Image -> DivBackgroundState.Image(
                 value.alpha.evaluate(resolver),
                 value.contentAlignmentHorizontal.evaluate(resolver),
@@ -602,11 +628,33 @@ internal class DivBaseBinder @Inject constructor(
         ): DivBackgroundState()
 
         data class RadialGradient(
-            val centerX: Double,
-            val centerY: Double,
+            val centerX: Center,
+            val centerY: Center,
             val colors: List<Int>,
-            val radius: Int
-        ): DivBackgroundState()
+            val radius: Radius
+        ) : DivBackgroundState() {
+            sealed class Center {
+                data class Relative(
+                    val value: Double
+                ) : Center()
+
+                data class Fixed(
+                    val value: Int,
+                    val unit: DivSizeUnit
+                ) : Center()
+            }
+
+            sealed class Radius {
+                data class Relative(
+                    val value: DivRadialGradientRelativeRadius.Value
+                ) : Radius()
+
+                data class Fixed(
+                    val value: Int,
+                    val unit: DivSizeUnit
+                ) : Radius()
+            }
+        }
 
         data class Image(
             val alpha: Double,

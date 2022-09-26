@@ -1,0 +1,20 @@
+{
+    "type": "object",
+    "$description": "translations.json#/div_radial_gradient_relative_center",
+    "properties": {
+        "value": {
+            "type": "number",
+            "$description": "translations.json#/div_radial_gradient_relative_center_value"
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "relative"
+            ]
+        }
+    },
+    "required": [
+        "value",
+        "type"
+    ]
+}

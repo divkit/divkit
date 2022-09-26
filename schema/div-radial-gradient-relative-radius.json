@@ -1,0 +1,26 @@
+{
+    "type": "object",
+    "$description": "translations.json#/div_radial_gradient_relative_radius",
+    "properties": {
+        "value": {
+            "type": "string",
+            "$description": "translations.json#/div_radial_gradient_relative_radius_value",
+            "enum": [
+                "nearest_corner",
+                "farthest_corner",
+                "nearest_side",
+                "farthest_side"
+            ]
+        },
+        "type": {
+            "type": "string",
+            "enum": [
+                "relative"
+            ]
+        }
+    },
+    "required": [
+        "value",
+        "type"
+    ]
+}
