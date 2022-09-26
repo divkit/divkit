@@ -1,3 +1,5 @@
+import Foundation
+
 import DivKit
 import Serialization
 import TemplatesSupport

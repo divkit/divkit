@@ -14,6 +14,18 @@ JSON → DivData → LayoutKit block → UIView
 
 Although DivKit produces UIKit views, it can be easyly used in SwiftUI apps (see [playground application](DivKitPlayground)).
 
+## Installing DivKit
+
+DivKit supports [Swift Package Manager](https://www.swift.org/package-manager/) and [CocoaPods](https://cocoapods.org/).
+
+Use this repository to install DivKit using Swift Package Manager: https://github.com/divkit/divkit-ios.git.
+
+Use `DivKit` podspec to install DivKit using CocoaPods:
+```bash
+pod 'DivKit'
+pod install
+```
+
 ## DivKit Project
 
 `DivKit.xcodeproj` – main Xcode project that contains all DivKit modules, tests and playground application.
@@ -26,7 +38,7 @@ Use `SnapshotTests` scheme to run snapshot tests.
 
 ## Sample Project
 
-`Sample/DivKitSample.xcodeproj` – sample project with simple DivKit integration using CocoaPods.
+`Sample/DivKitSample.xcodeproj` – sample project with simple DivKit integration using Swift Package Manager.
 
 ---
 
