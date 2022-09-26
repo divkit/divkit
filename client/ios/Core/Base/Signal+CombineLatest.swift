@@ -1,5 +1,6 @@
 // Copyright 2018 Yandex LLC. All rights reserved.
 extension Signal {
+  @inlinable
   public static func combineLatest<U>(_ signals: [Signal<U>]) -> Signal where T == [U] {
     let count = signals.count
     return Signal(addObserver: { arrayObserver in
@@ -20,6 +21,7 @@ extension Signal {
     })
   }
 
+  @inlinable
   public static func combineLatest<U0, U1>(
     _ signal0: Signal<U0>,
     _ signal1: Signal<U1>
@@ -44,6 +46,7 @@ extension Signal {
     })
   }
 
+  @inlinable
   public static func combineLatest<U0, U1, U2>(
     _ signal0: Signal<U0>,
     _ signal1: Signal<U1>,
@@ -73,6 +76,7 @@ extension Signal {
     })
   }
 
+  @inlinable
   public static func combineLatest<U0, U1, U2, U3>(
     _ signal0: Signal<U0>,
     _ signal1: Signal<U1>,
@@ -107,6 +111,7 @@ extension Signal {
     })
   }
 
+  @inlinable
   public static func combineLatest<U0, U1, U2, U3, U4>(
     _ signal0: Signal<U0>,
     _ signal1: Signal<U1>,
@@ -147,6 +152,7 @@ extension Signal {
     })
   }
 
+  @inlinable
   public static func combineLatest<U0, U1, U2, U3, U4, U5>(
     _ signal0: Signal<U0>,
     _ signal1: Signal<U1>,

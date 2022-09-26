@@ -73,6 +73,19 @@ extension RGBAColor {
   }
 }
 
+extension RGBAColor: Codable {
+  public init(from decoder: Decoder) throws {
+    let container = try decoder.singleValueContainer()
+    let colorString = try container.decode(String.self)
+    self = RGBAColor.color(withHexString: colorString)!
+  }
+
+  public func encode(to encoder: Encoder) throws {
+    var container = encoder.singleValueContainer()
+    try container.encode(hexString)
+  }
+}
+
 private func colorValueForShortFormat<S: StringProtocol>(_ string: S) throws -> UInt32 {
   guard let value = UInt32(string, safeRadix: .hex) else {
     throw ColorError.unexpectedCharacter

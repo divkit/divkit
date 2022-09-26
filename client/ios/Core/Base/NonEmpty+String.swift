@@ -17,6 +17,7 @@ extension NonEmpty where C == String {
     return NonEmpty(uppercasedHead.first!, uppercasedHead.dropFirst() + tail.uppercased())
   }
 
+  @inlinable
   public init?<S: LosslessStringConvertible>(_ value: S) {
     let string = String(value)
     guard let head = string.first else {

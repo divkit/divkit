@@ -58,6 +58,10 @@ extension HTTPHeaders {
   public func addXUUID(_ uuid: String?) -> HTTPHeaders {
     self.addHeader("X-UUID", uuid)
   }
+
+  public func addXYandexTheme(_ theme: String) -> HTTPHeaders {
+    self.addHeader("X-Yandex-Theme", theme)
+  }
 }
 
 extension HTTPHeaders {

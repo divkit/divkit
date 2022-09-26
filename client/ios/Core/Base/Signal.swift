@@ -4,10 +4,12 @@ import Foundation
 public struct Signal<T> {
   public let addObserver: (Observer<T>) -> Disposable
 
+  @inlinable
   public func addObserver(_ action: @escaping (T) -> Void) -> Disposable {
     addObserver(Observer(action: action))
   }
 
+  @inlinable
   public init(addObserver: @escaping (Observer<T>) -> Disposable) {
     self.addObserver = addObserver
   }
@@ -18,6 +20,7 @@ extension Signal {
     Signal(addObserver: { _ in Disposable() })
   }
 
+  @inlinable
   public static func value(_ value: T) -> Signal {
     Signal(addObserver: { observer in
       observer.action(value)
@@ -25,6 +28,7 @@ extension Signal {
     })
   }
 
+  @inlinable
   public static func values<S: Sequence>(_ values: S) -> Signal where S.Element == T {
     Signal(addObserver: { observer in
       for value in values {
@@ -34,6 +38,7 @@ extension Signal {
     })
   }
 
+  @inlinable
   public func startWith(_ valueProvider: @escaping () -> T) -> Signal {
     performingBeforeAddObserver { observer in
       let value = valueProvider()
@@ -41,22 +46,27 @@ extension Signal {
     }
   }
 
+  @inlinable
   public func contramap<U>(_ transform: @escaping (Observer<U>) -> Observer<T>) -> Signal<U> {
     Signal<U>(addObserver: compose(addObserver, after: transform))
   }
 
+  @inlinable
   public func map<U>(_ transform: @escaping (T) -> U) -> Signal<U> {
     contramap { $0.contramap(transform) }
   }
 
+  @inlinable
   public func filter(_ predicate: @escaping (T) -> Bool) -> Signal {
     contramap { $0.filter(predicate) }
   }
 
+  @inlinable
   public func compactMap<U>(_ transform: @escaping (T) -> U?) -> Signal<U> {
     contramap { $0.compactContramap(transform) }
   }
 
+  @inlinable
   public func flatMap<U>(_ transform: @escaping (T) -> Signal<U>) -> Signal<U> {
     Signal<U>(addObserver: { uObserver in
       var innerDisposable: Disposable?
@@ -107,6 +117,7 @@ extension Signal {
     }
   }
 
+  @inlinable
   public func performingBeforeAddObserver(_ sideEffect: @escaping (Observer<T>) -> Void) -> Signal {
     Signal(addObserver: { observer in
       sideEffect(observer)
@@ -114,10 +125,12 @@ extension Signal {
     })
   }
 
+  @inlinable
   public func performingBeforeEachValue(_ sideEffect: @escaping (T) -> Void) -> Signal {
     contramap { $0.performingBeforeEachValue(sideEffect) }
   }
 
+  @inlinable
   public func skipRepeats(
     areEqual: @escaping (T, T) -> Bool,
     initialValue: (() -> T?)? = nil
@@ -125,14 +138,17 @@ extension Signal {
     contramap { $0.skipRepeats(areEqual: areEqual, initialValue: initialValue?()) }
   }
 
+  @inlinable
   public func skipUntil(_ predicate: @escaping (T) -> Bool) -> Signal<T> {
     contramap { $0.skipUntil(predicate) }
   }
 
+  @inlinable
   public func takeUntil(_ predicate: @escaping (T) -> Bool) -> Signal<T> {
     contramap { $0.takeUntil(predicate) }
   }
 
+  @inlinable
   public func scan<U>(
     _ accumulator: U,
     updateAccumulator: @escaping (inout U, T) -> Void
@@ -144,6 +160,7 @@ extension Signal {
     }}
   }
 
+  @inlinable
   public func scan<U>(
     _ accumulator: U,
     nextPartialResult: @escaping (U, T) -> U
@@ -153,6 +170,7 @@ extension Signal {
     }
   }
 
+  @inlinable
   public func mapOnBackground<U>(
     _ transform: @escaping (T) -> U,
     backgroundRunner: @escaping BackgroundRunner = onBackgroundThread,
@@ -177,6 +195,7 @@ extension Signal {
 }
 
 extension Signal where T: Equatable {
+  @inlinable
   public func skipRepeats(initialValue: (() -> T?)? = nil) -> Signal {
     skipRepeats(areEqual: ==, initialValue: initialValue)
   }
@@ -185,6 +204,7 @@ extension Signal where T: Equatable {
 extension Signal {
   /// Makes a new Signal based on `self`. It, and all subscriptions (`Disposable`s)
   /// are made by it retain the `object`
+  @inlinable
   public func retaining<U>(object: U) -> Signal<T> {
     Signal(addObserver: { observer in
       let baseDisposable = addObserver(observer)
@@ -219,6 +239,7 @@ extension Signal {
       .performingBeforeEachValue { _ in Thread.assertIsMain() }
   }
 
+  @inlinable
   public static func changesForKeyPath<Root: NSObject, Value>(
     _ keyPath: KeyPath<Root, Value>,
     onNSObject object: Root,
@@ -235,6 +256,7 @@ extension Signal {
     })
   }
 
+  @inlinable
   public static func unsafeChangesForKeyPath<Root: NSObject, Value>(
     _ keyPath: KeyPath<Root, Value>,
     onNSObject object: Root,
@@ -252,10 +274,12 @@ extension Signal {
 }
 
 extension Signal {
+  @inlinable
   public func transmit<O>(to keyPath: ReferenceWritableKeyPath<O, T>, of object: O) -> Disposable {
     addObserver { object[keyPath: keyPath] = $0 }
   }
 
+  @inlinable
   public func transmit<O>(
     to keyPath: ReferenceWritableKeyPath<O, T?>,
     of object: O
@@ -263,6 +287,7 @@ extension Signal {
     addObserver { object[keyPath: keyPath] = $0 }
   }
 
+  @inlinable
   public func transmit<O: AnyObject>(
     to keyPath: ReferenceWritableKeyPath<O, T>,
     ofWeak object: O
@@ -289,6 +314,7 @@ extension Signal where T == Void {
 }
 
 extension Lazy {
+  @inlinable
   public func addObserver<U>(_ observer: Observer<U>) -> Disposable where T == Signal<U> {
     var token: Disposable?
     var observerToAdd: Observer<U>? = observer

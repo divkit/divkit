@@ -3,6 +3,7 @@
 public typealias NonEmptyArray<Element> = NonEmpty<[Element]>
 
 extension NonEmpty {
+  @inlinable
   public init?<E>(_ array: C) where C == [E] {
     guard let head = array.first else {
       return nil
@@ -10,6 +11,7 @@ extension NonEmpty {
     self.init(head, Array(array.dropFirst()))
   }
 
+  @inlinable
   public func asArray() -> [C.Element] {
     Array(self)
   }

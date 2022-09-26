@@ -23,14 +23,6 @@ public final class URLSessionDelegateImpl: NSObject {
 
   private var stateByTask = [URLSessionTask: TaskState]()
   private var challengeHandler: ChallengeHandling?
-  private let responseTimeTracker: TimeTracking?
-
-  public init(
-    responseTimeTracker: TimeTracking? = nil
-  ) {
-    self.responseTimeTracker = responseTimeTracker
-    super.init()
-  }
 
   public func setHandlers(
     downloadProgressChange: ProgressChangeHandler? = nil,
@@ -53,35 +45,6 @@ public final class URLSessionDelegateImpl: NSObject {
 }
 
 extension URLSessionDelegateImpl: URLSessionDataDelegate {
-  // Networking is exported with minimal iOS version 9.0.
-  // It's needed by RealTimeAnalytics pod, which is integrated in YXMobileMetrica.
-  @available(iOS 10, tvOS 10, *)
-  public func urlSession(
-    _: URLSession,
-    task _: URLSessionTask,
-    didFinishCollecting metrics: URLSessionTaskMetrics
-  ) {
-    Thread.assertIsMain()
-    reportConnectionMetrics(with: metrics.networkSessionMetrics)
-  }
-
-  // Networking is exported with minimal iOS version 9.0.
-  // It's needed by RealTimeAnalytics pod, which is integrated in YXMobileMetrica.
-  @available(iOS 10, tvOS 10, *)
-  func reportConnectionMetrics(with metrics: [NetworkSessionMetrics]) {
-    guard let responseTimeTracker = responseTimeTracker else { return }
-    let connectionMetrics = metrics.compactMap { metric -> (interval: TimeInterval, end: Date)? in
-      guard metric.resourceFetchType == .networkLoad,
-            let start = metric.connectStartDate,
-            let end = metric.connectEndDate else { return nil }
-      return (end.timeIntervalSince(start), end)
-    }
-    guard !connectionMetrics.isEmpty else { return }
-    for metric in connectionMetrics {
-      responseTimeTracker.track(metric.interval, timestamp: metric.end)
-    }
-  }
-
   public func urlSession(
     _: URLSession,
     task: URLSessionTask,

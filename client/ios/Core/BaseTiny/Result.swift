@@ -3,6 +3,7 @@
 import Foundation
 
 extension Result {
+  @inlinable
   public func map<U>(_ transform: (Success) throws -> U) -> Result<U, Error> {
     switch self {
     case let .success(value):
@@ -16,6 +17,7 @@ extension Result {
     }
   }
 
+  @inlinable
   public func bimap<U>(
     _ transformValue: (Success) throws -> U,
     transfromError: (Failure) throws -> U

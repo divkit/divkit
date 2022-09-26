@@ -9,6 +9,7 @@ public func weakify<T: AnyObject>(_ self: T, in f: @escaping (T) -> () -> Void) 
   WeakWrapper(`self`, f).invoke
 }
 
+@inlinable
 public func weakify<T: AnyObject, U>(
   _ self_: T,
   in f: @escaping (T) -> (U) -> Void
@@ -19,6 +20,7 @@ public func weakify<T: AnyObject, U>(
   }
 }
 
+@inlinable
 public func weakify<T: AnyObject>(_ value: T) -> Variable<T?> {
   Variable { [weak weakValue = value] in weakValue }
 }

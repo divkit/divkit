@@ -6,6 +6,7 @@ public let ResultErrorDomain = "ResultErrorDomain"
 public let ResultErrorTransformFailureErrorCode = 0
 
 extension Result {
+  @inlinable
   public func unwrap() -> Success {
     switch self {
     case let .success(value):
@@ -15,6 +16,7 @@ extension Result {
     }
   }
 
+  @inlinable
   public func value() -> Success? {
     if case let .success(value) = self {
       return value
@@ -22,6 +24,7 @@ extension Result {
     return nil
   }
 
+  @inlinable
   public func error() -> Failure? {
     guard case let .failure(error) = self else { return nil }
     return error
@@ -37,6 +40,7 @@ extension Result {
 }
 
 extension Result where Failure: NSError {
+  @inlinable
   public func applyTransform<U>(_ transform: (Success) -> U?) -> Result<U, NSError> {
     switch self {
     case let .success(value):
@@ -55,6 +59,7 @@ extension Result where Failure: NSError {
   }
 }
 
+@inlinable
 public func resultsAreEqual<T>(
   _ a: Result<T, NSError>,
   _ b: Result<T, NSError>,

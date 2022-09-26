@@ -5,6 +5,7 @@ import Foundation
 public enum SettingProperty<T> {}
 
 extension SettingProperty where T: KeyValueDirectStoringSupporting {
+  @inlinable
   public static func storage(_ storage: KeyValueStorage, key: String) -> Property<T?> {
     Property(getter: {
       storage.object(forKey: key) as? T
@@ -19,6 +20,7 @@ extension SettingProperty where T: KeyValueDirectStoringSupporting {
 }
 
 extension SettingProperty where T: RawRepresentable, T.RawValue: KeyValueDirectStoringSupporting {
+  @inlinable
   public static func rawStorage(_ storage: KeyValueStorage, key: String) -> Property<T?> {
     let field = SettingProperty<T.RawValue>.storage(storage, key: key)
     return Property(
@@ -29,6 +31,7 @@ extension SettingProperty where T: RawRepresentable, T.RawValue: KeyValueDirectS
 }
 
 extension SettingProperty where T: RawRepresentable, T.RawValue: KeyValueDirectStoringSupporting {
+  @inlinable
   public static func rawArrayStorage(_ storage: KeyValueStorage, key: String) -> Property<[T]?> {
     let field = SettingProperty<[T.RawValue]>.storage(storage, key: key)
     return Property(
@@ -39,6 +42,7 @@ extension SettingProperty where T: RawRepresentable, T.RawValue: KeyValueDirectS
 }
 
 extension SettingProperty where T: NSCoding {
+  @inlinable
   public static func encodedStorage(_ storage: KeyValueStorage, key: String) -> Property<T?> {
     Property(getter: {
       guard let object = storage.object(forKey: key) else { return nil }
@@ -95,6 +99,7 @@ extension SettingProperty where T: Codable {
 }
 
 extension SettingProperty where T: ReferenceConvertible, T.ReferenceType: NSCoding {
+  @inlinable
   public static func referencedEncodedStorage(
     _ storage: KeyValueStorage,
     key: String
@@ -115,11 +120,13 @@ public func stringPropertyForURLField(_ field: Property<URL?>) -> Property<Strin
 }
 
 extension KeyValueStorage {
+  @inlinable
   public func makeCodableField<T>(key: String) -> Property<T?>
     where T: Codable {
     SettingProperty.codableStorage(self, key: key)
   }
 
+  @inlinable
   public func makeCodableField<T>(key: String, default: T) -> Property<T>
     where T: Codable {
     SettingProperty.codableStorage(self, key: key).withDefault(`default`)
@@ -127,10 +134,12 @@ extension KeyValueStorage {
 }
 
 extension KeyValueStorage {
+  @inlinable
   public func makeField<T: KeyValueDirectStoringSupporting>(key: String) -> Property<T?> {
     SettingProperty.storage(self, key: key)
   }
 
+  @inlinable
   public func makeField<T: KeyValueDirectStoringSupporting>(
     key: String,
     default: T
@@ -138,11 +147,25 @@ extension KeyValueStorage {
     SettingProperty.storage(self, key: key).withDefault(`default`)
   }
 
+  @inlinable
+  public func makeField<T: KeyValueDirectStoringSupporting>(
+    key: String,
+    writeDefaultIfNone defaultValue: T
+  ) -> Property<T> {
+    let field: Property<T?> = SettingProperty.storage(self, key: key)
+    if field.value == nil {
+      field.value = defaultValue
+    }
+    return field.withDefault(defaultValue)
+  }
+
+  @inlinable
   public func makeField<T>(key: String) -> Property<T?>
     where T: RawRepresentable, T.RawValue: KeyValueDirectStoringSupporting {
     SettingProperty.rawStorage(self, key: key)
   }
 
+  @inlinable
   public func makeField<T>(key: String, default: T) -> Property<T>
     where T: RawRepresentable, T.RawValue: KeyValueDirectStoringSupporting {
     SettingProperty.rawStorage(self, key: key).withDefault(`default`)
@@ -150,11 +173,13 @@ extension KeyValueStorage {
 }
 
 extension KeyValueStorage {
+  @inlinable
   public func makeField<Element>(key: String) -> Property<[Element]?>
     where Element: RawRepresentable, Element.RawValue: KeyValueDirectStoringSupporting {
     SettingProperty.rawArrayStorage(self, key: key)
   }
 
+  @inlinable
   public func makeField<Element>(key: String, default: [Element]) -> Property<[Element]>
     where Element: RawRepresentable, Element.RawValue: KeyValueDirectStoringSupporting {
     SettingProperty.rawArrayStorage(self, key: key).withDefault(`default`)

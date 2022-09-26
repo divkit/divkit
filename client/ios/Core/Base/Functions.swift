@@ -129,6 +129,7 @@ public func asyncActionAssertCompletionOnMT(
   }
 }
 
+@inlinable
 public func partialApply<T, U>(_ f: @escaping (T) -> U, with arg: T) -> () -> U {
   { f(arg) }
 }

@@ -19,6 +19,7 @@ extension UIScrollView: ScrollViewType {
     }
   }
 
+  @inlinable
   public func performWithDetachedDelegate<T>(_ closure: () throws -> T) rethrows -> T {
     let delegate = self.delegate
     self.delegate = nil

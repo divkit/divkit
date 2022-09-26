@@ -11,6 +11,7 @@ public final class Atomic<T> {
     queue = accessQueue
   }
 
+  @inlinable
   public convenience init(initialValue: T, label: String) {
     let accessQueue = DispatchQueue(label: label, attributes: [.concurrent])
     self.init(initialValue: initialValue, accessQueue: accessQueue)

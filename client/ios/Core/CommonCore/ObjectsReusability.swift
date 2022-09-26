@@ -11,12 +11,14 @@ public struct ReuseResult<Object, Model> {
   public let modelsReusability: [(Model, ModelReusability<Object>)]
   public let orphanObjects: [Object]
 
+  @inlinable
   public init(modelsReusability: [(Model, ModelReusability<Object>)], orphanObjects: [Object]) {
     self.modelsReusability = modelsReusability
     self.orphanObjects = orphanObjects
   }
 }
 
+@inlinable
 public func calculateReusabilityFor<R, M>(
   _ objects: [R],
   with models: [M],

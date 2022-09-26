@@ -21,6 +21,8 @@ public class DivStateManager {
     case withID(DivStateID)
   }
 
+  private let rwLock = RWLock()
+  
   public private(set) var items: [DivStatePath: Item]
   public private(set) var blockIds: [DivStatePath: Set<String>] = [:]
   public private(set) var blockVisibility: [DivBlockPath: Bool] = [:]
@@ -34,11 +36,15 @@ public class DivStateManager {
   }
 
   func get(stateBlockPath: DivStatePath) -> Item? {
-    items[stateBlockPath]
+    rwLock.read {
+      items[stateBlockPath]
+    }
   }
 
   public func setState(stateBlockPath: DivStatePath, stateID: DivStateID) {
-    items[stateBlockPath] = Item(currentStateID: stateID, previousState: .empty)
+    rwLock.write {
+      items[stateBlockPath] = Item(currentStateID: stateID, previousState: .empty)
+    }
   }
 
   public func setStateWithHistory(path: DivStatePath, stateID: DivStateID) {
@@ -48,11 +54,15 @@ public class DivStateManager {
     } else {
       previousState = .initial
     }
-    items[path] = Item(currentStateID: stateID, previousState: previousState)
+    rwLock.write {
+      items[path] = Item(currentStateID: stateID, previousState: previousState)
+    }
   }
 
   public func removeState(path: DivStatePath) {
-    items.removeValue(forKey: path)
+    rwLock.write {
+      _ = items.removeValue(forKey: path)
+    }
   }
 
   public func isBlockAdded(_ id: String, stateBlockPath: DivStatePath) -> Bool {

@@ -3,6 +3,7 @@
 import Foundation
 
 extension Array where Element: AnyObject {
+  @inlinable
   public func isEqualByReferences(_ rhs: [Element]) -> Bool {
     guard count == rhs.count else { return false }
 
@@ -16,6 +17,7 @@ extension Array where Element: AnyObject {
   }
 }
 
+@inlinable
 public func == <T: Equatable>(lhs: [T], rhs: [T?]) -> Bool {
   let nonOptionalRhs = rhs.compactMap { $0 }
   guard nonOptionalRhs.count == rhs.count else { return false }
@@ -23,6 +25,7 @@ public func == <T: Equatable>(lhs: [T], rhs: [T?]) -> Bool {
   return lhs == nonOptionalRhs
 }
 
+@inlinable
 public func == <T: Equatable>(lhs: [T?], rhs: [T]) -> Bool {
   let nonOptionalLhs = lhs.compactMap { $0 }
   guard nonOptionalLhs.count == lhs.count else { return false }
@@ -30,11 +33,13 @@ public func == <T: Equatable>(lhs: [T?], rhs: [T]) -> Bool {
   return rhs == nonOptionalLhs
 }
 
+@inlinable
 public func reverseIndex<T: Collection>(_ index: T.Index, inCollection collection: T) -> T.Index {
   let distanceToIndex = collection.distance(from: collection.startIndex, to: index)
   return collection.index(collection.endIndex, offsetBy: -(1 + distanceToIndex))
 }
 
+@inlinable
 public func += <T: RangeReplaceableCollection>(
   collection: inout T, object: T.Element
 ) {
@@ -42,12 +47,14 @@ public func += <T: RangeReplaceableCollection>(
 }
 
 extension Collection {
+  @inlinable
   public func firstMatchWithIndex(
     _ predicate: @escaping (Element) -> Bool
   ) -> (Index, Element)? {
     zip(indices, self).first { predicate($0.1) }
   }
 
+  @inlinable
   public func floorIndex<T: BinaryFloatingPoint>(
     _ index: T
   ) -> Int where Index == Int {
@@ -59,6 +66,7 @@ extension Collection {
     return clamp(integral, min: startIndex, max: endIndex.advanced(by: -1))
   }
 
+  @inlinable
   public func ceilIndex<T: BinaryFloatingPoint>(
     _ index: T
   ) -> Int where Index == Int {
@@ -72,6 +80,7 @@ extension Collection {
 }
 
 extension MutableCollection where Element: MutableCollection {
+  @inlinable
   public subscript(coords: (Index, Element.Index)) -> Element.Element {
     get {
       self[coords.0][coords.1]
@@ -83,6 +92,7 @@ extension MutableCollection where Element: MutableCollection {
 }
 
 extension RangeReplaceableCollection where Index == Int {
+  @inlinable
   public func stableSort(isLessOrEqual: (Element, Element) -> Bool) -> Self {
     var result = self
     var aux: [Element] = []
@@ -129,6 +139,7 @@ extension NSArray {
   }
 }
 
+@inlinable
 public func == <A: Equatable, B: Equatable>(lhs: [(A, B)], rhs: [(A, B)]) -> Bool {
   guard lhs.count == rhs.count else {
     return false
@@ -143,11 +154,13 @@ public func == <A: Equatable, B: Equatable>(lhs: [(A, B)], rhs: [(A, B)]) -> Boo
   return true
 }
 
+@inlinable
 public func != <A: Equatable, B: Equatable>(lhs: [(A, B)], rhs: [(A, B)]) -> Bool {
   !(lhs == rhs)
 }
 
 extension Collection where Element: Equatable {
+  @inlinable
   public func element(after item: Element) -> Element? {
     guard let itemIndex = firstIndex(of: item) else {
       return nil
@@ -166,11 +179,13 @@ extension RandomAccessCollection {
   }
 }
 
+@inlinable
 public func arraysEqual<T>(_ lhs: [T], _ rhs: [T], equalityTest: (T, T) -> Bool) -> Bool {
   guard lhs.count == rhs.count else { return false }
   return zip(lhs, rhs).first { equalityTest($0.0, $0.1) == false } == nil ? true : false
 }
 
+@inlinable
 public func == <A: Equatable, B: Equatable, C: Equatable>(
   _ lhs: [(A, B, C)],
   _ rhs: [(A, B, C)]
@@ -179,6 +194,7 @@ public func == <A: Equatable, B: Equatable, C: Equatable>(
 }
 
 extension Array {
+  @inlinable
   public func iterativeFlatMap<T>(_ transform: (Element, Index) throws -> T?) rethrows -> [T] {
     var result = [T]()
     result.reserveCapacity(count)
@@ -190,6 +206,7 @@ extension Array {
     return result
   }
 
+  @inlinable
   public func toDictionary<K, V>() -> [K: V] where Element == (K, V?) {
     var dict = [K: V]()
     forEach { key, value in
@@ -198,6 +215,7 @@ extension Array {
     return dict
   }
 
+  @inlinable
   public var randomElement: Element? {
     guard !isEmpty else { return nil }
     return self[Int(arc4random_uniform(UInt32(count)))]
@@ -205,6 +223,7 @@ extension Array {
 }
 
 extension Array where Element: Hashable {
+  @inlinable
   public var uniqueElements: [Element] {
     Array(Set(self))
   }

@@ -35,7 +35,7 @@ public struct ImageHolderFactory {
           return NilImageHolder()
         }
       }
-      if let localImage = localImageProvider?.localImage(forURL: url) {
+      if let localImage = localImageProvider?.localImage(for: url) {
         return localImage
       }
       return RemoteImageHolder(

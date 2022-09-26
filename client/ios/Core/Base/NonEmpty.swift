@@ -21,6 +21,7 @@ public struct NonEmpty<C: Collection>: Collection {
     case head
     case tail(C.Index)
 
+    @inlinable
     public static func <(lhs: InternalIndex, rhs: InternalIndex) -> Bool {
       switch (lhs, rhs) {
       case let (.tail(l), .tail(r)):
@@ -163,6 +164,7 @@ extension NonEmpty: BidirectionalCollection where C: BidirectionalCollection {
 }
 
 extension NonEmpty where C: RangeReplaceableCollection {
+  @inlinable
   public init(_ head: Element, _ tail: Element...) {
     self.init(head, C(tail))
   }
@@ -205,6 +207,7 @@ extension NonEmpty where C: RangeReplaceableCollection {
     return NonEmpty(lhs.head, tail)
   }
 
+  @inlinable
   public static func += <S: Sequence>(lhs: inout NonEmpty, rhs: S) where Element == S.Element {
     lhs.append(contentsOf: rhs)
   }
@@ -230,6 +233,7 @@ extension NonEmpty {
     )
   }
 
+  @inlinable
   public func joined<RRC: RangeReplaceableCollection>() -> NonEmpty<RRC>
     where Element == NonEmpty<RRC> {
     joined(separator: RRC())
@@ -241,6 +245,7 @@ extension NonEmpty {
     ContiguousArray(self).randomElement(using: &generator) ?? head
   }
 
+  @inlinable
   public func randomElement() -> Element {
     var generator = SystemRandomNumberGenerator()
     return randomElement(using: &generator)
@@ -259,12 +264,14 @@ extension NonEmpty where C: RangeReplaceableCollection {
     shuffle(using: &generator)
   }
 
+  @inlinable
   public func shuffled<T: RandomNumberGenerator>(using generator: inout T) -> NonEmpty {
     var copy = self
     copy.shuffle(using: &generator)
     return copy
   }
 
+  @inlinable
   public func shuffled() -> NonEmpty {
     var generator = SystemRandomNumberGenerator()
     return shuffled(using: &generator)

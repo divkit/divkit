@@ -2,16 +2,19 @@
 public struct Observer<T> {
   public let action: (T) -> Void
 
+  @inlinable
   public init(action: @escaping (T) -> Void) {
     self.action = action
   }
 }
 
 extension Observer {
+  @inlinable
   public func contramap<U>(_ transform: @escaping (U) -> T) -> Observer<U> {
     Observer<U>(action: compose(action, after: transform))
   }
 
+  @inlinable
   public func filter(_ predicate: @escaping (T) -> Bool) -> Observer {
     Observer(action: { t in
       if predicate(t) {
@@ -20,6 +23,7 @@ extension Observer {
     })
   }
 
+  @inlinable
   public func compactContramap<U>(_ transform: @escaping (U) -> T?) -> Observer<U> {
     Observer<U>(action: { u in
       if let t = transform(u) {
@@ -28,6 +32,7 @@ extension Observer {
     })
   }
 
+  @inlinable
   public func performingBeforeEachValue(_ sideEffect: @escaping (T) -> Void) -> Observer {
     Observer(action: { t in
       sideEffect(t)
@@ -35,6 +40,7 @@ extension Observer {
     })
   }
 
+  @inlinable
   public func skipRepeats(
     areEqual: @escaping (T, T) -> Bool,
     initialValue: T?
@@ -49,6 +55,7 @@ extension Observer {
     })
   }
 
+  @inlinable
   public func skipUntil(_ predicate: @escaping (T) -> Bool) -> Observer {
     var shouldSkip = true
     return Observer(action: { t in
@@ -60,6 +67,7 @@ extension Observer {
     })
   }
 
+  @inlinable
   public func takeUntil(_ predicate: @escaping (T) -> Bool) -> Observer {
     var shouldTake = true
     return Observer(action: { t in
@@ -73,15 +81,18 @@ extension Observer {
 }
 
 extension Observer where T: Equatable {
+  @inlinable
   public func skipRepeats(initialValue: T?) -> Observer {
     skipRepeats(areEqual: ==, initialValue: initialValue)
   }
 }
 
+@inlinable
 public func compose<A, B, C>(_ f: @escaping (B) -> C, after g: @escaping (A) -> B) -> (A) -> C {
   { a in f(g(a)) }
 }
 
+@inlinable
 public func compose<B, C>(_ f: @escaping (B) -> C, after g: @escaping () -> B) -> () -> C {
   { f(g()) }
 }

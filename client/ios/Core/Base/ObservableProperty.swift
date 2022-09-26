@@ -19,11 +19,13 @@ public struct ObservableProperty<T> {
     self.newValues = newValues
   }
 
+  @inlinable
   public var wrappedValue: T {
     get { value }
     nonmutating set { value = newValue }
   }
 
+  @inlinable
   public var projectedValue: ObservableVariable<T> {
     asObservableVariable()
   }
@@ -73,10 +75,12 @@ extension ObservableProperty {
     )
   }
 
+  @inlinable
   public init(wrappedValue: T) {
     self.init(initialValue: wrappedValue)
   }
 
+  @inlinable
   public init<U>() where T == U? {
     self.init(initialValue: nil)
   }
@@ -93,6 +97,7 @@ extension ObservableProperty {
     )
   }
 
+  @inlinable
   public func withDefault<U>(_ defaultValue: U) -> ObservableProperty<U> where T == U? {
     bimap(get: { $0 ?? defaultValue }, set: { $0 })
   }
@@ -136,6 +141,33 @@ extension ObservableProperty {
       getter: { object[keyPath: keyPath] },
       setter: { object[keyPath: keyPath] = $0 },
       newValues: newValues
+    )
+  }
+
+  public func retaining<U>(_ object: U) -> Self {
+    Self(
+      getter: {
+        withExtendedLifetime(object) {
+          self.getter()
+        }
+      },
+      setter: { newValue in
+        withExtendedLifetime(object) {
+          self.setter(newValue)
+        }
+      },
+      newValues: newValues.retaining(object: object)
+    )
+  }
+}
+
+extension ObservableProperty {
+  public func descend<Key, Value>(to key: Key) -> ObservableProperty<Value?>
+    where Key: Hashable, T == [Key: Value] {
+    ObservableProperty<Value?>(
+      getter: { self.value[key] },
+      setter: { self.value[key] = $0 },
+      newValues: newValues.map { $0[key] }
     )
   }
 }

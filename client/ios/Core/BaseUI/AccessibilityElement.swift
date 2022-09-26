@@ -116,6 +116,10 @@ extension AccessibilityElement {
     }
   }
 
+  public static func header(strings: Strings?) -> AccessibilityElement? {
+    strings.map { AccessibilityElement(traits: .header, strings: $0) }
+  }
+
   public static func link(label: String?) -> AccessibilityElement? {
     label.map {
       AccessibilityElement(
@@ -177,14 +181,16 @@ extension AccessibilityElement {
     label: String,
     hint: String? = nil,
     isOn: Bool,
-    isEnabled: Bool = true
+    isEnabled: Bool = true,
+    identifier: String? = nil
   ) -> AccessibilityElement {
     AccessibilityElement(
       traits: .switchButton,
       strings: Strings(
         label: label,
         hint: hint,
-        value: isOn ? "1" : "0"
+        value: isOn ? "1" : "0",
+        identifier: identifier
       ),
       enabled: isEnabled
     )

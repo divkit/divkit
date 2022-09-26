@@ -5,5 +5,5 @@ import Foundation
 import Base
 
 public protocol LocalImageProviding {
-  func localImage(forURL: URL) -> Image?
+  func localImage(for url: URL) -> ImageHolder?
 }

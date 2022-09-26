@@ -1,6 +1,7 @@
 // Copyright 2021 Yandex LLC. All rights reserved.
 
 extension Sequence {
+  @inlinable
   public func firstMatch(_ predicate: (Element) -> Bool) -> Element? {
     for item in self {
       if predicate(item) {
@@ -11,10 +12,12 @@ extension Sequence {
     return nil
   }
 
+  @inlinable
   public func allPass(predicate: (Element) throws -> Bool) rethrows -> Bool {
     try !contains { try !predicate($0) }
   }
 
+  @inlinable
   public func maxElements<T: Comparable>(by scoringFunction: (Element) -> T) -> [Element] {
     let scores = map(scoringFunction)
     guard let maxScore = scores.max() else {
@@ -27,6 +30,7 @@ extension Sequence {
 }
 
 extension Sequence where Element: Hashable {
+  @inlinable
   public func makeDictionary<T>(withValueForKey valueForKey: (Element) throws -> T?) rethrows
     -> [Element: T] {
     var result: [Element: T] = [:]
@@ -38,16 +42,19 @@ extension Sequence where Element: Hashable {
     return result
   }
 
+  @inlinable
   public func countElements() -> [Element: Int] {
     reduce(into: [Element: Int]()) { $0[$1, default: 0] += 1 }
   }
 }
 
 extension Sequence {
+  @inlinable
   public func map<Value>(to path: KeyPath<Element, Value>) -> [Value] {
     map { $0[keyPath: path] }
   }
 
+  @inlinable
   public func reduce<Result, Value>(
     _ initial: Result,
     _ nextPartialResult: (Result, Value) throws -> Result,
@@ -58,6 +65,7 @@ extension Sequence {
 }
 
 extension Sequence where Element: Numeric {
+  @inlinable
   public var partialSums: [Element] {
     var sums = [Element]()
     var currentSum: Element = 0
@@ -77,6 +85,7 @@ public func unzip<SequenceType: Sequence, E1, E2>(
 }
 
 extension Sequence {
+  @inlinable
   public func toDictionary<KeyType, ValueType>(
     keyMapper: (Element) throws -> KeyType,
     valueMapper: (Element) throws -> ValueType
@@ -89,6 +98,7 @@ extension Sequence {
   }
 }
 
+@inlinable
 public func walk<IteratorType: IteratorProtocol, Element>(
   iterator: IteratorType,
   elementAction: @escaping (Element, @escaping Action) -> Void,
@@ -112,6 +122,7 @@ public func walk<IteratorType: IteratorProtocol, Element>(
   }
 }
 
+@inlinable
 public func walkSync<IteratorType: IteratorProtocol, Element>(
   iterator: IteratorType,
   elementAction: @escaping (Element, @escaping (Bool) -> Void) -> Void,
@@ -151,6 +162,7 @@ public func walkSync<IteratorType: IteratorProtocol, Element>(
 }
 
 extension Sequence {
+  @inlinable
   public func categorize(
     _ predicate: (Element) -> Bool
   ) -> (onTrue: [Element], onFalse: [Element]) {
@@ -167,12 +179,14 @@ extension Sequence {
 }
 
 extension Array where Element: Equatable {
+  @inlinable
   public func endsWith(_ other: [Element]) -> Bool {
     Array(self.suffix(other.count)) == other
   }
 }
 
 extension Array where Element: Hashable {
+  @inlinable
   public func isPermutation(of other: Array) -> Bool {
     let set = Set(self)
     let otherSet = Set(other)
@@ -182,6 +196,7 @@ extension Array where Element: Hashable {
 }
 
 extension Set {
+  @inlinable
   public static func union<T: Collection>(
     _ sets: T
   ) -> Set<Element> where T.Element == Set<Element> {

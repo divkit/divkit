@@ -18,10 +18,31 @@ public func onMainThread(_ block: @escaping () -> Void) {
   }
 }
 
+public func onMainThreadResult<T>(_ function: @escaping () -> T) -> Future<T> {
+  let (future, feed) = Future<T>.create()
+  onMainThread {
+    feed(function())
+  }
+  return future
+}
+
+public func onMainThreadResult<T>(_ function: @escaping () -> Future<T>) -> Future<T> {
+  let (future, feed) = Future<T>.create()
+  onMainThread {
+    function().resolved { result in
+      onMainThread {
+        feed(result)
+      }
+    }
+  }
+  return future
+}
+
 public func onMainThreadAsync(_ block: @escaping () -> Void) {
   DispatchQueue.main.async(execute: block)
 }
 
+@inlinable
 public func onMainThreadSync<T>(_ block: () -> T) -> T {
   if Thread.isMainThread {
     return block()
@@ -42,6 +63,10 @@ public func onBackgroundThread(qos: DispatchQoS.QoSClass) -> (@escaping () -> Vo
   {
     DispatchQueue.global(qos: qos).async(execute: $0)
   }
+}
+
+public func invokeImmediately(_ block: @escaping () -> Void) {
+  block()
 }
 
 @discardableResult
@@ -68,6 +93,7 @@ public func after(
   return workItem
 }
 
+@inlinable
 public func performAsyncAction<T>(
   _ action: (@escaping (T) -> Void) -> Void,
   withMinimumDelay minimumDelay: TimeInterval,

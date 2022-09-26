@@ -7,6 +7,7 @@ extension Optional {
     case valueIsNil
   }
 
+  @inlinable
   public func asArray() -> [Wrapped] {
     switch self {
     case let .some(wrapped):
@@ -16,6 +17,7 @@ extension Optional {
     }
   }
 
+  @inlinable
   public func asNonEmptyArray() -> NonEmptyArray<Wrapped>? {
     switch self {
     case let .some(wrapped):
@@ -25,15 +27,18 @@ extension Optional {
     }
   }
 
+  @inlinable
   public func flatten<T>() -> T? where Wrapped == T? {
     self ?? nil
   }
 
+  @inlinable
   public func unwrap(elseThrow error: Swift.Error = Error.valueIsNil) throws -> Wrapped {
     guard let value = self else { throw error }
     return value
   }
 
+  @inlinable
   public func apply(_ action: (Wrapped) -> Void) {
     switch self {
     case let .some(wrapped):
@@ -44,6 +49,7 @@ extension Optional {
   }
 }
 
+@inlinable
 public func bothNilOrBothNot<T>(_ lhs: T?, _ rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case (.none, .none):

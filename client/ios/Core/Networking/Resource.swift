@@ -77,6 +77,7 @@ public struct Resource<T> {
   }
 }
 
+@inlinable
 public func URLForResource<T>(_ resource: Resource<T>, withBaseURL baseURL: URL) -> URL {
   var absoluteURL = baseURL
   if let path = resource.path {
@@ -96,6 +97,7 @@ public func URLForResource<T>(_ resource: Resource<T>, withBaseURL baseURL: URL)
   return components.url!
 }
 
+@inlinable
 public func URLRequestForResource<T>(
   _ resource: Resource<T>,
   withBaseURL baseURL: URL
@@ -116,6 +118,32 @@ public func URLRequestForResource<T>(
 
 public func noOpParser<T>(_: Data, _: HTTPURLResponse) throws -> T {
   throw UnexpectedParserInvocation()
+}
+
+extension Resource {
+  public func addingGetParams(_ params: [String: String]) -> Self {
+    Self(
+      path: path,
+      method: method,
+      GETParameters: GETParameters + params.queryParams,
+      headers: headers,
+      body: body,
+      timeout: timeout,
+      parser: parser
+    )
+  }
+
+  public func mergingDefaultHeaders(_ defaultHeaders: HTTPHeaders) -> Self {
+    Self(
+      path: path,
+      method: method,
+      GETParameters: GETParameters,
+      headers: defaultHeaders + (headers ?? HTTPHeaders.empty),
+      body: body,
+      timeout: timeout,
+      parser: parser
+    )
+  }
 }
 
 private struct UnexpectedParserInvocation: Error {}

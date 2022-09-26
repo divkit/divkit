@@ -24,6 +24,7 @@ public enum JSONObject: Codable, Equatable {
   public static let `true` = JSONObject.bool(true)
   public static let `false` = JSONObject.bool(false)
 
+  @inlinable
   public static func number<IntType: BinaryInteger>(_ integer: IntType) -> Self {
     .number(Double(integer))
   }
@@ -348,22 +349,45 @@ extension JSONObject {
   public struct Path: Codable, CustomDebugStringConvertible, ExpressibleByStringLiteral, Hashable {
     public typealias Component = JSONPathComponent
 
-    public var components: ArraySlice<Component>
+    public private(set) var components: [Component]
+    public private(set) var asString: String
+
+    private var asConcatinationSuffix: String {
+      switch components.first {
+      case .none:
+        return ""
+      case .key:
+        return "." + asString
+      case .index:
+        return asString
+      }
+    }
 
     public var isEmpty: Bool {
       components.isEmpty
     }
 
-    public init(components: ArraySlice<Component>) {
+    private init(
+      components: [Component],
+      string: String
+    ) {
       self.components = components
+      self.asString = string
+    }
+
+    public init(component: Component) {
+      self.components = [component]
+      asString = component.stringValue
     }
 
     public init(components: [Component]) {
-      self.init(components: ArraySlice<Component>(components))
+      self.components = components
+      asString = Self.stringify(components: components)
     }
 
     public init(string: String) throws {
-      self.init(components: try Component.components(from: string))
+      components = try Component.components(from: string)
+      asString = string
     }
 
     public init(stringLiteral value: String) {
@@ -374,33 +398,57 @@ extension JSONObject {
       try self.init(string: try String(from: decoder))
     }
 
-    public static let empty = Self(components: [])
+    public static let empty = Self(components: [], string: "")
 
     public func encode(to encoder: Encoder) throws {
       try asString.encode(to: encoder)
     }
 
-    public func dropFirst() -> Path {
-      Path(components: components.dropFirst())
-    }
-
     public func appending(path: Path) -> Path {
-      Path(components: components + path.components)
+      if components.isEmpty {
+        return path
+      }
+      return Path(
+        components: components + path.components,
+        string: asString + path.asConcatinationSuffix
+      )
     }
 
     public mutating func append(path: Path) {
-      components.append(contentsOf: path.components)
+      if components.isEmpty {
+        components = path.components
+        asString = path.asString
+      } else {
+        asString.append(path.asConcatinationSuffix)
+        components.append(contentsOf: path.components)
+      }
     }
 
     public func appending(component: Component) -> Path {
-      Path(components: components + [component])
+      var p = self
+      p.append(component: component)
+      return p
     }
 
     public mutating func append(component: Component) {
-      components.append(component)
+      if components.isEmpty {
+        components.append(component)
+        asString = component.stringValue
+      } else {
+        switch component {
+        case let .key(key):
+          asString.append(".")
+          asString.append(key)
+        case let .index(index):
+          asString.append("[")
+          asString.append(String(index))
+          asString.append("]")
+        }
+        components.append(component)
+      }
     }
 
-    public var asString: String {
+    private static func stringify(components: [Component]) -> String {
       components
         .reduce(into: [String]()) { partialResult, component in
           switch component {

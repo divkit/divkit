@@ -293,3 +293,9 @@ extension String {
     data(using: .utf8)?.base64EncodedString() ?? ""
   }
 }
+
+extension String {
+  public func formatted(_ args: CVarArg...) -> Self {
+    String(format: self, args)
+  }
+}

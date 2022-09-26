@@ -1,10 +1,12 @@
 // Copyright 2020 Yandex LLC. All rights reserved.
 
 public enum Combine {
+  @inlinable
   public static func `throw`<T>(_ first: T, last: T) throws -> T {
     throw CombineFailure(values: [first, last])
   }
 
+  @inlinable
   public static func lastWithAssertionFailure<T>(_ first: T, last: T) -> T {
     assertionFailure(CombineFailure(values: [first, last]).debugDescription)
     return last
@@ -12,8 +14,10 @@ public enum Combine {
 }
 
 public struct CombineFailure<T>: Error, CustomDebugStringConvertible {
+  @usableFromInline
   let values: [T]
 
+  @inlinable
   public init(values: [T]) {
     self.values = values
   }

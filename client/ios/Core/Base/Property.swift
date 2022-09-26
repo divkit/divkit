@@ -35,6 +35,7 @@ public struct Property<T> {
     nonmutating set { setter(newValue) }
   }
 
+  @inlinable
   public var projectedValue: Variable<T> { asVariable() }
 
   public init(getter: @escaping () -> T, setter: @escaping (T) -> Void) {
@@ -42,6 +43,7 @@ public struct Property<T> {
     self.setter = setter
   }
 
+  @inlinable
   public init(wrappedValue: T) {
     self.init(initialValue: wrappedValue)
   }
@@ -53,6 +55,7 @@ extension Property {
     nonmutating set { setter(newValue) }
   }
 
+  @inlinable
   public subscript<U>(dynamicMember path: WritableKeyPath<T, U>) -> Property<U> {
     Property<U>(
       getter: { self.value[keyPath: path] },
@@ -60,6 +63,7 @@ extension Property {
     )
   }
 
+  @inlinable
   public subscript<ValueType, UnderlyingType>(
     dynamicMember path: WritableKeyPath<UnderlyingType, ValueType?>
   ) -> Property<ValueType?> where T == UnderlyingType? {
@@ -73,6 +77,7 @@ extension Property {
     Variable(getter)
   }
 
+  @inlinable
   public init(initialValue: T) {
     var value = initialValue
     self.init(
@@ -81,10 +86,12 @@ extension Property {
     )
   }
 
+  @inlinable
   public init<U>() where T == U? {
     self.init(initialValue: nil)
   }
 
+  @inlinable
   public init<U>(_ object: U, refKeyPath: ReferenceWritableKeyPath<U, T>) {
     self.init(
       getter: { object[keyPath: refKeyPath] },
@@ -109,6 +116,7 @@ extension Property {
     )
   }
 
+  @inlinable
   public func withDefault<U>(_ defaultValue: U) -> Property<U> where T == U? {
     bimap(get: { $0 ?? defaultValue }, set: { $0 })
   }
@@ -132,11 +140,23 @@ extension Property {
     )
   }
 
+  @inlinable
   public static func weak<U>(
     _ initialValue: U? = nil
   ) -> Self where T == U?, U: AnyObject {
     weak var value: U? = initialValue
     return .init(getter: { value }, setter: { value = $0 })
+  }
+}
+
+extension Property {
+  @inlinable
+  public func descend<Key, Value>(to key: Key) -> Property<Value?>
+    where Key: Hashable, T == [Key: Value] {
+    Property<Value?>(
+      getter: { self.value[key] },
+      setter: { self.value[key] = $0 }
+    )
   }
 }
 

@@ -3,6 +3,7 @@
 import CoreGraphics
 import Foundation
 
+@inlinable
 public func clamp<T: Comparable>(
   _ value: T, min minValue: T, max maxValue: T
 ) -> T {
@@ -13,6 +14,7 @@ public func clamp<T: Comparable>(
   return value.clamp(minValue...maxValue)
 }
 
+@inlinable
 public func clamp<T: FloatingPoint>(
   _ value: T, min minValue: T, max maxValue: T
 ) -> T

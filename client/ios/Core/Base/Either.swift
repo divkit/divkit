@@ -6,6 +6,7 @@ public enum Either<T, U> {
   case left(T)
   case right(U)
 
+  @inlinable
   public func mapLeft<T1>(_ transform: (T) throws -> T1) rethrows -> Either<T1, U> {
     switch self {
     case let .left(t):
@@ -15,6 +16,7 @@ public enum Either<T, U> {
     }
   }
 
+  @inlinable
   public func mapRight<U1>(_ transform: (U) throws -> U1) rethrows -> Either<T, U1> {
     switch self {
     case let .left(t):

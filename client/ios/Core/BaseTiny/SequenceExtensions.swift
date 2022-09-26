@@ -51,6 +51,7 @@ extension Sequence {
 
   /// Returns array of unique element based on comparator
   /// Complexity: O(n^2)
+  @inlinable
   public func uniqued(comparator: @escaping (Element, Element) -> Bool) -> [Element] {
     var result: [Element] = []
     for element in self {

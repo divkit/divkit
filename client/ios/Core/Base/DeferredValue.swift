@@ -27,6 +27,7 @@ extension DeferredValue {
     return makeReadySignal(notifyOnAdd: true, transform: { $0 })
   }
 
+  @inlinable
   public func asObservableVariable<U>(fallbackUntilLoaded: U) -> T
     where T == ObservableVariable<U> {
     currentValue ?? observableCurrentValue.flatMap { $0 ?? .constant(fallbackUntilLoaded) }
@@ -44,6 +45,7 @@ extension DeferredValue {
     asObservableVariable(fallbackUntilLoaded: false)
   }
 
+  @inlinable
   public func asSignal<U>() -> T where T == Signal<U> {
     currentValue ?? readySignal.flatMap { $0 }
   }

@@ -25,6 +25,7 @@ public final class Lazy<T> {
   private let shouldAssertOnMainThread: Bool
   private var state: State
 
+  @inlinable
   public subscript<U>(dynamicMember path: KeyPath<T, U>) -> Lazy<U> {
     map { $0[keyPath: path] }
   }
@@ -61,6 +62,11 @@ public final class Lazy<T> {
 
   public convenience init(value: T) {
     self.init({ value }, shouldAssertOnMainThread: false)
+  }
+
+  public init(loaded value: T) {
+    self.state = .loaded(value: value)
+    shouldAssertOnMainThread = false
   }
 
   public func whenLoaded(perform action: @escaping Action) {

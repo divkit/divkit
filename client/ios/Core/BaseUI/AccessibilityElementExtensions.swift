@@ -87,3 +87,12 @@ extension UIBarButtonItem {
     accessibilityTraits.insert(traits)
   }
 }
+
+extension UIControl {
+  public func applyAccessibilityStrings(_ strings: AccessibilityElement.Strings) {
+    accessibilityLabel = strings.label
+    accessibilityValue = strings.value
+    accessibilityHint = strings.hint
+    accessibilityIdentifier = strings.identifier
+  }
+}

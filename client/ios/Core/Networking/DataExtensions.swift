@@ -25,7 +25,7 @@ private enum ImageHeaderData: CaseIterable {
   }
 }
 
-enum ImageFormat {
+public enum ImageFormat {
   case unknown
   case png
   case jpeg
@@ -34,7 +34,7 @@ enum ImageFormat {
 }
 
 extension Data {
-  var imageFormat: ImageFormat {
+  public var imageFormat: ImageFormat {
     guard !isEmpty else { return .unknown }
     let buffer: UInt8 = self[0]
     return ImageHeaderData.allCases.first { $0.rawValue == buffer }.format

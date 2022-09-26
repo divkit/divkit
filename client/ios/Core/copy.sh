@@ -11,7 +11,6 @@ cp $1/src/base/ios/yandex/algorithms/Functions.swift Base
 cp $1/src/base/ios/yandex/algorithms/WeakCollection.swift Base
 cp $1/src/base/ios/yandex/concurrency/GCD.swift Base
 cp $1/src/base/ios/yandex/concurrency/operations/OperationQueue.swift Base
-cp $1/src/base/ios/yandex/extensions/ArrayBuilder.swift Base
 cp $1/src/base/ios/yandex/extensions/ArrayExtensions.swift Base
 cp $1/src/base/ios/yandex/extensions/ComparableExtension.swift Base
 cp $1/src/base/ios/yandex/extensions/DictionaryExtensions.swift Base
@@ -19,6 +18,7 @@ cp $1/src/base/ios/yandex/extensions/EncodableExtensions.swift Base
 cp $1/src/base/ios/yandex/extensions/HTTPURLResponse+Extensions.swift Base
 cp $1/src/base/ios/yandex/extensions/IndexSetExtensions.swift Base
 cp $1/src/base/ios/yandex/extensions/NSTimerExtensions.swift Base
+cp $1/src/base/ios/yandex/extensions/NSURLExtensions.swift Base
 cp $1/src/base/ios/yandex/extensions/OptionalExtensions.swift Base
 cp $1/src/base/ios/yandex/extensions/Range+Extensions.swift Base
 cp $1/src/base/ios/yandex/extensions/RangeReplaceableCollectionExtensions.swift Base
@@ -94,8 +94,10 @@ cp $1/src/base/ios/yandex/thick_ui/uikit/ImageExtensions.swift Base
 cp $1/src/base/ios/yandex/thick_ui/uikit/UIScrollView+Extensions.swift Base
 cp $1/src/base/ios/yandex/thick_ui/uikit/UIViewExtensions.swift Base
 cp $1/src/base/ios/yandex/thick_ui/iOS.swift Base
+cp $1/src/base/ios/yandex/tiny/extensions/ArrayBuilder.swift Base
 cp $1/src/base/ios/yandex/BaseExports.swift Base
 cp $1/src/base/ios/yandex/InvalidArgumentError.swift Base
+cp $1/src/base/ios/yandex/RWLock.swift Base
 cp $1/src/base/ios/yandex/Time.swift Base
 cp $1/src/base/ios/yandex/UrlOpener.swift Base
 cp $1/src/base/ios/yandex/weakify.swift Base
@@ -116,7 +118,6 @@ cp $1/src/base/ios/yandex/ui/extensions/*.swift BaseUI
 cp $1/src/base/ios/yandex/ui/types/*.swift BaseUI
 cp $1/src/base/ios/yandex/ui/typo/*.swift BaseUI
 cp $1/src/base/ios/yandex/ui/*.swift BaseUI
-rm BaseUI/*Tests.swift
 rm BaseUI/UIAlertControllerExtensions.swift
 rm BaseUI/UIViewControllerExtensions.swift
 
@@ -136,7 +137,6 @@ cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/CommonUI/CompoundScrollDel
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/CommonUI/ExclusiveTouchCollectionView.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/CommonUI/ScrollableContent.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Extensions/NSAttributedStringExtensions.swift CommonCore
-cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Extensions/NSURLExtensions.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/NativeHTMLParser/HTMLEntities.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/NativeHTMLParser/HTMLEntitiesResolver.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/NativeHTMLParser/HTMLParser.swift CommonCore

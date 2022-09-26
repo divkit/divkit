@@ -4,6 +4,7 @@ import Foundation
 
 public typealias Milliseconds = Int64
 public typealias Nanoseconds = Int64
+public typealias UNanoseconds = UInt64
 
 extension TimeInterval {
   public var milliseconds: Milliseconds {
@@ -16,5 +17,9 @@ extension TimeInterval {
     let bottomBounded = max(nsecs, 0)
     let topBounded = min(bottomBounded, TimeInterval(Nanoseconds.max))
     return Nanoseconds(topBounded)
+  }
+
+  public static func from(nanoseconds: Nanoseconds) -> Self {
+    TimeInterval(nanoseconds) / TimeInterval(NSEC_PER_SEC)
   }
 }

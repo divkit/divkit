@@ -42,6 +42,18 @@ extension UIView {
     }
   }
 
+  public func findSubview(withAccessibilityId accessibilityId: String) -> UIView? {
+    if accessibilityIdentifier == accessibilityId {
+      return self
+    }
+    for subview in subviews {
+      if let view = subview.findSubview(withAccessibilityId: accessibilityId) {
+        return view
+      }
+    }
+    return nil
+  }
+
   public func recursiveSubviews() -> [UIView] {
     var result = [UIView]()
     forRecursiveSubviews { result.append($0) }
@@ -192,6 +204,16 @@ extension UIView {
         completion()
       }
     )
+  }
+
+  public func isChild(of parentView: UIView) -> Bool {
+    var internalView = superview
+    while internalView != nil {
+      if parentView === internalView { return true }
+      internalView = internalView?.superview
+    }
+
+    return false
   }
 }
 

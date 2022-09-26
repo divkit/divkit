@@ -501,12 +501,20 @@ extension NSAttributedString {
        (range.lowerBound...range.upperBound).contains(trailingSelectionIndex) {
       let trailingOffset = CTLineGetOffsetForStringIndex(
         line,
-        normalizedLineIndex(index: trailingSelectionIndex, isTruncated: isTruncated, range: range),
+        normalizedLineIndex(
+          index: trailingSelectionIndex,
+          isTruncated: isTruncated,
+          range: range
+        ),
         nil
       )
       let leadingOffset = CTLineGetOffsetForStringIndex(
         line,
-        normalizedLineIndex(index: leadingSelectionIndex, isTruncated: isTruncated, range: range),
+        normalizedLineIndex(
+          index: leadingSelectionIndex,
+          isTruncated: isTruncated,
+          range: range
+        ),
         nil
       )
       needDrawLeadingPointer = true
@@ -520,12 +528,20 @@ extension NSAttributedString {
     } else if (range.lowerBound..<range.upperBound).contains(leadingSelectionIndex) {
       let leadingOffset = CTLineGetOffsetForStringIndex(
         line,
-        normalizedLineIndex(index: leadingSelectionIndex, isTruncated: isTruncated, range: range),
+        normalizedLineIndex(
+          index: leadingSelectionIndex,
+          isTruncated: isTruncated,
+          range: range
+        ),
         nil
       )
       let trailingOffset = CTLineGetOffsetForStringIndex(
         line,
-        normalizedLineIndex(index: range.upperBound - 1, isTruncated: isTruncated, range: range),
+        normalizedLineIndex(
+          index: range.upperBound - 1,
+          isTruncated: isTruncated,
+          range: range
+        ),
         nil
       )
       needDrawLeadingPointer = true

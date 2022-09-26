@@ -35,6 +35,7 @@ extension Sequence where Element == Disposable {
 }
 
 extension AutodisposePool {
+  @inlinable
   @discardableResult
   public func retain<T>(_ value: T) -> T {
     add(Disposable { withExtendedLifetime(value) {} })

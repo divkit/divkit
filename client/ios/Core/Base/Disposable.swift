@@ -20,6 +20,7 @@ public final class Disposable {
 }
 
 extension Disposable {
+  @inlinable
   public convenience init<S: Sequence>(_ disposables: S) where S.Element == Disposable {
     self.init {
       for disposable in disposables {

@@ -21,16 +21,19 @@ public struct ObservableVariable<T> {
   public var wrappedValue: T { getter() }
   public var projectedValue: Self { self }
 
+  @inlinable
   public subscript<U>(dynamicMember path: KeyPath<T, U>) -> ObservableVariable<U> {
     map { $0[keyPath: path] }
   }
 
+  @inlinable
   public subscript<ValueType, UnderlyingType>(
     dynamicMember path: KeyPath<UnderlyingType, ValueType>
   ) -> ObservableVariable<ValueType?> where T == UnderlyingType? {
     map { $0?[keyPath: path] }
   }
 
+  @inlinable
   public subscript<ValueType, UnderlyingType>(
     dynamicMember path: KeyPath<UnderlyingType, ValueType?>
   ) -> ObservableVariable<ValueType?> where T == UnderlyingType? {
@@ -47,6 +50,7 @@ extension ObservableVariable {
     Variable(getter)
   }
 
+  @inlinable
   public static func constant(_ value: T) -> ObservableVariable {
     ObservableVariable(getter: { value }, newValues: .empty)
   }
@@ -72,6 +76,7 @@ extension ObservableVariable {
     )
   }
 
+  @inlinable
   public func cachedMap<U>(_ transform: @escaping (T) -> U) -> ObservableVariable<U> {
     var current = transform(value)
 
@@ -103,6 +108,7 @@ extension ObservableVariable {
     )
   }
 
+  @inlinable
   public func compactMap<U>(
     valueIfNil: @autoclosure () -> U,
     _ transform: @escaping (T) -> U?
@@ -120,6 +126,7 @@ extension ObservableVariable {
     )
   }
 
+  @inlinable
   public var lazy: ObservableVariable<Lazy<T>> {
     ObservableVariable<Lazy<T>>(
       getter: { Lazy(getter: { self.value }) },
@@ -127,16 +134,19 @@ extension ObservableVariable {
     )
   }
 
+  @inlinable
   public func involving(_ signals: Signal<T>...) -> Self {
     involving(signals)
   }
 
+  @inlinable
   public func involving(_ signals: [Signal<T>]) -> Self {
     Self(initialValue: value, newValues: .merge([newValues] + signals))
   }
 }
 
 extension ObservableVariable where T: Equatable {
+  @inlinable
   public func skipRepeats() -> ObservableVariable {
     skipRepeats(areEqual: ==)
   }
@@ -153,6 +163,7 @@ extension ObservableVariable {
     )
   }
 
+  @inlinable
   public static func keyPath<Root: NSObject>(
     _ keyPath: KeyPath<Root, T>,
     onNSObject object: Root
@@ -167,6 +178,7 @@ extension ObservableVariable {
 }
 
 extension ObservableVariable {
+  @inlinable
   public static func `nil`<U>() -> ObservableVariable where T == U? {
     ObservableVariable(getter: { nil }, newValues: .empty)
   }
@@ -183,6 +195,7 @@ extension ObservableVariable {
   /// Lifetime managment:
   /// `newValues: Signal<T>` is not retained
   /// `Disposable` of `newValues.addObserver()` is retained
+  @inlinable
   public init(initialValue: T, newValues: Signal<T>) {
     var value = initialValue
     let pipe = SignalPipe<T>()
@@ -211,12 +224,14 @@ extension ObservableVariable {
 }
 
 extension ObservableVariable {
+  @inlinable
   public func retaining<U>(_ object: U) -> Self {
     Self(initialValue: value, newValues: newValues.retaining(object: object))
   }
 
   // if we draw analogy with array, this method makes something like this
   // [nil, nil, 1, 2, 3, nil, nil, 4, 5, nil] -> [nil, [1, 2, 3], nil, [4, 5], nil]
+  @inlinable
   public func collapseNils<U>() -> ObservableVariable<ObservableVariable<U>?> where T == U? {
     @ObservableProperty
     var outer: ObservableVariable<U>? = nil
@@ -245,6 +260,7 @@ extension ObservableVariable {
 }
 
 extension ObservableVariable {
+  @inlinable
   public func multiplexed() -> (variable: Self, afterUpdateSignal: Signal<T>) {
     var value = value
     let afterUpdatePipe = SignalPipe<T>()
