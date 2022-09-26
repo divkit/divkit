@@ -94,7 +94,6 @@ cp $1/src/base/ios/yandex/thick_ui/uikit/ImageExtensions.swift Base
 cp $1/src/base/ios/yandex/thick_ui/uikit/UIScrollView+Extensions.swift Base
 cp $1/src/base/ios/yandex/thick_ui/uikit/UIViewExtensions.swift Base
 cp $1/src/base/ios/yandex/thick_ui/iOS.swift Base
-cp $1/src/base/ios/yandex/tiny/extensions/ArrayBuilder.swift Base
 cp $1/src/base/ios/yandex/BaseExports.swift Base
 cp $1/src/base/ios/yandex/InvalidArgumentError.swift Base
 cp $1/src/base/ios/yandex/RWLock.swift Base
@@ -144,9 +143,6 @@ cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/NativeHTMLParser/HTMLParse
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/NativeHTMLParser/HTMLTag.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/NativeHTMLParser/HTMLTaggedString.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Exported.swift CommonCore
-
-rm CommonCoreTiny/*.*
-cp $1/src/yandex/ios/search_app/CommonCore/CommonCoreTiny/Exports.swift CommonCoreTiny
 
 rm Networking/*.*
 cp $1/src/yandex/ios/search_app/CommonCore/Networking/ActiveRequestsTracker.swift Networking

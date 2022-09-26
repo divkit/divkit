@@ -43,17 +43,8 @@ let package = Package(
       dependencies: [
         "Base",
         "BaseUI",
-        "CommonCoreTiny",
       ],
       path: "Core/CommonCore"
-    ),
-
-    .target(
-      name: "CommonCoreTiny",
-      dependencies: [
-        "BaseTiny",
-      ],
-      path: "Core/CommonCoreTiny"
     ),
 
     .target(

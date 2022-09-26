@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9A9A9F28CB1A9200D1D810 /* Lottie */; };
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
+		6178F76B28E2095100FE1648 /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6178F74E28E2095100FE1648 /* LayoutKit */; };
+		6178F77128E2097A00FE1648 /* TabInterimItemExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */; };
+		6178F77228E2097A00FE1648 /* Array+UIViewRenderableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74028E2042200FE1648 /* Array+UIViewRenderableTests.swift */; };
+		6178F77328E2097A00FE1648 /* UIViewRenderable+AccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */; };
+		6178F77428E2097A00FE1648 /* TabListSelectionDataSourceImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74428E2042200FE1648 /* TabListSelectionDataSourceImplTests.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
 		89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1928C8EBC40041EC18 /* Palette.swift */; };
 		8C0149982873297900BA5402 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0149972873297900BA5402 /* DivKit */; };
@@ -226,6 +231,11 @@
 
 /* Begin PBXFileReference section */
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
+		6178F74028E2042200FE1648 /* Array+UIViewRenderableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+UIViewRenderableTests.swift"; sourceTree = "<group>"; };
+		6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
+		6178F74428E2042200FE1648 /* TabListSelectionDataSourceImplTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabListSelectionDataSourceImplTests.swift; sourceTree = "<group>"; };
+		6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabInterimItemExtensionsTests.swift; sourceTree = "<group>"; };
+		6178F77028E2095100FE1648 /* LayoutKit_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoutKit_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		89D02B1328C891890041EC18 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
 		89D02B1928C8EBC40041EC18 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		8C01499B287329D000BA5402 /* unit_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unit_test_data; path = ../../../test_data/unit_test_data; sourceTree = "<group>"; };
@@ -431,6 +441,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6178F76A28E2095100FE1648 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6178F76B28E2095100FE1648 /* LayoutKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C1CF631286B58810016D0A1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -493,6 +511,66 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6178F73D28E2042200FE1648 /* LayoutKit_iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				6178F73E28E2042200FE1648 /* UI */,
+				6178F74528E2042200FE1648 /* ViewModels */,
+			);
+			name = LayoutKit_iOSTests;
+			path = LayoutKit/LayoutKit_iOSTests;
+			sourceTree = "<group>";
+		};
+		6178F73E28E2042200FE1648 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				6178F73F28E2042200FE1648 /* Blocks */,
+				6178F74228E2042200FE1648 /* Views */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		6178F73F28E2042200FE1648 /* Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				6178F74028E2042200FE1648 /* Array+UIViewRenderableTests.swift */,
+				6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */,
+			);
+			path = Blocks;
+			sourceTree = "<group>";
+		};
+		6178F74228E2042200FE1648 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				6178F74328E2042200FE1648 /* TabbedPages */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		6178F74328E2042200FE1648 /* TabbedPages */ = {
+			isa = PBXGroup;
+			children = (
+				6178F74428E2042200FE1648 /* TabListSelectionDataSourceImplTests.swift */,
+			);
+			path = TabbedPages;
+			sourceTree = "<group>";
+		};
+		6178F74528E2042200FE1648 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				6178F74628E2042200FE1648 /* TabbedPages */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		6178F74628E2042200FE1648 /* TabbedPages */ = {
+			isa = PBXGroup;
+			children = (
+				6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */,
+			);
+			path = TabbedPages;
+			sourceTree = "<group>";
+		};
 		8C0E7384288AED99009BEB3C /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -634,6 +712,7 @@
 				8C9284C5288ACCBA00BEA1FA /* DivKitSnapshotTests.xctest */,
 				8C9284F7288ADEEA00BEA1FA /* SnapshotTestsHostApp.app */,
 				8C6E40B128AAA47B0038E107 /* LayoutKitSnapshotTests.xctest */,
+				6178F77028E2095100FE1648 /* LayoutKit_iOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -905,6 +984,7 @@
 				8C7B1B1B2865BFF10036EF4C /* DivKitTests */,
 				8C6E40B228AAA47B0038E107 /* LayoutKitSnapshotTests */,
 				8CF329252875D534003F799A /* LayoutKitTests */,
+				6178F73D28E2042200FE1648 /* LayoutKit_iOSTests */,
 				8C9284F8288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
 				8C1CF635286B58810016D0A1 /* TemplatesSupportTests */,
 				8C7B1B112865BF4C0036EF4C /* Frameworks */,
@@ -922,7 +1002,8 @@
 				8CF3295F2875D5D6003F799A /* ViewModels */,
 				8CF32B7D2875E12F003F799A /* Utils.swift */,
 			);
-			path = LayoutKitTests;
+			name = LayoutKitTests;
+			path = LayoutKit/LayoutKitTests;
 			sourceTree = "<group>";
 		};
 		8CF329312875D5C8003F799A /* UI */ = {
@@ -1013,6 +1094,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6178F74C28E2095100FE1648 /* LayoutKit_iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6178F76D28E2095100FE1648 /* Build configuration list for PBXNativeTarget "LayoutKit_iOSTests" */;
+			buildPhases = (
+				6178F74F28E2095100FE1648 /* Sources */,
+				6178F76A28E2095100FE1648 /* Frameworks */,
+				6178F76C28E2095100FE1648 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				6178F74D28E2095100FE1648 /* PBXTargetDependency */,
+			);
+			name = LayoutKit_iOSTests;
+			packageProductDependencies = (
+				6178F74E28E2095100FE1648 /* LayoutKit */,
+			);
+			productName = LayoutKitTests;
+			productReference = 6178F77028E2095100FE1648 /* LayoutKit_iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		8C1CF633286B58810016D0A1 /* TemplatesSupportTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C1CF638286B58810016D0A1 /* Build configuration list for PBXNativeTarget "TemplatesSupportTests" */;
@@ -1227,6 +1329,7 @@
 				8C7B1B192865BFF10036EF4C /* DivKitTests */,
 				8C6E40B028AAA47B0038E107 /* LayoutKitSnapshotTests */,
 				8CF329232875D534003F799A /* LayoutKitTests */,
+				6178F74C28E2095100FE1648 /* LayoutKit_iOSTests */,
 				8C9284F6288ADEEA00BEA1FA /* SnapshotTestsHostApp */,
 				8C1CF633286B58810016D0A1 /* TemplatesSupportTests */,
 			);
@@ -1234,6 +1337,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6178F76C28E2095100FE1648 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C1CF632286B58810016D0A1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1311,6 +1421,17 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6178F74F28E2095100FE1648 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6178F77228E2097A00FE1648 /* Array+UIViewRenderableTests.swift in Sources */,
+				6178F77428E2097A00FE1648 /* TabListSelectionDataSourceImplTests.swift in Sources */,
+				6178F77128E2097A00FE1648 /* TabInterimItemExtensionsTests.swift in Sources */,
+				6178F77328E2097A00FE1648 /* UIViewRenderable+AccessibilityTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8C1CF630286B58810016D0A1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1526,6 +1647,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		6178F74D28E2095100FE1648 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 8CF3296D2875D645003F799A /* LayoutKit */;
+		};
 		8C0149902873296000BA5402 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			productRef = 8C01498F2873296000BA5402 /* DivKit */;
@@ -1575,6 +1700,26 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		6178F76E28E2095100FE1648 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
+			buildSettings = {
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		6178F76F28E2095100FE1648 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
+			buildSettings = {
+				PRODUCT_BUNDLE_IDENTIFIER = tech.divkit.LayoutKitTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
 		8C1CF639286B58810016D0A1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
@@ -1816,6 +1961,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6178F76D28E2095100FE1648 /* Build configuration list for PBXNativeTarget "LayoutKit_iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6178F76E28E2095100FE1648 /* Debug */,
+				6178F76F28E2095100FE1648 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		8C1CF638286B58810016D0A1 /* Build configuration list for PBXNativeTarget "TemplatesSupportTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -1906,6 +2060,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A9A9A9E28CB1A9200D1D810 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		6178F74E28E2095100FE1648 /* LayoutKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LayoutKit;
 		};
 		8C01498F2873296000BA5402 /* DivKit */ = {
 			isa = XCSwiftPackageProductDependency;

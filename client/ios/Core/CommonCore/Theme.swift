@@ -1,7 +1,7 @@
 // Copyright 2021 Yandex LLC. All rights reserved.
 
+import BaseTiny
 import BaseUI
-import CommonCoreTiny
 
 public enum Theme: String {
   case dark
