@@ -49,6 +49,7 @@ internal class DivImageBinder @Inject constructor(
         view.addSubscription(
             div.imageUrl.observeAndGet(expressionResolver) { view.applyImage(divView, expressionResolver, div) }
         )
+        view.observeTintColor(expressionResolver, div.tintColor)
     }
 
     private fun DivImageView.observeAspectRatio(resolver: ExpressionResolver, aspect: DivAspect?) {
@@ -99,7 +100,10 @@ internal class DivImageBinder @Inject constructor(
             div.preview?.evaluate(resolver),
             div.placeholderColor.evaluate(resolver),
             synchronous = isHighPriorityShowPreview
-        ) { observeTintColor(resolver, div.tintColor) }
+        ) {
+            previewLoaded()
+            applyTintColor(div.tintColor?.evaluate(resolver))
+        }
 
         val reference = imageLoader.loadImage(
             newImageUrl.toString(),
@@ -110,7 +114,7 @@ internal class DivImageBinder @Inject constructor(
                     setImage(cachedBitmap.bitmap)
                     applyLoadingFade(div, resolver, cachedBitmap.from)
                     imageLoaded()
-                    observeTintColor(resolver, div.tintColor)
+                    applyTintColor(div.tintColor?.evaluate(resolver))
                     invalidate()
                 }
             }
@@ -156,7 +160,7 @@ internal class DivImageBinder @Inject constructor(
             return
         }
 
-        addSubscription(tintColor.observeAndGet(resolver) { color -> applyTintColor(color) })
+        addSubscription(tintColor.observeAndGet(resolver) { color -> if (isImageLoaded || isImagePreview) applyTintColor(color) else applyTintColor(null) })
     }
 
     private fun ImageView.applyTintColor(color: Int?) {

@@ -11,11 +11,15 @@ interface LoadableImage {
     val isImageLoaded: Boolean
         get() = false
 
+    val isImagePreview: Boolean
+        get() = false
+
     fun saveLoadingTask(task: Future<*>)
     fun getLoadingTask(): Future<*>?
     fun cleanLoadingTask()
 
     fun imageLoaded()
+    fun previewLoaded()
     fun resetImageLoaded()
 
     /**

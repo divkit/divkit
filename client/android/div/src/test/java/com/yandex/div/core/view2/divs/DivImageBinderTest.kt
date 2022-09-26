@@ -1,13 +1,14 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Color
 import android.net.Uri
-import com.yandex.div.core.Div2ImageStubProvider
 import com.yandex.div.core.asExpression
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivImage
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,15 +24,13 @@ import org.mockito.kotlin.verify
 import org.mockito.kotlin.verifyNoMoreInteractions
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import java.util.concurrent.Executors
 
 @RunWith(RobolectricTestRunner::class)
 class DivImageBinderTest : DivBinderTest() {
 
-    private val placeholderLoader =
-        spy(DivPlaceholderLoader(Div2ImageStubProvider.STUB, Executors.newFixedThreadPool(1)))
+    private val placeholderLoader = mock<DivPlaceholderLoader>()
     private val binder = DivImageBinder(
-        baseBinder, imageLoader, placeholderLoader,
+            baseBinder, imageLoader, placeholderLoader,
     )
 
     @Before
@@ -113,26 +112,26 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
 
         val divContainer = DivImage(
-            imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
-            highPriorityPreviewShow = true.asExpression()
+                imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
+                highPriorityPreviewShow = true.asExpression()
         )
         binder.bindView(view, divContainer, divView)
         verify(placeholderLoader).applyPlaceholder(
-            any(), anyOrNull(), any(),
-            synchronous = eq(true), any()
+                any(), anyOrNull(), any(),
+                synchronous = eq(true), any()
         )
 
         whenImageLoaded(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
 
         val nextDivContainer = DivImage(
-            imageUrl = Uri.parse("https://foo.bar/bar.png").asExpression(),
-            highPriorityPreviewShow = true.asExpression()
+                imageUrl = Uri.parse("https://foo.bar/bar.png").asExpression(),
+                highPriorityPreviewShow = true.asExpression()
         )
         binder.bindView(view, nextDivContainer, divView)
 
         verify(placeholderLoader).applyPlaceholder(
-            any(), anyOrNull(), any(),
-            synchronous = eq(false), any()
+                any(), anyOrNull(), any(),
+                synchronous = eq(false), any()
         )
     }
 
@@ -141,8 +140,8 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
 
         val divContainer = DivImage(
-            imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
-            highPriorityPreviewShow = true.asExpression()
+                imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
+                highPriorityPreviewShow = true.asExpression()
         )
         binder.bindView(view, divContainer, divView)
 
@@ -151,8 +150,8 @@ class DivImageBinderTest : DivBinderTest() {
         val spyView = spy(view)
 
         val nextDivContainer = DivImage(
-            imageUrl = Uri.parse("https://foo.bar/bar.png").asExpression(),
-            highPriorityPreviewShow = true.asExpression()
+                imageUrl = Uri.parse("https://foo.bar/bar.png").asExpression(),
+                highPriorityPreviewShow = true.asExpression()
         )
         binder.bindView(spyView, nextDivContainer, divView)
 
@@ -164,8 +163,8 @@ class DivImageBinderTest : DivBinderTest() {
         val (view, _) = createTestDiv("with_action.json")
 
         val divContainer = DivImage(
-            imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
-            highPriorityPreviewShow = true.asExpression()
+                imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
+                highPriorityPreviewShow = true.asExpression()
         )
         binder.bindView(view, divContainer, divView)
 
@@ -174,12 +173,54 @@ class DivImageBinderTest : DivBinderTest() {
         val spyView = spy(view)
 
         val nextDivContainer = DivImage(
-            imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
-            highPriorityPreviewShow = true.asExpression()
+                imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
+                highPriorityPreviewShow = true.asExpression()
         )
         binder.bindView(spyView, nextDivContainer, divView)
 
         verify(spyView, never()).resetImageLoaded()
+    }
+
+    @Test
+    fun `tint color applied to image after rebind`() {
+        val (view, _) = createTestDiv("with_action.json")
+        val divContainer = DivImage(
+                imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
+                tintColor = Color.parseColor("#ffffff").asExpression())
+
+        binder.bindView(view, divContainer, divView)
+        Assert.assertTrue(view.colorFilter == null)
+        whenImageLoaded(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
+        Assert.assertTrue(view.colorFilter != null)
+
+        // with the same image url
+        val nextDivContainer = DivImage(
+                imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
+                tintColor = Color.parseColor("#ffffff").asExpression())
+        binder.bindView(view, nextDivContainer, divView)
+        Assert.assertTrue(view.colorFilter != null)
+
+        // with another image url
+        val anotherDivContainer = DivImage(
+                imageUrl = Uri.parse("https://another_image.png").asExpression(),
+                tintColor = Color.parseColor("#ffffff").asExpression())
+        binder.bindView(view, anotherDivContainer, divView)
+        Assert.assertTrue(view.colorFilter == null)
+    }
+
+    @Test
+    fun `tint color applied to preview`() {
+        val preview = "iVBORw0KGgoAAAANSUhEUgAAAEEAAABACAYAAABFqxrgAAAACXBIWXMAABYlAAAWJQFJUiTwAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAIsSURBVHgB7ZqNbcIwEIXdTsAI6QRtN2CDMgIblA1CJ2g3gE5QOkEYgQ3MBnSDV1s2KjKOf0gVfOY+yUImF8Kdz+aeDiEYhmEYhmEYhjwAJmq0anRqHGA42Plc1I5ycnbieB9SjUbUiF39VHSgnkRN6JVFPjoQE5HJvSiXzvPemxoPdwr1+qzGp3NdB2AhakCntWeVZz22y//IhuJQTiwcxzYRe/fgnIoMSt0OjTPfRuy/I/cHoRKEGPTT/whMUfTuOQ+6yH1yyHYoBsSLor6DsXUNBTVg6oEOabSwlaG9z5c1K0EF/OmBvtWPlco+JKiUz+qLTnG+j0+dX9ogLZDOdcpmZKo7mBT+CjjSuSupPycQsCPyWgHIUnfq9RXh1J8FntXYYHQoRUojX93tAtc/QK3MxWXqzkcHwr/n0uOQPsgae12Ln3XAeZ0ZdJUehqk7zQrUFR5GVndjkSugGme+jdgPUndjkRuE3FQmkfq5Qdg585eI/aMz3wvqwJS7qQdj6xqKWoBf8WmHG3u9T91pJGpolvRkQy4dqDdLkKfuQqxIBwPp6k4LrXXErg0FAyX3IpGh7qztBuGAzT3PqK8XaZ2SKcFA7b1IxLeTRD40u08wQksmOpmiVpeCIjDnRezwvI1eZCAYt9OLVB33vRpzca4+t5Fbq+xF/og8BqV/qUFgtQpWqwZcrlbp9CJj4DK1KlHbX/lAoRc5Bii5FzkmKLEXyTAMwzAMw9wQvznV1eV5FJ3aAAAAAElFTkSuQmCC"
+        val (view, _) = createTestDiv("with_action.json")
+        val divContainer = DivImage(
+                imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression(),
+                preview = preview.asExpression(),
+                tintColor = Color.parseColor("#ffffff").asExpression())
+
+        binder.bindView(view, divContainer, divView)
+        Assert.assertTrue(view.colorFilter == null)
+        whenPreviewLoaded()
+        Assert.assertTrue(view.colorFilter != null)
     }
 
     private fun whenImageLoaded(imageUrl: String) {
@@ -187,6 +228,12 @@ class DivImageBinderTest : DivBinderTest() {
         verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any())
         verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
         imageDownloadCallbackCaptor.firstValue.onSuccess(mock())
+    }
+
+    private fun whenPreviewLoaded() {
+        val previewSetCallbackCaptor = argumentCaptor<() -> Unit>()
+        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), previewSetCallbackCaptor.capture())
+        previewSetCallbackCaptor.firstValue.invoke()
     }
 
     private fun createTestDiv(fileName: String): Pair<DivImageView, DivImage> {

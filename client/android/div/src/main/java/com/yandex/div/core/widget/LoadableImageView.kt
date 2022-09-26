@@ -34,10 +34,15 @@ open class LoadableImageView(
     override val isImageLoaded: Boolean
         get() = getTag(R.id.image_loaded_flag) == true
 
+    override val isImagePreview: Boolean
+        get() = getTag(R.id.image_loaded_flag) == false
+
     /**
      * Marks if bitmap was actually set on [LoadableImageView].
      */
     override fun imageLoaded() = setTag(R.id.image_loaded_flag, true)
+
+    override fun previewLoaded() = setTag(R.id.image_loaded_flag, false)
 
     /**
      * Resetting flag when rebind before loading new image
