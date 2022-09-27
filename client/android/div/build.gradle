@@ -11,6 +11,7 @@ android {
 
     defaultConfig {
         buildConfigField "String", "DIV2_JSON_PATH", "\"$crossplatformProjectDir/\""
+        buildConfigField "String", "VERSION_NAME", "\"${rootProject.property('divkitVersionName')}\""
     }
 }
 

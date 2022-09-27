@@ -8,6 +8,7 @@ import com.yandex.div.core.dagger.DaggerDivKitComponent
 import com.yandex.div.core.dagger.DivKitComponent
 import com.yandex.div.core.util.Assert
 import com.yandex.div.histogram.DivParsingHistogramReporter
+import com.yandex.div.BuildConfig
 
 @PublicApi
 class DivKit private constructor(
@@ -25,6 +26,9 @@ class DivKit private constructor(
 
     val parsingHistogramReporter: DivParsingHistogramReporter
         get() = component.parsingHistogramReporter
+
+    val versionName: String
+        get() = BuildConfig.VERSION_NAME
 
     companion object {
 
