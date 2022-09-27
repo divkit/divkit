@@ -22,12 +22,21 @@ internal class DemoHistogramConfiguration(
 private const val TAG = "DIV_HISTOGRAM_LOGGER"
 
 internal class LoggingHistogramBridge : HistogramBridge {
+
+    private val lastSavedHistograms: HashMap<String, String> = HashMap()
+
+    fun getLastSavedHistogram(name: String): String? {
+        return if (lastSavedHistograms.containsKey(name)) {
+            lastSavedHistograms[name]
+        } else null
+    }
+
     override fun recordBooleanHistogram(name: String, sample: Boolean) {
-        recordHistogram("$name: $sample")
+        recordHistogram(name, "$sample")
     }
 
     override fun recordEnumeratedHistogram(name: String, sample: Int, boundary: Int) {
-        recordHistogram("$name: $sample")
+        recordHistogram(name, "$sample")
     }
 
     override fun recordLinearCountHistogram(
@@ -37,7 +46,7 @@ internal class LoggingHistogramBridge : HistogramBridge {
         max: Int,
         bucketCount: Int
     ) {
-        recordHistogram("$name: $sample")
+        recordHistogram(name, "$sample")
     }
 
     override fun recordCountHistogram(
@@ -47,7 +56,7 @@ internal class LoggingHistogramBridge : HistogramBridge {
         max: Int,
         bucketCount: Int
     ) {
-        recordHistogram("$name: $sample")
+        recordHistogram(name, "$sample")
         dispatcher?.dispatch(name)
         if (sample <= 0) return
         PerfMetricReporter.reportCountMetric(name, sample.toLong())
@@ -61,18 +70,19 @@ internal class LoggingHistogramBridge : HistogramBridge {
         unit: TimeUnit,
         bucketCount: Long
     ) {
-        recordHistogram("$name: ${unit.toMillis(duration)}")
+        recordHistogram(name, "${unit.toMillis(duration)}")
         dispatcher?.dispatch(name)
         if (duration <= 0) return
         PerfMetricReporter.reportTimeMetric(name, TimeUnit.MILLISECONDS, unit.toMillis(duration))
     }
 
     override fun recordSparseSlowlyHistogram(name: String, sample: Int) {
-        recordHistogram("$name: $sample")
+        recordHistogram(name, "$sample")
     }
 
-    private fun recordHistogram(data: String) {
-        KLog.d(TAG) { data }
+    private fun recordHistogram(name: String, sample: String) {
+        KLog.d(TAG) { "$name: $sample" }
+        lastSavedHistograms[name.removeSuffix(".Cool").removeSuffix(".Cold").removeSuffix(".Warm")] = sample
     }
 
     companion object {

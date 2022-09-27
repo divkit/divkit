@@ -14,8 +14,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivViewFacade
+import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.util.Assert
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
@@ -29,19 +32,22 @@ import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2ScenarioBinding
 import com.yandex.divkit.demo.div.editor.*
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
+import com.yandex.divkit.demo.settings.SettingsActionHandler
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.loadText
 import com.yandex.divkit.demo.utils.longToast
+import com.yandex.divkit.regression.MetadataBottomSheet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.json.JSONException
 import org.json.JSONObject
 
-class Div2ScenarioActivity : AppCompatActivity() {
+class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.MetadataHost {
 
     private lateinit var binding: ActivityDiv2ScenarioBinding
+    private val metadataBottomSheet = Div2MetadataBottomSheet()
     private lateinit var editorPresenter: DivEditorPresenter
     private lateinit var div2Adapter: DivEditorAdapter
     private lateinit var divContext: Div2Context
@@ -62,7 +68,12 @@ class Div2ScenarioActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             super.onBackPressed()
         }
-        binding.refreshButton.setOnClickListener { refresh() }
+        binding.metadataButton.setOnClickListener {
+            metadataBottomSheet.showNow(supportFragmentManager, MetadataBottomSheet.TAG)
+            (metadataBottomSheet.dialog as BottomSheetDialog).behavior.run {
+                state = BottomSheetBehavior.STATE_EXPANDED
+            }
+        }
 
         json = intent.getStringExtra(JSON)
         url = intent.getStringExtra(URL)
@@ -91,11 +102,13 @@ class Div2ScenarioActivity : AppCompatActivity() {
         }
         val divEditorUi = DivEditorUi(
             this,
-            binding.refreshButton,
+            binding.metadataButton,
             binding.error,
             binding.singleContainer,
             binding.div2Recycler,
             div2Adapter,
+            this,
+            Container.flagPreferenceProvider.getExperimentFlag(Experiment.SHOW_RENDERING_TIME)
         )
 
         val editorLogger = DivEditorLogger(this::setError)
@@ -150,7 +163,6 @@ class Div2ScenarioActivity : AppCompatActivity() {
         }
 
         json?.let {
-            binding.refreshButton.visibility = View.GONE
             preferences.edit().putString(DIV2_KEY_URL, json).apply()
             coroutineScope.launch {
                 editorPresenter.parseDivDataList(JSONObject(it))
@@ -170,7 +182,6 @@ class Div2ScenarioActivity : AppCompatActivity() {
         } else {
             setError(getString(R.string.unhandled_uri_error))
         }
-
     }
 
     private fun showVariablesDialog() {
@@ -291,4 +302,6 @@ class Div2ScenarioActivity : AppCompatActivity() {
         private const val DIV2_PATCH_KEY_URL = "patch_key_url"
         private const val DIV2_VARIABLES_KEY_URL = "variables_url"
     }
+
+    override val renderingTimeMessages: ArrayList<String> = ArrayList()
 }

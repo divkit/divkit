@@ -7,6 +7,7 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
+import com.yandex.divkit.demo.div.editor.DEMO_ACTIVITY_COMPONENT_NAME
 
 class DivEditorAdapter(val context: Div2Context) :
     ListAdapter<DivEditorItem, DivEditorViewHolder>(DIFF_CALLBACK) {
@@ -19,6 +20,7 @@ class DivEditorAdapter(val context: Div2Context) :
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
+            componentName = DEMO_ACTIVITY_COMPONENT_NAME
         })
         viewHolderList.add(holder)
         return holder

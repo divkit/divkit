@@ -106,11 +106,11 @@ fun JSONObject.parseToDiv2(errorLogger: ParsingErrorLogger? = null): DivData {
     }
 }
 
-fun JSONObject.parseToDiv2List(errorLogger: ParsingErrorLogger? = null): List<DivData> {
+fun JSONObject.parseToDiv2List(errorLogger: ParsingErrorLogger? = null, componentName: String? = null): List<DivData> {
     return when {
-        isDiv2DataList() -> asDiv2DataListWithTemplates(errorLogger)
-        isDiv2Data() -> listOf(asDiv2DataWithTemplates(errorLogger))
-        else -> listOf(asDiv2Data(errorLogger))
+        isDiv2DataList() -> asDiv2DataListWithTemplates(errorLogger, componentName)
+        isDiv2Data() -> listOf(asDiv2DataWithTemplates(errorLogger, componentName))
+        else -> listOf(asDiv2Data(errorLogger, componentName))
     }
 }
 
@@ -118,7 +118,7 @@ fun JSONObject.isDiv2Data() = optJSONObject("card") != null
 
 fun JSONObject.isDiv2DataList() = optJSONArray("cards") != null
 
-fun JSONObject.asDiv2Data(errorLogger: ParsingErrorLogger? = null): DivData {
+fun JSONObject.asDiv2Data(errorLogger: ParsingErrorLogger? = null, componentName: String? = null): DivData {
     val environment = DivParsingEnvironment(
         errorLogger ?: ParsingErrorLogger.LOG,
         MainTemplateProvider(
@@ -126,24 +126,24 @@ fun JSONObject.asDiv2Data(errorLogger: ParsingErrorLogger? = null): DivData {
             TemplateProvider.empty(),
         ),
     )
-    return environment.createDivDataWithHistograms(this)
+    return environment.createDivDataWithHistograms(this, componentName)
 }
 
-fun JSONObject.asDiv2DataWithTemplates(errorLogger: ParsingErrorLogger? = null): DivData {
+fun JSONObject.asDiv2DataWithTemplates(errorLogger: ParsingErrorLogger? = null, componentName: String? = null): DivData {
     val templates = optJSONObject("templates")
     val card = getJSONObject("card")
-    val environment = createEnvironment(errorLogger, templates)
-    return environment.createDivDataWithHistograms(card)
+    val environment = createEnvironment(errorLogger, templates, componentName)
+    return environment.createDivDataWithHistograms(card, componentName)
 }
 
-fun JSONObject.asDiv2DataListWithTemplates(errorLogger: ParsingErrorLogger? = null): List<DivData> {
+fun JSONObject.asDiv2DataListWithTemplates(errorLogger: ParsingErrorLogger? = null, componentName: String? = null): List<DivData> {
     val templates = optJSONObject("templates")
-    val environment = createEnvironment(errorLogger, templates)
+    val environment = createEnvironment(errorLogger, templates, componentName)
 
     val cards = getJSONArray("cards")
     val divDataList = mutableListOf<DivData>()
     for (i in 0 until cards.length()) {
-        divDataList.add(environment.createDivDataWithHistograms(cards.getJSONObject(i)))
+        divDataList.add(environment.createDivDataWithHistograms(cards.getJSONObject(i), componentName))
     }
     return divDataList
 }
@@ -155,30 +155,30 @@ fun JSONObject.asDivPatchWithTemplates(errorLogger: ParsingErrorLogger? = null):
     return DivPatch(environment, card)
 }
 
-private fun createEnvironment(errorLogger: ParsingErrorLogger?, templates: JSONObject?): DivParsingEnvironment {
+private fun createEnvironment(errorLogger: ParsingErrorLogger?, templates: JSONObject?, componentName: String? = null): DivParsingEnvironment {
     val environment = DivParsingEnvironment(errorLogger ?: ParsingErrorLogger.LOG)
 
     templates?.let {
-        environment.parseTemplatesWithHistograms(templates)
+        environment.parseTemplatesWithHistograms(templates, componentName)
     }
 
     return environment
 }
 
-internal fun ParsingEnvironment.createDivDataWithHistograms(data: JSONObject): DivData {
-    return Container.parsingHistogramReporter.measureDataParsing(data, componentName = null) {
+internal fun ParsingEnvironment.createDivDataWithHistograms(data: JSONObject, componentName: String? = null): DivData {
+    return Container.parsingHistogramReporter.measureDataParsing(data, componentName) {
         DivData(this, data)
     }
 }
 
-internal fun DivParsingEnvironment.parseTemplatesWithHistograms(templates: JSONObject) {
-    Container.parsingHistogramReporter.measureTemplatesParsing(templates, componentName = null) {
+internal fun DivParsingEnvironment.parseTemplatesWithHistograms(templates: JSONObject, componentName: String? = null) {
+    Container.parsingHistogramReporter.measureTemplatesParsing(templates, componentName) {
         parseTemplates(templates)
     }
 }
 
-internal fun String.toJSONObjectWithHistograms(): JSONObject {
-    return Container.parsingHistogramReporter.measureJsonParsing(componentName = null) {
+internal fun String.toJSONObjectWithHistograms(componentName: String? = null): JSONObject {
+    return Container.parsingHistogramReporter.measureJsonParsing(componentName) {
         JSONObject(this)
     }
 }

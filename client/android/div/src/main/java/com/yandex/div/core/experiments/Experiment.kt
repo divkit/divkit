@@ -33,6 +33,10 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
         "resource_cache_enabled",
         defaultValue = true
     ),
+    SHOW_RENDERING_TIME(
+        "demo_activity_rendering_time_enabled",
+        defaultValue = false
+    ),
     MULTIPLE_STATE_CHANGE_ENABLED(
         "multiple_state_change_enabled"
     )

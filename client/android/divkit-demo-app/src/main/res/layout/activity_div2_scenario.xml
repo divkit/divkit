@@ -56,14 +56,14 @@
             tools:text="loading..." />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/refresh_button"
+            android:id="@+id/metadata_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:layout_margin="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@drawable/refresh"
+            app:srcCompat="@drawable/metadata"
             android:focusable="true" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

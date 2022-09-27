@@ -30,6 +30,7 @@ private const val JPG_COMPRESS_QUALITY = 80
 private const val JSON_PARAM = "json"
 private const val ERROR_TEXT_PARAM = "text"
 private const val WEB_EDITOR_URL = "divview"
+const val DEMO_ACTIVITY_COMPONENT_NAME = "com.yandex.divkit.demo.div.Div2ScenarioActivity"
 
 class DivEditorPresenter(
     private val context: Context,
@@ -157,7 +158,8 @@ class DivEditorPresenter(
     @WorkerThread
     fun parseDivDataList(json: JSONObject) {
         val divDataList: List<DivData>? = try {
-            json.parseToDiv2List(errorLogger)
+            divEditorUi.hasTemplates = (json.has("templates"))
+            json.parseToDiv2List(errorLogger, DEMO_ACTIVITY_COMPONENT_NAME)
         } catch (e: Exception) {
             errorLogger.logError(e)
             null
