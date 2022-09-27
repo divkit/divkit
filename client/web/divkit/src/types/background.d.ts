@@ -44,7 +44,7 @@ export interface RadialGradientRelativeCenter {
 export type RadialGradientCenter = RadialGradientFixedCenter | RadialGradientRelativeCenter;
 
 export interface RadialBackground {
-    type: 'radial';
+    type: 'radial_gradient';
     colors: string[];
     radius?: RadialBackgroundRadius;
     center_x?: RadialGradientCenter;

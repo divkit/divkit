@@ -41,12 +41,12 @@ describe('background', () => {
 
     test('radial', () => {
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00']
         }])).toMatchSnapshot();
 
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00'],
             radius: {
                 type: 'fixed',
@@ -55,7 +55,7 @@ describe('background', () => {
         }])).toMatchSnapshot();
 
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00'],
             radius: {
                 type: 'relative',
@@ -64,7 +64,7 @@ describe('background', () => {
         }])).toMatchSnapshot();
 
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00'],
             radius: {
                 type: 'relative',
@@ -73,7 +73,7 @@ describe('background', () => {
         }])).toMatchSnapshot();
 
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00'],
             radius: {
                 type: 'relative',
@@ -82,7 +82,7 @@ describe('background', () => {
         }])).toMatchSnapshot();
 
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00'],
             radius: {
                 type: 'relative',
@@ -91,7 +91,7 @@ describe('background', () => {
         }])).toMatchSnapshot();
 
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00'],
             center_x: {
                 type: 'fixed',
@@ -100,7 +100,7 @@ describe('background', () => {
         }])).toMatchSnapshot();
 
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00'],
             center_x: {
                 type: 'relative',
@@ -113,7 +113,7 @@ describe('background', () => {
         }])).toMatchSnapshot();
 
         expect(getBackground([{
-            type: 'radial',
+            type: 'radial_gradient',
             colors: ['#fc0', '#f00'],
             center_x: {
                 type: 'relative',

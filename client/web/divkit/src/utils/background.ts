@@ -40,7 +40,7 @@ export function getBackground(bgs: MaybeMissing<Background>[]): {
                 return image({
                     bg
                 });
-            } else if (bg.type === 'radial') {
+            } else if (bg.type === 'radial_gradient') {
                 return radial({
                     bg
                 });
