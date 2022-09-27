@@ -1,3 +1,29 @@
+## 9.0.0 (September 27, 2022)
+## JSON Schema:
+* Clarification of wrap container documentation
+* Added radial gradient schema
+
+## Android Client:
+Additions and changes:
+* Implemented `WrapLayout` - layout with transfer of elements to the next line if they don't fit in the previous one
+* Implemented showing of rendering time in demo activity
+* Improved snapshot tests
+Fixes:
+* Fixed concurrent modification of variables
+* Fixed `tint_color` observing on element's rebind
+* Fixed lottie resources providing for tests
+
+## iOS Client:
+* Added Swift Package Manager support
+* Fixed concurrency issues in `DivStateManager` and `DivVariablesStorage`
+* Improved `DivContainer` height calculation
+* Improved snapshot tests
+
+## Web Client:
+Added:
+* `radial_gradient` support
+
+
 ## 8.0.0 (September 20, 2022)
 ### Android Client:
 Additions and changes:

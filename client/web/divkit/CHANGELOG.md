@@ -1,3 +1,10 @@
+## 9.0.0 (September 27, 2022)
+
+## Web Client:
+Added:
+* `radial_gradient` support
+
+
 ## 8.0.0 (September 20, 2022)
 
 Changes and additions:
