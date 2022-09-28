@@ -45,16 +45,17 @@ internal class ErrorView(
 
         if (new.showDetails) {
             tryAddDetailsView()
-            detailsView?.text = new.errorDetails
+            detailsView?.text = new.getDetails()
         } else {
-            if (new.errorCount > 0) {
+            if (new.getCounterText().isNotEmpty()) {
                 tryAddCounterView()
             } else {
                 counterView?.let { root.removeView(it) }
                 counterView = null
             }
 
-            counterView?.text = "${new.errorCount}"
+            counterView?.text = new.getCounterText()
+            counterView?.setBackgroundResource(new.getCounterBackground())
         }
     }
 
@@ -109,7 +110,7 @@ internal class ErrorView(
         val view = AppCompatTextView(root.context).apply {
             setBackgroundResource(R.drawable.error_counter_background)
             textSize = 12f
-            setTextColor(Color.WHITE)
+            setTextColor(Color.BLACK)
             gravity = Gravity.CENTER
             elevation = resources.getDimension(R.dimen.div_shadow_elevation)
             setOnClickListener { errorModel.showDetails() }

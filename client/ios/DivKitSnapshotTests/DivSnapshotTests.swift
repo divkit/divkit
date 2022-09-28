@@ -23,6 +23,9 @@ private let exclusions = [
   "div-gif-image/aspect-wrap_content.json",
   "div-pager/vertical-pager-fixed-width.json",
   "div-pager/vertical-pager-resizable-width.json",
+
+  "div-slider/slider_with_warning.json",
+  "div-slider/slider_with_error_and_warning.json",
   
 ]
 

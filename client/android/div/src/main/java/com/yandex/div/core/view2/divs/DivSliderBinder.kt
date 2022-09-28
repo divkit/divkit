@@ -2,13 +2,18 @@ package com.yandex.div.core.view2.divs
 
 import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
+import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.Disposable
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.dagger.ExperimentFlag
+import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
+import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.font.DivTypefaceProvider
 import com.yandex.div.core.widget.slider.SliderTextStyle
 import com.yandex.div.core.widget.slider.SliderView
@@ -20,17 +25,25 @@ import com.yandex.div2.DivShape
 import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSlider
 import javax.inject.Inject
+import kotlin.math.max
 import kotlin.math.roundToInt
+
+private const val SLIDER_TICKS_OVERLAP_WARNING = "Slider ticks overlap each other."
 
 internal class DivSliderBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val logger: Div2Logger,
     private val typefaceProvider: DivTypefaceProvider,
-    private val variableBinder: TwoWayIntegerVariableBinder
+    private val variableBinder: TwoWayIntegerVariableBinder,
+    private val errorCollectors: ErrorCollectors,
+    @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
 ) : DivViewBinder<DivSlider, DivSliderView> {
+
+    private var errorCollector: ErrorCollector? = null
 
     override fun bindView(view: DivSliderView, div: DivSlider, divView: Div2View) {
         val oldDiv = view.div
+        errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
         if (div == oldDiv) return
 
         val expressionResolver = divView.expressionResolver
@@ -43,11 +56,13 @@ internal class DivSliderBinder @Inject constructor(
         view.addSubscription(
             div.minValue.observeAndGet(expressionResolver) { minValue ->
                 view.minValue = minValue.toFloat()
+                view.checkSliderTicks()
             }
         )
         view.addSubscription(
             div.maxValue.observeAndGet(expressionResolver) { maxValue ->
                 view.maxValue = maxValue.toFloat()
+                view.checkSliderTicks()
             }
         )
 
@@ -230,8 +245,9 @@ internal class DivSliderBinder @Inject constructor(
         }
     }
 
-    private fun SliderView.applyTickMarkActiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
+    private fun DivSliderView.applyTickMarkActiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
         activeTickMarkDrawable = tickMarkStyle?.toDrawable(resources.displayMetrics, resolver)
+        checkSliderTicks()
     }
 
     private fun DivSliderView.observeTickMarkInactiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
@@ -242,8 +258,9 @@ internal class DivSliderBinder @Inject constructor(
         }
     }
 
-    private fun SliderView.applyTickMarkInactiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
+    private fun DivSliderView.applyTickMarkInactiveStyle(resolver: ExpressionResolver, tickMarkStyle: DivDrawable?) {
         inactiveTickMarkDrawable = tickMarkStyle?.toDrawable(resources.displayMetrics, resolver)
+        checkSliderTicks()
     }
 
     private fun DivSliderView.observeDrawable(
@@ -259,14 +276,47 @@ internal class DivSliderBinder @Inject constructor(
                 val shapeDrawable = drawable.value
                 val roundedRect = shapeDrawable.shape as? DivShape.RoundedRectangle
                 addSubscription(shapeDrawable.color.observe(resolver, callback))
-                addSubscription(shapeDrawable.stroke?.color?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(shapeDrawable.stroke?.width?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.itemWidth?.value?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.itemWidth?.unit?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.itemHeight?.value?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.itemHeight?.unit?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.cornerRadius?.value?.observe(resolver, callback) ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.cornerRadius?.unit?.observe(resolver, callback) ?: Disposable.NULL)
+                addSubscription(shapeDrawable.stroke?.color?.observe(resolver, callback)
+                    ?: Disposable.NULL)
+                addSubscription(shapeDrawable.stroke?.width?.observe(resolver, callback)
+                    ?: Disposable.NULL)
+                addSubscription(roundedRect?.value?.itemWidth?.value?.observe(resolver, callback)
+                    ?: Disposable.NULL)
+                addSubscription(roundedRect?.value?.itemWidth?.unit?.observe(resolver, callback)
+                    ?: Disposable.NULL)
+                addSubscription(roundedRect?.value?.itemHeight?.value?.observe(resolver, callback)
+                    ?: Disposable.NULL)
+                addSubscription(roundedRect?.value?.itemHeight?.unit?.observe(resolver, callback)
+                    ?: Disposable.NULL)
+                addSubscription(roundedRect?.value?.cornerRadius?.value?.observe(resolver, callback)
+                    ?: Disposable.NULL)
+                addSubscription(roundedRect?.value?.cornerRadius?.unit?.observe(resolver, callback)
+                    ?: Disposable.NULL)
+            }
+        }
+    }
+
+    private fun DivSliderView.checkSliderTicks() {
+        if (!visualErrorsEnabled || errorCollector == null) return
+        doOnPreDraw {
+            if (activeTickMarkDrawable != null || inactiveTickMarkDrawable != null) {
+                val ticksNumber = maxValue - minValue
+                val activeTicksWidth = activeTickMarkDrawable?.intrinsicWidth ?: 0
+                val inactiveTicksWidth = inactiveTickMarkDrawable?.intrinsicWidth ?: 0
+                val tickWidth = max(activeTicksWidth, inactiveTicksWidth)
+
+                if (tickWidth * ticksNumber > width && errorCollector != null) {
+                    val warnings = errorCollector!!.getWarnings()
+                    var warningLogged = false
+                    for (warning in warnings.iterator()) {
+                        if (warning.message == SLIDER_TICKS_OVERLAP_WARNING) {
+                            warningLogged = true
+                        }
+                    }
+                    if (!warningLogged) {
+                        errorCollector?.logWarning(Throwable(SLIDER_TICKS_OVERLAP_WARNING))
+                    }
+                }
             }
         }
     }
@@ -307,11 +357,11 @@ private fun DivSlider.TextStyle.toSliderTextStyle(
     resolver: ExpressionResolver
 ): SliderTextStyle {
     return SliderTextStyle(
-            fontSize = fontSize.evaluate(resolver).fontSizeToPx(fontSizeUnit.evaluate(resolver), metrics),
-            fontWeight = getTypeface(fontWeight.evaluate(resolver), typefaceProvider),
-            offsetX = offset?.x?.toPx(metrics, resolver)?.toFloat() ?: 0f,
-            offsetY = offset?.y?.toPx(metrics, resolver)?.toFloat() ?: 0f,
-            textColor = textColor.evaluate(resolver)
+        fontSize = fontSize.evaluate(resolver).fontSizeToPx(fontSizeUnit.evaluate(resolver), metrics),
+        fontWeight = getTypeface(fontWeight.evaluate(resolver), typefaceProvider),
+        offsetX = offset?.x?.toPx(metrics, resolver)?.toFloat() ?: 0f,
+        offsetY = offset?.y?.toPx(metrics, resolver)?.toFloat() ?: 0f,
+        textColor = textColor.evaluate(resolver)
     )
 }
 

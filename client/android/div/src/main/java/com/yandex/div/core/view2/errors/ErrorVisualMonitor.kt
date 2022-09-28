@@ -67,17 +67,23 @@ internal class ErrorModel(private val errorCollectors: ErrorCollectors) {
 
     private val observers = mutableSetOf<(ErrorViewModel) -> Unit>()
     private val currentErrors = mutableListOf<Throwable>()
+    private val currentWarnings = mutableListOf<Throwable>()
     private var existingSubscription: Disposable? = null
 
-    private val updateOnErrors = { errors: List<Throwable> ->
+    private val updateOnErrors = { errors: List<Throwable>, warnings: List<Throwable> ->
         this.currentErrors.apply {
             clear()
             addAll(errors.reversed())
         }
-        state = state.copy(errorCount = currentErrors.size, errorDetails = toDetails(currentErrors))
+        this.currentWarnings.apply {
+            clear()
+            addAll(warnings.reversed())
+        }
+        state = state.copy(errorCount = currentErrors.size, errorDetails = errorsToDetails(currentErrors),
+            warningCount = currentWarnings.size, warningDetails = warningsToDetails(currentWarnings))
     }
 
-    private fun toDetails(errors: List<Throwable>): String {
+    private fun errorsToDetails(errors: List<Throwable>): String {
         val errorsList = errors.take(SHOW_LIMIT).joinToString(separator = "\n") {
             if (it is ParsingException) {
                 " - " + it.reason.toString() + ": " + it.fullStackMessage
@@ -87,6 +93,12 @@ internal class ErrorModel(private val errorCollectors: ErrorCollectors) {
         }
 
         return "Last $SHOW_LIMIT errors:\n$errorsList"
+    }
+
+    private fun warningsToDetails(currentWarnings: List<Throwable>): String {
+        val warningsList = currentWarnings.take(SHOW_LIMIT)
+            .joinToString(separator = "\n") { " - ${it.fullStackMessage}" }
+        return "Last $SHOW_LIMIT warnings:\n$warningsList"
     }
 
     fun observeAndGet(observer: (ErrorViewModel) -> Unit): Disposable {
@@ -106,19 +118,34 @@ internal class ErrorModel(private val errorCollectors: ErrorCollectors) {
     }
 
     fun generateFullReport(): String {
-        val results = JSONArray()
+        val results = JSONObject()
 
-        currentErrors.forEach {
-            results.put(JSONObject().apply {
-                put("message", it.fullStackMessage)
-                put("stacktrace", it.stackTraceToString())
+        if (currentErrors.size > 0) {
+            val errors = JSONArray()
+            currentErrors.forEach {
+                errors.put(JSONObject().apply {
+                    put("message", it.fullStackMessage)
+                    put("stacktrace", it.stackTraceToString())
 
-                if (it is ParsingException) {
-                    put("reason", it.reason)
-                    put("json_source", it.source?.dump())
-                    put("json_summary", it.jsonSummary)
-                }
-            })
+                    if (it is ParsingException) {
+                        put("reason", it.reason)
+                        put("json_source", it.source?.dump())
+                        put("json_summary", it.jsonSummary)
+                    }
+                })
+            }
+            results.put("errors", errors)
+        }
+
+        if (currentWarnings.size > 0) {
+            val warnings = JSONArray()
+            currentWarnings.forEach {
+                warnings.put(JSONObject().apply {
+                    put("warning_message", it.message)
+                    put("stacktrace", it.stackTraceToString())
+                })
+            }
+            results.put("warnings", warnings)
         }
 
         return results.toString(/*indentSpaces*/ 4)
