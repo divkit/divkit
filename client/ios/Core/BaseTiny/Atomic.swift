@@ -4,27 +4,20 @@ import Foundation
 
 public final class Atomic<T> {
   private var unsafeValue: T
-  private let queue: DispatchQueue
+  private let lock = RWLock()
 
-  public init(initialValue: T, accessQueue: DispatchQueue) {
+  public init(initialValue: T) {
     unsafeValue = initialValue
-    queue = accessQueue
-  }
-
-  @inlinable
-  public convenience init(initialValue: T, label: String) {
-    let accessQueue = DispatchQueue(label: label, attributes: [.concurrent])
-    self.init(initialValue: initialValue, accessQueue: accessQueue)
   }
 
   public func accessRead<U>(_ block: (T) throws -> U) rethrows -> U {
-    try queue.sync {
+    try lock.read {
       try block(unsafeValue)
     }
   }
 
   public func accessWrite<U>(_ block: (inout T) throws -> U) rethrows -> U {
-    try queue.sync(flags: .barrier) {
+    try lock.write {
       try block(&unsafeValue)
     }
   }

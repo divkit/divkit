@@ -2,7 +2,6 @@
 
 import Foundation
 
-private let accessQueue = DispatchQueue(label: "Memoization queue", attributes: [.concurrent])
 private let assignmentQueue = DispatchQueue(
   label: "Memoization optimization assignment (for classes)",
   attributes: [.concurrent]
@@ -22,14 +21,14 @@ private func cachedValue<A, B>(
 }
 
 public func memoize<A: Hashable, B>(_ f: @escaping (A) throws -> B) -> (A) throws -> B {
-  let cache = Atomic(initialValue: [A: B](), accessQueue: accessQueue)
+  let cache = Atomic(initialValue: [A: B]())
   return { (input: A) -> B in
     try cachedValue(from: cache, for: input, fallback: f)
   }
 }
 
 public func memoize<A: Hashable, B>(_ f: @escaping (A) -> B) -> (A) -> B {
-  let cache = Atomic(initialValue: [A: B](), accessQueue: accessQueue)
+  let cache = Atomic(initialValue: [A: B]())
   return { (input: A) -> B in
     cachedValue(from: cache, for: input, fallback: f)
   }
@@ -41,7 +40,7 @@ private struct MemoizeParams2<A: Hashable, B: Hashable>: Hashable {
 }
 
 public func memoize<A: Hashable, B: Hashable, C>(_ f: @escaping (A, B) -> C) -> (A, B) -> C {
-  let cache = Atomic(initialValue: [MemoizeParams2<A, B>: C](), accessQueue: accessQueue)
+  let cache = Atomic(initialValue: [MemoizeParams2<A, B>: C]())
   return { (a: A, b: B) -> C in
     cachedValue(from: cache, for: MemoizeParams2(a: a, b: b), fallback: { f($0.a, $0.b) })
   }
@@ -73,9 +72,9 @@ private class MemoizeParams3AClass<A: Hashable, B: Hashable, C: Hashable>: Hasha
 
   static func ==(lhs: MemoizeParams3AClass, rhs: MemoizeParams3AClass) -> Bool {
     // This 🦃 performs a very specific optimization for the case when
-    // we put the calculcations for the specific string (which has reference type) to the cache,
+    // we put the calculations for the specific string (which has reference type) to the cache,
     // but _sometimes_ we re-create the instance of this string. Thus, if we don't modify
-    // dictionary key, we'll always miss comparation by reference.
+    // dictionary key, we'll always miss comparison by reference.
     // Here we rely on the implementation detail of Dictionary, namely we hope that
     // `lhs` corresponds to the key _already contained_ in dictionary and `rhs` corresponds
     // to the key by which we're trying to get the value.
@@ -96,7 +95,7 @@ public func memoize<
   C: Hashable,
   D
 >(_ f: @escaping (A, B, C) -> D) -> (A, B, C) -> D {
-  let cache = Atomic(initialValue: [MemoizeParams3<A, B, C>: D](), accessQueue: accessQueue)
+  let cache = Atomic(initialValue: [MemoizeParams3<A, B, C>: D]())
   return { (a: A, b: B, c: C) -> D in
     cachedValue(
       from: cache,
@@ -112,7 +111,7 @@ public func memoizeAClass<
   C: Hashable,
   D
 >(_ f: @escaping (A, B, C) -> D) -> (A, B, C) -> D where A: AnyObject {
-  let cache = Atomic(initialValue: [MemoizeParams3AClass<A, B, C>: D](), accessQueue: accessQueue)
+  let cache = Atomic(initialValue: [MemoizeParams3AClass<A, B, C>: D]())
   return { (a: A, b: B, c: C) -> D in
     cachedValue(
       from: cache,

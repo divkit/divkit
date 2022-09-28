@@ -13,15 +13,15 @@ public final class RWLock {
     pthread_rwlock_destroy(&lock)
   }
 
-  public func read<T>(_ block: () -> T) -> T {
+  public func read<T>(_ block: () throws -> T) rethrows -> T {
     pthread_rwlock_rdlock(&lock)
     defer { pthread_rwlock_unlock(&lock) }
-    return block()
+    return try block()
   }
 
-  public func write<T>(_ block: () -> T) -> T {
+  public func write<T>(_ block: () throws -> T) rethrows -> T {
     pthread_rwlock_wrlock(&lock)
     defer { pthread_rwlock_unlock(&lock) }
-    return block()
+    return try block()
   }
 }

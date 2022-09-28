@@ -96,7 +96,6 @@ cp $1/src/base/ios/yandex/thick_ui/uikit/UIViewExtensions.swift Base
 cp $1/src/base/ios/yandex/thick_ui/iOS.swift Base
 cp $1/src/base/ios/yandex/BaseExports.swift Base
 cp $1/src/base/ios/yandex/InvalidArgumentError.swift Base
-cp $1/src/base/ios/yandex/RWLock.swift Base
 cp $1/src/base/ios/yandex/Time.swift Base
 cp $1/src/base/ios/yandex/UrlOpener.swift Base
 cp $1/src/base/ios/yandex/weakify.swift Base
