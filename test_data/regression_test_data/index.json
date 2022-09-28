@@ -296,6 +296,9 @@
     },
     {
       "title": "Focus",
+      "platforms": [
+        "android"
+      ],
       "steps": [
         "Switch focus"
       ],
@@ -306,6 +309,9 @@
     },
     {
       "title": "Focus events",
+      "platforms": [
+        "android"
+      ],
       "steps": [
         "Switch focus to handler",
         "Switch focus to idle"
@@ -448,6 +454,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Fade full",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -462,6 +471,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Fade part",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -476,6 +488,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Scale full",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -490,6 +505,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Scale part",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -504,6 +522,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Slide full",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -518,6 +539,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Slide part",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -532,6 +556,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Set",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -546,6 +573,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Diff ids",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -560,6 +590,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Diff sizes",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -574,6 +607,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Diff types",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -588,6 +624,9 @@
     },
     {
       "title": "Synchronizing multiple change bounds animations. Change bounds same ids",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "Animations"
       ],
@@ -644,19 +683,6 @@
       "file": "animations/blink.json"
     },
     {
-      "title": "Example of tooltip animation",
-      "tags": [
-        "Animations"
-      ],
-      "steps": [
-        "A few seconds after the card is shown, a tooltip should appear"
-      ],
-      "expected_results": [
-        "Toolip hides a few seconds later"
-      ],
-      "file": "animations/mute_notification.json"
-    },
-    {
       "title": "Scale transition ignore pivot_x/pivot_y",
       "tags": [
         "Animations"
@@ -675,9 +701,10 @@
         "Animations"
       ],
       "steps": [
-        "Click on notificattion"
+        "Click on tooltip"
       ],
       "expected_results": [
+        "A few seconds after the card is shown, a tooltip should appear",
         "The text should disappear first, and the background after a short delay"
       ],
       "file": "animations/mute_notification.json"
@@ -883,11 +910,10 @@
         "Visibility_actions"
       ],
       "steps": [
-        "Click on items",
+        "Click EXPAND",
         "Check logs"
       ],
       "expected_results": [
-        "Card article.json is opened",
         "Elements are expanded",
         "Visibility actions logged, example logViewShown(cardId = ..., id = separator) logViewShown(cardId = ..., id = text) logViewShown(cardId = ..., id = text2) logViewShown(cardId = ..., id = comment_state) logViewShown(cardId = ..., id = comment_01) logViewShown(cardId = ..., id = comment_02) logViewShown(cardId = ..., id = comment_03) logViewShown(cardId = ..., id = comment_04)"
       ],
@@ -1026,6 +1052,9 @@
     },
     {
       "title": "Animations of switching tabs headers",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "DivTabs",
         "Animations"
@@ -1106,6 +1135,9 @@
     },
     {
       "title": "Manage VideoCustom",
+      "platforms": [
+        "android"
+      ],
       "tags": [
         "VideoCustom"
       ],
@@ -1135,6 +1167,9 @@
     },
     {
       "title": "Data transition trigger",
+      "platforms": [
+        "android"
+      ],
       "steps": [
         "Press 'Change data'"
       ],

@@ -277,61 +277,6 @@
               "text": "Title",
               "width": {
                 "type": "wrap_content"
-              },
-              "tooltips": [
-                {
-                  "id": "tooltip",
-                  "position": "bottom",
-                  "duration": 0,
-                  "offset": {
-                    "x": {
-                      "value": 0
-                    },
-                    "y":  {
-                      "value": 4
-                    }
-                  },
-                  "div": {
-                    "type": "text",
-                    "width": {
-                      "type": "wrap_content"
-                    },
-                    "paddings": {
-                      "left": 16,
-                      "top": 16,
-                      "right": 16,
-                      "bottom": 16
-                    },
-                    "background": [
-                      {
-                        "type": "solid",
-                        "color": "#3498DB"
-                      }
-                    ],
-                    "border": {
-                      "corner_radius": 6
-                    },
-                    "text_color": "#2C3E50",
-                    "text": "Title tooltip",
-                    "action": {
-                      "log_id": "hide_tooltip",
-                      "url": "div-action://hide_tooltip?id=tooltip"
-                    },
-                    "visibility_actions": [
-                      {
-                        "log_id": "item_log_id",
-                        "url": "div-action://hide_tooltip?id=tooltip",
-                        "log_limit": 0,
-                        "visibility_duration": 5000,
-                        "visibility_percentage": 100
-                      }
-                    ]
-                  }
-                }
-              ],
-              "action": {
-                "log_id": "show_tooltip",
-                "url": "div-action://show_tooltip?id=tooltip"
               }
             },
             {

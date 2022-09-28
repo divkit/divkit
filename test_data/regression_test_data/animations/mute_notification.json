@@ -187,7 +187,7 @@
                                   {
                                     "log_id": "show_unmute_notification",
                                     "url": "div-action://set_state?state_id=0/mute/unmute_notification",
-                                    "visibility_duration": 4000,
+                                    "visibility_duration": 2000,
                                     "visibility_percentage": 1
                                   }
                                 ]
@@ -240,7 +240,7 @@
                                     "log_id": "hide_unmute_notification",
                                     "url": "div-action://set_state?state_id=0/mute/muted",
                                     "log_limit": 0,
-                                    "visibility_duration": 4000,
+                                    "visibility_duration": 2000,
                                     "visibility_percentage": 1
                                   }
                                 ],

@@ -6,12 +6,6 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "width": {
-            "type": "match_parent"
-          },
-          "height": {
-            "type": "wrap_content"
-          },
           "margins": {
             "left": 16,
             "top": 16,
@@ -22,45 +16,21 @@
             {
               "type": "custom",
               "id": "old_custom_card_1",
-              "width": {
-                "type": "wrap_content"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "custom_type": "old_custom_card_1"
             },
             {
               "type": "custom",
               "id": "old_custom_card_2",
-              "width": {
-                "type": "wrap_content"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "custom_type": "old_custom_card_2"
             },
             {
               "type": "custom",
               "id": "new_custom_card_1",
-              "width": {
-                "type": "wrap_content"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "custom_type": "new_custom_card_1"
             },
             {
               "type": "custom",
               "id": "new_custom_card_2",
-              "width": {
-                "type": "wrap_content"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "custom_type": "new_custom_card_2"
             }
           ]

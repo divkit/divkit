@@ -20,12 +20,6 @@
         "state_id": 0,
         "div": {
           "type": "container",
-          "width": {
-            "type": "match_parent"
-          },
-          "height": {
-            "type": "wrap_content"
-          },
           "margins": {
             "left": 16,
             "top": 16,
@@ -36,12 +30,6 @@
             {
               "type": "custom",
               "id": "new_custom_container_1",
-              "width": {
-                "type": "wrap_content"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "items": [
                 {
                   "type": "news_item_template",

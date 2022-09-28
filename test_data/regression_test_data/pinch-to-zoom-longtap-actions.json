@@ -16,6 +16,9 @@
             {
               "type": "image",
               "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+              "aspect": {
+                "ratio": 1
+              },
               "extensions": [
                 {
                   "id": "pinch-to-zoom"
