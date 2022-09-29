@@ -2,8 +2,6 @@
   "templates": {
     "lottie_grid": {
       "type": "grid",
-      "width": "div-match-parent-size",
-      "height": "div-match-parent-size",
       "paddings": {
         "left": 8,
         "top": 8,
@@ -32,7 +30,6 @@
       "type": "text",
       "text_alignment_horizontal": "center",
       "text_alignment_vertical": "center",
-      "width": "div-match-parent-size",
       "font_size": 14,
       "paddings": {
         "top": 8
@@ -42,10 +39,6 @@
     },
     "lottie_card": {
       "type": "container",
-      "width": {
-        "type": "match_parent",
-        "weight": 1
-      },
       "margins": {
         "left": 4,
         "right": 4,

@@ -27,15 +27,14 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     div: DivBase,
     context: DivBlockModelingContext
   ) -> Block {
-    let extensionParams = div.extensions?
-      .first(where: { $0.id == self.id })
-    guard let extensionParams = extensionParams?.params,
-            let lottieValue = LottieValues(
-              params: extensionParams
-            ) else { return block }
+    let extensionData = div.extensions?.first { $0.id == id }
+    guard let paramsDict = extensionData?.params,
+          let params = LottieExtensionParams(params: paramsDict) else {
+      return block
+    }
     
     let animationHolder: AnimationHolder
-    switch lottieValue.source {
+    switch params.source {
     case let .url(url):
       animationHolder = RemoteAnimationHolder(
         url: url,
@@ -49,8 +48,8 @@ public final class LottieExtensionHandler: DivExtensionHandler {
       animatableView: Lazy(
         getter: {
           self.factory.createAnimatableView(
-            withMode: lottieValue.repeatMode.repeateMode,
-            repeatCount: lottieValue.repeatCount
+            withMode: params.repeatMode,
+            repeatCount: params.repeatCount
           )
         }
       ),
@@ -61,17 +60,6 @@ public final class LottieExtensionHandler: DivExtensionHandler {
   }
 }
 
-extension LottieValues.RepeatMode {
-  var repeateMode: AnimationRepeatMode {
-    switch self {
-    case .reverse:
-      return .reverse
-    case .restart:
-      return .restart
-    }
-  }
-}
-
 private class JSONAnimationHolder: AnimationHolder {
   let animation: AnimationSourceType?
 
@@ -79,7 +67,9 @@ private class JSONAnimationHolder: AnimationHolder {
     self.animation = .json(json)
   }
   
-  func requestAnimationWithCompletion(_ completion: @escaping (AnimationSourceType?) -> Void) -> Cancellable? {
+  func requestAnimationWithCompletion(
+    _ completion: @escaping (AnimationSourceType?) -> Void
+  ) -> Cancellable? {
     completion(animation)
     return nil
   }
@@ -97,53 +87,50 @@ private class JSONAnimationHolder: AnimationHolder {
   }
 }
 
-private struct LottieValues {
-  enum ValuesError: String, Error {
-    case notValidJSONOrURL
-    case notValidRepeatCount
-    case notValidRepeatMode
-  }
-  
+private struct LottieExtensionParams {
   enum Source {
     case json([String: Any])
     case url(URL)
   }
   
-  enum RepeatMode: String {
-    case reverse
-    case restart
-  }
-  
   var source: Source
   var repeatCount: Float
-  var repeatMode: RepeatMode
+  var repeatMode: AnimationRepeatMode
   
   init?(params: [String: Any]) {
     if let json = params["lottie_json"] as? [String: Any] {
       source = .json(json)
-    } else if let urlString = params["lottie_url"] as? String, let url = URL(string: urlString) {
+    } else if let urlString = params["lottie_url"] as? String,
+              let url = URL(string: urlString) {
       source = .url(url)
     } else {
       DivKitLogger.error("Not valid lottie_json or lottie_url")
       return nil
     }
     
-    if let repeatCount = params["repeat_count"] as? Float {
-      self.repeatCount = repeatCount
+    if let repeatCount = params["repeat_count"] {
+      if let repeatCountFloat = repeatCount as? Float {
+        self.repeatCount = repeatCountFloat
+      } else {
+        DivKitLogger.error("Not valid repeat_count")
+        return nil
+      }
     } else {
-      DivKitLogger.error("Not valid repeat_count")
-      return nil
+      self.repeatCount = 0
     }
-    
-    let repeatModeString = params["repeat_mode"] as? String
-    switch repeatModeString {
-    case "reverse":
-      self.repeatMode = .reverse
-    case "restart":
+
+    if let repeatMode = params["repeat_mode"] {
+      switch repeatMode as? String {
+      case "reverse":
+        self.repeatMode = .reverse
+      case "restart":
+        self.repeatMode = .restart
+      default:
+        DivKitLogger.error("Not valid repeat_mode")
+        return nil
+      }
+    } else {
       self.repeatMode = .restart
-    default:
-      DivKitLogger.error("Not valid repeat_mode")
-      return nil
     }
   }
 }

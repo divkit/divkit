@@ -734,14 +734,14 @@
       "file": "animations/transition/inner_state_transition_data_change.json"
     },
     {
-      "title": "Lottie animation restart repeate_mode. Repeate count = 5",
+      "title": "Lottie animation (repeat_mode=restart, repeat_count=5)",
       "tags": [
         "Animations",
         "lottie"
       ],
       "steps": [
         "Spinner animation will continue 5 times and then stop",
-        "Press RESET"
+        "Press RESTART"
       ],
       "expected_results": [
         "Spinner animation will continue 5 times and then stop"
@@ -749,22 +749,22 @@
       "file": "animations/lottie/spinner_restart_repeat_mode.json"
     },
     {
-      "title": "Lottie animation revese repeate_mode. Repeate count = 3",
+      "title": "Lottie animation (repeate_mode=revese, repeat_count=3)",
       "tags": [
         "Animations",
         "lottie"
       ],
       "steps": [
-        "Spinner change spin dirrection 3 times and then stops",
-        "\u041d\u0430\u0436\u0430\u0442\u044c RESET"
+        "Spinner changes spin direction 3 times and stops",
+        "Press RESTART"
       ],
       "expected_results": [
-        "Spinner change spin dirrection 3 times and then stops"
+        "Spinner changes spin direction 3 times and stops"
       ],
       "file": "animations/lottie/spinner_reverse_repeat_mode.json"
     },
     {
-      "title": "Lottie animation restart repeate_mode. Repeate count = -1",
+      "title": "Lottie animation (repeat_mode=restart, repeate_count=-1)",
       "tags": [
         "Animations",
         "lottie"
