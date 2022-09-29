@@ -3,6 +3,7 @@ export * from './div-utils';
 export * from './expression';
 export * from './generated';
 export * from './helper';
+export * from './safe-expression';
 export * from './template';
 export * from './template-helper';
 export * from './template-helper-deps';

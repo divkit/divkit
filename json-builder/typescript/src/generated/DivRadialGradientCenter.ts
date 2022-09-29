@@ -5,14 +5,10 @@ import { TemplateBlock, Type } from '../template';
 import { DivExpression } from '../safe-expression';
 
 import {
-    DivImageBackground,
-    DivLinearGradient,
-    DivRadialGradient,
-    DivSolidBackground,
+    DivRadialGradientFixedCenter,
+    DivRadialGradientRelativeCenter,
 } from './';
 
-export type DivBackground =
-    | DivLinearGradient
-    | DivRadialGradient
-    | DivImageBackground
-    | DivSolidBackground;
+export type DivRadialGradientCenter =
+    | DivRadialGradientFixedCenter
+    | DivRadialGradientRelativeCenter;

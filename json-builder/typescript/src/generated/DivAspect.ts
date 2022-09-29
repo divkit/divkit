@@ -2,7 +2,7 @@
 
 import { Exact, IntBoolean, NonEmptyArray } from '../helper';
 import { TemplateBlock, Type } from '../template';
-import { DivExpression } from '../expression';
+import { DivExpression } from '../safe-expression';
 
 /**
  * Size with a fixed aspect ratio. It counts height from width and ignores other specified height

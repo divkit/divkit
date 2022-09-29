@@ -2,7 +2,7 @@
 
 import { Div } from './generated/Div';
 import { IDivData } from './generated/DivData';
-import { UnsafeDivExpression } from './unsafe-expression';
+import { SafeDivExpression } from './safe-expression';
 import { escapeExpression } from './expression';
 
 export interface ITemplates {
@@ -50,7 +50,7 @@ export function template<T extends string = any, U = object>(type: T, props?: U)
 export function escapeCard(obj: unknown): unknown {
     if (typeof obj === 'string') {
         return escapeExpression(obj);
-    } else if (obj instanceof UnsafeDivExpression) {
+    } else if (obj instanceof SafeDivExpression) {
         return obj.toJSON();
     } else if (obj && typeof obj === 'object') {
         if (Array.isArray(obj)) {

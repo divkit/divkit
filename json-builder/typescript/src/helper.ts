@@ -1,4 +1,5 @@
 import { ITemplates } from './template';
+import { SafeDivExpression } from './safe-expression';
 
 export type NonEmptyArray<T> = T[];
 
@@ -37,7 +38,7 @@ export function copyTemplates<T extends ITemplates>(templates: T): T {
     const copy: ITemplates = {};
 
     const placeHolder = (node: unknown): unknown => {
-        if (!node || ['string', 'number'].includes(typeof node)) {
+        if (!node || ['string', 'number', 'boolean'].includes(typeof node) || node instanceof SafeDivExpression) {
             return node;
         }
 

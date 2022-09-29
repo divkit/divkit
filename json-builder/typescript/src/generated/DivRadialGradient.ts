@@ -2,7 +2,12 @@
 
 import { Exact, IntBoolean, NonEmptyArray } from '../helper';
 import { TemplateBlock, Type } from '../template';
-import { DivExpression } from '../expression';
+import { DivExpression } from '../safe-expression';
+
+import {
+    DivRadialGradientCenter,
+    DivRadialGradientRadius,
+} from './';
 
 /**
  * Radial gradient.
@@ -12,23 +17,21 @@ export class DivRadialGradient<T extends DivRadialGradientProps = DivRadialGradi
 
     readonly type = 'radial_gradient';
     /**
-     * Shift of the central point of the gradient relative to the left edge along the X axis in the
-     * range `0..1`.
+     * Shift of the central point of the gradient relative to the left edge along the X axis.
      */
-    center_x?: Type<number | DivExpression>;
+    center_x?: Type<DivRadialGradientCenter>;
     /**
-     * Shift of the central point of the gradient relative to the upper edge along the Y axis in the
-     * range `0..1`.
+     * Shift of the central point of the gradient relative to the upper edge along the Y axis.
      */
-    center_y?: Type<number | DivExpression>;
+    center_y?: Type<DivRadialGradientCenter>;
     /**
      * Colors. Gradient points will be located at an equal distance from each other.
      */
     colors: Type<NonEmptyArray<string | DivExpression>>;
     /**
-     * Radius of the gradient transition in `dp`.
+     * Radius of the gradient transition.
      */
-    radius: Type<number | DivExpression>;
+    radius?: Type<DivRadialGradientRadius>;
 
     constructor(props: Exact<DivRadialGradientProps, T>) {
         this.center_x = props.center_x;
@@ -40,21 +43,19 @@ export class DivRadialGradient<T extends DivRadialGradientProps = DivRadialGradi
 
 export interface DivRadialGradientProps {
     /**
-     * Shift of the central point of the gradient relative to the left edge along the X axis in the
-     * range `0..1`.
+     * Shift of the central point of the gradient relative to the left edge along the X axis.
      */
-    center_x?: Type<number | DivExpression>;
+    center_x?: Type<DivRadialGradientCenter>;
     /**
-     * Shift of the central point of the gradient relative to the upper edge along the Y axis in the
-     * range `0..1`.
+     * Shift of the central point of the gradient relative to the upper edge along the Y axis.
      */
-    center_y?: Type<number | DivExpression>;
+    center_y?: Type<DivRadialGradientCenter>;
     /**
      * Colors. Gradient points will be located at an equal distance from each other.
      */
     colors: Type<NonEmptyArray<string | DivExpression>>;
     /**
-     * Radius of the gradient transition in `dp`.
+     * Radius of the gradient transition.
      */
-    radius: Type<number | DivExpression>;
+    radius?: Type<DivRadialGradientRadius>;
 }

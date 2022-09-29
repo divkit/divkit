@@ -4,7 +4,7 @@ export interface DivExpression {
     [expr]: string;
 }
 
-export class UnsafeDivExpression implements DivExpression {
+export class SafeDivExpression implements DivExpression {
     public [expr]: string;
 
     public constructor(expression: string) {

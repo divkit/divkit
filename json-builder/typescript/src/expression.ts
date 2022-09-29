@@ -1,7 +1,7 @@
-import { DivExpression, UnsafeDivExpression } from './unsafe-expression';
+import { DivExpression, SafeDivExpression } from './safe-expression';
 
 export function expression(expression: string): DivExpression {
-    return new UnsafeDivExpression(expression);
+    return new SafeDivExpression(expression);
 }
 
 const replacer: Record<string, string> = {
@@ -14,5 +14,3 @@ export function escapeExpression(str: string): string {
         return replacer[full];
     });
 }
-
-export { DivExpression };

@@ -9,10 +9,10 @@ import {
 } from './';
 
 /**
- * Fixed size of an element.
+ * Fixed central point of the gradient.
  */
-export class DivFixedSize<T extends DivFixedSizeProps = DivFixedSizeProps> {
-    readonly _props?: Exact<DivFixedSizeProps, T>;
+export class DivRadialGradientFixedCenter<T extends DivRadialGradientFixedCenterProps = DivRadialGradientFixedCenterProps> {
+    readonly _props?: Exact<DivRadialGradientFixedCenterProps, T>;
 
     readonly type = 'fixed';
     /**
@@ -21,24 +21,24 @@ export class DivFixedSize<T extends DivFixedSizeProps = DivFixedSizeProps> {
      */
     unit?: Type<DivSizeUnit | DivExpression>;
     /**
-     * Element size.
+     * Shift value of the fixed central point of the gradient.
      */
     value: Type<number | DivExpression>;
 
-    constructor(props: Exact<DivFixedSizeProps, T>) {
+    constructor(props: Exact<DivRadialGradientFixedCenterProps, T>) {
         this.unit = props.unit;
         this.value = props.value;
     }
 }
 
-export interface DivFixedSizeProps {
+export interface DivRadialGradientFixedCenterProps {
     /**
      * Unit of measurement. To learn more about units of size measurement, see [Layout inside the
      * card](../../layout.dita).
      */
     unit?: Type<DivSizeUnit | DivExpression>;
     /**
-     * Element size.
+     * Shift value of the fixed central point of the gradient.
      */
     value: Type<number | DivExpression>;
 }
