@@ -40,6 +40,7 @@ import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.animations.allowsTransitionsOnDataChange
 import com.yandex.div.core.view2.animations.doOnEnd
 import com.yandex.div.core.view2.divs.bindLayoutParams
@@ -173,6 +174,8 @@ class Div2View private constructor(
     private val viewCreateCallType: String = div2Component.divCreationTracker.viewCreateCallType
 
     private var drawWasSkipped = true
+
+    internal val divTransitionHandler = DivTransitionHandler(this)
 
     init {
         timeCreated = DivCreationTracker.currentUptimeMillis

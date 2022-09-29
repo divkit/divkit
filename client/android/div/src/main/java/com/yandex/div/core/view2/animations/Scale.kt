@@ -20,14 +20,20 @@ internal class Scale(
         transitionValues.withNoScale {
             super.captureStartValues(transitionValues)
         }
-        captureValues(transitionValues)
+        captureStartScaleValues(transitionValues)
+        capturePosition(transitionValues) { position ->
+            transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        }
     }
 
     override fun captureEndValues(transitionValues: TransitionValues) {
         transitionValues.withNoScale {
             super.captureEndValues(transitionValues)
         }
-        captureValues(transitionValues)
+        captureEndScaleValues(transitionValues)
+        capturePosition(transitionValues) { position ->
+            transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        }
     }
 
     private inline fun TransitionValues.withNoScale(block: (TransitionValues) -> Unit) {
@@ -42,14 +48,32 @@ internal class Scale(
         view.scaleY = scaleY
     }
 
-    private fun captureValues(transitionValues: TransitionValues) {
+    private fun captureStartScaleValues(transitionValues: TransitionValues) {
         val view = transitionValues.view
-        transitionValues.values[PROPNAME_SCALE_X] = view.scaleX
-        transitionValues.values[PROPNAME_SCALE_Y] = view.scaleY
 
-        val position = IntArray(2)
-        view.getLocationOnScreen(position)
-        transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        when(mode) {
+            MODE_IN -> {
+                transitionValues.values[PROPNAME_SCALE_X] = scaleFactor
+                transitionValues.values[PROPNAME_SCALE_Y] = scaleFactor
+            }
+            MODE_OUT -> {
+                transitionValues.values[PROPNAME_SCALE_X] = view.scaleX
+                transitionValues.values[PROPNAME_SCALE_Y] = view.scaleY
+            }
+        }
+    }
+
+    private fun captureEndScaleValues(transitionValues: TransitionValues) {
+        when(mode) {
+            MODE_IN -> {
+                transitionValues.values[PROPNAME_SCALE_X] = 1f
+                transitionValues.values[PROPNAME_SCALE_Y] = 1f
+            }
+            MODE_OUT -> {
+                transitionValues.values[PROPNAME_SCALE_X] = scaleFactor
+                transitionValues.values[PROPNAME_SCALE_Y] = scaleFactor
+            }
+        }
     }
 
     override fun onAppear(
@@ -73,9 +97,9 @@ internal class Scale(
     }
 
     override fun onDisappear(
-        sceneRoot: ViewGroup?,
+        sceneRoot: ViewGroup,
         view: View?,
-        startValues: TransitionValues?,
+        startValues: TransitionValues,
         endValues: TransitionValues?
     ): Animator? {
         if (view == null) return null
@@ -84,7 +108,10 @@ internal class Scale(
         val startScaleY = getCapturedScaleY(startValues, NO_SCALE)
         val endScaleX = getCapturedScaleX(endValues, scaleFactor)
         val endScaleY = getCapturedScaleY(endValues, scaleFactor)
-        return createScaleAnimator(view, startScaleX, startScaleY, endScaleX, endScaleY)
+
+        val viewForAnimate = getViewForAnimate(view, sceneRoot, startValues, PROPNAME_SCREEN_POSITION)
+
+        return createScaleAnimator(viewForAnimate, startScaleX, startScaleY, endScaleX, endScaleY)
     }
 
     private fun getCapturedScaleX(transitionValues: TransitionValues?, fallbackValue: Float): Float {
@@ -112,12 +139,14 @@ internal class Scale(
             PropertyValuesHolder.ofFloat(View.SCALE_X, startScaleX, endScaleX),
             PropertyValuesHolder.ofFloat(View.SCALE_Y, startScaleY, endScaleY)
         ).apply {
-            addListener(ScaleAnimatorListener(view))
+            addListener(ScaleAnimatorListener(view, view.scaleX, view.scaleY))
         }
     }
 
     private inner class ScaleAnimatorListener(
-        private val view: View
+        private val view: View,
+        private val nonTransitionScaleX: Float,
+        private val nonTransitionScaleY: Float
     ) : AnimatorListenerAdapter() {
 
         private var isPivotSet = false
@@ -132,6 +161,9 @@ internal class Scale(
         }
 
         override fun onAnimationEnd(animation: Animator) {
+            view.scaleX = nonTransitionScaleX
+            view.scaleY = nonTransitionScaleY
+
             if (isPivotSet) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     view.resetPivot()
@@ -145,7 +177,7 @@ internal class Scale(
     }
 
     private companion object {
-        private const val PROPNAME_SCREEN_POSITION = "yandex:slide:screenPosition"
+        private const val PROPNAME_SCREEN_POSITION = "yandex:scale:screenPosition"
 
         const val NO_SCALE = 1.0f
         const val PIVOT_CENTER = 0.5f

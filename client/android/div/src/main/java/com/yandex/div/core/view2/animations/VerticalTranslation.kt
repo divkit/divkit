@@ -17,6 +17,20 @@ internal class VerticalTranslation(
     private val translatedValue: Float = DEFAULT_TRANSLATED_VALUE,
     private val stableValue: Float = DEFAULT_STABLE_VALUE
 ) : OutlineAwareVisibility() {
+    override fun captureStartValues(transitionValues: TransitionValues) {
+        super.captureStartValues(transitionValues)
+        capturePosition(transitionValues) { position ->
+            transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        }
+    }
+
+    override fun captureEndValues(transitionValues: TransitionValues) {
+        super.captureEndValues(transitionValues)
+        capturePosition(transitionValues) { position ->
+            transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        }
+    }
+
     override fun onAppear(
         sceneRoot: ViewGroup,
         view: View,
@@ -28,8 +42,7 @@ internal class VerticalTranslation(
         val startY = translatedValue * height
         val endY = stableValue * height
 
-        val position = IntArray(2)
-        endValues.view.getLocationOnScreen(position)
+        val position = endValues.values[PROPNAME_SCREEN_POSITION] as IntArray
 
         val overlayView = createOrGetVisualCopy(view, sceneRoot, this, position)
 
@@ -57,14 +70,16 @@ internal class VerticalTranslation(
     override fun onDisappear(
         sceneRoot: ViewGroup,
         view: View,
-        startValues: TransitionValues?,
+        startValues: TransitionValues,
         endValues: TransitionValues?
     ): Animator {
         val startY = stableValue
         val endY = translatedValue * view.height.toFloat()
 
+        val viewForAnimate = getViewForAnimate(view, sceneRoot, startValues, PROPNAME_SCREEN_POSITION)
+
         return ObjectAnimator.ofPropertyValuesHolder(
-            view,
+            viewForAnimate,
             PropertyValuesHolder.ofFloat(
                 View.TRANSLATION_Y,
                 startY,
@@ -118,5 +133,7 @@ internal class VerticalTranslation(
     companion object {
         const val DEFAULT_TRANSLATED_VALUE = -1f
         const val DEFAULT_STABLE_VALUE = 0f
+
+        private const val PROPNAME_SCREEN_POSITION = "yandex:verticalTranslation:screenPosition"
     }
 }

@@ -11,6 +11,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivValidator
 import com.yandex.div.core.view2.DivViewCreator
+import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.view.pooling.PseudoViewPool
@@ -47,6 +48,7 @@ open class DivBinderTest {
         on { logId } doReturn "id"
         on { config } doReturn mock()
         on { expressionResolver } doReturn expressionResolver
+        on { divTransitionHandler } doReturn DivTransitionHandler(mock)
     }
     private val divExtensionController = DivExtensionController(emptyList())
 

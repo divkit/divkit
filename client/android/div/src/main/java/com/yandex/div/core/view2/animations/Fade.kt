@@ -12,25 +12,37 @@ import androidx.transition.TransitionValues
 internal class Fade(
     @FloatRange(from = 0.0, to = 1.0) val alpha: Float = 0.0f
 ) : OutlineAwareVisibility() {
-
     override fun captureStartValues(transitionValues: TransitionValues) {
         super.captureStartValues(transitionValues)
-        captureValues(transitionValues)
+        when (mode) {
+            MODE_IN -> {
+                transitionValues.values[PROPNAME_ALPHA] = alpha
+            }
+            MODE_OUT -> {
+                transitionValues.values[PROPNAME_ALPHA] = transitionValues.view.alpha
+            }
+        }
+
+        capturePosition(transitionValues) { position ->
+            transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        }
     }
 
     override fun captureEndValues(transitionValues: TransitionValues) {
         super.captureEndValues(transitionValues)
-        captureValues(transitionValues)
-    }
 
-    private fun captureValues(transitionValues: TransitionValues) {
-        val view = transitionValues.view
+        when (mode) {
+            MODE_IN -> {
+                transitionValues.values[PROPNAME_ALPHA] = transitionValues.view.alpha
+            }
+            MODE_OUT -> {
+                transitionValues.values[PROPNAME_ALPHA] = alpha
+            }
+        }
 
-        transitionValues.values[PROPNAME_ALPHA] = view.alpha
-
-        val position = IntArray(2)
-        view.getLocationOnScreen(position)
-        transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        capturePosition(transitionValues) { position ->
+            transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        }
     }
 
     override fun onAppear(
@@ -54,14 +66,17 @@ internal class Fade(
     override fun onDisappear(
         sceneRoot: ViewGroup,
         view: View?,
-        startValues: TransitionValues?,
+        startValues: TransitionValues,
         endValues: TransitionValues?
     ): Animator? {
         if (view == null) return null
 
         val startAlpha = getCapturedAlpha(startValues, 1.0f)
         val endAlpha = getCapturedAlpha(endValues, alpha)
-        return createFadeAnimator(view, startAlpha, endAlpha)
+
+        val viewForAnimate = getViewForAnimate(view, sceneRoot, startValues, PROPNAME_SCREEN_POSITION)
+
+        return createFadeAnimator(viewForAnimate, startAlpha, endAlpha)
     }
 
     private fun getCapturedAlpha(transitionValues: TransitionValues?, fallbackValue: Float): Float {
@@ -75,12 +90,13 @@ internal class Fade(
 
         view.visibility = View.INVISIBLE
         return ObjectAnimator.ofFloat(view, View.ALPHA, startAlpha, endAlpha).apply {
-            addListener(FadeAnimatorListener(view))
+            addListener(FadeAnimatorListener(view, view.alpha))
         }
     }
 
     private class FadeAnimatorListener(
-        private val view: View
+        private val view: View,
+        private val nonTransitionAlpha: Float
     ) : AnimatorListenerAdapter() {
 
         private var isLayerTypeChanged = false
@@ -94,6 +110,8 @@ internal class Fade(
         }
 
         override fun onAnimationEnd(animation: Animator) {
+            view.alpha = nonTransitionAlpha
+
             if (isLayerTypeChanged) {
                 view.setLayerType(View.LAYER_TYPE_NONE, null)
             }
@@ -102,8 +120,8 @@ internal class Fade(
     }
 
     private companion object {
-        private const val PROPNAME_ALPHA: String = "yandex:fade:alpha"
+        private const val PROPNAME_SCREEN_POSITION = "yandex:fade:screenPosition"
 
-        private const val PROPNAME_SCREEN_POSITION = "yandex:slide:screenPosition"
+        private const val PROPNAME_ALPHA: String = "yandex:fade:alpha"
     }
 }

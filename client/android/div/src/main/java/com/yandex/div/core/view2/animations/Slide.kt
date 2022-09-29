@@ -27,19 +27,16 @@ internal class Slide(
 
     override fun captureStartValues(transitionValues: TransitionValues) {
         super.captureStartValues(transitionValues)
-        captureValues(transitionValues)
+        capturePosition(transitionValues) { position ->
+            transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        }
     }
 
     override fun captureEndValues(transitionValues: TransitionValues) {
         super.captureEndValues(transitionValues)
-        captureValues(transitionValues)
-    }
-
-    private fun captureValues(transitionValues: TransitionValues) {
-        val view = transitionValues.view
-        val position = IntArray(2)
-        view.getLocationOnScreen(position)
-        transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        capturePosition(transitionValues) { position ->
+            transitionValues.values[PROPNAME_SCREEN_POSITION] = position
+        }
     }
 
     override fun onAppear(
@@ -80,8 +77,11 @@ internal class Slide(
         val startY = view.translationY
         val endX: Float = slideCalculator.getGoneX(sceneRoot, view, distance)
         val endY: Float = slideCalculator.getGoneY(sceneRoot, view, distance)
+
+        val viewForAnimate = getViewForAnimate(view, sceneRoot, startValues, PROPNAME_SCREEN_POSITION)
+
         return createTranslateAnimator(
-            view, this, startValues,
+            viewForAnimate, this, startValues,
             position[0], position[1],
             startX, startY,
             endX, endY,

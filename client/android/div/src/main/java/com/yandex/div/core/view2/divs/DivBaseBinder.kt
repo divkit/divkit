@@ -11,6 +11,9 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
+import androidx.transition.Transition
+import androidx.transition.TransitionManager
+import androidx.transition.Visibility
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
@@ -24,6 +27,8 @@ import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
+import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
+import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.drawables.LinearGradientDrawable
 import com.yandex.div.drawables.ScalingDrawable
@@ -471,24 +476,74 @@ internal class DivBaseBinder @Inject constructor(
         subscriber: ExpressionSubscriber,
         divView: Div2View,
     ) {
-        applyVisibility(div.visibility.evaluate(resolver), divView)
         subscriber.addSubscription(div.visibility.observeAndGet(resolver) { visibility ->
             if (visibility != DivVisibility.GONE) {
                 applyTransform(div, resolver)
             }
-            applyVisibility(visibility, divView)
+            applyVisibility(div, visibility, divView, resolver)
         })
     }
 
     private fun View.applyVisibility(
+        div: DivBase,
         divVisibility: DivVisibility,
         divView: Div2View,
+        resolver: ExpressionResolver
     ) {
-        visibility = when(divVisibility) {
+        val divTransitionHandler = divView.divTransitionHandler
+
+        val newVisibility = when (divVisibility) {
             DivVisibility.VISIBLE -> View.VISIBLE
-            DivVisibility.GONE -> View.GONE
             DivVisibility.INVISIBLE -> View.INVISIBLE
+            DivVisibility.GONE -> View.GONE
         }
+
+        var transition: Transition? = null
+
+        var visibility = visibility
+
+        if (div.transitionTriggers?.allowsTransitionsOnVisibilityChange() != false) {
+            divTransitionHandler
+                .getLastChange(this)
+                ?.let { visibility = it.new }
+
+            val transitionBuilder = divView.viewComponent.transitionBuilder
+
+            transition = when {
+                (visibility == View.INVISIBLE || visibility == View.GONE)
+                    && newVisibility == View.VISIBLE -> {
+                    transitionBuilder.createAndroidTransition(
+                        div.transitionIn,
+                        Visibility.MODE_IN,
+                        resolver
+                    )
+                }
+                (newVisibility == View.INVISIBLE || newVisibility == View.GONE)
+                    && visibility == View.VISIBLE -> {
+                    transitionBuilder.createAndroidTransition(
+                        div.transitionOut,
+                        Visibility.MODE_OUT,
+                        resolver
+                    )
+                }
+                else -> null
+            }
+
+            transition?.addTarget(this)
+        }
+
+        if (transition != null) {
+            TransitionManager.endTransitions(divView)
+
+            divTransitionHandler.putTransition(
+                transition,
+                this,
+                ChangeType.Visibility(newVisibility)
+            )
+        } else {
+            this.visibility = newVisibility
+        }
+
         divView.trackChildrenVisibility()
     }
 

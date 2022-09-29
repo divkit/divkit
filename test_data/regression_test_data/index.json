@@ -1245,6 +1245,43 @@
     {
       "title": "Custom card",
       "file": "custom-card.json"
+    },
+    {
+      "title": "Visibility transition trigger",
+      "file": "animations/transition/transition_triggers_visibility_change.json",
+      "steps": [
+        "Жмем 'Visible', затем 'Invisible'",
+        "Жмем 'Visible', затем 'Gone'",
+        "Жмем 'Invisible', затем 'Visible'",
+        "Жмем 'Invisible', затем 'Gone'",
+        "Жмем 'Gone', затем 'Visible'",
+        "Жмем 'Gone', затем 'Invisible'"
+      ],
+      "expected_results": [
+        "1, 2 - имеют анимацию, 3 - нет, 4 - служит якорем для определения размеров предыдущих дивов",
+        "Переход из 'Visible' в 'Invisible' - с анимацией",
+        "Переход из 'Visible' в 'Gone', - постепенный в 'Invisible', затем 4 сдвигается вверх",
+        "Переход из 'Invisible' в 'Visible' - с анимацией",
+        "Переход из 'Invisible' в 'Gone' - моментально пропадает с экрана, затем 4 сдвигается вверх",
+        "Переход из 'Gone' в 'Visible' - 4 сдвигается вниз, затем анимация появления",
+        "Переход из 'Gone' в 'Invisible' - 4 сдвигается вверх"
+      ]
+    },
+    {
+      "title": "Complex transition triggers",
+      "steps": [
+        "Жмем 'Change data'",
+        "Жмем 'Go back'",
+        "Жмем 'To state two'",
+        "Жмем 'Visible' / 'Invisible' / 'Gone'"
+      ],
+      "expected_results": [
+        "Элемент на голубом фоне должен плавно менять прозрачность до 0 (фон пропадает сразу)",
+        "...плавно менять прозрачность до 1 (фон появляется сразу)",
+        "...плавно менять прозрачность до 0, на его месте плавно появляется 'State two'/'State one'",
+        "...плавно менять прозрачность в зависимости от выбранного действия, при 'Gone' все пропадает сразу"
+      ],
+      "file": "animations/transition/transition_triggers_complex_src.json"
     }
   ]
 }

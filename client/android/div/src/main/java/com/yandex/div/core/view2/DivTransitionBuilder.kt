@@ -124,6 +124,16 @@ internal class DivTransitionBuilder @Inject constructor(
         return transitions
     }
 
+   fun createAndroidTransition(
+       divAppearanceTransition: DivAppearanceTransition?,
+       @Visibility.Mode transitionMode: Int,
+       resolver: ExpressionResolver
+   ): Transition? {
+       if (divAppearanceTransition == null) return null
+
+       return divAppearanceTransition.toAndroidTransition(transitionMode, resolver)
+   }
+
     private fun DivAppearanceTransition.toAndroidTransition(@Visibility.Mode transitionMode: Int,
                                                             resolver: ExpressionResolver): Transition {
         return when (this) {

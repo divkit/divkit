@@ -1,7 +1,9 @@
 package com.yandex.div.core.view2.divs
 
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivEdgeInsets
@@ -31,8 +33,11 @@ class DivBaseBinderTest {
 
     private val baseBinder = DivBaseBinder(mock(), mock(), mock(), mock(), mock())
     private val expressionResolver = mock<ExpressionResolver>()
+    private val viewComponent = mock<Div2ViewComponent>()
     private val divView = mock<Div2View> {
         on { expressionResolver } doReturn expressionResolver
+        on { divTransitionHandler } doReturn DivTransitionHandler(mock)
+        on { viewComponent } doReturn viewComponent
     }
 
     @Test
