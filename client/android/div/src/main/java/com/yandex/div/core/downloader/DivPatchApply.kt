@@ -12,8 +12,7 @@ import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 
 internal class DivPatchApply(private val patch: DivPatchMap) {
-
-    var appliedPatchesCount = 0
+    private val appliedPatches = mutableSetOf<String>()
 
      fun applyPatch(states: List<DivData.State>, resolver: ExpressionResolver): List<DivData.State>? {
         val list: MutableList<DivData.State> = ArrayList(states.size)
@@ -21,7 +20,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
             val newState = DivData.State(oldState.div.applyPatch(resolver)[0], oldState.stateId)
             list.add(newState)
         }
-        if (patch.mode.evaluate(resolver) == DivPatch.Mode.TRANSACTIONAL && appliedPatchesCount != patch.patches.size) {
+        if (patch.mode.evaluate(resolver) == DivPatch.Mode.TRANSACTIONAL && appliedPatches.size != patch.patches.size) {
             return null
         }
         return list
@@ -58,7 +57,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         val divId = value().id ?: return listOf(this)
         val patchList = patch.patches[divId]
         if (patchList != null) {
-            appliedPatchesCount++
+            appliedPatches += divId
             return patchList
         }
         return listOf(this)
@@ -277,10 +276,10 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                         state.swipeOutActions,
                     )
                     newStates.add(patchedState)
-                    appliedPatchesCount++
+                    appliedPatches += divId
                 } else if (patchList != null && patchList.isEmpty()) {
                     // just delete this state
-                    appliedPatchesCount++
+                    appliedPatches += divId
                 } else {
                     newStates.add(state)
                 }
