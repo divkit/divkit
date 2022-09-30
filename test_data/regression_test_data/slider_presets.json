@@ -733,7 +733,7 @@
                   "state_id": "tick_marks_2_thumbs",
                   "div": {
                     "type": "custom_slider_with_tick_marks",
-                    "max_value": "@{toInteger(max_value}",
+                    "max_value": "@{toInteger(max_value)}",
                     "thumb_value_variable": "sixth_thumb_value",
                     "thumb_secondary_value_variable": "sixth_thumb_secondary_value"
                   }
