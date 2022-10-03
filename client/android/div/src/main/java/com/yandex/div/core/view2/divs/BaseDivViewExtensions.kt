@@ -17,9 +17,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
-import com.yandex.div.R
+import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.expression.suppressExpressionErrors
-import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.util.Log
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
@@ -30,9 +29,31 @@ import com.yandex.div.drawables.ScalingDrawable
 import com.yandex.div.font.DivTypefaceProvider
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.dpToPx
-import com.yandex.div.util.spToPx
 import com.yandex.div.util.fontHeight
-import com.yandex.div2.*
+import com.yandex.div.util.spToPx
+import com.yandex.div2.Div
+import com.yandex.div2.DivAction
+import com.yandex.div2.DivAlignmentHorizontal
+import com.yandex.div2.DivAlignmentVertical
+import com.yandex.div2.DivAnimation
+import com.yandex.div2.DivBase
+import com.yandex.div2.DivBorder
+import com.yandex.div2.DivDimension
+import com.yandex.div2.DivEdgeInsets
+import com.yandex.div2.DivFixedSize
+import com.yandex.div2.DivFontWeight
+import com.yandex.div2.DivImageScale
+import com.yandex.div2.DivPivot
+import com.yandex.div2.DivPivotFixed
+import com.yandex.div2.DivPivotPercentage
+import com.yandex.div2.DivRadialGradientCenter
+import com.yandex.div2.DivRadialGradientFixedCenter
+import com.yandex.div2.DivRadialGradientRadius
+import com.yandex.div2.DivRadialGradientRelativeCenter
+import com.yandex.div2.DivRadialGradientRelativeRadius
+import com.yandex.div2.DivSize
+import com.yandex.div2.DivSizeUnit
+import com.yandex.div2.DivVisibilityAction
 import kotlin.math.roundToInt
 
 fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
@@ -101,12 +122,24 @@ fun DivFixedSize.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): In
     }
 }
 
-fun DivFixedSize.toPxF(metrics: DisplayMetrics, resolver: ExpressionResolver): Float {
-    return when (unit.evaluate(resolver)) {
-        DivSizeUnit.DP -> value.evaluate(resolver).dpToPxF(metrics)
-        DivSizeUnit.SP -> value.evaluate(resolver).spToPxF(metrics)
-        DivSizeUnit.PX -> value.evaluate(resolver).toFloat()
-    }
+fun DivFixedSize.toPxF(
+    metrics: DisplayMetrics,
+    resolver: ExpressionResolver
+): Float = evaluatePxFloatByUnit(value.evaluate(resolver), unit.evaluate(resolver), metrics)
+
+fun DivRadialGradientFixedCenter.toPxF(
+    metrics: DisplayMetrics,
+    resolver: ExpressionResolver
+): Float = evaluatePxFloatByUnit(value.evaluate(resolver), unit.evaluate(resolver), metrics)
+
+private fun evaluatePxFloatByUnit(
+    value: Int,
+    unit: DivSizeUnit,
+    metrics: DisplayMetrics
+): Float = when (unit) {
+    DivSizeUnit.DP -> value.dpToPxF(metrics)
+    DivSizeUnit.SP -> value.spToPxF(metrics)
+    DivSizeUnit.PX -> value.toFloat()
 }
 
 fun DivDimension.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
@@ -258,6 +291,38 @@ fun DivAlignmentVertical.toVerticalAlignment(): ScalingDrawable.AlignmentVertica
         DivAlignmentVertical.CENTER -> ScalingDrawable.AlignmentVertical.CENTER
         DivAlignmentVertical.BOTTOM -> ScalingDrawable.AlignmentVertical.BOTTOM
         else -> ScalingDrawable.AlignmentVertical.TOP
+    }
+}
+
+fun DivRadialGradientRadius.observe(
+    resolver: ExpressionResolver,
+    subscriber: ExpressionSubscriber,
+    callback: (Any) -> Unit
+) {
+    when (val divRadius = this.value()) {
+        is DivFixedSize -> {
+            subscriber.addSubscription(divRadius.unit.observe(resolver, callback))
+            subscriber.addSubscription(divRadius.value.observe(resolver, callback))
+        }
+        is DivRadialGradientRelativeRadius -> {
+            subscriber.addSubscription(divRadius.value.observe(resolver, callback))
+        }
+    }
+}
+
+fun DivRadialGradientCenter.observe(
+    resolver: ExpressionResolver,
+    subscriber: ExpressionSubscriber,
+    callback: (Any) -> Unit
+) {
+    when (val divCenter = this.value()) {
+        is DivRadialGradientFixedCenter -> {
+            subscriber.addSubscription(divCenter.unit.observe(resolver, callback))
+            subscriber.addSubscription(divCenter.value.observe(resolver, callback))
+        }
+        is DivRadialGradientRelativeCenter -> {
+            subscriber.addSubscription(divCenter.value.observe(resolver, callback))
+        }
     }
 }
 

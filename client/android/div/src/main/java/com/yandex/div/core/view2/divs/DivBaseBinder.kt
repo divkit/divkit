@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.StateListDrawable
 import android.net.Uri
+import android.util.DisplayMetrics
 import android.util.StateSet
 import android.view.View
 import android.view.ViewGroup.LayoutParams
@@ -31,6 +32,7 @@ import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.drawables.LinearGradientDrawable
+import com.yandex.div.drawables.RadialGradientDrawable
 import com.yandex.div.drawables.ScalingDrawable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -46,11 +48,11 @@ import com.yandex.div2.DivFocus
 import com.yandex.div2.DivImageBackground
 import com.yandex.div2.DivImageScale
 import com.yandex.div2.DivLinearGradient
+import com.yandex.div2.DivRadialGradient
 import com.yandex.div2.DivRadialGradientCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivSize
-import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivVisibility
 import javax.inject.Inject
@@ -288,6 +290,7 @@ internal class DivBaseBinder @Inject constructor(
         subscriber: ExpressionSubscriber,
         additionalLayer: Drawable? = null
     ) {
+        val metrics = resources.displayMetrics
         val updateBackground = { drawable: Drawable? ->
             val drawables = mutableListOf<Drawable>()
 
@@ -312,7 +315,9 @@ internal class DivBaseBinder @Inject constructor(
 
         if (focusedBackgroundList == null) {
             val callback = { _: Any ->
-                val newDefaultDivBackground = defaultBackgroundList?.map { it.toBackgroundState(resolver) } ?: emptyList()
+                val newDefaultDivBackground =
+                    defaultBackgroundList?.map { it.toBackgroundState(metrics, resolver) }
+                        ?: emptyList()
 
                 val currentDefaultDivBackground = getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
                 val currentAdditionalLayer = getTag(R.id.div_additional_background_layer_tag) as? Drawable?
@@ -334,12 +339,18 @@ internal class DivBaseBinder @Inject constructor(
             addBackgroundSubscriptions(defaultBackgroundList, resolver, subscriber, callback)
         } else {
             val callback = { _: Any ->
-                val newDefaultDivBackground = defaultBackgroundList?.map { it.toBackgroundState(resolver) } ?: emptyList()
-                val newFocusedDivBackground =  focusedBackgroundList.map { it.toBackgroundState(resolver) }
+                val newDefaultDivBackground =
+                    defaultBackgroundList?.map { it.toBackgroundState(metrics, resolver) }
+                        ?: emptyList()
+                val newFocusedDivBackground =
+                    focusedBackgroundList.map { it.toBackgroundState(metrics, resolver) }
 
-                val currentDefaultDivBackground = getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
-                val currentFocusedDivBackground = getTag(R.id.div_focused_background_list_tag) as? List<DivBackgroundState>
-                val currentAdditionalLayer = getTag(R.id.div_additional_background_layer_tag) as? Drawable?
+                val currentDefaultDivBackground =
+                    getTag(R.id.div_default_background_list_tag) as? List<DivBackgroundState>
+                val currentFocusedDivBackground =
+                    getTag(R.id.div_focused_background_list_tag) as? List<DivBackgroundState>
+                val currentAdditionalLayer =
+                    getTag(R.id.div_additional_background_layer_tag) as? Drawable?
 
                 val backgroundChanged = (currentDefaultDivBackground != newDefaultDivBackground) ||
                         (currentFocusedDivBackground != newFocusedDivBackground) ||
@@ -458,6 +469,13 @@ internal class DivBaseBinder @Inject constructor(
                     subscriber.addSubscription(divBackground.colors.observe(resolver, callback))
                 }
 
+                is DivRadialGradient -> {
+                    divBackground.centerX.observe(resolver, subscriber, callback)
+                    divBackground.centerY.observe(resolver, subscriber, callback)
+                    divBackground.radius.observe(resolver, subscriber, callback)
+                    subscriber.addSubscription(divBackground.colors.observe(resolver, callback))
+                }
+
                 is DivImageBackground -> {
                     subscriber.addSubscription(divBackground.alpha.observe(resolver, callback))
                     subscriber.addSubscription(divBackground.imageUrl.observe(resolver, callback))
@@ -557,52 +575,55 @@ internal class DivBaseBinder @Inject constructor(
         }?.let { subscriber.addSubscription(it) }
     }
 
-    private fun DivBackground.toBackgroundState(resolver: ExpressionResolver): DivBackgroundState {
-        return when (this) {
-            is DivBackground.LinearGradient -> DivBackgroundState.LinearGradient(
-                value.angle.evaluate(resolver),
-                value.colors.evaluate(resolver),
-            )
-            is DivBackground.RadialGradient -> {
-                fun DivRadialGradientCenter.toBackgroundState() = when (this) {
-                    is DivRadialGradientCenter.Fixed -> DivBackgroundState.RadialGradient.Center.Fixed(
-                        value.value.evaluate(resolver),
-                        value.unit.evaluate(resolver)
-                    )
-                    is DivRadialGradientCenter.Relative -> DivBackgroundState.RadialGradient.Center.Relative(
-                        value.value.evaluate(resolver)
-                    )
-                }
+    private fun DivBackground.toBackgroundState(
+        metrics: DisplayMetrics,
+        resolver: ExpressionResolver
+    ): DivBackgroundState = when (this) {
+        is DivBackground.LinearGradient -> DivBackgroundState.LinearGradient(
+            value.angle.evaluate(resolver),
+            value.colors.evaluate(resolver),
+        )
+        is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
+            value.centerX.toBackgroundState(metrics, resolver),
+            value.centerY.toBackgroundState(metrics, resolver),
+            value.colors.evaluate(resolver),
+            value.radius.toBackgroundState(metrics, resolver)
+        )
+        is DivBackground.Image -> DivBackgroundState.Image(
+            value.alpha.evaluate(resolver),
+            value.contentAlignmentHorizontal.evaluate(resolver),
+            value.contentAlignmentVertical.evaluate(resolver),
+            value.imageUrl.evaluate(resolver),
+            value.preloadRequired.evaluate(resolver),
+            value.scale.evaluate(resolver)
+        )
+        is DivBackground.Solid -> DivBackgroundState.Solid(
+            value.color.evaluate(resolver)
+        )
+    }
 
-                fun DivRadialGradientRadius.toBackgroundState() = when (this) {
-                    is DivRadialGradientRadius.FixedSize -> DivBackgroundState.RadialGradient.Radius.Fixed(
-                        value.value.evaluate(resolver),
-                        value.unit.evaluate(resolver)
-                    )
-                    is DivRadialGradientRadius.Relative -> DivBackgroundState.RadialGradient.Radius.Relative(
-                        value.value.evaluate(resolver)
-                    )
-                }
+    private fun DivRadialGradientCenter.toBackgroundState(
+        metrics: DisplayMetrics,
+        resolver: ExpressionResolver
+    ) = when (this) {
+        is DivRadialGradientCenter.Fixed -> DivBackgroundState.RadialGradient.Center.Fixed(
+            value.toPxF(metrics, resolver)
+        )
+        is DivRadialGradientCenter.Relative -> DivBackgroundState.RadialGradient.Center.Relative(
+            value.value.evaluate(resolver).toFloat()
+        )
+    }
 
-                DivBackgroundState.RadialGradient(
-                    value.centerX.toBackgroundState(),
-                    value.centerY.toBackgroundState(),
-                    value.colors.evaluate(resolver),
-                    value.radius.toBackgroundState()
-                )
-            }
-            is DivBackground.Image -> DivBackgroundState.Image(
-                value.alpha.evaluate(resolver),
-                value.contentAlignmentHorizontal.evaluate(resolver),
-                value.contentAlignmentVertical.evaluate(resolver),
-                value.imageUrl.evaluate(resolver),
-                value.preloadRequired.evaluate(resolver),
-                value.scale.evaluate(resolver)
-            )
-            is DivBackground.Solid -> DivBackgroundState.Solid(
-                value.color.evaluate(resolver)
-            )
-        }
+    private fun DivRadialGradientRadius.toBackgroundState(
+        metrics: DisplayMetrics,
+        resolver: ExpressionResolver
+    ) = when (this) {
+        is DivRadialGradientRadius.FixedSize -> DivBackgroundState.RadialGradient.Radius.Fixed(
+            value.toPxF(metrics, resolver)
+        )
+        is DivRadialGradientRadius.Relative -> DivBackgroundState.RadialGradient.Radius.Relative(
+            value.value.evaluate(resolver)
+        )
     }
 
     private fun List<DivBackgroundState>?.toDrawable(
@@ -615,7 +636,7 @@ internal class DivBaseBinder @Inject constructor(
         this ?: return additionalLayer?.let { LayerDrawable(arrayOf(it)) }
 
         val listDrawable = mapNotNull {
-            divBackgroundToDrawable(it, divView, view)?.mutate()
+            divBackgroundToDrawable(it, divView, view).mutate()
         }.toMutableList()
         additionalLayer?.let { listDrawable.add(it) }
 
@@ -626,19 +647,39 @@ internal class DivBaseBinder @Inject constructor(
         background: DivBackgroundState,
         divView: Div2View,
         target: View
-    ): Drawable? {
-        return when (background) {
-            is DivBackgroundState.Image -> getDivImageBackground(background, divView, target)
-            is DivBackgroundState.LinearGradient -> {
-                LinearGradientDrawable(
-                    background.angle.toFloat(),
-                    background.colors.toIntArray()
-                )
-            }
-            is DivBackgroundState.RadialGradient -> null
-            is DivBackgroundState.Solid -> ColorDrawable(background.color)
-        }
+    ): Drawable = when (background) {
+        is DivBackgroundState.Image -> getDivImageBackground(background, divView, target)
+        is DivBackgroundState.Solid -> ColorDrawable(background.color)
+        is DivBackgroundState.LinearGradient -> LinearGradientDrawable(
+            background.angle.toFloat(),
+            background.colors.toIntArray()
+        )
+        is DivBackgroundState.RadialGradient -> RadialGradientDrawable(
+            radius = background.radius.toRadialGradientDrawableRadius(),
+            centerX = background.centerX.toRadialGradientDrawableCenter(),
+            centerY = background.centerY.toRadialGradientDrawableCenter(),
+            colors = background.colors.toIntArray()
+        )
     }
+
+    private fun DivBackgroundState.RadialGradient.Radius.toRadialGradientDrawableRadius() =
+        when (this) {
+            is DivBackgroundState.RadialGradient.Radius.Fixed -> RadialGradientDrawable.Radius.Fixed(valuePx)
+            is DivBackgroundState.RadialGradient.Radius.Relative -> RadialGradientDrawable.Radius.Relative(
+                when (value) {
+                    DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_CORNER
+                    DivRadialGradientRelativeRadius.Value.NEAREST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_CORNER
+                    DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_SIDE
+                    DivRadialGradientRelativeRadius.Value.NEAREST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_SIDE
+                }
+            )
+        }
+
+    private fun DivBackgroundState.RadialGradient.Center.toRadialGradientDrawableCenter() =
+        when (this) {
+            is DivBackgroundState.RadialGradient.Center.Fixed -> RadialGradientDrawable.Center.Fixed(valuePx)
+            is DivBackgroundState.RadialGradient.Center.Relative -> RadialGradientDrawable.Center.Relative(value)
+        }
 
     private fun getDivImageBackground(
         background: DivBackgroundState.Image,
@@ -689,25 +730,13 @@ internal class DivBaseBinder @Inject constructor(
             val radius: Radius
         ) : DivBackgroundState() {
             sealed class Center {
-                data class Relative(
-                    val value: Double
-                ) : Center()
-
-                data class Fixed(
-                    val value: Int,
-                    val unit: DivSizeUnit
-                ) : Center()
+                data class Relative(val value: Float) : Center()
+                data class Fixed(val valuePx: Float) : Center()
             }
 
             sealed class Radius {
-                data class Relative(
-                    val value: DivRadialGradientRelativeRadius.Value
-                ) : Radius()
-
-                data class Fixed(
-                    val value: Int,
-                    val unit: DivSizeUnit
-                ) : Radius()
+                data class Relative(val value: DivRadialGradientRelativeRadius.Value) : Radius()
+                data class Fixed(val valuePx: Float) : Radius()
             }
         }
 

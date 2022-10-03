@@ -15,6 +15,7 @@ import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.UnderlineSpan
+import android.util.DisplayMetrics
 import android.view.View
 import android.widget.TextView
 import androidx.core.text.getSpans
@@ -33,6 +34,7 @@ import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.drawables.LinearGradientDrawable
+import com.yandex.div.drawables.RadialGradientDrawable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.spannable.BitmapImageSpan
@@ -45,10 +47,17 @@ import com.yandex.div.view.EllipsizedTextView
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
+import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFontFamily
 import com.yandex.div2.DivFontWeight
-import com.yandex.div2.DivLinearGradient
 import com.yandex.div2.DivLineStyle
+import com.yandex.div2.DivLinearGradient
+import com.yandex.div2.DivRadialGradient
+import com.yandex.div2.DivRadialGradientCenter
+import com.yandex.div2.DivRadialGradientFixedCenter
+import com.yandex.div2.DivRadialGradientRadius
+import com.yandex.div2.DivRadialGradientRelativeCenter
+import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
 import javax.inject.Inject
@@ -305,26 +314,69 @@ internal class DivTextBinder @Inject constructor(
             is DivLinearGradient -> {
                 addSubscription(gradient.angle.observe(resolver, callback))
             }
+            is DivRadialGradient -> {
+                gradient.centerX.observe(resolver, this, callback)
+                gradient.centerY.observe(resolver, this, callback)
+                gradient.radius.observe(resolver, this, callback)
+            }
         }
-
     }
 
-    private fun TextView.applyTextGradientColor(resolver: ExpressionResolver, gradient: DivTextGradient?) {
+    private fun TextView.applyTextGradientColor(
+        resolver: ExpressionResolver,
+        gradient: DivTextGradient?
+    ) {
+        val metrics = resources.displayMetrics
         doOnLayout {
-            if (gradient == null) {
-                this.paint.shader = null
-                return@doOnLayout
-            }
-            this.paint.shader = when(val textGradient = gradient.value()) {
+            this.paint.shader = when (val gradientBackground = gradient?.value()) {
                 is DivLinearGradient -> LinearGradientDrawable.createLinearGradient(
-                    textGradient.angle.evaluate(resolver).toFloat(),
-                    textGradient.colors.evaluate(resolver).toIntArray(),
-                    width,
-                    height
+                    angle = gradientBackground.angle.evaluate(resolver).toFloat(),
+                    colors = gradientBackground.colors.evaluate(resolver).toIntArray(),
+                    width = width,
+                    height = height
+                )
+                is DivRadialGradient -> RadialGradientDrawable.createRadialGradient(
+                    radius = gradientBackground.radius.toRadialGradientDrawableRadius(metrics, resolver)!!,
+                    centerX = gradientBackground.centerX.toRadialGradientDrawableCenter(metrics, resolver)!!,
+                    centerY = gradientBackground.centerY.toRadialGradientDrawableCenter(metrics, resolver)!!,
+                    colors = gradientBackground.colors.evaluate(resolver).toIntArray(),
+                    width = width,
+                    height = height
                 )
                 else -> null
             }
         }
+    }
+
+    private fun DivRadialGradientRadius.toRadialGradientDrawableRadius(
+        metrics: DisplayMetrics,
+        resolver: ExpressionResolver
+    ) = when (val radius = this.value()) {
+        is DivFixedSize -> RadialGradientDrawable.Radius.Fixed(
+            radius.value.evaluate(resolver).dpToPxF(metrics)
+        )
+        is DivRadialGradientRelativeRadius -> RadialGradientDrawable.Radius.Relative(
+            when (radius.value.evaluate(resolver)) {
+                DivRadialGradientRelativeRadius.Value.FARTHEST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_CORNER
+                DivRadialGradientRelativeRadius.Value.NEAREST_CORNER -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_CORNER
+                DivRadialGradientRelativeRadius.Value.FARTHEST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.FARTHEST_SIDE
+                DivRadialGradientRelativeRadius.Value.NEAREST_SIDE -> RadialGradientDrawable.Radius.Relative.Type.NEAREST_SIDE
+            }
+        )
+        else -> null
+    }
+
+    private fun DivRadialGradientCenter.toRadialGradientDrawableCenter(
+        metrics: DisplayMetrics,
+        resolver: ExpressionResolver
+    ) = when (val center = this.value()) {
+        is DivRadialGradientFixedCenter -> RadialGradientDrawable.Center.Fixed(
+            center.value.evaluate(resolver).dpToPxF(metrics)
+        )
+        is DivRadialGradientRelativeCenter -> RadialGradientDrawable.Center.Relative(
+            center.value.evaluate(resolver).toFloat()
+        )
+        else -> null
     }
 
     private fun DivLineHeightTextView.observeText(
