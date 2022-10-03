@@ -25,6 +25,24 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             }
         }
 
+    @WrapAlignment
+    var alignmentHorizontal: Int = WrapAlignment.START
+        set(value) {
+            if (field != value) {
+                field = value
+                requestLayout()
+            }
+        }
+
+    @WrapAlignment
+    var alignmentVertical: Int = WrapAlignment.START
+        set(value) {
+            if (field != value) {
+                field = value
+                requestLayout()
+            }
+        }
+
     private var isRowDirection = true
 
     private val lines: MutableList<WrapLine> = mutableListOf()
@@ -40,9 +58,9 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         calculateLines(widthMeasureSpec, heightMeasureSpec)
 
         if (isRowDirection) {
-            determineCrossSize(heightMeasureSpec, paddingTop + paddingBottom)
+            determineCrossSize(heightMeasureSpec, alignmentVertical, paddingTop + paddingBottom)
         } else {
-            determineCrossSize(widthMeasureSpec, paddingLeft + paddingRight)
+            determineCrossSize(widthMeasureSpec, alignmentHorizontal, paddingLeft + paddingRight)
         }
 
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
@@ -161,9 +179,41 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
     private fun isWrapRequired(mode: Int, maxSize: Int, currentLength: Int, childLength: Int) =
             mode != MeasureSpec.UNSPECIFIED && maxSize < currentLength + childLength
 
-    private fun determineCrossSize(measureSpec: Int, paddingAlongCrossAxis: Int) {
-        if (MeasureSpec.getMode(measureSpec) == MeasureSpec.EXACTLY && lines.size == 1) {
-            lines[0].crossSize = MeasureSpec.getSize(measureSpec) - paddingAlongCrossAxis
+    private fun determineCrossSize(
+            measureSpec: Int,
+            @WrapAlignment crossAlignment: Int,
+            paddingAlongCrossAxis: Int
+    ) {
+        if (lines.size == 0) {
+            return
+        }
+
+        if (MeasureSpec.getMode(measureSpec) != MeasureSpec.EXACTLY) {
+            return
+        }
+
+        val size = MeasureSpec.getSize(measureSpec)
+        val totalCrossSize: Int = sumOfCrossSize + paddingAlongCrossAxis
+        if (lines.size == 1) {
+            lines[0].crossSize = size - paddingAlongCrossAxis
+            return
+        }
+
+        when (crossAlignment) {
+            WrapAlignment.END -> {
+                val spaceTop = size - totalCrossSize
+                val spaceLine = WrapLine()
+                spaceLine.crossSize = spaceTop
+                lines.add(0, spaceLine)
+            }
+            WrapAlignment.CENTER -> {
+                val spaceAboveAndBottom = (size - totalCrossSize) / 2
+                val spaceLine = WrapLine()
+                spaceLine.crossSize = spaceAboveAndBottom
+                lines.add(0, spaceLine)
+                lines.add(spaceLine)
+            }
+            else -> Unit
         }
     }
 
@@ -206,8 +256,22 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         var childLeft: Int
         var childRight: Int
         lines.forEach { line ->
-            childLeft = paddingLeft
-            childRight = width - paddingRight
+            when (alignmentHorizontal) {
+                WrapAlignment.START -> {
+                    childLeft = paddingLeft
+                    childRight = width - paddingRight
+                }
+                WrapAlignment.END -> {
+                    childLeft = width - line.mainSize + paddingRight
+                    childRight = line.mainSize - paddingLeft
+                }
+                WrapAlignment.CENTER -> {
+                    childLeft = paddingLeft + (width - line.mainSize) / 2
+                    childRight = width - paddingRight - (width - line.mainSize) / 2
+                }
+                else -> throw java.lang.IllegalStateException(
+                        "Invalid alignmentHorizontal is set: $alignmentHorizontal")
+            }
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
@@ -217,17 +281,24 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
                 val lp = child.layoutParams as LayoutParams
                 childLeft += lp.leftMargin
                 childRight -= lp.rightMargin
-                child.layout(
-                        childLeft,
-                        childTop + lp.topMargin,
-                        childLeft + child.measuredWidth,
-                        childTop + child.measuredHeight + lp.topMargin
-                )
+                val currentTop = childTop + getTopOffsetForHorizontalLayout(child, line.crossSize)
+                child.layout(childLeft, currentTop,
+                        childLeft + child.measuredWidth, currentTop + child.measuredHeight)
                 childLeft += child.measuredWidth + lp.rightMargin
                 childRight -= child.measuredWidth + lp.leftMargin
             }
             childTop += line.crossSize
             childBottom -= line.crossSize
+        }
+    }
+
+    private fun getTopOffsetForHorizontalLayout(view: View, lineHeight: Int): Int {
+        val lp = view.layoutParams as LayoutParams
+        return when (lp.childAlignment) {
+            WrapAlignment.END -> lineHeight - view.measuredHeight - lp.bottomMargin
+            WrapAlignment.CENTER ->
+                (lineHeight - view.measuredHeight + lp.topMargin - lp.bottomMargin) / 2
+            else -> lp.topMargin
         }
     }
 
@@ -239,8 +310,22 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         var childTop: Int
         var childBottom: Int
         lines.forEach { line ->
-            childTop = paddingTop
-            childBottom = height - paddingBottom
+            when (alignmentVertical) {
+                WrapAlignment.START -> {
+                    childTop = paddingTop
+                    childBottom = height - paddingBottom
+                }
+                WrapAlignment.END -> {
+                    childTop = height - line.mainSize + paddingBottom
+                    childBottom = line.mainSize - paddingTop
+                }
+                WrapAlignment.CENTER -> {
+                    childTop = paddingTop + (height - line.mainSize) / 2
+                    childBottom = height - paddingBottom - (height - line.mainSize) / 2
+                }
+                else -> throw java.lang.IllegalStateException(
+                        "Invalid alignmentVertical is set: $alignmentVertical")
+            }
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
@@ -250,18 +335,31 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
                 val lp = child.layoutParams as LayoutParams
                 childTop += lp.topMargin
                 childBottom -= lp.bottomMargin
-                child.layout(
-                        childLeft + lp.leftMargin,
-                        childTop,
-                        childLeft + child.measuredWidth + lp.leftMargin,
-                        childTop + child.measuredHeight
-                )
+                val currentLeft = childLeft + getLeftOffsetForVerticalLayout(child, line.crossSize)
+                child.layout(currentLeft, childTop,
+                        currentLeft + child.measuredWidth, childTop + child.measuredHeight)
                 childTop += child.measuredHeight + lp.bottomMargin
                 childBottom -= child.measuredHeight + lp.topMargin
             }
             childLeft += line.crossSize
             childRight -= line.crossSize
         }
+    }
+
+    private fun getLeftOffsetForVerticalLayout(view: View, lineWidth: Int): Int {
+        val lp = view.layoutParams as LayoutParams
+        return when (lp.childAlignment) {
+            WrapAlignment.END -> lineWidth - view.measuredWidth - lp.rightMargin
+            WrapAlignment.CENTER ->
+                (lineWidth - view.measuredWidth + lp.leftMargin - lp.rightMargin) / 2
+            else -> lp.leftMargin
+        }
+    }
+
+    private val LayoutParams.childAlignment get() = when {
+        alignSelf != WrapAlignment.AUTO -> alignSelf
+        isRowDirection -> alignmentVertical
+        else -> alignmentHorizontal
     }
 
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
@@ -276,6 +374,12 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             }
 
     internal class LayoutParams : MarginLayoutParams {
+        var alignSelf = WrapAlignment.AUTO
+
+        constructor(source: LayoutParams): super(source) {
+            alignSelf = source.alignSelf
+        }
+
         constructor(source: ViewGroup.LayoutParams?) : super(source)
         constructor(width: Int, height: Int) : super(ViewGroup.LayoutParams(width, height))
         constructor(source: MarginLayoutParams?) : super(source)

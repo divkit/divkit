@@ -146,6 +146,14 @@ internal class DivContainerBinder @Inject constructor(
                     if (div.isHorizontal(resolver)) WrapDirection.ROW else WrapDirection.COLUMN
         })
 
+        subscriber.addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
+            view.alignmentHorizontal = it.toWrapAlignment()
+        })
+
+        subscriber.addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
+            view.alignmentVertical = it.toWrapAlignment()
+        })
+
         view.div = div
     }
 
@@ -161,7 +169,7 @@ internal class DivContainerBinder @Inject constructor(
             val alignmentVertical = childDivValue.alignmentVertical ?: div.contentAlignmentVertical
 
             childView.applyAlignment(alignmentHorizontal.evaluate(resolver),
-                alignmentVertical.evaluate(resolver))
+                alignmentVertical.evaluate(resolver), div.orientation.evaluate(resolver))
 
             if (div.isVertical(resolver) && childDivValue.height is DivSize.MatchParent) {
                 childView.applyWeight(childDivValue.height.value() as DivMatchParentSize, resolver)

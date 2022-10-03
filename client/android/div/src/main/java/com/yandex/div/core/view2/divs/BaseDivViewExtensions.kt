@@ -25,6 +25,8 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectImageView
 import com.yandex.div.core.widget.GridContainer
+import com.yandex.div.core.widget.wraplayout.WrapAlignment
+import com.yandex.div.core.widget.wraplayout.WrapLayout
 import com.yandex.div.drawables.ScalingDrawable
 import com.yandex.div.font.DivTypefaceProvider
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -38,6 +40,7 @@ import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivAnimation
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivBorder
+import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDimension
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFixedSize
@@ -105,12 +108,11 @@ fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
 }
 
 fun DivSize?.toLayoutParamsSize(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
-    if (this == null) return ViewGroup.LayoutParams.WRAP_CONTENT
-
-    when (this) {
-        is DivSize.MatchParent -> return ViewGroup.LayoutParams.MATCH_PARENT
-        is DivSize.WrapContent -> return ViewGroup.LayoutParams.WRAP_CONTENT
-        is DivSize.Fixed -> return value.toPx(metrics, resolver)
+    return when (this) {
+        null -> ViewGroup.LayoutParams.WRAP_CONTENT
+        is DivSize.MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
+        is DivSize.WrapContent -> ViewGroup.LayoutParams.WRAP_CONTENT
+        is DivSize.Fixed -> value.toPx(metrics, resolver)
     }
 }
 
@@ -203,8 +205,41 @@ fun View.applyAlpha(alpha: Double) {
     this.alpha = alpha.toFloat()
 }
 
-fun View.applyAlignment(horizontal: DivAlignmentHorizontal?, vertical: DivAlignmentVertical?) =
-    applyGravity(evaluateGravity(horizontal, vertical))
+fun View.applyAlignment(
+        horizontal: DivAlignmentHorizontal?,
+        vertical: DivAlignmentVertical?,
+        orientation: DivContainer.Orientation? = null
+) {
+    (layoutParams as? WrapLayout.LayoutParams)?.let { lp ->
+        lp.alignSelf = evaluateAlignSelf(horizontal, vertical, orientation)
+    } ?: applyGravity(evaluateGravity(horizontal, vertical))
+}
+
+@WrapAlignment
+private fun evaluateAlignSelf(
+        horizontal: DivAlignmentHorizontal?,
+        vertical: DivAlignmentVertical?,
+        orientation: DivContainer.Orientation?
+) = if (orientation == DivContainer.Orientation.HORIZONTAL)
+    vertical.toWrapAlignment(WrapAlignment.AUTO) else horizontal.toWrapAlignment(WrapAlignment.AUTO)
+
+internal fun DivAlignmentHorizontal?.toWrapAlignment(
+        @WrapAlignment default: Int = WrapAlignment.START
+) = when (this) {
+    DivAlignmentHorizontal.LEFT -> WrapAlignment.START
+    DivAlignmentHorizontal.CENTER -> WrapAlignment.CENTER
+    DivAlignmentHorizontal.RIGHT -> WrapAlignment.END
+    else -> default
+}
+
+internal fun DivAlignmentVertical?.toWrapAlignment(
+        @WrapAlignment default: Int = WrapAlignment.START
+) = when (this) {
+    DivAlignmentVertical.TOP -> WrapAlignment.START
+    DivAlignmentVertical.CENTER -> WrapAlignment.CENTER
+    DivAlignmentVertical.BOTTOM -> WrapAlignment.END
+    else -> default
+}
 
 private fun View.applyGravity(newGravity: Int) {
     when(val lp = layoutParams) {
