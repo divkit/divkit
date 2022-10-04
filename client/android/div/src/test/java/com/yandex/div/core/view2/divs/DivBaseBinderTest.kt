@@ -8,6 +8,8 @@ import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivText
+import com.yandex.div2.DivTransitionTrigger
+import com.yandex.div2.DivVisibility
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any
@@ -77,5 +79,44 @@ class DivBaseBinderTest {
 
         verify(view).setPadding(any(), any(), any(), any())
         verify(view, atLeastOnce()).requestLayout()
+    }
+
+    @Test
+    fun `not clear animation when view is visible`() {
+        val div = DivText(
+                text = "text".asExpression(),
+                visibility = DivVisibility.VISIBLE.asExpression(),
+                transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
+        )
+
+        baseBinder.bindView(view, div, null, divView)
+
+        verify(view, never()).clearAnimation()
+    }
+
+    @Test
+    fun `clear animation when view is invisible`() {
+        val div = DivText(
+                text = "text".asExpression(),
+                visibility = DivVisibility.INVISIBLE.asExpression(),
+                transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
+        )
+
+        baseBinder.bindView(view, div, null, divView)
+
+        verify(view).clearAnimation()
+    }
+
+    @Test
+    fun `clear animation when view is gone`() {
+        val div = DivText(
+                text = "text".asExpression(),
+                visibility = DivVisibility.GONE.asExpression(),
+                transitionTriggers = listOf(DivTransitionTrigger.STATE_CHANGE)
+        )
+
+        baseBinder.bindView(view, div, null, divView)
+
+        verify(view).clearAnimation()
     }
 }

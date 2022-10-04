@@ -516,6 +516,10 @@ internal class DivBaseBinder @Inject constructor(
             DivVisibility.GONE -> View.GONE
         }
 
+        if (divVisibility != DivVisibility.VISIBLE) {
+            clearAnimation()
+        }
+
         var transition: Transition? = null
 
         var visibility = visibility
