@@ -15,7 +15,6 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.DivUtils
-import com.yandex.test.screenshot.ScreenshotTestState
 import java.io.File
 import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.wrapContent
@@ -39,9 +38,6 @@ class DivScreenshotActivity : AppCompatActivity() {
     private val templatesAssetName: String
         get() = cardAssetName.substringBeforeLast(File.separator) + "${File.separator}templates.json"
 
-    private val artifactsDir: String
-        get() = intent.extras?.getString(EXTRA_ARTIFACTS_DIR) ?: "null"
-
     private val broadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
@@ -54,28 +50,23 @@ class DivScreenshotActivity : AppCompatActivity() {
         addAction(REBIND_DIV_WITH_SAME_DATA_ACTION)
     }
 
+    lateinit var divView: Div2View
+        private set
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        ScreenshotTestState.notifyTestStarted(cardAssetName)
         divContext = DivUtils.createDivContext(this)
         super.onCreate(savedInstanceState)
 
-        val divJson = assetReader.read(cardAssetName)
-        val divView: Div2View = when {
-            divJson.has("steps") -> { InteractiveTestStepsPerformer(
-                artifactsDir,
-                divJson,
-                cardAssetName,
-                divContext,
-                this,
-            ).view }
-
-            divJson.has("card") -> {
-                val templateJson = divJson.optJSONObject("templates")
-                val cardJson = divJson.getJSONObject("card")
-                Div2ViewFactory(divContext, templateJson).createView(cardJson)
-            }
-
-            else -> Div2ViewFactory(divContext, assetReader.tryRead(templatesAssetName)).createView(divJson)
+        var divJson = getTestCaseJson()
+        if (divJson.has("div_data")) {
+            divJson = divJson.getJSONObject("div_data")
+        }
+        divView = if (divJson.has("card")) {
+            val templateJson = divJson.optJSONObject("templates")
+            val cardJson = divJson.getJSONObject("card")
+            Div2ViewFactory(divContext, templateJson).createView(cardJson)
+        } else {
+            Div2ViewFactory(divContext, assetReader.tryRead(templatesAssetName)).createView(divJson)
         }
 
         divView.apply {
@@ -86,8 +77,9 @@ class DivScreenshotActivity : AppCompatActivity() {
             hideCursor()
         }
         setContentView(divView)
-        ScreenshotTestState.notifyTestCompleted(cardAssetName)
     }
+
+    fun getTestCaseJson() = assetReader.read(cardAssetName)
 
     private fun ViewGroup.hideCursor() {
         for (child in children) {
@@ -121,6 +113,5 @@ class DivScreenshotActivity : AppCompatActivity() {
     companion object {
         const val REBIND_DIV_WITH_SAME_DATA_ACTION = "DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA"
         const val EXTRA_DIV_ASSET_NAME = "DivScreenshotActivity.EXTRA_DIV_ASSET_NAME"
-        const val EXTRA_ARTIFACTS_DIR = "DivScreenshotActivity.EXTRA_SUITE_NAME"
     }
 }

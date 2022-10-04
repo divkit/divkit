@@ -1,4 +1,4 @@
-package com.yandex.div
+package com.yandex.div.rule
 
 import com.yandex.divkit.demo.div.DemoDivImageLoader
 import com.yandex.test.idling.SimpleIdlingResource

@@ -1,5 +1,6 @@
 package com.yandex.div
 
+import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
 import com.yandex.div.steps.divInput
 import com.yandex.divkit.demo.R
