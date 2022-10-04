@@ -53,6 +53,7 @@ function createInteractiveTestCase(testCase, testPath) {
                 }
             }
 
+            await this.browser.pause(300);
             await this.browser.assertView(`step${i}`, '#root');
         }
     });
