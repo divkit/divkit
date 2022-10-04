@@ -1,3 +1,16 @@
+## 10.0.0
+## Android Client:
+Additions and changes:
+* Implemented alignments in `WrapLayout`
+* Implemented radial gradient
+* Implemented warnings on slider ticks overlap each other
+* Implemented visibility transition support
+* Allow patch multiple view with same id
+
+## iOS Client:
+Fixes:
+* Fixed Lottie extension params parsing
+
 ## 9.0.0 (September 27, 2022)
 ## JSON Schema:
 * Clarification of wrap container documentation
