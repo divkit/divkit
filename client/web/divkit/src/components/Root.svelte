@@ -327,15 +327,15 @@
         if (!stateId) {
             throw new Error('Missing state id');
         }
+        let state: StateInterface = stateInterface;
         let parts = stateId.split('/');
-        const firstId = parts.shift() || '';
-        parts = [firstId, 'root', '0', ...parts];
-        if (parts.length < 5 || parts.length % 2 !== 1) {
+
+        parts = ['root', ...parts];
+        if (parts.length < 2 || parts.length % 2 !== 0) {
             throw new Error('Incorrect state id format');
         }
 
-        let state: StateInterface = stateInterface;
-        for (let i = 1; i < parts.length; i += 2) {
+        for (let i = 0; i < parts.length; i += 2) {
             const divId = parts[i];
             const selectedStateId = parts[i + 1];
 
@@ -643,6 +643,9 @@
                 childStateMap.set(id, block);
             }
         },
+        unregisterInstance(id: string) {
+            childStateMap?.delete(id);
+        },
         runVisibilityTransition(
             _json: DivBaseData,
             _templateContext: TemplateContext,
@@ -849,9 +852,8 @@
         });
     }
 
-    let currentStateIndex = 0;
-    let currentDiv: DivBase | undefined = json?.card?.states?.[currentStateIndex]?.div;
-    let rootStateDiv: DivStateData | undefined = currentDiv && {
+    const states = json.card?.states;
+    const rootStateDiv: DivStateData | undefined = states ? {
         type: 'state',
         id: 'root',
         width: {
@@ -860,13 +862,11 @@
         height: {
             type: 'match_parent',
         },
-        states: [
-            {
-                state_id: '0',
-                div: currentDiv
-            }
-        ]
-    };
+        states: states.map(state => ({
+            state_id: state.state_id.toString(),
+            div: state.div
+        }))
+    } : undefined;
 
     /**
      * Fix for the :active pseudo-class on iOS

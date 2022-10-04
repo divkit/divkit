@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { setContext, getContext, tick } from 'svelte';
+    import { setContext, getContext, tick, onDestroy } from 'svelte';
 
     import css from './State.module.css';
 
@@ -23,6 +23,7 @@
     export let layoutParams: LayoutParams | undefined = undefined;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
+    const stateCtx = getContext<StateCtxValue>(STATE_CTX);
     let animationRoot: HTMLElement | undefined;
     let transitionChangeBoxes: Map<string, DOMRect> = new Map();
     let childrenIds = new Set<string>();
@@ -140,7 +141,6 @@
         hasError = true;
         rootCtx.logError(wrapError(new Error('Missing "id" prop for div "state"')));
     } else {
-        const stateCtx = getContext<StateCtxValue>(STATE_CTX);
         stateCtx.registerInstance(stateId, {
             async setState(stateId: string) {
                 if (selectedId === stateId) {
@@ -284,6 +284,9 @@
                 } else {
                     childStateMap.set(id, block);
                 }
+            },
+            unregisterInstance(id: string) {
+                childStateMap?.delete(id);
             },
             runVisibilityTransition(
                 json: DivBaseData,
@@ -435,6 +438,12 @@
             item.resolvePromise();
         }
     }
+
+    onDestroy(() => {
+        if (stateId) {
+            stateCtx.unregisterInstance(stateId);
+        }
+    });
 </script>
 
 {#if !hasError}
