@@ -11,6 +11,9 @@ private let exclusions: [String] = [
   "div-slider/tick-mark-style/tick-mark-inactive-style-properties.json",
   "div-slider/track-style/track-active-style-properties.json",
   "div-slider/track-style/track-inactive-style-properties.json",
+  "div-gallery/select-elements.json",
+  "div-pager/select-elements.json",
+  "div-tabs/select-elements.json",
 
   "div-text/text-properties.json",
 ]
