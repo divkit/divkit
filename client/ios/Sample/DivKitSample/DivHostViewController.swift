@@ -2,9 +2,8 @@ import UIKit
 
 import DivKit
 import LayoutKit
-import Serialization
 
-class DivHostViewController: UIViewController {
+final class DivHostViewController: UIViewController {
   private var divHostView: DivHostView!
   private var components: DivKitComponents!
 
@@ -18,7 +17,7 @@ class DivHostViewController: UIViewController {
     
     if let cards = try? DivJson.loadCards() {
       view.addSubview(divHostView)
-      divHostView.setCards(cards)
+      divHostView.setData(cards)
     }
   }
 
@@ -33,6 +32,7 @@ extension DivHostViewController: UIActionEventPerforming {
     switch event.payload {
     case let .divAction(params):
       components.handleActions(params: params)
+      divHostView.reloadItem(cardId: params.cardId)
     case .empty,
          .url,
          .menu,

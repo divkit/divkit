@@ -6,7 +6,7 @@ import LayoutKit
 
 final class DivHostView: UICollectionView {
   private let components: DivKitComponents
-  private var blocks: [Block] = []
+  private var items: [Item] = []
 
   init(components: DivKitComponents) {
     self.components = components
@@ -24,22 +24,46 @@ final class DivHostView: UICollectionView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func setCards(_ cards: [DivData]) {
-    self.blocks = cards.compactMap { card in
-      let context = components.makeContext(
-        cardId: DivCardID(rawValue: card.logId),
-        cachedImageHolders: []
-      )
-      return try? card.makeBlock(context: context)
+  func setData(_ items: [DivData]) {
+    self.items = items.compactMap { makeItem(data: $0) }
+  }
+  
+  func reloadItem(cardId: String) {
+    guard let index = items.firstIndex(where: { $0.data.logId == cardId }) else {
+      return
     }
+    
+    let item = items[index]
+    items[index] = makeItem(
+      data: item.data,
+      cachedImageHolders: item.block.getImageHolders()
+    )
+    
+    reloadItems(at: [IndexPath(item: index, section: 0)])
   }
 
+  private func makeItem(
+    data: DivData,
+    cachedImageHolders: [ImageHolder] = []
+  ) -> Item {
+    let context = components.makeContext(
+      cardId: DivCardID(rawValue: data.logId),
+      cachedImageHolders: cachedImageHolders
+    )
+    return Item(data: data, block: try! data.makeBlock(context: context))
+  }
+  
+  private struct Item {
+    let data: DivData
+    let block: Block
+  }
+  
   private class Cell: UICollectionViewCell {
     static let reuseIdentifier = "cell"
 
     struct State {
-      var block: Block
-      var view: BlockView
+      let block: Block
+      let view: BlockView
     }
 
     var state: State?
@@ -66,21 +90,31 @@ final class DivHostView: UICollectionView {
 }
 
 extension DivHostView: UICollectionViewDataSource {
-  func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-    return blocks.count
+  func collectionView(
+    _ collectionView: UICollectionView,
+    numberOfItemsInSection section: Int
+  ) -> Int {
+    return items.count
   }
 
-  func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+  func collectionView(
+    _ collectionView: UICollectionView,
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseIdentifier, for: indexPath) as! Cell
-    let block = blocks[indexPath.row]
+    let block = items[indexPath.row].block
     cell.setBlock(block)
     return cell
   }
 }
 
 extension DivHostView: UICollectionViewDelegateFlowLayout {
-  func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-    let block = blocks[indexPath.row]
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    sizeForItemAt indexPath: IndexPath
+  ) -> CGSize {
+    let block = items[indexPath.row].block
     let height = block.heightOfVerticallyNonResizableBlock(forWidth: bounds.width)
     return CGSize(width: bounds.width, height: height)
   }
