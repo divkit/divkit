@@ -21,9 +21,17 @@ extension DivBackground {
           )
         )
       )
-    case .divRadialGradient:
-      DivKitLogger.error("DivRadialGradient not supported")
-      return nil
+    case let .divRadialGradient(gradient):
+      return .gradient(
+        .radial(
+          Gradient.Radial(
+            colors: gradient.resolveColors(expressionResolver) ?? [],
+            end: gradient.resolveRadius(expressionResolver),
+            centerX: gradient.resolveCenterX(expressionResolver),
+            centerY: gradient.resolveCenterY(expressionResolver)
+          )
+        )
+      )
     case let .divImageBackground(imageBackground):
       let image = BackgroundImage(
         imageHolder: imageHolderFactory.make(
@@ -72,3 +80,66 @@ extension Gradient.Linear.Direction {
 }
 
 extension DivImageBackground: DivImageContentMode {}
+
+extension Gradient.Radial {
+  fileprivate init(
+    colors: [Color],
+    end: Gradient.Radial.Radius,
+    centerX: Gradient.Radial.CenterPoint,
+    centerY: Gradient.Radial.CenterPoint
+  ) {
+    var intermediateColors = colors
+    let centerColor = intermediateColors.removeFirst()
+    let outerColor = intermediateColors.removeLast()
+    let step = 1 / CGFloat(intermediateColors.count + 1)
+    let points = intermediateColors.enumerated().map {
+      (color: $0.element, location: CGFloat($0.offset + 1) * step)
+    }
+    self.init(
+      centerX: centerX,
+      centerY: centerY,
+      end: end,
+      centerColor: centerColor,
+      intermediatePoints: points,
+      outerColor: outerColor
+    )
+  }
+}
+
+extension DivRadialGradient {
+  fileprivate func resolveRadius(_ resolver: ExpressionResolver) -> Gradient.Radial.Radius {
+    switch radius {
+    case let .divFixedSize(size):
+      return .absolute(size.resolveValue(resolver) ?? 0)
+    case let .divRadialGradientRelativeRadius(radius):
+      switch radius.resolveValue(resolver) ?? .farthestCorner {
+      case .farthestCorner:
+        return .relativeToBorders(.farthestCorner)
+      case .farthestSide:
+        return .relativeToBorders(.farthestSide)
+      case .nearestCorner:
+        return .relativeToBorders(.nearestCorner)
+      case .nearestSide:
+        return .relativeToBorders(.nearestSide)
+      }
+    }
+  }
+
+  fileprivate func resolveCenterX(_ resolver: ExpressionResolver) -> Gradient.Radial.CenterPoint {
+    switch (centerX) {
+    case let (.divRadialGradientRelativeCenter(x)):
+      return .relative(x.resolveValue(resolver) ?? 0)
+    case let (.divRadialGradientFixedCenter(x)):
+      return .absolute(x.resolveValue(resolver) ?? 0)
+    }
+  }
+
+  fileprivate func resolveCenterY(_ resolver: ExpressionResolver) -> Gradient.Radial.CenterPoint {
+    switch (centerY) {
+    case let (.divRadialGradientRelativeCenter(y)):
+      return .relative(y.resolveValue(resolver) ?? 0)
+    case let (.divRadialGradientFixedCenter(y)):
+      return .absolute(y.resolveValue(resolver) ?? 0)
+    }
+  }
+}

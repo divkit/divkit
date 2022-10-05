@@ -53,15 +53,38 @@ public enum Gradient: Equatable {
   }
 
   public struct Radial: Equatable {
-    public let center: RelativePoint
-    public let end: RelativePoint
+    public let centerX: CenterPoint
+    public let centerY: CenterPoint
+    public let end: Radius
     public let centerColor: Color
     public let intermediatePoints: [Point]
     public let outerColor: Color
+    public let shape: Shape
 
     public init(
       center: RelativePoint = .mid,
       end: RelativePoint? = nil,
+      centerColor: Color,
+      intermediatePoints: [Point] = [],
+      outerColor: Color? = nil,
+      shape: Shape? = nil
+    ) {
+      let positions = intermediatePoints.map { $0.location }
+      assert(positions == positions.sorted())
+
+      self.centerX = .relative(center.x)
+      self.centerY = .relative(center.y)
+      self.end = .relativeToSize(end ?? RelativeRect.full.radialEndPoint(for: center))
+      self.centerColor = centerColor
+      self.intermediatePoints = intermediatePoints
+      self.outerColor = outerColor ?? centerColor.withAlphaComponent(0)
+      self.shape = shape ?? .ellipse
+    }
+
+    public init(
+      centerX: CenterPoint,
+      centerY: CenterPoint,
+      end: Radius,
       centerColor: Color,
       intermediatePoints: [Point] = [],
       outerColor: Color? = nil
@@ -69,11 +92,36 @@ public enum Gradient: Equatable {
       let positions = intermediatePoints.map { $0.location }
       assert(positions == positions.sorted())
 
-      self.center = center
-      self.end = end ?? RelativeRect.full.radialEndPoint(for: center)
+      self.centerX = centerX
+      self.centerY = centerY
+      self.end = end
       self.centerColor = centerColor
       self.intermediatePoints = intermediatePoints
       self.outerColor = outerColor ?? centerColor.withAlphaComponent(0)
+      self.shape = .circle
+    }
+
+    public enum CenterPoint: Equatable {
+      case relative(CGFloat)
+      case absolute(Int)
+    }
+
+    public enum Radius: Equatable {
+      case relativeToBorders(RelativeToBorder)
+      case relativeToSize(RelativePoint)
+      case absolute(Int)
+
+      public enum RelativeToBorder {
+        case nearestCorner
+        case farthestCorner
+        case nearestSide
+        case farthestSide
+      }
+    }
+
+    public enum Shape {
+      case circle
+      case ellipse
     }
   }
 
@@ -111,7 +159,8 @@ extension Gradient.Linear {
 
 extension Gradient.Radial {
   public static func ==(lhs: Gradient.Radial, rhs: Gradient.Radial) -> Bool {
-    lhs.center == rhs.center
+    lhs.centerX == rhs.centerX
+      && lhs.centerY == rhs.centerY
       && lhs.end == rhs.end
       && lhs.centerColor == rhs.centerColor
       && lhs.intermediatePoints == rhs.intermediatePoints
@@ -152,7 +201,7 @@ extension Gradient.Radial: CustomDebugStringConvertible {
     path.append(centerColor.debugDescription)
     path += intermediatePoints.map { "(\($0.location):\($0.color.debugDescription)" }
     path.append(outerColor.debugDescription)
-    return "Radial c: \(center), \(path.joined(separator: ".."))"
+    return "Radial c: \(centerX), \(centerY), \(path.joined(separator: ".."))"
   }
 }
 
