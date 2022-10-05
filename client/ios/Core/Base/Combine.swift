@@ -14,10 +14,8 @@ public enum Combine {
 }
 
 public struct CombineFailure<T>: Error, CustomDebugStringConvertible {
-  @usableFromInline
   let values: [T]
 
-  @inlinable
   public init(values: [T]) {
     self.values = values
   }

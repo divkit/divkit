@@ -1,5 +1,6 @@
 import Foundation
 
+@frozen
 public enum Expression<T> {
   case value(T)
   case link(ExpressionLink<T>)

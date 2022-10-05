@@ -2,6 +2,7 @@
 
 import BaseUI
 
+@frozen
 public enum Theme: String {
   case dark
   case light

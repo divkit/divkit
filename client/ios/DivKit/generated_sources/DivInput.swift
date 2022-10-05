@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivInput: DivBase {
+  @frozen
   public enum KeyboardType: String, CaseIterable {
     case singleLineText = "single_line_text"
     case multiLineText = "multi_line_text"

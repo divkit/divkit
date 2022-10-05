@@ -2,6 +2,7 @@
 
 import BaseUI
 
+@frozen
 public enum ImagePlaceholder: Equatable, CustomDebugStringConvertible {
   case image(Image)
   case color(Color)

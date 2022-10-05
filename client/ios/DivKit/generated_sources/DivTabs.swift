@@ -33,6 +33,7 @@ public final class DivTabs: DivBase {
   }
 
   public final class TabTitleStyle {
+    @frozen
     public enum AnimationType: String, CaseIterable {
       case slide = "slide"
       case fade = "fade"

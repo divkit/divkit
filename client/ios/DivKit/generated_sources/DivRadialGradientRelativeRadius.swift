@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivRadialGradientRelativeRadius {
+  @frozen
   public enum Value: String, CaseIterable {
     case nearestCorner = "nearest_corner"
     case farthestCorner = "farthest_corner"

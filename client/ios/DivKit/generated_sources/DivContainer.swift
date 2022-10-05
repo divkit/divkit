@@ -6,11 +6,13 @@ import Serialization
 import TemplatesSupport
 
 public final class DivContainer: DivBase {
+  @frozen
   public enum LayoutMode: String, CaseIterable {
     case noWrap = "no_wrap"
     case wrap = "wrap"
   }
 
+  @frozen
   public enum Orientation: String, CaseIterable {
     case vertical = "vertical"
     case horizontal = "horizontal"

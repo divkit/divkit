@@ -3,6 +3,7 @@ import CoreFoundation
 import CommonCore
 import Serialization
 
+@frozen
 public indirect enum Field<T> {
   case value(T)
   case link(Link)

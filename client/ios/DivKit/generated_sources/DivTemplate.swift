@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivTemplate: TemplateValue {
   case divImageTemplate(DivImageTemplate)
   case divGifImageTemplate(DivGifImageTemplate)

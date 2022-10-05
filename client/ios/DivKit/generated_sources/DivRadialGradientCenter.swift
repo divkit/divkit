@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivRadialGradientCenter {
   case divRadialGradientFixedCenter(DivRadialGradientFixedCenter)
   case divRadialGradientRelativeCenter(DivRadialGradientRelativeCenter)

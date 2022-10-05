@@ -17,25 +17,49 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "BaseUI",
-      dependencies: [
-        "BaseTiny",
-      ],
-      path: "Core/BaseUI"
-    ),
-
-    .target(
       name: "Base",
       dependencies: [
         "BaseTiny",
         "BaseUI",
       ],
-      path: "Core/Base"
+      path: "Core/Base",
+      swiftSettings: [
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+          ]
+        )
+      ]
     ),
 
     .target(
       name: "BaseTiny",
-      path: "Core/BaseTiny"
+      path: "Core/BaseTiny",
+      swiftSettings: [
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+          ]
+        )
+      ]
+    ),
+
+    .target(
+      name: "BaseUI",
+      dependencies: [
+        "BaseTiny",
+      ],
+      path: "Core/BaseUI",
+      swiftSettings: [
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+          ]
+        )
+      ]
     ),
 
     .target(
@@ -44,7 +68,15 @@ let package = Package(
         "Base",
         "BaseUI",
       ],
-      path: "Core/CommonCore"
+      path: "Core/CommonCore",
+      swiftSettings: [
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+          ]
+        )
+      ]
     ),
 
     .target(
@@ -52,7 +84,15 @@ let package = Package(
       dependencies: [
         "Base",
       ],
-      path: "Core/Networking"
+      path: "Core/Networking",
+      swiftSettings: [
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+          ]
+        )
+      ]
     ),
 
     .target(
@@ -69,7 +109,13 @@ let package = Package(
         "generator_config.json",
       ],
       swiftSettings: [
-        .unsafeFlags(["-warnings-as-errors"])
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+            "-warnings-as-errors",
+          ]
+        )
       ]
     ),
 
@@ -80,7 +126,13 @@ let package = Package(
       ],
       path: "DivKitExtensions",
       swiftSettings: [
-        .unsafeFlags(["-warnings-as-errors"])
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+            "-warnings-as-errors",
+          ]
+        )
       ]
     ),
 
@@ -92,7 +144,13 @@ let package = Package(
       ],
       path: "LayoutKit/LayoutKit",
       swiftSettings: [
-        .unsafeFlags(["-warnings-as-errors"])
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+            "-warnings-as-errors",
+          ]
+        )
       ]
     ),
 
@@ -103,7 +161,13 @@ let package = Package(
       ],
       path: "LayoutKit/Interface",
       swiftSettings: [
-        .unsafeFlags(["-warnings-as-errors"])
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+            "-warnings-as-errors",
+          ]
+        )
       ]
     ),
 
@@ -114,7 +178,13 @@ let package = Package(
       ],
       path: "Serialization",
       swiftSettings: [
-        .unsafeFlags(["-warnings-as-errors"])
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+            "-warnings-as-errors",
+          ]
+        )
       ]
     ),
 
@@ -126,7 +196,13 @@ let package = Package(
       ],
       path: "TemplatesSupport",
       swiftSettings: [
-        .unsafeFlags(["-warnings-as-errors"])
+        .unsafeFlags(
+          [
+            "-emit-module-interface",
+            "-enable-library-evolution",
+            "-warnings-as-errors",
+          ]
+        )
       ]
     ),
   ]

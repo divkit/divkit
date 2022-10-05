@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivAccessibility {
+  @frozen
   public enum Kind: String, CaseIterable {
     case none = "none"
     case button = "button"
@@ -16,6 +17,7 @@ public final class DivAccessibility {
     case tabBar = "tab_bar"
   }
 
+  @frozen
   public enum Mode: String, CaseIterable {
     case `default` = "default"
     case merge = "merge"

@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivPatch {
+  @frozen
   public enum Mode: String, CaseIterable {
     case transactional = "transactional"
     case partial = "partial"

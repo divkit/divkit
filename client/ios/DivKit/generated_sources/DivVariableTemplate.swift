@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivVariableTemplate: TemplateValue {
   case stringVariableTemplate(StringVariableTemplate)
   case numberVariableTemplate(NumberVariableTemplate)

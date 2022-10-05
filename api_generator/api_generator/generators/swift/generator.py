@@ -275,7 +275,7 @@ class SwiftGenerator(Generator):
         protocol = ''
         if entity_enumeration.mode.is_template:
             protocol = ': TemplateValue'
-        header = f'{access_modifier}enum {name}{protocol} {{'
+        header = f'@frozen\n{access_modifier}enum {name}{protocol} {{'
         result = Text(header)
 
         for name in entity_enumeration.entity_names:
@@ -324,7 +324,7 @@ class SwiftGenerator(Generator):
         if string_enumeration.parent is not None and string_enumeration.parent.generation_mode.is_template:
             prefix = string_enumeration.resolved_declaration_prefix
             return Text(f'{access_modifier}typealias {formatted_name} = {prefix}{formatted_name}')
-        result = Text(f'{access_modifier}enum {formatted_name}: String, CaseIterable {{')
+        result = Text(f'@frozen\n{access_modifier}enum {formatted_name}: String, CaseIterable {{')
         for case in string_enumeration.cases:
             case_name = swift_utils.fixing_keywords(utils.fixing_first_digit(utils.lower_camel_case(case[0])))
             result += f'  case {case_name} = "{case[1]}"'

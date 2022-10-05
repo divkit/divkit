@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivIndicator: DivBase {
+  @frozen
   public enum Animation: String, CaseIterable {
     case scale = "scale"
     case worm = "worm"

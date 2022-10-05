@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 
 public final class EntityWithStringEnumProperty {
+  @frozen
   public enum Property: String, CaseIterable {
     case first = "first"
     case second = "second"

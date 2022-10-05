@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivTooltip {
+  @frozen
   public enum Position: String, CaseIterable {
     case left = "left"
     case topLeft = "top-left"

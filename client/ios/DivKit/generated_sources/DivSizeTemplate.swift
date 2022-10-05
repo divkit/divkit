@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivSizeTemplate: TemplateValue {
   case divFixedSizeTemplate(DivFixedSizeTemplate)
   case divMatchParentSizeTemplate(DivMatchParentSizeTemplate)

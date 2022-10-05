@@ -1,3 +1,5 @@
+.build
+.DerivedData
 .DS_Store
 .gradle
 .idea

@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivChangeTransitionTemplate: TemplateValue {
   case divChangeSetTransitionTemplate(DivChangeSetTransitionTemplate)
   case divChangeBoundsTransitionTemplate(DivChangeBoundsTransitionTemplate)

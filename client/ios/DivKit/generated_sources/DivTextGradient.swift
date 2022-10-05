@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivTextGradient {
   case divLinearGradient(DivLinearGradient)
   case divRadialGradient(DivRadialGradient)

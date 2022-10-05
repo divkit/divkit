@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivTrigger {
+  @frozen
   public enum Mode: String, CaseIterable {
     case onCondition = "on_condition"
     case onVariable = "on_variable"

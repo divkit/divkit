@@ -1,5 +1,6 @@
 import BaseTiny
 
+@frozen
 public enum CommonHandler {
   case action(UserInterfaceAction)
   case block(Action)

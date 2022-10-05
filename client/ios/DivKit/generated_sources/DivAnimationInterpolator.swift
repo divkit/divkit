@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivAnimationInterpolator: String, CaseIterable {
   case linear = "linear"
   case ease = "ease"

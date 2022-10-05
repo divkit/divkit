@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivPagerLayoutModeTemplate: TemplateValue {
   case divPageSizeTemplate(DivPageSizeTemplate)
   case divNeighbourPageSizeTemplate(DivNeighbourPageSizeTemplate)

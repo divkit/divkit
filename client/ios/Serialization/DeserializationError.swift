@@ -2,6 +2,7 @@ import Foundation
 
 import CommonCore
 
+@frozen
 public indirect enum DeserializationError: Error {
   case generic
   case nonUTF8String(string: String)

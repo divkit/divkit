@@ -4,6 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
+@frozen
 public enum Entity {
   case entityWithArray(EntityWithArray)
   case entityWithArrayOfNestedItems(EntityWithArrayOfNestedItems)

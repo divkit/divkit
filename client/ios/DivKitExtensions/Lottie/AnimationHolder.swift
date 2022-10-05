@@ -10,11 +10,13 @@ public protocol AnimatableView: UIView {
   func setSource(_ source: AnimationSourceType)
 }
 
+@frozen
 public enum AnimationRepeatMode {
   case restart
   case reverse
 }
 
+@frozen
 public enum AnimationSourceType: Equatable {
   case json([String: Any])
   case data(Data)

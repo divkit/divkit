@@ -4,6 +4,7 @@ import BaseTiny
 import BaseUI
 
 public struct UserInterfaceAction: Equatable, Codable {
+  @frozen
   public enum Payload: Equatable {
     case empty // means just analytics logging
     case url(URL)
@@ -32,6 +33,7 @@ public struct UserInterfaceAction: Equatable, Codable {
     }
   }
 
+  @frozen
   public enum DivActionSource: String {
     case tap
     case visibility

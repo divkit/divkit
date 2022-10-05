@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivTransitionSelector: String, CaseIterable {
   case none = "none"
   case dataChange = "data_change"

@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivBackgroundTemplate: TemplateValue {
   case divLinearGradientTemplate(DivLinearGradientTemplate)
   case divRadialGradientTemplate(DivRadialGradientTemplate)

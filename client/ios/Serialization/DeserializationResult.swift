@@ -69,6 +69,7 @@ extension NonEmptyArray where C: RangeReplaceableCollection, Element == Either<
   }
 }
 
+@frozen
 public indirect enum DeserializationResult<T> {
   public typealias Error = Either<DeserializationError, FieldError>
   public typealias Errors = NonEmptyArray<Error>

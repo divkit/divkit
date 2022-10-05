@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivDrawableTemplate: TemplateValue {
   case divShapeDrawableTemplate(DivShapeDrawableTemplate)
 

@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivPivot {
   case divPivotFixed(DivPivotFixed)
   case divPivotPercentage(DivPivotPercentage)

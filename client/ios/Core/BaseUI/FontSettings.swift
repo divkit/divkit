@@ -8,6 +8,7 @@ public enum FontFamily: Hashable {
   case YSDisplay
 }
 
+@frozen
 public enum FontWeight: Hashable {
   case light
   case regular

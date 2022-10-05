@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivFontWeight: String, CaseIterable {
   case light = "light"
   case medium = "medium"

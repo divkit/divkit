@@ -9,7 +9,6 @@ public struct Signal<T> {
     addObserver(Observer(action: action))
   }
 
-  @inlinable
   public init(addObserver: @escaping (Observer<T>) -> Disposable) {
     self.addObserver = addObserver
   }

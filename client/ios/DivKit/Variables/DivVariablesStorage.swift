@@ -5,6 +5,7 @@ import CommonCore
 public enum DivVariableNameTag {}
 public typealias DivVariableName = Tagged<DivVariableNameTag, String>
 
+@frozen
 public enum DivVariableValue: Equatable {
   case string(String)
   case number(Double)

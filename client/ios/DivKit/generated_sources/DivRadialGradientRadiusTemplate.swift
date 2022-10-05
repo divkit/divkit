@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivRadialGradientRadiusTemplate: TemplateValue {
   case divFixedSizeTemplate(DivFixedSizeTemplate)
   case divRadialGradientRelativeRadiusTemplate(DivRadialGradientRelativeRadiusTemplate)

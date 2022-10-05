@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivPivotTemplate: TemplateValue {
   case divPivotFixedTemplate(DivPivotFixedTemplate)
   case divPivotPercentageTemplate(DivPivotPercentageTemplate)

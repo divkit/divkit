@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivAppearanceTransitionTemplate: TemplateValue {
   case divAppearanceSetTransitionTemplate(DivAppearanceSetTransitionTemplate)
   case divFadeTransitionTemplate(DivFadeTransitionTemplate)

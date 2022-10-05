@@ -4,6 +4,7 @@ import Foundation
 import CommonCore
 
 public struct GalleryViewState: ElementState, Equatable {
+  @frozen
   public enum Position: Equatable {
     case offset(CGFloat)
     case paging(index: CGFloat)

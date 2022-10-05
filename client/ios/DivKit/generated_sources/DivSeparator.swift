@@ -7,6 +7,7 @@ import TemplatesSupport
 
 public final class DivSeparator: DivBase {
   public final class DelimiterStyle {
+    @frozen
     public enum Orientation: String, CaseIterable {
       case vertical = "vertical"
       case horizontal = "horizontal"

@@ -4,6 +4,7 @@ import CoreGraphics
 
 import BaseUI
 
+@frozen
 public enum Gradient: Equatable {
   public typealias Point = (color: Color, location: CGFloat)
 

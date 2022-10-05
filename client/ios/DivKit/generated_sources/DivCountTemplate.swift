@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivCountTemplate: TemplateValue {
   case divInfinityCountTemplate(DivInfinityCountTemplate)
   case divFixedCountTemplate(DivFixedCountTemplate)

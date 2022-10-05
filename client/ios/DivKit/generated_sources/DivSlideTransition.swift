@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivSlideTransition: DivTransitionBase {
+  @frozen
   public enum Edge: String, CaseIterable {
     case left = "left"
     case top = "top"

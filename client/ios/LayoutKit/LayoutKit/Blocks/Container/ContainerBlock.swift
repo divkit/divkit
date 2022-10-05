@@ -12,6 +12,7 @@ public final class ContainerBlock: BlockWithLayout {
   )
 
   /// Determines direction in which child blocks are laid out in a container
+  @frozen
   public enum LayoutDirection: CaseIterable {
     /// Child blocks are laid out horizontally one after another
     case horizontal

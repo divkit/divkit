@@ -6,17 +6,20 @@ import Serialization
 import TemplatesSupport
 
 public final class DivGallery: DivBase {
+  @frozen
   public enum CrossContentAlignment: String, CaseIterable {
     case start = "start"
     case center = "center"
     case end = "end"
   }
 
+  @frozen
   public enum Orientation: String, CaseIterable {
     case horizontal = "horizontal"
     case vertical = "vertical"
   }
 
+  @frozen
   public enum ScrollMode: String, CaseIterable {
     case paging = "paging"
     case `default` = "default"

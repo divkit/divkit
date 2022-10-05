@@ -3,7 +3,6 @@
 public struct Tagged<Tag, RawValue>: RawRepresentable {
   public var rawValue: RawValue
 
-  @inlinable
   public init(rawValue: RawValue) {
     self.rawValue = rawValue
   }

@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivAnimation {
+  @frozen
   public enum Name: String, CaseIterable {
     case fade = "fade"
     case translate = "translate"

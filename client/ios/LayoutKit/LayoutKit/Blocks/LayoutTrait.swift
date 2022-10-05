@@ -1,6 +1,7 @@
 import CoreGraphics
 import Foundation
 
+@frozen
 public enum LayoutTrait: Equatable {
   /// Corresponding dimension is fixed and equal to associated value
   case fixed(CGFloat)

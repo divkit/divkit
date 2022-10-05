@@ -3,6 +3,7 @@ import CoreGraphics
 import CommonCore
 
 public struct TransitioningAnimation: Equatable {
+  @frozen
   public enum Kind: String, Equatable, CaseIterable {
     case fade
     case scaleXY

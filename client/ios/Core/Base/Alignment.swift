@@ -5,6 +5,7 @@ import CoreGraphics
 import BaseUI
 
 /// Determines postioning of child item inside parent container
+@frozen
 public enum Alignment {
   /// Child items are laid out starting from top/left
   case leading

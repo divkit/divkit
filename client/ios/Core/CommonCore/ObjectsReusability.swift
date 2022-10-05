@@ -2,6 +2,7 @@
 
 import Foundation
 
+@frozen
 public enum ModelReusability<Object> {
   case orphan
   case hasReusableObject(Object)
@@ -11,7 +12,6 @@ public struct ReuseResult<Object, Model> {
   public let modelsReusability: [(Model, ModelReusability<Object>)]
   public let orphanObjects: [Object]
 
-  @inlinable
   public init(modelsReusability: [(Model, ModelReusability<Object>)], orphanObjects: [Object]) {
     self.modelsReusability = modelsReusability
     self.orphanObjects = orphanObjects

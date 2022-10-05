@@ -6,6 +6,7 @@ import Serialization
 import TemplatesSupport
 
 public final class DivPager: DivBase {
+  @frozen
   public enum Orientation: String, CaseIterable {
     case horizontal = "horizontal"
     case vertical = "vertical"

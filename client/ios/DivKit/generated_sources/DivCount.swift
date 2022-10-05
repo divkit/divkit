@@ -5,6 +5,7 @@ import Foundation
 import Serialization
 import TemplatesSupport
 
+@frozen
 public enum DivCount {
   case divInfinityCount(DivInfinityCount)
   case divFixedCount(DivFixedCount)

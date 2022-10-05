@@ -4,6 +4,7 @@ import CommonCore
 import Foundation
 import Serialization
 
+@frozen
 public enum EntityTemplate: TemplateValue {
   case entityWithArrayTemplate(EntityWithArrayTemplate)
   case entityWithArrayOfNestedItemsTemplate(EntityWithArrayOfNestedItemsTemplate)

@@ -11,6 +11,7 @@ public struct GalleryViewModel: Equatable {
     case fixedPaging(pageSize: CGFloat)
   }
 
+  @frozen
   public enum Direction: Equatable {
     case horizontal
     case vertical

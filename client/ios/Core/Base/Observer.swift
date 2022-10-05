@@ -2,7 +2,6 @@
 public struct Observer<T> {
   public let action: (T) -> Void
 
-  @inlinable
   public init(action: @escaping (T) -> Void) {
     self.action = action
   }
