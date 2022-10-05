@@ -3,9 +3,11 @@ package com.yandex.divkit.demo.div.histogram
 import androidx.annotation.VisibleForTesting
 import com.yandex.div.core.histogram.HistogramBridge
 import com.yandex.div.core.util.KLog
+import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.RenderConfiguration
 import com.yandex.divkit.demo.perf.PerfMetricReporter
+import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 import javax.inject.Provider
 
@@ -21,22 +23,22 @@ internal class DemoHistogramConfiguration(
 
 private const val TAG = "DIV_HISTOGRAM_LOGGER"
 
-internal class LoggingHistogramBridge : HistogramBridge {
+class LoggingHistogramBridge : HistogramBridge {
 
-    private val lastSavedHistograms: HashMap<String, String> = HashMap()
+    private val lastSavedHistograms: HashMap<String, TimeHistogram> = HashMap()
 
-    fun getLastSavedHistogram(name: String): String? {
+    fun getLastSavedHistogram(name: String): TimeHistogram? {
         return if (lastSavedHistograms.containsKey(name)) {
             lastSavedHistograms[name]
         } else null
     }
 
     override fun recordBooleanHistogram(name: String, sample: Boolean) {
-        recordHistogram(name, "$sample")
+        recordHistogram(name, sample)
     }
 
     override fun recordEnumeratedHistogram(name: String, sample: Int, boundary: Int) {
-        recordHistogram(name, "$sample")
+        recordHistogram(name, sample.toLong())
     }
 
     override fun recordLinearCountHistogram(
@@ -46,7 +48,7 @@ internal class LoggingHistogramBridge : HistogramBridge {
         max: Int,
         bucketCount: Int
     ) {
-        recordHistogram(name, "$sample")
+        recordHistogram(name, sample.toLong())
     }
 
     override fun recordCountHistogram(
@@ -56,7 +58,7 @@ internal class LoggingHistogramBridge : HistogramBridge {
         max: Int,
         bucketCount: Int
     ) {
-        recordHistogram(name, "$sample")
+        recordHistogram(name, sample.toLong())
         dispatcher?.dispatch(name)
         if (sample <= 0) return
         PerfMetricReporter.reportCountMetric(name, sample.toLong())
@@ -70,19 +72,29 @@ internal class LoggingHistogramBridge : HistogramBridge {
         unit: TimeUnit,
         bucketCount: Long
     ) {
-        recordHistogram(name, "${unit.toMillis(duration)}")
+        recordHistogram(name, unit.toMillis(duration))
         dispatcher?.dispatch(name)
         if (duration <= 0) return
         PerfMetricReporter.reportTimeMetric(name, TimeUnit.MILLISECONDS, unit.toMillis(duration))
     }
 
     override fun recordSparseSlowlyHistogram(name: String, sample: Int) {
-        recordHistogram(name, "$sample")
+        recordHistogram(name, sample.toLong())
     }
 
-    private fun recordHistogram(name: String, sample: String) {
+    private fun recordHistogram(name: String, sample: Long) {
         KLog.d(TAG) { "$name: $sample" }
-        lastSavedHistograms[name.removeSuffix(".Cool").removeSuffix(".Cold").removeSuffix(".Warm")] = sample
+        val histogramName = name.removeSuffix(".Cool").removeSuffix(".Cold").removeSuffix(".Warm")
+        val histogramCallType = name.takeLast(4)
+        lastSavedHistograms[histogramName] = TimeHistogram(
+            histogramName,
+            histogramCallType,
+            sample,
+        )
+    }
+
+    private fun recordHistogram(name: String, sample: Boolean) {
+        KLog.d(TAG) { "$name: $sample" }
     }
 
     companion object {
@@ -90,8 +102,25 @@ internal class LoggingHistogramBridge : HistogramBridge {
         @VisibleForTesting
         var dispatcher: HistogramDispatcher? = null
     }
+
+    class TimeHistogram(
+        val name: String,
+        @HistogramCallType val histogramCallType: String,
+        val value: Long,
+    ) {
+        override fun toString(): String {
+            return "$name.$histogramCallType: $value"
+        }
+
+        fun toJSONObject(): JSONObject {
+            return JSONObject().apply {
+                put("histogram_type", histogramCallType.toLowerCase())
+                put("value", value)
+            }
+        }
+    }
 }
 
-internal fun interface HistogramDispatcher {
+fun interface HistogramDispatcher {
     fun dispatch(histogramName: String)
 }

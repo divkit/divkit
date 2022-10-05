@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
+import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivDataChangeListener
 import com.yandex.div.core.DivStateChangeListener
@@ -39,6 +40,7 @@ import com.yandex.div2.DivData
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2Binding
+import com.yandex.divkit.demo.div.editor.DEMO_ACTIVITY_COMPONENT_NAME
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.screenshot.Div2ViewFactory
 import com.yandex.divkit.demo.screenshot.DivAssetReader
@@ -107,9 +109,10 @@ class Div2Activity : AppCompatActivity() {
 
         div2Adapter = DivEditorAdapter(context)
         val divJson = DivAssetReader(context).read("application/demo.json")
-        val templateJson = divJson.optJSONObject("templates")
-        val cardJson = divJson.getJSONObject("card")
-        val div = Div2ViewFactory(context, templateJson).createView(cardJson)
+        val divData = divJson.asDiv2DataWithTemplates(componentName = DEMO_ACTIVITY_COMPONENT_NAME)
+        val div = Div2View(context).apply {
+            setData(divData, DivDataTag("div2"))
+        }
 
         binding.container.addView(div)
         div.layoutParams.width = MATCH_PARENT

@@ -29,10 +29,10 @@ class DivEditorUi(
     var hasTemplates: Boolean = false
 
     private val debounceOnViewDrawObserver = DebounceOnViewDrawObserver {
+        updateRenderTime()
         activity.takeScreenshot { screenshot: Bitmap ->
             onDiv2ViewDrawnListener?.invoke(screenshot)
         }
-        updateRenderTime()
     }
 
     fun updateState(newState: DivEditorState) {
@@ -62,16 +62,15 @@ class DivEditorUi(
             metadataHost.renderingTimeMessages.clear()
             val histogramBridge = Container.histogramConfiguration.histogramBridge.get()
                 as LoggingHistogramBridge
-            metadataHost.renderingTimeMessages.add("Div render time: \n")
-            histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.Div.Render.Total")?.let {
-                metadataHost.renderingTimeMessages.add("• Div.Render.Total: $it ms")
+            histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_RENDER_TOTAL")?.let {
+                metadataHost.renderingTimeMessages.put(DIV_RENDER_TOTAL, it)
             }
-            histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.Div.Parsing.Data")?.let {
-                metadataHost.renderingTimeMessages.add("• Div.Parsing.Data: $it ms")
+            histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_PARSING_DATA")?.let {
+                metadataHost.renderingTimeMessages.put(DIV_PARSING_DATA, it)
             }
             if (hasTemplates) {
-                histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.Div.Parsing.Templates")?.let {
-                    metadataHost.renderingTimeMessages.add("• Div.Parsing.Templates: $it ms")
+                histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_PARSING_TEMPLATES")?.let {
+                    metadataHost.renderingTimeMessages.put(DIV_PARSING_TEMPLATES, it)
                 }
             }
         } else {

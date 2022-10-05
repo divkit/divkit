@@ -6,7 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.yandex.divkit.demo.databinding.Div2MetadataBottomsheetBinding
-import com.yandex.divkit.regression.data.Scenario
+import com.yandex.divkit.demo.div.editor.DEMO_ACTIVITY_COMPONENT_NAME
+import com.yandex.divkit.demo.div.editor.DIV_PARSING_DATA
+import com.yandex.divkit.demo.div.editor.DIV_PARSING_TEMPLATES
+import com.yandex.divkit.demo.div.editor.DIV_RENDER_TOTAL
+import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
+import java.lang.StringBuilder
 
 class Div2MetadataBottomSheet : BottomSheetDialogFragment() {
 
@@ -26,7 +31,7 @@ class Div2MetadataBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bindMetadata(metadataHost.renderingTimeMessages)
+        bindRenderingTimeMetadata(metadataHost.renderingTimeMessages)
     }
 
     override fun onDestroyView() {
@@ -34,15 +39,21 @@ class Div2MetadataBottomSheet : BottomSheetDialogFragment() {
         _binding = null
     }
 
-    private fun bindMetadata(renderingTimeMessages: List<String>) {
-        binding.renderTimeView.text = renderingTimeMessages.formatList()
-    }
+    private fun bindRenderingTimeMetadata(renderingTimeMessages: Map<String, LoggingHistogramBridge.TimeHistogram>) {
+        val sb = StringBuilder()
+        sb.append("Rendering time:\n\n")
 
-    private fun List<String>.formatList() = joinToString("\n") { it }
+        sb.append("• ", renderingTimeMessages[DIV_RENDER_TOTAL].toString().removePrefix("$DEMO_ACTIVITY_COMPONENT_NAME."), '\n')
+        sb.append("• ", renderingTimeMessages[DIV_PARSING_DATA].toString().removePrefix("$DEMO_ACTIVITY_COMPONENT_NAME."), '\n')
+        if (renderingTimeMessages.containsKey(DIV_PARSING_TEMPLATES)) {
+            sb.append("• ", renderingTimeMessages[DIV_PARSING_TEMPLATES].toString().removePrefix("$DEMO_ACTIVITY_COMPONENT_NAME."))
+        }
+        binding.renderTimeView.text = sb.toString()
+    }
 
 
     interface MetadataHost {
-        val renderingTimeMessages: ArrayList<String>
+        val renderingTimeMessages: HashMap<String, LoggingHistogramBridge.TimeHistogram>
     }
 
     companion object {

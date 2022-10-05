@@ -9,6 +9,7 @@ import androidx.annotation.WorkerThread
 import com.neovisionaries.ws.client.WebSocketException
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.R
+import com.yandex.divkit.demo.div.Div2MetadataBottomSheet
 import com.yandex.divkit.demo.div.editor.DivEditorMessageUtils.addExceptions
 import com.yandex.divkit.demo.div.editor.DivEditorMessageUtils.addMetadata
 import com.yandex.divkit.demo.div.parseToDiv2List
@@ -32,6 +33,10 @@ private const val ERROR_TEXT_PARAM = "text"
 private const val WEB_EDITOR_URL = "divview"
 const val DEMO_ACTIVITY_COMPONENT_NAME = "com.yandex.divkit.demo.div.Div2ScenarioActivity"
 
+const val DIV_RENDER_TOTAL = "Div.Render.Total"
+const val DIV_PARSING_DATA = "Div.Parsing.Data"
+const val DIV_PARSING_TEMPLATES = "Div.Parsing.Templates"
+
 class DivEditorPresenter(
     private val context: Context,
     private val coroutineScope: CoroutineScope,
@@ -41,7 +46,8 @@ class DivEditorPresenter(
     private val httpClient: OkHttpClient,
     private val errorLogger: DivEditorParsingErrorLogger,
     private val logger: DivEditorLogger,
-    private val deviceKey: String?
+    private val deviceKey: String?,
+    private val metadataHost: Div2MetadataBottomSheet.MetadataHost,
 ) {
 
     init {
@@ -78,7 +84,7 @@ class DivEditorPresenter(
                     updateFailedState("Failed to create a socket for uri: $userInput", e)
                 } catch (e: UnknownHostException) {
                     val message = "Failed to load data for uri: $userInput\n" +
-                            context.getString(R.string.unknown_host_error)
+                        context.getString(R.string.unknown_host_error)
                     updateFailedState(message, e)
                 } catch (e: Exception) {
                     updateFailedState("Failed to connect to $userInput", e)
@@ -106,7 +112,7 @@ class DivEditorPresenter(
                     parseDivDataList(JSONObject(data))
                 } catch (e: UnknownHostException) {
                     val message = "Failed to load data for uri: $userInput\n" +
-                            context.getString(R.string.unknown_host_error)
+                        context.getString(R.string.unknown_host_error)
                     updateFailedState(message, e)
                 } catch (e: Exception) {
                     updateFailedState("Failed to load data for uri: $userInput", e)
@@ -198,6 +204,16 @@ class DivEditorPresenter(
                         .addExceptions(errorLogger.parsingExceptions())
                         .put("device_key", deviceKey)
                         .put("screenshot", encodedImage)
+                        .put("rendering_time", JSONObject().apply {
+                            put("div_render_total", metadataHost.renderingTimeMessages
+                                .getValue(DIV_RENDER_TOTAL).toJSONObject())
+                            put("div_parsing_data", metadataHost.renderingTimeMessages
+                                .getValue(DIV_PARSING_DATA).toJSONObject())
+                            if (metadataHost.renderingTimeMessages.containsKey(DIV_PARSING_TEMPLATES)) {
+                                put("div_parsing_templates", metadataHost.renderingTimeMessages
+                                    .getValue(DIV_PARSING_TEMPLATES).toJSONObject())
+                            }
+                        })
                     webController.sendMessage(MessageType.UI_STATE, message)
                 } catch (e: Exception) {
                     logger.logError("failed send uiState", e)

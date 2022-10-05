@@ -22,6 +22,7 @@ import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.util.Assert
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.json.JsonParser
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
@@ -32,6 +33,7 @@ import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2ScenarioBinding
 import com.yandex.divkit.demo.div.editor.*
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
+import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.settings.SettingsActionHandler
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.coroutineScope
@@ -131,7 +133,8 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             Container.httpClient,
             DivEditorParsingErrorLogger(),
             editorLogger,
-            intent.getStringExtra("deviceKey")
+            intent.getStringExtra("deviceKey"),
+            this
         )
         initDiv()
     }
@@ -303,5 +306,5 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         private const val DIV2_VARIABLES_KEY_URL = "variables_url"
     }
 
-    override val renderingTimeMessages: ArrayList<String> = ArrayList()
+    override val renderingTimeMessages: HashMap<String, LoggingHistogramBridge.TimeHistogram> = HashMap()
 }
