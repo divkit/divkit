@@ -4,7 +4,7 @@ import UIKit
 import CommonCore
 
 extension ImageBlock {
-  public static func makeBlockView() -> BlockView { RemoteImageView() }
+  public static func makeBlockView() -> BlockView { RemoteImageViewContainer(contentView: RemoteImageView()) }
 
   public func configureBlockView(
     _ view: BlockView,
@@ -12,29 +12,29 @@ extension ImageBlock {
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {
-    let remoteImageView = view as! RemoteImageView
-    remoteImageView.appearanceAnimation = appearanceAnimation?.cast()
-    if remoteImageView.imageHolder !== imageHolder {
-      remoteImageView.imageHolder = imageHolder
+    let remoteImageViewContainer = view as! RemoteImageViewContainer
+    remoteImageViewContainer.contentView.appearanceAnimation = appearanceAnimation?.cast()
+    if remoteImageViewContainer.imageHolder !== imageHolder {
+      remoteImageViewContainer.imageHolder = imageHolder
     }
-    remoteImageView.imageContentMode = contentMode
-    remoteImageView.imageRedrawingColor = tintColor
-    remoteImageView.isUserInteractionEnabled = false
-    remoteImageView.applyAccessibility(accessibilityElement)
+    remoteImageViewContainer.contentView.imageContentMode = contentMode
+    remoteImageViewContainer.contentView.imageRedrawingColor = tintColor
+    remoteImageViewContainer.contentView.isUserInteractionEnabled = false
+    remoteImageViewContainer.applyAccessibility(accessibilityElement)
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
-    view is RemoteImageView
+    view is RemoteImageViewContainer
   }
 }
 
-extension RemoteImageView: BlockViewProtocol, VisibleBoundsTrackingLeaf {
+extension RemoteImageViewContainer: BlockViewProtocol, VisibleBoundsTrackingLeaf {
   public var effectiveBackgroundColor: UIColor? { nil }
 }
 
 extension TransitioningAnimation {
-  fileprivate func cast() -> RemoteImageView.Animation {
-    RemoteImageView.Animation(
+  fileprivate func cast() -> ImageViewAnimation {
+    ImageViewAnimation(
       duration: duration.value,
       delay: delay.value,
       startAlpha: start,

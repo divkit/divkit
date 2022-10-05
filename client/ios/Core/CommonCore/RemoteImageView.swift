@@ -4,29 +4,7 @@ import UIKit
 
 import Base
 
-public final class RemoteImageView: UIView {
-  public struct Animation {
-    let duration: Double
-    let delay: Double
-    let startAlpha: Double
-    let endAlpha: Double
-    let options: UIView.AnimationOptions
-
-    public init(
-      duration: Double,
-      delay: Double,
-      startAlpha: Double,
-      endAlpha: Double,
-      options: UIView.AnimationOptions
-    ) {
-      self.duration = duration
-      self.delay = delay
-      self.startAlpha = startAlpha
-      self.endAlpha = endAlpha
-      self.options = options
-    }
-  }
-
+public final class RemoteImageView: UIView, RemoteImageViewContentProtocol {
   private let contentsLayer = CALayer()
   private lazy var clipMask: CALayer = {
     let mask = CALayer()
@@ -34,32 +12,7 @@ public final class RemoteImageView: UIView {
     return mask
   }()
 
-  var imageRequest: Cancellable?
-  public var imageHolder: ImageHolder? {
-    didSet {
-      imageRequest?.cancel()
-      setImage(nil, animated: false)
-      switch imageHolder?.placeholder {
-      case let .color(color)?:
-        backgroundColor = color.systemColor
-      case .none, .image?:
-        backgroundColor = nil
-      }
-
-      let newValue = imageHolder
-      imageRequest = imageHolder?.requestImageWithSource { [weak self] result in
-        guard let self = self,
-              newValue === self.imageHolder else {
-          return
-        }
-
-        self.setImage(result?.0, animated: result?.1.shouldAnimate)
-        self.backgroundColor = nil
-      }
-    }
-  }
-
-  public var appearanceAnimation: Animation?
+  public var appearanceAnimation: ImageViewAnimation?
 
   private var templateLayer: CALayer?
 
@@ -94,7 +47,7 @@ public final class RemoteImageView: UIView {
     setNeedsLayout()
   }
 
-  private func setImage(_ image: UIImage?, animated: Bool?) {
+  public func setImage(_ image: UIImage?, animated: Bool?) {
     self.image = image
     if let appearanceAnimation = appearanceAnimation, animated == true {
       self.alpha = appearanceAnimation.startAlpha
@@ -171,10 +124,6 @@ public final class RemoteImageView: UIView {
       layer.mask = nil
     }
     layer.masksToBounds = true
-  }
-
-  deinit {
-    imageRequest?.cancel()
   }
 }
 

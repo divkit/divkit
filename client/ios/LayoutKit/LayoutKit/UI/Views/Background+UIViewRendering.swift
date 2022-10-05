@@ -89,7 +89,7 @@ extension BackgroundView {
       view = ColoredView()
 
     case .image:
-      view = RemoteImageView()
+      view = RemoteImageViewContainer(contentView: RemoteImageView())
 
     case let .gradient(type):
       switch type {
@@ -141,12 +141,12 @@ extension BackgroundView {
       coloredView.backgroundColor = UIColor(patternImage: image)
 
     case let .image(image):
-      let imageView = innerView as! RemoteImageView
-      imageView.clipsToBounds = true
-      imageView.alpha = CGFloat(image.alpha)
-      imageView.imageContentMode = image.contentMode
-      if imageView.imageHolder != image.imageHolder {
-        imageView.imageHolder = image.imageHolder
+      let imageViewContainer = innerView as! RemoteImageViewContainer
+      imageViewContainer.contentView.clipsToBounds = true
+      imageViewContainer.contentView.alpha = CGFloat(image.alpha)
+      imageViewContainer.contentView.imageContentMode = image.contentMode
+      if imageViewContainer.imageHolder != image.imageHolder {
+        imageViewContainer.imageHolder = image.imageHolder
       }
 
     case let .gradient(type):
