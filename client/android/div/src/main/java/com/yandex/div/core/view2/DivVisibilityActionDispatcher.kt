@@ -25,7 +25,7 @@ class DivVisibilityActionDispatcher @Inject internal constructor(
 
     private val actionLogCounters = arrayMap<CompositeLogId, Int>()
 
-    fun dispatchActions(scope: Div2View, view: View, actions: Collection<DivVisibilityAction>) {
+    fun dispatchActions(scope: Div2View, view: View, actions: Array<DivVisibilityAction>) {
         scope.bulkActions {
             actions.forEach {
                 dispatchAction(scope, view, it)

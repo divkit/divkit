@@ -152,8 +152,8 @@ class DivVisibilityActionDispatcherTest {
 
     @Test
     fun `dispatch actions runs as a bulk`() {
-        val actionList = listOf(DivVisibilityAction(logId = "action"), DivVisibilityAction(logId = "action2"))
-        dispatcher.dispatchActions(divView, mock(), actionList)
+        val actionArray = arrayOf(DivVisibilityAction(logId = "action"), DivVisibilityAction(logId = "action2"))
+        dispatcher.dispatchActions(divView, mock(), actionArray)
         verify(divView, times(1)).bulkActions(any())
     }
 }

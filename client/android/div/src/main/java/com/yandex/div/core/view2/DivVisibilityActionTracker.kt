@@ -128,7 +128,7 @@ internal class DivVisibilityActionTracker @Inject constructor(
          * individual actions while still execute the rest of it as a bulk. */
         handler.postDelayed(delayInMillis = delayMs, token = logIds) {
             KLog.e(TAG) { "dispatchActions: id=${logIds.keys.joinToString()}" }
-            visibilityActionDispatcher.dispatchActions(scope, view, logIds.values)
+            visibilityActionDispatcher.dispatchActions(scope, view, logIds.values.toTypedArray())
         }
     }
 

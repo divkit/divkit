@@ -221,7 +221,7 @@ class DivVisibilityActionTrackerTest {
         verify(visibilityActionDispatcher, times(1)).dispatchActions(
             eq(scope),
             eq(view3),
-            argThat { this.containsAll(lottaActions) && this.size == lottaActions.size }
+            argThat { this.toList().containsAll(lottaActions) && this.size == lottaActions.size }
         )
     }
 
@@ -235,7 +235,7 @@ class DivVisibilityActionTrackerTest {
         verify(visibilityActionDispatcher, times(1)).dispatchActions(
             eq(scope),
             eq(view3),
-            argThat { this.containsAll(lottaActions) && this.size == lottaActions.size }
+            argThat { this.toList().containsAll(lottaActions) && this.size == lottaActions.size }
         )
     }
 
