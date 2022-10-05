@@ -18,14 +18,6 @@ private let exclusions = [
   // TODO: remove after implementation:
   "div-gallery/vertical-grid-gallery-padding.json",
   "div-gallery/vertical-grid-gallery-item-spacing.json",
-  "div-radial-gradient/fixed-center-negative.json",
-  "div-radial-gradient/fixed-center-positive.json",
-  "div-radial-gradient/relative-center-positive.json",
-  "div-radial-gradient/relative-radius-farthest-corner.json",
-  "div-radial-gradient/relative-radius-farthest-side.json",
-  "div-radial-gradient/relative-radius-nearest-corner.json",
-  "div-radial-gradient/relative-radius-nearest-side.json",
-  "div-radial-gradient/zero-radius.json",
 
   "div-image/aspect-wrap_content.json",
   "div-gif-image/aspect-wrap_content.json",
