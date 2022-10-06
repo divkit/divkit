@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, setContext } from 'svelte';
+    import { getContext, setContext, tick } from 'svelte';
 
     import rootCss from '../Root.module.css';
 
@@ -59,7 +59,7 @@
         hasJSAction = true;
     }
 
-    function onClick(event: MouseEvent): void {
+    async function onClick(event: MouseEvent): Promise<void> {
         if (actionCtx.hasAction()) {
             return;
         }
@@ -73,21 +73,26 @@
         if (cancelled) {
             event.preventDefault();
         } else if (actions) {
-            actions.forEach(action => {
+            for (let i = 0; i < actions.length; ++i) {
+                let action = actions[i];
+
                 const actionUrl = action.url;
                 if (actionUrl) {
                     const schema = getUrlSchema(actionUrl);
                     if (schema && !isBuiltinSchema(schema)) {
                         event.preventDefault();
 
+                        // wait until the ui is updated, so the second action can rely on the first action
                         if (schema === 'div-action') {
                             rootCtx.execAction(action);
+                            await tick();
                         } else if (action.log_id) {
                             rootCtx.execCustomAction(action as Action & { url: string });
+                            await tick();
                         }
                     }
                 }
-            });
+            }
             actions.forEach(action => {
                 rootCtx.logStat('click', action);
             });

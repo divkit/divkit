@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, onMount } from 'svelte';
+    import { getContext, onDestroy, onMount } from 'svelte';
 
     import css from './Pager.module.css';
 
@@ -226,6 +226,12 @@
                 item.setAttribute('id', `${instId}-panel-${index}`);
                 item.setAttribute('aria-labelledby', `${instId}-tab-${index}`);
             }
+        }
+    });
+
+    onDestroy(() => {
+        if (json.id) {
+            rootCtx.unregisterInstance(json.id);
         }
     });
 </script>

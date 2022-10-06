@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, onMount } from 'svelte';
+    import { getContext, onDestroy, onMount } from 'svelte';
     import { derived, Readable } from 'svelte/store';
 
     import css from './Gallery.module.css';
@@ -354,6 +354,12 @@
             }
         });
     }
+
+    onDestroy(() => {
+        if (json.id) {
+            rootCtx.unregisterInstance(json.id);
+        }
+    });
 </script>
 
 {#if !hasError}

@@ -25,6 +25,7 @@ export interface RootCtxValue {
     isRunning(type: Running): boolean;
     setRunning(type: Running, val: boolean): void;
     registerInstance<T>(id: string, block: T): void;
+    unregisterInstance(id: string): void;
     addSvgFilter(color: string): string;
     removeSvgFilter(color: string | undefined): void;
     getDerivedFromVars<T>(jsonProp: T): Readable<MaybeMissing<T>>;

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, tick } from 'svelte';
+    import { getContext, onDestroy, tick } from 'svelte';
 
     import css from './Tabs.module.css';
 
@@ -476,6 +476,12 @@
             }
         });
     }
+
+    onDestroy(() => {
+        if (json.id) {
+            rootCtx.unregisterInstance(json.id);
+        }
+    });
 </script>
 
 {#if !hasError}

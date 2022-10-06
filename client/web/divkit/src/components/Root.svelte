@@ -491,6 +491,9 @@
 
         instancesMap.set(id, block);
     }
+    function unregisterInstance(id: string) {
+        instancesMap.delete(id);
+    }
 
     function getInstance<T>(id: string): T | undefined {
         if (!instancesMap.has(id)) {
@@ -591,6 +594,7 @@
         isRunning,
         setRunning,
         registerInstance,
+        unregisterInstance,
         addSvgFilter,
         removeSvgFilter,
         getDerivedFromVars,
