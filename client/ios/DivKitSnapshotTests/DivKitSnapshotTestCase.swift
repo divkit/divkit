@@ -14,11 +14,6 @@ internal class DivKitSnapshotTestCase: XCTestCase {
   final var subdirectory = ""
   final var rootDirectory = "json"
 
-  override func setUp() {
-    super.setUp()
-    mode = .verify
-  }
-
   final func testDivs(
     _ fileName: String,
     testName: String = #function,

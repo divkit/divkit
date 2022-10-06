@@ -93,8 +93,8 @@ private func getDifferentPixelCount(lhs: [UInt8], rhs: [UInt8], bytesPerPixel: I
     diff += normalizedComponentDiff * normalizedComponentDiff
     if i % bytesPerPixel == bytesPerPixel - 1 {
       let rootMeanSquare = (diff / Double(bytesPerPixel)).squareRoot()
-      // 0.007 corresponds to 1.8 points diff between components
-      count += rootMeanSquare > 0.007 ? 1 : 0
+      // 0.01 corresponds to 2.5 points diff between components
+      count += rootMeanSquare > 0.01 ? 1 : 0
       diff = 0
     }
     i += 1

@@ -938,9 +938,9 @@
 			isa = PBXGroup;
 			children = (
 				E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */,
-				8C9284CE288ACCE400BEA1FA /* SnapshotTestKit */,
 				8C0E7374288AE576009BEB3C /* production_data */,
 				8C0E7372288AE563009BEB3C /* snapshot_test_data */,
+				8C9284CE288ACCE400BEA1FA /* SnapshotTestKit */,
 				8C035199288EC5AB0016A747 /* Images.xcassets */,
 				8C9284D9288ACCE400BEA1FA /* DivIndicatorTests.swift */,
 				8C9284D6288ACCE400BEA1FA /* DivKitSnapshotTestCase.swift */,
