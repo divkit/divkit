@@ -15,6 +15,7 @@ public struct DivBlockModelingContext {
   public let visibilityCounter: DivVisibilityCounting
   public var galleryResizableInsets: InsetMode.Resizable?
   public let imageHolderFactory: ImageHolderFactory
+  public let highPriorityImageHolderFactory: ImageHolderFactory?
   public let divCustomBlockFactory: DivCustomBlockFactory
   public let fontSpecifiers: FontSpecifiers
   public let flagsInfo: DivFlagsInfo
@@ -36,6 +37,7 @@ public struct DivBlockModelingContext {
     visibilityCounter: DivVisibilityCounting = DivVisibilityCounter(),
     galleryResizableInsets: InsetMode.Resizable? = nil,
     imageHolderFactory: ImageHolderFactory,
+    highPriorityImageHolderFactory: ImageHolderFactory? = nil,
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
     fontSpecifiers: FontSpecifiers = BaseUI.fontSpecifiers,
     flagsInfo: DivFlagsInfo = .default,
@@ -55,6 +57,7 @@ public struct DivBlockModelingContext {
     self.visibilityCounter = visibilityCounter
     self.galleryResizableInsets = galleryResizableInsets
     self.imageHolderFactory = imageHolderFactory
+    self.highPriorityImageHolderFactory = highPriorityImageHolderFactory
     self.divCustomBlockFactory = divCustomBlockFactory
     self.flagsInfo = flagsInfo
     self.fontSpecifiers = fontSpecifiers

@@ -1,6 +1,7 @@
 import Foundation
 
 import CommonCore
+import Networking
 import LayoutKit
 
 extension DivImage: DivBlockModeling, DivImageProtocol {
@@ -18,8 +19,17 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     try checkLayoutTraits(context: context)
 
+    
     let expressionResolver = context.expressionResolver
-    let imageHolder = context.imageHolderFactory.make(
+    let highPriority = resolveHighPriorityPreviewShow(expressionResolver)
+    let imageHolderFactory: ImageHolderFactory
+    if highPriority, let highPriorityImageHolderFactory = context.highPriorityImageHolderFactory {
+      imageHolderFactory = highPriorityImageHolderFactory
+    } else {
+      imageHolderFactory = context.imageHolderFactory
+    }
+    
+    let imageHolder = imageHolderFactory.make(
       resolveImageUrl(expressionResolver),
       resolvePlaceholder(expressionResolver)
     )
