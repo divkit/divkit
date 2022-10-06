@@ -35,6 +35,12 @@ private final class VideoBlockView: BlockView {
 
   init() {
     super.init(frame: .zero)
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(resumePlayer),
+      name: UIApplication.willEnterForegroundNotification,
+      object: nil
+    )
     playerLayer.player = avPlayer
     playerLayer.videoGravity = .resizeAspectFill
   }
@@ -42,6 +48,10 @@ private final class VideoBlockView: BlockView {
   @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  deinit {
+    NotificationCenter.default.removeObserver(self)
   }
 
   private let avPlayer = AVQueuePlayer()
@@ -58,6 +68,10 @@ private final class VideoBlockView: BlockView {
   private func configurePlayer(with playerItem: AVPlayerItem) {
     avPlayer.removeAllItems()
     playerLooper = AVPlayerLooper(player: avPlayer, templateItem: playerItem)
+    avPlayer.play()
+  }
+
+  @objc private func resumePlayer() {
     avPlayer.play()
   }
 }
