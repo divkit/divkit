@@ -51,7 +51,7 @@
         {
           "name": "line_height",
           "type": "number",
-          "value": 20
+          "value": 30
         },
         {
           "name": "max_lines",
@@ -239,7 +239,7 @@
           "log_id": "restore: text_color"
         },
         {
-          "url": "div-action://set_variable?name=line_height&value=20",
+          "url": "div-action://set_variable?name=line_height&value=30",
           "log_id": "restore: line_height"
         },
         {

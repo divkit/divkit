@@ -14,8 +14,6 @@ private let exclusions: [String] = [
   "div-gallery/select-elements.json",
   "div-pager/select-elements.json",
   "div-tabs/select-elements.json",
-
-  "div-text/text-properties.json",
 ]
 
 private let testDirectory = "interactive_snapshot_test_data"
