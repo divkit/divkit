@@ -10,6 +10,7 @@ import android.util.StateSet
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.MarginLayoutParams
+import android.widget.LinearLayout
 import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
 import androidx.transition.Transition
@@ -170,6 +171,11 @@ internal class DivBaseBinder @Inject constructor(
                 subscriber.addSubscription(width.value.unit.observe(resolver) { applyWidth(div, resolver) })
             }
             is DivSize.MatchParent -> Unit
+            is DivSize.WrapContent -> {
+                if (width.value.constrained?.evaluate(resolver) == true) {
+                    (layoutParams as? LinearLayout.LayoutParams)?.weight = 1f
+                }
+            }
             else -> Unit
         }
     }
@@ -183,6 +189,11 @@ internal class DivBaseBinder @Inject constructor(
                 subscriber.addSubscription(height.value.unit.observe(resolver) { applyHeight(div, resolver) })
             }
             is DivSize.MatchParent -> Unit
+            is DivSize.WrapContent -> {
+                if (height.value.constrained?.evaluate(resolver) == true) {
+                    (layoutParams as? LinearLayout.LayoutParams)?.weight = 1f
+                }
+            }
             else -> Unit
         }
     }

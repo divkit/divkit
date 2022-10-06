@@ -111,7 +111,10 @@ fun DivSize?.toLayoutParamsSize(metrics: DisplayMetrics, resolver: ExpressionRes
     return when (this) {
         null -> ViewGroup.LayoutParams.WRAP_CONTENT
         is DivSize.MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
-        is DivSize.WrapContent -> ViewGroup.LayoutParams.WRAP_CONTENT
+        is DivSize.WrapContent -> {
+            if (this.value.constrained?.evaluate(resolver) == true) ViewGroup.LayoutParams.MATCH_PARENT
+            else ViewGroup.LayoutParams.WRAP_CONTENT
+        }
         is DivSize.Fixed -> value.toPx(metrics, resolver)
     }
 }

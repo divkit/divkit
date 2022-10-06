@@ -26,6 +26,8 @@ private let exclusions = [
 
   "div-slider/slider_with_warning.json",
   "div-slider/slider_with_error_and_warning.json",
+
+  "div-container/container_with_wrap_content_constrained_child.json",
   
 ]
 
