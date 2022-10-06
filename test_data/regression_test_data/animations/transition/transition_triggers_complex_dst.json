@@ -1,66 +1,69 @@
 {
-  "log_id": "state_trigger",
-  "transition_animation_selector": "any_change",
-  "variables": [
-    {
-      "name": "visibility_variable",
-      "type": "string",
-      "value": "visible"
-    }
-  ],
-  "states": [
-    {
-      "state_id": 0,
-      "div": {
-        "type": "container",
-        "margins": {
-          "top": 16,
-          "right": 16,
-          "bottom": 16,
-          "left": 16
-        },
-        "items": [
-          {
-            "type": "text",
-            "text": "Go back",
-            "border": {
-              "corner_radius": 8
-            },
-            "background": [
-              {
-                "type": "solid",
-                "color": "#0E000000"
-              }
-            ],
-            "margins": {
-              "top": 8,
-              "right": 8,
-              "bottom": 8,
-              "left": 8
-            },
-            "paddings": {
-              "left": 16,
-              "top": 16,
-              "right": 16,
-              "bottom": 16
-            },
-            "font_size": 16,
-            "font_weight": "medium",
-            "text_alignment_vertical": "center",
-            "text_alignment_horizontal": "center",
-            "text_color": "#000000",
-            "alpha": 1.0,
-            "alignment_horizontal": "center",
-            "alignment_vertical": "center",
-            "actions": [
-              {
-                "log_id": "change_data",
-                "url": "div-demo-action://set_data?path=animations/transition/transition_triggers_complex_src.json"
-              }
-            ]
-          }
-        ]
+  "templates": {},
+  "card": {
+    "log_id": "state_trigger",
+    "transition_animation_selector": "any_change",
+    "variables": [
+      {
+        "name": "visibility_variable",
+        "type": "string",
+        "value": "visible"
       }
-    }
-  ]
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "top": 16,
+            "right": 16,
+            "bottom": 16,
+            "left": 16
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Go back",
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "margins": {
+                "top": 8,
+                "right": 8,
+                "bottom": 8,
+                "left": 8
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "font_size": 16,
+              "font_weight": "medium",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#000000",
+              "alpha": 1.0,
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "actions": [
+                {
+                  "log_id": "change_data",
+                  "url": "div-demo-action://set_data?path=animations/transition/transition_triggers_complex_src.json"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
 }
