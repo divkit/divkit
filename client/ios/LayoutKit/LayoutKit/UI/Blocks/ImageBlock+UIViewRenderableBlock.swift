@@ -20,6 +20,7 @@ extension ImageBlock {
     remoteImageViewContainer.contentView.imageContentMode = contentMode
     remoteImageViewContainer.contentView.imageRedrawingColor = tintColor
     remoteImageViewContainer.contentView.isUserInteractionEnabled = false
+    remoteImageViewContainer.isUserInteractionEnabled = false
     remoteImageViewContainer.applyAccessibility(accessibilityElement)
   }
 
