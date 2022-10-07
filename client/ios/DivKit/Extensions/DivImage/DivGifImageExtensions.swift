@@ -25,8 +25,8 @@ extension DivGifImage: DivBlockModeling, DivImageProtocol {
     )
     return AnimatableImageBlock(
       imageHolder: imageHolder,
-      widthTrait: makeContentWidthTrait(with: expressionResolver),
-      height: resolveHeight(expressionResolver),
+      widthTrait: makeContentWidthTrait(with: context),
+      height: resolveHeight(context),
       contentMode: resolveContentMode(expressionResolver)
     )
   }

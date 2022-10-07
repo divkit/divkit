@@ -272,15 +272,17 @@ extension DivBase {
 }
 
 extension DivBase {
-  func makeContentWidthTrait(with expressionResolver: ExpressionResolver) -> LayoutTrait {
-    width.makeLayoutTrait(with: expressionResolver).contentTrait(
-      consideringInsets: paddings.makeEdgeInsets(with: expressionResolver).horizontalInsets
+  func makeContentWidthTrait(with context: DivBlockModelingContext) -> LayoutTrait {
+    let overridenWidth = context.override(width: width)
+    return overridenWidth.makeLayoutTrait(with: context.expressionResolver).contentTrait(
+      consideringInsets: paddings.makeEdgeInsets(with: context.expressionResolver).horizontalInsets
     )
   }
 
-  func makeContentHeightTrait(with expressionResolver: ExpressionResolver) -> LayoutTrait {
-    height.makeLayoutTrait(with: expressionResolver).contentTrait(
-      consideringInsets: paddings.makeEdgeInsets(with: expressionResolver).verticalInsets
+  func makeContentHeightTrait(with context: DivBlockModelingContext) -> LayoutTrait {
+    let overridenHeight = context.override(height: height)
+    return overridenHeight.makeLayoutTrait(with: context.expressionResolver).contentTrait(
+      consideringInsets: paddings.makeEdgeInsets(with: context.expressionResolver).verticalInsets
     )
   }
 }

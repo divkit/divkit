@@ -88,8 +88,8 @@ extension DivText: DivBlockModeling {
     }
 
     return TextBlock(
-      widthTrait: makeContentWidthTrait(with: context.expressionResolver),
-      heightTrait: makeContentHeightTrait(with: context.expressionResolver),
+      widthTrait: makeContentWidthTrait(with: context),
+      heightTrait: makeContentHeightTrait(with: context),
       text: attributedString,
       verticalAlignment:
       resolveTextAlignmentVertical(context.expressionResolver).alignment,

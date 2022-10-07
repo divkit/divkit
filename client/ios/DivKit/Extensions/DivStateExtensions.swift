@@ -86,8 +86,8 @@ extension DivState: DivBlockModeling {
       defaultStateAlignment
 
     return LayeredBlock(
-      widthTrait: makeContentWidthTrait(with: expressionResolver),
-      heightTrait: makeContentHeightTrait(with: expressionResolver),
+      widthTrait: makeContentWidthTrait(with: context),
+      heightTrait: makeContentHeightTrait(with: context),
       children: [
         LayeredBlock.Child(
           content: TransitioningBlock(

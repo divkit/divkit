@@ -49,24 +49,20 @@ extension DivContainer: DivBlockModeling {
     guard !children.isEmpty else {
       throw DivBlockModelingError("DivContainer is empty", path: path)
     }
+  }
 
+  private func getFallbackWidth(
+    orientation: Orientation,
+    layoutMode: LayoutMode = .noWrap
+  ) -> DivOverridenSize? {
     if layoutMode == .wrap {
       switch orientation {
-      case .horizontal:
-        if children.hasVerticallyResizable {
-          throw DivBlockModelingError(
-            "Horizontal DivContainer with wrap layout mode contains item with match_parent height",
-            path: path
-          )
-        }
       case .vertical:
-        if children.hasHorizontallyResizable {
-          throw DivBlockModelingError(
-            "Vertical DivContainer with wrap layout mode contains item with match_parent width",
-            path: path
-          )
+        if items.hasHorizontallyMatchParent {
+          DivKitLogger.error("Vertical DivContainer with wrap layout mode contains item with match_parent width")
+          return defaultFallbackSize
         }
-      case .overlap:
+      case .horizontal, .overlap:
         break
       }
     }
@@ -74,40 +70,52 @@ extension DivContainer: DivBlockModeling {
     if width.isIntrinsic {
       switch orientation {
       case .horizontal:
-        if children.hasHorizontallyResizable {
-          throw DivBlockModelingError(
-            "Horizontal DivContainer with wrap_content width contains item with match_parent width",
-            path: path
-          )
+        if items.hasHorizontallyMatchParent {
+          DivKitLogger.error("Horizontal DivContainer with wrap_content width contains item with match_parent width")
+          return defaultFallbackSize
         }
       case .vertical, .overlap:
-        if children.allHorizontallyResizable {
-          throw DivBlockModelingError(
-            "All items in DivContainer with wrap_content width has match_parent width",
-            path: path
-          )
+        if items.allHorizontallyMatchParent {
+          DivKitLogger.error("All items in DivContainer with wrap_content width has match_parent width")
+          return defaultFallbackSize
         }
+      }
+    }
+
+    return nil
+  }
+
+  private func getFallbackHeight(
+    orientation: Orientation,
+    layoutMode: LayoutMode = .noWrap
+  ) -> DivOverridenSize? {
+    if layoutMode == .wrap {
+      switch orientation {
+      case .horizontal:
+        if items.hasVerticallyMatchParent {
+          DivKitLogger.error("Horizontal DivContainer with wrap layout mode contains item with match_parent height")
+          return defaultFallbackSize
+        }
+      case .vertical, .overlap:
+        break
       }
     }
 
     if height.isIntrinsic {
       switch orientation {
       case .horizontal, .overlap:
-        if children.allVerticallyResizable {
-          throw DivBlockModelingError(
-            "All items in DivContainer with wrap_content height has match_parent height",
-            path: path
-          )
+        if items.allVerticallyMatchParent {
+          DivKitLogger.error("All items in DivContainer with wrap_content height has match_parent height")
+          return defaultFallbackSize
         }
       case .vertical:
-        if children.hasVerticallyResizable {
-          throw DivBlockModelingError(
-            "Vertical DivContainer with wrap_content height contains item with match_parent height",
-            path: path
-          )
+        if items.hasVerticallyMatchParent {
+          DivKitLogger.error("Vertical DivContainer with wrap_content height contains item with match_parent height")
+          return defaultFallbackSize
         }
       }
     }
+    return nil
   }
 
   private func makeLayeredBlock(
@@ -119,8 +127,14 @@ extension DivContainer: DivBlockModeling {
         .alignment,
       vertical: resolveContentAlignmentVertical(childContext.expressionResolver).alignment
     )
+
+    let fallbackWidth = getFallbackWidth(orientation: orientation)
+    let fallbackHeight = getFallbackHeight(orientation: orientation)
+    
     let children = try items.makeBlocks(
       context: childContext,
+      overridenWidth: fallbackWidth,
+      overridenHeight: fallbackHeight,
       mappedBy: { div, block in
         LayeredBlock.Child(
           content: block,
@@ -139,8 +153,8 @@ extension DivContainer: DivBlockModeling {
     )
 
     return LayeredBlock(
-      widthTrait: makeContentWidthTrait(with: childContext.expressionResolver),
-      heightTrait: makeContentHeightTrait(with: childContext.expressionResolver),
+      widthTrait: makeContentWidthTrait(with: childContext),
+      heightTrait: makeContentHeightTrait(with: childContext),
       children: children
     )
   }
@@ -170,8 +184,13 @@ extension DivContainer: DivBlockModeling {
       .alignment
     }
 
+    let fallbackWidth = getFallbackWidth(orientation: orientation, layoutMode: layoutMode)
+    let fallbackHeight = getFallbackHeight(orientation: orientation, layoutMode: layoutMode)
+
     let children = try items.makeBlocks(
       context: childContext,
+      overridenWidth: fallbackWidth,
+      overridenHeight: fallbackHeight,
       mappedBy: { div, block in
         ContainerBlock.Child(
           content: block,
@@ -193,8 +212,8 @@ extension DivContainer: DivBlockModeling {
     return try ContainerBlock(
       layoutDirection: layoutDirection,
       layoutMode: layoutMode.system,
-      widthTrait: makeContentWidthTrait(with: childContext.expressionResolver),
-      heightTrait: makeContentHeightTrait(with: childContext.expressionResolver),
+      widthTrait: makeContentWidthTrait(with: childContext),
+      heightTrait: makeContentHeightTrait(with: childContext),
       axialAlignment: axialAlignment,
       children: children
     )
@@ -282,3 +301,8 @@ extension Div {
     }
   }
 }
+
+private let defaultFallbackSize = DivOverridenSize(
+  original: .divMatchParentSize(DivMatchParentSize()),
+  overriden: .divWrapContentSize(DivWrapContentSize(constrained: .value(true)))
+)

@@ -10,7 +10,8 @@
         "type": "wrap_content"
       },
       "height": {
-        "type": "match_parent"
+        "type": "wrap_content",
+        "constrained": true
       }
     }
   ]

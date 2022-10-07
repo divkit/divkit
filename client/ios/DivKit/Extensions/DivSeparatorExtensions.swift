@@ -15,8 +15,8 @@ extension DivSeparator: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
-    let widthTrait = makeContentWidthTrait(with: context.expressionResolver)
-    let heightTrait = makeContentHeightTrait(with: context.expressionResolver)
+    let widthTrait = makeContentWidthTrait(with: context)
+    let heightTrait = makeContentHeightTrait(with: context)
 
     let needsBeWrappedInContainer: Bool
     let trait: LayoutTrait

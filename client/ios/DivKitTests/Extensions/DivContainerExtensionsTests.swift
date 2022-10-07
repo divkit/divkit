@@ -57,96 +57,75 @@ final class DivContainerExtensionsTests: XCTestCase {
     )
   }
 
-  func test_HorizontalWrapContainer_HasVerticallyResizableItem_ThrowsError(
-  ) {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "horizontal_wrap_container_match_parent_height_item"),
-      DivBlockModelingError(
-        "Horizontal DivContainer with wrap layout mode contains item with match_parent height",
-        path: .root + "container"
-      )
+  func test_HorizontalWrapContainer_HasVerticallyResizableItem_FallbackHeight(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "horizontal_wrap_container_match_parent_height_item",
+      "horizontal_wrap_container_wrap_content_constrained_height_item"
     )
   }
 
-  func test_VerticalWrapContainer_HasHorizontallyResizableItem_ThrowsError(
-  ) {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "vertical_wrap_container_match_parent_width_item"),
-      DivBlockModelingError(
-        "Vertical DivContainer with wrap layout mode contains item with match_parent width",
-        path: .root + "container"
-      )
+  func test_VerticalWrapContainer_HasHorizontallyResizableItem_FallbackWidth(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "vertical_wrap_container_match_parent_width_item",
+      "vertical_wrap_container_wrap_content_constrained_width_item"
     )
   }
 
-  func test_HorizontalContainer_WithIntrinsicWidth_AndHasSingleHorizontallyResizableItem_ThrowsError(
-  ) {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "wrap_content_width_match_parent_items"),
-      DivBlockModelingError(
-        "All items in DivContainer with wrap_content width has match_parent width",
-        path: .root + "container"
-      )
+  func test_HorizontalContainer_WithIntrinsicWidth_AndHasSingleHorizontallyResizableItem_FallbackWidth(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "wrap_content_width_match_parent_items",
+      "wrap_content_width_wrap_content_constrained_items"
     )
   }
 
-  func test_HorizontalContainer_WithIntrinsicWidth_AndHasHorizontallyResizableItem_ThrowsError() {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "horizontal_wrap_content_width_match_parent_item"),
-      DivBlockModelingError(
-        "Horizontal DivContainer with wrap_content width contains item with match_parent width",
-        path: .root + "container"
-      )
+  func test_HorizontalContainer_WithIntrinsicWidth_AndHasHorizontallyResizableItem_FallbackWidth(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "horizontal_wrap_content_width_match_parent_item",
+      "horizontal_wrap_content_width_wrap_content_constrained_item"
     )
   }
 
-  func test_HorizontalContainer_WithIntrinsicHeight_AndAllItemsAreVerticallyResizable_ThrowsError() {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "horizontal_wrap_content_height_match_parent_items"),
-      DivBlockModelingError(
-        "All items in DivContainer with wrap_content height has match_parent height",
-        path: .root + "container"
-      )
+  func test_HorizontalContainer_WithIntrinsicHeight_AndAllItemsAreVerticallyResizable_FallbackHeight(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "horizontal_wrap_content_height_match_parent_items",
+      "horizontal_wrap_content_height_wrap_content_constrained_items"
     )
   }
 
-  func test_VerticalContainer_WithIntrinsicWidth_AndAllItemsAreHorizontallyResizable_ThrowsError() {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "vertical_wrap_content_width_match_parent_items"),
-      DivBlockModelingError(
-        "All items in DivContainer with wrap_content width has match_parent width",
-        path: .root + "container"
-      )
+  func test_VerticalContainer_WithIntrinsicWidth_AndAllItemsAreHorizontallyResizable_FallbackWidth(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "vertical_wrap_content_width_match_parent_items",
+      "vertical_wrap_content_width_wrap_content_constrained_items"
     )
   }
 
-  func test_VerticalContainer_WithIntrinsicHeight_AndHasVerticallyResizableItem_ThrowsError() {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "vertical_wrap_content_height_match_parent_item"),
-      DivBlockModelingError(
-        "Vertical DivContainer with wrap_content height contains item with match_parent height",
-        path: .root + "container"
-      )
+  func test_VerticalContainer_WithIntrinsicHeight_AndHasVerticallyResizableItem_FallbackHeight(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "vertical_wrap_content_height_match_parent_item",
+      "vertical_wrap_content_height_wrap_content_constrained_item"
     )
   }
 
-  func test_OverlapContainer_WithIntrinsicWidth_AndAllItemsAreHorizontallyResizable_ThrowsError() {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "overlap_wrap_content_width_match_parent_items"),
-      DivBlockModelingError(
-        "All items in DivContainer with wrap_content width has match_parent width",
-        path: .root + "container"
-      )
+  func test_OverlapContainer_WithIntrinsicWidth_AndAllItemsAreHorizontallyResizable_FallbackWidth(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "overlap_wrap_content_width_match_parent_items",
+      "overlap_wrap_content_width_wrap_content_constrained_items"
     )
   }
 
-  func test_OverlapContainer_WithIntrinsicHeight_AndAllItemsAreVerticallyResizable_ThrowsError() {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "overlap_wrap_content_height_match_parent_items"),
-      DivBlockModelingError(
-        "All items in DivContainer with wrap_content height has match_parent height",
-        path: .root + "container"
-      )
+  func test_OverlapContainer_WithIntrinsicHeight_AndAllItemsAreVerticallyResizable_FallbackHeight(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "overlap_wrap_content_height_match_parent_items",
+      "overlap_wrap_content_height_wrap_content_constrained_items"
     )
   }
 

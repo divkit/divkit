@@ -61,8 +61,8 @@ extension DivTabs: DivBlockModeling {
         separatorStyle: makeSeparatorStyle(with: context.expressionResolver)
       ),
       state: makeState(context: tabsContext, tabs: tabs),
-      widthTrait: makeContentWidthTrait(with: context.expressionResolver),
-      heightTrait: makeContentHeightTrait(with: context.expressionResolver)
+      widthTrait: makeContentWidthTrait(with: context),
+      heightTrait: makeContentHeightTrait(with: context)
     )
   }
 

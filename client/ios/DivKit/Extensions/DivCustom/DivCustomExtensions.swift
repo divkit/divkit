@@ -24,10 +24,10 @@ extension DivCustom: DivBlockModeling {
       data: customProps ?? [:],
       children: children
     )
-    let contentHeightTrait = makeContentHeightTrait(with: context.expressionResolver)
+    let contentHeightTrait = makeContentHeightTrait(with: context)
     return try ContainerBlock(
       layoutDirection: contentHeightTrait.isResizable ? .vertical : .horizontal,
-      widthTrait: makeContentWidthTrait(with: context.expressionResolver),
+      widthTrait: makeContentWidthTrait(with: context),
       heightTrait: contentHeightTrait,
       children: [
         context.divCustomBlockFactory.makeBlock(data: customData, context: context),

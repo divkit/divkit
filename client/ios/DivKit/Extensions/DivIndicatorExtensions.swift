@@ -51,8 +51,8 @@ extension DivIndicator: DivBlockModeling {
     return
       PageControlBlock(
         pagerPath: pagerPath,
-        widthTrait: makeContentWidthTrait(with: expressionResolver),
-        heightTrait: makeContentHeightTrait(with: expressionResolver),
+        widthTrait: makeContentWidthTrait(with: context),
+        heightTrait: makeContentHeightTrait(with: context),
         configuration: configuration,
         state: state
       )

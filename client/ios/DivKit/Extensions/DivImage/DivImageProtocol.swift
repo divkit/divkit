@@ -11,11 +11,11 @@ protocol DivImageProtocol: DivBase, DivImageContentMode {
 }
 
 extension DivImageProtocol {
-  func resolveHeight(_ expressionResolver: ExpressionResolver) -> ImageBlockHeight {
+  func resolveHeight(_ context: DivBlockModelingContext) -> ImageBlockHeight {
     if let aspect = aspect {
-      return .ratio(aspect.resolveRatio(expressionResolver) ?? 0)
+      return .ratio(aspect.resolveRatio(context.expressionResolver) ?? 0)
     }
-    return .trait(makeContentHeightTrait(with: expressionResolver))
+    return .trait(makeContentHeightTrait(with: context))
   }
 
   func resolvePlaceholder(_ expressionResolver: ExpressionResolver) -> ImagePlaceholder {

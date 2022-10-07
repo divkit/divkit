@@ -36,6 +36,9 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
       columnCount: resolveColumnCount(expressionResolver)
     )
 
+    let width = context.override(width: width)
+    let height = context.override(height: height)
+
     return try GalleryBlock(
       model: model,
       state: getState(context: galleryContext, itemsCount: model.items.count),

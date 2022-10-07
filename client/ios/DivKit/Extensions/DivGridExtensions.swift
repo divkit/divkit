@@ -23,8 +23,8 @@ extension DivGrid: DivBlockModeling {
     }
     let expressionResolver = context.expressionResolver
     return try GridBlock(
-      widthTrait: makeContentWidthTrait(with: expressionResolver),
-      heightTrait: makeContentHeightTrait(with: expressionResolver),
+      widthTrait: makeContentWidthTrait(with: context),
+      heightTrait: makeContentHeightTrait(with: context),
       contentAlignment: contentAlignment(with: expressionResolver),
       items: gridItems,
       columnCount: resolveColumnCount(expressionResolver) ?? 0,

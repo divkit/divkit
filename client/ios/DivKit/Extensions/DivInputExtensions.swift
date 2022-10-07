@@ -61,8 +61,8 @@ extension DivInput: DivBlockModeling {
     }
 
     return TextInputBlock(
-      widthTrait: makeContentWidthTrait(with: context.expressionResolver),
-      heightTrait: makeContentHeightTrait(with: context.expressionResolver),
+      widthTrait: makeContentWidthTrait(with: context),
+      heightTrait: makeContentHeightTrait(with: context),
       hint: hintValue.with(typo: hintTypo),
       textValue: textValue,
       textTypo: textTypo,

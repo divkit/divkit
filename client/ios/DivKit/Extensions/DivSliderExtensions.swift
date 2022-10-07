@@ -109,6 +109,8 @@ extension DivSlider: DivBlockModeling {
         corners: .all
       )) ?? SeparatorBlock()
     )
+    let width = context.override(width: width)
+    let height = context.override(height: height)
     return SliderBlock(
       sliderModel: sliderModel,
       widthTrait: width.makeLayoutTrait(with: context.expressionResolver),

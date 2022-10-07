@@ -38,6 +38,8 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       resizableInsets: context.galleryResizableInsets,
       scrollMode: .autoPaging
     )
+    let width = context.override(width: width)
+    let height = context.override(height: height)
     return try PagerBlock(
       pagerPath: pagerModelPath,
       layoutMode: layoutMode.cast(with: expressionResolver),
