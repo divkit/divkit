@@ -112,6 +112,7 @@ let package = Package(
         .unsafeFlags(
           [
             "-emit-module-interface",
+            "-emit-module-interface-path", ".swiftinterfaces/DivKit.swiftinterface",
             "-enable-library-evolution",
             "-warnings-as-errors",
           ]
@@ -129,6 +130,7 @@ let package = Package(
         .unsafeFlags(
           [
             "-emit-module-interface",
+            "-emit-module-interface-path", ".swiftinterfaces/DivKitExtensions.swiftinterface",
             "-enable-library-evolution",
             "-warnings-as-errors",
           ]
