@@ -9,6 +9,7 @@
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { SwitchElements, Overflow } from '../../types/switch-elements';
+    import type { TabItem } from '../../types/tabs';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
     import Unknown from '../utilities/Unknown.svelte';
@@ -24,7 +25,6 @@
     import { correctBorderRadius } from '../../utils/correctBorderRadius';
     import { correctColor } from '../../utils/correctColor';
     import { correctFontWeight } from '../../utils/correctFontWeight';
-    import { TabItem } from '../../types/tabs';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
 
@@ -508,6 +508,7 @@
             style:--divkit-tabs-active-background-color={tabActiveBackground}
             style:--divkit-tabs-inactive-background-color={tabInactiveBackground}
             style:--divkit-tabs-border-radius={tabBorderRadius}
+            on:keydown={onTabKeydown}
         >
             {#each items as item, index}
                 {@const isSelected = index === selected}
@@ -527,7 +528,6 @@
                         'aria-selected': isSelected ? 'true' : 'false'
                     }}
                     customAction={event => selectItem(event, index)}
-                    on:keydown={onTabKeydown}
                 >
                     {item.title}
                 </Actionable>

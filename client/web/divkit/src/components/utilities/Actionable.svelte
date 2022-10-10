@@ -59,6 +59,34 @@
         hasJSAction = true;
     }
 
+    async function processClick(): Promise<void> {
+        if (!actions) {
+            return;
+        }
+
+        for (let i = 0; i < actions.length; ++i) {
+            let action = actions[i];
+
+            const actionUrl = action.url;
+            if (actionUrl) {
+                const schema = getUrlSchema(actionUrl);
+                if (schema && !isBuiltinSchema(schema)) {
+                    // wait until the ui is updated, so the second action can rely on the first action
+                    if (schema === 'div-action') {
+                        rootCtx.execAction(action);
+                        await tick();
+                    } else if (action.log_id) {
+                        rootCtx.execCustomAction(action as Action & { url: string });
+                        await tick();
+                    }
+                }
+            }
+        }
+        actions.forEach(action => {
+            rootCtx.logStat('click', action);
+        });
+    }
+
     async function onClick(event: MouseEvent): Promise<void> {
         if (actionCtx.hasAction()) {
             return;
@@ -73,29 +101,31 @@
         if (cancelled) {
             event.preventDefault();
         } else if (actions) {
-            for (let i = 0; i < actions.length; ++i) {
-                let action = actions[i];
-
-                const actionUrl = action.url;
-                if (actionUrl) {
-                    const schema = getUrlSchema(actionUrl);
-                    if (schema && !isBuiltinSchema(schema)) {
-                        event.preventDefault();
-
-                        // wait until the ui is updated, so the second action can rely on the first action
-                        if (schema === 'div-action') {
-                            rootCtx.execAction(action);
-                            await tick();
-                        } else if (action.log_id) {
-                            rootCtx.execCustomAction(action as Action & { url: string });
-                            await tick();
-                        }
-                    }
+            const hasCustomAction = actions.some(action => {
+                const url = action?.url;
+                if (!url) {
+                    return false;
                 }
-            }
-            actions.forEach(action => {
-                rootCtx.logStat('click', action);
+
+                const schema = getUrlSchema(url);
+
+                return schema && !isBuiltinSchema(schema);
             });
+            if (hasCustomAction) {
+                event.preventDefault();
+            }
+            processClick();
+        }
+    }
+
+    function onKeydown(event: KeyboardEvent): void {
+        if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
+            return;
+        }
+
+        if (event.key === 'Enter') {
+            processClick();
+            event.preventDefault();
         }
     }
 </script>
@@ -109,7 +139,7 @@
         class="{cls} {hasActionAnimation ? '' : rootCss.root__clickable}"
         on:click={onClick}
         on:click
-        on:keydown
+        on:keydown={onKeydown}
         {...attrs}
     >
         <slot />
@@ -120,9 +150,10 @@
         class="{cls}{hasJSAction ? ` ${hasActionAnimation ? '' : rootCss.root__clickable} ${rootCss.root__unselectable}` : ''}"
         {style}
         role={hasJSAction ? 'button' : null}
+        tabindex={hasJSAction ? 0 : null}
         on:click={hasJSAction ? onClick : null}
         on:click
-        on:keydown
+        on:keydown={onKeydown}
         {...attrs}
     >
         <slot />
