@@ -1,20 +1,17 @@
 package com.yandex.div.core.view2.divs
 
-import android.os.Build
 import android.view.View
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.base.compat.ApiHelperForM
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.allIsNullOrEmpty
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBorder
 import javax.inject.Inject
-
-private const val NO_ELEVATION = 0f
 
 @DivScope
 @Mockable
@@ -29,19 +26,19 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
     ): Unit = view.run {
         val border = when {
             focusedBorder == null -> blurredBorder
-            focusedBorder.isEmpty(resolver) -> blurredBorder
+            focusedBorder.isConstantlyEmpty() -> blurredBorder
             isFocused -> focusedBorder
             else -> blurredBorder
         }
         applyBorder(border, resolver)
 
         val focusListener = onFocusChangeListener as? FocusChangeListener
-        if (focusListener == null && focusedBorder.isEmpty(resolver)) {
+        if (focusListener == null && focusedBorder.isConstantlyEmpty()) {
             return
         }
 
         val needNewListener = focusListener?.let {
-            it.focusActions != null || it.blurActions != null || !focusedBorder.isEmpty(resolver)
+            it.focusActions != null || it.blurActions != null || !focusedBorder.isConstantlyEmpty()
         } ?: true
 
         if (!needNewListener) {
@@ -58,30 +55,15 @@ internal class DivFocusBinder @Inject constructor(private val actionBinder: DivA
     private fun View.applyBorder(border: DivBorder, resolver: ExpressionResolver) {
         if (this is DivBorderSupports) {
             setBorder(border, resolver)
-        }
-
-        if (!border.isEmpty(resolver)) {
-            elevation = when {
-                !border.hasShadow.evaluate(resolver) -> NO_ELEVATION
-                border.shadow != null -> NO_ELEVATION
-                else -> resources.getDimension(R.dimen.div_shadow_elevation)
-            }
             return
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            ApiHelperForM.removeForeground(this)
+        elevation = when {
+            border.isConstantlyEmpty() -> DivBorderDrawer.NO_ELEVATION
+            !border.hasShadow.evaluate(resolver) -> DivBorderDrawer.NO_ELEVATION
+            border.shadow != null -> DivBorderDrawer.NO_ELEVATION
+            else -> resources.getDimension(R.dimen.div_shadow_elevation)
         }
-        elevation = NO_ELEVATION
-    }
-
-    private fun DivBorder?.isEmpty(resolver: ExpressionResolver): Boolean {
-        this ?: return true
-        if (cornerRadius != null) return false
-        if (cornersRadius != null) return false
-        if (hasShadow.evaluate(resolver)) return false
-        if (shadow != null) return false
-        return stroke == null
     }
 
     fun bindDivFocusActions(

@@ -106,11 +106,23 @@ class DivBorderDrawer(
             !radii.all { it.equals(firstCorner) }
         }
 
+        val hadCustomShadow = hasCustomShadow
         hasShadow = border.hasShadow.evaluate(resolver)
         hasCustomShadow = border.shadow != null && hasShadow
 
+        view.elevation = when {
+            !hasShadow -> NO_ELEVATION
+            hasCustomShadow -> NO_ELEVATION
+            else -> view.context.resources.getDimension(R.dimen.div_shadow_elevation)
+        }
+
         invalidatePaths()
         invalidateOutline()
+
+        // Since drawShadow is called by a parent, we have to invalidate it.
+        if (hasCustomShadow || hadCustomShadow) {
+            (view.parent as? View)?.invalidate()
+        }
     }
 
     fun onBoundsChanged(width: Int, height: Int) {
@@ -148,8 +160,10 @@ class DivBorderDrawer(
     private fun invalidateOutline() {
         if (isNeedUseCanvasClipping()) {
             view.clipToOutline = false
+            view.outlineProvider = ViewOutlineProvider.BACKGROUND
             return
         }
+
         view.outlineProvider = object : ViewOutlineProvider() {
             override fun getOutline(view: View?, outline: Outline?) {
                 if (view == null || outline == null) return
@@ -257,15 +271,15 @@ class DivBorderDrawer(
         private val defaultRadius =
             view.context.resources.getDimension(R.dimen.div_shadow_elevation)
         private var radius = defaultRadius
-        private var color = defaultShadowColor
+        private var color = DEFAULT_SHADOW_COLOR
 
         val paint = Paint()
         val rect = Rect()
 
         var cachedShadow: NinePatch? = null
 
-        var offsetX = defaultDX
-        var offsetY = defaultDY
+        var offsetX = DEFAULT_DX
+        var offsetY = DEFAULT_DY
 
         fun invalidateShadow(radii: FloatArray) {
             rect.set(0, 0, (view.width + radius * 2).toInt(), (view.height + radius * 2).toInt())
@@ -273,14 +287,14 @@ class DivBorderDrawer(
             val shadow = border.shadow
 
             radius = shadow?.blur?.evaluate(expressionResolver)?.dpToPxF(metrics) ?: defaultRadius
-            color = shadow?.color?.evaluate(expressionResolver) ?: defaultShadowColor
+            color = shadow?.color?.evaluate(expressionResolver) ?: DEFAULT_SHADOW_COLOR
             val shadowAlpha = shadow?.alpha?.evaluate(expressionResolver)?.toFloat()
-                ?: defaultShadowAlpha
+                ?: DEFAULT_SHADOW_ALPHA
 
             offsetX = (shadow?.offset?.x?.toPx(metrics, expressionResolver)
-                ?: defaultDX.dpToPx()).toFloat() - radius
+                ?: DEFAULT_DX.dpToPx()).toFloat() - radius
             offsetY = (shadow?.offset?.y?.toPx(metrics, expressionResolver)
-                ?: defaultDY.dpToPx()).toFloat() - radius
+                ?: DEFAULT_DY.dpToPx()).toFloat() - radius
 
             paint.color = color
             paint.alpha = (shadowAlpha * 255).toInt()
@@ -290,10 +304,11 @@ class DivBorderDrawer(
     }
 
     companion object {
-        private const val defaultDX = 0f
-        private const val defaultDY = 0.5f
-        private const val defaultShadowColor = Color.BLACK
-        private const val defaultShadowAlpha = 0.23f
+        const val NO_ELEVATION = 0f
+        private const val DEFAULT_DX = 0f
+        private const val DEFAULT_DY = 0.5f
+        private const val DEFAULT_SHADOW_COLOR = Color.BLACK
+        private const val DEFAULT_SHADOW_ALPHA = 0.23f
     }
 }
 

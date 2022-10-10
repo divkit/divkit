@@ -42,13 +42,16 @@ class DivFocusBinderTest {
     }
     private var focusListener: View.OnFocusChangeListener? = null
     private val view = mock<DivLineHeightTextView> {
-        on { resources } doReturn resources
         on { isFocused } doReturn true
         on { onFocusChangeListener = anyOrNull() } doAnswer {
             focusListener = it.arguments[0] as? View.OnFocusChangeListener
             on { onFocusChangeListener } doReturn focusListener
             Unit
         }
+    }
+    private val customView = mock<View> {
+        on { resources } doReturn resources
+        on { isFocused } doReturn true
     }
     private val divView = mock<Div2View>()
     private val resolver = mock<ExpressionResolver>()
@@ -118,26 +121,26 @@ class DivFocusBinderTest {
     }
 
     @Test
-    fun `set no elevation when border is empty`() {
-        bindBorder(blurredBorder = DivBorder())
+    fun `set no elevation for custom view when border is empty`() {
+        bindBorder(blurredBorder = DivBorder(), viewToBind = customView)
         verifyNoElevation()
     }
 
     @Test
-    fun `set no elevation when border does not have shadow`() {
-        bindBorder(borderWithCornerRadius)
+    fun `set no elevation for custom view when border does not have shadow`() {
+        bindBorder(borderWithCornerRadius, viewToBind = customView)
         verifyNoElevation()
     }
 
     @Test
-    fun `set no elevation when border has shadow object`() {
-        bindBorder(borderWithShadow)
+    fun `set no elevation for custom view when border has shadow object`() {
+        bindBorder(borderWithShadow, viewToBind = customView)
         verifyNoElevation()
     }
 
     @Test
-    fun `set elevation when border has shadow and no shadow object`() {
-        bindBorder()
+    fun `set elevation for custom view when border has shadow and no shadow object`() {
+        bindBorder(viewToBind = customView)
         verifyElevation(ELEVATION)
     }
 
@@ -358,8 +361,9 @@ class DivFocusBinderTest {
 
     private fun bindBorder(
         focusedBorder: DivBorder? = null,
-        blurredBorder: DivBorder = defaultBorder
-    ) = underTest.bindDivBorder(view, divView, resolver, focusedBorder, blurredBorder)
+        blurredBorder: DivBorder = defaultBorder,
+        viewToBind: View = view
+    ) = underTest.bindDivBorder(viewToBind, divView, resolver, focusedBorder, blurredBorder)
 
     private fun setViewNotFocused() = whenever(view.isFocused).thenReturn(false)
 
@@ -385,7 +389,7 @@ class DivFocusBinderTest {
     private fun verifyNoElevation() = verifyElevation(0f)
 
     private fun verifyElevation(elevation: Float) {
-        verify(view).elevation = elevation
+        verify(customView).elevation = elevation
     }
 
     private fun verifyActionsHandled(actions: List<DivAction>, mode: VerificationMode = times(1)) =

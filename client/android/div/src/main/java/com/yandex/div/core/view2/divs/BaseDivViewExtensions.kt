@@ -29,6 +29,7 @@ import com.yandex.div.core.widget.wraplayout.WrapAlignment
 import com.yandex.div.core.widget.wraplayout.WrapLayout
 import com.yandex.div.drawables.ScalingDrawable
 import com.yandex.div.font.DivTypefaceProvider
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.dpToPx
 import com.yandex.div.util.fontHeight
@@ -513,6 +514,8 @@ fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
     }
 }
 
+// This code is pretty hot since it's executed during binding for most of divs, so avoid creating
+// DivBorderDrawer or reuse it if possible.
 internal fun <T> T.updateBorderDrawer(
         border: DivBorder?,
         resolver: ExpressionResolver
@@ -526,16 +529,30 @@ internal fun <T> T.updateBorderDrawer(
     if (border == null) {
         currentDrawer?.release()
 
-        // Reset outline because it could have been set by DivBorderDrawer.
+        elevation = DivBorderDrawer.NO_ELEVATION
         clipToOutline = false
         outlineProvider = ViewOutlineProvider.BACKGROUND
     } else if (currentDrawer == null) {
-        newDrawer = DivBorderDrawer(resources.displayMetrics, this, resolver, border)
+        if (border.isConstantlyEmpty()) {
+            elevation = DivBorderDrawer.NO_ELEVATION
+            clipToOutline = true
+            outlineProvider = ViewOutlineProvider.BOUNDS
+        } else {
+            newDrawer = DivBorderDrawer(resources.displayMetrics, this, resolver, border)
+        }
     } else {
-        // Try to reuse DivBorderDrawer if possible.
         currentDrawer.setBorder(resolver, border)
         newDrawer = currentDrawer
     }
     invalidate()
     return newDrawer
+}
+
+internal fun DivBorder?.isConstantlyEmpty(): Boolean {
+    this ?: return true
+    if (cornerRadius != null) return false
+    if (cornersRadius != null) return false
+    if (hasShadow != Expression.constant(false)) return false
+    if (shadow != null) return false
+    return stroke == null
 }
