@@ -75,4 +75,13 @@ describe('crossplatform', () => {
         const skipTests = [];
         read(`${crossplatformPath}/interactive_snapshot_test_data/`, createInteractiveTestCase, skipTests);
     });
+
+    describe('unit', () => {
+        const skipTests = [
+            'patches',
+            // animated images
+            'div-gif-image'
+        ];
+        read(`${crossplatformPath}/unit_test_data/`, createSimpleTestCase, skipTests);
+    });
 });

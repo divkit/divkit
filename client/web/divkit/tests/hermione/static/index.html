@@ -93,6 +93,19 @@
                     };
                 }
 
+                if (!card.log_id && !card.states && !card.card && !card.templates) {
+                    return {
+                        card: {
+                            log_id: 'test',
+                            states: [{
+                                state_id: 0,
+                                div: card
+                            }]
+                        },
+                        templates: {}
+                    };
+                }
+
                 return {
                     card: card.card || card,
                     templates: card.templates || templates || {}
