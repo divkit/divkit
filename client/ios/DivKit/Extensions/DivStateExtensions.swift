@@ -135,7 +135,7 @@ extension DivState: DivBlockModeling {
   }
 }
 
-private let stub: Block = SeparatorBlock(size: .zero)
+private let stub: Block = EmptyBlock.zeroSized
 
 extension DivBlockModelingContext {
   fileprivate func makeContextForState(

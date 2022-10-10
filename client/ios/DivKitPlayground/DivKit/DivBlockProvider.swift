@@ -120,7 +120,7 @@ final class DivBlockProvider {
 
 private let cardId: DivCardID = "sample_card"
 
-private let noDataBlock = SeparatorBlock()
+private let noDataBlock = EmptyBlock.zeroSized
 
 private func makeErrorBlock(_ text: String) -> Block {
   TextBlock(

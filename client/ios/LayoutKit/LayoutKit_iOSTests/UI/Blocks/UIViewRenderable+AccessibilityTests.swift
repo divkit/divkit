@@ -108,7 +108,7 @@ private func makeContainerBlock(
 ) -> ContainerBlock {
   try! ContainerBlock(
     layoutDirection: .horizontal,
-    children: [SeparatorBlock()],
+    children: [EmptyBlock.zeroSized],
     accessibilityElement: accessibility
   )
 }
@@ -117,7 +117,7 @@ private func makeDecoratingBlock(
   accessibility: AccessibilityElement?
 ) -> DecoratingBlock {
   DecoratingBlock(
-    child: SeparatorBlock(),
+    child: EmptyBlock.zeroSized,
     accessibilityElement: accessibility
   )
 }
@@ -126,7 +126,7 @@ private func makeDecoratingBlockWithActions(
   accessibility: AccessibilityElement
 ) -> DecoratingBlock {
   DecoratingBlock(
-    child: SeparatorBlock(),
+    child: EmptyBlock.zeroSized,
     actions: NonEmptyArray<UserInterfaceAction>([
       UserInterfaceAction(path: UIElementPath("0"), accessibilityElement: nil),
       UserInterfaceAction(path: UIElementPath("1"), accessibilityElement: accessibility),

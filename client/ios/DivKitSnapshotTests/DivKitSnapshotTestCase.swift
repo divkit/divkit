@@ -10,7 +10,7 @@ let testCardId = "test_card_id"
 let testDivCardId = DivCardID(rawValue: testCardId)
 
 internal class DivKitSnapshotTestCase: XCTestCase {
-  final var mode = TestMode.verify
+  final var mode = TestMode.update
   final var subdirectory = ""
   final var rootDirectory = "json"
 

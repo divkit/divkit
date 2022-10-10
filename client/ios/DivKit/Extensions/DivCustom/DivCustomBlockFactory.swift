@@ -9,6 +9,6 @@ public struct EmptyDivCustomBlockFactory: DivCustomBlockFactory {
 
   public func makeBlock(data: DivCustomData, context _: DivBlockModelingContext) -> Block {
     DivKitLogger.error("No block factory for DivCustom: \(data.name)")
-    return SeparatorBlock()
+    return EmptyBlock.zeroSized
   }
 }

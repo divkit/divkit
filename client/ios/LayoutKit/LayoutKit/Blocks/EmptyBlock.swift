@@ -38,6 +38,10 @@ public func ==(lhs: EmptyBlock, rhs: EmptyBlock) -> Bool {
   lhs.widthTrait == rhs.widthTrait && lhs.heightTrait == rhs.heightTrait
 }
 
+extension EmptyBlock {
+  public static let zeroSized = EmptyBlock(widthTrait: .fixed(0), heightTrait: .fixed(0))
+}
+
 extension EmptyBlock: LayoutCachingDefaultImpl {}
 extension EmptyBlock: ElementStateUpdatingDefaultImpl {}
 

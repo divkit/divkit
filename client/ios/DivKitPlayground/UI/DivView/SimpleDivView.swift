@@ -133,7 +133,7 @@ extension SimpleDivUIView: UIActionEventPerforming {
   }
 }
 
-private let noDataBlock = SeparatorBlock()
+private let noDataBlock = EmptyBlock.zeroSized
 
 private func makeErrorBlock(_ text: String) -> Block {
   TextBlock(

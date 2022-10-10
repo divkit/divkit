@@ -80,7 +80,7 @@ extension DivSlider: DivBlockModeling {
       secondThumb: secondThumb,
       activeMarkModel: tickMarkActiveStyle.flatMap {
         SliderModel.MarkModel(
-          block: (try? $0.makeBlock(context: context, corners: .all)) ?? SeparatorBlock(),
+          block: (try? $0.makeBlock(context: context, corners: .all)) ?? EmptyBlock.zeroSized,
           size: CGSize(
             width: $0.getWidth(context: context),
             height: $0.getHeight(context: context)
@@ -89,7 +89,7 @@ extension DivSlider: DivBlockModeling {
       },
       inactiveMarkModel: tickMarkInactiveStyle.flatMap {
         SliderModel.MarkModel(
-          block: (try? $0.makeBlock(context: context, corners: .all)) ?? SeparatorBlock(),
+          block: (try? $0.makeBlock(context: context, corners: .all)) ?? EmptyBlock.zeroSized,
           size: CGSize(
             width: $0.getWidth(context: context),
             height: $0.getHeight(context: context)
@@ -102,12 +102,12 @@ extension DivSlider: DivBlockModeling {
         context: context,
         widthTrait: .resizable,
         corners: .all
-      )) ?? SeparatorBlock(),
+      )) ?? EmptyBlock.zeroSized,
       inactiveTrack: (try? self.trackInactiveStyle.makeBlock(
         context: context,
         widthTrait: .resizable,
         corners: .all
-      )) ?? SeparatorBlock()
+      )) ?? EmptyBlock.zeroSized
     )
     let width = context.override(width: width)
     let height = context.override(height: height)

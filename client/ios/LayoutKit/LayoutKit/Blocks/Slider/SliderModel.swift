@@ -27,7 +27,7 @@ public struct SliderModel: Equatable {
 
     static var empty: Self {
       ThumbModel(
-        block: SeparatorBlock(),
+        block: EmptyBlock.zeroSized,
         value: Binding(name: "", getValue: { _ in 0 }, userInterfaceActionFactory: { _, _ in nil }),
         size: .zero,
         offsetX: 0,
@@ -139,8 +139,8 @@ public struct SliderModel: Equatable {
       inactiveMarkModel: nil,
       minValue: 0,
       maxValue: 0,
-      activeTrack: SeparatorBlock(),
-      inactiveTrack: SeparatorBlock()
+      activeTrack: EmptyBlock.zeroSized,
+      inactiveTrack: EmptyBlock.zeroSized
     )
   }
 
