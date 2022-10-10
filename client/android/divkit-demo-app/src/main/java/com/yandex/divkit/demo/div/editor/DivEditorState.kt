@@ -16,5 +16,6 @@ sealed class DivEditorState {
     data class DivReceivedState(
         val divDataList: List<DivData>,
         val rawDiv: JSONObject,
+        val isSingleCard: Boolean
     ) : DivEditorState()
 }

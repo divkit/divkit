@@ -34,6 +34,10 @@ class DivEditorAdapter(val context: Div2Context) :
         submitList(divDataList.map { DivEditorItem(it, it.logId) })
     }
 
+    fun clearList() {
+        submitList(null)
+    }
+
     fun applyPath(divPatch: DivPatch, errorCallback: () -> Unit): Boolean {
         var resultSuccessApplied = true
         viewHolderList.forEach { holder ->

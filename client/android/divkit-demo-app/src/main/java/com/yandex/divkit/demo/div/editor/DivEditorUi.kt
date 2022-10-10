@@ -1,13 +1,15 @@
 package com.yandex.divkit.demo.div.editor
 
 import android.graphics.Bitmap
-import android.view.View
-import android.view.View.*
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.yandex.div.DivDataTag
+import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.Div2MetadataBottomSheet
 import com.yandex.divkit.demo.div.editor.DivEditorScreenshot.takeScreenshot
@@ -19,6 +21,7 @@ class DivEditorUi(
     private val metadataButton: FloatingActionButton,
     private val failedTextMessage: TextView,
     private val divContainer: ViewGroup,
+    private val div2View: Div2View,
     private val div2Recycler: RecyclerView,
     private val div2Adapter: DivEditorAdapter,
     private val metadataHost: Div2MetadataBottomSheet.MetadataHost,
@@ -97,8 +100,20 @@ class DivEditorUi(
 
     private fun showDivReceivedState(state: DivEditorState.DivReceivedState) {
         hideAll()
-        div2Adapter.setList(state.divDataList)
-        div2Recycler.viewTreeObserver.addOnDrawListener(debounceOnViewDrawObserver)
+
+        if (state.isSingleCard) {
+            div2View.visibility = VISIBLE
+            div2Recycler.visibility = GONE
+            div2Adapter.clearList()
+            val card = state.divDataList.first()
+            div2View.setData(card, DivDataTag(card.logId))
+        } else {
+            div2Recycler.visibility = VISIBLE
+            div2View.visibility = GONE
+            div2View.cleanup()
+            div2Adapter.setList(state.divDataList)
+            div2Recycler.viewTreeObserver.addOnDrawListener(debounceOnViewDrawObserver)
+        }
 
         // Make sure onDiv2ViewDrawnListener called, even if div2View not going to be drawn.
         debounceOnViewDrawObserver.onDraw()

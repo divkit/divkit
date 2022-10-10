@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.view.ViewGroup
 import android.widget.EditText
 import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AlertDialog
@@ -20,9 +20,9 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.util.Assert
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
-import com.yandex.div.json.JsonParser
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
@@ -34,7 +34,6 @@ import com.yandex.divkit.demo.databinding.ActivityDiv2ScenarioBinding
 import com.yandex.divkit.demo.div.editor.*
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
-import com.yandex.divkit.demo.settings.SettingsActionHandler
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.loadText
@@ -57,6 +56,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     private val preferences by lazy { getSharedPreferences("div2", Context.MODE_PRIVATE) }
     private var json: String? = null
     private var url: String? = null
+    private lateinit var div2View: Div2View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,6 +98,8 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         div2Adapter = DivEditorAdapter(divContext)
         globalVariableController.bindWith(divContext)
 
+        setupDiv2View()
+
         with(binding.div2Recycler) {
             layoutManager = LinearLayoutManager(this@Div2ScenarioActivity, RecyclerView.VERTICAL, false)
             adapter = div2Adapter
@@ -107,6 +109,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             binding.metadataButton,
             binding.error,
             binding.singleContainer,
+            div2View,
             binding.div2Recycler,
             div2Adapter,
             this,
@@ -233,6 +236,15 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 }
             }
         adb.create().show()
+    }
+
+    private fun setupDiv2View() {
+        div2View = Div2View(divContext)
+        div2View.layoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+        binding.singleContainer.addView(div2View)
     }
 
     @WorkerThread

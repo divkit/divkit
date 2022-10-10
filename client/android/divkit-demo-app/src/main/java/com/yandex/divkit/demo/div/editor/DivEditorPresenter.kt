@@ -12,6 +12,7 @@ import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.Div2MetadataBottomSheet
 import com.yandex.divkit.demo.div.editor.DivEditorMessageUtils.addExceptions
 import com.yandex.divkit.demo.div.editor.DivEditorMessageUtils.addMetadata
+import com.yandex.divkit.demo.div.isDiv2Data
 import com.yandex.divkit.demo.div.parseToDiv2List
 import com.yandex.divkit.demo.utils.loadText
 import kotlinx.coroutines.CoroutineScope
@@ -171,7 +172,8 @@ class DivEditorPresenter(
             null
         }
         if (divDataList != null) {
-            updateState(DivEditorState.DivReceivedState(divDataList, json))
+            val isSingleCard = json.isDiv2Data()
+            updateState(DivEditorState.DivReceivedState(divDataList, json, isSingleCard))
             logger.log("Successfully parsed")
         } else {
             updateFailedState("Parsing failed, reason: ${errorLogger.parsingExceptions().lastOrNull()?.message}")
