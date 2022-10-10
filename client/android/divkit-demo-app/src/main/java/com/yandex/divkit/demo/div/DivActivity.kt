@@ -30,7 +30,6 @@ import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.SamplesActivityBinding
-import com.yandex.divkit.demo.div.urlopen.UrlOpenActivity
 import com.yandex.divkit.demo.utils.DivkitDemoPermissionHelper
 import com.yandex.divkit.demo.utils.showToast
 import org.json.JSONObject
@@ -128,11 +127,6 @@ open class DivActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         when (requestCode) {
             REQUEST_CODE -> data?.data?.path?.let { loadDivJsonPath(it) } ?: showToast("No json path data")
-            REQUEST_CODE_URL -> {
-                if (resultCode == RESULT_OK) {
-                    data?.getStringExtra(UrlOpenActivity.RESULT_EXTRA)?.let { addItemFromJson(jsonString = it) }
-                }
-            }
             else -> showToast("Unsupported requestCode: $requestCode")
         }
     }
@@ -218,6 +212,5 @@ open class DivActivity : AppCompatActivity() {
 
     companion object {
         const val REQUEST_CODE = 49
-        const val REQUEST_CODE_URL = 7832
     }
 }

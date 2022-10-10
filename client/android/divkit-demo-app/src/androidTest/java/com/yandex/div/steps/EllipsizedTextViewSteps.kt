@@ -13,6 +13,7 @@ import androidx.test.rule.ActivityTestRule
 import com.yandex.div.view.EllipsizedTextView
 import com.yandex.test.util.StepsDsl
 import com.yandex.div.utils.CharSequences
+import com.yandex.div.utils.contentView
 import com.yandex.div.utils.runOnView
 import com.yandex.div.view.lineSpacingAdd
 import org.hamcrest.CoreMatchers.allOf
@@ -20,7 +21,6 @@ import org.hamcrest.CoreMatchers.not
 import org.hamcrest.CoreMatchers.startsWith
 import org.hamcrest.Description
 import org.hamcrest.TypeSafeMatcher
-import org.jetbrains.anko.contentView
 import org.junit.Assert
 import ru.tinkoff.allure.step
 

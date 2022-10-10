@@ -5,8 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import org.jetbrains.anko.intentFor
-import org.jetbrains.anko.newTask
 
 private const val EXTRA_URI = "EXTRA_URI"
 private const val EXTRA_RETURN_INTENT = "EXTRA_RETURN_INTENT"
@@ -60,10 +58,11 @@ class BrowserActivity : AppCompatActivity() {
 }
 
 fun Context.startBrowserActivity(uri: Uri, returnIntent: Intent? = null, colors: CustomTabColors? = null) {
-    val intent = intentFor<BrowserActivity>().apply {
+    val intent = Intent(this, BrowserActivity::class.java).apply {
         putExtra(EXTRA_URI, uri)
         putExtra(EXTRA_RETURN_INTENT, returnIntent)
         putExtra(EXTRA_COLORS, colors)
+        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
     }
-    startActivity(intent.newTask())
+    startActivity(intent)
 }

@@ -11,7 +11,6 @@ import com.yandex.div.video.custom.VideoCustomUriHandler
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.uri.CustomTabColors
 import com.yandex.divkit.demo.uri.startBrowserActivity
-import org.jetbrains.anko.newTask
 import java.lang.ref.WeakReference
 
 private const val TAG = "UriHandler"
@@ -62,7 +61,9 @@ class DefaultUriHandler(private val context: Context) {
 
     fun handle(uri: Uri): Boolean {
         val url = uri.toString()
-        val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME).newTask()
+        val intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
         val resolveInfo = context.packageManager.resolveActivity(intent, 0)
         if (resolveInfo == null) {
             context.showToast("No one can handle:\n$url")

@@ -1,5 +1,4 @@
 ext.versions = [
-        anko                            : '0.10.8',
         coroutines                      : '1.6.0',
         dagger                          : '2.38',
         exoPlayer                       : '2.14.2',
@@ -26,7 +25,7 @@ ext.versions = [
         picasso                         : '2.8',
         pulse                           : '1.0.10',
         robolectric                     : '4.4',
-        stetho                          : '1.5.1',
+        stetho                          : '1.6.0',
         strikt                          : '0.28.2',
         tinkoffAllure                   : '2.5.1'
 ]

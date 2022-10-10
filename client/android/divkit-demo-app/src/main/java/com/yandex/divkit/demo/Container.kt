@@ -20,13 +20,13 @@ import com.yandex.divkit.demo.regression.RegressionDiv2ViewCreator
 import com.yandex.divkit.demo.settings.FlagPreferenceProvider
 import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
+import com.yandex.divkit.demo.utils.connectivityManager
 import com.yandex.divkit.regression.di.DaggerRegressionComponent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
-import org.jetbrains.anko.connectivityManager
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("StaticFieldLeak")

@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnAttach
 import com.yandex.div.core.util.Assert
 import com.yandex.div.core.utils.UiThreadHandler
-import org.jetbrains.anko.longToast
 import java.lang.ref.WeakReference
 import java.util.LinkedList
 import java.util.Queue

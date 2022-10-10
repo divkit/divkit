@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
-import org.jetbrains.anko.displayMetrics
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.IOException
@@ -256,7 +255,7 @@ private fun Bitmap?.toBase64(context: Context): String {
 }
 
 fun Bitmap.scaleDown(context: Context): Bitmap {
-    val density = context.displayMetrics.density
+    val density = context.resources.displayMetrics.density
 
     val scale = density / TARGET_DENSITY
 

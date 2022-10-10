@@ -3,7 +3,7 @@ package com.yandex.divkit.demo.div.editor
 import android.content.Context
 import android.view.Surface
 import com.yandex.divkit.demo.BuildConfig
-import org.jetbrains.anko.windowManager
+import com.yandex.divkit.demo.utils.windowManager
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.UUID

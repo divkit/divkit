@@ -12,13 +12,13 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.utils.contentView
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.div.DivUtils
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.test.util.StepsDsl
-import org.jetbrains.anko.contentView
 import ru.tinkoff.allure.step
 import java.util.UUID
 

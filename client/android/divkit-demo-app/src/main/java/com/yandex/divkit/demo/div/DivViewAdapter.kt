@@ -6,8 +6,6 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.json.map
 import com.yandex.div2.DivData
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.wrapContent
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -24,7 +22,10 @@ class DivViewAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         DivViewHolder(
             Div2View(context).apply {
-                layoutParams = ViewGroup.LayoutParams(matchParent, wrapContent)
+                layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                )
             }
         )
 

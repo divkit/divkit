@@ -16,8 +16,6 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.DivUtils
 import java.io.File
-import org.jetbrains.anko.matchParent
-import org.jetbrains.anko.wrapContent
 
 private const val TAG = "DivScreenshotActivity"
 
@@ -70,9 +68,9 @@ class DivScreenshotActivity : AppCompatActivity() {
         }
 
         divView.apply {
-            val divViewHeight = if (getChildAt(0)?.layoutParams?.height == matchParent)
-                matchParent else wrapContent
-            layoutParams = ViewGroup.LayoutParams(matchParent, divViewHeight)
+            val divViewHeight = if (getChildAt(0)?.layoutParams?.height == ViewGroup.LayoutParams.MATCH_PARENT)
+                ViewGroup.LayoutParams.MATCH_PARENT else ViewGroup.LayoutParams.WRAP_CONTENT
+            layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, divViewHeight)
             id = R.id.morda_screenshot_div
             hideCursor()
         }
