@@ -3,6 +3,7 @@
     import { derived, Readable } from 'svelte/store';
 
     import css from './Gallery.module.css';
+    import rootCss from '../Root.module.css';
 
     import type { Align, LayoutParams } from '../../types/layoutParams';
     import type { DivGalleryData } from '../../types/gallery';
