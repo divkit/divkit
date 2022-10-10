@@ -43,6 +43,13 @@ export function simpleCheckInput(json?: Partial<DivJson>): WrappedError | null {
                 }
             });
         }
+        if (typeof card.states[i].state_id !== 'number') {
+            return wrapError(new Error('Missing state_id'), {
+                additional: {
+                    index: i
+                }
+            });
+        }
     }
 
     return null;

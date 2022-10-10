@@ -857,7 +857,7 @@
     }
 
     const states = json.card?.states;
-    const rootStateDiv: DivStateData | undefined = states ? {
+    const rootStateDiv: DivStateData | undefined = (states && !hasError) ? {
         type: 'state',
         id: 'root',
         width: {
