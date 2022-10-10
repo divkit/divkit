@@ -163,11 +163,14 @@
             },
             {
               "type": "subtitle",
-              "text": "The input text can also be without borders."
+              "text": "The input text can also be presented in a format of an underlined text."
             },
             {
               "type": "input_text_borderless",
               "hint_text": "This is borderless text",
+              "native_interface": {
+                "color": "#000000"
+              },
               "text_variable": "my_borderless_text"
             },
             {
