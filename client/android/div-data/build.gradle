@@ -43,10 +43,12 @@ schemas.forEach{ item ->
         def schemasDirectory = item['scheme'].absolutePath
         def generatedDir = item['generated']
         def configPath = item['config'].absolutePath
-        println "Process schemas: $schemasDirectory"
         def binPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
         commandLine binPath, configPath, schemasDirectory, generatedDir
-        println commandLine
+        doFirst {
+            println "Process schemas: $schemasDirectory"
+            println commandLine
+        }
 
         inputs.dir item['scheme']
         inputs.file item['config']

@@ -77,8 +77,10 @@ schemes.forEach { item ->
 
         commandLine = listOf(binPath, configPath, schemesDirectory, generatedDir)
 
-        println("Process schemes: $schemesDirectory")
-        println(commandLine.joinToString(" "))
+        doFirst {
+            println("Process schemes: $schemesDirectory")
+            println(commandLine.joinToString(" "))
+        }
 
         inputs.dir(item["scheme"]!!)
         inputs.file(item["config"]!!)

@@ -34,10 +34,18 @@ buildscript {
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.kotlin"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$versions.kotlin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
+        classpath "org.jetbrains.kotlinx:binary-compatibility-validator:0.11.1"
     }
 }
 
+apply plugin: "org.jetbrains.kotlinx.binary-compatibility-validator"
+
 allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         kotlinOptions {
             freeCompilerArgs = ['-Xjvm-default=all']
@@ -46,9 +54,32 @@ allprojects {
         }
     }
 
-    repositories {
-        google()
-        mavenCentral()
+    tasks.whenTaskAdded { task ->
+        if (task.name == "apiBuild") {
+            tasks.create(name: "archiveApiDump", type: Copy) {
+                from "$projectDir/api"
+                into "$rootProject.projectDir/../../../internal/android/api-dump"
+                include "*.api"
+            }
+
+            tasks.create(name: "removeApiDump", type: Delete) {
+                delete "$projectDir/api"
+            }
+
+            archiveApiDump.finalizedBy(removeApiDump)
+
+            // Restoring api dump to in order to configure 'apiCheck' task successfully
+            exec {
+                commandLine "mkdir", "-p", "$projectDir/api"
+            }
+            exec {
+                commandLine "cp", "$rootProject.projectDir/../../../internal/android/api-dump/${project.name}.api", "$projectDir/api"
+            }
+        }
+
+        if (task.name in ["apiDump", "apiCheck"]) {
+            task.finalizedBy(archiveApiDump)
+        }
     }
 }
 
@@ -77,7 +108,7 @@ subprojects {
             }
         }
 
-        if (project.hasProperty('teamcity.version')) {
+        if (project.hasProperty("teamcity.version")) {
             project.tasks.withType(PublishToMavenRepository) { task ->
                 task.finalizedBy(reportBuildNumberToTeamcity)
             }
@@ -93,6 +124,19 @@ wrapper {
     gradleVersion "7.4.1"
     distributionType = Wrapper.DistributionType.ALL
     distributionUrl "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
+}
+
+apiValidation {
+    ignoredProjects += [
+        "api-generator-test",
+        "divkit-demo-app",
+        "divkit-perftests",
+        "divkit-regression-testing",
+        "sample",
+        "screenshot-test-runtime",
+        "ui-test-common",
+        "unit-test-common"
+    ]
 }
 
 task reportVersion {
