@@ -76,7 +76,7 @@
         "div": {
           "type": "container",
           "width": {
-            "type": "wrap_content"
+            "type": "match_parent"
           },
           "height": {
             "type": "wrap_content"

@@ -179,6 +179,7 @@
                           "height": {
                             "type": "wrap_content"
                           },
+                          "alignment_vertical": "center",
                           "actions": [
                             {
                               "log_id": "open_regression",

@@ -43,7 +43,7 @@
           "value": "@{width_value}"
         },
         "height": {
-          "type": "match_parent"
+          "type": "wrap_content"
         }
       },
       "test_container": {

@@ -146,8 +146,9 @@
                             "type": "match_parent"
                           },
                           "height": {
-                            "type": "match_parent"
-                          }
+                            "type": "wrap_content"
+                          },
+                          "alignment_vertical": "center"
                         }
                       ],
                       "margins": {

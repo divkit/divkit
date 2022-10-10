@@ -25,7 +25,7 @@ class DivContainerBinderTest : DivBinderTest() {
 
     private val binder = DivContainerBinder(
         baseBinder, { viewCreator }, mock(),
-        mock(), { mock() },
+        mock(), { mock() }, mock(), false
     )
 
     @Test
