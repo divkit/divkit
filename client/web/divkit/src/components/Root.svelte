@@ -164,6 +164,9 @@
 
         const prepared = prepareVars(jsonProp, logError);
         if (!prepared.vars.length) {
+            if (prepared.hasExpression) {
+                return constStore(prepared.applyVars(variables));
+            }
             return constStore(jsonProp);
         }
         const stores = prepared.vars.map(name => {

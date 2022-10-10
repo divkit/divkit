@@ -6,8 +6,6 @@ import { evalExpression, VariablesMap } from './eval';
 import { containsUnsetVariables, dateToString, gatherVarsFromAst } from './utils';
 import { LogError, wrapError } from '../utils/wrapError';
 
-const EXPR_REGEXP = /(?:[^\\]|^)@{.+}/i;
-
 class ExpressionBinding {
     private readonly ast: Node;
 
@@ -61,19 +59,28 @@ export type MaybeMissing<T> = T | (
 );
 
 function hasExpressions(str: string): boolean {
-    return EXPR_REGEXP.test(str);
+    return str.indexOf('@{') > -1 || str.indexOf('\\') > -1;
 }
 
-function prepareVarsObj<T>(jsonProp: T, vars: string[], logError: LogError): unknown {
+function prepareVarsObj<T>(
+    jsonProp: T,
+    store: {
+        vars: string[];
+        hasExpression: boolean;
+    },
+    logError: LogError
+): unknown {
     if (jsonProp) {
         if (typeof jsonProp === 'string') {
             if (hasExpressions(jsonProp)) {
+                store.hasExpression = true;
+
                 try {
                     const ast = parse(jsonProp, {
                         startRule: 'JsonStringContents'
                     });
                     const propVars = gatherVarsFromAst(ast);
-                    vars.push(...propVars);
+                    store.vars.push(...propVars);
 
                     return new ExpressionBinding(ast);
                 } catch (err) {
@@ -86,11 +93,11 @@ function prepareVarsObj<T>(jsonProp: T, vars: string[], logError: LogError): unk
                 }
             }
         } else if (Array.isArray(jsonProp)) {
-            return jsonProp.map(item => prepareVarsObj(item, vars, logError));
+            return jsonProp.map(item => prepareVarsObj(item, store, logError));
         } else if (typeof jsonProp === 'object') {
             const res: Record<string, unknown> = {};
             for (const key in jsonProp) {
-                res[key] = prepareVarsObj(jsonProp[key], vars, logError);
+                res[key] = prepareVarsObj(jsonProp[key], store, logError);
             }
             return res;
         }
@@ -117,15 +124,23 @@ function applyVars(jsonProp: unknown, variables: VariablesMap, logError: LogErro
 
 export function prepareVars<T>(jsonProp: T, logError: LogError): {
     vars: string[];
+    hasExpression: boolean;
     applyVars: (variables: VariablesMap) => MaybeMissing<T>;
 } {
-    let vars: string[] = [];
-    const root = prepareVarsObj(jsonProp, vars, logError);
+    const store: {
+        vars: string[];
+        hasExpression: boolean;
+    } = {
+        vars: [],
+        hasExpression: false
+    };
+    const root = prepareVarsObj(jsonProp, store, logError);
 
-    vars = uniq(vars);
+    const vars = uniq(store.vars);
 
     return {
         vars,
+        hasExpression: store.hasExpression,
         applyVars(variables: VariablesMap) {
             return applyVars(root, variables, logError) as MaybeMissing<T>;
         }
