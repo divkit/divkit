@@ -42,3 +42,7 @@
 .root:not(.root_platform_desktop) .root__only-desktop {
     display: none;
 }
+
+.root_restrict-scroll {
+    overscroll-behavior: contain;
+}

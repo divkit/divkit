@@ -208,6 +208,8 @@
         childLayoutParams = assignIfDifferent(newChildLayoutParams, childLayoutParams);
     }
 
+    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
+
     $: gridStyle = {
         padding,
         'grid-gap': gridGap
@@ -403,7 +405,7 @@
         forceWidth={orientation === 'horizontal'}
     >
         <div
-            class={css.gallery__scroller}
+            class="{css.gallery__scroller} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
             bind:this={scroller}
             on:scroll={shouldCheckArrows ? updateArrowsVisibility : null}
             style={makeStyle(scrollerStyle)}

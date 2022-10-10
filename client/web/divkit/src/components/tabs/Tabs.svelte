@@ -2,6 +2,7 @@
     import { getContext, onDestroy, tick } from 'svelte';
 
     import css from './Tabs.module.css';
+    import rootCss from '../Root.module.css';
 
     import type { Mods } from '../../types/general';
     import type { LayoutParams } from '../../types/layoutParams';
@@ -202,6 +203,8 @@
         true :
         Boolean($jsonSwipeEnabled);
 
+    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
+
     let isSwipeInitialized = false;
     let isAnimated = false;
     let previousSelected = selected;
@@ -351,7 +354,14 @@
     let currentTransform: number;
 
     function onTouchStart(event: TouchEvent): void {
-        if (items.length < 2 || event.touches.length > 1) {
+        const target = event.target as HTMLElement | null;
+        const restrictClosest = target?.closest?.(`.${rootCss['root_restrict-scroll']}`);
+
+        if (
+            items.length < 2 ||
+            event.touches.length > 1 ||
+            (restrictClosest && restrictClosest !== panelsWrapper)
+        ) {
             return;
         }
 
@@ -498,7 +508,7 @@
     >
         <div
             bind:this={tabsElem}
-            class={css.tabs__list}
+            class="{css.tabs__list} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
             role="tablist"
             style:--divkit-tabs-font-size={pxToEm(tabFontSize)}
             style:--divkit-tabs-paddings={tabPaddings}
@@ -543,7 +553,7 @@
             ></div>
         {/if}
         <div
-            class={css.tabs__panels}
+            class="{css.tabs__panels} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
             bind:this={panelsWrapper}
         >
             <div

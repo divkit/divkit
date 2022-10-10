@@ -2,6 +2,7 @@
     import { getContext, onDestroy, onMount } from 'svelte';
 
     import css from './Pager.module.css';
+    import rootCss from '../Root.module.css';
 
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
@@ -95,6 +96,8 @@
     $: {
         padding = correctEdgeInserts($jsonPaddings, padding);
     }
+
+    $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
 
     $: gridAuto = orientation === 'horizontal' ? 'grid-auto-columns' : 'grid-auto-rows';
     let sizeVal = '';
@@ -246,7 +249,7 @@
         customPaddings={true}
     >
         <div
-            class={css.pager__items}
+            class="{css.pager__items} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
             style={makeStyle(style)}
             bind:this={pagerItemsWrapper}
             on:scroll={onScrollDebounced}

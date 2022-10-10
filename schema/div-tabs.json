@@ -216,7 +216,7 @@
           "$description": "translations.json#/div_tabs_restrict_parent_scroll",
           "platforms": [
             "android",
-            "ios"
+            "web"
           ]
         }
       }

@@ -40,5 +40,5 @@ export interface DivTabsData extends DivBaseData, DivActionableData {
     items: TabItem[];
     // tabs_position
     // dynamic_height
-    // restrict_parent_scroll
+    restrict_parent_scroll?: BooleanInt;
 }
