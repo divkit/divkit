@@ -56,12 +56,12 @@
     export let onCustomAction: CustomActionCallback | undefined = undefined;
     export let onComponent: ComponentCallback | undefined = undefined;
 
-    let isDesktop = platform === 'desktop';
+    let isDesktop = writable(platform === 'desktop');
     if (platform === 'auto' && typeof matchMedia !== 'undefined') {
         const touchQuery = matchMedia('(any-pointer: coarse)');
-        isDesktop = !touchQuery.matches;
+        isDesktop.set(!touchQuery.matches);
         touchQuery.addListener(() => {
-            isDesktop = !touchQuery.matches;
+            isDesktop.set(!touchQuery.matches);
         });
     }
 
@@ -601,6 +601,7 @@
         getJsonWithVars,
         getStore,
         getVariable: getVariableInstance,
+        isDesktop,
         registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
         unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined
     });
@@ -881,7 +882,7 @@
 
 {#if !hasError && rootStateDiv}
     <div
-        class="{css.root}{isDesktop ? ` ${css.root_platform_desktop}` : ''}"
+        class="{css.root}{$isDesktop ? ` ${css.root_platform_desktop}` : ''}"
         on:touchstart={emptyTouchstartHandler}
     >
         <RootSvgFilters {svgFiltersMap} />

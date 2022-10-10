@@ -44,10 +44,12 @@
 
 .gallery_orientation_horizontal > .gallery__scroller > .gallery__items-grid {
     flex-direction: column;
+    min-width: min-content;
 }
 
 .gallery_orientation_vertical > .gallery__scroller > .gallery__items-grid {
     flex-direction: row;
+    min-height: min-content;
 }
 
 .gallery__items {
@@ -60,6 +62,7 @@
     grid-template-rows: 100%;
     grid-auto-flow: column;
     height: 100%;
+    min-width: min-content;
     min-height: 0;
 }
 
@@ -69,6 +72,7 @@
     grid-auto-flow: row;
     width: 100%;
     min-width: 0;
+    min-height: min-content;
 }
 
 .gallery__arrow {

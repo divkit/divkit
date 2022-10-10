@@ -3,7 +3,6 @@
     import { derived, Readable } from 'svelte/store';
 
     import css from './Gallery.module.css';
-    import rootCss from '../Root.module.css';
 
     import type { Align, LayoutParams } from '../../types/layoutParams';
     import type { DivGalleryData } from '../../types/gallery';
@@ -28,6 +27,7 @@
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { joinTemplateSizes } from '../../utils/joinTemplateSizes';
+    import { debounce } from '../../utils/debounce';
 
     export let json: Partial<DivGalleryData> = {};
     export let templateContext: TemplateContext;
@@ -40,6 +40,10 @@
     let hasScrollLeft = false;
     let hasScrollRight = false;
 
+    let resizeObserver: ResizeObserver | null = null;
+    let itemsGridElem: HTMLElement;
+    let mounted = false;
+
     let hasError = false;
     $: jsonItems = json.items;
     $: {
@@ -50,6 +54,8 @@
             hasError = false;
         }
     }
+
+    const isDesktop = rootCtx.isDesktop;
 
     interface Item {
         json: DivBaseData;
@@ -72,6 +78,20 @@
             origJson: item
         };
     });
+
+    $: shouldCheckArrows = $isDesktop && mounted && !hasError;
+    $: if (shouldCheckArrows) {
+        if (typeof ResizeObserver !== 'undefined') {
+            // Gallery can contain a dynamic content (e.g. loading images with auto-size)
+            resizeObserver = new ResizeObserver(() => {
+                updateArrowsVisibilityDebounced();
+            });
+            resizeObserver.observe(itemsGridElem);
+        }
+    } else if (resizeObserver) {
+        resizeObserver.disconnect();
+        resizeObserver = null;
+    }
 
     $: jsonColumnCount = rootCtx.getDerivedFromVars(json.column_count);
     let columns = 1;
@@ -214,15 +234,13 @@
         hasScrollRight = scrollLeft + containerWidth < scrollWidth - 2;
     }
 
+    const updateArrowsVisibilityDebounced = debounce(updateArrowsVisibility, 50);
+
     function scroll(type: 'left' | 'right'): void {
         scroller.scroll({
             left: scroller.scrollLeft + (scroller.offsetWidth * .75) * (type === 'right' ? 1 : -1),
             behavior: 'smooth'
         });
-    }
-
-    function onScroll(): void {
-        updateArrowsVisibility();
     }
 
     function getItems(): HTMLElement[] {
@@ -298,17 +316,6 @@
         return action === 'prev' ? 1 : galleryElements.length - 2;
     }
 
-    onMount(() => {
-        if (!hasError) {
-            updateArrowsVisibility();
-
-            if (defaultItem) {
-                const galleryElements = getItems();
-                scrollToGalleryItem(galleryElements, defaultItem, 'auto');
-            }
-        }
-    });
-
     if (json.id && !hasError) {
         rootCtx.registerInstance<SwitchElements>(json.id, {
             setCurrentItem(item: number) {
@@ -355,12 +362,29 @@
         });
     }
 
+    onMount(() => {
+        mounted = true;
+
+        if (!hasError) {
+            updateArrowsVisibilityDebounced();
+
+            if (defaultItem) {
+                const galleryElements = getItems();
+                scrollToGalleryItem(galleryElements, defaultItem, 'auto');
+            }
+        }
+    });
+
     onDestroy(() => {
+        mounted = false;
+
         if (json.id) {
             rootCtx.unregisterInstance(json.id);
         }
     });
 </script>
+
+<svelte:window on:resize={shouldCheckArrows ? updateArrowsVisibilityDebounced : null} />
 
 {#if !hasError}
     <Outer
@@ -377,10 +401,11 @@
         <div
             class={css.gallery__scroller}
             bind:this={scroller}
-            on:scroll={onScroll}
+            on:scroll={shouldCheckArrows ? updateArrowsVisibility : null}
             style={makeStyle(scrollerStyle)}
         >
             <div
+                bind:this={itemsGridElem}
                 class={css['gallery__items-grid']}
                 style={makeStyle(gridStyle)}
             >
@@ -403,15 +428,15 @@
             </div>
         </div>
         {#if orientation === 'horizontal'}
-            {#if hasScrollLeft}
-                <div class="{css.gallery__arrow} {css.gallery__arrow_left} {rootCss['root__only-desktop']}" on:click={() => scroll('left')}>
+            {#if hasScrollLeft && shouldCheckArrows}
+                <div class="{css.gallery__arrow} {css.gallery__arrow_left}" on:click={() => scroll('left')}>
                     <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['gallery__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
                     </svg>
                 </div>
             {/if}
-            {#if hasScrollRight}
-                <div class="{css.gallery__arrow} {css.gallery__arrow_right} {rootCss['root__only-desktop']}" on:click={() => scroll('right')}>
+            {#if hasScrollRight && shouldCheckArrows}
+                <div class="{css.gallery__arrow} {css.gallery__arrow_right}" on:click={() => scroll('right')}>
                     <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
                         <path class={css['gallery__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>
                     </svg>

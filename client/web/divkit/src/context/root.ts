@@ -32,6 +32,7 @@ export interface RootCtxValue {
     getJsonWithVars<T>(jsonProp: T): MaybeMissing<T>;
     getStore<T>(id: string): Writable<T>;
     getVariable(varName: string, type: VariableType): Variable | undefined;
+    isDesktop: Readable<boolean>;
 
     // Devtool
     registerComponent?({
