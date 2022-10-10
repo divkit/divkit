@@ -177,7 +177,8 @@
             return {
                 ...item,
                 layoutParams: {
-                    gridArea
+                    gridArea,
+                    fakeElement: layoutParams?.fakeElement || false
                 }
             };
         });

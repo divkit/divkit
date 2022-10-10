@@ -185,7 +185,7 @@
         currentItem = index;
     }
 
-    if (json.id) {
+    if (json.id && !layoutParams?.fakeElement) {
         rootCtx.registerInstance<SwitchElements>(json.id, {
             setCurrentItem(item: number) {
                 if (item < 0 || item > items.length - 1) {
@@ -230,7 +230,7 @@
     });
 
     onDestroy(() => {
-        if (json.id) {
+        if (json.id && !layoutParams?.fakeElement) {
             rootCtx.unregisterInstance(json.id);
         }
     });
@@ -257,6 +257,7 @@
                         div={item.json}
                         templateContext={item.templateContext}
                         origJson={item.origJson}
+                        layoutParams={layoutParams?.fakeElement ? { fakeElement: true } : undefined}
                     />
                 </div>
             {/each}

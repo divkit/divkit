@@ -109,9 +109,6 @@
         return {
             json: {
                 ...json,
-                transition_in: undefined,
-                transition_out: undefined,
-                transition_change: undefined,
                 margins: undefined,
                 alpha: haveFadeTransition(transitionsList) ? undefined : json.alpha
             },
@@ -144,7 +141,7 @@
     if (!stateId) {
         hasError = true;
         rootCtx.logError(wrapError(new Error('Missing "id" prop for div "state"')));
-    } else {
+    } else if (!layoutParams?.fakeElement) {
         stateCtx.registerInstance(stateId, {
             async setState(stateId: string) {
                 if (selectedId === stateId) {
@@ -225,9 +222,6 @@
                         const res: ChangeBoundsItem = {
                             json: {
                                 ...child.json,
-                                transition_in: undefined,
-                                transition_out: undefined,
-                                transition_change: undefined,
                                 margins: undefined,
                                 width: { type: 'match_parent' },
                                 height: { type: 'match_parent' },
@@ -443,7 +437,7 @@
     }
 
     onDestroy(() => {
-        if (stateId) {
+        if (stateId && !layoutParams?.fakeElement) {
             stateCtx.unregisterInstance(stateId);
         }
     });
@@ -462,7 +456,7 @@
                 <Unknown div={selectedState.div} templateContext={templateContext} />
             {/key}
         {/if}
-        <div class={css.state__animations} bind:this={animationRoot}>
+        <div class={css.state__animations} bind:this={animationRoot} aria-hidden="true">
             {#each animationList as item (item)}
                 {#if 'direction' in item}
                     <div
@@ -472,7 +466,7 @@
                         on:introend={() => onOutro(item)}
                     >
                         <div class={css['state__animation-child-inner']}>
-                            <Unknown div={item.json} templateContext={item.templateContext} />
+                            <Unknown div={item.json} templateContext={item.templateContext} layoutParams={{ fakeElement: true }} />
                         </div>
                     </div>
                 {:else}
@@ -482,7 +476,7 @@
                         on:introend={() => onOutro(item)}
                     >
                         <div class={css['state__animation-child-inner']}>
-                            <Unknown div={item.json} templateContext={item.templateContext} />
+                            <Unknown div={item.json} templateContext={item.templateContext} layoutParams={{ fakeElement: true }} />
                         </div>
                     </div>
                 {/if}

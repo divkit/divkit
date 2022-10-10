@@ -89,6 +89,9 @@
     $: {
         let newChildLayoutParams: LayoutParams = {};
 
+        if (layoutParams?.fakeElement) {
+            newChildLayoutParams.fakeElement = true;
+        }
         if (orientation === 'overlap') {
             newChildLayoutParams.overlapParent = true;
         }

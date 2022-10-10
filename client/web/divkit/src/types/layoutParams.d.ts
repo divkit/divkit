@@ -18,4 +18,5 @@ export interface LayoutParams {
         rowSpan: number;
     };
     scrollSnap?: ScrollSnap;
+    fakeElement?: boolean;
 }

@@ -53,6 +53,9 @@
     $: {
         let newLayoutParams: LayoutParams = {};
 
+        if (layoutParams?.fakeElement) {
+            newLayoutParams.fakeElement = true;
+        }
         if ($jsonWidth?.type === 'wrap_content') {
             newLayoutParams.parentHorizontalWrapContent = true;
         }
@@ -447,7 +450,7 @@
         return { x, y };
     }
 
-    if (json.id && !hasError) {
+    if (json.id && !hasError && !layoutParams?.fakeElement) {
         rootCtx.registerInstance<SwitchElements>(json.id, {
             setCurrentItem(item: number) {
                 if (item < 0 || item > items.length - 1) {
@@ -478,7 +481,7 @@
     }
 
     onDestroy(() => {
-        if (json.id) {
+        if (json.id && !layoutParams?.fakeElement) {
             rootCtx.unregisterInstance(json.id);
         }
     });
@@ -518,16 +521,16 @@
                         selected: isSelected,
                         actionable: Boolean(item.title_click_action)
                     })}
-                    actions={item.title_click_action ? [item.title_click_action] : []}
+                    actions={item.title_click_action && !layoutParams?.fakeElement ? [item.title_click_action] : []}
                     attrs={{
                         id: `${instId}-tab-${index}`,
                         'aria-controls': `${instId}-panel-${index}`,
                         role: 'tab',
                         // eslint-disable-next-line no-nested-ternary
-                        tabindex: isSelected ? (item.title_click_action ? undefined : '0') : '-1',
+                        tabindex: isSelected && !layoutParams?.fakeElement ? (item.title_click_action ? undefined : '0') : '-1',
                         'aria-selected': isSelected ? 'true' : 'false'
                     }}
-                    customAction={event => selectItem(event, index)}
+                    customAction={layoutParams?.fakeElement ? null : (event => selectItem(event, index))}
                 >
                     {item.title}
                 </Actionable>

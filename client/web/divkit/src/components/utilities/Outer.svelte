@@ -309,7 +309,9 @@
         }
     }
 
-    const jsonTransitionTriggers = json.transition_triggers || ['state_change', 'visibility_change'];
+    const jsonTransitionTriggers = layoutParams.fakeElement ?
+        [] :
+        (json.transition_triggers || ['state_change', 'visibility_change']);
     const hasStateChangeTrigger = jsonTransitionTriggers.indexOf('state_change') !== -1 && json.id;
     const hasVisibilityChangeTrigger = jsonTransitionTriggers.indexOf('visibility_change') !== -1 && json.id;
 
@@ -337,7 +339,9 @@
     let actions: MaybeMissing<Action>[] = [];
     $: {
         let newActions = $jsonActions || $jsonAction && [$jsonAction] || [];
-        if (!Array.isArray(newActions)) {
+        if (layoutParams.fakeElement) {
+            newActions = [];
+        } else if (!Array.isArray(newActions)) {
             newActions = [];
             rootCtx.logError(wrapError(new Error('Actions should be array')));
         } else if (newActions.length && customActions) {
@@ -547,10 +551,12 @@
             });
         }
 
-        const visibilityActions = rootCtx.getJsonWithVars(
-            json.visibility_actions ||
-            json.visibility_action && [json.visibility_action]
-        );
+        const visibilityActions = layoutParams.fakeElement ?
+            [] :
+            rootCtx.getJsonWithVars(
+                json.visibility_actions ||
+                json.visibility_action && [json.visibility_action]
+            );
         visibilityAction(node, {
             visibilityActions,
             rootCtx
@@ -563,7 +569,7 @@
 
         let dev: DevtoolResult | null = null;
 
-        if (devtool) {
+        if (devtool && !layoutParams.fakeElement) {
             dev = devtool(node, {
                 json,
                 origJson,

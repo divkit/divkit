@@ -182,6 +182,10 @@
         let newChildLayoutParams: LayoutParams = {};
         scrollSnap = false;
 
+        if (layoutParams?.fakeElement) {
+            newChildLayoutParams.fakeElement = true;
+        }
+
         if (orientation === 'horizontal') {
             newChildLayoutParams.parentVAlign = align;
         } else {
@@ -316,7 +320,7 @@
         return action === 'prev' ? 1 : galleryElements.length - 2;
     }
 
-    if (json.id && !hasError) {
+    if (json.id && !hasError && !layoutParams?.fakeElement) {
         rootCtx.registerInstance<SwitchElements>(json.id, {
             setCurrentItem(item: number) {
                 const galleryElements = getItems();
@@ -378,7 +382,7 @@
     onDestroy(() => {
         mounted = false;
 
-        if (json.id) {
+        if (json.id && !layoutParams?.fakeElement) {
             rootCtx.unregisterInstance(json.id);
         }
     });
