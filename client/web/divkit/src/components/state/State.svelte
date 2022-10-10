@@ -94,6 +94,10 @@
     let childrenWithTransitionOut: ChildWithTransition[] = [];
     let childrenWithTransitionChange: ChildWithTransitionChange[] = [];
 
+    function haveFadeTransition(list: AnyTransition[]): boolean {
+        return list.some(it => it.type === 'fade');
+    }
+
     function getItemAnimation(rootBbox: DOMRect, child: ChildWithTransition, direction: 'in' | 'out'): AnimationItem {
         let { json, templateContext, transitions, node } = child;
         json = rootCtx.getJsonWithVars(json) as DivBaseData;
@@ -109,7 +113,7 @@
                 transition_out: undefined,
                 transition_change: undefined,
                 margins: undefined,
-                alpha: undefined
+                alpha: haveFadeTransition(transitionsList) ? undefined : json.alpha
             },
             templateContext,
             elementBbox: bbox,
@@ -225,7 +229,6 @@
                                 transition_out: undefined,
                                 transition_change: undefined,
                                 margins: undefined,
-                                alpha: undefined,
                                 width: { type: 'match_parent' },
                                 height: { type: 'match_parent' },
                             },
