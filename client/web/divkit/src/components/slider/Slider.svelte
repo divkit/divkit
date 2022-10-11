@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext } from 'svelte';
+    import { getContext, onMount } from 'svelte';
 
     import css from './Slider.module.css';
 
@@ -18,13 +18,13 @@
     import { correctNumber } from '../../utils/correctNumber';
     import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
+    import { debounce } from '../../utils/debounce';
 
     export let json: Partial<DivSliderData> = {};
     export let templateContext: TemplateContext;
     export let origJson: DivBase | undefined = undefined;
     export let layoutParams: LayoutParams | undefined = undefined;
 
-    const MAX_TICKS_COUNT = 20;
     const DEFAULT_DRAWABLE_STYLE: DrawableStyle = {
         width: 10,
         height: 10,
@@ -44,6 +44,7 @@
     $: {
         minValue = correctNumber($jsonMinValue, minValue);
         maxValue = correctNumber($jsonMaxValue, maxValue);
+        checkTicks();
     }
 
     const firstVariable = rootCtx.getJsonWithVars(json.thumb_value_variable);
@@ -93,8 +94,6 @@
         trackActiveStyle = correctDrawableStyle($jsonTrackActiveStyle, trackActiveStyle);
     }
 
-    $: canShowTicks = maxValue - minValue + 1 <= MAX_TICKS_COUNT;
-
     function fillTicks(from: number, to: number, minValue: number, maxValue: number, inside: boolean): number[] {
         let res: number[] = [];
 
@@ -118,20 +117,17 @@
     let markActiveTicks: number[];
     let markActiveStyle: DrawableStyle | null = null;
     $: {
-        if (canShowTicks) {
-            let newStyle = correctDrawableStyle($jsonMarkActiveStyle, DEFAULT_DRAWABLE_STYLE);
+        let newStyle = correctDrawableStyle($jsonMarkActiveStyle, DEFAULT_DRAWABLE_STYLE);
 
-            if (newStyle !== DEFAULT_DRAWABLE_STYLE) {
-                markActiveStyle = newStyle;
-            }
-        } else {
-            markActiveStyle = null;
+        if (newStyle !== DEFAULT_DRAWABLE_STYLE) {
+            markActiveStyle = newStyle;
         }
     }
     $: if (markActiveStyle) {
         markActiveTicks = secondVariable ?
             fillTicks(Math.min(value, value2), Math.max(value, value2) + 1, minValue, maxValue, true) :
             fillTicks(minValue, value, minValue, maxValue, true);
+        checkTicks();
     } else {
         markActiveTicks = [];
     }
@@ -140,20 +136,17 @@
     let markInactiveTicks: number[];
     let markInactiveStyle: DrawableStyle | null = null;
     $: {
-        if (canShowTicks) {
-            let newStyle = correctDrawableStyle($jsonMarkInactiveStyle, DEFAULT_DRAWABLE_STYLE);
+        let newStyle = correctDrawableStyle($jsonMarkInactiveStyle, DEFAULT_DRAWABLE_STYLE);
 
-            if (newStyle !== DEFAULT_DRAWABLE_STYLE) {
-                markInactiveStyle = newStyle;
-            }
-        } else {
-            markInactiveStyle = null;
+        if (newStyle !== DEFAULT_DRAWABLE_STYLE) {
+            markInactiveStyle = newStyle;
         }
     }
     $: if (markInactiveStyle) {
         markInactiveTicks = secondVariable ?
             fillTicks(Math.min(value, value2), Math.max(value, value2) + 1, minValue, maxValue, false) :
             fillTicks(value + 1, maxValue + 1, minValue, maxValue, true);
+        checkTicks();
     } else {
         markInactiveTicks = [];
     }
@@ -213,13 +206,6 @@
         }
     }
 
-    $: maxHeight = Math.max(...[
-        thumbStyle.height,
-        thumbSecondaryStyle.height,
-        trackInactiveStyle.height,
-        trackActiveStyle.height,
-        0,
-    ].filter(isNonNegativeNumber));
     $: maxThumbWidth = pxToEm(Math.max(...[
         thumbStyle.width,
         thumbSecondaryStyle.width,
@@ -234,17 +220,6 @@
     $: trackSecondaryPart = secondVariable ? (value2 - minValue) / (maxValue - minValue) : undefined;
     $: trackActivePart = trackSecondaryPart !== undefined ? Math.abs(trackSecondaryPart - trackPart) : trackPart;
     $: trackActiveOffset = trackSecondaryPart !== undefined ? Math.min(trackSecondaryPart, trackPart) : 0;
-
-    $: textTopOffset = -Math.min(...[
-        (maxHeight - thumbStyle.height) / 2 + (textStyle?.offset?.y || 0),
-        secondVariable ? (maxHeight - thumbSecondaryStyle.height) / 2 + (textSecondaryStyle?.offset?.y || 0) : 0,
-        0
-    ].filter(it => it !== undefined && typeof it === 'number' && !isNaN(it)) as number[]);
-    $: textBottomOffset = Math.max(...[
-        (textStyle?.offset?.y || 0) - (maxHeight - thumbStyle.height) / 2,
-        secondVariable ? (textSecondaryStyle?.offset?.y || 0) - (maxHeight - thumbSecondaryStyle.height) / 2 : 0,
-        0
-    ].filter(it => it !== undefined && typeof it === 'number' && !isNaN(it)) as number[]);
 
     $: stl = {
         '--divkit-slider-thumb-width': pxToEm(thumbStyle.width),
@@ -273,13 +248,10 @@
         '--divkit-slider-tick-inactive-background': markInactiveStyle?.background || undefined,
         '--divkit-slider-tick-inactive-box-shadow': markInactiveStyle?.boxShadow || undefined,
 
-        '--divkit-slider-max-height': pxToEm(maxHeight),
         '--divkit-slider-max-thumb-width': maxThumbWidth,
         '--divkit-slider-max-thumb-height': maxThumbHeight,
         '--divkit-slider-track-part': trackPart,
         '--divkit-slider-track-secondary-part': trackSecondaryPart,
-        '--divkit-slider-offset-top': pxToEmWithUnits(textTopOffset),
-        '--divkit-slider-offset-bottom': pxToEmWithUnits(textBottomOffset),
     };
 
     $: mods = {};
@@ -310,7 +282,39 @@
             valueVariable.setValue(val);
         }
     }
+
+    let isTicksWarning = false;
+
+    function checkTicks() {
+        if (!tracksInner) {
+            return;
+        }
+
+        const ticksCount = maxValue - minValue;
+        const activeTickWidth = markActiveStyle?.width || 0;
+        const inactiveTickWidth = markInactiveStyle?.width || 0;
+        const maxTickWidth = Math.max(activeTickWidth, inactiveTickWidth);
+
+        if (maxTickWidth * ticksCount >= tracksInner?.clientWidth) {
+            if (!isTicksWarning) {
+                rootCtx.logError(wrapError(new Error('Slider ticks overlap each other'), {
+                    level: 'warn'
+                }));
+                isTicksWarning = true;
+            }
+        } else {
+            isTicksWarning = false;
+        }
+    }
+
+    const checkTicksDebounced = debounce(checkTicks, 50);
+
+    onMount(() => {
+        checkTicks();
+    });
 </script>
+
+<svelte:window on:resize={checkTicksDebounced} />
 
 {#if !hasError}
     <Outer
@@ -324,34 +328,6 @@
         {layoutParams}
     >
         <div class={css['slider__tracks-wrapper']}>
-            {#if textStyle || secondVariable && textSecondaryStyle}
-                <div class={css['slider__thumb-text-wrapper']} aria-hidden="true">
-                    {#if textStyle}
-                        <div class={css['slider__thumb-text']}>
-                            <div
-                                class={css['slider__thumb-text-inner']}
-                                style:font-size={textStyle?.fontSize || '1em'}
-                                style:font-weight={textStyle?.fontWeight || ''}
-                                style:color={textStyle?.textColor || '#000'}
-                            >
-                                {value}
-                            </div>
-                        </div>
-                    {/if}
-                    {#if secondVariable}
-                        <div class="{css['slider__thumb-text']} {css['slider__thumb-text_secondary']}">
-                            <div
-                                class={css['slider__thumb-text-inner']}
-                                style:font-size={textSecondaryStyle?.fontSize || '1em'}
-                                style:font-weight={textSecondaryStyle?.fontWeight || ''}
-                                style:color={textSecondaryStyle?.textColor || '#000'}
-                            >
-                                {value2}
-                            </div>
-                        </div>
-                    {/if}
-                </div>
-            {/if}
             <div class={css['slider__tracks-inner']} bind:this={tracksInner}>
                 <div
                     class={css.slider__track}
@@ -380,14 +356,40 @@
                     style:border-radius={pxToEm(thumbStyle.borderRadius)}
                     style:background={thumbStyle.background}
                     style:box-shadow={thumbStyle.boxShadow || ''}
-                ></div>
+                >
+                    {#if textStyle}
+                        <div class={css['slider__thumb-text']}>
+                            <div
+                                    class={css['slider__thumb-text-inner']}
+                                    style:font-size={textStyle?.fontSize || '1em'}
+                                    style:font-weight={textStyle?.fontWeight || ''}
+                                    style:color={textStyle?.textColor || '#000'}
+                            >
+                                {value}
+                            </div>
+                        </div>
+                    {/if}
+                </div>
                 {#if secondVariable}
                     <div
                         class="{css.slider__thumb} {css.slider__thumb_secondary}"
                         style:border-radius={pxToEm(thumbSecondaryStyle.borderRadius)}
                         style:background={thumbSecondaryStyle.background}
                         style:box-shadow={thumbSecondaryStyle.boxShadow || ''}
-                    ></div>
+                    >
+                        {#if textSecondaryStyle}
+                            <div class="{css['slider__thumb-text']} {css['slider__thumb-text_secondary']}">
+                                <div
+                                        class={css['slider__thumb-text-inner']}
+                                        style:font-size={textSecondaryStyle?.fontSize || '1em'}
+                                        style:font-weight={textSecondaryStyle?.fontWeight || ''}
+                                        style:color={textSecondaryStyle?.textColor || '#000'}
+                                >
+                                    {value2}
+                                </div>
+                            </div>
+                        {/if}
+                    </div>
                 {/if}
                 <input
                     type="range"

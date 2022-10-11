@@ -58,8 +58,6 @@
 
 .slider__tracks-inner {
     position: relative;
-    margin-top: var(--divkit-slider-offset-top);
-    margin-bottom: var(--divkit-slider-offset-bottom);
 }
 
 .slider__track {
@@ -78,34 +76,21 @@
     margin: auto;
 }
 
-.slider__thumb-text-wrapper {
-    position: absolute;
-    z-index: 2;
-    left: calc(var(--divkit-slider-max-thumb-width) / -2);
-    width: calc(100% + var(--divkit-slider-max-thumb-width));
-    pointer-events: none;
-    user-select: none;
-    white-space: nowrap;
-}
-
 .slider__thumb-text {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: calc(var(--divkit-slider-text-offset-y, 0px) + 50%);
+    left: calc(var(--divkit-slider-text-offset-x, 0px) + 50%);
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--divkit-slider-thumb-width);
+    width: max-content;
     height: var(--divkit-slider-thumb-height);
-    margin-top: calc(var(--divkit-slider-text-offset-y, 0px) + var(--divkit-slider-offset-top) + calc(calc(var(--divkit-slider-max-height) - var(--divkit-slider-thumb-height)) / 2));
-    margin-left: calc(var(--divkit-slider-text-offset-x, 0px) + calc(calc(100% - var(--divkit-slider-max-thumb-width)) * var(--divkit-slider-track-part)) + calc(calc(var(--divkit-slider-max-thumb-width) - var(--divkit-slider-thumb-width)) / 2));
+    transform: translate(-50%, -50%);
 }
 
 .slider__thumb-text_secondary {
-    width: var(--divkit-slider-thumb-secondary-width);
-    height: var(--divkit-slider-thumb-secondary-height);
-    margin-top: calc(var(--divkit-slider-text-secondary-offset-y, 0px) + var(--divkit-slider-offset-top) + calc(calc(var(--divkit-slider-max-height) - var(--divkit-slider-thumb-secondary-height)) / 2));
-    margin-left: calc(var(--divkit-slider-text-secondary-offset-x, 0px) + calc(calc(100% - var(--divkit-slider-max-thumb-width)) * var(--divkit-slider-track-secondary-part)) + calc(calc(var(--divkit-slider-max-thumb-width) - var(--divkit-slider-thumb-secondary-width)) / 2));
+    top: calc(var(--divkit-slider-text-secondary-offset-y, 0px) + 50%);
+    left: calc(var(--divkit-slider-text-secondary-offset-x, 0px) + 50%);
 }
 
 .slider__tick {
