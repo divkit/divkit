@@ -1,6 +1,7 @@
 import type { DivBaseData } from './base';
 import type { DivActionableData } from './actionable';
 import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
+import type { FadeTransition } from './base';
 
 export type ImageScale = 'no_scale' | 'fill' | 'fit';
 
@@ -22,4 +23,5 @@ export interface DivImageData extends DivBaseData, DivActionableData {
     aspect?: DivAspect;
     // high_priority_preview_show
     tint_color?: string;
+    appearance_animation?: FadeTransition;
 }

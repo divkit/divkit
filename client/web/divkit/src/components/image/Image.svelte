@@ -17,6 +17,8 @@
     import { correctImagePosition } from '../../utils/correctImagePosition';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { correctColor } from '../../utils/correctColor';
+    import { correctCSSInterpolator } from '../../utils/correctCSSInterpolator';
+    import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
 
     export let json: Partial<DivImageData> = {};
     export let templateContext: TemplateContext;
@@ -27,6 +29,10 @@
     // const DEFAULT_PLACEHOLDER_COLOR = correctColor('#14000000');
     const DEFAULT_PLACEHOLDER_COLOR = 'rgba(0,0,0,0.08)';
 
+    const STATE_LOADING = 0;
+    const STATE_LOADED = 1;
+    const STATE_ERROR = 2;
+
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     $: jsonImageUrl = rootCtx.getDerivedFromVars(json.image_url);
@@ -34,13 +40,11 @@
     $: jsonGifUrl = rootCtx.getDerivedFromVars(json.gif_url);
     $: imageUrl = $jsonImageUrl || $jsonGifUrl;
 
-    let fallbackMode = false;
-    let loading = true;
+    let state = STATE_LOADING;
     let placeholderColor = DEFAULT_PLACEHOLDER_COLOR;
 
     function updateImageUrl(_url: string | undefined): void {
-        loading = true;
-        fallbackMode = false;
+        state = STATE_LOADING;
     }
     $: updateImageUrl(imageUrl);
 
@@ -65,7 +69,7 @@
     $: {
         const preview = $jsonPreview;
 
-        if ((loading || fallbackMode) && preview) {
+        if ((state === STATE_LOADING || state === STATE_ERROR) && preview) {
             if (preview.startsWith('data:')) {
                 backgroundImage = `url("${htmlFilter(preview)}")`;
             } else {
@@ -77,14 +81,14 @@
     }
 
     $: jsonPlaceholderColor = rootCtx.getDerivedFromVars(json.placeholder_color);
-    function updatePlaceholderColor(loading: boolean, fallbackMode: boolean, color: string | undefined): void {
-        if (loading || fallbackMode) {
+    function updatePlaceholderColor(state: number, color: string | undefined): void {
+        if (state === STATE_LOADING || state === STATE_ERROR) {
             placeholderColor = correctColor(color, 1, placeholderColor);
         } else {
             placeholderColor = '';
         }
     }
-    $: updatePlaceholderColor(loading, fallbackMode, $jsonPlaceholderColor);
+    $: updatePlaceholderColor(state, $jsonPlaceholderColor);
 
     $: jsonScale = rootCtx.getDerivedFromVars(json.scale);
     // Exactly "none", "scale-down" would not match android
@@ -133,28 +137,54 @@
         }
     }
 
+    $: jsonAppearanceAnimation = rootCtx.getDerivedFromVars(json.appearance_animation);
+    let animationInterpolator = '';
+    let animationFadeStart = 0;
+    let animationDelay = 0;
+    let animationDuration = 0;
+
+    $: if ($jsonAppearanceAnimation && $jsonAppearanceAnimation.type === 'fade') {
+        const animation = $jsonAppearanceAnimation;
+
+        animationInterpolator = correctCSSInterpolator(animation.interpolator, 'ease_in_out').replace(/_/g, '-');
+        animationDuration = correctNonNegativeNumber(animation.duration, 300);
+        animationDelay = correctNonNegativeNumber(animation.start_delay, 0);
+        animationFadeStart = correctNonNegativeNumber(animation.alpha, 0);
+    }
+
     $: mods = {
         aspect: aspectPaddingBottom !== '0',
         'is-width-content': isWidthContent,
-        'is-height-content': isHeightContent
+        'is-height-content': isHeightContent,
+        loaded: state === STATE_LOADED,
+        'before-appearance': Boolean(animationInterpolator) && state === STATE_LOADING
+    };
+
+    $: containerStyle = {
+        'background-image': backgroundImage,
+        'background-color': placeholderColor
     };
 
     $: style = {
-        'background-image': backgroundImage,
-        'background-color': placeholderColor,
         'object-fit': scale,
         'object-position': position,
-        filter: !loading && !fallbackMode && svgFilterId ? `url(#${svgFilterId})` : ''
+        filter: state === STATE_LOADED && svgFilterId ? `url(#${svgFilterId})` : '',
+        '--divkit-appearance-interpolator': animationInterpolator || undefined,
+        '--divkit-appearance-fade-start': animationInterpolator ? animationFadeStart : undefined,
+        '--divkit-appearance-delay': animationInterpolator ? `${animationDelay}ms` : undefined,
+        '--divkit-appearance-duration': animationInterpolator ? `${animationDuration}ms` : undefined
     };
 
-    $: styleStr = makeStyle(style);
-
     function onLoad(): void {
-        loading = false;
+        if (state === STATE_LOADING) {
+            state = STATE_LOADED;
+        }
     }
 
     function onError(): void {
-        fallbackMode = true;
+        if (state === STATE_LOADING) {
+            state = STATE_ERROR;
+        }
     }
 
     onDestroy(() => {
@@ -169,16 +199,17 @@
         {origJson}
         {templateContext}
         {layoutParams}
+        style={containerStyle}
         customDescription={true}
     >
         {#if mods.aspect}
             <span class={css['image__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
                 <img
                     class={css.image__image}
-                    src={fallbackMode ? FALLBACK_IMAGE : imageUrl}
+                    src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
                     loading="lazy"
                     decoding="async"
-                    style={styleStr}
+                    style={makeStyle(style)}
                     {alt}
                     aria-hidden={alt ? null : 'true'}
                     on:load={onLoad}
@@ -188,7 +219,7 @@
         {:else}
             <img
                 class={css.image__image}
-                src={fallbackMode ? FALLBACK_IMAGE : imageUrl}
+                src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
                 loading="lazy"
                 decoding="async"
                 style={makeStyle(style)}

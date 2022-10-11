@@ -39,7 +39,8 @@
           "$ref": "div-fade-transition.json",
           "$description": "translations.json#/div_image_appearance_animation",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         }
       }
