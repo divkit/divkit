@@ -42,9 +42,7 @@ extension DivContainer: DivBlockModeling {
 
   private func checkConstraints(
     for children: [Block],
-    path: UIElementPath,
-    orientation: Orientation,
-    layoutMode: LayoutMode = .noWrap
+    path: UIElementPath
   ) throws {
     guard !children.isEmpty else {
       throw DivBlockModelingError("DivContainer is empty", path: path)
@@ -148,8 +146,7 @@ extension DivContainer: DivBlockModeling {
 
     try checkConstraints(
       for: children.map { $0.content },
-      path: childContext.parentPath,
-      orientation: orientation
+      path: childContext.parentPath
     )
 
     return LayeredBlock(
@@ -204,9 +201,7 @@ extension DivContainer: DivBlockModeling {
 
     try checkConstraints(
       for: children.map { $0.content },
-      path: childContext.parentPath,
-      orientation: orientation,
-      layoutMode: layoutMode
+      path: childContext.parentPath
     )
 
     return try ContainerBlock(

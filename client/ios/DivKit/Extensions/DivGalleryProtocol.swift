@@ -19,8 +19,12 @@ extension DivGalleryProtocol {
     columnCount: Int? = nil
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
+    let fallbackWidth = getFallbackWidth(direction: direction)
+    let fallbackHeight = getFallbackHeight(direction: direction)
     let children: [GalleryViewModel.Item] = try items.makeBlocks(
       context: context,
+      overridenWidth: fallbackWidth,
+      overridenHeight: fallbackHeight,
       mappedBy: {
         GalleryViewModel.Item(
           crossAlignment: (
@@ -35,7 +39,6 @@ extension DivGalleryProtocol {
 
     try checkLayoutConstraints(
       children,
-      direction: direction,
       path: context.parentPath
     )
 
@@ -90,9 +93,43 @@ extension DivGalleryProtocol {
     )
   }
 
+  private func getFallbackWidth(
+    direction: GalleryViewModel.Direction
+  ) -> DivOverridenSize? {
+    if width.isIntrinsic {
+      switch direction {
+      case .vertical:
+        if items.allHorizontallyMatchParent {
+          DivKitLogger.error("All items in vertical \(typeName) with wrap_content width has match_parent width")
+          return defaultFallbackSize
+        }
+      case .horizontal:
+        break
+      }
+    }
+
+    return nil
+  }
+
+  private func getFallbackHeight(
+    direction: GalleryViewModel.Direction
+  ) -> DivOverridenSize? {
+    if height.isIntrinsic {
+      switch direction {
+      case .horizontal:
+        if items.allVerticallyMatchParent {
+          DivKitLogger.error("All items in horizontal \(typeName) with wrap_content height has match_parent height")
+          return defaultFallbackSize
+        }
+      case .vertical:
+        break
+      }
+    }
+    return nil
+  }
+
   private func checkLayoutConstraints(
     _ children: [GalleryViewModel.Item],
-    direction: GalleryViewModel.Direction,
     path: UIElementPath
   ) throws {
     guard !children.isEmpty else {
@@ -100,24 +137,6 @@ extension DivGalleryProtocol {
         "\(typeName) has no items",
         path: path
       )
-    }
-
-    let blocks = children.map { $0.content }
-    switch direction {
-    case .horizontal:
-      if height.isIntrinsic, blocks.allVerticallyResizable {
-        throw DivBlockModelingError(
-          "All items in horizontal \(typeName) with wrap_content height has match_parent height",
-          path: path
-        )
-      }
-    case .vertical:
-      if width.isIntrinsic, blocks.allHorizontallyResizable {
-        throw DivBlockModelingError(
-          "All items in vertical \(typeName) with wrap_content width has match_parent width",
-          path: path
-        )
-      }
     }
   }
 
@@ -128,3 +147,8 @@ extension DivGalleryProtocol {
     return String(typeName)
   }
 }
+
+private let defaultFallbackSize = DivOverridenSize(
+  original: .divMatchParentSize(DivMatchParentSize()),
+  overriden: .divWrapContentSize(DivWrapContentSize(constrained: .value(true)))
+)

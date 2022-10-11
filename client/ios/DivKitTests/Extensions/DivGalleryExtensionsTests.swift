@@ -76,25 +76,19 @@ final class DivGalleryExtensionsTests: XCTestCase {
     _ = try makeBlock(fromFile: "vertical_gallery_match_parent_height_items")
   }
 
-  func test_HorizontalGallery_WhenVerticallyInrinsic_AndAllItemsAreVerticallyResizable_ThrowsError(
-  ) {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "horizontal_gallery_match_parent_height_items"),
-      DivBlockModelingError(
-        "All items in horizontal DivGallery with wrap_content height has match_parent height",
-        path: .root + "gallery"
-      )
+  func test_HorizontalGallery_WhenVerticallyInrinsic_AndAllItemsAreVerticallyResizable_FallbackHeight(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "horizontal_gallery_match_parent_height_items",
+      "horizontal_gallery_wrap_content_constrained_height_items"
     )
   }
 
-  func test_VerticalGallery_WhenHorizontallyInrinsic_AndAllItemsAreHorizontallyResizable_ThrowsError(
-  ) {
-    XCTAssertThrowsError(
-      try makeBlock(fromFile: "vertical_gallery_match_parent_width_items"),
-      DivBlockModelingError(
-        "All items in vertical DivGallery with wrap_content width has match_parent width",
-        path: .root + "gallery"
-      )
+  func test_VerticalGallery_WhenHorizontallyInrinsic_AndAllItemsAreHorizontallyResizable_FallbackWidth(
+  ) throws {
+    try assertBlocksAreEqual(
+      in: "vertical_gallery_match_parent_width_items",
+      "vertical_gallery_wrap_content_constrained_width_items"
     )
   }
 
@@ -137,6 +131,13 @@ final class DivGalleryExtensionsTests: XCTestCase {
     let nestedGallery = nestedGalleryBlock?.child as? GalleryBlock
     let expectedInsets = SideInsets.zero
     XCTAssertEqual(nestedGallery?.model.metrics.axialInsetMode, .fixed(values: expectedInsets))
+  }
+
+  private func assertBlocksAreEqual(in files: String...) throws {
+    let first = try makeBlock(fromFile: files[0])
+    for file in files.dropFirst() {
+      XCTAssertTrue(try first == makeBlock(fromFile: file))
+    }
   }
 }
 
