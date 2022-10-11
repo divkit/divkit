@@ -28,6 +28,7 @@
     import { correctFontWeight } from '../../utils/correctFontWeight';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
+    import { Coords, getTouchCoords } from '../../utils/getTouchCoords';
 
     export let json: Partial<DivTabsData> = {};
     export let templateContext: TemplateContext;
@@ -344,7 +345,6 @@
         swiperElem.style.transform = `translate3d(${-previousSelected * 100}%,0,0)`;
     }
 
-    type Coords = { x: number; y: number };
     let startCoords: Coords | null = null;
     let moveCoords: Coords | null = null;
     let swipeStartTime: number;
@@ -450,14 +450,6 @@
         } else {
             setSelected(newSelected);
         }
-    }
-
-    function getTouchCoords(event: TouchEvent): Coords {
-        const firstEvent = event.touches[0];
-        const x = firstEvent.clientX || firstEvent.pageX;
-        const y = firstEvent.clientY || firstEvent.pageY;
-
-        return { x, y };
     }
 
     if (json.id && !hasError && !layoutParams?.fakeElement) {

@@ -92,8 +92,8 @@
     "ru": "Действие при двойном нажатии на элемент."
   },
   "div_actionable_longtap_actions": {
-    "en": "Action when long-clicking on an element.",
-    "ru": "Действие при долгом нажатии на элемент."
+    "en": "Action when long-clicking on an element. Doesn't work on the devices w/o touch gestures.",
+    "ru": "Действие при долгом нажатии на элемент. Не работает на устройствах без тачевых жестов."
   },
   "div_animation": {
     "en": "Element animation parameters.",

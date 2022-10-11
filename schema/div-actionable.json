@@ -20,11 +20,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "$description": "translations.json#/div_actionable_longtap_actions",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_actionable_longtap_actions"
     },
     "doubletap_actions": {
       "type": "array",
@@ -33,11 +29,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "$description": "translations.json#/div_actionable_doubletap_actions",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_actionable_doubletap_actions"
     },
     "action_animation": {
       "$ref": "div-animation.json",

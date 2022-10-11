@@ -14,7 +14,7 @@ export interface ActionAnimation {
 export interface DivActionableData {
     action?: Action;
     actions?: Action[];
-    // longtap_actions;
-    // doubletap_actions;
+    longtap_actions?: Action[];
+    doubletap_actions?: Action[];
     action_animation?: ActionAnimation;
 }

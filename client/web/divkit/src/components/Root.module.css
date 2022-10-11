@@ -46,3 +46,7 @@
 .root_restrict-scroll {
     overscroll-behavior: contain;
 }
+
+.root_disabled-context-menu {
+    -webkit-touch-callout: none;
+}

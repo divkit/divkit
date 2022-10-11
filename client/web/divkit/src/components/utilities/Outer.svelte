@@ -336,20 +336,46 @@
 
     $: jsonAction = rootCtx.getDerivedFromVars(json.action);
     $: jsonActions = rootCtx.getDerivedFromVars(json.actions);
+    $: jsonDoubleTapActions = rootCtx.getDerivedFromVars(json.doubletap_actions);
+    $: jsonLongTapActions = rootCtx.getDerivedFromVars(json.longtap_actions);
     let actions: MaybeMissing<Action>[] = [];
+    let doubleTapActions: MaybeMissing<Action>[] = [];
+    let longTapActions: MaybeMissing<Action>[] = [];
     $: {
         let newActions = $jsonActions || $jsonAction && [$jsonAction] || [];
+        let newDoubleTapActions = $jsonDoubleTapActions || [];
+        let newLongTapActions = $jsonLongTapActions || [];
+
         if (layoutParams.fakeElement) {
             newActions = [];
-        } else if (!Array.isArray(newActions)) {
+            newDoubleTapActions = [];
+            newLongTapActions = [];
+        } else {
+            if (!Array.isArray(newActions)) {
+                newActions = [];
+                rootCtx.logError(wrapError(new Error('Actions should be array')));
+            }
+            if (!Array.isArray(newDoubleTapActions)) {
+                newDoubleTapActions = [];
+                rootCtx.logError(wrapError(new Error('DoubleTapActions should be array')));
+            }
+            if (!Array.isArray(newLongTapActions)) {
+                newLongTapActions = [];
+                rootCtx.logError(wrapError(new Error('LongTapActions should be array')));
+            }
+        }
+
+        if ((newActions.length || newDoubleTapActions.length || newLongTapActions.length) && customActions) {
             newActions = [];
-            rootCtx.logError(wrapError(new Error('Actions should be array')));
-        } else if (newActions.length && customActions) {
-            newActions = [];
+            newDoubleTapActions = [];
+            newLongTapActions = [];
             rootCtx.logError(wrapError(new Error(`Cannot use action on component "${customActions}"`)));
         }
+
         // todo check parent actions with customActions
         actions = newActions;
+        doubleTapActions = newDoubleTapActions;
+        longTapActions = newLongTapActions;
     }
 
     $: jsonActionAnimation = rootCtx.getDerivedFromVars(json.action_animation);
@@ -596,6 +622,8 @@
     cls="{cls} {genClassName('outer', css, mods)}"
     style={makeStyle(stl)}
     {actions}
+    {doubleTapActions}
+    {longTapActions}
     {attrs}
     hasActionAnimation={Boolean(actionAnimationTransition)}
 >
