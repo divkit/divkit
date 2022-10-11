@@ -22,7 +22,7 @@ extension DivBase {
     let visibility = resolveVisibility(expressionResolver)
     if visibility == .gone {
       context.stateManager.setBlockVisibility(statePath: statePath, div: self, isVisible: false)
-      return EmptyBlock.zeroSized//SeparatorBlock(color: .clear, size: 0)
+      return EmptyBlock.zeroSized
     }
 
     var block = try block()
