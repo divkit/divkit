@@ -16,6 +16,10 @@
     },
     {
       "title": "Long tap",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivAction"
       ],
@@ -94,6 +98,10 @@
     },
     {
       "title": "Gallery columns",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "DivGallery"
       ],
@@ -442,6 +450,10 @@
     },
     {
       "title": "Div errors visualization",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "priority": "critical",
       "expected_results": [
         "The card displays a red button with the number 1",
@@ -684,6 +696,10 @@
     },
     {
       "title": "Scale transition ignore pivot_x/pivot_y",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "Animations"
       ],
@@ -735,6 +751,10 @@
     },
     {
       "title": "Lottie animation (repeat_mode=restart, repeat_count=5)",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "Animations",
         "lottie"
@@ -750,6 +770,10 @@
     },
     {
       "title": "Lottie animation (repeate_mode=revese, repeat_count=3)",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "Animations",
         "lottie"
@@ -765,6 +789,10 @@
     },
     {
       "title": "Lottie animation (repeat_mode=restart, repeate_count=-1)",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "tags": [
         "Animations",
         "lottie"
@@ -1201,22 +1229,42 @@
     },
     {
       "title": "Auto ellipsize",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "file": "auto-ellipsize.json"
     },
     {
       "title": "Expand cutout 1",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "file": "expand-cutout-1.json"
     },
     {
       "title": "Expand cutout 2",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "file": "expand-cutout-2.json"
     },
     {
       "title": "Lottie animations",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "file": "lottie_animations.json"
     },
     {
       "title": "Lottie cycled animations",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "expected_results": [
         "Red circle appears with animation, then blink"
       ],
@@ -1240,10 +1288,18 @@
     },
     {
       "title": "Custom container",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "file": "custom-container.json"
     },
     {
       "title": "Custom card",
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "file": "custom-card.json"
     },
     {
