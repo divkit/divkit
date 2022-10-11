@@ -2,6 +2,35 @@
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_container",
   "generate_swift_optional_arguments": false,
+  "definitions": {
+    "separator": {
+      "type": "object",
+      "properties": {
+        "show_at_start": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_container_separator_show_at_start",
+          "default_value": "false"
+        },
+        "show_between": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_container_separator_show_between",
+          "default_value": "true"
+        },
+        "show_at_end": {
+          "$ref": "common.json#/boolean_int",
+          "$description": "translations.json#/div_container_separator_show_at_end",
+          "default_value": "false"
+        },
+        "style": {
+          "$ref": "div-drawable.json",
+          "$description": "translations.json#/div_container_separator_style"
+        }
+      },
+      "required": [
+        "style"
+      ]
+    }
+  },
   "allOf": [
     {
       "$ref": "div-base.json"
@@ -45,6 +74,16 @@
           ],
           "default_value": "no_wrap",
           "$description": "translations.json#/div_container_layout_mode",
+          "platforms": []
+        },
+        "separator": {
+          "$ref": "#/definitions/separator",
+          "$description": "translations.json#/div_container_separator",
+          "platforms": []
+        },
+        "line_separator": {
+          "$ref": "#/definitions/separator",
+          "$description": "translations.json#/div_container_line_separator",
           "platforms": []
         },
         "items": {

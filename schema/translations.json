@@ -359,6 +359,30 @@
     "en": "Method of placing elements. `wrap` value includes the transfer of elements to the next line if they did not fit in the previous one. If the value is set to `wrap`, then a separate line will be allocated for all elements with a size value of match_parent along the main axis. If the value is set to `wrap`, then elements with a size value of match_parent along the cross axis will be ignored.",
     "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей. Если установлено значения `wrap`, то для каждого элемента со значением размера match_parent вдоль главной оси будет выделена отдельная строка. Если установлено значения `wrap`, то элементы со значением match_parent вдоль побочной оси будут проигнорированы."
   },
+  "div_container_separator": {
+    "en": "Separator between elements along the main axis. Not used if the `orientation` parameter has the value `overlap'.",
+    "ru": "Разделитель между элементами вдоль основной оси. Не используется, если параметр `orientation` имеет значение `overlap`."
+  },
+  "div_container_line_separator": {
+    "en": "Separator between elements along the cross axis. Not used if the `layout_mode` parameter has the value `no_wrap'.",
+    "ru": "Разделитель между элементами вдоль поперечной оси. Не используется, если параметр `layout_mode` имеет значение `no_wrap`."
+  },
+  "div_container_separator_show_at_start": {
+    "en": "Enables showing of separator before the first item.",
+    "ru": "Включает отображение разделителя до первого элемента."
+  },
+  "div_container_separator_show_between": {
+    "en": "Enables showing of separator between items.",
+    "ru": "Включает отображение разделителя между элементами."
+  },
+  "div_container_separator_show_at_end": {
+    "en": "Enables showing of separator after the last item.",
+    "ru": "Включает отображение разделителя после последнего элемента."
+  },
+  "div_container_separator_style": {
+    "en": "Style of the separator.",
+    "ru": "Стиль разделителя."
+  },
   "div_container_short": {
     "en": "Container.",
     "ru": "Контейнер."
