@@ -28,13 +28,6 @@ private let exclusions = [
   "div-slider/slider_with_error_and_warning.json",
 
   "div-container/container_with_wrap_content_constrained_child.json",
-
-  "div-grid/content-alignment.json",
-  "div-container/horizontal-orientation-alignments.json",
-  "div-container/overlap-orientation-default-alignments.json",
-  "div-container/vertical-orientation-alignments.json",
-  "div-text/images.json",
-  "div-gallery/visibility.json",
   
   "div-gallery/horizontal-gallery-cross-spacing.json",
   "div-gallery/vertical-gallery-cross-spacing.json",
