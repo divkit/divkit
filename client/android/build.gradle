@@ -68,7 +68,7 @@ allprojects {
 
             archiveApiDump.finalizedBy(removeApiDump)
 
-            // Restoring api dump to in order to configure 'apiCheck' task successfully
+            // Restoring api dump to in order to configure 'apiCheck' task correctly
             exec {
                 commandLine "mkdir", "-p", "$projectDir/api"
             }
