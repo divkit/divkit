@@ -34,6 +34,11 @@
           "default_value": "8",
           "$description": "translations.json#/div_gallery_item_spacing"
         },
+        "cross_spacing": {
+          "$ref": "common.json#/non_negative_integer",
+          "$description": "translations.json#/div_gallery_cross_spacing",
+          "platforms": []
+        },
         "scroll_mode": {
           "type": "string",
           "default_value": "default",

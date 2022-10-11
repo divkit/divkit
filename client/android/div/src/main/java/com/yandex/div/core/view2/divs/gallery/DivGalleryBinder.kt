@@ -161,11 +161,20 @@ internal class DivGalleryBinder @Inject constructor(
 
         view.clipChildren = false
         view.setItemDecoration(
-            PaddingItemDecoration(
-                midItemPadding = div.itemSpacing.evaluate(resolver)
-                    .dpToPx(metrics),
-                orientation = orientation
-            )
+            if (columnCount == 1)
+                PaddingItemDecoration(
+                    midItemPadding = div.itemSpacing.evaluate(resolver)
+                        .dpToPx(metrics),
+                    orientation = orientation
+                )
+            else
+                PaddingItemDecoration(
+                    midItemPadding = div.itemSpacing.evaluate(resolver)
+                        .dpToPx(metrics),
+                    crossItemPadding = (div.crossSpacing ?: div.itemSpacing).evaluate(resolver)
+                        .dpToPx(metrics),
+                    orientation = orientation
+                )
         )
 
         val layoutManager = if (columnCount == 1) {

@@ -36,6 +36,8 @@ private let exclusions = [
   "div-text/images.json",
   "div-gallery/visibility.json",
   
+  "div-gallery/horizontal-gallery-cross-spacing.json",
+  "div-gallery/vertical-gallery-cross-spacing.json",
 ]
 
 private let casesWithPlaceholerOnly = [

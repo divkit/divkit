@@ -158,6 +158,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                 div.columnCount,
                 div.columnSpan,
                 div.crossContentAlignment,
+                div.crossSpacing,
                 div.defaultItem,
                 div.extensions,
                 div.focus,

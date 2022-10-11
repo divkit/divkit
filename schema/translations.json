@@ -583,6 +583,10 @@
     "en": "Spacing between elements.",
     "ru": "Расстояние между элементами."
   },
+  "div_gallery_cross_spacing": {
+    "en": "Spacing between elements across the scroll axis. Default value is `item_spacing`",
+    "ru": "Расстояние между элементами поперек оси прокрутки. По умолчанию равно `item_spacing`"
+  },
   "div_gallery_items": {
     "en": "Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.",
     "ru": "Элементы галереи. Скролл к элементам можно осуществить с помощью:<li>`div-action://set_current_item?id=&item=` — скролл к элементу с порядковым номером `item` внутри элемента, с заданным `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — скролл к следующему элементу внутри элемента, с заданным `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — скролл к предыдущему элементу внутри элемента, с заданным `id`.</li></p><p>Опциональный параметр `overflow` позволяет задать навигацию при достижении первого или последнего элемента:<li>`clamp` — переход остановится на пограничном элементе;</li><li>`ring` — переход в начало или конец, в зависимости от текущего элемента.</li></p><p>По умолчанию, `clamp`."

@@ -11,6 +11,7 @@ import com.yandex.div.core.util.KAssert
 class PaddingItemDecoration @JvmOverloads constructor(
     @param:Px @field:Px private val paddingLeft: Int = 0,
     @param:Px @field:Px private val midItemPadding: Int = 0,
+    @param:Px @field:Px private val crossItemPadding: Int = 0,
     @param:Px @field:Px private val paddingRight: Int = 0,
     @param:Px @field:Px private val paddingTop: Int = 0,
     @param:Px @field:Px private val paddingBottom: Int = 0,
@@ -52,13 +53,23 @@ class PaddingItemDecoration @JvmOverloads constructor(
             }
         } else {
             val halfMidItemPadding = midItemPadding / 2
+            val halfCrossItemPadding = crossItemPadding / 2
 
-            outRect.set(
-                halfMidItemPadding,
-                halfMidItemPadding,
-                halfMidItemPadding,
-                halfMidItemPadding
-            )
+            when (orientation) {
+                RecyclerView.HORIZONTAL -> outRect.set(
+                    halfMidItemPadding,
+                    halfCrossItemPadding,
+                    halfMidItemPadding,
+                    halfCrossItemPadding
+                )
+                RecyclerView.VERTICAL -> outRect.set(
+                    halfCrossItemPadding,
+                    halfMidItemPadding,
+                    halfCrossItemPadding,
+                    halfMidItemPadding
+                )
+                else -> KAssert.fail { "Unsupported orientation: $orientation" }
+            }
         }
     }
 }
