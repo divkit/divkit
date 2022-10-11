@@ -17,9 +17,7 @@ import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.font.DivTypefaceProvider
 import com.yandex.div.core.widget.slider.SliderTextStyle
 import com.yandex.div.core.widget.slider.SliderView
-import com.yandex.div.core.widget.slider.shapes.RoundedRectDrawable
-import com.yandex.div.core.widget.slider.shapes.RoundedRectParams
-import com.yandex.div.core.widget.slider.shapes.TextDrawable
+import com.yandex.div.core.widget.slider.shapes.*
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivShapeDrawable
@@ -325,7 +323,7 @@ internal class DivSliderBinder @Inject constructor(
 private fun DivDrawable.toDrawable(
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
-): Drawable {
+): Drawable? {
     return when (this) {
         is DivDrawable.Shape -> value.toDrawable(metrics, resolver)
     }
@@ -334,7 +332,7 @@ private fun DivDrawable.toDrawable(
 private fun DivShapeDrawable.toDrawable(
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
-): Drawable {
+): Drawable? {
     return when (val shape = this.shape) {
         is DivShape.RoundedRectangle -> {
             RoundedRectDrawable(
@@ -348,6 +346,7 @@ private fun DivShapeDrawable.toDrawable(
                 )
             )
         }
+        else -> null
     }
 }
 

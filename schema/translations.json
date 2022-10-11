@@ -1011,6 +1011,14 @@
     "en": "Width.",
     "ru": "Ширина."
   },
+  "div_circle_shape": {
+    "en": "A circle.",
+    "ru": "Круг"
+  },
+  "div_circle_shape_radius": {
+    "en": "Radius.",
+    "ru": "Радиус."
+  },
   "div_scale_transition": {
     "en": "Scale animation.",
     "ru": "Анимация масштабирования."

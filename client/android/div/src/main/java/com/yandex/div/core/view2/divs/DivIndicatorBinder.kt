@@ -77,8 +77,11 @@ internal class DivIndicatorBinder @Inject constructor(
                 animation = indicator.animation.evaluate(resolver).convert(),
                 shape = IndicatorParams.Shape.ROUND_RECT
             )
+            else -> null
         }
-        setStyle(style)
+        if (style != null) {
+            setStyle(style)
+        }
     }
 
     fun attachAll() {

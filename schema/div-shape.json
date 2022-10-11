@@ -3,6 +3,10 @@
     {
       "$ref": "div-rounded-rectangle-shape.json",
       "$description": "translations.json#/div_rounded_rectangle_shape"
+    },
+    {
+      "$ref": "div-circle-shape.json",
+      "$description": "translations.json#/div_circle_shape"
     }
   ]
 }
