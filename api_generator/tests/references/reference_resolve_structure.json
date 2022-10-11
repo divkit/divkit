@@ -40,6 +40,12 @@
             "$ref": "entity_with_array.json"
           },
           {
+            "$ref": "entity_with_array_of_enums.json"
+          },
+          {
+            "$ref": "entity_with_array_of_expressions.json"
+          },
+          {
             "$ref": "entity_with_array_of_nested_items.json"
           },
           {
@@ -112,6 +118,60 @@
         "required": [
           "type",
           "array"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_enums.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_enums"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "first",
+                "second"
+              ]
+            },
+            "minItems": 1,
+            "clientMinItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_expressions.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_expressions"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "common.json#/non_empty_string"
+            },
+            "minItems": 1,
+            "clientMinItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
         ]
       }
     },

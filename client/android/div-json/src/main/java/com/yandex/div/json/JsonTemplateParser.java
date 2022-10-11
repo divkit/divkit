@@ -350,6 +350,33 @@ public class JsonTemplateParser {
     }
 
     @NonNull
+    public static <T> Field<ExpressionsList<T>> readExpressionsListField(
+            @NonNull JSONObject json,
+            @NonNull String key,
+            boolean overridable,
+            @Nullable Field<ExpressionsList<T>> fallback,
+            @NonNull ListValidator<T> listValidator,
+            @NonNull ValueValidator<T> itemValidator,
+            @NonNull ParsingErrorLogger logger,
+            @NonNull ParsingEnvironment env,
+            @NonNull final TypeHelper<T> typeHelper) {
+        ExpressionsList<T> opt = JsonParser.readOptionalExpressionsList(json, key, doNotConvert(),
+                listValidator, itemValidator, logger, env, typeHelper);
+        if (opt != null) {
+            return new Field.Value<>(overridable, opt);
+        } else {
+            String reference = readReference(json, key, logger, env);
+            if (reference != null) {
+                return new Field.Reference<>(overridable, reference);
+            } else if (fallback != null) {
+                return FieldKt.clone(fallback, overridable);
+            } else {
+                return Field.Companion.nullField(overridable);
+            }
+        }
+    }
+
+    @NonNull
     public static <R, T> Field<List<T>> readOptionalListField(
             @NonNull JSONObject json,
             @NonNull String key,
@@ -453,6 +480,50 @@ public class JsonTemplateParser {
     }
 
     @NonNull
+    @SuppressWarnings("unused")
+    public static <R, T> Field<ExpressionsList<T>> readOptionalExpressionsListField(
+            @NonNull JSONObject json,
+            @NonNull String key,
+            boolean overridable,
+            @Nullable Field<ExpressionsList<T>> fallback,
+            @NonNull Function1<R, T> converter,
+            @NonNull ListValidator<T> listValidator,
+            @NonNull ParsingErrorLogger logger,
+            @NonNull ParsingEnvironment env,
+            @NonNull final TypeHelper<T> typeHelper) {
+        return readExpressionsListField(json, key, overridable, fallback, converter, listValidator,
+                logger, env, typeHelper);
+    }
+
+    @NonNull
+    @SuppressWarnings("unused")
+    public static <T> Field<ExpressionsList<T>> readOptionalExpressionsListField(
+            @NonNull JSONObject json,
+            @NonNull String key,
+            boolean overridable,
+            @Nullable Field<ExpressionsList<T>> fallback,
+            @NonNull ListValidator<T> listValidator,
+            @NonNull ValueValidator<T> itemValidator,
+            @NonNull ParsingErrorLogger logger,
+            @NonNull ParsingEnvironment env,
+            @NonNull final TypeHelper<T> typeHelper) {
+        ExpressionsList<T> opt = JsonParser.readOptionalExpressionsList(json, key, doNotConvert(),
+                listValidator, itemValidator, logger, env, typeHelper);
+        if (opt != null) {
+            return new Field.Value<>(overridable, opt);
+        } else {
+            String reference = readReference(json, key, logger, env);
+            if (reference != null) {
+                return new Field.Reference<>(overridable, reference);
+            } else if (fallback != null) {
+                return FieldKt.clone(fallback, overridable);
+            } else {
+                return Field.Companion.nullField(overridable);
+            }
+        }
+    }
+
+    @NonNull
     public static <T> Field<List<T>> readStrictListField(
             @NonNull JSONObject json,
             @NonNull String key,
@@ -532,6 +603,7 @@ public class JsonTemplateParser {
     }
 
     @NonNull
+    @SuppressWarnings("unused")
     public static <R, T> Field<List<T>> readStrictListField(
             @NonNull JSONObject json,
             @NonNull String key,
@@ -560,6 +632,7 @@ public class JsonTemplateParser {
 
     @PublishedApi
     @Nullable
+    @SuppressWarnings("ConstantConditions")
     public static <T> Field<T> referenceOrFallback(
             boolean overridable,
             @Nullable String reference,

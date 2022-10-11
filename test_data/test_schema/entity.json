@@ -4,6 +4,12 @@
       "$ref": "entity_with_array.json"
     },
     {
+      "$ref": "entity_with_array_of_enums.json"
+    },
+    {
+      "$ref": "entity_with_array_of_expressions.json"
+    },
+    {
       "$ref": "entity_with_array_of_nested_items.json"
     },
     {

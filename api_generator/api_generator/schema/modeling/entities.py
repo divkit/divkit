@@ -613,6 +613,9 @@ class PropertyType(ABC):
         elif isinstance(self, (Dictionary, StaticString)):
             return False
         elif isinstance(self, Array):
+            if isinstance(self.property_type, Object) and \
+                    isinstance(self.property_type.object, StringEnumeration):
+                return False
             return self.property_type.supports_expressions
         elif isinstance(self, Object):
             return isinstance(self.object, StringEnumeration)

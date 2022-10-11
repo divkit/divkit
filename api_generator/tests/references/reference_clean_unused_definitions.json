@@ -44,6 +44,18 @@
           },
           {
             "$resolved_refs": [
+              "entity_with_array_of_enums.json"
+            ],
+            "type": "$defined_entity_with_array_of_enums"
+          },
+          {
+            "$resolved_refs": [
+              "entity_with_array_of_expressions.json"
+            ],
+            "type": "$defined_entity_with_array_of_expressions"
+          },
+          {
+            "$resolved_refs": [
               "entity_with_array_of_nested_items.json"
             ],
             "type": "$defined_entity_with_array_of_nested_items"
@@ -166,6 +178,65 @@
         "required": [
           "type",
           "array"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_enums.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_enums"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "first",
+                "second"
+              ]
+            },
+            "minItems": 1,
+            "clientMinItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_expressions.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_expressions"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "common.json#/non_empty_string"
+              ],
+              "type": "string",
+              "minLength": 1,
+              "clientMinLength": 1
+            },
+            "minItems": 1,
+            "clientMinItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
         ]
       }
     },

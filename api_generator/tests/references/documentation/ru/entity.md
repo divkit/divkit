@@ -1,6 +1,8 @@
 # entity
 Может быть одним из следующих типов:
 * [entity_with_array](entity_with_array.md#entity_with_array)
+* [entity_with_array_of_enums](entity_with_array_of_enums.md#entity_with_array_of_enums)
+* [entity_with_array_of_expressions](entity_with_array_of_expressions.md#entity_with_array_of_expressions)
 * [entity_with_array_of_nested_items](entity_with_array_of_nested_items.md#entity_with_array_of_nested_items)
 * [entity_with_array_with_transform](entity_with_array_with_transform.md#entity_with_array_with_transform)
 * [entity_with_complex_property](entity_with_complex_property.md#entity_with_complex_property)

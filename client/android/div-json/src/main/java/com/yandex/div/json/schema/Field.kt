@@ -252,3 +252,17 @@ fun <T: Any> Field<Expression<T>>.resolveOptionalExpression(
         else -> null
     }
 }
+
+fun <T: Any> Field<ExpressionsList<T>>.resolveOptionalExpressionList(
+        env: ParsingEnvironment,
+        key: String,
+        data: JSONObject,
+        reader: Reader<ExpressionsList<T>?>
+): ExpressionsList<T>? {
+    return when {
+        overridable && data.has(key) -> reader.invoke(key, data, env)
+        this is Field.Value -> value
+        this is Field.Reference -> reader.invoke(reference, data, env)
+        else -> null
+    }
+}

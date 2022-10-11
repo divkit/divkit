@@ -2,6 +2,8 @@
 
 export * from './Entity';
 export * from './EntityWithArray';
+export * from './EntityWithArrayOfEnums';
+export * from './EntityWithArrayOfExpressions';
 export * from './EntityWithArrayOfNestedItems';
 export * from './EntityWithArrayWithTransform';
 export * from './EntityWithComplexProperty';

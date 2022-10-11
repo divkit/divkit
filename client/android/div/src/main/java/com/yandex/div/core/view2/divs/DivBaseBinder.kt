@@ -272,7 +272,7 @@ internal class DivBaseBinder @Inject constructor(
         )
 
         accessibility.type?.let { type ->
-            divAccessibilityBinder.bindType(this, type.evaluate(resolver))
+            divAccessibilityBinder.bindType(this, type)
         } ?: divAccessibilityBinder.bindTypeAutomatically(this, div)
     }
 

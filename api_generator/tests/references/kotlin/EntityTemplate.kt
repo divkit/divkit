@@ -18,6 +18,8 @@ import com.yandex.div.data.*
 @Mockable
 sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
     class WithArray(val value: EntityWithArrayTemplate) : EntityTemplate()
+    class WithArrayOfEnums(val value: EntityWithArrayOfEnumsTemplate) : EntityTemplate()
+    class WithArrayOfExpressions(val value: EntityWithArrayOfExpressionsTemplate) : EntityTemplate()
     class WithArrayOfNestedItems(val value: EntityWithArrayOfNestedItemsTemplate) : EntityTemplate()
     class WithArrayWithTransform(val value: EntityWithArrayWithTransformTemplate) : EntityTemplate()
     class WithComplexProperty(val value: EntityWithComplexPropertyTemplate) : EntityTemplate()
@@ -38,6 +40,8 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
     fun value(): Any {
         return when (this) {
             is WithArray -> value
+            is WithArrayOfEnums -> value
+            is WithArrayOfExpressions -> value
             is WithArrayOfNestedItems -> value
             is WithArrayWithTransform -> value
             is WithComplexProperty -> value
@@ -60,6 +64,8 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
     override fun writeToJSON(): JSONObject {
         return when (this) {
             is WithArray -> value.writeToJSON()
+            is WithArrayOfEnums -> value.writeToJSON()
+            is WithArrayOfExpressions -> value.writeToJSON()
             is WithArrayOfNestedItems -> value.writeToJSON()
             is WithArrayWithTransform -> value.writeToJSON()
             is WithComplexProperty -> value.writeToJSON()
@@ -82,6 +88,8 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
     override fun resolve(env: ParsingEnvironment, data: JSONObject): Entity {
         return when (this) {
             is WithArray -> Entity.WithArray(value.resolve(env, data))
+            is WithArrayOfEnums -> Entity.WithArrayOfEnums(value.resolve(env, data))
+            is WithArrayOfExpressions -> Entity.WithArrayOfExpressions(value.resolve(env, data))
             is WithArrayOfNestedItems -> Entity.WithArrayOfNestedItems(value.resolve(env, data))
             is WithArrayWithTransform -> Entity.WithArrayWithTransform(value.resolve(env, data))
             is WithComplexProperty -> Entity.WithComplexProperty(value.resolve(env, data))
@@ -105,6 +113,8 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
         get() {
             return when (this) {
                 is WithArray -> EntityWithArrayTemplate.TYPE
+                is WithArrayOfEnums -> EntityWithArrayOfEnumsTemplate.TYPE
+                is WithArrayOfExpressions -> EntityWithArrayOfExpressionsTemplate.TYPE
                 is WithArrayOfNestedItems -> EntityWithArrayOfNestedItemsTemplate.TYPE
                 is WithArrayWithTransform -> EntityWithArrayWithTransformTemplate.TYPE
                 is WithComplexProperty -> EntityWithComplexPropertyTemplate.TYPE
@@ -137,6 +147,8 @@ sealed class EntityTemplate : JSONSerializable, JsonTemplate<Entity> {
             val type = parent?.type ?: receivedType
             when (type) {
                 EntityWithArrayTemplate.TYPE -> return WithArray(EntityWithArrayTemplate(env, parent?.value() as EntityWithArrayTemplate?, topLevel, json))
+                EntityWithArrayOfEnumsTemplate.TYPE -> return WithArrayOfEnums(EntityWithArrayOfEnumsTemplate(env, parent?.value() as EntityWithArrayOfEnumsTemplate?, topLevel, json))
+                EntityWithArrayOfExpressionsTemplate.TYPE -> return WithArrayOfExpressions(EntityWithArrayOfExpressionsTemplate(env, parent?.value() as EntityWithArrayOfExpressionsTemplate?, topLevel, json))
                 EntityWithArrayOfNestedItemsTemplate.TYPE -> return WithArrayOfNestedItems(EntityWithArrayOfNestedItemsTemplate(env, parent?.value() as EntityWithArrayOfNestedItemsTemplate?, topLevel, json))
                 EntityWithArrayWithTransformTemplate.TYPE -> return WithArrayWithTransform(EntityWithArrayWithTransformTemplate(env, parent?.value() as EntityWithArrayWithTransformTemplate?, topLevel, json))
                 EntityWithComplexPropertyTemplate.TYPE -> return WithComplexProperty(EntityWithComplexPropertyTemplate(env, parent?.value() as EntityWithComplexPropertyTemplate?, topLevel, json))

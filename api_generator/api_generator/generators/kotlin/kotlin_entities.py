@@ -147,9 +147,14 @@ class KotlinEntity(Entity):
             if decl is not None:
                 default_values.append(decl)
         type_helpers = []
-        for p in filter(lambda p: cast(KotlinPropertyType, p.property_type).is_enum_of_expressions,
-                        instance_properties_kotlin):
-            type_helpers.append(p.type_helper_declaration)
+        for p in instance_properties_kotlin:
+            if p.supports_expressions:
+                property_type = p.property_type
+                if isinstance(property_type, Array):
+                    property_type = property_type.property_type
+                property_type = cast(KotlinPropertyType, property_type)
+                if property_type.is_enum_of_expressions:
+                    type_helpers.append(property_type.type_helper_declaration(p))
         groups = []
         if static_properties:
             static_decl = Text()
@@ -190,10 +195,26 @@ class KotlinEntity(Entity):
 
         validators = Text()
         for p in properties_kotlin:
-            validator_or_empty = p.static_validator_expression(with_template_validators=is_template)
-            if not str(validator_or_empty):
-                continue
-            validators += validator_or_empty
+            validator_or_empty = p.property_type.static_validator_expression(
+                property_name=p.name,
+                optional=p.optional,
+                supports_expressions=p.supports_expressions,
+                with_template_validators=is_template
+            )
+            if str(validator_or_empty):
+                validators += validator_or_empty
+
+            if isinstance(p.property_type, Array):
+                validator_or_empty = cast(KotlinPropertyType, p.property_type.property_type)\
+                    .static_validator_expression(
+                    property_name=p.name + '_item',
+                    optional=p.optional,
+                    supports_expressions=p.supports_expressions,
+                    with_template_validators=is_template
+                )
+                if str(validator_or_empty):
+                    validators += validator_or_empty
+
         if validators.lines:
             groups.append(validators)
 
@@ -261,10 +282,12 @@ class KotlinProperty(Property):
 
     @property
     def use_expression_type(self) -> bool:
+        if not self.supports_expressions:
+            return False
         prop = cast(KotlinPropertyType, self.property_type)
         if prop.is_array_of_expressions:
             return False
-        return self.supports_expressions or prop.is_enum_of_expressions
+        return prop.supports_expressions
 
     @property
     def type_declaration(self) -> str:
@@ -282,7 +305,10 @@ class KotlinProperty(Property):
             else:
                 prefix = ''
                 suffix = ''
-        type_decl = cast(KotlinPropertyType, self.property_type).declaration(self.mode)
+        type_decl = cast(KotlinPropertyType, self.property_type).declaration(
+            self.mode,
+            self.supports_expressions
+        )
         return f'{prefix}{type_decl}{suffix}{"?" if self.should_be_optional else ""}'
 
     def declaration(self, overridden: bool, in_interface: bool, with_comma: bool, with_default: bool) -> Text:
@@ -320,7 +346,7 @@ class KotlinProperty(Property):
             expression_or_empty = ''
             expression_suffix_or_empty = ''
         else:
-            if self.supports_expressions or cast(KotlinPropertyType, self.property_type).is_enum_of_expressions:
+            if self.supports_expressions:
                 expression_or_empty = EXPRESSION_TYPE_NAME
                 expression_suffix_or_empty = 'WithExpression'
             else:
@@ -345,13 +371,25 @@ class KotlinProperty(Property):
         transform = kotlin_type.deserialization_transform(
             string_enum_prefixed=self.mode.is_template
         )
-        arg_list = ['json', key_value, template_args, creator, transform,
-                    self.validator_arg(with_template_validators=mode.is_template), logger_arg, 'env']
+        arg_list = ['json', key_value, template_args, creator, transform, kotlin_type.validator_arg(
+            property_name=self.name,
+            optional=self.optional,
+            with_template_validators=mode.is_template
+        )]
+
+        if isinstance(kotlin_type, Array):
+            arg_list.append(cast(KotlinPropertyType, kotlin_type.property_type).validator_arg(
+                property_name=self.name + '_item',
+                optional=self.optional,
+                with_template_validators=mode.is_template
+            ))
+
+        arg_list.extend([logger_arg, 'env'])
 
         if self.supports_expressions and not mode.is_template and self.default_value_definition is not None:
             arg_list.append(self.default_value_var_name)
 
-        if self.supports_expressions or kotlin_type.is_array_of_expressions or kotlin_type.is_enum_of_expressions:
+        if self.supports_expressions:
             arg_list.append(kotlin_type.type_helper_reference(self))
 
         args = ', '.join(filter(lambda s: s, arg_list))
@@ -372,50 +410,11 @@ class KotlinProperty(Property):
 
         type_decl = cast(KotlinPropertyType, creator_type).declaration_by_prefixed(
             prefixed=self.mode.is_template and self.mode != mode,
-            mode=mode
+            mode=mode,
+            supports_expressions=self.supports_expressions
         )
 
         return f'{type_decl}.{ENTITY_STATIC_CREATOR}'
-
-    def validator_arg(self, with_template_validators: bool) -> str:
-        validator_definition = self.validator_definition
-        if validator_definition is None:
-            return ''
-        return self.validator_instance_name(with_template_validators)
-
-    def validator_instance_name(self, with_templates: bool) -> str:
-        name = utils.constant_upper_case(self.name)
-        return f'{name}_TEMPLATE_VALIDATOR' if with_templates else f'{name}_VALIDATOR'
-
-    @property
-    def validator_definition(self) -> Optional[str]:
-        if isinstance(self.property_type, Array) and self.property_type.min_items > 0:
-            return f'{{ it: List<*> -> it.size >= {self.property_type.min_items} }}'
-        elif isinstance(self.property_type, String) and (
-            self.property_type.min_length > 0 or
-                self.optional or self.property_type.regex is not None):
-            expressions = []
-            length_field = 'rawLength' if self.property_type.formatted else 'length'
-            min_length = self.property_type.min_length
-            actual_min_length = 1 if min_length == 0 and self.optional else min_length
-            if actual_min_length > 0:
-                expressions.append(f'it.{length_field} >= {actual_min_length}')
-            regex = self.property_type.regex
-            if regex is not None:
-                escaped_pattern = regex.pattern.replace('\\', '\\\\')
-                expressions.append(f'it: String -> it.doesMatch("{escaped_pattern}")')
-            if not expressions:
-                return ''
-            return f'{{ it: String -> {" && ".join(expressions)} }}'
-        elif isinstance(self.property_type, Url) and self.property_type.schemes is not None:
-            scheme_list = ', '.join(map(lambda s: f'"{s}"', self.property_type.schemes))
-            return f'{{ it.hasScheme(listOf({scheme_list})) }}'
-        elif isinstance(self.property_type, Int):
-            return _number_validator_decl('Int', self.property_type.constraint)
-        elif isinstance(self.property_type, Double):
-            return _number_validator_decl('Double', self.property_type.constraint)
-        else:
-            return None
 
     def default_value_coalescing(self, mode: GenerationMode) -> str:
         if not mode.is_template and self.default_value_definition is not None:
@@ -432,13 +431,18 @@ class KotlinProperty(Property):
         reader = self.reader_declaration_name
         if isinstance(self.property_type, Array):
             kotlin_prop = cast(KotlinPropertyType, self.property_type)
-            if kotlin_prop.is_array_of_expressions:
+            if self.supports_expressions and kotlin_prop.is_array_of_expressions:
                 list_or_empty = 'ExpressionList'
                 validator = ''
                 expression_or_empty = ''
             else:
                 list_or_empty = 'List'
-                validator = f', {self.validator_arg(with_template_validators=False)}'
+                validator = cast(KotlinPropertyType, self.property_type).validator_arg(
+                    property_name=self.name,
+                    optional=self.optional,
+                    with_template_validators=False
+                )
+                validator = f', {validator}'
                 expression_or_empty = ''
                 if self.supports_expressions and not kotlin_prop.is_enum_of_expressions:
                     expression_or_empty = EXPRESSION_TYPE_NAME
@@ -469,48 +473,14 @@ class KotlinProperty(Property):
                 expression_suffix_or_empty = ''
         else:
             expression_prefix_or_empty = ''
-            if cast(KotlinPropertyType, self.property_type).is_array_of_expressions:
+            if self.supports_expressions and \
+                    cast(KotlinPropertyType, self.property_type).is_array_of_expressions:
                 expression_prefix_or_empty = EXPRESSION_LIST_TYPE_NAME
             expression_suffix_or_empty = ''
-        serialization_transform = cast(KotlinPropertyType, self.property_type).serialization_transform(
-            string_enum_prefixed=self.mode.is_template
-        )
+        serialization_transform = cast(KotlinPropertyType, self.property_type)\
+            .serialization_transform(string_enum_prefixed=self.mode.is_template)
         args = f'key = "{self.dict_field}", {value_arg} = {self.declaration_name}{serialization_transform}'
         return Text(f'json.write{expression_prefix_or_empty}{suffix}{expression_suffix_or_empty}({args})')
-
-    @property
-    def type_helper_declaration(self) -> str:
-        type_decl = cast(KotlinPropertyType, self.property_type).prefixed_declaration(
-            mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES)
-        definition = f'TypeHelper.from(default = {type_decl}.values().first()) {{ it is {type_decl} }}'
-        return f'private val {cast(KotlinPropertyType, self.property_type).type_helper_reference(self)} = {definition}'
-
-    def static_validator_expression(self, with_template_validators: bool) -> Text:
-        result = Text()
-        definition = self.validator_definition or ''
-        if not definition:
-            return result
-
-        if isinstance(self.property_type, Array) and self.property_type.min_items > 0:
-            item_type = cast(KotlinPropertyType, self.property_type.property_type)
-            list_type = item_type.prefixed_declaration(
-                GenerationMode.NORMAL_WITHOUT_TEMPLATES)
-            validator_instance_name = self.validator_instance_name(with_templates=False)
-            result += f'private val {validator_instance_name} = ListValidator<{list_type}> {definition}'
-
-            if with_template_validators:
-                templated_list_type = item_type.prefixed_declaration(GenerationMode.TEMPLATE)
-                validator_instance_name = self.validator_instance_name(with_templates=True)
-                result += f'private val {validator_instance_name} = ListValidator<{templated_list_type}> {definition}'
-        else:
-            prop_type = cast(KotlinPropertyType, self.property_type)
-            validator_type = prop_type.prefixed_declaration(GenerationMode.NORMAL_WITH_TEMPLATES)
-            validator_instance_name_with = self.validator_instance_name(with_templates=True)
-            validator_instance_name_without = self.validator_instance_name(with_templates=False)
-            result += f'private val {validator_instance_name_with} = ValueValidator<{validator_type}> {definition}'
-            result += f'private val {validator_instance_name_without} = ValueValidator<{validator_type}> {definition}'
-
-        return result
 
     @property
     def static_reader_deserialization_expression(self) -> str:
@@ -518,7 +488,8 @@ class KotlinProperty(Property):
                                                                             reuse_logger_instance=False)
         reader_type = cast(KotlinPropertyType, self.property_type).declaration_by_prefixed(
             prefixed=True,
-            mode=GenerationMode.NORMAL_WITH_TEMPLATES
+            mode=GenerationMode.NORMAL_WITH_TEMPLATES,
+            supports_expressions=self.supports_expressions
         )
         if self.use_expression_type:
             reader_type = f'{EXPRESSION_TYPE_NAME}<{reader_type}>'
@@ -626,13 +597,24 @@ class KotlinPropertyType(PropertyType):
         else:
             return None
 
-    def declaration(self, mode: GenerationMode) -> str:
-        return self.declaration_by_prefixed(prefixed=False, mode=mode)
+    def declaration(self, mode: GenerationMode, supports_expressions: bool) -> str:
+        return self.declaration_by_prefixed(
+            prefixed=False,
+            mode=mode,
+            supports_expressions=supports_expressions
+        )
 
-    def prefixed_declaration(self, mode: GenerationMode) -> str:
-        return self.declaration_by_prefixed(prefixed=True, mode=mode)
+    def prefixed_declaration(self, mode: GenerationMode, supports_expressions: bool) -> str:
+        return self.declaration_by_prefixed(
+            prefixed=True,
+            mode=mode,
+            supports_expressions=supports_expressions
+        )
 
-    def declaration_by_prefixed(self, prefixed: bool, mode: GenerationMode) -> str:
+    def declaration_by_prefixed(self,
+                                prefixed: bool,
+                                mode: GenerationMode,
+                                supports_expressions: bool) -> str:
         if isinstance(self, (Int, Color)):
             return 'Int'
         elif isinstance(self, Double):
@@ -649,8 +631,8 @@ class KotlinPropertyType(PropertyType):
             return 'Uri'
         elif isinstance(self, Array):
             item_type = cast(KotlinPropertyType, self.property_type)
-            item_decl = item_type.declaration_by_prefixed(prefixed, mode)
-            if item_type.supports_expressions and not item_type.is_enum_of_expressions:
+            item_decl = item_type.declaration_by_prefixed(prefixed, mode, supports_expressions)
+            if supports_expressions and cast(KotlinPropertyType, self).is_array_of_expressions:
                 return f'{EXPRESSION_LIST_TYPE_NAME}<{item_decl}>'
             return f'List<{item_decl}>'
         elif isinstance(self, Object):
@@ -693,6 +675,108 @@ class KotlinPropertyType(PropertyType):
             return cast(KotlinPropertyType, self.property_type).deserialization_transform(string_enum_prefixed)
         else:
             return ''
+
+    def static_validator_expression(self,
+                                    property_name: str,
+                                    optional: bool,
+                                    supports_expressions: bool,
+                                    with_template_validators: bool) -> Text:
+        result = Text()
+        definition = self.validator_definition(optional) or ''
+        if not definition:
+            return result
+
+        if isinstance(self, Array) and self.min_items > 0:
+            item_type = cast(KotlinPropertyType, self.property_type)
+            list_type = item_type.prefixed_declaration(
+                GenerationMode.NORMAL_WITHOUT_TEMPLATES,
+                supports_expressions
+            )
+
+            kotlin_type = cast(KotlinPropertyType, self)
+            validator_instance_name = kotlin_type.validator_instance_name(
+                property_name=property_name,
+                with_templates=False
+            )
+            result += f'private val {validator_instance_name} = ListValidator<{list_type}> {definition}'
+
+            if with_template_validators:
+                templated_list_type = item_type.prefixed_declaration(
+                    GenerationMode.TEMPLATE,
+                    supports_expressions
+                )
+                validator_instance_name = kotlin_type.validator_instance_name(
+                    property_name=property_name,
+                    with_templates=True
+                )
+                result += f'private val {validator_instance_name} = ListValidator<{templated_list_type}> {definition}'
+        else:
+            validator_type = self.prefixed_declaration(
+                GenerationMode.NORMAL_WITH_TEMPLATES,
+                supports_expressions
+            )
+            validator_instance_name_with = self.validator_instance_name(
+                property_name=property_name,
+                with_templates=True
+            )
+            validator_instance_name_without = self.validator_instance_name(
+                property_name=property_name,
+                with_templates=False
+            )
+            result += f'private val {validator_instance_name_with} = ValueValidator<{validator_type}> {definition}'
+            result += f'private val {validator_instance_name_without} = ValueValidator<{validator_type}> {definition}'
+
+        return result
+
+    def validator_arg(self,
+                      property_name: str,
+                      optional: bool,
+                      with_template_validators: bool) -> str:
+        if self.validator_definition(optional) is None:
+            return ''
+        return self.validator_instance_name(property_name, with_template_validators)
+
+    @staticmethod
+    def validator_instance_name(property_name: str, with_templates: bool) -> str:
+        name = utils.constant_upper_case(property_name)
+        return f'{name}_TEMPLATE_VALIDATOR' if with_templates else f'{name}_VALIDATOR'
+
+    def validator_definition(self, optional: bool) -> Optional[str]:
+        if isinstance(self, Array) and self.min_items > 0:
+            return f'{{ it: List<*> -> it.size >= {self.min_items} }}'
+        elif isinstance(self, String) and (
+                self.min_length > 0 or
+                optional or self.regex is not None):
+            expressions = []
+            length_field = 'rawLength' if self.formatted else 'length'
+            min_length = self.min_length
+            actual_min_length = 1 if min_length == 0 and optional else min_length
+            if actual_min_length > 0:
+                expressions.append(f'it.{length_field} >= {actual_min_length}')
+            regex = self.regex
+            if regex is not None:
+                escaped_pattern = regex.pattern.replace('\\', '\\\\')
+                expressions.append(f'it: String -> it.doesMatch("{escaped_pattern}")')
+            if not expressions:
+                return ''
+            return f'{{ it: String -> {" && ".join(expressions)} }}'
+        elif isinstance(self, Url) and self.schemes is not None:
+            scheme_list = ', '.join(map(lambda s: f'"{s}"', self.schemes))
+            return f'{{ it.hasScheme(listOf({scheme_list})) }}'
+        elif isinstance(self, Int):
+            return _number_validator_decl('Int', self.constraint)
+        elif isinstance(self, Double):
+            return _number_validator_decl('Double', self.constraint)
+        else:
+            return None
+
+    def type_helper_declaration(self, p: KotlinProperty) -> str:
+        type_decl = self.prefixed_declaration(
+            mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES,
+            supports_expressions=p.supports_expressions
+        )
+        definition = f'TypeHelper.from(default = {type_decl}.values().first()) {{ it is {type_decl} }}'
+        return f'private val {self.type_helper_reference(p)} = {definition}'
 
     def type_helper_reference(self, p: KotlinProperty) -> str:
         prefix = 'TYPE_HELPER_'

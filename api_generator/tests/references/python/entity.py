@@ -6,6 +6,8 @@ import enum
 import typing
 
 from . import entity_with_array
+from . import entity_with_array_of_enums
+from . import entity_with_array_of_expressions
 from . import entity_with_array_of_nested_items
 from . import entity_with_array_with_transform
 from . import entity_with_complex_property
@@ -27,6 +29,8 @@ from typing import Union
 
 Entity = Union[
     entity_with_array.EntityWithArray,
+    entity_with_array_of_enums.EntityWithArrayOfEnums,
+    entity_with_array_of_expressions.EntityWithArrayOfExpressions,
     entity_with_array_of_nested_items.EntityWithArrayOfNestedItems,
     entity_with_array_with_transform.EntityWithArrayWithTransform,
     entity_with_complex_property.EntityWithComplexProperty,

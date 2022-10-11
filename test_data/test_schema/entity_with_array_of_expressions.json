@@ -1,0 +1,23 @@
+{
+  "type": "object",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "entity_with_array_of_expressions"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "common.json#/non_empty_string"
+      },
+      "minItems": 1,
+      "clientMinItems": 1
+    }
+  },
+  "required": [
+    "type",
+    "items"
+  ]
+}

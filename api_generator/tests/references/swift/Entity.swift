@@ -7,6 +7,8 @@ import Serialization
 @frozen
 public enum Entity {
   case entityWithArray(EntityWithArray)
+  case entityWithArrayOfEnums(EntityWithArrayOfEnums)
+  case entityWithArrayOfExpressions(EntityWithArrayOfExpressions)
   case entityWithArrayOfNestedItems(EntityWithArrayOfNestedItems)
   case entityWithArrayWithTransform(EntityWithArrayWithTransform)
   case entityWithComplexProperty(EntityWithComplexProperty)
@@ -27,6 +29,10 @@ public enum Entity {
   public var value: Serializable {
     switch self {
     case let .entityWithArray(value):
+      return value
+    case let .entityWithArrayOfEnums(value):
+      return value
+    case let .entityWithArrayOfExpressions(value):
       return value
     case let .entityWithArrayOfNestedItems(value):
       return value
@@ -69,6 +75,10 @@ extension Entity: Equatable {
   public static func ==(lhs: Entity, rhs: Entity) -> Bool {
     switch (lhs, rhs) {
     case let (.entityWithArray(l), .entityWithArray(r)):
+      return l == r
+    case let (.entityWithArrayOfEnums(l), .entityWithArrayOfEnums(r)):
+      return l == r
+    case let (.entityWithArrayOfExpressions(l), .entityWithArrayOfExpressions(r)):
       return l == r
     case let (.entityWithArrayOfNestedItems(l), .entityWithArrayOfNestedItems(r)):
       return l == r

@@ -2,6 +2,8 @@
 
 from .entity import Entity
 from .entity_with_array import EntityWithArray
+from .entity_with_array_of_enums import EntityWithArrayOfEnums, EntityWithArrayOfEnumsItem
+from .entity_with_array_of_expressions import EntityWithArrayOfExpressions
 from .entity_with_array_of_nested_items import EntityWithArrayOfNestedItems, EntityWithArrayOfNestedItemsItem
 from .entity_with_array_with_transform import EntityWithArrayWithTransform
 from .entity_with_complex_property import EntityWithComplexProperty, EntityWithComplexPropertyProperty
@@ -20,6 +22,8 @@ from .entity_with_string_enum_property_with_default_value import EntityWithStrin
 from .entity_without_properties import EntityWithoutProperties
 
 EntityWithArray.update_forward_refs()
+EntityWithArrayOfEnums.update_forward_refs()
+EntityWithArrayOfExpressions.update_forward_refs()
 EntityWithArrayOfNestedItems.update_forward_refs()
 EntityWithArrayOfNestedItemsItem.update_forward_refs()
 EntityWithArrayWithTransform.update_forward_refs()

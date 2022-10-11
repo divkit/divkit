@@ -803,6 +803,31 @@ public class JsonParser {
         return readExpressionsList(jsonObject, key, converter, validator, alwaysValid(), logger, env, typeHelper);
     }
 
+    @NonNull
+    public static <T> ExpressionsList<T> readExpressionsList(
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final ListValidator<T> validator,
+            @NonNull final ValueValidator<T> itemValidator,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingEnvironment env,
+            @NonNull final TypeHelper<T> typeHelper) {
+        return readExpressionsList(jsonObject, key, doNotConvert(), validator, itemValidator, logger, env, typeHelper);
+    }
+
+    @Nullable
+    public static <T> ExpressionsList<T> readOptionalExpressionsList(
+            @NonNull final JSONObject jsonObject,
+            @NonNull final String key,
+            @NonNull final ListValidator<T> validator,
+            @NonNull final ValueValidator<T> itemValidator,
+            @NonNull final ParsingErrorLogger logger,
+            @NonNull final ParsingEnvironment env,
+            @NonNull final TypeHelper<T> typeHelper) {
+        return readOptionalExpressionsList(jsonObject, key, doNotConvert(), validator,
+                itemValidator, logger, env, typeHelper);
+    }
+
     @Nullable
     public static <R, T> ExpressionsList<T> readOptionalExpressionsList(
             @NonNull final JSONObject jsonObject,

@@ -6,6 +6,8 @@ import { Type } from '../template';
 
 import {
     EntityWithArray,
+    EntityWithArrayOfEnums,
+    EntityWithArrayOfExpressions,
     EntityWithArrayOfNestedItems,
     EntityWithArrayWithTransform,
     EntityWithComplexProperty,
@@ -26,6 +28,8 @@ import {
 
 export type Entity =
     | EntityWithArray
+    | EntityWithArrayOfEnums
+    | EntityWithArrayOfExpressions
     | EntityWithArrayOfNestedItems
     | EntityWithArrayWithTransform
     | EntityWithComplexProperty

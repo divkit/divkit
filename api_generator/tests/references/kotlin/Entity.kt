@@ -18,6 +18,8 @@ import com.yandex.div.data.*
 @Mockable
 sealed class Entity : JSONSerializable {
     class WithArray(val value: EntityWithArray) : Entity()
+    class WithArrayOfEnums(val value: EntityWithArrayOfEnums) : Entity()
+    class WithArrayOfExpressions(val value: EntityWithArrayOfExpressions) : Entity()
     class WithArrayOfNestedItems(val value: EntityWithArrayOfNestedItems) : Entity()
     class WithArrayWithTransform(val value: EntityWithArrayWithTransform) : Entity()
     class WithComplexProperty(val value: EntityWithComplexProperty) : Entity()
@@ -38,6 +40,8 @@ sealed class Entity : JSONSerializable {
     fun value(): Any {
         return when (this) {
             is WithArray -> value
+            is WithArrayOfEnums -> value
+            is WithArrayOfExpressions -> value
             is WithArrayOfNestedItems -> value
             is WithArrayWithTransform -> value
             is WithComplexProperty -> value
@@ -60,6 +64,8 @@ sealed class Entity : JSONSerializable {
     override fun writeToJSON(): JSONObject {
         return when (this) {
             is WithArray -> value.writeToJSON()
+            is WithArrayOfEnums -> value.writeToJSON()
+            is WithArrayOfExpressions -> value.writeToJSON()
             is WithArrayOfNestedItems -> value.writeToJSON()
             is WithArrayWithTransform -> value.writeToJSON()
             is WithComplexProperty -> value.writeToJSON()
@@ -88,6 +94,8 @@ sealed class Entity : JSONSerializable {
             val type: String = json.read("type", logger = logger, env = env)
             when (type) {
                 EntityWithArray.TYPE -> return WithArray(EntityWithArray(env, json))
+                EntityWithArrayOfEnums.TYPE -> return WithArrayOfEnums(EntityWithArrayOfEnums(env, json))
+                EntityWithArrayOfExpressions.TYPE -> return WithArrayOfExpressions(EntityWithArrayOfExpressions(env, json))
                 EntityWithArrayOfNestedItems.TYPE -> return WithArrayOfNestedItems(EntityWithArrayOfNestedItems(env, json))
                 EntityWithArrayWithTransform.TYPE -> return WithArrayWithTransform(EntityWithArrayWithTransform(env, json))
                 EntityWithComplexProperty.TYPE -> return WithComplexProperty(EntityWithComplexProperty(env, json))

@@ -7,6 +7,8 @@ import Serialization
 @frozen
 public enum EntityTemplate: TemplateValue {
   case entityWithArrayTemplate(EntityWithArrayTemplate)
+  case entityWithArrayOfEnumsTemplate(EntityWithArrayOfEnumsTemplate)
+  case entityWithArrayOfExpressionsTemplate(EntityWithArrayOfExpressionsTemplate)
   case entityWithArrayOfNestedItemsTemplate(EntityWithArrayOfNestedItemsTemplate)
   case entityWithArrayWithTransformTemplate(EntityWithArrayWithTransformTemplate)
   case entityWithComplexPropertyTemplate(EntityWithComplexPropertyTemplate)
@@ -27,6 +29,10 @@ public enum EntityTemplate: TemplateValue {
   public var value: Any {
     switch self {
     case let .entityWithArrayTemplate(value):
+      return value
+    case let .entityWithArrayOfEnumsTemplate(value):
+      return value
+    case let .entityWithArrayOfExpressionsTemplate(value):
       return value
     case let .entityWithArrayOfNestedItemsTemplate(value):
       return value
@@ -67,6 +73,10 @@ public enum EntityTemplate: TemplateValue {
     switch self {
     case let .entityWithArrayTemplate(value):
       return .entityWithArrayTemplate(try value.resolveParent(templates: templates))
+    case let .entityWithArrayOfEnumsTemplate(value):
+      return .entityWithArrayOfEnumsTemplate(try value.resolveParent(templates: templates))
+    case let .entityWithArrayOfExpressionsTemplate(value):
+      return .entityWithArrayOfExpressionsTemplate(try value.resolveParent(templates: templates))
     case let .entityWithArrayOfNestedItemsTemplate(value):
       return .entityWithArrayOfNestedItemsTemplate(try value.resolveParent(templates: templates))
     case let .entityWithArrayWithTransformTemplate(value):
@@ -117,6 +127,22 @@ public enum EntityTemplate: TemplateValue {
       switch result {
       case let .success(value): return .success(.entityWithArray(value))
       case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArray(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .entityWithArrayOfEnumsTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.entityWithArrayOfEnums(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArrayOfEnums(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case let .entityWithArrayOfExpressionsTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.entityWithArrayOfExpressions(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArrayOfExpressions(value), warnings: warnings)
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
@@ -265,6 +291,22 @@ public enum EntityTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case EntityWithArrayOfEnums.type:
+      let result = EntityWithArrayOfEnumsTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.entityWithArrayOfEnums(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArrayOfEnums(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
+    case EntityWithArrayOfExpressions.type:
+      let result = EntityWithArrayOfExpressionsTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.entityWithArrayOfExpressions(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.entityWithArrayOfExpressions(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     case EntityWithArrayOfNestedItems.type:
       let result = EntityWithArrayOfNestedItemsTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
       switch result {
@@ -406,6 +448,10 @@ extension EntityTemplate: TemplateDeserializable {
     switch blockType {
     case EntityWithArrayTemplate.type:
       self = .entityWithArrayTemplate(try EntityWithArrayTemplate(dictionary: dictionary, templateToType: templateToType))
+    case EntityWithArrayOfEnumsTemplate.type:
+      self = .entityWithArrayOfEnumsTemplate(try EntityWithArrayOfEnumsTemplate(dictionary: dictionary, templateToType: templateToType))
+    case EntityWithArrayOfExpressionsTemplate.type:
+      self = .entityWithArrayOfExpressionsTemplate(try EntityWithArrayOfExpressionsTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithArrayOfNestedItemsTemplate.type:
       self = .entityWithArrayOfNestedItemsTemplate(try EntityWithArrayOfNestedItemsTemplate(dictionary: dictionary, templateToType: templateToType))
     case EntityWithArrayWithTransformTemplate.type:
