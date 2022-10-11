@@ -287,6 +287,10 @@
     "en": "Element width.",
     "ru": "Ширина элемента."
   },
+  "div_blend_mode": {
+    "en": "Blend mode.",
+    "ru": "Метод наложения."
+  },
   "div_border": {
     "en": "Stroke around the element.",
     "ru": "Рамка вокруг элемента."
@@ -782,6 +786,10 @@
   "div_image_short": {
     "en": "Image.",
     "ru": "Изображение."
+  },
+  "div_image_tint_mode": {
+    "en": "The blend mode of color specified in tint_color. Default value: `sourceIn`",
+    "ru": "Метод наложения цвета, указанного в tint_color. Значение по умолчанию: `sourceIn`"
   },
   "div_image_tint_color": {
     "en": "New color of a contour image.",

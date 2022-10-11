@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.Canvas
+import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.util.DisplayMetrics
 import android.util.TypedValue
@@ -56,6 +57,7 @@ import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRadialGradientRelativeCenter
 import com.yandex.div2.DivRadialGradientRelativeRadius
 import com.yandex.div2.DivSize
+import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivVisibilityAction
 import kotlin.math.roundToInt
@@ -330,6 +332,17 @@ fun DivAlignmentVertical.toVerticalAlignment(): ScalingDrawable.AlignmentVertica
         DivAlignmentVertical.CENTER -> ScalingDrawable.AlignmentVertical.CENTER
         DivAlignmentVertical.BOTTOM -> ScalingDrawable.AlignmentVertical.BOTTOM
         else -> ScalingDrawable.AlignmentVertical.TOP
+    }
+}
+
+internal fun DivBlendMode.toPorterDuffMode(): PorterDuff.Mode {
+    return when (this) {
+        DivBlendMode.SOURCE_IN -> PorterDuff.Mode.SRC_IN
+        DivBlendMode.SOURCE_ATOP -> PorterDuff.Mode.SRC_ATOP
+        DivBlendMode.DARKEN -> PorterDuff.Mode.DARKEN
+        DivBlendMode.LIGHTEN -> PorterDuff.Mode.LIGHTEN
+        DivBlendMode.MULTIPLY -> PorterDuff.Mode.MULTIPLY
+        DivBlendMode.SCREEN -> PorterDuff.Mode.SCREEN
     }
 }
 

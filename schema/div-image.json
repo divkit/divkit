@@ -31,6 +31,14 @@
             "image"
           ]
         },
+        "tint_mode": {
+          "$ref": "div-blend-mode.json",
+          "default_value": "source_in",
+          "$description": "translations.json#/div_image_tint_mode",
+          "platforms": [
+            "android"
+          ]
+        },
         "tint_color": {
           "$ref": "common.json#/color",
           "$description": "translations.json#/div_image_tint_color"
