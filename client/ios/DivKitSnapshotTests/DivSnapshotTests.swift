@@ -31,6 +31,33 @@ private let exclusions = [
   
   "div-gallery/horizontal-gallery-cross-spacing.json",
   "div-gallery/vertical-gallery-cross-spacing.json",
+
+  "div-container/wrap/horizontal-orientation-alignments-center-bottom.json",
+  "div-container/wrap/horizontal-orientation-alignments-right-center.json",
+  "div-container/wrap/horizontal-orientation-child-alignments.json",
+  "div-container/wrap/horizontal-orientation-first-match-parent.json",
+  "div-container/wrap/horizontal-orientation-fixed-size.json",
+  "div-container/wrap/horizontal-orientation-last-match-parent.json",
+  "div-container/wrap/horizontal-orientation-margins.json",
+  "div-container/wrap/horizontal-orientation-match-parent.json",
+  "div-container/wrap/horizontal-orientation-middle-match-parent.json",
+  "div-container/wrap/horizontal-orientation-multi-line.json",
+  "div-container/wrap/horizontal-orientation-one-line.json",
+  "div-container/wrap/horizontal-orientation-two-match-parent-in-a-row.json",
+  "div-container/wrap/horizontal-orientation-wrap-content.json",
+  "div-container/wrap/vertical-orientation-alignments-center-bottom.json",
+  "div-container/wrap/vertical-orientation-alignments-right-center.json",
+  "div-container/wrap/vertical-orientation-child-alignments.json",
+  "div-container/wrap/vertical-orientation-first-match-parent.json",
+  "div-container/wrap/vertical-orientation-fixed-size.json",
+  "div-container/wrap/vertical-orientation-last-match-parent.json",
+  "div-container/wrap/vertical-orientation-margins.json",
+  "div-container/wrap/vertical-orientation-match-parent.json",
+  "div-container/wrap/vertical-orientation-middle-match-parent.json",
+  "div-container/wrap/vertical-orientation-multi-line.json",
+  "div-container/wrap/vertical-orientation-one-line.json",
+  "div-container/wrap/vertical-orientation-two-match-parent-in-a-row.json",
+  "div-container/wrap/vertical-orientation-wrap-content.json",
 ]
 
 private let casesWithPlaceholerOnly = [

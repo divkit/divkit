@@ -1,0 +1,88 @@
+{
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "horizontal",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 450
+          },
+          "border": {
+            "stroke": {
+              "color": "#0000FF"
+            }
+          },
+          "content_alignment_horizontal": "right",
+          "content_alignment_vertical": "center",
+          "layout_mode": "wrap",
+          "items": [
+            {
+              "type": "wrapped_text",
+              "text": "One",
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Two",
+              "width": {
+                "type": "fixed",
+                "value": 100
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Three",
+              "width": {
+                "type": "fixed",
+                "value": 120
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Four",
+              "width": {
+                "type": "fixed",
+                "value": 180
+              }
+            },
+            {
+              "type": "wrapped_text",
+              "text": "Five",
+              "width": {
+                "type": "fixed",
+                "value": 250
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

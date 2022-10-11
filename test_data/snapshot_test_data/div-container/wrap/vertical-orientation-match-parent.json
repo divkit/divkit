@@ -1,0 +1,97 @@
+{
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "fixed",
+            "value": 450
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "vertical",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "border": {
+                "stroke": {
+                  "color": "#0000FF"
+                }
+              },
+              "layout_mode": "wrap",
+              "items": [
+                {
+                  "type": "wrapped_text",
+                  "text": "One"
+                },
+                {
+                  "type": "wrapped_text",
+                  "text": "Two",
+                  "height": {
+                    "type": "fixed",
+                    "value": 100
+                  }
+                },
+                {
+                  "type": "wrapped_text",
+                  "text": "Three",
+                  "height": {
+                    "type": "fixed",
+                    "value": 150
+                  }
+                },
+                {
+                  "type": "wrapped_text",
+                  "text": "Four",
+                  "height": {
+                    "type": "fixed",
+                    "value": 250
+                  }
+                },
+                {
+                  "type": "wrapped_text",
+                  "text": "Five",
+                  "height": {
+                    "type": "fixed",
+                    "value": 400
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
