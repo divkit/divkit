@@ -120,7 +120,7 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["web", "ios"]
+      "platforms": ["ios"]
     },
     {
       "name": "setColorAlpha(string, number) color",
@@ -137,7 +137,7 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android"]
+      "platforms": ["android", "web"]
     },
     {
       "name": "setColorAlpha(color, number) color",
@@ -154,7 +154,7 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android","web", "ios"]
+      "platforms": ["android", "web", "ios"]
     },
     {
       "name": "setColorRed(string, number) string",
@@ -172,7 +172,7 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["web", "ios"]
+      "platforms": ["ios"]
     },
     {
       "name": "setColorRed(string, number) color",
@@ -189,7 +189,7 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android"]
+      "platforms": ["android", "web"]
     },
     {
       "name": "setColorRed(color, number) color",
@@ -224,7 +224,7 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["web", "ios"]
+      "platforms": ["ios"]
     },
     {
       "name": "setColorGreen(string, number) color",
@@ -241,7 +241,7 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android"]
+      "platforms": ["android", "web"]
     },
     {
       "name": "setColorGreen(color, number) color",
@@ -258,7 +258,7 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android","web", "ios"]
+      "platforms": ["android", "web", "ios"]
     },
     {
       "name": "setColorBlue(string, number) string",
@@ -276,7 +276,7 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["web", "ios"]
+      "platforms": ["ios"]
     },
     {
       "name": "setColorBlue(string, number) color",
@@ -293,7 +293,7 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android"]
+      "platforms": ["android", "web"]
     },
     {
       "name": "setColorBlue(color, number) color",
@@ -310,7 +310,7 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android","web", "ios"]
+      "platforms": ["android", "web", "ios"]
     },
 
     {
@@ -337,7 +337,7 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["web", "ios"]
+      "platforms": ["ios"]
     },
     {
       "name": "argb(number, number, number, number) color",
@@ -362,7 +362,7 @@
         }
       ],
       "result_type": "color",
-      "platforms": ["android"]
+      "platforms": ["android", "web"]
     },
     {
       "name": "rgb(number, number, number) string",
@@ -384,7 +384,7 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["web", "ios"]
+      "platforms": ["ios"]
     },
     {
       "name": "rgb(number, number, number) color",
@@ -405,7 +405,7 @@
         }
       ],
       "result_type": "string",
-      "platforms": ["android"]
+      "platforms": ["android", "web"]
     }
   ]
 }

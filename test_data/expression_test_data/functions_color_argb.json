@@ -10,8 +10,7 @@
       },
       "variables": [],
       "platforms": [
-        "ios",
-        "web"
+        "ios"
       ]
     },
     {
@@ -23,7 +22,8 @@
       },
       "variables": [],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -36,8 +36,7 @@
       },
       "variables": [],
       "platforms": [
-        "ios",
-        "web"
+        "ios"
       ]
     },
     {
@@ -49,7 +48,8 @@
       },
       "variables": [],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -62,8 +62,7 @@
       },
       "variables": [],
       "platforms": [
-        "ios",
-        "web"
+        "ios"
       ]
     },
     {
@@ -75,7 +74,8 @@
       },
       "variables": [],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -88,8 +88,7 @@
       },
       "variables": [],
       "platforms": [
-        "ios",
-        "web"
+        "ios"
       ]
     },
     {
@@ -101,7 +100,8 @@
       },
       "variables": [],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {
@@ -114,8 +114,7 @@
       },
       "variables": [],
       "platforms": [
-        "ios",
-        "web"
+        "ios"
       ]
     },
     {
@@ -127,7 +126,8 @@
       },
       "variables": [],
       "platforms": [
-        "android"
+        "android",
+        "web"
       ]
     },
     {

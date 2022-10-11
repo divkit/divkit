@@ -22,7 +22,7 @@ function colorSetter(field: keyof ParsedColor): (color: StringValue | ColorValue
         parsed[field] = val.value * 255;
 
         return {
-            type: color.type,
+            type: COLOR,
             value: stringifyColor(parsed)
         };
     };
@@ -47,7 +47,7 @@ function rgb(red: NumberValue, green: NumberValue, blue: NumberValue): EvalValue
     };
 
     return {
-        type: STRING,
+        type: COLOR,
         value: stringifyColor(parsed)
     };
 }
@@ -61,7 +61,7 @@ function argb(alpha: NumberValue, red: NumberValue, green: NumberValue, blue: Nu
     };
 
     return {
-        type: STRING,
+        type: COLOR,
         value: stringifyColor(parsed)
     };
 }
