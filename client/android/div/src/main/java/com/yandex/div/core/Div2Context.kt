@@ -8,6 +8,8 @@ import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.MainThread
+import androidx.annotation.StyleRes
+import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.view2.Div2View
@@ -36,15 +38,18 @@ class Div2Context @MainThread private constructor(
     val div2Component: Div2Component
 ) : CustomInflaterContext(baseContext) {
 
+    @JvmOverloads
     constructor(
         baseContext: ContextThemeWrapper,
-        configuration: DivConfiguration
+        configuration: DivConfiguration,
+        @StyleRes themeId: Int = R.style.Div_Theme
     ) : this(
         baseContext,
         DivKit.getInstance(baseContext).component
             .div2Component()
             .baseContext(baseContext)
             .configuration(configuration)
+            .themeId(themeId)
             .divCreationTracker(DivCreationTracker(SystemClock.uptimeMillis()))
             .build()
     )

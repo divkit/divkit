@@ -14,7 +14,8 @@ import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.div.DemoDivLottieRawResProvider
 import com.yandex.divkit.demo.div.Div2Activity
-import com.yandex.divkit.demo.div.DivUtils
+import com.yandex.divkit.demo.div.divConfiguration
+import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.screenshot.Div2ViewFactory
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
@@ -41,7 +42,7 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
         val divJson = assetReader.read(scenarioPath)
         val transitionScheduler = Div2Activity.DivParentTransitionScheduler(parent)
         val divConfiguration =
-            DivUtils.createDivConfiguration(activity, transitionScheduler, logDelegate)
+            divConfiguration(activity, transitionScheduler, logDelegate)
                 .extension(
                     DivPinchToZoomExtensionHandler(
                         DivPinchToZoomConfiguration.Builder(activity).build()
@@ -55,7 +56,7 @@ class RegressionDiv2ViewCreator(context: Context) : Div2ViewCreator {
                 .actionHandler(RegressionDivActionHandler(uriHandler, assetReader, activity))
                 .enableAccessibility(true)
                 .build()
-        val divContext = Div2Context(baseContext = activity, configuration = divConfiguration)
+        val divContext = divContext(baseContext = activity, configuration = divConfiguration)
         divStateStorage.preloadState("div2")
         return when {
             divJson.has("card") -> {

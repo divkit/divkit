@@ -118,4 +118,14 @@
         <item name="colorControlActivated">@color/white</item>
         <item name="colorSwitchThumbNormal">@color/white</item>
     </style>
+
+    <style name="Div.Theme.Demo" parent="Div.Theme">
+        <item name="divTextStyle">@style/Div.Text.Demo</item>
+        <item name="divImageStyle">@style/Div.Image.Demo</item>
+    </style>
+
+    <style name="Div.Text.Demo"/>
+
+    <style name="Div.Image.Demo"/>
+
 </resources>

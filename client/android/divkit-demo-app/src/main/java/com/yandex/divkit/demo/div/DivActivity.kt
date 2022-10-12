@@ -102,15 +102,13 @@ open class DivActivity : AppCompatActivity() {
                 android.util.Log.e("4444", message, throwable)
             }
         }
-        val configuration = DivUtils.createDivConfiguration(this, stateChangeListener)
+        val configuration = divConfiguration(this, stateChangeListener)
             .extension(DivPinchToZoomExtensionHandler(DivPinchToZoomConfiguration.Builder(this).build()))
             .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider, logger))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
             .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
             .build()
-        return DivViewAdapter(
-            Div2Context(this, configuration)
-        )
+        return DivViewAdapter(divContext(baseContext = this, configuration = configuration))
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

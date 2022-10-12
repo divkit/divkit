@@ -9,8 +9,10 @@ import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.state.DivStateDatabase
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
+import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.Div2Activity
-import com.yandex.divkit.demo.div.DivUtils
+import com.yandex.divkit.demo.div.divConfiguration
+import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.screenshot.Div2ViewFactory
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
@@ -37,7 +39,7 @@ class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
         val divJson = assetReader.read(scenarioPath)
         val transitionScheduler = Div2Activity.DivParentTransitionScheduler(parent)
         val divConfiguration =
-            DivUtils.createDivConfiguration(activity, transitionScheduler, logDelegate)
+            divConfiguration(activity, transitionScheduler, logDelegate)
                 .extension(
                     DivPinchToZoomExtensionHandler(
                         DivPinchToZoomConfiguration.Builder(activity).build()
@@ -48,7 +50,7 @@ class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
                 .actionHandler(UIDiv2ActionHandler(uriHandler, context))
                 .enableAccessibility(true)
                 .build()
-        val divContext = Div2Context(baseContext = activity, configuration = divConfiguration)
+        val divContext = divContext(baseContext = activity, configuration = divConfiguration)
         divStateStorage.preloadState("div2")
         val templateJson = divJson.optJSONObject("templates")
         val cardJson = divJson.getJSONObject("card")

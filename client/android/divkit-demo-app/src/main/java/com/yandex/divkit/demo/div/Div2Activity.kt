@@ -88,7 +88,7 @@ class Div2Activity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         val transitionScheduler = DivParentTransitionScheduler(binding.container)
-        val divConfiguration = DivUtils.createDivConfiguration(this, transitionScheduler)
+        val divConfiguration = divConfiguration(this, transitionScheduler)
             .extension(
                 DivPinchToZoomExtensionHandler(
                     DivPinchToZoomConfiguration.Builder(this).build()
@@ -100,7 +100,7 @@ class Div2Activity : AppCompatActivity() {
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
             .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
             .build()
-        val context = Div2Context(baseContext = this, configuration = divConfiguration)
+        val context = divContext(baseContext = this, configuration = divConfiguration)
 
         val prevValue = preferences.getString(DIV2_KEY_URL, "")?.takeIf { it.isNotBlank() } ?: ""
         variable = Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, prevValue)

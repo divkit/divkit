@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
+import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.ExpressionSubscriber
@@ -19,7 +20,7 @@ import com.yandex.div2.DivText
 internal class DivLineHeightTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    private val defStyleAttr: Int = R.attr.divTextStyle
 ) : SuperLineHeightTextView(context, attrs, defStyleAttr), DivAnimator, DivBorderSupports, TransientView,
     ExpressionSubscriber {
 

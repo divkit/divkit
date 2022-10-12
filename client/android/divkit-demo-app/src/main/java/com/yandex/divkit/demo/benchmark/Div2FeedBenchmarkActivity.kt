@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.divkit.demo.div.DivUtils
+import com.yandex.divkit.demo.div.divContext
 
 class Div2FeedBenchmarkActivity : AppCompatActivity() {
 
@@ -21,7 +21,7 @@ class Div2FeedBenchmarkActivity : AppCompatActivity() {
         val assetNames = intent.getStringArrayExtra(EXTRA_ASSET_NAMES)
 
         val viewController = Div2FeedBenchmarkViewController(recyclerView)
-        val divContext = DivUtils.createDivContext(activity = this)
+        val divContext = divContext(activity = this)
         benchmark = Div2FeedBenchmark(divContext, viewController)
 
         if (assetNames == null) {

@@ -16,7 +16,7 @@ import com.yandex.div.utils.contentView
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivData
-import com.yandex.divkit.demo.div.DivUtils
+import com.yandex.divkit.demo.div.divContext
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.test.util.StepsDsl
 import ru.tinkoff.allure.step
@@ -57,7 +57,7 @@ abstract class DivTestAssetSteps {
     ): Unit =
         step("Build container w=$width, h=$height, isScrollable=$isScrollable") {
             runOnUiThread {
-                val divContext = DivUtils.createDivContext(activity, null) {
+                val divContext = divContext(activity, null) {
                     extension(
                         DivPinchToZoomExtensionHandler(
                             DivPinchToZoomConfiguration.Builder(activity).build()

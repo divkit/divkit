@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.net.Uri
 import android.util.AttributeSet
+import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.extension.DivExtensionView
@@ -17,7 +18,7 @@ import com.yandex.div2.DivImage
 internal open class DivImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = R.attr.divImageStyle
 ): LoadableImageView(context, attrs, defStyleAttr), DivBorderSupports,
     TransientView, DivExtensionView, ExpressionSubscriber {
 

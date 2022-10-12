@@ -2,28 +2,19 @@
 
 <resources>
 
-    <attr name="divButtonTextStyle" format="reference"/>
-    <attr name="divButtonImageStyle" format="reference"/>
-    <attr name="divFooterStyle" format="reference"/>
+    <attr name="divTextStyle" format="reference"/>
+    <attr name="divImageStyle" format="reference"/>
     <attr name="divTabIndicatorLayoutStyle" format="reference"/>
-    <attr name="divTitleStyle" format="reference"/>
-    <attr name="divTrafficLayoutStyle" format="reference"/>
-    <attr name="divUniversalTitleStyle" format="reference"/>
-    <attr name="divUniversalTextStyle" format="reference"/>
-    <attr name="divUniversalImageStyle" format="reference"/>
-    <attr name="divUniversalDayStyle" format="reference"/>
-    <attr name="divUniversalMonthStyle" format="reference"/>
 
-    <declare-styleable name="RatioImageView">
-        <attr name="ratio" format="float"/>
-        <attr name="customScaleType" format="enum">
-            <enum name="topCrop" value="0"/>
+    <declare-styleable name="AspectImageView">
+        <attr name="android:gravity"/>
+        <attr name="aspectRatio" format="float"/>
+        <attr name="imageScale" format="enum">
+            <enum name="noScale" value="0"/>
+            <enum name="fit" value="1"/>
+            <enum name="fill" value="2"/>
         </attr>
-        <attr name="direction" format="enum">
-            <enum name="width" value="0"/>
-            <enum name="height" value="1"/>
-        </attr>
-        <attr name="ratioImageViewStyle" format="reference"/>
+        <attr name="aspectImageViewStyle" format="reference"/>
     </declare-styleable>
 
     <declare-styleable name="GridContainer">
@@ -37,17 +28,6 @@
         <attr name="android:layout_rowSpan"/>
         <attr name="android:layout_columnWeight"/>
         <attr name="android:layout_rowWeight"/>
-    </declare-styleable>
-
-    <declare-styleable name="AspectImageView">
-        <attr name="android:gravity"/>
-        <attr name="aspectRatio" format="float"/>
-        <attr name="imageScale" format="enum">
-            <enum name="noScale" value="0"/>
-            <enum name="fit" value="1"/>
-            <enum name="fill" value="2"/>
-        </attr>
-        <attr name="aspectImageViewStyle" format="reference"/>
     </declare-styleable>
 
 </resources>

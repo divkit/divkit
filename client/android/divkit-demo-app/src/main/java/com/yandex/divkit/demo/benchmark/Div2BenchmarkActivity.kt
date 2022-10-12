@@ -2,7 +2,7 @@ package com.yandex.divkit.demo.benchmark
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.yandex.divkit.demo.div.DivUtils
+import com.yandex.divkit.demo.div.divContext
 
 class Div2BenchmarkActivity : AppCompatActivity() {
 
@@ -18,7 +18,7 @@ class Div2BenchmarkActivity : AppCompatActivity() {
         val rebindCount = intent.getIntExtra(EXTRA_REBIND_COUNT, -1)
 
         val viewController = Div2BenchmarkViewController(rootLayout)
-        val divContext = DivUtils.createDivContext(activity = this)
+        val divContext = divContext(activity = this)
         benchmark = Div2Benchmark(divContext, viewController, rebindCount)
 
         if (assetName == null) {

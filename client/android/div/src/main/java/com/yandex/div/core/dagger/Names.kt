@@ -6,4 +6,5 @@ internal object Names {
     const val CONTEXT = "context"
     const val THEMED_CONTEXT = "themed_context"
     const val TYPEFACE_DISPLAY = "typeface_display"
+    const val THEME = "theme"
 }

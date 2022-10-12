@@ -81,7 +81,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         url = intent.getStringExtra(URL)
 
         val transitionScheduler = Div2Activity.DivParentTransitionScheduler(binding.singleContainer)
-        val divConfiguration = DivUtils.createDivConfiguration(this, transitionScheduler)
+        val divConfiguration = divConfiguration(this, transitionScheduler)
             .extension(
                 DivPinchToZoomExtensionHandler(
                     DivPinchToZoomConfiguration.Builder(this).build()
@@ -94,7 +94,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(this))
             .build()
 
-        divContext = Div2Context(baseContext = this, configuration = divConfiguration)
+        divContext = divContext(baseContext = this, configuration = divConfiguration)
         div2Adapter = DivEditorAdapter(divContext)
         globalVariableController.bindWith(divContext)
 

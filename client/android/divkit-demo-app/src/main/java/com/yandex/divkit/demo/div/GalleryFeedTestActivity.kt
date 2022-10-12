@@ -19,7 +19,7 @@ class GalleryFeedTestActivity : AppCompatActivity() {
     private val assetReader = DivAssetReader(this)
 
     private val divContext by lazy {
-        DivUtils.createDivContext(this, divStateChangeListener = null)
+        divContext(this, divStateChangeListener = null)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

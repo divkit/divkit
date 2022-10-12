@@ -3,6 +3,7 @@ package com.yandex.div.core.dagger;
 import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.StyleRes;
 import com.yandex.div.core.Div2Logger;
 import com.yandex.div.core.DivActionHandler;
 import com.yandex.div.core.DivConfiguration;
@@ -30,6 +31,7 @@ import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import dagger.BindsInstance;
 import dagger.Subcomponent;
+import javax.inject.Named;
 
 /**
  * Context scoped component for div2 {@link com.yandex.div.core.Div2Context}
@@ -129,6 +131,10 @@ public interface Div2Component {
 
         @NonNull
         Builder configuration(@NonNull DivConfiguration configuration);
+
+        @NonNull
+        @BindsInstance
+        Builder themeId(@Named(Names.THEME) @StyleRes int themeId);
 
         @NonNull
         @BindsInstance

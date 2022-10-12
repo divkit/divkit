@@ -2,6 +2,7 @@ package com.yandex.divkit.demo.div
 
 import android.app.Activity
 import android.net.Uri
+import android.view.ContextThemeWrapper
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
@@ -21,59 +22,67 @@ import com.yandex.div.view.pooling.ViewPoolProfiler
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
+import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
 import com.yandex.divkit.regression.ScenarioLogDelegate
 import org.json.JSONObject
 
-object DivUtils {
+fun divConfiguration(
+    activity: Activity,
+    divStateChangeListener: DivStateChangeListener? = null,
+    logDelegate: ScenarioLogDelegate = ScenarioLogDelegate.Stub
+): DivConfiguration.Builder {
+    val reporter = MetricaUtils.getReporter(activity)
+    val flagPreferenceProvider = Container.flagPreferenceProvider
+    return DivConfiguration.Builder(Container.imageLoader)
+        .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
+        .divStateChangeListener(divStateChangeListener ?: DivStateChangeListener.STUB)
+        .divCustomViewFactory(DemoDivCustomViewFactory())
+        .divCustomViewAdapter(DemoDivCustomViewAdapter())
+        .div2Logger(DemoDiv2Logger(logDelegate))
+        .enableVisibilityBeacons()
+        .enableLongtapActionsPassingToChild()
+        .enableViewPool(
+            flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_ENABLED)
+        )
+        .enableViewPoolProfiling(
+            flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_PROFILING_ENABLED)
+        )
+        .enableMultipleStateChange(
+            flagPreferenceProvider.getExperimentFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED)
+        )
+        .tooltipRestrictor { _, _ -> true }
+        .divDownloader(DemoDivDownloader())
+        .typefaceProvider(YandexSansDivTypefaceProvider(activity))
+        .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(activity))
+        .viewPoolReporter(object : ViewPoolProfiler.Reporter {
+            override fun reportEvent(message: String, result: Map<String, Any>) {
+                reporter.reportEvent(message, result)
+            }
+        })
+        .supportHyphenation(true)
+        .visualErrorsEnabled(true)
+}
 
-    fun createDivConfiguration(
-        activity: Activity,
-        divStateChangeListener: DivStateChangeListener? = null,
-        logDelegate: ScenarioLogDelegate = ScenarioLogDelegate.Stub
-    ): DivConfiguration.Builder {
-        val reporter = MetricaUtils.getReporter(activity)
-        val flagPreferenceProvider = Container.flagPreferenceProvider
-        return DivConfiguration.Builder(Container.imageLoader)
-            .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
-            .divStateChangeListener(divStateChangeListener ?: DivStateChangeListener.STUB)
-            .divCustomViewFactory(DemoDivCustomViewFactory())
-            .divCustomViewAdapter(DemoDivCustomViewAdapter())
-            .div2Logger(DemoDiv2Logger(logDelegate))
-            .enableVisibilityBeacons()
-            .enableLongtapActionsPassingToChild()
-            .enableViewPool(
-                flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_ENABLED)
-            )
-            .enableViewPoolProfiling(
-                flagPreferenceProvider.getExperimentFlag(Experiment.VIEW_POOL_PROFILING_ENABLED)
-            )
-            .enableMultipleStateChange(
-                flagPreferenceProvider.getExperimentFlag(Experiment.MULTIPLE_STATE_CHANGE_ENABLED)
-            )
-            .tooltipRestrictor { _, _ -> true }
-            .divDownloader(DemoDivDownloader())
-            .typefaceProvider(YandexSansDivTypefaceProvider(activity))
-            .displayTypefaceProvider(YandexSansDisplayDivTypefaceProvider(activity))
-            .viewPoolReporter(object : ViewPoolProfiler.Reporter {
-                override fun reportEvent(message: String, result: Map<String, Any>) {
-                    reporter.reportEvent(message, result)
-                }
-            })
-            .supportHyphenation(true)
-            .visualErrorsEnabled(true)
-    }
+fun divContext(
+    activity: Activity,
+    divStateChangeListener: DivStateChangeListener? = null,
+    configBuilder: DivConfiguration.Builder.() -> DivConfiguration.Builder = { this }
+): Div2Context {
+    val configuration = divConfiguration(activity, divStateChangeListener)
+        .configBuilder()
+        .build()
 
-    fun createDivContext(
-        activity: Activity, divStateChangeListener: DivStateChangeListener? = null,
-        configBuilder: DivConfiguration.Builder.() -> DivConfiguration.Builder = { this }
-    ): Div2Context {
-        val configuration =
-            createDivConfiguration(activity, divStateChangeListener).configBuilder().build()
-        return Div2Context(activity, configuration)
-    }
+    return divContext(activity, configuration)
+}
+
+fun divContext(
+    baseContext: ContextThemeWrapper,
+    configuration: DivConfiguration
+): Div2Context {
+    return Div2Context(baseContext, configuration, themeId = R.style.Div_Theme_Demo)
 }
 
 open class DemoDivActionHandler(private val uriHandlerDivkit: DivkitDemoUriHandler) : DivActionHandler() {

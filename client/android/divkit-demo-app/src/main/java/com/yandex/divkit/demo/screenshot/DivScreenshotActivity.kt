@@ -14,7 +14,7 @@ import androidx.core.view.children
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.divkit.demo.R
-import com.yandex.divkit.demo.div.DivUtils
+import com.yandex.divkit.demo.div.divContext
 import java.io.File
 
 private const val TAG = "DivScreenshotActivity"
@@ -52,7 +52,7 @@ class DivScreenshotActivity : AppCompatActivity() {
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        divContext = DivUtils.createDivContext(this)
+        divContext = divContext(this)
         super.onCreate(savedInstanceState)
 
         var divJson = getTestCaseJson()
