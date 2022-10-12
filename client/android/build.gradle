@@ -55,30 +55,23 @@ allprojects {
     }
 
     tasks.whenTaskAdded { task ->
-        if (task.name == "apiBuild") {
-            tasks.create(name: "archiveApiDump", type: Copy) {
-                from "$projectDir/api"
-                into "$rootProject.projectDir/../../../internal/android/api-dump"
-                include "*.api"
-            }
-
-            tasks.create(name: "removeApiDump", type: Delete) {
-                delete "$projectDir/api"
-            }
-
-            archiveApiDump.finalizedBy(removeApiDump)
-
-            // Restoring api dump to in order to configure 'apiCheck' task correctly
-            exec {
-                commandLine "mkdir", "-p", "$projectDir/api"
-            }
-            exec {
-                commandLine "cp", "$rootProject.projectDir/../../../internal/android/api-dump/${project.name}.api", "$projectDir/api"
+        if (task.name == "apiDump") {
+            afterEvaluate {
+                task.configure {
+                    into "$rootProject.projectDir/../../../internal/android/api-dump"
+                    preserve {
+                        include "*.api"
+                    }
+                }
             }
         }
 
-        if (task.name in ["apiDump", "apiCheck"]) {
-            task.finalizedBy(archiveApiDump)
+        if (task.name == "apiCheck") {
+            afterEvaluate {
+                task.configure {
+                    projectApiDir = file("$rootProject.projectDir/../../../internal/android/api-dump")
+                }
+            }
         }
     }
 }
