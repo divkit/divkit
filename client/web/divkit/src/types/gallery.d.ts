@@ -12,6 +12,7 @@ export interface DivGalleryData extends DivBaseData, DivActionableData {
     cross_content_alignment?: GalleryCrossAlignment;
     column_count?: number;
     item_spacing?: number;
+    cross_spacing?: number;
     scroll_mode?: GalleryScrollMode;
     items: DivBaseData[];
     orientation?: Orientation;

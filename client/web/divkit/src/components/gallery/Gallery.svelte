@@ -138,6 +138,14 @@
         gridGap = pxToEm(itemSpacing);
     }
 
+    let crossGridGap: string | undefined;
+    let crossSpacing;
+    $: jsonCrossSpacing = rootCtx.getDerivedFromVars(json.cross_spacing);
+    $: {
+        crossSpacing = correctNonNegativeNumber($jsonCrossSpacing, itemSpacing);
+        crossGridGap = pxToEm(crossSpacing);
+    }
+
     $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
     let padding = '';
     $: {
@@ -213,7 +221,7 @@
 
     $: gridStyle = {
         padding,
-        'grid-gap': gridGap
+        'grid-gap': crossGridGap
     };
 
     $: columnStyle = {
