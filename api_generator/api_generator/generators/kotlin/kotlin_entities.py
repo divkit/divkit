@@ -484,8 +484,13 @@ class KotlinProperty(Property):
 
     @property
     def static_reader_deserialization_expression(self) -> str:
-        lambda_val = 'key, json, env -> ' + self.deserialization_expression(mode=GenerationMode.NORMAL_WITH_TEMPLATES,
-                                                                            reuse_logger_instance=False)
+        def_val = self.default_value_coalescing(mode=GenerationMode.NORMAL_WITHOUT_TEMPLATES)
+        optional = ''
+        if self.parsed_value_is_optional and def_val == '':
+            optional = '?'
+        deserialize_expression = self.deserialization_expression(mode=GenerationMode.NORMAL_WITH_TEMPLATES,
+                                                                 reuse_logger_instance=False)
+        lambda_val = f'key, json, env -> {deserialize_expression}{def_val}'
         reader_type = cast(KotlinPropertyType, self.property_type).declaration_by_prefixed(
             prefixed=True,
             mode=GenerationMode.NORMAL_WITH_TEMPLATES,
@@ -493,8 +498,6 @@ class KotlinProperty(Property):
         )
         if self.use_expression_type:
             reader_type = f'{EXPRESSION_TYPE_NAME}<{reader_type}>'
-
-        optional = '?' if self.parsed_value_is_optional else ''
         return f'val {self.reader_declaration_name}: Reader<{reader_type}{optional}> = {{ {lambda_val} }}'
 
 
@@ -549,7 +552,7 @@ class KotlinPropertyType(PropertyType):
             if len(values) != len(declarations):
                 return None
             joined = ', '.join(declarations)
-            return f'listOf({joined})'
+            return f'listOf<{item_type.declaration(GenerationMode.NORMAL_WITHOUT_TEMPLATES)}>({joined})'
         elif isinstance(self, Object):
             if self.object is None:
                 return None

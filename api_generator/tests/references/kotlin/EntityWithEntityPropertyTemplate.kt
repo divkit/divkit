@@ -47,7 +47,7 @@ class EntityWithEntityPropertyTemplate : JSONSerializable, JsonTemplate<EntityWi
 
         private val ENTITY_DEFAULT_VALUE = Entity.WithStringEnumProperty(EntityWithStringEnumProperty(property = Expression.constant(EntityWithStringEnumProperty.Property.SECOND)))
 
-        val ENTITY_READER: Reader<Entity?> = { key, json, env -> JsonParser.readOptional(json, key, Entity.CREATOR, env.logger, env) }
+        val ENTITY_READER: Reader<Entity> = { key, json, env -> JsonParser.readOptional(json, key, Entity.CREATOR, env.logger, env) ?: ENTITY_DEFAULT_VALUE }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithEntityPropertyTemplate(env, json = it) }

@@ -61,10 +61,10 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
         private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
         private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
 
-        val INT_READER: Reader<Expression<Int>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) }
+        val INT_READER: Reader<Expression<Int>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
         val NESTED_READER: Reader<EntityWithPropertyWithDefaultValue.Nested?> = { key, json, env -> JsonParser.readOptional(json, key, EntityWithPropertyWithDefaultValue.Nested.CREATOR, env.logger, env) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
-        val URL_READER: Reader<Expression<Uri>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) }
+        val URL_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithPropertyWithDefaultValueTemplate(env, json = it) }
     }
@@ -113,9 +113,9 @@ class EntityWithPropertyWithDefaultValueTemplate : JSONSerializable, JsonTemplat
             private val URL_TEMPLATE_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
             private val URL_VALIDATOR = ValueValidator<Uri> { it.hasScheme(listOf("https")) }
 
-            val INT_READER: Reader<Expression<Int>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) }
+            val INT_READER: Reader<Expression<Int>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, NUMBER_TO_INT, INT_VALIDATOR, env.logger, env, INT_DEFAULT_VALUE, TYPE_HELPER_INT) ?: INT_DEFAULT_VALUE }
             val NON_OPTIONAL_READER: Reader<Expression<String>> = { key, json, env -> JsonParser.readExpression(json, key, env.logger, env, TYPE_HELPER_STRING) }
-            val URL_READER: Reader<Expression<Uri>?> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) }
+            val URL_READER: Reader<Expression<Uri>> = { key, json, env -> JsonParser.readOptionalExpression(json, key, STRING_TO_URI, URL_VALIDATOR, env.logger, env, URL_DEFAULT_VALUE, TYPE_HELPER_URI) ?: URL_DEFAULT_VALUE }
 
             val CREATOR = { env: ParsingEnvironment, it: JSONObject -> NestedTemplate(env, json = it) }
         }

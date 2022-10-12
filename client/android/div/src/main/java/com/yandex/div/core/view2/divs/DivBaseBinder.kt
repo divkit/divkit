@@ -4,6 +4,8 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.StateListDrawable
+import android.graphics.Color
+import android.graphics.Rect
 import android.net.Uri
 import android.util.DisplayMetrics
 import android.util.StateSet
@@ -615,6 +617,15 @@ internal class DivBaseBinder @Inject constructor(
         is DivBackground.Solid -> DivBackgroundState.Solid(
             value.color.evaluate(resolver)
         )
+        is DivBackground.Ninepatch -> DivBackgroundState.NinePatch(
+            imageUrl = value.imageUrl.evaluate(resolver),
+            insets = Rect(
+                value.insets.left.evaluate(resolver),
+                value.insets.top.evaluate(resolver),
+                value.insets.right.evaluate(resolver),
+                value.insets.bottom.evaluate(resolver)
+            )
+        )
     }
 
     private fun DivRadialGradientCenter.toBackgroundState(
@@ -675,6 +686,7 @@ internal class DivBaseBinder @Inject constructor(
             centerY = background.centerY.toRadialGradientDrawableCenter(),
             colors = background.colors.toIntArray()
         )
+        is DivBackgroundState.NinePatch -> ColorDrawable(Color.TRANSPARENT) // TODO: implement 9-patch support
     }
 
     private fun DivBackgroundState.RadialGradient.Radius.toRadialGradientDrawableRadius() =
@@ -766,6 +778,11 @@ internal class DivBaseBinder @Inject constructor(
 
         data class Solid(
             val color: Int
+        ): DivBackgroundState()
+
+        data class NinePatch(
+            val imageUrl: Uri,
+            val insets: Rect
         ): DivBackgroundState()
     }
 }

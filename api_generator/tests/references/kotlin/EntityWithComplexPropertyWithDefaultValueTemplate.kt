@@ -47,7 +47,7 @@ class EntityWithComplexPropertyWithDefaultValueTemplate : JSONSerializable, Json
 
         private val PROPERTY_DEFAULT_VALUE = EntityWithComplexPropertyWithDefaultValue.Property(value = Expression.constant("Default text"))
 
-        val PROPERTY_READER: Reader<EntityWithComplexPropertyWithDefaultValue.Property?> = { key, json, env -> JsonParser.readOptional(json, key, EntityWithComplexPropertyWithDefaultValue.Property.CREATOR, env.logger, env) }
+        val PROPERTY_READER: Reader<EntityWithComplexPropertyWithDefaultValue.Property> = { key, json, env -> JsonParser.readOptional(json, key, EntityWithComplexPropertyWithDefaultValue.Property.CREATOR, env.logger, env) ?: PROPERTY_DEFAULT_VALUE }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithComplexPropertyWithDefaultValueTemplate(env, json = it) }

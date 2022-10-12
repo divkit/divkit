@@ -408,6 +408,62 @@
       }
     },
     {
+      "entity_with_property_with_default_value.json": {
+        "type": "object",
+        "definitions": {
+          "int_prop": {
+            "$ref": "common.json#/non_negative_integer",
+            "default_value": "0"
+          },
+          "url_prop": {
+            "$ref": "common.json#/url",
+            "schemes": [
+              "https"
+            ],
+            "default_value": "https://yandex.ru"
+          },
+          "nested": {
+            "type": "object",
+            "properties": {
+              "int": {
+                "$ref": "#/definitions/int_prop"
+              },
+              "url": {
+                "$ref": "#/definitions/url_prop"
+              },
+              "non_optional": {
+                "type": "string"
+              }
+            },
+            "$description": "translations.json#/entity_with_property_with_default_value_nested",
+            "required": [
+              "non_optional"
+            ]
+          }
+        },
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_property_with_default_value"
+            ]
+          },
+          "int": {
+            "$ref": "#/definitions/int_prop"
+          },
+          "url": {
+            "$ref": "#/definitions/url_prop"
+          },
+          "nested": {
+            "$ref": "#/definitions/nested"
+          }
+        },
+        "required": [
+          "type"
+        ]
+      }
+    },
+    {
       "entity_with_required_property.json": {
         "type": "object",
         "properties": {
@@ -424,6 +480,70 @@
         "required": [
           "type",
           "property"
+        ]
+      }
+    },
+    {
+      "entity_with_simple_properties.json": {
+        "type": "object",
+        "$description": "translations.json#/entity_with_simple_properties",
+        "swift_protocols": "EntityProtocol",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_simple_properties"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "supports_expressions": false,
+            "$description": "translations.json#/entity_with_simple_properties_id"
+          },
+          "string": {
+            "$ref": "common.json#/non_empty_string",
+            "$description": "translations.json#/entity_with_simple_properties_string",
+            "platforms": [
+              "android",
+              "ios",
+              "web"
+            ]
+          },
+          "integer": {
+            "type": "integer",
+            "$description": "translations.json#/entity_with_simple_properties_integer"
+          },
+          "double": {
+            "type": "number",
+            "$description": "translations.json#/entity_with_simple_properties_double"
+          },
+          "boolean": {
+            "type": "boolean",
+            "$description": "translations.json#/entity_with_simple_properties_boolean"
+          },
+          "boolean_int": {
+            "$ref": "common.json#/boolean_int",
+            "$description": "translations.json#/entity_with_simple_properties_boolean_int",
+            "deprecated": true,
+            "platforms": [
+              "android"
+            ]
+          },
+          "positive_integer": {
+            "$ref": "common.json#/positive_integer",
+            "$description": "translations.json#/entity_with_simple_properties_positive_integer",
+            "platforms": []
+          },
+          "color": {
+            "$ref": "common.json#/color",
+            "$description": "translations.json#/entity_with_simple_properties_color"
+          },
+          "url": {
+            "$ref": "common.json#/url"
+          }
+        },
+        "required": [
+          "type"
         ]
       }
     },
@@ -541,126 +661,6 @@
             "enum": [
               "entity_without_properties"
             ]
-          }
-        },
-        "required": [
-          "type"
-        ]
-      }
-    },
-    {
-      "entity_with_property_with_default_value.json": {
-        "type": "object",
-        "definitions": {
-          "int_prop": {
-            "$ref": "common.json#/non_negative_integer",
-            "default_value": "0"
-          },
-          "url_prop": {
-            "$ref": "common.json#/url",
-            "schemes": [
-              "https"
-            ],
-            "default_value": "https://yandex.ru"
-          },
-          "nested": {
-            "type": "object",
-            "properties": {
-              "int": {
-                "$ref": "#/definitions/int_prop"
-              },
-              "url": {
-                "$ref": "#/definitions/url_prop"
-              },
-              "non_optional": {
-                "type": "string"
-              }
-            },
-            "$description": "translations.json#/entity_with_property_with_default_value_nested",
-            "required": [
-              "non_optional"
-            ]
-          }
-        },
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_property_with_default_value"
-            ]
-          },
-          "int": {
-            "$ref": "#/definitions/int_prop"
-          },
-          "url": {
-            "$ref": "#/definitions/url_prop"
-          },
-          "nested": {
-            "$ref": "#/definitions/nested"
-          }
-        },
-        "required": [
-          "type"
-        ]
-      }
-    },
-    {
-      "entity_with_simple_properties.json": {
-        "type": "object",
-        "$description": "translations.json#/entity_with_simple_properties",
-        "swift_protocols": "EntityProtocol",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_simple_properties"
-            ]
-          },
-          "id": {
-            "type": "integer",
-            "supports_expressions": false,
-            "$description": "translations.json#/entity_with_simple_properties_id"
-          },
-          "string": {
-            "$ref": "common.json#/non_empty_string",
-            "$description": "translations.json#/entity_with_simple_properties_string",
-            "platforms": [
-              "android",
-              "ios",
-              "web"
-            ]
-          },
-          "integer": {
-            "type": "integer",
-            "$description": "translations.json#/entity_with_simple_properties_integer"
-          },
-          "double": {
-            "type": "number",
-            "$description": "translations.json#/entity_with_simple_properties_double"
-          },
-          "boolean": {
-            "type": "boolean",
-            "$description": "translations.json#/entity_with_simple_properties_boolean"
-          },
-          "boolean_int": {
-            "$ref": "common.json#/boolean_int",
-            "$description": "translations.json#/entity_with_simple_properties_boolean_int",
-            "deprecated": true,
-            "platforms": [
-              "android"
-            ]
-          },
-          "positive_integer": {
-            "$ref": "common.json#/positive_integer",
-            "$description": "translations.json#/entity_with_simple_properties_positive_integer",
-            "platforms": []
-          },
-          "color": {
-            "$ref": "common.json#/color",
-            "$description": "translations.json#/entity_with_simple_properties_color"
-          },
-          "url": {
-            "$ref": "common.json#/url"
           }
         },
         "required": [

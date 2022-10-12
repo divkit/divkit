@@ -15,6 +15,11 @@
     {
       "$ref": "div-solid-background.json",
       "$description": "translations.json#/div_background_solid"
+    },
+    {
+      "$ref": "div-ninepatch-background.json",
+      "$description": "translations.json#/div_background_ninepatch",
+      "platforms": []
     }
   ]
 }

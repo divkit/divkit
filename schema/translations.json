@@ -187,6 +187,14 @@
     "en": "Solid color.",
     "ru": "Сплошной цвет."
   },
+  "div_ninepatch_background": {
+    "en": "Image in nine patch format. https://developer.android.com/studio/write/draw9patch.",
+    "ru": "Изображение в формате nine patch. https://developer.android.com/studio/write/draw9patch."
+  },
+  "div_ninepatch_background_insets": {
+    "en": "Margins that break images into parts, according to the rule, are similar to border-image-slice. (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)",
+    "ru": "Отступы, разбивающие изображения на части, по правилу аналогично border-image-slice (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
+  },
   "div_base_accessibility": {
     "en": "Accessibility for disabled people.",
     "ru": "Доступность для людей с ограниченными возможностями."
@@ -490,6 +498,10 @@
   "div_download_callbacks_on_success_actions": {
     "en": "Actions in case of successful loading.",
     "ru": "Действия при успешной загрузке."
+  },
+  "div_absolute_edge_insets": {
+    "en": "Sets the margins, without taking the properties of the screen.",
+    "ru": "Устанавливает отступы, без учета свойств экрана."
   },
   "div_edge_insets": {
     "en": "It sets margins.",
