@@ -81,9 +81,10 @@ final class DivHostView: UICollectionView {
 
     override func layoutSubviews() {
       super.layoutSubviews()
+      
       if let state = state {
-        let height = state.block.heightOfVerticallyNonResizableBlock(forWidth: bounds.width)
-        state.view.frame = CGRect(x: 0, y: 0, width: bounds.width, height: height)
+        let blockSize = state.block.size(forResizableBlockSize: bounds.size)
+        state.view.frame = CGRect(origin: .zero, size: blockSize)
       }
     }
   }
