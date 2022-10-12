@@ -9,8 +9,13 @@ import Networking
 let testCardId = "test_card_id"
 let testDivCardId = DivCardID(rawValue: testCardId)
 
-internal class DivKitSnapshotTestCase: XCTestCase {
+class DivKitSnapshotTestCase: XCTestCase {
+  #if UPDATE_SNAPSHOTS
+  final var mode = TestMode.update
+  #else
   final var mode = TestMode.verify
+  #endif
+  
   final var subdirectory = ""
   final var rootDirectory = "json"
 
@@ -23,7 +28,7 @@ internal class DivKitSnapshotTestCase: XCTestCase {
   ) {
     guard let jsonData = jsonData(fileName: fileName, subdirectory: rootDirectory + "/" + subdirectory),
           let dictionary = jsonDict(data: jsonData) else {
-      XCTFail("Data could not be created from json \(fileName): \(DivTestingErrors.invalidData.localizedDescription)")
+      XCTFail("Invalid json: \(fileName)")
       return
     }
 
@@ -58,9 +63,11 @@ internal class DivKitSnapshotTestCase: XCTestCase {
   }
 
   private func loadSteps(dictionary: [String: Any]) throws -> [TestStep]? {
-    return try? dictionary.getOptionalArray("steps", transform: {
-      try TestStep(dictionary: $0 as [String: Any])
-    }).unwrap()
+    return try? dictionary
+      .getOptionalArray(
+        "steps",
+        transform: { try TestStep(dictionary: $0 as [String: Any]) }
+      ).unwrap()
   }
 
   private func loadDivData(dictionary: [String: Any], divKitComponents: DivKitComponents) -> (DivData?, [Error]) {
@@ -224,14 +231,11 @@ private func makeEmptyView() -> UIView {
 }
 
 private enum DivTestingErrors: LocalizedError {
-  case invalidData
   case blockCouldNotBeCreatedFromData
   case snapshotCouldNotBeCreated
 
   var errorDescription: String? {
     switch self {
-    case .invalidData:
-      return "Invalid data"
     case .blockCouldNotBeCreatedFromData:
       return "Block could not be created from data"
     case .snapshotCouldNotBeCreated:

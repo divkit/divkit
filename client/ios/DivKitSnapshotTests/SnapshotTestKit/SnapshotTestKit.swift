@@ -6,7 +6,6 @@ import XCTest
 import CommonCore
 
 public enum TestMode {
-  case record
   case update
   case verify
 }
@@ -30,30 +29,21 @@ public enum SnapshotTestKit {
 
     do {
       switch mode {
-      case .record:
+      case .update:
+        if let reference = try? UIImage.makeWith(url: referenceURL),
+           snapshot.compare(with: reference) {
+          return
+        }
+
         let snapshotsDir = referenceURL.deletingLastPathComponent()
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: snapshotsDir.path) {
           try fileManager.createDirectory(at: snapshotsDir, withIntermediateDirectories: true)
         }
+        
         try snapshot.makePNGData().write(to: referenceURL)
-        throw SnapshotTestError.recordModeEnabled
-      case .update:
-        let reference = try UIImage.makeWith(url: referenceURL)
-        if !snapshot.compare(with: reference) {
-          testSnapshot(
-            snapshot,
-            referenceURL: referenceURL,
-            diffDirPath: diffDirPath,
-            mode: .record
-          )
-        }
+        throw SnapshotTestError.updateModeEnabled
       case .verify:
-        let data = try Data(contentsOf: referenceURL)
-        if data == snapshot.pngData() {
-          return
-        }
-
         let reference = try UIImage.makeWith(url: referenceURL)
         if snapshot.compare(with: reference) {
           return
@@ -91,17 +81,17 @@ extension UIImage {
 }
 
 private enum SnapshotTestError: LocalizedError {
-  case recordModeEnabled
+  case updateModeEnabled
   case comparisonFailed
   case nilPNGData
   case imageCouldNotBeCreated
 
   var errorDescription: String? {
     switch self {
-    case .recordModeEnabled:
+    case .updateModeEnabled:
       return "Snapshot saved. Don't forget to change mode back to `verify`!"
     case .comparisonFailed:
-      return "View snapshot is not equal to reference. Diff is attached in test result"
+      return "View snapshot is not equal to reference. Diff is attached in test result."
     case .nilPNGData:
       return "UIImage.pngData() returns nil"
     case .imageCouldNotBeCreated:
