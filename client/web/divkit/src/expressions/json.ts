@@ -38,6 +38,9 @@ class ExpressionBinding {
             if (value instanceof Date) {
                 return dateToString(value);
             }
+            if (result.type === 'boolean') {
+                return Boolean(value);
+            }
             return value;
         } catch (err) {
             logError(wrapError(new Error('Expression execution error')));
