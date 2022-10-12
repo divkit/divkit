@@ -5,10 +5,8 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
-import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
@@ -24,6 +22,7 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChild
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.widget.wraplayout.WrapDirection
+import com.yandex.div.core.widget.wraplayout.WrapLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -34,6 +33,8 @@ import javax.inject.Inject
 import javax.inject.Provider
 
 private const val INCORRECT_CHILD_SIZE = "Incorrect child size. Container with wrap_content size contains child with match_parent size."
+private const val MATCH_PARENT_ALONG_CROSS_AXIS_MESSAGE = "Incorrect child size. " +
+    "Container with wrap layout mode contains child%s with match parent size along the cross axis."
 
 @DivScope
 internal class DivContainerBinder @Inject constructor(
@@ -43,10 +44,7 @@ internal class DivContainerBinder @Inject constructor(
     private val divPatchCache: DivPatchCache,
     private val divBinder: Provider<DivBinder>,
     private val errorCollectors: ErrorCollectors,
-    @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
 ) : DivViewBinder<DivContainer, ViewGroup> {
-
-    private var errorCollector: ErrorCollector? = null
 
     override fun bindView(view: ViewGroup, div: DivContainer, divView: Div2View, path: DivStatePath) {
         var oldDiv = when (view) {
@@ -56,9 +54,8 @@ internal class DivContainerBinder @Inject constructor(
             else -> null
         }
 
-        if (visualErrorsEnabled) {
-            errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
-        }
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+
         if (div == oldDiv) {
             // todo MORDAANDROID-636
             // return
@@ -104,12 +101,20 @@ internal class DivContainerBinder @Inject constructor(
             val childDivValue = div.items[containerIndex].value()
             val childView = view.getChildAt(containerIndex + viewsPositionDiff)
             val childDivId = childDivValue.id
-            if (visualErrorsEnabled) {
+
+            if (view is WrapLayout) {
+                if (div.hasMatchParentAlongCrossAxis(childDivValue, resolver)) {
+                    val withId = childDivValue.id?.let { " with id='$it'" } ?: ""
+                    errorCollector.logWarning(Throwable(
+                        MATCH_PARENT_ALONG_CROSS_AXIS_MESSAGE.format(withId)))
+                }
+            } else {
                 hasChildWithMatchParentHeight =
                     if (childDivValue.height is DivSize.MatchParent) true else hasChildWithMatchParentHeight
                 hasChildWithMatchParentWidth =
                     if (childDivValue.width is DivSize.MatchParent) true else hasChildWithMatchParentWidth
             }
+
             // applying div patch
             if (childDivId != null) {
                 val patchViewsToAdd = divPatchManager.createViewsForId(divView, childDivId)
@@ -234,10 +239,18 @@ internal class DivContainerBinder @Inject constructor(
         applyAlignments(childView)
     }
 
-    private fun DivContainer.checkIncorrectSize(errorCollector: ErrorCollector?,
-                                             hasChildWithMatchParentHeight: Boolean,
-                                             hasChildWithMatchParentWidth: Boolean) {
-        if (errorCollector == null) return
+    private fun DivContainer.hasMatchParentAlongCrossAxis(
+        childDiv: DivBase,
+        resolver: ExpressionResolver
+    ) = if (isHorizontal(resolver)) {
+        childDiv.height is DivSize.MatchParent
+    } else {
+        childDiv.width is DivSize.MatchParent
+    }
+
+    private fun DivContainer.checkIncorrectSize(errorCollector: ErrorCollector,
+                                                hasChildWithMatchParentHeight: Boolean,
+                                                hasChildWithMatchParentWidth: Boolean) {
         if ((height is DivSize.WrapContent && hasChildWithMatchParentHeight) ||
             (width is DivSize.WrapContent && hasChildWithMatchParentWidth)) {
             errorCollector.getWarnings().forEach {

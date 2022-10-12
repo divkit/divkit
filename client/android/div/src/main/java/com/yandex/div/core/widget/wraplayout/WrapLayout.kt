@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.core.view.children
 import kotlin.math.max
 
@@ -106,7 +107,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         var line = WrapLine(mainSize = mainPaddings)
 
         children.forEachIndexed { index, child ->
-            if (child.visibility == View.GONE) {
+            if (child.isHidden) {
                 line.goneItemCount++
                 line.itemCount++
                 addLineIfNeeded(index, line)
@@ -166,6 +167,12 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
                 sumCrossSize += line.crossSize
             }
         }
+    }
+
+    private val View.isHidden get() = when {
+        visibility == View.GONE -> true
+        isRowDirection -> layoutParams.height == MATCH_PARENT
+        else -> layoutParams.width == MATCH_PARENT
     }
 
     private fun addLineIfNeeded(childIndex: Int, line: WrapLine): Boolean {
@@ -275,7 +282,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
-                if (child == null || child.visibility == GONE) {
+                if (child == null || child.isHidden) {
                     continue
                 }
                 val lp = child.layoutParams as LayoutParams
@@ -329,7 +336,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
-                if (child == null || child.visibility == GONE) {
+                if (child == null || child.isHidden) {
                     continue
                 }
                 val lp = child.layoutParams as LayoutParams
