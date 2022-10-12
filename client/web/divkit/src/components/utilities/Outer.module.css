@@ -90,6 +90,14 @@
     align-self: stretch;
 }
 
+.outer_width_content {
+    width: max-content;
+}
+
+.outer_height_content {
+    height: max-content;
+}
+
 .outer_width-constrained {
     max-width: 100%;
 }

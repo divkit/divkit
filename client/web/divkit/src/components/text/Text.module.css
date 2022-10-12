@@ -37,14 +37,6 @@
     align-items: flex-end;
 }
 
-.text_width_content {
-    min-width: max-content;
-}
-
-.text_height_content {
-    min-height: max-content;
-}
-
 .text__inner {
     overflow: hidden;
 }

@@ -7,6 +7,7 @@ export interface LayoutParams {
     parentHAlign?: Align;
     parentVAlign?: Align;
     parentContainerOrientation?: Orientation;
+    parentContainerWrap?: boolean;
     parentLayoutOrientation?: Orientation;
     parentHorizontalWrapContent?: boolean;
     parentVerticalWrapContent?: boolean;

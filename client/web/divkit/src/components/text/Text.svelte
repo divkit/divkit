@@ -168,9 +168,6 @@
         selectable = correctBooleanInt($jsonSelectable, selectable);
     }
 
-    $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
-    $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
-
     let renderList: ({
         text: string;
         textStyles: TextStyles;
@@ -359,9 +356,7 @@
         multiline,
         halign,
         valign,
-        truncate,
-        width: $jsonWidth?.type === 'wrap_content' && !$jsonWidth.constrained ? 'content' : '',
-        height: !$jsonHeight || $jsonHeight.type === 'wrap_content' && !$jsonHeight.constrained ? 'content' : ''
+        truncate
     };
 
     $: innerMods = {

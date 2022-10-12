@@ -82,6 +82,9 @@
         contentHAlign = correctAlignmentHorizontal($jsonContentHAlign, contentHAlign);
     }
 
+    $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
+    $: wrap = $jsonLayoutMode === 'wrap';
+
     $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
     $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
 
@@ -120,6 +123,9 @@
         if (orientation === 'vertical') {
             newChildLayoutParams.parentContainerOrientation = 'vertical';
         }
+        if (wrap) {
+            newChildLayoutParams.parentContainerWrap = true;
+        }
 
         childLayoutParams = assignIfDifferent(newChildLayoutParams, childLayoutParams);
     }
@@ -127,7 +133,8 @@
     $: mods = {
         orientation,
         valign: contentVAlign,
-        halign: contentHAlign
+        halign: contentHAlign,
+        wrap
     };
 </script>
 

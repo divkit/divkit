@@ -125,12 +125,16 @@
     let widthNum = 0;
     let widthFlexGrow = 0;
     let widthFlexShrink = 0;
+    let widthFill = false;
+    let hasWidthError = false;
     $: {
         let widthType: 'parent' | 'content' | undefined = undefined;
         let newWidth: string | undefined = undefined;
         let newWidthMods: Mods = {};
         let newFlexGrow = 0;
         let newFlexShrink = 0;
+        let newWidthFill = false;
+        let newWidthError = false;
 
         const type = $jsonWidth?.type;
 
@@ -157,10 +161,19 @@
             }
         } else {
             widthType = 'parent';
+            if (layoutParams.parentContainerOrientation === 'vertical' && layoutParams.parentContainerWrap) {
+                newWidthError = true;
+                rootCtx.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
+                    level: 'error'
+                }));
+            }
             if (layoutParams.parentLayoutOrientation === 'vertical') {
                 newWidth = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.left || 0) + ($jsonMargins?.right || 0))})`;
             } else if (layoutParams.parentContainerOrientation === 'horizontal') {
                 newFlexGrow = $jsonWidth && 'weight' in $jsonWidth && $jsonWidth.weight || 1;
+                if (layoutParams.parentContainerWrap) {
+                    newWidthFill = true;
+                }
             }
         }
 
@@ -190,6 +203,8 @@
         widthFlexGrow = newFlexGrow;
         widthFlexShrink = newFlexShrink;
         widthMods = assignIfDifferent(newWidthMods, widthMods);
+        widthFill = newWidthFill;
+        hasWidthError = newWidthError;
     }
 
     $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
@@ -199,12 +214,16 @@
     let heightNum = 0;
     let heightFlexGrow = 0;
     let heightFlexShrink = 0;
+    let heightFill = false;
+    let hasHeightError = false;
     $: {
         let heightType: 'parent' | 'content' | undefined = undefined;
         let newHeight: string | undefined = undefined;
         let newHeightMods: Mods = {};
         let newFlexGrow = 0;
         let newFlexShrink = 0;
+        let newHeightFill = false;
+        let newHeightError = false;
 
         const type = $jsonHeight?.type;
 
@@ -213,10 +232,19 @@
             newHeight = pxToEm(heightNum);
         } else if (type === 'match_parent' && (layoutParams.overlapParent || !layoutParams.parentVerticalWrapContent)) {
             heightType = 'parent';
+            if (layoutParams.parentContainerOrientation === 'horizontal' && layoutParams.parentContainerWrap) {
+                newHeightError = true;
+                rootCtx.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
+                    level: 'error'
+                }));
+            }
             if (layoutParams.parentLayoutOrientation === 'horizontal') {
                 newHeight = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.top || 0) + ($jsonMargins?.bottom || 0))})`;
             } else if (layoutParams.parentContainerOrientation === 'vertical') {
                 newFlexGrow = $jsonHeight?.weight || 1;
+                if (layoutParams.parentContainerWrap) {
+                    newHeightFill = true;
+                }
             }
         } else {
             heightType = 'content';
@@ -261,6 +289,8 @@
         heightFlexGrow = newFlexGrow;
         heightFlexShrink = newFlexShrink;
         heightMods = assignIfDifferent(newHeightMods, heightMods);
+        heightFill = newHeightFill;
+        hasHeightError = newHeightError;
     }
 
     $: parentOverlapMod = layoutParams.overlapParent ? true : undefined;
@@ -518,6 +548,11 @@
         }
     }
 
+    // eslint-disable-next-line no-nested-ternary
+    $: flexBasis = (widthFill || heightFill) ?
+        '100%' :
+        ((widthFlexGrow || heightFlexGrow) ? 0 : undefined);
+
     $: stl = {
         ...style,
         ...backgroundStyle,
@@ -533,7 +568,7 @@
         transform,
         'flex-grow': widthFlexGrow || heightFlexGrow || undefined,
         'flex-shrink': (widthFlexShrink || heightFlexShrink) ? 1 : undefined,
-        'flex-basis': (widthFlexGrow || heightFlexGrow) ? 0 : undefined,
+        'flex-basis': flexBasis,
         '--divkit-animation-opacity-start': animationOpacityStart,
         '--divkit-animation-opacity-end': animationOpacityEnd,
         '--divkit-animation-scale-start': animationScaleStart,
@@ -617,15 +652,17 @@
     }
 </script>
 
-<Actionable
-    use={useAction}
-    cls="{cls} {genClassName('outer', css, mods)}"
-    style={makeStyle(stl)}
-    {actions}
-    {doubleTapActions}
-    {longTapActions}
-    {attrs}
-    hasActionAnimation={Boolean(actionAnimationTransition)}
->
-    {#if hasImagesBg}<OuterBackground background={$jsonBackground} />{/if}<slot />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
-</Actionable>
+{#if !hasWidthError && !hasHeightError}
+    <Actionable
+        use={useAction}
+        cls="{cls} {genClassName('outer', css, mods)}"
+        style={makeStyle(stl)}
+        {actions}
+        {doubleTapActions}
+        {longTapActions}
+        {attrs}
+        hasActionAnimation={Boolean(actionAnimationTransition)}
+    >
+        {#if hasImagesBg}<OuterBackground background={$jsonBackground} />{/if}<slot />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
+    </Actionable>
+{/if}
