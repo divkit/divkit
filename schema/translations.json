@@ -187,11 +187,11 @@
     "en": "Solid color.",
     "ru": "Сплошной цвет."
   },
-  "div_ninepatch_background": {
+  "div_nine_patch_background": {
     "en": "Image in nine patch format. https://developer.android.com/studio/write/draw9patch.",
     "ru": "Изображение в формате nine patch. https://developer.android.com/studio/write/draw9patch."
   },
-  "div_ninepatch_background_insets": {
+  "div_nine_patch_background_insets": {
     "en": "Margins that break images into parts, according to the rule, are similar to border-image-slice. (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)",
     "ru": "Отступы, разбивающие изображения на части, по правилу аналогично border-image-slice (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
   },

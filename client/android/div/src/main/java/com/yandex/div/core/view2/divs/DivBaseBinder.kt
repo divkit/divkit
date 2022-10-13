@@ -617,7 +617,7 @@ internal class DivBaseBinder @Inject constructor(
         is DivBackground.Solid -> DivBackgroundState.Solid(
             value.color.evaluate(resolver)
         )
-        is DivBackground.Ninepatch -> DivBackgroundState.NinePatch(
+        is DivBackground.NinePatch -> DivBackgroundState.NinePatch(
             imageUrl = value.imageUrl.evaluate(resolver),
             insets = Rect(
                 value.insets.left.evaluate(resolver),
