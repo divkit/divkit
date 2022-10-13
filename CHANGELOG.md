@@ -1,3 +1,50 @@
+## 11.0.0
+## JSON Schema:
+* Added `cross_spacing` support for gallery
+* Added `tint_mode` for `div-image`
+* Added separator in DivContainer
+* Added circle shape to schema
+* Updated description for `longtap_actions` and `doubletap_actions`
+
+## Android Client:
+Additions and changes:
+* Implemented support external theme in DivContext
+* Implemented `tint_mode` for DivImage
+* Implemented `cross_spacing` for Gallery
+* Implemented `wrap_content_constrained`
+* Added divider between elements in container to schema
+* Added avoid creating `DivBorderDrawer` if it will not used
+* Added show warning on `wrap_content` container with `match_parent` child size
+Fixes:
+* Fixed list of expressions generating
+
+## iOS Client:
+* Added `cross_spacing` support in DivGallery.
+* Added radial gradient support.
+* Improved `match_parent` items behaviour in DivContainer and DivGallery.
+* Fixed invisible items size.
+* Fixed actions handling in Sample app.
+
+## Web Client:
+Additions:
+* Support for the `wrap` layout mode in a `container`
+* Support for the `cross_spacing` property in `gallery`
+* `doubletap_actions` and `longtap_actions` are now supoorted in actionable components
+* Support for the `appearance_animation` in `image`
+* Support for the `restrict_parent_scroll` property in `tabs`, `gallery` and `pager`
+* Root states are now properly supported
+Changes and fixes:
+* Updated the `wrap_content` logic, this would lead to a different layout in some corner-cases
+* Boolean values from exressions are now correctly converted to the string `false` / `true` in the `text` block
+* The layout of the `slider` has been changed to sync with other platforms, now the text offset will not change the size of the component. Also now there may be more than 20 ticks
+* Updated color functions according to the latest changes. Now several of them would return the type `color` instead of `string` (rgb, rgba, setColorRed and others)
+* Components will now correctly unregister when destroyed, so recreated elements will work properly (for example, actions to change the current element in the gallery, nested state elements and others)
+* Fixed logic of expression processing Previously, if a string was considered an "expression", it was processed as it, otherwise it would be used as a simple string. But sometimes this check worked incorrectly and processed expressions as a string. This is now fixed. It also means that some strings will now require proper escaping, so be sure to check this in your project (previously,these strings "just worked" without escaping because they were not treated as expressions)
+* Now elements with custom actions can be focused, as it was with simple URLs. This would result to better accessibility in such cases (these elements also accept the keyboard input!)
+* Fixed the visibility of the `gallery` arrows on desktops in several cases
+* Fixed a case where`transition_in`, `transition_out` and `transition_change` incorrectly discarded the `alpha` component property
+* Component actions will now wait for the result of each of them. This means that you can create an array using 2 actions: one to change the state, and the second to change the created component inside the state
+
 ## 10.0.0
 ## Android Client:
 Additions and changes:

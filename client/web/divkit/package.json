@@ -1,6 +1,6 @@
 {
     "name": "@divkitframework/divkit",
-    "version": "10.0.0",
+    "version": "11.0.0",
     "description": "DivKit for the web",
     "keywords": [
         "server-driven-ui",
