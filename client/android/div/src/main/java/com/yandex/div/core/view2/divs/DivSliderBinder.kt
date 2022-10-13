@@ -1,10 +1,7 @@
 package com.yandex.div.core.view2.divs
 
-import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
 import androidx.core.view.doOnPreDraw
-import com.yandex.div.core.Disposable
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
@@ -14,13 +11,12 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.font.DivTypefaceProvider
 import com.yandex.div.core.widget.slider.SliderTextStyle
 import com.yandex.div.core.widget.slider.SliderView
-import com.yandex.div.core.widget.slider.shapes.*
+import com.yandex.div.core.widget.slider.shapes.TextDrawable
+import com.yandex.div.font.DivTypefaceProvider
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivDrawable
-import com.yandex.div2.DivShape
-import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSlider
 import javax.inject.Inject
 import kotlin.math.max
@@ -261,39 +257,6 @@ internal class DivSliderBinder @Inject constructor(
         checkSliderTicks()
     }
 
-    private fun DivSliderView.observeDrawable(
-        resolver: ExpressionResolver,
-        drawable: DivDrawable,
-        applyDrawable: (DivDrawable) -> Unit
-    ) {
-        applyDrawable(drawable)
-
-        val callback = { _: Any -> applyDrawable(drawable) }
-        when (drawable) {
-            is DivDrawable.Shape -> {
-                val shapeDrawable = drawable.value
-                val roundedRect = shapeDrawable.shape as? DivShape.RoundedRectangle
-                addSubscription(shapeDrawable.color.observe(resolver, callback))
-                addSubscription(shapeDrawable.stroke?.color?.observe(resolver, callback)
-                    ?: Disposable.NULL)
-                addSubscription(shapeDrawable.stroke?.width?.observe(resolver, callback)
-                    ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.itemWidth?.value?.observe(resolver, callback)
-                    ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.itemWidth?.unit?.observe(resolver, callback)
-                    ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.itemHeight?.value?.observe(resolver, callback)
-                    ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.itemHeight?.unit?.observe(resolver, callback)
-                    ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.cornerRadius?.value?.observe(resolver, callback)
-                    ?: Disposable.NULL)
-                addSubscription(roundedRect?.value?.cornerRadius?.unit?.observe(resolver, callback)
-                    ?: Disposable.NULL)
-            }
-        }
-    }
-
     private fun DivSliderView.checkSliderTicks() {
         if (!visualErrorsEnabled || errorCollector == null) return
         doOnPreDraw {
@@ -317,36 +280,6 @@ internal class DivSliderBinder @Inject constructor(
                 }
             }
         }
-    }
-}
-
-private fun DivDrawable.toDrawable(
-    metrics: DisplayMetrics,
-    resolver: ExpressionResolver
-): Drawable? {
-    return when (this) {
-        is DivDrawable.Shape -> value.toDrawable(metrics, resolver)
-    }
-}
-
-private fun DivShapeDrawable.toDrawable(
-    metrics: DisplayMetrics,
-    resolver: ExpressionResolver
-): Drawable? {
-    return when (val shape = this.shape) {
-        is DivShape.RoundedRectangle -> {
-            RoundedRectDrawable(
-                RoundedRectParams(
-                    width = shape.value.itemWidth.toPxF(metrics, resolver),
-                    height = shape.value.itemHeight.toPxF(metrics, resolver),
-                    color = color.evaluate(resolver),
-                    radius = shape.value.cornerRadius.toPxF(metrics, resolver),
-                    strokeColor = stroke?.color?.evaluate(resolver),
-                    strokeWidth = stroke?.width?.evaluate(resolver)?.toFloat()
-                )
-            )
-        }
-        else -> null
     }
 }
 

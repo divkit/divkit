@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
@@ -22,7 +23,6 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChild
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.widget.wraplayout.WrapDirection
-import com.yandex.div.core.widget.wraplayout.WrapLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -72,8 +72,8 @@ internal class DivContainerBinder @Inject constructor(
 
         val areDivsReplaceable = DivComparator.areDivsReplaceable(oldDiv, div, resolver)
         when (view) {
-            is DivLinearLayout -> bindLinearProperties(view, div, resolver, expressionSubscriber)
-            is DivWrapLayout -> bindWrapProperties(view, div, resolver, expressionSubscriber)
+            is DivLinearLayout -> view.bindProperties(div, resolver)
+            is DivWrapLayout -> view.bindProperties(div, resolver)
             is DivFrameLayout -> view.div = div
         }
 
@@ -102,7 +102,7 @@ internal class DivContainerBinder @Inject constructor(
             val childView = view.getChildAt(containerIndex + viewsPositionDiff)
             val childDivId = childDivValue.id
 
-            if (view is WrapLayout) {
+            if (view is DivWrapLayout) {
                 if (div.hasMatchParentAlongCrossAxis(childDivValue, resolver)) {
                     val withId = childDivValue.id?.let { " with id='$it'" } ?: ""
                     errorCollector.logWarning(Throwable(
@@ -143,46 +143,75 @@ internal class DivContainerBinder @Inject constructor(
         div.checkIncorrectSize(errorCollector, hasChildWithMatchParentHeight, hasChildWithMatchParentWidth)
     }
 
-    private fun bindLinearProperties(
-        view: DivLinearLayout,
-        div: DivContainer,
-        resolver: ExpressionResolver,
-        subscriber: ExpressionSubscriber
-    ) {
-        subscriber.addSubscription(div.orientation.observeAndGet(resolver) {
-            view.orientation = if (div.isHorizontal(resolver))
-                LinearLayout.HORIZONTAL else LinearLayout.VERTICAL
+    private fun DivLinearLayout.bindProperties(div: DivContainer, resolver: ExpressionResolver) {
+        addSubscription(div.orientation.observeAndGet(resolver) {
+            orientation =
+                if (div.isHorizontal(resolver)) LinearLayout.HORIZONTAL else LinearLayout.VERTICAL
         })
-        subscriber.addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
-            view.gravity = evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver))
+        addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
+            gravity = evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver))
         })
-        subscriber.addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
-            view.gravity = evaluateGravity(div.contentAlignmentHorizontal.evaluate(resolver), it)
+        addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
+            gravity = evaluateGravity(div.contentAlignmentHorizontal.evaluate(resolver), it)
         })
+        div.separator?.let { observeSeparator(it, resolver) }
 
-        view.div = div
+        this.div = div
     }
 
-    private fun bindWrapProperties(
-            view: DivWrapLayout,
-            div: DivContainer,
-            resolver: ExpressionResolver,
-            subscriber: ExpressionSubscriber
+    private fun DivLinearLayout.observeSeparator(
+        separator: DivContainer.Separator,
+        resolver: ExpressionResolver
     ) {
-        subscriber.addSubscription(div.orientation.observeAndGet(resolver) {
-            view.wrapDirection =
-                    if (div.isHorizontal(resolver)) WrapDirection.ROW else WrapDirection.COLUMN
+        observeSeparatorShowMode(separator, resolver) {
+            var showSeparators = LinearLayout.SHOW_DIVIDER_NONE
+            if (separator.showAtStart.evaluate(resolver)) {
+                showSeparators = showSeparators or LinearLayout.SHOW_DIVIDER_BEGINNING
+            }
+            if (separator.showBetween.evaluate(resolver)) {
+                showSeparators = showSeparators or LinearLayout.SHOW_DIVIDER_MIDDLE
+            }
+            if (separator.showAtEnd.evaluate(resolver)) {
+                showSeparators = showSeparators or LinearLayout.SHOW_DIVIDER_END
+            }
+            showDividers = showSeparators
+        }
+        observeSeparatorDrawable(this, separator, resolver) { dividerDrawable = it }
+    }
+
+    private fun DivWrapLayout.bindProperties(div: DivContainer, resolver: ExpressionResolver) {
+        addSubscription(div.orientation.observeAndGet(resolver) {
+            wrapDirection =
+                if (div.isHorizontal(resolver)) WrapDirection.ROW else WrapDirection.COLUMN
+        })
+        addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
+            alignmentHorizontal = it.toWrapAlignment()
+        })
+        addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
+            alignmentVertical = it.toWrapAlignment()
         })
 
-        subscriber.addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
-            view.alignmentHorizontal = it.toWrapAlignment()
-        })
+        this.div = div
+    }
 
-        subscriber.addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
-            view.alignmentVertical = it.toWrapAlignment()
-        })
+    private fun ExpressionSubscriber.observeSeparatorShowMode(
+        separator: DivContainer.Separator,
+        resolver: ExpressionResolver,
+        callback: (Boolean) -> Unit
+    ) {
+        callback(false)
+        addSubscription(separator.showAtStart.observe(resolver, callback))
+        addSubscription(separator.showBetween.observe(resolver, callback))
+        addSubscription(separator.showAtEnd.observe(resolver, callback))
+    }
 
-        view.div = div
+    private fun ExpressionSubscriber.observeSeparatorDrawable(
+        view: ViewGroup,
+        separator: DivContainer.Separator,
+        resolver: ExpressionResolver,
+        applyDrawable: (Drawable?) -> Unit
+    ) = observeDrawable(resolver, separator.style) {
+        applyDrawable(it.toDrawable(view.resources.displayMetrics, resolver))
     }
 
     private fun observeChildViewAlignment(
@@ -268,11 +297,11 @@ internal class DivContainerBinder @Inject constructor(
     }
 
     private fun DivContainer.isHorizontal(resolver: ExpressionResolver) =
-            orientation.evaluate(resolver) == DivContainer.Orientation.HORIZONTAL
+        orientation.evaluate(resolver) == DivContainer.Orientation.HORIZONTAL
 
     private fun DivContainer.isVertical(resolver: ExpressionResolver) =
-            orientation.evaluate(resolver) == DivContainer.Orientation.VERTICAL
+        orientation.evaluate(resolver) == DivContainer.Orientation.VERTICAL
 
     private fun DivContainer.isWrapContainer(resolver: ExpressionResolver) =
-            layoutMode.evaluate(resolver) == DivContainer.LayoutMode.WRAP
+        layoutMode.evaluate(resolver) == DivContainer.LayoutMode.WRAP
 }

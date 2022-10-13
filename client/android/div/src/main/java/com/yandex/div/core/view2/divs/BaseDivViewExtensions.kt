@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.graphics.Canvas
 import android.graphics.PorterDuff
 import android.graphics.Typeface
+import android.graphics.drawable.Drawable
 import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.Gravity
@@ -26,6 +27,7 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectImageView
 import com.yandex.div.core.widget.GridContainer
+import com.yandex.div.core.widget.shapes.RoundedRectDrawable
 import com.yandex.div.core.widget.wraplayout.WrapAlignment
 import com.yandex.div.core.widget.wraplayout.WrapLayout
 import com.yandex.div.drawables.ScalingDrawable
@@ -44,6 +46,7 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivDimension
+import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFontWeight
@@ -56,6 +59,8 @@ import com.yandex.div2.DivRadialGradientFixedCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRadialGradientRelativeCenter
 import com.yandex.div2.DivRadialGradientRelativeRadius
+import com.yandex.div2.DivShape
+import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivSizeUnit
@@ -568,4 +573,63 @@ internal fun DivBorder?.isConstantlyEmpty(): Boolean {
     if (hasShadow != Expression.constant(false)) return false
     if (shadow != null) return false
     return stroke == null
+}
+
+internal fun ExpressionSubscriber.observeDrawable(
+    resolver: ExpressionResolver,
+    drawable: DivDrawable,
+    applyDrawable: (DivDrawable) -> Unit
+) {
+    applyDrawable(drawable)
+
+    val callback = { _: Any -> applyDrawable(drawable) }
+    when (drawable) {
+        is DivDrawable.Shape -> {
+            val shapeDrawable = drawable.value
+            addSubscription(shapeDrawable.color.observe(resolver, callback))
+            shapeDrawable.stroke?.let {
+                addSubscription(it.color.observe(resolver, callback))
+                addSubscription(it.width.observe(resolver, callback))
+                addSubscription(it.unit.observe(resolver, callback))
+            }
+
+            val roundedRect = shapeDrawable.shape as? DivShape.RoundedRectangle
+            roundedRect?.value?.let {
+                addSubscription(it.itemWidth.value.observe(resolver, callback))
+                addSubscription(it.itemWidth.unit.observe(resolver, callback))
+                addSubscription(it.itemHeight.value.observe(resolver, callback))
+                addSubscription(it.itemHeight.unit.observe(resolver, callback))
+                addSubscription(it.cornerRadius.value.observe(resolver, callback))
+                addSubscription(it.cornerRadius.unit.observe(resolver, callback))
+            }
+        }
+    }
+}
+
+internal fun DivDrawable.toDrawable(
+    metrics: DisplayMetrics,
+    resolver: ExpressionResolver
+): Drawable? {
+    return when (this) {
+        is DivDrawable.Shape -> value.toDrawable(metrics, resolver)
+    }
+}
+
+internal fun DivShapeDrawable.toDrawable(
+    metrics: DisplayMetrics,
+    resolver: ExpressionResolver
+): Drawable? {
+    return when (val shape = this.shape) {
+        is DivShape.RoundedRectangle -> RoundedRectDrawable(
+            RoundedRectDrawable.Params(
+                width = shape.value.itemWidth.toPxF(metrics, resolver),
+                height = shape.value.itemHeight.toPxF(metrics, resolver),
+                color = color.evaluate(resolver),
+                radius = shape.value.cornerRadius.toPxF(metrics, resolver),
+                strokeColor = stroke?.color?.evaluate(resolver),
+                strokeWidth = stroke?.width?.evaluate(resolver)?.toFloat()
+            )
+        )
+        else -> null
+    }
 }

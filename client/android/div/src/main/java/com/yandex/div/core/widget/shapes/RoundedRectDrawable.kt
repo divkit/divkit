@@ -1,4 +1,4 @@
-package com.yandex.div.core.widget.slider.shapes
+package com.yandex.div.core.widget.shapes
 
 import android.graphics.Canvas
 import android.graphics.ColorFilter
@@ -10,7 +10,17 @@ import androidx.annotation.Px
 import androidx.core.graphics.toRect
 import com.yandex.div.core.util.Assert
 
-class RoundedRectDrawable(private val params: RoundedRectParams) : Drawable() {
+class RoundedRectDrawable(private val params: Params) : Drawable() {
+
+    data class Params(
+        @Px val width: Float,
+        @Px val height: Float,
+        val color: Int,
+        @Px val radius: Float,
+        val strokeColor: Int? = null,
+        val strokeWidth: Float? = null
+    )
+
     private val mainPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = params.color
@@ -56,14 +66,4 @@ class RoundedRectDrawable(private val params: RoundedRectParams) : Drawable() {
     }
 
     override fun getOpacity() = PixelFormat.OPAQUE
-
 }
-
-data class RoundedRectParams(
-    @Px val width: Float,
-    @Px val height: Float,
-    val color: Int,
-    @Px val radius: Float,
-    val strokeColor: Int? = null,
-    val strokeWidth: Float? = null
-)

@@ -7,11 +7,10 @@ import android.text.TextWatcher
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.yandex.div.util.dpToPx
+import com.yandex.div.core.widget.shapes.RoundedRectDrawable
+import com.yandex.div.core.widget.shapes.RoundedRectDrawable.Params
 import com.yandex.div.core.widget.slider.SliderView
-import com.yandex.div.core.widget.slider.shapes.RoundedRectDrawable
-import com.yandex.div.core.widget.slider.shapes.RoundedRectParams
-
+import com.yandex.div.util.dpToPx
 
 class SliderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,27 +18,25 @@ class SliderActivity : AppCompatActivity() {
         setContentView(R.layout.slider_activity_layout)
 
         val slider = findViewById<SliderView>(R.id.slider)
-        slider.inactiveTrackDrawable =
-            RoundedRectDrawable(
-                RoundedRectParams(
-                    0f,
-                    dpToPx(5f),
-                    Color.GRAY,
-                    dpToPx(4f)
-                )
+        slider.inactiveTrackDrawable = RoundedRectDrawable(
+            Params(
+                0f,
+                dpToPx(5f),
+                Color.GRAY,
+                dpToPx(4f)
             )
-        slider.activeTrackDrawable =
-            RoundedRectDrawable(
-                RoundedRectParams(
-                    0f,
-                    dpToPx(5f),
-                    Color.RED,
-                    dpToPx(4f)
-                )
+        )
+        slider.activeTrackDrawable = RoundedRectDrawable(
+            Params(
+                0f,
+                dpToPx(5f),
+                Color.RED,
+                dpToPx(4f)
             )
+        )
         slider.maxValue = 10f
         val thumbDrawable = RoundedRectDrawable(
-            RoundedRectParams(
+            Params(
                 dpToPx(28f),
                 dpToPx(28f),
                 Color.RED,
@@ -64,28 +61,26 @@ class SliderActivity : AppCompatActivity() {
         findViewById<SwitchCompat>(R.id.tick_marks_switch).apply {
             setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    slider.activeTickMarkDrawable =
-                        RoundedRectDrawable(
-                            RoundedRectParams(
-                                dpToPx(7f),
-                                dpToPx(7f),
-                                Color.RED,
-                                dpToPx(3.5f),
-                                Color.WHITE,
-                                dpToPx(2f),
-                            )
+                    slider.activeTickMarkDrawable = RoundedRectDrawable(
+                        Params(
+                            dpToPx(7f),
+                            dpToPx(7f),
+                            Color.RED,
+                            dpToPx(3.5f),
+                            Color.WHITE,
+                            dpToPx(2f),
                         )
-                    slider.inactiveTickMarkDrawable =
-                        RoundedRectDrawable(
-                            RoundedRectParams(
-                                dpToPx(7f),
-                                dpToPx(7f),
-                                Color.GRAY,
-                                dpToPx(3.5f),
-                                Color.WHITE,
-                                dpToPx(2f),
-                            )
+                    )
+                    slider.inactiveTickMarkDrawable = RoundedRectDrawable(
+                        Params(
+                            dpToPx(7f),
+                            dpToPx(7f),
+                            Color.GRAY,
+                            dpToPx(3.5f),
+                            Color.WHITE,
+                            dpToPx(2f),
                         )
+                    )
                 } else {
                     slider.activeTickMarkDrawable = null
                     slider.inactiveTickMarkDrawable = null
