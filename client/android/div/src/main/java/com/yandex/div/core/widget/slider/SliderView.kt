@@ -259,6 +259,10 @@ open class SliderView @JvmOverloads constructor(
      * Returns [null] if doesn't exist.
      */
     var thumbTextDrawable: TextDrawable? = null
+        set(drawable) {
+            field = drawable
+            invalidate()
+        }
 
     /**
      * The value of thumb secondary. Should be in range from [minValue] to [maxValue].
@@ -336,6 +340,10 @@ open class SliderView @JvmOverloads constructor(
      * Returns [null] if doesn't exist.
      */
     var thumbSecondTextDrawable: TextDrawable? = null
+        set(drawable) {
+            field = drawable
+            invalidate()
+        }
 
     /**
      * Cached maximum width of thumb or tickmark drawables, used for an additional
