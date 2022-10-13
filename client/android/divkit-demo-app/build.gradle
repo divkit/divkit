@@ -112,7 +112,7 @@ dependencies {
     implementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
 
     // QR code stuff
-    implementation 'com.journeyapps:zxing-android-embedded:3.6.0@aar'
+    implementation 'com.journeyapps:zxing-android-embedded:4.3.0@aar'
     implementation 'com.google.zxing:core:3.4.1'
 
     androidTestImplementation "org.hamcrest:hamcrest-library:$versions.hamcrestCore"
