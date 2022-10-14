@@ -1,0 +1,32 @@
+{
+  "description": "match_parent inside container with orientation: overlap should not affect total size",
+  "card": {
+    "log_id": "div_welcome/default_browser",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "items": [
+            {
+              "type": "image",
+              "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+              "alpha": 0.3,
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              }
+            },
+            {
+              "type": "text",
+              "text": "Text component\nwith height=wrap_content\nand width=match_parent"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

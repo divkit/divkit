@@ -28,10 +28,16 @@ private let exclusions = [
   "div-slider/slider_with_error_and_warning.json",
 
   "div-container/container_with_wrap_content_constrained_child.json",
-  
+
   "div-gallery/horizontal-gallery-cross-spacing.json",
   "div-gallery/vertical-gallery-cross-spacing.json",
-  
+
+  "div-container/match-parent-inside-wrap-content.json",
+  "div-container/match-parent-lesser-than-paddings.json",
+  "div-container/match-parent-with-big-content.json",
+  "div-container/match-parent-with-margins.json",
+  "div-container/match-parent-with-padding.json",
+  "div-container/overlap-with-match-parent-child.json",
 ]
 
 private let casesWithPlaceholerOnly = [

@@ -1,0 +1,60 @@
+{
+  "description": "match_parent should take free space, event if that space is lesser, than the element paddings",
+  "templates": {},
+  "card": {
+    "log_id": "abc",
+    "states": [{
+      "state_id": 0,
+      "div": {
+        "type": "container",
+        "orientation": "horizontal",
+        "height": {
+          "type": "fixed",
+          "value": 100
+        },
+        "border": {
+          "stroke": {
+            "color": "#000",
+            "width": 1
+          }
+        },
+        "items": [
+          {
+            "type": "text",
+            "width": {
+              "type": "match_parent",
+              "weight": 10
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "background": [{
+              "type": "solid",
+              "color": "#f00"
+            }],
+            "text": "weight=10",
+            "font_size": 20
+          },
+          {
+            "type": "text",
+            "width": {
+              "type": "match_parent"
+            },
+            "height": {
+              "type": "match_parent"
+            },
+            "paddings": {
+              "left": 100
+            },
+            "background": [{
+              "type": "solid",
+              "color": "#00f"
+            }],
+            "text": "padding=100",
+            "font_size": 20
+          }
+        ]
+      }
+    }]
+  }
+}
