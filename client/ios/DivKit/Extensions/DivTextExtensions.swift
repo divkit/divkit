@@ -91,6 +91,7 @@ extension DivText: DivBlockModeling {
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeContentHeightTrait(with: context),
       text: attributedString,
+      textGradient: makeGradient(context.expressionResolver),
       verticalAlignment:
       resolveTextAlignmentVertical(context.expressionResolver).alignment,
       maxIntrinsicNumberOfLines: resolveMaxLines(context.expressionResolver) ?? .max,
@@ -171,6 +172,32 @@ extension DivText: DivBlockModeling {
     let cfRange = CFRange(location: start, length: actualEnd - start)
     typos.forEach { $0.apply(to: string, at: cfRange) }
     string.apply(actions, at: cfRange)
+  }
+
+  private func makeGradient(_ expressionResolver: ExpressionResolver) -> Gradient? {
+    guard let textGradient = textGradient else {
+      return nil
+    }
+    switch textGradient {
+    case let .divLinearGradient(gradient):
+      return
+        .linear(
+          Gradient.Linear(
+            colors: gradient.resolveColors(expressionResolver) ?? [],
+            angle: gradient.resolveAngle(expressionResolver)
+          )
+        )
+    case let .divRadialGradient(gradient):
+      return
+        .radial(
+          Gradient.Radial(
+            colors: gradient.resolveColors(expressionResolver) ?? [],
+            end: gradient.resolveRadius(expressionResolver),
+            centerX: gradient.resolveCenterX(expressionResolver),
+            centerY: gradient.resolveCenterY(expressionResolver)
+          )
+        )
+    }
   }
 
   private func makeCustomA11yElement(with expressionResolver: ExpressionResolver)

@@ -24,6 +24,7 @@ public final class TextBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
   public let text: NSAttributedString
+  public let textGradient: Gradient?
   public let verticalAlignment: Alignment
   public let maxIntrinsicNumberOfLines: Int
   public let minNumberOfHiddenLines: Int
@@ -41,6 +42,7 @@ public final class TextBlock: BlockWithTraits {
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait = .intrinsic,
     text: NSAttributedString,
+    textGradient: Gradient? = nil,
     verticalAlignment: Alignment = .center,
     maxIntrinsicNumberOfLines: Int = .max,
     minNumberOfHiddenLines: Int = 0,
@@ -52,6 +54,7 @@ public final class TextBlock: BlockWithTraits {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     (self.text, attachments) = setImagePlaceholders(for: images, to: text)
+    self.textGradient = textGradient
     self.verticalAlignment = verticalAlignment
     self.maxIntrinsicNumberOfLines = maxIntrinsicNumberOfLines
     self.minNumberOfHiddenLines = minNumberOfHiddenLines
@@ -65,6 +68,7 @@ public final class TextBlock: BlockWithTraits {
     widthTrait: LayoutTrait,
     heightTrait: LayoutTrait = .intrinsic,
     text: NSAttributedString,
+    textGradient: Gradient? = nil,
     verticalAlignment: Alignment = .center,
     maxIntrinsicNumberOfLines: Int = .max,
     minNumberOfHiddenLines: Int = 0,
@@ -76,6 +80,7 @@ public final class TextBlock: BlockWithTraits {
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       text: text,
+      textGradient: textGradient,
       verticalAlignment: verticalAlignment,
       maxIntrinsicNumberOfLines: maxIntrinsicNumberOfLines,
       minNumberOfHiddenLines: minNumberOfHiddenLines,
@@ -143,6 +148,7 @@ public final class TextBlock: BlockWithTraits {
     lhs.widthTrait == rhs.widthTrait
       && lhs.heightTrait == rhs.heightTrait
       && lhs.text == rhs.text
+      && lhs.textGradient == rhs.textGradient
       && lhs.maxIntrinsicNumberOfLines == rhs.maxIntrinsicNumberOfLines
       && lhs.minNumberOfHiddenLines == rhs.minNumberOfHiddenLines
       && lhs.images == rhs.images

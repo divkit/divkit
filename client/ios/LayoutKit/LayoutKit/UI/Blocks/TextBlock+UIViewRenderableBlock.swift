@@ -6,7 +6,7 @@ import CommonCore
 import LayoutKitInterface
 
 extension TextBlock {
-  public static func makeBlockView() -> BlockView { TextBlockView() }
+  public static func makeBlockView() -> BlockView { TextBlockContainer() }
 
   public func configureBlockView(
     _ view: BlockView,
@@ -14,7 +14,9 @@ extension TextBlock {
     overscrollDelegate _: ScrollDelegate?,
     renderingDelegate _: RenderingDelegate?
   ) {
-    (view as! TextBlockView).model = .init(
+    let textBlockContainer = view as! TextBlockContainer
+    textBlockContainer.textGradient = textGradient
+    textBlockContainer.model = .init(
       images: images,
       attachments: attachments,
       text: text,
@@ -27,11 +29,76 @@ extension TextBlock {
   }
 
   public func canConfigureBlockView(_ view: BlockView) -> Bool {
-    view is TextBlockView
+    view is TextBlockContainer
   }
 }
 
-private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
+private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
+
+  private let textBlockView = TextBlockView()
+  private var gradientView: UIView? = nil
+
+  var textGradient: Gradient? {
+    didSet {
+      guard textGradient == nil || textGradient != oldValue else {
+        return
+      }
+      if let textGradient = textGradient {
+        gradientView = textGradient.uiView
+        currentView = gradientView
+      } else {
+        gradientView = nil
+        currentView = textBlockView
+      }
+    }
+  }
+
+  private var currentView: UIView? {
+    didSet {
+      guard currentView !== oldValue else {
+        return
+      }
+      oldValue?.removeFromSuperview()
+      if let currentView = currentView {
+        addSubview(currentView)
+      }
+      setNeedsLayout()
+    }
+  }
+
+  var model: TextBlockView.Model! {
+    didSet {
+      guard model == nil || model != oldValue else {
+        return
+      }
+      textBlockView.model = model
+      applyAccessibility(model.accessibility)
+    }
+  }
+
+  var effectiveBackgroundColor: UIColor? { backgroundColor }
+
+  override init(frame: CGRect) {
+    super.init(frame: frame)
+    backgroundColor = .clear
+  }
+
+  @available(*, unavailable)
+  required init(coder _: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    textBlockView.frame = bounds
+    gradientView?.frame = bounds
+
+    gradientView?.mask = textBlockView
+  }
+}
+
+private final class TextBlockView: UIView {
   struct Model: ReferenceEquatable {
     let images: [TextBlock.InlineImage]
     let attachments: [TextAttachment]
@@ -88,7 +155,6 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
         return
       }
 
-      applyAccessibility(model?.accessibility)
       precondition(model.images.count == model.attachments.count)
       imageRequests = model.images.indices
         .filter { model.attachments[$0].image == nil }
@@ -121,8 +187,6 @@ private final class TextBlockView: BlockView, VisibleBoundsTrackingLeaf {
       setNeedsDisplay()
     }
   }
-
-  var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   override init(frame: CGRect) {
     super.init(frame: frame)
@@ -388,6 +452,19 @@ extension AttributedStringLayout {
           lineLayout.line,
           point.movingX(by: -lineLayout.horizontalOffset)
         )
+    }
+  }
+}
+
+extension Gradient {
+  fileprivate var uiView: UIView {
+    switch self {
+    case let .linear(gradient):
+      return LinearGradientView(gradient)
+    case let .radial(gradient):
+      return RadialGradientView(gradient)
+    case let .box(color):
+      return BoxShadowView(shadowColor: color)
     }
   }
 }
