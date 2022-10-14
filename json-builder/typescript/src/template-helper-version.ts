@@ -28,12 +28,11 @@ export function thelperVersion(templates: ITemplates): (name: string) => string 
 }
 
 /**
- * Переписывает вызовы TemplateBlock в шаблонах,
- * добавляя к их именам версии (md5 хэш).
- * Имена корневых шаблонов (ключи объекта templates) не меняются!
- * @param templates шаблоны
- * @param resolvedNames ранее вычисленные имена, например общих шаблонов
- * @returns хэшмап новых имен шаблонов
+ * Replaces a TemplateBlock calls with the concat of the name with a hash (md5).
+ * The names of the root templates are not changed! (templates object keys)
+ * @param templates
+ * @param resolvedNames Names cache
+ * @returns A map with new names
  */
 export function rewriteTemplateVersions<T extends ITemplates>(
     templates: T,

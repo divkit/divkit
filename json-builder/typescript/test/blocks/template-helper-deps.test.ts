@@ -3,7 +3,7 @@ import { DivContainer, DivText, template, templatesDepsMap } from '../../src';
 describe('template deps', () => {
     it('should find templates deps', () => {
         const templates = {
-            template1: template('home:block', {
+            template1: template('template2', {
                 items: [template('template2'), template('template5')],
             }),
             template2: new DivContainer({
@@ -11,7 +11,7 @@ describe('template deps', () => {
             }),
             template3: new DivContainer({
                 items: [
-                    template('home:test'),
+                    template('template5'),
                     new DivContainer({
                         items: [template('template4')],
                     }),
@@ -30,8 +30,8 @@ describe('template deps', () => {
         expect(new Set(depsMap.template1)).toEqual(
             new Set(['template1', 'template2', 'template3', 'template4', 'template5']),
         );
-        expect(new Set(depsMap.template2)).toEqual(new Set(['template2', 'template3', 'template4']));
-        expect(new Set(depsMap.template3)).toEqual(new Set(['template3', 'template4']));
+        expect(new Set(depsMap.template2)).toEqual(new Set(['template2', 'template3', 'template4', 'template5']));
+        expect(new Set(depsMap.template3)).toEqual(new Set(['template3', 'template4', 'template5']));
         expect(new Set(depsMap.template4)).toEqual(new Set(['template4']));
     });
 

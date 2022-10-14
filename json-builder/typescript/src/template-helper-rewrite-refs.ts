@@ -12,7 +12,7 @@ function rewriteRefsTemplate(template: unknown): void {
                 const objChild = obj[key];
                 if (objChild && typeof objChild === 'object') {
                     if (objChild instanceof TemplatePropertyReference) {
-                        obj[key] = undefined; // delete ломает валидатор
+                        obj[key] = undefined;
 
                         if (objChild.templatePropertyName !== key) {
                             obj['$' + key] = objChild.templatePropertyName;
@@ -27,12 +27,14 @@ function rewriteRefsTemplate(template: unknown): void {
 }
 
 /**
- * Заменяет  в шаблонах замену параметры вида
+ * Changes the reference-objects with the actual props
+ *
+ * Example:
  * prop: reference('template_prop')
- * на
+ * to
  * $prop: 'template_prop'
- * @param templates Шаблоны
- * @returns Шаблоны, готовые для сериализации в формате DivKit
+ * @param templates
+ * @returns Serialization-ready templates
  */
 export function rewriteRefs<T extends ITemplates>(templates: T): T {
     const result = copyTemplates(templates);

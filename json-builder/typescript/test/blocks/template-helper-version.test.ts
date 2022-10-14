@@ -53,7 +53,9 @@ describe('template helper version', () => {
             template3: new DivContainer({
                 items: [template('template4'), template('template1')],
             }),
-            template4: template('home:block'),
+            template4: new DivText({
+                text: 'template4',
+            }),
         };
 
         templates = rewriteTemplateVersions(templates).templates;

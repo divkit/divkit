@@ -1,7 +1,5 @@
-// Стандартные снепшоты слишком точные для наших целей -
-// они снапшотят undefined поля, которых в карточках очень много
-// (в силу особенностей конструкторов блоков), читать
-// стандартный снапшот поэтому тяжело.
+// The standard snapshot serializer is too accurate for us
+// It stores all the "undefined" values, of which there are many in our data
 module.exports = {
     serialize(val) {
         return JSON.stringify(val, null, 2);

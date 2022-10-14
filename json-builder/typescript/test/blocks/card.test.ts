@@ -264,21 +264,21 @@ describe('DivCard tests', (): void => {
                     div: template('poi_card', {
                         title_items: [
                             template('title_text', {
-                                text: 'Рядом с вами',
+                                text: 'Around',
                             }),
                             template('title_menu', {
                                 action: {
                                     log_id: 'menu',
                                     menu_items: [
                                         {
-                                            text: 'Настройки ленты',
+                                            text: 'Feed options',
                                             action: {
                                                 url: 'http://ya.ru',
                                                 log_id: 'settings',
                                             },
                                         },
                                         {
-                                            text: 'Скрыть карточку',
+                                            text: 'Hide the card',
                                             action: {
                                                 url: 'http://ya.ru',
                                                 log_id: 'hide',
@@ -288,10 +288,10 @@ describe('DivCard tests', (): void => {
                                 },
                             }),
                         ],
-                        footer_text: 'ОТКРЫТЬ КАРТЫ',
+                        footer_text: 'OPEN MAPS',
                         tab_items_link: [
                             {
-                                title: 'ПОПУЛЯРНОЕ',
+                                title: 'POPULAR',
                                 div: new DivGallery({
                                     width: weighted(40),
                                     height: fixed(240, 'sp'),
@@ -301,14 +301,14 @@ describe('DivCard tests', (): void => {
                                     },
                                     items: [
                                         template('poi_gallery_item', {
-                                            badge_text: 'Лучшее',
+                                            badge_text: 'Best',
                                             background_url:
                                                 'https://avatars.mds.yandex.net/get-pdb/1340633/88a085e7-7254-43ff-805a-660b96f0e6ce/s1200?webp=false',
-                                            place_category: 'РЕСТОРАН',
-                                            place_title: 'Кулинарная лавка',
-                                            address: 'улица Тимура Фрунзе, 11, корп. 8',
-                                            time: 'ДО 23:00',
-                                            distance: '150м',
+                                            place_category: 'RESTAURANT',
+                                            place_title: 'Bakery',
+                                            address: '221b, Baker Street',
+                                            time: 'till 23:00',
+                                            distance: '150m',
                                             poi_stars: [
                                                 {
                                                     type: 'star_full',
@@ -329,19 +329,19 @@ describe('DivCard tests', (): void => {
                                             poi_gallery_item_action_link: 'ya.ru',
                                         }),
                                         template('poi_gallery_item', {
-                                            badge_text: 'Лучшее',
+                                            badge_text: 'Best',
                                             background_url:
                                                 'https://avatars.mds.yandex.net/get-pdb/1340633/88a085e7-7254-43ff-805a-660b96f0e6ce/s1200?webp=false',
-                                            place_category: 'КОНЦЕРТ',
-                                            place_title: 'Black Label Society',
-                                            address: 'чт 15 февраля',
-                                            time: 'Главclub Green Concert',
-                                            distance: '150м',
+                                            place_category: 'CONCERT',
+                                            place_title: 'Violin concert',
+                                            address: '221b, Baker Street',
+                                            time: '21:30',
+                                            distance: '150m',
                                             poi_stars: [],
                                             poi_gallery_item_action_link: 'ya.ru',
                                         }),
                                         template('gallery_tail_light', {
-                                            tail_text_link: 'Ещё на картах',
+                                            tail_text_link: 'More',
                                             visibility_action: {
                                                 log_id: 'a66',
                                                 visibility_duration: 10000,

@@ -3,26 +3,14 @@ import { treeWalkDFS } from './helper';
 import { ITemplates, TemplateBlock } from './template';
 
 /**
- * Проверяет имя шаблона и возвращает true,
- * если имя шаблона нужно сохранить.
- * Например, в веб-морде есть 'мета-шаблон'
- * home:block, который нельзя переименовывать
- */
-export function isExternalTemplate(templateName: string): boolean {
-    return templateName.startsWith('home:');
-}
-
-/**
- * Поиск вложенных шаблонов для заданного шаблона
- * @param name - имя заданного шаблона
- * @param templates - список всех шаблонов для проверки
- * разрешимости зависимостей
+ * Search for a used templates list
+ * @param template
  */
 function findPlainDeps(template: Div): Set<string> {
     const deps = new Set<string>();
 
     treeWalkDFS(template, (node) => {
-        if (node instanceof TemplateBlock && !isExternalTemplate(node.type)) {
+        if (node instanceof TemplateBlock) {
             deps.add(node.type);
         }
     });
@@ -41,12 +29,10 @@ export type TemplateResolvedAction<T> = (props: {
 }) => T;
 
 /**
- * Обход шаблонов с разрешением зависимостей
- * перед выполнением действия
+ * Templates walker. It resolves template dependencies on each step, and also can run a callback after that
  * @param templates
- * @param resolvedAction действие выполнямое для шаблона,
- *        когда все его зависимости разрешены
- * @param depsResolved ранее разрешенные зависимости, например для общих шаблонов
+ * @param resolvedAction Callback for the template. It will be called after resolving dependencies
+ * @param depsResolved Deps resolve cache, for example, for common templates
  */
 export function runResolveDeps<T>(
     templates: ITemplates,
@@ -95,9 +81,10 @@ export function runResolveDeps<T>(
 }
 
 /**
- * Поиск зависимостей шаблонов
- * @param templates шаблоны
- * @returns для каждого шаблона список его зависимостей
+ * Search for a templates dependencies
+ * @param templates
+ * @param depsResolved Deps resolution cache
+ * @returns Map with deps for each template
  */
 export function templatesDepsMap(
     templates: ITemplates,

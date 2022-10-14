@@ -29,7 +29,7 @@ type TemplateVars<T, X> = T extends TemplateBlock<infer K2, any>
         : {}
     : Vars<T, X>;
 
-// Переход от A | B | C к Vars<A> | Vars<B> | Vars<C>
+// Transforms "A | B | C" into the "Vars<A> | Vars<B> | Vars<C>"
 type DistributeTemplateVars<T, X> = UnionToIntersection<T extends any ? TemplateVars<T, X> : never>;
 
 type Vars<T, X> = '_props' extends keyof T

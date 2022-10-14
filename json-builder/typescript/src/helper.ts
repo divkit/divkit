@@ -12,10 +12,9 @@ type Exactly<TBase, TExt extends TBase> = {
 export type IntBoolean = 1 | 0;
 
 /**
- * DFS-Обход js-объекта как дерева с выполнением в каждом
- * узле заданного действия
- * @param tree js-объект
- * @param nodeAction действие, выполняемое для каждого узла дерева
+ * DFS for a js object with callback on each leaf
+ * @param tree js object
+ * @param nodeAction callback for each leaf
  */
 export function treeWalkDFS(tree: unknown, nodeAction: (x: unknown, path: string[]) => void): void {
     const stack: [unknown, string[]][] = [[tree, []]];

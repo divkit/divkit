@@ -1,20 +1,20 @@
 import { copyTemplates, treeWalkDFS } from './helper';
 import { ITemplates, TemplateBlock } from './template';
-import { isExternalTemplate, runResolveDeps } from './template-helper-deps';
+import { runResolveDeps } from './template-helper-deps';
 
 /**
- * Переписывание шаблонов с заменой имен вложенных шаблонов
- * Например, в шаблоне
+ * Templates rewriting for a nested templates
+ * For example, in template
  * new DivContainer({
  *   items: [
  *       template('template2')
  *   ]
  * })
- * 'template2' будет заменен на `template2/${hash(templates.template2)}`
- * @param templates шаблоны для перезаписи
- * @param rename функция, возвращающая новое имя
- * @param depsResolved ранее вычисленные имена, например общих шаблонов
- * @returns переписанные шаблоны + хэшмап новых имен
+ * 'template2' would be replaces into `template2/${hash(templates.template2)}`
+ * @param templates Templates to process
+ * @param rename New name generator
+ * @param resolvedNames Rename cache
+ * @returns Processed templates + map with transformed names
  */
 export function rewriteNames<T extends ITemplates>(
     templates: T,
@@ -30,7 +30,7 @@ export function rewriteNames<T extends ITemplates>(
         templates,
         ({ name, template, depsResolved }) => {
             treeWalkDFS(template, (node) => {
-                if (node instanceof TemplateBlock && !isExternalTemplate(node.type)) {
+                if (node instanceof TemplateBlock) {
                     (node as any).type = depsResolved[node.type];
                 }
             });
