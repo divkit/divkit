@@ -62,8 +62,7 @@ class GalleryAndPagerScrollTest {
 
         visibilityActions {
             assert {
-                checkGalleryScroll("card")
-                checkScrollCompleted("card", 1, 3)
+                checkScrollCompleted("card")
             }
         }
     }

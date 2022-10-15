@@ -7,8 +7,11 @@ import androidx.core.view.doOnNextLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.util.Assert
+import com.yandex.div.util.dpToPx
 
 // From: http://stackoverflow.com/a/37816976
+private const val ITEM_SPACING_DEFAULT_VALUE = 8
+
 open class SnappyRecyclerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -17,6 +20,7 @@ open class SnappyRecyclerView @JvmOverloads constructor(
 
     val savedItemPosition: Int
         get() = _savedItemPosition
+    var itemSpacing: Int = dpToPx(ITEM_SPACING_DEFAULT_VALUE)
     private var _savedItemPosition = DEFAULT_ITEM_POSITION
     private val itemCount: Int
         get() = adapter?.itemCount ?: 0
@@ -28,51 +32,18 @@ open class SnappyRecyclerView @JvmOverloads constructor(
 
         val linearLayoutManager = layoutManager as androidx.recyclerview.widget.LinearLayoutManager
 
-        // views on the screen
-        var lastVisibleItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition()
-        if (lastVisibleItemPosition == NO_POSITION) {
-            lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition()
-        }
-        val lastView = linearLayoutManager.findViewByPosition(lastVisibleItemPosition)
         var firstVisibleItemPosition = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
         if (firstVisibleItemPosition == NO_POSITION) {
             firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
         }
-        val firstView = linearLayoutManager.findViewByPosition(firstVisibleItemPosition)
+        val firstView = linearLayoutManager.findViewByPosition(firstVisibleItemPosition) ?: return false
+        val nextView = linearLayoutManager.findViewByPosition(firstVisibleItemPosition + 1)
 
-        if (firstView == null || lastView == null) {
-            return false
-        }
-
-        val screenSize = choosePropertyDependOnOrientation(width, height)
-        val params = ScrollParams(screenSize, firstView, lastView)
+        val params = ScrollParams(firstView, nextView, itemSpacing)
 
         var delta: Int
-        if (Math.abs(choosePropertyDependOnOrientation(velocityX, velocityY)) < FLING_VELOCITY_FOR_PAGE_CHANGE) {
-            // The fling is slow -> stay at the current page if we are less than half through,
-            // or go to the next page if more than half through
-            if (params.startEdge > screenSize / 2) {
-                // go to left page
-                delta = params.distanceEnd
-            } else if (params.endEdge < screenSize / 2) {
-                // go to right page
-                delta = params.distanceStart
-            } else {
-                // stay at current page
-                if (isRightSwipe(velocityX)) {
-                    delta = params.distanceEnd
-                } else {
-                    delta = params.distanceStart
-                }
-            }
-        } else {
-            // The fling is fast -> go to next page
-            if (isRightSwipe(velocityX)) {
-                delta = params.distanceStart
-            } else {
-                delta = params.distanceEnd
-            }
-        }
+        delta = if (params.startEdgeFirst > -firstView.width/2) params.distanceStartFirst else params.distanceStartSecond
+
         if (delta == 0) {
             /* Hack for first and last items.
             If we scroll last item to the right side, there is a scroll with 0px, as result there isn't SCROLL_STATE_IDLE. But our
@@ -94,8 +65,6 @@ open class SnappyRecyclerView @JvmOverloads constructor(
     }
 
     override fun onScrollStateChanged(state: Int) {
-        super.onScrollStateChanged(state)
-
         // If you tap on the phone while the RecyclerView is scrolling it will stop in the middle.
         // This code fixes this. This code is not strictly necessary but it improves the behaviour.
 
@@ -106,49 +75,22 @@ open class SnappyRecyclerView @JvmOverloads constructor(
             if (firstVisibleItemPosition == 0) {
                 return
             }
-            var lastVisibleItemPosition = linearLayoutManager.findLastCompletelyVisibleItemPosition()
-            if (lastVisibleItemPosition == itemCount - 1) {
-                return
-            }
 
-            if (firstVisibleItemPosition == NO_POSITION) {
-                firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
-            }
-            if (lastVisibleItemPosition == NO_POSITION) {
-                lastVisibleItemPosition = linearLayoutManager.findLastVisibleItemPosition()
-            }
-            val firstView = linearLayoutManager.findViewByPosition(firstVisibleItemPosition)
-            val lastView = linearLayoutManager.findViewByPosition(lastVisibleItemPosition)
+            firstVisibleItemPosition = linearLayoutManager.findFirstVisibleItemPosition()
 
-            if (firstView == null || lastView == null) {
-                return
-            }
+            val firstView = linearLayoutManager.findViewByPosition(firstVisibleItemPosition) ?: return
+            val nextView = linearLayoutManager.findViewByPosition(firstVisibleItemPosition + 1)
 
-            val screenSize = choosePropertyDependOnOrientation(width, height)
-            val params = ScrollParams(screenSize, firstView, lastView)
+            val params = ScrollParams(firstView, nextView, itemSpacing)
 
-            if (firstVisibleItemPosition == lastVisibleItemPosition) {
-                // Special case: there is no difference between distanceStart and distanceEnd.
-                // We just need to perform smoothScrollBy().
-                if (orientation == HORIZONTAL) {
-                    smoothScrollBy(params.distanceStart, 0)
-                } else {
-                    smoothScrollBy(0, params.distanceStart)
-                }
-            } else if (params.startEdge > screenSize / 4) {
-                if (orientation == HORIZONTAL) {
-                    smoothScrollBy(params.distanceEnd, 0)
-                } else {
-                    smoothScrollBy(0, params.distanceEnd)
-                }
-            } else if (params.endEdge < screenSize / 4) {
-                if (orientation == HORIZONTAL) {
-                    smoothScrollBy(params.distanceStart, 0)
-                } else {
-                    smoothScrollBy(0, params.distanceStart)
-                }
+            val distanceStart = if (params.startEdgeFirst > - firstView.width/2) params.distanceStartFirst else params.distanceStartSecond
+            if (orientation == HORIZONTAL) {
+                smoothScrollBy(distanceStart, 0)
+            } else {
+                smoothScrollBy(0, distanceStart)
             }
         }
+        super.onScrollStateChanged(state)
     }
 
     override fun scrollToPosition(position: Int) {
@@ -217,23 +159,23 @@ open class SnappyRecyclerView @JvmOverloads constructor(
         _savedItemPosition = position
     }
 
-    private fun<T> choosePropertyDependOnOrientation(horizontal: T, vertical: T) = if (orientation == HORIZONTAL) horizontal else vertical
+    private fun <T> choosePropertyDependOnOrientation(horizontal: T, vertical: T) = if (orientation == HORIZONTAL) horizontal else vertical
 
-    inner class ScrollParams internal constructor(screenSize: Int, firstView: View, lastView: View) {
+    inner class ScrollParams internal constructor(firstView: View, nextView: View?, itemSpacing: Int) {
 
-        val distanceStart: Int
-        val distanceEnd: Int
-        val startEdge: Int
-        val endEdge: Int
+        val distanceStartFirst: Int
+        val distanceStartSecond: Int
+        val startEdgeFirst: Int
+        val startEdgeSecond: Int
 
         init {
-            val startMargin = (screenSize - choosePropertyDependOnOrientation(lastView.width, lastView.height)) / 2
-            val endMargin = (screenSize - choosePropertyDependOnOrientation(firstView.width, firstView.height)) / 2 +
-                    choosePropertyDependOnOrientation(firstView.width, firstView.height)
-            startEdge = choosePropertyDependOnOrientation(lastView.left, lastView.top)
-            endEdge = choosePropertyDependOnOrientation(firstView.right, firstView.bottom)
-            distanceStart = startEdge - startMargin
-            distanceEnd = endEdge - endMargin
+            val startMargin = itemSpacing / 2
+            startEdgeFirst = choosePropertyDependOnOrientation(firstView.left, firstView.top)
+            distanceStartFirst = startEdgeFirst - startMargin
+            startEdgeSecond = if (nextView != null)
+                choosePropertyDependOnOrientation(nextView.left, nextView.top)
+                else startEdgeFirst
+            distanceStartSecond = startEdgeSecond - startMargin
         }
     }
 

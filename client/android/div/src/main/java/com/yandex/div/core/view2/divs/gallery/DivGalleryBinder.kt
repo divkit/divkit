@@ -33,8 +33,10 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChild
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.widget.ViewWrapper
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div.util.dpToPx
 import com.yandex.div.view.OnInterceptTouchEventListenerHost
 import com.yandex.div.view.PaddingItemDecoration
+import com.yandex.div.view.SnappyRecyclerView
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import java.util.WeakHashMap
@@ -176,6 +178,10 @@ internal class DivGalleryBinder @Inject constructor(
                     orientation = orientation
                 )
         )
+
+        if (view is SnappyRecyclerView) {
+            view.itemSpacing = dpToPx(div.itemSpacing.evaluate(resolver))
+        }
 
         val layoutManager = if (columnCount == 1) {
             DivLinearLayoutManager(divView, view, div, orientation)
