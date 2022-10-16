@@ -1,5 +1,9 @@
 # DivKit for iOS client library
 
+[![SwiftPM](https://img.shields.io/badge/SPM-supported-DE5C43)](https://github.com/divkit/divkit-ios)
+[![CocoaPods](https://img.shields.io/cocoapods/v/DivKit)](https://cocoapods.org/pods/DivKit)
+![Size](https://img.shields.io/badge/ipa%20size-~6%20MB-blue)
+
 ## How it works
 
 DivKit builds native views from JSON data.
