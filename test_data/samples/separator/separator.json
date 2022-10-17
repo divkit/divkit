@@ -103,8 +103,8 @@
                         "color": "#1e000000"
                       },
                       "height": {
-                        "type": "match_parent",
-                        "value": 64
+                        "type": "fixed",
+                        "value": 100
                       }
                     },
                     {
