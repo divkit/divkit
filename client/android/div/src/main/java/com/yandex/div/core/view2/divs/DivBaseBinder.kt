@@ -16,7 +16,6 @@ import android.widget.LinearLayout
 import androidx.annotation.UiThread
 import androidx.core.content.ContextCompat
 import androidx.transition.Transition
-import androidx.transition.TransitionManager
 import androidx.transition.Visibility
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
@@ -568,8 +567,6 @@ internal class DivBaseBinder @Inject constructor(
         }
 
         if (transition != null) {
-            TransitionManager.endTransitions(divView)
-
             divTransitionHandler.putTransition(
                 transition,
                 this,

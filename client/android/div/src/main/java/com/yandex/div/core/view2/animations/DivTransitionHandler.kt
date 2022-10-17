@@ -19,11 +19,17 @@ internal class DivTransitionHandler(
             posted = true
 
             divView.post {
-                beginDelayedTransitions()
+                if (posted) beginDelayedTransitions()
 
                 posted = false
             }
         }
+    }
+
+    fun runTransitions() {
+        posted = false
+
+        beginDelayedTransitions()
     }
 
     fun putTransition(transition: Transition, view: View, changeType: ChangeType.Visibility) {
@@ -52,6 +58,8 @@ internal class DivTransitionHandler(
     }
 
     private fun beginDelayedTransitions() {
+        TransitionManager.endTransitions(divView)
+
         val transitionSet = TransitionSet()
 
         pendingTransitions.forEach { transitionData ->

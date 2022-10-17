@@ -105,6 +105,9 @@ internal class DivStateBinder @Inject constructor(
             if (incoming != null && newStateDiv != null) {
                 viewBinder.get().bind(incoming, newStateDiv, divView, currentPath)
             }
+            if (outgoing != null) {
+                divView.divTransitionHandler.runTransitions()
+            }
         } else if (newStateDivValue != null) {
             val areDivsReplaceable = outgoing != null && DivComparator.areDivsReplaceable(oldDiv, newStateDiv, resolver)
             incoming = if (areDivsReplaceable) {
