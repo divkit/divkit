@@ -39,6 +39,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
   public let scale: Field<Expression<DivImageScale>>? // default value: fill
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let tintColor: Field<Expression<Color>>?
+  public let tintMode: Field<Expression<DivBlendMode>>? // default value: source_in
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?
   public let transitionChange: Field<DivChangeTransitionTemplate>?
@@ -88,6 +89,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
         scale: try dictionary.getOptionalExpressionField("scale"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
         tintColor: try dictionary.getOptionalExpressionField("tint_color", transform: Color.color(withHexString:)),
+        tintMode: try dictionary.getOptionalExpressionField("tint_mode"),
         tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
         transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
         transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
@@ -137,6 +139,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     scale: Field<Expression<DivImageScale>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
     tintColor: Field<Expression<Color>>? = nil,
+    tintMode: Field<Expression<DivBlendMode>>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
     transitionChange: Field<DivChangeTransitionTemplate>? = nil,
@@ -180,6 +183,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     self.scale = scale
     self.selectedActions = selectedActions
     self.tintColor = tintColor
+    self.tintMode = tintMode
     self.tooltips = tooltips
     self.transform = transform
     self.transitionChange = transitionChange
@@ -224,6 +228,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     let scaleValue = parent?.scale?.resolveOptionalValue(context: context, validator: ResolvedValue.scaleValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
     let tintColorValue = parent?.tintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.tintColorValidator) ?? .noValue
+    let tintModeValue = parent?.tintMode?.resolveOptionalValue(context: context, validator: ResolvedValue.tintModeValidator) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
     let transitionChangeValue = parent?.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true) ?? .noValue
@@ -266,6 +271,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       scaleValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "scale", level: .warning)) },
       selectedActionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "selected_actions", level: .warning)) },
       tintColorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "tint_color", level: .warning)) },
+      tintModeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "tint_mode", level: .warning)) },
       tooltipsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "tooltips", level: .warning)) },
       transformValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transform", level: .warning)) },
       transitionChangeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transition_change", level: .warning)) },
@@ -317,6 +323,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       scale: scaleValue.value,
       selectedActions: selectedActionsValue.value,
       tintColor: tintColorValue.value,
+      tintMode: tintModeValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
       transitionChange: transitionChangeValue.value,
@@ -366,6 +373,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     var scaleValue: DeserializationResult<Expression<DivImageScale>> = parent?.scale?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
     var tintColorValue: DeserializationResult<Expression<Color>> = parent?.tintColor?.value() ?? .noValue
+    var tintModeValue: DeserializationResult<Expression<DivBlendMode>> = parent?.tintMode?.value() ?? .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
@@ -440,6 +448,8 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
         selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self).merged(with: selectedActionsValue)
       case "tint_color":
         tintColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.tintColorValidator).merged(with: tintColorValue)
+      case "tint_mode":
+        tintModeValue = deserialize(__dictValue, validator: ResolvedValue.tintModeValidator).merged(with: tintModeValue)
       case "tooltips":
         tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
       case "transform":
@@ -522,6 +532,8 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
         selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self))
       case parent?.tintColor?.link:
         tintColorValue = tintColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.tintColorValidator))
+      case parent?.tintMode?.link:
+        tintModeValue = tintModeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.tintModeValidator))
       case parent?.tooltips?.link:
         tooltipsValue = tooltipsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self))
       case parent?.transform?.link:
@@ -603,6 +615,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       scaleValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "scale", level: .warning)) },
       selectedActionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "selected_actions", level: .warning)) },
       tintColorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "tint_color", level: .warning)) },
+      tintModeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "tint_mode", level: .warning)) },
       tooltipsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "tooltips", level: .warning)) },
       transformValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transform", level: .warning)) },
       transitionChangeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transition_change", level: .warning)) },
@@ -654,6 +667,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       scale: scaleValue.value,
       selectedActions: selectedActionsValue.value,
       tintColor: tintColorValue.value,
+      tintMode: tintModeValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
       transitionChange: transitionChangeValue.value,
@@ -708,6 +722,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       scale: scale ?? mergedParent.scale,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
       tintColor: tintColor ?? mergedParent.tintColor,
+      tintMode: tintMode ?? mergedParent.tintMode,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
       transitionChange: transitionChange ?? mergedParent.transitionChange,
@@ -757,6 +772,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       scale: merged.scale,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
       tintColor: merged.tintColor,
+      tintMode: merged.tintMode,
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),
       transitionChange: merged.transitionChange?.tryResolveParent(templates: templates),

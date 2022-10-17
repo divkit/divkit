@@ -7,6 +7,7 @@ public enum Background: Equatable {
   case image(BackgroundImage)
   case gradient(Gradient)
   case transparentAction(UserInterfaceAction)
+  case ninePatchImage(NinePatchImage)
   indirect case composite(Background, Background, Float?)
   indirect case withInsets(background: Background, contentInsets: EdgeInsets)
 
@@ -33,6 +34,8 @@ public func ==(lhs: Background, rhs: Background) -> Bool {
     return imagesDataAreEqual(image1, image2)
   case let (.image(image1), .image(image2)):
     return image1 == image2
+  case let (.ninePatchImage(image1), .ninePatchImage(image2)):
+    return image1 == image2
   case let (.gradient(gradient1), .gradient(gradient2)):
     return gradient1 == gradient2
   case let (.transparentAction(action1), .transparentAction(action2)):
@@ -51,7 +54,8 @@ public func ==(lhs: Background, rhs: Background) -> Bool {
        (.gradient, _),
        (.transparentAction, _),
        (.composite, _),
-       (.withInsets, _):
+       (.withInsets, _),
+       (.ninePatchImage, _):
     return false
   }
 }
@@ -63,6 +67,8 @@ extension Background: CustomDebugStringConvertible {
       return "Gradient \(gradient.debugDescription)"
     case let .image(image):
       return "Image \(image.debugDescription)"
+    case let .ninePatchImage(image):
+      return "NinePatchImage \(image.debugDescription)"
     case let .solidColor(color):
       return "Solid \(color.debugDescription)"
     case let .tiledImage(image):
@@ -97,6 +103,8 @@ extension Background: ImageContaining {
     case let .composite(first, second, _):
       return first.getImageHolders() + second.getImageHolders()
     case let .image(image):
+      return [image.imageHolder]
+    case let .ninePatchImage(image):
       return [image.imageHolder]
     case let .withInsets(background, _):
       return background.getImageHolders()

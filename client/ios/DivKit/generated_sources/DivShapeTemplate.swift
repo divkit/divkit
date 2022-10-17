@@ -8,10 +8,13 @@ import TemplatesSupport
 @frozen
 public enum DivShapeTemplate: TemplateValue {
   case divRoundedRectangleShapeTemplate(DivRoundedRectangleShapeTemplate)
+  case divCircleShapeTemplate(DivCircleShapeTemplate)
 
   public var value: Any {
     switch self {
     case let .divRoundedRectangleShapeTemplate(value):
+      return value
+    case let .divCircleShapeTemplate(value):
       return value
     }
   }
@@ -20,6 +23,8 @@ public enum DivShapeTemplate: TemplateValue {
     switch self {
     case let .divRoundedRectangleShapeTemplate(value):
       return .divRoundedRectangleShapeTemplate(try value.resolveParent(templates: templates))
+    case let .divCircleShapeTemplate(value):
+      return .divCircleShapeTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -41,6 +46,14 @@ public enum DivShapeTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divCircleShapeTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divCircleShape(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divCircleShape(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     }
   }
 
@@ -58,6 +71,14 @@ public enum DivShapeTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivCircleShape.type:
+      let result = DivCircleShapeTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divCircleShape(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divCircleShape(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     default:
       return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
@@ -71,6 +92,8 @@ extension DivShapeTemplate: TemplateDeserializable {
     switch blockType {
     case DivRoundedRectangleShapeTemplate.type:
       self = .divRoundedRectangleShapeTemplate(try DivRoundedRectangleShapeTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivCircleShapeTemplate.type:
+      self = .divCircleShapeTemplate(try DivCircleShapeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-shape_template", representation: dictionary)
     }

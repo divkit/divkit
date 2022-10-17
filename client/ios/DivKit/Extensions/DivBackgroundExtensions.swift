@@ -43,6 +43,14 @@ extension DivBackground {
       return .image(image)
     case let .divSolidBackground(solidBackground):
       return .solidColor(solidBackground.resolveColor(expressionResolver) ?? .black)
+    case let .divNinePatchBackground(ninePatchBackground):
+      let image = NinePatchImage(
+        imageHolder: imageHolderFactory.make(
+          ninePatchBackground.resolveImageUrl(expressionResolver)
+        ),
+        insets: ninePatchBackground.insets.makeEdgeInsets(with: expressionResolver)
+      )
+      return .ninePatchImage(image)
     }
   }
 }

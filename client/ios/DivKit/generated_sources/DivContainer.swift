@@ -19,6 +19,46 @@ public final class DivContainer: DivBase {
     case overlap = "overlap"
   }
 
+  public final class Separator {
+    public let showAtEnd: Expression<Bool> // default value: false
+    public let showAtStart: Expression<Bool> // default value: false
+    public let showBetween: Expression<Bool> // default value: true
+    public let style: DivDrawable
+
+    public func resolveShowAtEnd(_ resolver: ExpressionResolver) -> Bool {
+      resolver.resolveNumericValue(expression: showAtEnd) ?? false
+    }
+
+    public func resolveShowAtStart(_ resolver: ExpressionResolver) -> Bool {
+      resolver.resolveNumericValue(expression: showAtStart) ?? false
+    }
+
+    public func resolveShowBetween(_ resolver: ExpressionResolver) -> Bool {
+      resolver.resolveNumericValue(expression: showBetween) ?? true
+    }
+
+    static let showAtEndValidator: AnyValueValidator<Bool> =
+      makeNoOpValueValidator()
+
+    static let showAtStartValidator: AnyValueValidator<Bool> =
+      makeNoOpValueValidator()
+
+    static let showBetweenValidator: AnyValueValidator<Bool> =
+      makeNoOpValueValidator()
+
+    init(
+      showAtEnd: Expression<Bool>? = nil,
+      showAtStart: Expression<Bool>? = nil,
+      showBetween: Expression<Bool>? = nil,
+      style: DivDrawable
+    ) {
+      self.showAtEnd = showAtEnd ?? .value(false)
+      self.showAtStart = showAtStart ?? .value(false)
+      self.showBetween = showBetween ?? .value(true)
+      self.style = style
+    }
+  }
+
   public static let type: String = "container"
   public let accessibility: DivAccessibility
   public let action: DivAction?
@@ -39,12 +79,14 @@ public final class DivContainer: DivBase {
   public let id: String? // at least 1 char
   public let items: [Div] // at least 1 elements
   public let layoutMode: Expression<LayoutMode> // default value: no_wrap
+  public let lineSeparator: Separator?
   public let longtapActions: [DivAction]? // at least 1 elements
   public let margins: DivEdgeInsets
   public let orientation: Expression<Orientation> // default value: vertical
   public let paddings: DivEdgeInsets
   public let rowSpan: Expression<Int>? // constraint: number >= 0
   public let selectedActions: [DivAction]? // at least 1 elements
+  public let separator: Separator?
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
   public let transitionChange: DivChangeTransition?
@@ -153,6 +195,9 @@ public final class DivContainer: DivBase {
   static let layoutModeValidator: AnyValueValidator<DivContainer.LayoutMode> =
     makeNoOpValueValidator()
 
+  static let lineSeparatorValidator: AnyValueValidator<DivContainer.Separator> =
+    makeNoOpValueValidator()
+
   static let longtapActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
 
@@ -170,6 +215,9 @@ public final class DivContainer: DivBase {
 
   static let selectedActionsValidator: AnyArrayValueValidator<DivAction> =
     makeArrayValidator(minItems: 1)
+
+  static let separatorValidator: AnyValueValidator<DivContainer.Separator> =
+    makeNoOpValueValidator()
 
   static let tooltipsValidator: AnyArrayValueValidator<DivTooltip> =
     makeArrayValidator(minItems: 1)
@@ -221,12 +269,14 @@ public final class DivContainer: DivBase {
     id: String?,
     items: [Div],
     layoutMode: Expression<LayoutMode>?,
+    lineSeparator: Separator?,
     longtapActions: [DivAction]?,
     margins: DivEdgeInsets?,
     orientation: Expression<Orientation>?,
     paddings: DivEdgeInsets?,
     rowSpan: Expression<Int>?,
     selectedActions: [DivAction]?,
+    separator: Separator?,
     tooltips: [DivTooltip]?,
     transform: DivTransform?,
     transitionChange: DivChangeTransition?,
@@ -257,12 +307,14 @@ public final class DivContainer: DivBase {
     self.id = id
     self.items = items
     self.layoutMode = layoutMode ?? .value(.noWrap)
+    self.lineSeparator = lineSeparator
     self.longtapActions = longtapActions
     self.margins = margins ?? DivEdgeInsets()
     self.orientation = orientation ?? .value(.vertical)
     self.paddings = paddings ?? DivEdgeInsets()
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
+    self.separator = separator
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()
     self.transitionChange = transitionChange
@@ -323,41 +375,47 @@ extension DivContainer: Equatable {
     }
     guard
       lhs.layoutMode == rhs.layoutMode,
-      lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins
+      lhs.lineSeparator == rhs.lineSeparator,
+      lhs.longtapActions == rhs.longtapActions
     else {
       return false
     }
     guard
+      lhs.margins == rhs.margins,
       lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.paddings == rhs.paddings
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.selectedActions == rhs.selectedActions,
+      lhs.separator == rhs.separator
+    else {
+      return false
+    }
+    guard
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.transform == rhs.transform,
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
-      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionOut == rhs.transitionOut,
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
-      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibilityAction == rhs.visibilityAction,
+      lhs.visibilityActions == rhs.visibilityActions
     else {
       return false
     }
     guard
-      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -390,12 +448,14 @@ extension DivContainer: Serializable {
     result["id"] = id
     result["items"] = items.map { $0.toDictionary() }
     result["layout_mode"] = layoutMode.toValidSerializationValue()
+    result["line_separator"] = lineSeparator?.toDictionary()
     result["longtap_actions"] = longtapActions?.map { $0.toDictionary() }
     result["margins"] = margins.toDictionary()
     result["orientation"] = orientation.toValidSerializationValue()
     result["paddings"] = paddings.toDictionary()
     result["row_span"] = rowSpan?.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
+    result["separator"] = separator?.toDictionary()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()
@@ -406,6 +466,37 @@ extension DivContainer: Serializable {
     result["visibility_action"] = visibilityAction?.toDictionary()
     result["visibility_actions"] = visibilityActions?.map { $0.toDictionary() }
     result["width"] = width.toDictionary()
+    return result
+  }
+}
+
+#if DEBUG
+extension DivContainer.Separator: Equatable {
+  public static func ==(lhs: DivContainer.Separator, rhs: DivContainer.Separator) -> Bool {
+    guard
+      lhs.showAtEnd == rhs.showAtEnd,
+      lhs.showAtStart == rhs.showAtStart,
+      lhs.showBetween == rhs.showBetween
+    else {
+      return false
+    }
+    guard
+      lhs.style == rhs.style
+    else {
+      return false
+    }
+    return true
+  }
+}
+#endif
+
+extension DivContainer.Separator: Serializable {
+  public func toDictionary() -> [String: ValidSerializationValue] {
+    var result: [String: ValidSerializationValue] = [:]
+    result["show_at_end"] = showAtEnd.toValidSerializationValue()
+    result["show_at_start"] = showAtStart.toValidSerializationValue()
+    result["show_between"] = showBetween.toValidSerializationValue()
+    result["style"] = style.toDictionary()
     return result
   }
 }

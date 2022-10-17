@@ -35,6 +35,7 @@ public final class DivGallery: DivBase {
   public let columnCount: Expression<Int>? // constraint: number > 0
   public let columnSpan: Expression<Int>? // constraint: number >= 0
   public let crossContentAlignment: Expression<CrossContentAlignment> // default value: start
+  public let crossSpacing: Expression<Int>? // constraint: number >= 0
   public let defaultItem: Expression<Int> // constraint: number >= 0; default value: 0
   public let extensions: [DivExtension]? // at least 1 elements
   public let focus: DivFocus?
@@ -82,6 +83,10 @@ public final class DivGallery: DivBase {
 
   public func resolveCrossContentAlignment(_ resolver: ExpressionResolver) -> CrossContentAlignment {
     resolver.resolveStringBasedValue(expression: crossContentAlignment, initializer: CrossContentAlignment.init(rawValue:)) ?? CrossContentAlignment.start
+  }
+
+  public func resolveCrossSpacing(_ resolver: ExpressionResolver) -> Int? {
+    resolver.resolveNumericValue(expression: crossSpacing)
   }
 
   public func resolveDefaultItem(_ resolver: ExpressionResolver) -> Int {
@@ -138,6 +143,9 @@ public final class DivGallery: DivBase {
 
   static let crossContentAlignmentValidator: AnyValueValidator<DivGallery.CrossContentAlignment> =
     makeNoOpValueValidator()
+
+  static let crossSpacingValidator: AnyValueValidator<Int> =
+    makeValueValidator(valueValidator: { $0 >= 0 })
 
   static let defaultItemValidator: AnyValueValidator<Int> =
     makeValueValidator(valueValidator: { $0 >= 0 })
@@ -221,6 +229,7 @@ public final class DivGallery: DivBase {
     columnCount: Expression<Int>?,
     columnSpan: Expression<Int>?,
     crossContentAlignment: Expression<CrossContentAlignment>?,
+    crossSpacing: Expression<Int>?,
     defaultItem: Expression<Int>?,
     extensions: [DivExtension]?,
     focus: DivFocus?,
@@ -255,6 +264,7 @@ public final class DivGallery: DivBase {
     self.columnCount = columnCount
     self.columnSpan = columnSpan
     self.crossContentAlignment = crossContentAlignment ?? .value(.start)
+    self.crossSpacing = crossSpacing
     self.defaultItem = defaultItem ?? .value(0)
     self.extensions = extensions
     self.focus = focus
@@ -307,57 +317,62 @@ extension DivGallery: Equatable {
       return false
     }
     guard
+      lhs.crossSpacing == rhs.crossSpacing,
       lhs.defaultItem == rhs.defaultItem,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.height == rhs.height,
-      lhs.id == rhs.id,
-      lhs.itemSpacing == rhs.itemSpacing
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.itemSpacing == rhs.itemSpacing,
       lhs.items == rhs.items,
-      lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.orientation == rhs.orientation,
       lhs.paddings == rhs.paddings,
-      lhs.restrictParentScroll == rhs.restrictParentScroll,
-      lhs.rowSpan == rhs.rowSpan
+      lhs.restrictParentScroll == rhs.restrictParentScroll
     else {
       return false
     }
     guard
+      lhs.rowSpan == rhs.rowSpan,
       lhs.scrollMode == rhs.scrollMode,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.tooltips == rhs.tooltips
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -380,6 +395,7 @@ extension DivGallery: Serializable {
     result["column_count"] = columnCount?.toValidSerializationValue()
     result["column_span"] = columnSpan?.toValidSerializationValue()
     result["cross_content_alignment"] = crossContentAlignment.toValidSerializationValue()
+    result["cross_spacing"] = crossSpacing?.toValidSerializationValue()
     result["default_item"] = defaultItem.toValidSerializationValue()
     result["extensions"] = extensions?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()

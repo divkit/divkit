@@ -90,6 +90,9 @@ extension BackgroundView {
 
     case .image:
       view = RemoteImageViewContainer(contentView: RemoteImageView())
+      
+    case .ninePatchImage:
+      view = RemoteImageViewContainer(contentView: NinePatchImageView())
 
     case let .gradient(type):
       switch type {
@@ -191,6 +194,13 @@ extension BackgroundView {
         renderingDelegate: renderingDelegate
       )
       viewWithContentInsets.contentInsets = contentInsets
+    case let .ninePatchImage(image):
+      let imageViewContainer = innerView as! RemoteImageViewContainer
+      let imageView = imageViewContainer.contentView as! NinePatchImageView
+      imageView.capInsets = image.insets
+      if imageViewContainer.imageHolder != image.imageHolder {
+        imageViewContainer.imageHolder = image.imageHolder
+      }
     }
   }
 
@@ -200,7 +210,8 @@ extension BackgroundView {
     case (.solidColor, .solidColor),
          (.tiledImage, .tiledImage),
          (.image, .image),
-         (.transparentAction, .transparentAction):
+         (.transparentAction, .transparentAction),
+         (.ninePatchImage, .ninePatchImage):
       return true
 
     case let (.gradient(type1), .gradient(type2)):
@@ -239,7 +250,8 @@ extension BackgroundView {
          (.transparentAction, _),
          (.gradient, _),
          (.composite, _),
-         (.withInsets, _):
+         (.withInsets, _),
+      (.ninePatchImage, _):
       return false
     }
   }
@@ -253,7 +265,8 @@ extension Background {
     case .solidColor,
          .tiledImage,
          .image,
-         .gradient:
+         .gradient,
+         .ninePatchImage:
       return false
     case .transparentAction:
       return true

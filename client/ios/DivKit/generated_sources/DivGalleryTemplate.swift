@@ -23,6 +23,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
   public let columnCount: Field<Expression<Int>>? // constraint: number > 0
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let crossContentAlignment: Field<Expression<CrossContentAlignment>>? // default value: start
+  public let crossSpacing: Field<Expression<Int>>? // constraint: number >= 0
   public let defaultItem: Field<Expression<Int>>? // constraint: number >= 0; default value: 0
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
@@ -64,6 +65,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
         columnCount: try dictionary.getOptionalExpressionField("column_count"),
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
         crossContentAlignment: try dictionary.getOptionalExpressionField("cross_content_alignment"),
+        crossSpacing: try dictionary.getOptionalExpressionField("cross_spacing"),
         defaultItem: try dictionary.getOptionalExpressionField("default_item"),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
@@ -105,6 +107,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
     columnCount: Field<Expression<Int>>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
     crossContentAlignment: Field<Expression<CrossContentAlignment>>? = nil,
+    crossSpacing: Field<Expression<Int>>? = nil,
     defaultItem: Field<Expression<Int>>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
@@ -140,6 +143,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
     self.columnCount = columnCount
     self.columnSpan = columnSpan
     self.crossContentAlignment = crossContentAlignment
+    self.crossSpacing = crossSpacing
     self.defaultItem = defaultItem
     self.extensions = extensions
     self.focus = focus
@@ -176,6 +180,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
     let columnCountValue = parent?.columnCount?.resolveOptionalValue(context: context, validator: ResolvedValue.columnCountValidator) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
     let crossContentAlignmentValue = parent?.crossContentAlignment?.resolveOptionalValue(context: context, validator: ResolvedValue.crossContentAlignmentValidator) ?? .noValue
+    let crossSpacingValue = parent?.crossSpacing?.resolveOptionalValue(context: context, validator: ResolvedValue.crossSpacingValidator) ?? .noValue
     let defaultItemValue = parent?.defaultItem?.resolveOptionalValue(context: context, validator: ResolvedValue.defaultItemValidator) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
@@ -210,6 +215,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
       columnCountValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "column_count", level: .warning)) },
       columnSpanValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "column_span", level: .warning)) },
       crossContentAlignmentValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "cross_content_alignment", level: .warning)) },
+      crossSpacingValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "cross_spacing", level: .warning)) },
       defaultItemValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "default_item", level: .warning)) },
       extensionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "extensions", level: .warning)) },
       focusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "focus", level: .warning)) },
@@ -253,6 +259,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
       columnCount: columnCountValue.value,
       columnSpan: columnSpanValue.value,
       crossContentAlignment: crossContentAlignmentValue.value,
+      crossSpacing: crossSpacingValue.value,
       defaultItem: defaultItemValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -294,6 +301,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
     var columnCountValue: DeserializationResult<Expression<Int>> = parent?.columnCount?.value() ?? .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
     var crossContentAlignmentValue: DeserializationResult<Expression<DivGallery.CrossContentAlignment>> = parent?.crossContentAlignment?.value() ?? .noValue
+    var crossSpacingValue: DeserializationResult<Expression<Int>> = parent?.crossSpacing?.value() ?? .noValue
     var defaultItemValue: DeserializationResult<Expression<Int>> = parent?.defaultItem?.value() ?? .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
@@ -338,6 +346,8 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
         columnSpanValue = deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator).merged(with: columnSpanValue)
       case "cross_content_alignment":
         crossContentAlignmentValue = deserialize(__dictValue, validator: ResolvedValue.crossContentAlignmentValidator).merged(with: crossContentAlignmentValue)
+      case "cross_spacing":
+        crossSpacingValue = deserialize(__dictValue, validator: ResolvedValue.crossSpacingValidator).merged(with: crossSpacingValue)
       case "default_item":
         defaultItemValue = deserialize(__dictValue, validator: ResolvedValue.defaultItemValidator).merged(with: defaultItemValue)
       case "extensions":
@@ -404,6 +414,8 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
         columnSpanValue = columnSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.columnSpanValidator))
       case parent?.crossContentAlignment?.link:
         crossContentAlignmentValue = crossContentAlignmentValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.crossContentAlignmentValidator))
+      case parent?.crossSpacing?.link:
+        crossSpacingValue = crossSpacingValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.crossSpacingValidator))
       case parent?.defaultItem?.link:
         defaultItemValue = defaultItemValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.defaultItemValidator))
       case parent?.extensions?.link:
@@ -485,6 +497,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
       columnCountValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "column_count", level: .warning)) },
       columnSpanValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "column_span", level: .warning)) },
       crossContentAlignmentValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "cross_content_alignment", level: .warning)) },
+      crossSpacingValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "cross_spacing", level: .warning)) },
       defaultItemValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "default_item", level: .warning)) },
       extensionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "extensions", level: .warning)) },
       focusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "focus", level: .warning)) },
@@ -528,6 +541,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
       columnCount: columnCountValue.value,
       columnSpan: columnSpanValue.value,
       crossContentAlignment: crossContentAlignmentValue.value,
+      crossSpacing: crossSpacingValue.value,
       defaultItem: defaultItemValue.value,
       extensions: extensionsValue.value,
       focus: focusValue.value,
@@ -574,6 +588,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
       columnCount: columnCount ?? mergedParent.columnCount,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
       crossContentAlignment: crossContentAlignment ?? mergedParent.crossContentAlignment,
+      crossSpacing: crossSpacing ?? mergedParent.crossSpacing,
       defaultItem: defaultItem ?? mergedParent.defaultItem,
       extensions: extensions ?? mergedParent.extensions,
       focus: focus ?? mergedParent.focus,
@@ -615,6 +630,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
       columnCount: merged.columnCount,
       columnSpan: merged.columnSpan,
       crossContentAlignment: merged.crossContentAlignment,
+      crossSpacing: merged.crossSpacing,
       defaultItem: merged.defaultItem,
       extensions: merged.extensions?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),

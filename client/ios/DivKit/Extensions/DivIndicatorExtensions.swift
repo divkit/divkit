@@ -17,6 +17,10 @@ extension DivIndicator: DivBlockModeling {
   }
 
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
+    guard let rectangle = shape.rectangle else {
+      DivKitLogger.error("circle shape unsupported.")
+      return EmptyBlock()
+    }
     let pagerPath = pagerId.map {
       PagerPath(
         cardId: context.cardId.rawValue,
@@ -29,8 +33,8 @@ extension DivIndicator: DivBlockModeling {
     let expressionResolver = context.expressionResolver
     let pageSize =
       CGSize(
-        width: shape.rectangle.itemWidth.resolveValue(expressionResolver) ?? 0,
-        height: shape.rectangle.itemHeight.resolveValue(expressionResolver) ?? 0
+        width: rectangle.itemWidth.resolveValue(expressionResolver) ?? 0,
+        height: rectangle.itemHeight.resolveValue(expressionResolver) ?? 0
       )
     let configuration =
       PageIndicatorConfiguration(
@@ -43,7 +47,7 @@ extension DivIndicator: DivBlockModeling {
         ),
         pageSize: pageSize,
         pageCornerRadius: CGFloat(
-          shape.rectangle.cornerRadius.resolveValue(expressionResolver) ?? 0
+          rectangle.cornerRadius.resolveValue(expressionResolver) ?? 0
         ),
         animation: resolveAnimation(expressionResolver).asBlockAnimation
       )
@@ -60,10 +64,12 @@ extension DivIndicator: DivBlockModeling {
 }
 
 extension DivShape {
-  fileprivate var rectangle: DivRoundedRectangleShape {
+  fileprivate var rectangle: DivRoundedRectangleShape? {
     switch self {
     case let .divRoundedRectangleShape(rectangle):
       return rectangle
+    case .divCircleShape:
+      return nil
     }
   }
 }

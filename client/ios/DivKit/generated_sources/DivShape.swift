@@ -8,10 +8,13 @@ import TemplatesSupport
 @frozen
 public enum DivShape {
   case divRoundedRectangleShape(DivRoundedRectangleShape)
+  case divCircleShape(DivCircleShape)
 
   public var value: Serializable {
     switch self {
     case let .divRoundedRectangleShape(value):
+      return value
+    case let .divCircleShape(value):
       return value
     }
   }
@@ -23,6 +26,10 @@ extension DivShape: Equatable {
     switch (lhs, rhs) {
     case let (.divRoundedRectangleShape(l), .divRoundedRectangleShape(r)):
       return l == r
+    case let (.divCircleShape(l), .divCircleShape(r)):
+      return l == r
+    default:
+      return false
     }
   }
 }

@@ -6,6 +6,136 @@ import Serialization
 import TemplatesSupport
 
 public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
+  public final class SeparatorTemplate: TemplateValue, TemplateDeserializable {
+    public let showAtEnd: Field<Expression<Bool>>? // default value: false
+    public let showAtStart: Field<Expression<Bool>>? // default value: false
+    public let showBetween: Field<Expression<Bool>>? // default value: true
+    public let style: Field<DivDrawableTemplate>?
+
+    public convenience init(dictionary: [String: Any], templateToType: TemplateToType) throws {
+      do {
+        self.init(
+          showAtEnd: try dictionary.getOptionalExpressionField("show_at_end"),
+          showAtStart: try dictionary.getOptionalExpressionField("show_at_start"),
+          showBetween: try dictionary.getOptionalExpressionField("show_between"),
+          style: try dictionary.getOptionalField("style", templateToType: templateToType)
+        )
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "separator_template." + field, representation: representation)
+      }
+    }
+
+    init(
+      showAtEnd: Field<Expression<Bool>>? = nil,
+      showAtStart: Field<Expression<Bool>>? = nil,
+      showBetween: Field<Expression<Bool>>? = nil,
+      style: Field<DivDrawableTemplate>? = nil
+    ) {
+      self.showAtEnd = showAtEnd
+      self.showAtStart = showAtStart
+      self.showBetween = showBetween
+      self.style = style
+    }
+
+    private static func resolveOnlyLinks(context: Context, parent: SeparatorTemplate?) -> DeserializationResult<DivContainer.Separator> {
+      let showAtEndValue = parent?.showAtEnd?.resolveOptionalValue(context: context, validator: ResolvedValue.showAtEndValidator) ?? .noValue
+      let showAtStartValue = parent?.showAtStart?.resolveOptionalValue(context: context, validator: ResolvedValue.showAtStartValidator) ?? .noValue
+      let showBetweenValue = parent?.showBetween?.resolveOptionalValue(context: context, validator: ResolvedValue.showBetweenValidator) ?? .noValue
+      let styleValue = parent?.style?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
+      var errors = mergeErrors(
+        showAtEndValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "show_at_end", level: .warning)) },
+        showAtStartValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "show_at_start", level: .warning)) },
+        showBetweenValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "show_between", level: .warning)) },
+        styleValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "style", level: .error)) }
+      )
+      if case .noValue = styleValue {
+        errors.append(.right(FieldError(fieldName: "style", level: .error, error: .requiredFieldIsMissing)))
+      }
+      guard
+        let styleNonNil = styleValue.value
+      else {
+        return .failure(NonEmptyArray(errors)!)
+      }
+      let result = DivContainer.Separator(
+        showAtEnd: showAtEndValue.value,
+        showAtStart: showAtStartValue.value,
+        showBetween: showBetweenValue.value,
+        style: styleNonNil
+      )
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    }
+
+    public static func resolveValue(context: Context, parent: SeparatorTemplate?, useOnlyLinks: Bool) -> DeserializationResult<DivContainer.Separator> {
+      if useOnlyLinks {
+        return resolveOnlyLinks(context: context, parent: parent)
+      }
+      var showAtEndValue: DeserializationResult<Expression<Bool>> = parent?.showAtEnd?.value() ?? .noValue
+      var showAtStartValue: DeserializationResult<Expression<Bool>> = parent?.showAtStart?.value() ?? .noValue
+      var showBetweenValue: DeserializationResult<Expression<Bool>> = parent?.showBetween?.value() ?? .noValue
+      var styleValue: DeserializationResult<DivDrawable> = .noValue
+      context.templateData.forEach { key, __dictValue in
+        switch key {
+        case "show_at_end":
+          showAtEndValue = deserialize(__dictValue, validator: ResolvedValue.showAtEndValidator).merged(with: showAtEndValue)
+        case "show_at_start":
+          showAtStartValue = deserialize(__dictValue, validator: ResolvedValue.showAtStartValidator).merged(with: showAtStartValue)
+        case "show_between":
+          showBetweenValue = deserialize(__dictValue, validator: ResolvedValue.showBetweenValidator).merged(with: showBetweenValue)
+        case "style":
+          styleValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDrawableTemplate.self).merged(with: styleValue)
+        case parent?.showAtEnd?.link:
+          showAtEndValue = showAtEndValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.showAtEndValidator))
+        case parent?.showAtStart?.link:
+          showAtStartValue = showAtStartValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.showAtStartValidator))
+        case parent?.showBetween?.link:
+          showBetweenValue = showBetweenValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.showBetweenValidator))
+        case parent?.style?.link:
+          styleValue = styleValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, type: DivDrawableTemplate.self))
+        default: break
+        }
+      }
+      if let parent = parent {
+        styleValue = styleValue.merged(with: parent.style?.resolveValue(context: context, useOnlyLinks: true))
+      }
+      var errors = mergeErrors(
+        showAtEndValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "show_at_end", level: .warning)) },
+        showAtStartValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "show_at_start", level: .warning)) },
+        showBetweenValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "show_between", level: .warning)) },
+        styleValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "style", level: .error)) }
+      )
+      if case .noValue = styleValue {
+        errors.append(.right(FieldError(fieldName: "style", level: .error, error: .requiredFieldIsMissing)))
+      }
+      guard
+        let styleNonNil = styleValue.value
+      else {
+        return .failure(NonEmptyArray(errors)!)
+      }
+      let result = DivContainer.Separator(
+        showAtEnd: showAtEndValue.value,
+        showAtStart: showAtStartValue.value,
+        showBetween: showBetweenValue.value,
+        style: styleNonNil
+      )
+      return errors.isEmpty ? .success(result) : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
+    }
+
+    private func mergedWithParent(templates: Templates) throws -> SeparatorTemplate {
+      return self
+    }
+
+    public func resolveParent(templates: Templates) throws -> SeparatorTemplate {
+      let merged = try mergedWithParent(templates: templates)
+
+      return SeparatorTemplate(
+        showAtEnd: merged.showAtEnd,
+        showAtStart: merged.showAtStart,
+        showBetween: merged.showBetween,
+        style: try merged.style?.resolveParent(templates: templates)
+      )
+    }
+  }
+
   public typealias LayoutMode = DivContainer.LayoutMode
 
   public typealias Orientation = DivContainer.Orientation
@@ -31,12 +161,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
   public let id: Field<String>? // at least 1 char
   public let items: Field<[DivTemplate]>? // at least 1 elements
   public let layoutMode: Field<Expression<LayoutMode>>? // default value: no_wrap
+  public let lineSeparator: Field<SeparatorTemplate>?
   public let longtapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let orientation: Field<Expression<Orientation>>? // default value: vertical
   public let paddings: Field<DivEdgeInsetsTemplate>?
   public let rowSpan: Field<Expression<Int>>? // constraint: number >= 0
   public let selectedActions: Field<[DivActionTemplate]>? // at least 1 elements
+  public let separator: Field<SeparatorTemplate>?
   public let tooltips: Field<[DivTooltipTemplate]>? // at least 1 elements
   public let transform: Field<DivTransformTemplate>?
   public let transitionChange: Field<DivChangeTransitionTemplate>?
@@ -74,12 +206,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         id: try dictionary.getOptionalField("id"),
         items: try dictionary.getOptionalArray("items", templateToType: templateToType),
         layoutMode: try dictionary.getOptionalExpressionField("layout_mode"),
+        lineSeparator: try dictionary.getOptionalField("line_separator", templateToType: templateToType),
         longtapActions: try dictionary.getOptionalArray("longtap_actions", templateToType: templateToType),
         margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
         orientation: try dictionary.getOptionalExpressionField("orientation"),
         paddings: try dictionary.getOptionalField("paddings", templateToType: templateToType),
         rowSpan: try dictionary.getOptionalExpressionField("row_span"),
         selectedActions: try dictionary.getOptionalArray("selected_actions", templateToType: templateToType),
+        separator: try dictionary.getOptionalField("separator", templateToType: templateToType),
         tooltips: try dictionary.getOptionalArray("tooltips", templateToType: templateToType),
         transform: try dictionary.getOptionalField("transform", templateToType: templateToType),
         transitionChange: try dictionary.getOptionalField("transition_change", templateToType: templateToType),
@@ -117,12 +251,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     id: Field<String>? = nil,
     items: Field<[DivTemplate]>? = nil,
     layoutMode: Field<Expression<LayoutMode>>? = nil,
+    lineSeparator: Field<SeparatorTemplate>? = nil,
     longtapActions: Field<[DivActionTemplate]>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     orientation: Field<Expression<Orientation>>? = nil,
     paddings: Field<DivEdgeInsetsTemplate>? = nil,
     rowSpan: Field<Expression<Int>>? = nil,
     selectedActions: Field<[DivActionTemplate]>? = nil,
+    separator: Field<SeparatorTemplate>? = nil,
     tooltips: Field<[DivTooltipTemplate]>? = nil,
     transform: Field<DivTransformTemplate>? = nil,
     transitionChange: Field<DivChangeTransitionTemplate>? = nil,
@@ -154,12 +290,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     self.id = id
     self.items = items
     self.layoutMode = layoutMode
+    self.lineSeparator = lineSeparator
     self.longtapActions = longtapActions
     self.margins = margins
     self.orientation = orientation
     self.paddings = paddings
     self.rowSpan = rowSpan
     self.selectedActions = selectedActions
+    self.separator = separator
     self.tooltips = tooltips
     self.transform = transform
     self.transitionChange = transitionChange
@@ -192,12 +330,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     let idValue = parent?.id?.resolveOptionalValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
     let layoutModeValue = parent?.layoutMode?.resolveOptionalValue(context: context, validator: ResolvedValue.layoutModeValidator) ?? .noValue
+    let lineSeparatorValue = parent?.lineSeparator?.resolveOptionalValue(context: context, validator: ResolvedValue.lineSeparatorValidator, useOnlyLinks: true) ?? .noValue
     let longtapActionsValue = parent?.longtapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.longtapActionsValidator, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true) ?? .noValue
     let orientationValue = parent?.orientation?.resolveOptionalValue(context: context, validator: ResolvedValue.orientationValidator) ?? .noValue
     let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
     let rowSpanValue = parent?.rowSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.rowSpanValidator) ?? .noValue
     let selectedActionsValue = parent?.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true) ?? .noValue
+    let separatorValue = parent?.separator?.resolveOptionalValue(context: context, validator: ResolvedValue.separatorValidator, useOnlyLinks: true) ?? .noValue
     let tooltipsValue = parent?.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true) ?? .noValue
     let transformValue = parent?.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true) ?? .noValue
     let transitionChangeValue = parent?.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true) ?? .noValue
@@ -228,12 +368,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       idValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "id", level: .warning)) },
       itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .error)) },
       layoutModeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "layout_mode", level: .warning)) },
+      lineSeparatorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "line_separator", level: .warning)) },
       longtapActionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "longtap_actions", level: .warning)) },
       marginsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "margins", level: .warning)) },
       orientationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "orientation", level: .warning)) },
       paddingsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "paddings", level: .warning)) },
       rowSpanValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "row_span", level: .warning)) },
       selectedActionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "selected_actions", level: .warning)) },
+      separatorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "separator", level: .warning)) },
       tooltipsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "tooltips", level: .warning)) },
       transformValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transform", level: .warning)) },
       transitionChangeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transition_change", level: .warning)) },
@@ -273,12 +415,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       id: idValue.value,
       items: itemsNonNil,
       layoutMode: layoutModeValue.value,
+      lineSeparator: lineSeparatorValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
+      separator: separatorValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
       transitionChange: transitionChangeValue.value,
@@ -316,12 +460,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
     var itemsValue: DeserializationResult<[Div]> = .noValue
     var layoutModeValue: DeserializationResult<Expression<DivContainer.LayoutMode>> = parent?.layoutMode?.value() ?? .noValue
+    var lineSeparatorValue: DeserializationResult<DivContainer.Separator> = .noValue
     var longtapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var orientationValue: DeserializationResult<Expression<DivContainer.Orientation>> = parent?.orientation?.value() ?? .noValue
     var paddingsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var rowSpanValue: DeserializationResult<Expression<Int>> = parent?.rowSpan?.value() ?? .noValue
     var selectedActionsValue: DeserializationResult<[DivAction]> = .noValue
+    var separatorValue: DeserializationResult<DivContainer.Separator> = .noValue
     var tooltipsValue: DeserializationResult<[DivTooltip]> = .noValue
     var transformValue: DeserializationResult<DivTransform> = .noValue
     var transitionChangeValue: DeserializationResult<DivChangeTransition> = .noValue
@@ -372,6 +518,8 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         itemsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self).merged(with: itemsValue)
       case "layout_mode":
         layoutModeValue = deserialize(__dictValue, validator: ResolvedValue.layoutModeValidator).merged(with: layoutModeValue)
+      case "line_separator":
+        lineSeparatorValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.lineSeparatorValidator, type: DivContainerTemplate.SeparatorTemplate.self).merged(with: lineSeparatorValue)
       case "longtap_actions":
         longtapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.longtapActionsValidator, type: DivActionTemplate.self).merged(with: longtapActionsValue)
       case "margins":
@@ -384,6 +532,8 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         rowSpanValue = deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator).merged(with: rowSpanValue)
       case "selected_actions":
         selectedActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self).merged(with: selectedActionsValue)
+      case "separator":
+        separatorValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.separatorValidator, type: DivContainerTemplate.SeparatorTemplate.self).merged(with: separatorValue)
       case "tooltips":
         tooltipsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self).merged(with: tooltipsValue)
       case "transform":
@@ -442,6 +592,8 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         itemsValue = itemsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsValidator, type: DivTemplate.self))
       case parent?.layoutMode?.link:
         layoutModeValue = layoutModeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.layoutModeValidator))
+      case parent?.lineSeparator?.link:
+        lineSeparatorValue = lineSeparatorValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.lineSeparatorValidator, type: DivContainerTemplate.SeparatorTemplate.self))
       case parent?.longtapActions?.link:
         longtapActionsValue = longtapActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.longtapActionsValidator, type: DivActionTemplate.self))
       case parent?.margins?.link:
@@ -454,6 +606,8 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         rowSpanValue = rowSpanValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.rowSpanValidator))
       case parent?.selectedActions?.link:
         selectedActionsValue = selectedActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.selectedActionsValidator, type: DivActionTemplate.self))
+      case parent?.separator?.link:
+        separatorValue = separatorValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.separatorValidator, type: DivContainerTemplate.SeparatorTemplate.self))
       case parent?.tooltips?.link:
         tooltipsValue = tooltipsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.tooltipsValidator, type: DivTooltipTemplate.self))
       case parent?.transform?.link:
@@ -489,10 +643,12 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
       itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
+      lineSeparatorValue = lineSeparatorValue.merged(with: parent.lineSeparator?.resolveOptionalValue(context: context, validator: ResolvedValue.lineSeparatorValidator, useOnlyLinks: true))
       longtapActionsValue = longtapActionsValue.merged(with: parent.longtapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.longtapActionsValidator, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
       selectedActionsValue = selectedActionsValue.merged(with: parent.selectedActions?.resolveOptionalValue(context: context, validator: ResolvedValue.selectedActionsValidator, useOnlyLinks: true))
+      separatorValue = separatorValue.merged(with: parent.separator?.resolveOptionalValue(context: context, validator: ResolvedValue.separatorValidator, useOnlyLinks: true))
       tooltipsValue = tooltipsValue.merged(with: parent.tooltips?.resolveOptionalValue(context: context, validator: ResolvedValue.tooltipsValidator, useOnlyLinks: true))
       transformValue = transformValue.merged(with: parent.transform?.resolveOptionalValue(context: context, validator: ResolvedValue.transformValidator, useOnlyLinks: true))
       transitionChangeValue = transitionChangeValue.merged(with: parent.transitionChange?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionChangeValidator, useOnlyLinks: true))
@@ -522,12 +678,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       idValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "id", level: .warning)) },
       itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .error)) },
       layoutModeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "layout_mode", level: .warning)) },
+      lineSeparatorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "line_separator", level: .warning)) },
       longtapActionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "longtap_actions", level: .warning)) },
       marginsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "margins", level: .warning)) },
       orientationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "orientation", level: .warning)) },
       paddingsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "paddings", level: .warning)) },
       rowSpanValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "row_span", level: .warning)) },
       selectedActionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "selected_actions", level: .warning)) },
+      separatorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "separator", level: .warning)) },
       tooltipsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "tooltips", level: .warning)) },
       transformValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transform", level: .warning)) },
       transitionChangeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transition_change", level: .warning)) },
@@ -567,12 +725,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       id: idValue.value,
       items: itemsNonNil,
       layoutMode: layoutModeValue.value,
+      lineSeparator: lineSeparatorValue.value,
       longtapActions: longtapActionsValue.value,
       margins: marginsValue.value,
       orientation: orientationValue.value,
       paddings: paddingsValue.value,
       rowSpan: rowSpanValue.value,
       selectedActions: selectedActionsValue.value,
+      separator: separatorValue.value,
       tooltips: tooltipsValue.value,
       transform: transformValue.value,
       transitionChange: transitionChangeValue.value,
@@ -615,12 +775,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       id: id ?? mergedParent.id,
       items: items ?? mergedParent.items,
       layoutMode: layoutMode ?? mergedParent.layoutMode,
+      lineSeparator: lineSeparator ?? mergedParent.lineSeparator,
       longtapActions: longtapActions ?? mergedParent.longtapActions,
       margins: margins ?? mergedParent.margins,
       orientation: orientation ?? mergedParent.orientation,
       paddings: paddings ?? mergedParent.paddings,
       rowSpan: rowSpan ?? mergedParent.rowSpan,
       selectedActions: selectedActions ?? mergedParent.selectedActions,
+      separator: separator ?? mergedParent.separator,
       tooltips: tooltips ?? mergedParent.tooltips,
       transform: transform ?? mergedParent.transform,
       transitionChange: transitionChange ?? mergedParent.transitionChange,
@@ -658,12 +820,14 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       id: merged.id,
       items: try merged.items?.resolveParent(templates: templates),
       layoutMode: merged.layoutMode,
+      lineSeparator: merged.lineSeparator?.tryResolveParent(templates: templates),
       longtapActions: merged.longtapActions?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       orientation: merged.orientation,
       paddings: merged.paddings?.tryResolveParent(templates: templates),
       rowSpan: merged.rowSpan,
       selectedActions: merged.selectedActions?.tryResolveParent(templates: templates),
+      separator: merged.separator?.tryResolveParent(templates: templates),
       tooltips: merged.tooltips?.tryResolveParent(templates: templates),
       transform: merged.transform?.tryResolveParent(templates: templates),
       transitionChange: merged.transitionChange?.tryResolveParent(templates: templates),

@@ -38,6 +38,7 @@ public final class DivImage: DivBase {
   public let scale: Expression<DivImageScale> // default value: fill
   public let selectedActions: [DivAction]? // at least 1 elements
   public let tintColor: Expression<Color>?
+  public let tintMode: Expression<DivBlendMode> // default value: source_in
   public let tooltips: [DivTooltip]? // at least 1 elements
   public let transform: DivTransform
   public let transitionChange: DivChangeTransition?
@@ -103,6 +104,10 @@ public final class DivImage: DivBase {
 
   public func resolveTintColor(_ resolver: ExpressionResolver) -> Color? {
     resolver.resolveStringBasedValue(expression: tintColor, initializer: Color.color(withHexString:))
+  }
+
+  public func resolveTintMode(_ resolver: ExpressionResolver) -> DivBlendMode {
+    resolver.resolveStringBasedValue(expression: tintMode, initializer: DivBlendMode.init(rawValue:)) ?? DivBlendMode.sourceIn
   }
 
   public func resolveVisibility(_ resolver: ExpressionResolver) -> DivVisibility {
@@ -199,6 +204,9 @@ public final class DivImage: DivBase {
   static let tintColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
 
+  static let tintModeValidator: AnyValueValidator<DivBlendMode> =
+    makeNoOpValueValidator()
+
   static let tooltipsValidator: AnyArrayValueValidator<DivTooltip> =
     makeArrayValidator(minItems: 1)
 
@@ -261,6 +269,7 @@ public final class DivImage: DivBase {
     scale: Expression<DivImageScale>? = nil,
     selectedActions: [DivAction]? = nil,
     tintColor: Expression<Color>? = nil,
+    tintMode: Expression<DivBlendMode>? = nil,
     tooltips: [DivTooltip]? = nil,
     transform: DivTransform? = nil,
     transitionChange: DivChangeTransition? = nil,
@@ -303,6 +312,7 @@ public final class DivImage: DivBase {
     self.scale = scale ?? .value(.fill)
     self.selectedActions = selectedActions
     self.tintColor = tintColor
+    self.tintMode = tintMode ?? .value(.sourceIn)
     self.tooltips = tooltips
     self.transform = transform ?? DivTransform()
     self.transitionChange = transitionChange
@@ -391,26 +401,27 @@ extension DivImage: Equatable {
     }
     guard
       lhs.tintColor == rhs.tintColor,
-      lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform
+      lhs.tintMode == rhs.tintMode,
+      lhs.tooltips == rhs.tooltips
     else {
       return false
     }
     guard
+      lhs.transform == rhs.transform,
       lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut
+      lhs.transitionIn == rhs.transitionIn
     else {
       return false
     }
     guard
+      lhs.transitionOut == rhs.transitionOut,
       lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction
+      lhs.visibility == rhs.visibility
     else {
       return false
     }
     guard
+      lhs.visibilityAction == rhs.visibilityAction,
       lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
@@ -456,6 +467,7 @@ extension DivImage: Serializable {
     result["scale"] = scale.toValidSerializationValue()
     result["selected_actions"] = selectedActions?.map { $0.toDictionary() }
     result["tint_color"] = tintColor?.toValidSerializationValue()
+    result["tint_mode"] = tintMode.toValidSerializationValue()
     result["tooltips"] = tooltips?.map { $0.toDictionary() }
     result["transform"] = transform.toDictionary()
     result["transition_change"] = transitionChange?.toDictionary()

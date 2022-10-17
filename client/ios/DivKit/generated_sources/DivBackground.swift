@@ -11,6 +11,7 @@ public enum DivBackground {
   case divRadialGradient(DivRadialGradient)
   case divImageBackground(DivImageBackground)
   case divSolidBackground(DivSolidBackground)
+  case divNinePatchBackground(DivNinePatchBackground)
 
   public var value: Serializable {
     switch self {
@@ -21,6 +22,8 @@ public enum DivBackground {
     case let .divImageBackground(value):
       return value
     case let .divSolidBackground(value):
+      return value
+    case let .divNinePatchBackground(value):
       return value
     }
   }
@@ -37,6 +40,8 @@ extension DivBackground: Equatable {
     case let (.divImageBackground(l), .divImageBackground(r)):
       return l == r
     case let (.divSolidBackground(l), .divSolidBackground(r)):
+      return l == r
+    case let (.divNinePatchBackground(l), .divNinePatchBackground(r)):
       return l == r
     default:
       return false

@@ -11,6 +11,7 @@ public enum DivBackgroundTemplate: TemplateValue {
   case divRadialGradientTemplate(DivRadialGradientTemplate)
   case divImageBackgroundTemplate(DivImageBackgroundTemplate)
   case divSolidBackgroundTemplate(DivSolidBackgroundTemplate)
+  case divNinePatchBackgroundTemplate(DivNinePatchBackgroundTemplate)
 
   public var value: Any {
     switch self {
@@ -21,6 +22,8 @@ public enum DivBackgroundTemplate: TemplateValue {
     case let .divImageBackgroundTemplate(value):
       return value
     case let .divSolidBackgroundTemplate(value):
+      return value
+    case let .divNinePatchBackgroundTemplate(value):
       return value
     }
   }
@@ -35,6 +38,8 @@ public enum DivBackgroundTemplate: TemplateValue {
       return .divImageBackgroundTemplate(try value.resolveParent(templates: templates))
     case let .divSolidBackgroundTemplate(value):
       return .divSolidBackgroundTemplate(try value.resolveParent(templates: templates))
+    case let .divNinePatchBackgroundTemplate(value):
+      return .divNinePatchBackgroundTemplate(try value.resolveParent(templates: templates))
     }
   }
 
@@ -80,6 +85,14 @@ public enum DivBackgroundTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case let .divNinePatchBackgroundTemplate(value):
+      let result = value.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divNinePatchBackground(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divNinePatchBackground(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     }
   }
 
@@ -121,6 +134,14 @@ public enum DivBackgroundTemplate: TemplateValue {
       case let .failure(errors): return .failure(errors)
       case .noValue: return .noValue
       }
+    case DivNinePatchBackground.type:
+      let result = DivNinePatchBackgroundTemplate.resolveValue(context: context, useOnlyLinks: useOnlyLinks)
+      switch result {
+      case let .success(value): return .success(.divNinePatchBackground(value))
+      case let .partialSuccess(value, warnings): return .partialSuccess(.divNinePatchBackground(value), warnings: warnings)
+      case let .failure(errors): return .failure(errors)
+      case .noValue: return .noValue
+      }
     default:
       return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
     }
@@ -140,6 +161,8 @@ extension DivBackgroundTemplate: TemplateDeserializable {
       self = .divImageBackgroundTemplate(try DivImageBackgroundTemplate(dictionary: dictionary, templateToType: templateToType))
     case DivSolidBackgroundTemplate.type:
       self = .divSolidBackgroundTemplate(try DivSolidBackgroundTemplate(dictionary: dictionary, templateToType: templateToType))
+    case DivNinePatchBackgroundTemplate.type:
+      self = .divNinePatchBackgroundTemplate(try DivNinePatchBackgroundTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
       throw DeserializationError.invalidFieldRepresentation(field: "div-background_template", representation: dictionary)
     }
