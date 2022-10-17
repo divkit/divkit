@@ -1,9 +1,9 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import type { Platform, DivkitInstance } from '@yandex-int/divkit/typings/common';
+    import type { Platform, DivkitInstance } from '@divkitframework/divkit/typings/common';
     import { jsonStore } from '../data/jsonStore';
-    import { render } from '@yandex-int/divkit/client-devtool';
-    import '@yandex-int/divkit/dist/client.css';
+    import { render } from '@divkitframework/divkit/client-devtool';
+    import '@divkitframework/divkit/dist/client.css';
 
     export let platform: Platform = 'auto';
 

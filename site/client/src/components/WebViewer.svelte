@@ -1,9 +1,9 @@
 <script lang="ts">
     import { getContext, onDestroy, onMount } from 'svelte';
     import { get } from 'svelte/store';
-    import type { DivkitInstance } from '@yandex-int/divkit/typings/common';
-    import { render } from '@yandex-int/divkit/client-devtool';
-    import '@yandex-int/divkit/dist/client.css';
+    import type { DivkitInstance } from '@divkitframework/divkit/typings/common';
+    import { render } from '@divkitframework/divkit/client-devtool';
+    import '@divkitframework/divkit/dist/client.css';
     import ViewportSelect from './ViewportSelect.svelte';
     import PlatformSelect from './PlatformSelect.svelte';
     import {
