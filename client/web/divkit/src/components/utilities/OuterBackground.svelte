@@ -14,7 +14,6 @@
         style: Style;
     }[] = background.map(bg => {
         const stl: Style = {};
-        const res = getBackground([bg]);
         const obj: {
             image_url?: string;
             style: Style;
@@ -22,17 +21,24 @@
             style: stl
         };
 
-        if (bg.type === 'solid') {
-            stl['background-color'] = res.color;
-        }
-        if (bg.type === 'gradient') {
-            stl['background-image'] = res.image;
-        }
-        if (bg.type === 'image') {
-            stl.opacity = Number(bg.alpha);
-            obj.image_url = bg.image_url;
-            stl['object-fit'] = res.size;
-            stl['object-position'] = res.position;
+        if (bg.type === 'nine_patch_image' && bg.insets) {
+            stl['border-image'] = `url("${bg.image_url}") ${bg.insets.top || 0} ${bg.insets.right || 0} ${bg.insets.bottom || 0} ${bg.insets.left || 0} fill`;
+            stl['border-image-width'] = 'auto';
+        } else {
+            const res = getBackground([bg]);
+
+            if (bg.type === 'solid') {
+                stl['background-color'] = res.color;
+            }
+            if (bg.type === 'gradient') {
+                stl['background-image'] = res.image;
+            }
+            if (bg.type === 'image') {
+                stl.opacity = Number(bg.alpha);
+                obj.image_url = bg.image_url;
+                stl['object-fit'] = res.size;
+                stl['object-position'] = res.position;
+            }
         }
 
         return obj;

@@ -327,7 +327,9 @@
         backgroundStyle = {};
         hasImagesBg = false;
         if ($jsonBackground) {
-            hasImagesBg = $jsonBackground.some(it => it.type === 'image');
+            hasImagesBg = $jsonBackground
+                .some(it => it.type === 'image' || it.type === 'nine_patch_image');
+
             if (!hasImagesBg) {
                 const res = getBackground($jsonBackground);
                 backgroundStyle['background-color'] = res.color;

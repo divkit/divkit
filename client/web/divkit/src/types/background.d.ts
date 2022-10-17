@@ -1,11 +1,22 @@
 import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { ImageScale } from './imageScale';
 import type { FixedSize } from './sizes';
+import type { EdgeInsets } from './edgeInserts';
 
 export interface GradientBackground {
     type: 'gradient';
     colors: string[];
     angle?: number;
+}
+
+export interface ImageScaleSegment {
+    start: number;
+    end: number;
+}
+
+export interface ImageScaleSegments {
+    x_segments?: ImageScaleSegment[];
+    y_segments?: ImageScaleSegment[];
 }
 
 export interface ImageBackground {
@@ -16,6 +27,13 @@ export interface ImageBackground {
     scale?: ImageScale;
     alpha?: number;
     // preload_required
+    scale_segments?: ImageScaleSegments;
+}
+
+export interface NinePatchImageBackground {
+    type: 'nine_patch_image';
+    image_url: string;
+    insets: EdgeInsets;
 }
 
 export interface SolidBackground {
@@ -51,4 +69,5 @@ export interface RadialBackground {
     center_y?: RadialGradientCenter;
 }
 
-export type Background = GradientBackground | ImageBackground | SolidBackground | RadialBackground;
+export type Background = GradientBackground | ImageBackground |
+    SolidBackground | RadialBackground | NinePatchImageBackground;

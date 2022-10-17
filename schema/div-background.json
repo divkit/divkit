@@ -19,7 +19,9 @@
     {
       "$ref": "div-nine-patch-background.json",
       "$description": "translations.json#/div_background_nine_patch",
-      "platforms": []
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }
