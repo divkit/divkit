@@ -3,8 +3,9 @@ import type { VariableValue } from './variable';
 import { uniq } from '../utils/uniq';
 import { parse } from './expressions';
 import { evalExpression, VariablesMap } from './eval';
-import { containsUnsetVariables, dateToString, gatherVarsFromAst } from './utils';
+import { containsUnsetVariables, dateToString, gatherVarsFromAst, stringifyColor } from './utils';
 import { LogError, wrapError } from '../utils/wrapError';
+import { parseColor } from '../utils/correctColor';
 
 class ExpressionBinding {
     private readonly ast: Node;
@@ -40,6 +41,13 @@ class ExpressionBinding {
             }
             if (result.type === 'boolean') {
                 return Boolean(value);
+            }
+            if (result.type === 'color') {
+                const parsed = parseColor(String(value));
+                if (parsed) {
+                    return stringifyColor(parsed);
+                }
+                logError(wrapError(new Error('Expression execution error')));
             }
             return value;
         } catch (err) {

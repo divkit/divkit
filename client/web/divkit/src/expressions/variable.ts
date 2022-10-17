@@ -155,6 +155,7 @@ export class ColorVariable extends Variable<string, 'color'> {
             throw new Error('Incorrect variable value');
         }
 
+        // save input value, some expression tests rely on that
         return value;
     }
 
