@@ -26,10 +26,12 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
     }
     let defaultAlignment = resolveCrossContentAlignment(expressionResolver)
       .blockAlignment
+    let itemSpacing = resolveItemSpacing(expressionResolver)
     let model = try makeGalleryModel(
       context: galleryContext,
       direction: resolveOrientation(expressionResolver).direction,
-      spacing: CGFloat(resolveItemSpacing(expressionResolver)),
+      spacing: CGFloat(itemSpacing),
+      crossSpacing: CGFloat(resolveCrossSpacing(expressionResolver) ?? itemSpacing),
       defaultAlignment: defaultAlignment,
       resizableInsets: context.galleryResizableInsets,
       scrollMode: resolveScrollMode(expressionResolver).blockScrollMode,

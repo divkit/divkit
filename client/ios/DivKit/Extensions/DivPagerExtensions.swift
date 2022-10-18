@@ -34,6 +34,7 @@ extension DivPager: DivBlockModeling, DivGalleryProtocol {
       context: itemContext,
       direction: resolveOrientation(expressionResolver).direction,
       spacing: CGFloat(itemSpacing.resolveValue(expressionResolver) ?? 0),
+      crossSpacing: 0,
       defaultAlignment: .center,
       resizableInsets: context.galleryResizableInsets,
       scrollMode: .autoPaging

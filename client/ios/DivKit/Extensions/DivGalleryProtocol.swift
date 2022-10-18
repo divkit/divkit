@@ -13,6 +13,7 @@ extension DivGalleryProtocol {
     context: DivBlockModelingContext,
     direction: GalleryViewModel.Direction,
     spacing: CGFloat,
+    crossSpacing: CGFloat,
     defaultAlignment: Alignment,
     resizableInsets: InsetMode.Resizable?,
     scrollMode: GalleryViewModel.ScrollMode,
@@ -44,6 +45,7 @@ extension DivGalleryProtocol {
 
     let metrics = try makeMetrics(
       spacing: spacing,
+      crossSpacing: crossSpacing,
       childrenCount: children.count,
       resizableInsets: resizableInsets,
       direction: direction,
@@ -62,6 +64,7 @@ extension DivGalleryProtocol {
 
   private func makeMetrics(
     spacing: CGFloat,
+    crossSpacing: CGFloat,
     childrenCount: Int,
     resizableInsets: InsetMode.Resizable?,
     direction: GalleryViewModel.Direction,
@@ -89,7 +92,8 @@ extension DivGalleryProtocol {
     return GalleryViewMetrics(
       axialInsetMode: axialInsetOverride ?? .fixed(values: axialInsets),
       crossInsetMode: .fixed(values: crossInsets),
-      spacings: spacings
+      spacings: spacings,
+      crossSpacing: crossSpacing
     )
   }
 

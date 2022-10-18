@@ -389,18 +389,21 @@ extension GalleryViewMetrics {
   fileprivate static let resizableAxial = GalleryViewMetrics(
     axialInsetMode: .resizable(params: Blocks.resizableInsets),
     crossInsetMode: .fixed(values: Blocks.fixedInsets),
-    spacings: spacings
+    spacings: spacings,
+    crossSpacing: 0
   )
 
   fileprivate static let fixed = GalleryViewMetrics(
     axialInsetMode: .fixed(values: SideInsets(leading: Blocks.gapSize, trailing: Blocks.gapSize)),
     crossInsetMode: .fixed(values: Blocks.fixedInsets),
-    spacings: spacings
+    spacings: spacings,
+    crossSpacing: 0
   )
 
   fileprivate static let resizableCross = GalleryViewMetrics(
     axialInsetMode: .fixed(values: Blocks.fixedInsets),
     crossInsetMode: .resizable(params: Blocks.resizableInsets),
-    spacings: spacings
+    spacings: spacings,
+    crossSpacing: 0
   )
 }

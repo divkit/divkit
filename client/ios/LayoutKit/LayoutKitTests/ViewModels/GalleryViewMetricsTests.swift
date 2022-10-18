@@ -23,7 +23,8 @@ final class GalleryViewMetricsTests: XCTestCase {
     let insetValues = SideInsets(leading: 16, trailing: 14)
     let metrics = GalleryViewMetrics(
       axialInsetMode: .fixed(values: insetValues),
-      spacings: [2, 3, 1]
+      spacings: [2, 3, 1],
+      crossSpacing: 0
     )
 
     let arbitraryBoundsSize: CGFloat = 320
@@ -37,7 +38,8 @@ final class GalleryViewMetricsTests: XCTestCase {
     let maxViewportSize: CGFloat = 100
     let metrics = GalleryViewMetrics(
       axialInsetMode: .resizable(params: .init(minValue: 9, maxViewportSize: maxViewportSize)),
-      spacings: [2, 3, 1]
+      spacings: [2, 3, 1],
+      crossSpacing: 0
     )
 
     let boundsSize: CGFloat = 320
@@ -51,7 +53,8 @@ final class GalleryViewMetricsTests: XCTestCase {
     let minInsetValue: CGFloat = 9
     let metrics = GalleryViewMetrics(
       axialInsetMode: .resizable(params: .init(minValue: minInsetValue, maxViewportSize: 100)),
-      spacings: [2, 3, 1]
+      spacings: [2, 3, 1],
+      crossSpacing: 0
     )
 
     let boundsSize: CGFloat = 110

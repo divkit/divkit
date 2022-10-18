@@ -29,9 +29,6 @@ private let exclusions = [
 
   "div-container/container_with_wrap_content_constrained_child.json",
 
-  "div-gallery/horizontal-gallery-cross-spacing.json",
-  "div-gallery/vertical-gallery-cross-spacing.json",
-
   "div-container/match-parent-inside-wrap-content.json",
   "div-container/match-parent-lesser-than-paddings.json",
   "div-container/match-parent-with-big-content.json",
