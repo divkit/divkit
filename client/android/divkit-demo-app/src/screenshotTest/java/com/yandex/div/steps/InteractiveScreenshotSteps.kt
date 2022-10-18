@@ -48,6 +48,7 @@ internal class InteractiveScreenshotSteps {
             results.add(TestStep(
                     actions = actions,
                     expectedScreenshot = step.optString("expected_screenshot"),
+                    delay = step.optLong("delay"),
             ))
         }
 
@@ -68,6 +69,7 @@ internal class InteractiveScreenshotSteps {
                 handleStepActions(activity.divView, step)
             }
             Espresso.onIdle()
+            Thread.sleep(step.delay)
 
             instrumentation.runOnMainSync {
                 val screenshots = captureScreenshots(
@@ -146,6 +148,7 @@ internal class InteractiveScreenshotSteps {
 private class TestStep(
     val actions: List<DivAction>,
     val expectedScreenshot: String,
+    val delay: Long,
 )
 
 private class ScreenshotCategory(
