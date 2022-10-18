@@ -7,4 +7,9 @@ export interface RoundedRectangle {
     corner_radius?: FixedSize;
 }
 
-export type Shape = RoundedRectangle;
+export interface Circle {
+    type: 'circle';
+    radius?: FixedSize;
+}
+
+export type Shape = RoundedRectangle | Circle;

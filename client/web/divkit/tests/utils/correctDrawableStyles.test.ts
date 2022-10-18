@@ -9,27 +9,29 @@ describe('correctDrawableStyle', () => {
             background: '#000'
         };
 
-        expect(correctDrawableStyle(undefined, defaultVal)).toEqual(defaultVal);
+        const types = ['rounded_rectangle', 'circle'];
+
+        expect(correctDrawableStyle(undefined, types, defaultVal)).toEqual(defaultVal);
 
         // @ts-expect-error Incorrect data
-        expect(correctDrawableStyle({}, defaultVal)).toEqual(defaultVal);
+        expect(correctDrawableStyle({}, types, defaultVal)).toEqual(defaultVal);
 
         expect(correctDrawableStyle({
             // @ts-expect-error Incorrect data
             type: 'abcde'
-        }, defaultVal)).toEqual(defaultVal);
+        }, types, defaultVal)).toEqual(defaultVal);
 
         expect(correctDrawableStyle({
             type: 'shape_drawable',
             // @ts-expect-error Incorrect data
             color: 123
-        }, defaultVal)).toEqual(defaultVal);
+        }, types, defaultVal)).toEqual(defaultVal);
 
         // @ts-expect-error Incorrect data
         expect(correctDrawableStyle({
             type: 'shape_drawable',
             color: '#fc0',
-        }, defaultVal)).toEqual(defaultVal);
+        }, types, defaultVal)).toEqual(defaultVal);
 
         expect(correctDrawableStyle({
             type: 'shape_drawable',
@@ -37,7 +39,7 @@ describe('correctDrawableStyle', () => {
             shape: {
                 type: 'rounded_rectangle'
             }
-        }, defaultVal)).toEqual({
+        }, types, defaultVal)).toEqual({
             width: 10,
             height: 10,
             borderRadius: 5,
@@ -54,7 +56,7 @@ describe('correctDrawableStyle', () => {
                     value: 100
                 }
             }
-        }, defaultVal)).toEqual({
+        }, types, defaultVal)).toEqual({
             width: 100,
             height: 10,
             borderRadius: 5,
@@ -79,7 +81,7 @@ describe('correctDrawableStyle', () => {
                     value: 10
                 }
             }
-        }, defaultVal)).toEqual({
+        }, types, defaultVal)).toEqual({
             width: 100,
             height: 200,
             borderRadius: 10,
@@ -108,12 +110,49 @@ describe('correctDrawableStyle', () => {
                 width: 10,
                 color: '#f00'
             }
-        }, defaultVal)).toEqual({
+        }, types, defaultVal)).toEqual({
             width: 100,
             height: 200,
             borderRadius: 10,
             background: '#ffcc00',
             boxShadow: 'inset 0 0 0 1em #ff0000'
         });
+
+        expect(correctDrawableStyle({
+            type: 'shape_drawable',
+            color: '#fc0',
+            shape: {
+                type: 'circle',
+                radius: {
+                    type: 'fixed',
+                    value: 100
+                }
+            }
+        }, types, defaultVal)).toEqual({
+            width: 100,
+            height: 100,
+            borderRadius: 100,
+            background: '#ffcc00'
+        });
+
+        expect(correctDrawableStyle({
+            type: 'shape_drawable',
+            color: '#fc0',
+            shape: {
+                type: 'circle',
+                radius: {
+                    type: 'fixed',
+                    value: 100
+                }
+            }
+        }, [], defaultVal)).toEqual(defaultVal);
+
+        expect(correctDrawableStyle({
+            type: 'shape_drawable',
+            color: '#fc0',
+            shape: {
+                type: 'rounded_rectangle'
+            }
+        }, [], defaultVal)).toEqual(defaultVal);
     });
 });

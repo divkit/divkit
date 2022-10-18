@@ -14,21 +14,33 @@ export interface DrawableStyle extends Style {
 
 export function correctDrawableStyle(
     drawable: MaybeMissing<Drawable> | undefined,
+    availShapes: string[],
     defaultValue: DrawableStyle
 ): DrawableStyle {
-    if (!drawable || !drawable.shape || !drawable.color) {
+    if (
+        !drawable || !drawable.shape || !drawable.color ||
+        !drawable.shape.type || !availShapes.includes(drawable.shape.type)
+    ) {
         return defaultValue;
     }
 
     const bg = correctColor(drawable.color);
-    const width = Number(drawable.shape.item_width?.value || 10);
-    const height = Number(drawable.shape.item_height?.value || 10);
-    const radius = Number(drawable.shape.corner_radius?.value || 5);
+    let width: number;
+    let height: number;
+    let radius: number;
+    if (drawable.shape.type === 'rounded_rectangle') {
+        width = Number(drawable.shape.item_width?.value || 10);
+        height = Number(drawable.shape.item_height?.value || 10);
+        radius = Number(drawable.shape.corner_radius?.value || 5);
+    } else if (drawable.shape.type === 'circle') {
+        width = height = radius = Number(drawable.shape.radius?.value || 10);
+    } else {
+        return defaultValue;
+    }
 
     if (
         drawable.type === 'shape_drawable' &&
-        bg !== 'transparent' &&
-        drawable.shape.type === 'rounded_rectangle'
+        bg !== 'transparent'
     ) {
         const stl: Partial<DrawableStyle> = {};
 

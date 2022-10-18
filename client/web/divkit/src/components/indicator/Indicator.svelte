@@ -32,16 +32,21 @@
     $: {
         // TODO: think about what if $jsonShape was deleted
         if ($jsonShape) {
-            if ($jsonShape.item_width) {
-                shapeWidth = correctNonNegativeNumber($jsonShape.item_width.value, shapeWidth);
-            }
+            if ($jsonShape.type === 'rounded_rectangle') {
+                if ($jsonShape.item_width) {
+                    shapeWidth = correctNonNegativeNumber($jsonShape.item_width.value, shapeWidth);
+                }
 
-            if ($jsonShape.item_height) {
-                shapeHeight = correctNonNegativeNumber($jsonShape.item_height.value, shapeHeight);
-            }
+                if ($jsonShape.item_height) {
+                    shapeHeight = correctNonNegativeNumber($jsonShape.item_height.value, shapeHeight);
+                }
 
-            if ($jsonShape.corner_radius) {
-                shapeCornerRadius = correctNonNegativeNumber($jsonShape.corner_radius.value, shapeCornerRadius);
+                if ($jsonShape.corner_radius) {
+                    shapeCornerRadius = correctNonNegativeNumber($jsonShape.corner_radius.value, shapeCornerRadius);
+                }
+            } else if ($jsonShape.type === 'circle') {
+                shapeWidth = shapeHeight = shapeCornerRadius =
+                    correctNonNegativeNumber($jsonShape.radius?.value, shapeWidth);
             }
         }
     }

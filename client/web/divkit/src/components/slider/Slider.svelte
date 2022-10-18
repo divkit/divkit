@@ -32,6 +32,9 @@
         background: '#000'
     };
 
+    const THUMB_MARK_SHAPES = ['rounded_rectangle', 'circle'];
+    const TRACK_SHAPES = ['rounded_rectangle'];
+
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
     let tracksInner: HTMLElement;
@@ -73,25 +76,25 @@
     $: jsonThumbStyle = rootCtx.getDerivedFromVars(json.thumb_style);
     let thumbStyle = DEFAULT_DRAWABLE_STYLE;
     $: {
-        thumbStyle = correctDrawableStyle($jsonThumbStyle, thumbStyle);
+        thumbStyle = correctDrawableStyle($jsonThumbStyle, THUMB_MARK_SHAPES, thumbStyle);
     }
 
     $: jsonThumbSecondaryStyle = rootCtx.getDerivedFromVars(json.thumb_secondary_style);
     let thumbSecondaryStyle = thumbStyle;
     $: {
-        thumbSecondaryStyle = correctDrawableStyle($jsonThumbSecondaryStyle, thumbStyle);
+        thumbSecondaryStyle = correctDrawableStyle($jsonThumbSecondaryStyle, THUMB_MARK_SHAPES, thumbStyle);
     }
 
     $: jsonTrackInactiveStyle = rootCtx.getDerivedFromVars(json.track_inactive_style);
     let trackInactiveStyle = DEFAULT_DRAWABLE_STYLE;
     $: {
-        trackInactiveStyle = correctDrawableStyle($jsonTrackInactiveStyle, trackInactiveStyle);
+        trackInactiveStyle = correctDrawableStyle($jsonTrackInactiveStyle, TRACK_SHAPES, trackInactiveStyle);
     }
 
     $: jsonTrackActiveStyle = rootCtx.getDerivedFromVars(json.track_active_style);
     let trackActiveStyle = DEFAULT_DRAWABLE_STYLE;
     $: {
-        trackActiveStyle = correctDrawableStyle($jsonTrackActiveStyle, trackActiveStyle);
+        trackActiveStyle = correctDrawableStyle($jsonTrackActiveStyle, TRACK_SHAPES, trackActiveStyle);
     }
 
     function fillTicks(from: number, to: number, minValue: number, maxValue: number, inside: boolean): number[] {
@@ -117,7 +120,7 @@
     let markActiveTicks: number[];
     let markActiveStyle: DrawableStyle | null = null;
     $: {
-        let newStyle = correctDrawableStyle($jsonMarkActiveStyle, DEFAULT_DRAWABLE_STYLE);
+        let newStyle = correctDrawableStyle($jsonMarkActiveStyle, THUMB_MARK_SHAPES, DEFAULT_DRAWABLE_STYLE);
 
         if (newStyle !== DEFAULT_DRAWABLE_STYLE) {
             markActiveStyle = newStyle;
@@ -136,7 +139,7 @@
     let markInactiveTicks: number[];
     let markInactiveStyle: DrawableStyle | null = null;
     $: {
-        let newStyle = correctDrawableStyle($jsonMarkInactiveStyle, DEFAULT_DRAWABLE_STYLE);
+        let newStyle = correctDrawableStyle($jsonMarkInactiveStyle, THUMB_MARK_SHAPES, DEFAULT_DRAWABLE_STYLE);
 
         if (newStyle !== DEFAULT_DRAWABLE_STYLE) {
             markInactiveStyle = newStyle;

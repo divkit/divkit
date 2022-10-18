@@ -2,7 +2,7 @@ import { DivBaseData } from './base';
 import { FixedSize } from './sizes';
 import { Shape } from './shape';
 
-export type IndicatorAnimation = 'scale' | 'worm' | 'slider';
+// export type IndicatorAnimation = 'scale' | 'worm' | 'slider';
 
 export interface DivIndicatorData extends DivBaseData {
     type: 'indicator';
