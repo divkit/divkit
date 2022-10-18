@@ -3,6 +3,7 @@ import type { DivActionableData } from './actionable';
 import type { Dimension } from './sizes';
 import type { Stroke } from './border';
 import type { FontWeight } from './text';
+import type { Shape } from './shape';
 
 export interface Drawable {
     type: 'shape_drawable';
