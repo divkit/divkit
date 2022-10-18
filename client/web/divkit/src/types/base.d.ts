@@ -5,6 +5,7 @@ import type { Background } from './background';
 import type { EdgeInsets } from './edgeInserts';
 import type { VisibilityAction } from './visibilityAction';
 import type { Dimension } from './sizes';
+import type { Action } from '../../typings/common';
 
 export interface Accessibility {
     description?: string;
@@ -105,7 +106,7 @@ export interface DivBaseData {
     transition_change?: TransitionChange;
     transition_out?: AppearanceTransition;
     transition_triggers?: TransitionTrigger[];
-    // selected_actions;
+    selected_actions?: Action[];
     // focus;
     transform?: Transform;
 }

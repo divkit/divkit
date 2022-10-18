@@ -21,6 +21,7 @@ export interface RootCtxValue {
     genId(key: string): string;
     genClass(key: string): string;
     execAction(action: MaybeMissing<Action | VisibilityAction>): void;
+    execAnyActions(actions: MaybeMissing<Action[]> | undefined, processUrls?: boolean): Promise<void>;
     execCustomAction(action: (Action | VisibilityAction) & { url: string }): void;
     isRunning(type: Running): boolean;
     setRunning(type: Running, val: boolean): void;

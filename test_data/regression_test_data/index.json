@@ -892,6 +892,10 @@
         "Visibility_actions",
         "DivPager"
       ],
+      "platforms": [
+        "android",
+        "ios"
+      ],
       "steps": [
         "Check first item visibility logged",
         "Swipe to the next item",

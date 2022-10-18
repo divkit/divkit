@@ -61,6 +61,7 @@
     });
 
     let currentItem = 0;
+    let prevSelectedItem = 0;
 
     let hasLayoutModeError = false;
     $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
@@ -171,9 +172,23 @@
         }
     }
 
-    $: {
-        pagerDataUpdate(items.length, currentItem);
+    function runSelectedActions(currentItem: number): void {
+        // prevent initial actions execution
+        if (currentItem === prevSelectedItem) {
+            return;
+        }
+        prevSelectedItem = currentItem;
+
+        const actions = rootCtx.getJsonWithVars(items[currentItem].json?.selected_actions);
+        if (!actions?.length) {
+            return;
+        }
+        rootCtx.execAnyActions(actions);
     }
+
+    $: pagerDataUpdate(items.length, currentItem);
+
+    $: runSelectedActions(currentItem);
 
     function scrollToPagerItem(index: number, behavior: ScrollBehavior = 'smooth'): void {
         const isHorizontal = orientation === 'horizontal';

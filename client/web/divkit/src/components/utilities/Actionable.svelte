@@ -68,45 +68,6 @@
         hasJSAction = true;
     }
 
-    async function processClick(actions: MaybeMissing<Action[]> | undefined, processUrls?: boolean): Promise<void> {
-        if (!actions) {
-            return;
-        }
-
-        for (let i = 0; i < actions.length; ++i) {
-            let action = actions[i];
-
-            const actionUrl = action.url;
-            if (actionUrl) {
-                const schema = getUrlSchema(actionUrl);
-                if (schema) {
-                    if (isBuiltinSchema(schema)) {
-                        if (processUrls) {
-                            if (action.target === '_blank') {
-                                const win = window.open('', '_blank');
-                                if (win) {
-                                    win.opener = null;
-                                    win.location = actionUrl;
-                                }
-                            } else {
-                                location.href = actionUrl;
-                            }
-                        }
-                    } else if (schema === 'div-action') {
-                        rootCtx.execAction(action);
-                        await tick();
-                    } else if (action.log_id) {
-                        rootCtx.execCustomAction(action as Action & { url: string });
-                        await tick();
-                    }
-                }
-            }
-        }
-        actions.forEach(action => {
-            rootCtx.logStat('click', action);
-        });
-    }
-
     async function onClick(event: MouseEvent): Promise<void> {
         if (actionCtx.hasAction()) {
             return;
@@ -134,7 +95,7 @@
             if (hasCustomAction) {
                 event.preventDefault();
             }
-            processClick(actions);
+            rootCtx.execAnyActions(actions);
         }
     }
 
@@ -147,7 +108,7 @@
             return;
         }
 
-        processClick(doubleTapActions, true);
+        rootCtx.execAnyActions(doubleTapActions, true);
     }
 
     function onTouchStart(event: TouchEvent): void {
@@ -178,7 +139,7 @@
         }
 
         if (!isChanged && (Date.now() - startTs) >= MIN_LONG_TAP_DURATION) {
-            processClick(longTapActions, true);
+            rootCtx.execAnyActions(longTapActions, true);
         }
 
         startCoords = null;
@@ -191,7 +152,7 @@
         }
 
         if (event.key === 'Enter') {
-            processClick(actions);
+            rootCtx.execAnyActions(actions);
             event.preventDefault();
         }
     }

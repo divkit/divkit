@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Readable, Writable } from 'svelte/types/runtime/store';
-    import { setContext } from 'svelte';
+    import { setContext, tick } from 'svelte';
     import { derived, writable } from 'svelte/store';
 
     import css from './Root.module.css';
@@ -45,6 +45,7 @@
         getControllerVars,
         GlobalVariablesController
     } from '../expressions/globalVariablesController';
+    import { getUrlSchema, isBuiltinSchema } from '../utils/url';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -404,8 +405,8 @@
         }
     }
 
-    export function execAction(action: Action | VisibilityAction): void {
-        const actionUrl = String(action.url);
+    export function execAction(action: MaybeMissing<Action | VisibilityAction>): void {
+        const actionUrl = action.url ? String(action.url) : '';
 
         if (actionUrl) {
             try {
@@ -467,6 +468,47 @@
                 }));
             }
         }
+    }
+
+    async function execAnyActions(actions: MaybeMissing<Action[]> | undefined, processUrls?: boolean): Promise<void> {
+        if (!actions) {
+            return;
+        }
+
+        for (let i = 0; i < actions.length; ++i) {
+            let action = actions[i];
+
+            const actionUrl = action.url;
+            if (actionUrl) {
+                const schema = getUrlSchema(actionUrl);
+                if (schema) {
+                    if (isBuiltinSchema(schema)) {
+                        if (processUrls) {
+                            if (action.target === '_blank') {
+                                const win = window.open('', '_blank');
+                                if (win) {
+                                    win.opener = null;
+                                    win.location = actionUrl;
+                                }
+                            } else {
+                                location.href = actionUrl;
+                            }
+                        }
+                    } else if (schema === 'div-action') {
+                        execAction(action);
+                        await tick();
+                    } else if (action.log_id) {
+                        execCustomAction(action as Action & { url: string });
+                        await tick();
+                    }
+                }
+            }
+        }
+        actions.forEach(action => {
+            if (action.log_id) {
+                logStat('click', action as Action);
+            }
+        });
     }
 
     function execCustomAction(action: (Action | VisibilityAction) & { url: string }): void {
@@ -593,6 +635,7 @@
         genId,
         genClass,
         execAction,
+        execAnyActions,
         execCustomAction,
         isRunning,
         setRunning,

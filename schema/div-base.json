@@ -134,11 +134,7 @@
       },
       "minItems": 1,
       "clientMinItems": 1,
-      "$description": "translations.json#/div_base_selected_actions",
-      "platforms": [
-        "android",
-        "ios"
-      ]
+      "$description": "translations.json#/div_base_selected_actions"
     },
     "focus": {
       "$ref": "div-focus.json",
