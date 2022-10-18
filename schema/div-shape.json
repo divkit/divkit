@@ -6,7 +6,10 @@
     },
     {
       "$ref": "div-circle-shape.json",
-      "$description": "translations.json#/div_circle_shape"
+      "$description": "translations.json#/div_circle_shape",
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }
