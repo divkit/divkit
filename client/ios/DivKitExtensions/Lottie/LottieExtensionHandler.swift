@@ -54,8 +54,7 @@ public final class LottieExtensionHandler: DivExtensionHandler {
         }
       ),
       animationHolder: animationHolder,
-      widthTrait: .resizable,
-      heightTrait: .resizable
+      sizeProvider: block
     )
   }
 }
