@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "$description": "translations.json#/div_background_nine_patch",
+  "$description": "translations.json#/div_nine_patch_background",
   "properties": {
     "image_url": {
       "$ref": "common.json#/url",
