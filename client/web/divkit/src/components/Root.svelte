@@ -21,6 +21,7 @@
     import type { AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
     import type { DivStateData } from '../types/state';
+    import type { TintMode } from '../types/image';
     import Unknown from './utilities/Unknown.svelte';
     import RootSvgFilters from './utilities/RootSvgFilters.svelte';
     import { ROOT_CTX, RootCtxValue, Running } from '../context/root';
@@ -295,29 +296,32 @@
     let svgFiltersMap: Record<string, string> = {};
     let svgFilterUsages: Record<string, number> = {};
 
-    function addSvgFilter(color: string): string {
-        svgFilterUsages[color] = svgFilterUsages[color] || 0;
-        ++svgFilterUsages[color];
+    function addSvgFilter(color: string, mode: TintMode): string {
+        const key = `${color}:${mode}`;
+        svgFilterUsages[key] = svgFilterUsages[key] || 0;
+        ++svgFilterUsages[key];
 
-        if (svgFiltersMap[color]) {
-            return svgFiltersMap[color];
+        if (svgFiltersMap[key]) {
+            return svgFiltersMap[key];
         }
 
         const filterId = `${genId('root')}-svg-filter`;
         svgFiltersMap = {
             ...svgFiltersMap,
-            [color]: filterId
+            [key]: filterId
         };
 
         return filterId;
     }
 
-    function removeSvgFilter(color: string | undefined): void {
+    function removeSvgFilter(color: string | undefined, mode: TintMode): void {
         if (!color || !svgFilterUsages[color]) {
             return;
         }
 
-        if (--svgFilterUsages[color] === 0) {
+        const key = `${color}:${mode}`;
+
+        if (--svgFilterUsages[key] === 0) {
             svgFiltersMap = Object.keys(svgFiltersMap).reduce((acc, item) => {
                 if (svgFilterUsages[item]) {
                     acc[item] = svgFiltersMap[item];

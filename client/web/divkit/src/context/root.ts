@@ -5,6 +5,7 @@ import type { VisibilityAction } from '../types/visibilityAction';
 import type { DivBaseData } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
+import type { TintMode } from '../types/image';
 
 export const ROOT_CTX = Symbol('root');
 
@@ -27,8 +28,8 @@ export interface RootCtxValue {
     setRunning(type: Running, val: boolean): void;
     registerInstance<T>(id: string, block: T): void;
     unregisterInstance(id: string): void;
-    addSvgFilter(color: string): string;
-    removeSvgFilter(color: string | undefined): void;
+    addSvgFilter(color: string, mode: TintMode): string;
+    removeSvgFilter(color: string | undefined, mode: TintMode): void;
     getDerivedFromVars<T>(jsonProp: T): Readable<MaybeMissing<T>>;
     getJsonWithVars<T>(jsonProp: T): MaybeMissing<T>;
     getStore<T>(id: string): Writable<T>;

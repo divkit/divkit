@@ -36,7 +36,8 @@
           "default_value": "source_in",
           "$description": "translations.json#/div_image_tint_mode",
           "platforms": [
-            "android"
+            "android",
+            "web"
           ]
         },
         "tint_color": {

@@ -5,6 +5,7 @@ import type { FixedSize } from './sizes';
 import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { GradientBackground } from './background';
 import type { BooleanInt } from '../../typings/common';
+import type { TintMode } from './image';
 
 export type FontWeight = 'light' | 'regular' | 'medium' | 'bold';
 
@@ -36,6 +37,7 @@ export interface TextImage {
     width?: FixedSize;
     height?: FixedSize;
     tint_color?: string;
+    tint_mode?: TintMode;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface

@@ -4,7 +4,7 @@
     import css from './Image.module.css';
 
     import type { LayoutParams } from '../../types/layoutParams';
-    import type { DivImageData } from '../../types/image';
+    import type { DivImageData, TintMode } from '../../types/image';
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
     import Outer from '../utilities/Outer.svelte';
@@ -19,6 +19,7 @@
     import { correctColor } from '../../utils/correctColor';
     import { correctCSSInterpolator } from '../../utils/correctCSSInterpolator';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
+    import { correctTintMode } from '../../utils/correctTintMode';
 
     export let json: Partial<DivImageData> = {};
     export let templateContext: TemplateContext;
@@ -126,14 +127,18 @@
 
     $: jsonTintColor = rootCtx.getDerivedFromVars(json.tint_color);
     let tintColor: string | undefined = undefined;
+    $: jsonTintMode = rootCtx.getDerivedFromVars(json.tint_mode);
+    let tintMode: TintMode = 'source_in';
     let svgFilterId = '';
     $: {
         const val = $jsonTintColor;
         const newTintColor = val ? correctColor(val) : undefined;
-        if (newTintColor !== tintColor) {
-            rootCtx.removeSvgFilter(tintColor);
-            svgFilterId = newTintColor ? rootCtx.addSvgFilter(newTintColor) : '';
+        const newTintMode = correctTintMode($jsonTintMode, tintMode);
+        if (newTintColor !== tintColor || newTintMode !== tintMode) {
+            rootCtx.removeSvgFilter(tintColor, tintMode);
+            svgFilterId = newTintColor ? rootCtx.addSvgFilter(newTintColor, newTintMode) : '';
             tintColor = newTintColor;
+            tintMode = newTintMode;
         }
     }
 
@@ -188,7 +193,7 @@
     }
 
     onDestroy(() => {
-        rootCtx.removeSvgFilter(tintColor);
+        rootCtx.removeSvgFilter(tintColor, tintMode);
     });
 </script>
 

@@ -9,6 +9,7 @@
     import type { LayoutParams } from '../../types/layoutParams';
     import type { Action, DivBase, TemplateContext } from '../../../typings/common';
     import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type { TintMode } from '../../types/image';
     import type { MaybeMissing } from '../../expressions/json';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import Outer from '../utilities/Outer.svelte';
@@ -25,6 +26,7 @@
     import { correctColor } from '../../utils/correctColor';
     import { correctBooleanInt } from '../../utils/correctBooleanInt';
     import { propToString } from '../../utils/propToString';
+    import { correctTintMode } from '../../utils/correctTintMode';
 
     export let json: Partial<DivTextData> = {};
     export let templateContext: TemplateContext;
@@ -181,7 +183,7 @@
             svgFilterId: string;
         };
     })[] = [];
-    let usedTintColors: string[] = [];
+    let usedTintColors: [string, TintMode][] = [];
 
     function updateRenderList(
         text: string,
@@ -190,8 +192,8 @@
     ) {
         let newRenderList: typeof renderList = [];
 
-        usedTintColors.forEach(color => {
-            rootCtx.removeSvgFilter(color);
+        usedTintColors.forEach(([color, mode]) => {
+            rootCtx.removeSvgFilter(color, mode);
         });
         usedTintColors = [];
 
@@ -319,10 +321,12 @@
                 };
 
                 let svgFilterId = '';
-                if (item.image.tint_color) {
+                const tintColor = item.image.tint_color;
+                const tintMode = correctTintMode(item.image.tint_mode, 'source_in');
+                if (tintColor) {
                     const color = correctColor(item.image.tint_color);
-                    svgFilterId = rootCtx.addSvgFilter(color);
-                    usedTintColors.push(color);
+                    svgFilterId = rootCtx.addSvgFilter(color, tintMode);
+                    usedTintColors.push([color, tintMode]);
                 }
 
                 newRenderList.push({
@@ -379,8 +383,8 @@
     }
 
     onDestroy(() => {
-        usedTintColors.forEach(color => {
-            rootCtx.removeSvgFilter(color);
+        usedTintColors.forEach(([color, mode]) => {
+            rootCtx.removeSvgFilter(color, mode);
         });
     });
 </script>
