@@ -1,6 +1,6 @@
 {
     "name": "@divkitframework/jsonbuilder",
-    "version": "1.4.0",
+    "version": "1.5.0",
     "description": "DivKit TypeScript JSON Builder",
     "main": "./dist/jsonbuilder.js",
     "module": "./dist/es/jsonbuilder.js",
@@ -16,7 +16,8 @@
     "scripts": {
         "test": "jest",
         "test:watch": "jest --watch",
-        "build": "rm -rf dist && rollup --config rollup.config.ts --configPlugin typescript",
+        "build": "npm run gen && rm -rf dist && rollup --config rollup.config.ts --configPlugin typescript",
+        "gen": "sh codegen.sh",
         "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
         "lint": "tsc --noEmit && eslint 'src/**/*.ts' 'test/**/*.ts'",
         "cover": "jest --collect-coverage",
