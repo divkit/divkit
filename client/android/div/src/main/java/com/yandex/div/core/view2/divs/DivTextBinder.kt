@@ -676,6 +676,7 @@ internal class DivTextBinder @Inject constructor(
                 range.width.toPx(metrics, resolver),
                 imageHeight,
                 range.tintColor?.evaluate(resolver),
+                range.tintMode.evaluate(resolver).toPorterDuffMode(),
                 isSquare = false,
                 anchorPoint = BitmapImageSpan.AnchorPoint.BASELINE
             )

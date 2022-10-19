@@ -26,6 +26,7 @@ class BitmapImageSpan @JvmOverloads constructor(
     width: Int,
     height: Int,
     @ColorInt tintColor: Int? = null,
+    tintMode: PorterDuff.Mode = PorterDuff.Mode.SRC_IN,
     isSquare: Boolean = true,
     private val anchorPoint: AnchorPoint = AnchorPoint.LINE_BOTTOM
 ) : ReplacementSpan() {
@@ -45,7 +46,7 @@ class BitmapImageSpan @JvmOverloads constructor(
             drawable.setBounds(0, 0, width, height)
         }
         if (tintColor != null) {
-            drawable.colorFilter = PorterDuffColorFilter(tintColor, PorterDuff.Mode.SRC_IN)
+            drawable.colorFilter = PorterDuffColorFilter(tintColor, tintMode)
         }
     }
 

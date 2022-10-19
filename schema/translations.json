@@ -800,8 +800,8 @@
     "ru": "Изображение."
   },
   "div_image_tint_mode": {
-    "en": "The blend mode of color specified in tint_color. Default value: `sourceIn`",
-    "ru": "Метод наложения цвета, указанного в tint_color. Значение по умолчанию: `sourceIn`"
+    "en": "The blend mode of color specified in tint_color.",
+    "ru": "Метод наложения цвета, указанного в tint_color."
   },
   "div_image_tint_color": {
     "en": "New color of a contour image.",
@@ -1474,6 +1474,10 @@
   "div_text_image_tint_color": {
     "en": "New color of a contour image.",
     "ru": "Новый цвет контурного изображения."
+  },
+  "div_text_image_tint_mode": {
+    "en": "The blend mode of color specified in tint_color.",
+    "ru": "Метод наложения цвета, указанного в tint_color."
   },
   "div_text_image_url": {
     "en": "Image URL.",
