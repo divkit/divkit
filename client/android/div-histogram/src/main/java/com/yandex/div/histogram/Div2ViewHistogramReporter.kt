@@ -17,6 +17,8 @@ class Div2ViewHistogramReporter(
     private var renderStarted = false
 
     private var bindingStartedTime: Long? = null
+    private var bindingPausedTime: Long? = null
+    private var bindingResumedTime: Long? = null
     private var rebindingStartedTime: Long? = null
 
     private var measureStartedTime: Long? = null
@@ -36,9 +38,19 @@ class Div2ViewHistogramReporter(
         bindingStartedTime = currentUptime
     }
 
+    fun onBindingPaused() {
+        bindingPausedTime = currentUptime
+    }
+
+    fun onBindingResumed() {
+        bindingResumedTime = currentUptime
+    }
+
     fun onBindingFinished() {
-        reportHistogram(bindingStartedTime, DIV_BINDING_HISTOGRAM, renderMetrics::binding)
+        reportHistogram(DIV_BINDING_HISTOGRAM, bindingStartedTime, bindingPausedTime, bindingResumedTime, renderMetrics::binding)
         bindingStartedTime = null
+        bindingPausedTime = null
+        bindingResumedTime = null
     }
 
     fun onRebindingStarted() {
@@ -46,7 +58,7 @@ class Div2ViewHistogramReporter(
     }
 
     fun onRebindingFinished() {
-        reportHistogram(rebindingStartedTime, DIV_REBINDING_HISTOGRAM, renderMetrics::rebinding)
+        reportHistogram(DIV_REBINDING_HISTOGRAM, rebindingStartedTime, onDuration = renderMetrics::rebinding)
         rebindingStartedTime = null
     }
 
@@ -79,15 +91,26 @@ class Div2ViewHistogramReporter(
     }
 
     private inline fun reportHistogram(
-        startTime: Long?,
         histogramName: String,
+        startTime: Long?,
+        pausedTime: Long? = null,
+        resumedTime: Long? = null,
         onDuration: (Long) -> Unit
     ) {
         if (startTime == null) {
             KAssert.fail { "start time of $histogramName is null" }
             return
         }
-        val duration = currentUptime - startTime
+        val duration = when {
+            pausedTime != null && resumedTime != null -> {
+                currentUptime - resumedTime + pausedTime - startTime
+            }
+            pausedTime != null || resumedTime != null -> {
+                KAssert.fail { "when $histogramName has paused time it should have resumed time and otherwise" }
+                return
+            }
+            else -> currentUptime - startTime
+        }
         onDuration(duration)
         histogramReporter().reportDuration(histogramName, duration, component)
     }

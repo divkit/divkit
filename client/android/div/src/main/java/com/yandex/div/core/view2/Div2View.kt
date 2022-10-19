@@ -105,6 +105,8 @@ class Div2View private constructor(
     private var setActiveBindingRunnable: SingleTimeOnAttachCallback? = null
     @VisibleForTesting
     internal var bindOnAttachRunnable: SingleTimeOnAttachCallback? = null
+    private var reportBindingResumedRunnable: SingleTimeOnAttachCallback? = null
+    private var reportBindingFinishedRunnable: SingleTimeOnAttachCallback? = null
 
     @VisibleForTesting
     internal var stateId = INVALID_STATE_ID
@@ -282,7 +284,19 @@ class Div2View private constructor(
         divData = data
 
         val result = switchToDivData(oldData, data)
-        histogramReporter?.onBindingFinished()
+
+        if (bindOnAttachEnabled && oldData == null) {
+            histogramReporter?.onBindingPaused()
+            reportBindingResumedRunnable = SingleTimeOnAttachCallback(this) {
+                histogramReporter?.onBindingResumed()
+            }
+            reportBindingFinishedRunnable = SingleTimeOnAttachCallback(this) {
+                histogramReporter?.onBindingFinished()
+            }
+        } else {
+            histogramReporter?.onBindingFinished()
+        }
+
         return result
     }
 
@@ -346,8 +360,10 @@ class Div2View private constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
+        reportBindingResumedRunnable?.onAttach()
         setActiveBindingRunnable?.onAttach()
         bindOnAttachRunnable?.onAttach()
+        reportBindingFinishedRunnable?.onAttach()
     }
 
     override fun onDetachedFromWindow() {
