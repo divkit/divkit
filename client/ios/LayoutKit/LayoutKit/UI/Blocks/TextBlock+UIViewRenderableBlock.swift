@@ -81,6 +81,8 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
   override init(frame: CGRect) {
     super.init(frame: frame)
     backgroundColor = .clear
+    isUserInteractionEnabled = false
+    layer.contentsGravity = .center
   }
 
   @available(*, unavailable)
