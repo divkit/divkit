@@ -1,3 +1,12 @@
+## 12.0.0 (October 18, 2022)
+
+Additions:
+* Implemented Nine-patch background
+* Supported for the `selected_actions` in `pager`
+
+Changes and fixes:
+* Fixed color values convertion
+
 ## 11.0.0 (October 12, 2022)
 
 Additions:

@@ -1,3 +1,23 @@
+## 12.0.0
+## JSON Schema:
+* Added Nine-patch background
+
+## Android Client:
+* Added separators in linear layout
+* Fixed text style change after slider position change
+* Fixed invalid view visibility on change state
+* Fixed gallery pages position
+
+## iOS Client:
+* Added text gradient support
+* Implemented Nine-patch background
+* Fixed animation traits
+
+## Web Client:
+* Implemented Nine-patch background
+* Supported for the `selected_actions` in `pager`
+* Fixed color values convertion
+
 ## 11.0.0
 ## JSON Schema:
 * Added `cross_spacing` support for gallery
