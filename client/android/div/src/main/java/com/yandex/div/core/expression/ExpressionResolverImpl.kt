@@ -71,7 +71,7 @@ internal class ExpressionResolverImpl(
         val convertedValue = if (fieldType.isTypeValid(result)) {
             result as T
         } else {
-            safeConvert(expressionKey, rawExpression, converter, result)
+            safeConvert(expressionKey, rawExpression, converter, result, fieldType)
                     ?: throw invalidValue(expressionKey, rawExpression, result)
         }
 
@@ -91,21 +91,38 @@ internal class ExpressionResolverImpl(
         expressionKey: String,
         rawExpression: String,
         converter: Converter<R, T?>?,
-        rawValue: R
+        rawValue: R,
+        fieldType: TypeHelper<T>
     ): T? {
-        // cast is unsafe but we hope that safeValidate() will check this type later
-        val c = converter ?: return rawValue as? T
-        try {
-            // We need to guard with try..catch because at this point we're
-            // not sure that resolved expression type is same type that converter accepts.
-            return c.invoke(rawValue)
-        } catch (e: ClassCastException) {
-            throw typeMismatch(
-                expressionKey = expressionKey,
-                rawExpression = rawExpression,
-                wrongTypeValue = rawValue,
-                cause = e,
-            )
+        val convertedValue = if (converter == null) {
+            // cast is unsafe but we hope that safeValidate() will check this type later
+            rawValue as? T
+        } else {
+            try {
+                // We need to guard with try..catch because at this point we're
+                // not sure that resolved expression type is same type that converter accepts.
+                converter.invoke(rawValue)
+            } catch (e: ClassCastException) {
+                throw typeMismatch(
+                    expressionKey = expressionKey,
+                    rawExpression = rawExpression,
+                    wrongTypeValue = rawValue,
+                    cause = e,
+                )
+            }
+        }
+
+        fun fieldAwaitsStringButValueNotConverted(value: T?): Boolean {
+            if (value == null) {
+                return false
+            }
+            return fieldType.typeDefault is String && !fieldType.isTypeValid(value)
+        }
+
+        return if (fieldAwaitsStringButValueNotConverted(convertedValue)) {
+            convertedValue.toString() as T
+        } else {
+            convertedValue
         }
     }
 

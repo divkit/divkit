@@ -100,23 +100,23 @@ class ExpressionResolverImplTest {
     }
 
     @Test
-    fun `string expression cannot access non-string variables`() {
+    fun `string expression can access non-string variables`() {
         val value = mutableExpression(
             rawExpression = "@{hundred}",
             typeHelper = TYPE_HELPER_STRING,
             logger = silentLogger
         ).evaluate(underTest)
-        Assert.assertEquals("", value)
+        Assert.assertEquals("100", value)
     }
 
     @Test
-    fun `string expression cannot access non-string variables with evaluable`() {
+    fun `string expression can access non-string variables with evaluable`() {
         val value = mutableExpression(
             rawExpression = "@{hundred}",
             typeHelper = TYPE_HELPER_STRING,
             logger = silentLogger
         ).evaluate(underTest)
-        Assert.assertEquals("", value)
+        Assert.assertEquals("100", value)
     }
 
     @Test
