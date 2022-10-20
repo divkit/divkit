@@ -39,5 +39,8 @@ enum class Experiment(val key: String, val defaultValue: Boolean = false) {
     ),
     MULTIPLE_STATE_CHANGE_ENABLED(
         "multiple_state_change_enabled"
-    )
+    ),
+    BIND_ON_ATTACH_ENABLED(
+        "bind_on_attach_enabled"
+    ),
 }

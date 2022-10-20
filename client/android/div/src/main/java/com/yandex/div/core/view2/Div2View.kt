@@ -77,11 +77,12 @@ class Div2View private constructor(
     defStyleAttr: Int = 0,
     private val constructorCallTime: Long,
 ) : FrameLayout(context, attrs, defStyleAttr), DivViewFacade {
-    private val bindOnAttachEnabled = false //TODO(https://st.yandex-team.ru/DIVKIT-580)
     internal val div2Component: Div2Component = context.div2Component
     internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()
         .divView(this)
         .build()
+
+    private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled  //TODO(https://st.yandex-team.ru/DIVKIT-580)
 
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
 

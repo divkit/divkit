@@ -15,6 +15,7 @@ import com.yandex.div.core.DivDataChangeListener;
 import com.yandex.div.core.DivStateChangeListener;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
+import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.state.DivStateManager;
@@ -118,6 +119,10 @@ public interface Div2Component {
 
     @NonNull
     DivCreationTracker getDivCreationTracker();
+
+    @NonNull
+    @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
+    boolean isBindOnAttachEnabled();
 
     /**
      * Builder for Div2Component

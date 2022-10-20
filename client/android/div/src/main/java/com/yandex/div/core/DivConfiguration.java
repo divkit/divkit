@@ -71,6 +71,7 @@ public class DivConfiguration {
     private boolean mViewPoolProfilingEnabled;
     private boolean mResourceCacheEnabled;
     private boolean mMultipleStateChangeEnabled;
+    private boolean mBindOnAttachEnabled;
 
     private DivConfiguration(
             @NonNull DivImageLoader imageLoader,
@@ -99,7 +100,8 @@ public class DivConfiguration {
             boolean viewPoolEnabled,
             boolean viewPoolProfilingEnabled,
             boolean resourceCacheEnabled,
-            boolean multipleStateChangeEnabled
+            boolean multipleStateChangeEnabled,
+            boolean bindOnAttachEnabled
     ) {
         mImageLoader = imageLoader;
         mActionHandler = actionHandler;
@@ -128,6 +130,7 @@ public class DivConfiguration {
         mViewPoolProfilingEnabled = viewPoolProfilingEnabled;
         mResourceCacheEnabled = resourceCacheEnabled;
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
+        mBindOnAttachEnabled = bindOnAttachEnabled;
     }
 
     @Provides
@@ -296,6 +299,12 @@ public class DivConfiguration {
         return mAccessibilityEnabled;
     }
 
+    @Provides
+    @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)
+    public boolean isBindOnAttachEnabled() {
+        return mBindOnAttachEnabled;
+    }
+
     public static class Builder {
 
         @NonNull
@@ -342,6 +351,7 @@ public class DivConfiguration {
         private boolean mViewPoolProfilingEnabled = Experiment.VIEW_POOL_PROFILING_ENABLED.getDefaultValue();
         private boolean mResourceCacheEnabled = Experiment.RESOURCE_CACHE_ENABLED.getDefaultValue();
         private boolean mMultipleStateChangeEnabled = Experiment.MULTIPLE_STATE_CHANGE_ENABLED.getDefaultValue();
+        private boolean mBindOnAttachEnabled = false;
 
         public Builder(@NonNull DivImageLoader imageLoader) {
             mImageLoader = imageLoader;
@@ -533,6 +543,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder enableBindOnAttach(boolean enable) {
+            mBindOnAttachEnabled = enable;
+            return this;
+        }
+
+        @NonNull
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
                     mTypefaceProvider == null ? DivTypefaceProvider.DEFAULT : mTypefaceProvider;
@@ -564,7 +580,8 @@ public class DivConfiguration {
                     mViewPoolEnabled,
                     mViewPoolProfilingEnabled,
                     mResourceCacheEnabled,
-                    mMultipleStateChangeEnabled);
+                    mMultipleStateChangeEnabled,
+                    mBindOnAttachEnabled);
         }
     }
 }
