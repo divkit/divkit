@@ -177,6 +177,8 @@ final class CalcExpression: CustomStringConvertible {
     /// An array was accessed with an index outside the valid range
     case arrayBounds(Symbol, Double)
 
+    case escaping
+
     /// Empty expression
     static let emptyExpression = unexpectedToken("")
 
@@ -188,7 +190,7 @@ final class CalcExpression: CustomStringConvertible {
       case .emptyExpression:
         return "Empty expression"
       case let .unexpectedToken(string):
-        return "Unexpected token `\(string)`"
+        return "Error tokenizing '\(string)'."
       case let .missingDelimiter(string):
         return "Missing `\(string)`"
       case let .undefinedSymbol(symbol):
@@ -215,6 +217,8 @@ final class CalcExpression: CustomStringConvertible {
         return "\(description.prefix(1).uppercased())\(description.dropFirst()) expects \(arity)"
       case let .arrayBounds(symbol, index):
         return "Index \(CalcExpression.stringify(index)) out of bounds for \(symbol)"
+      case .escaping:
+        return "Incorrect string escape"
       }
     }
   }
@@ -1148,9 +1152,14 @@ extension UnicodeScalarView {
             return .error(.unexpectedToken(hex), string)
           }
           string.append(Character(c))
-        default:
+        case "'", "\\":
           string.append(Character(c))
+        case "@" where scanCharacter("{"):
+          string += "@{"
+        default:
+          return .error(.escaping, string)
         }
+        part = ""
       }
     } while part != nil
     guard scanCharacter(delimiter) else {

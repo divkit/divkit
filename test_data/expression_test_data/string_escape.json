@@ -8,6 +8,7 @@
                 "value": "Error tokenizing '\\'."
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -19,6 +20,7 @@
                 "value": "Incorrect string escape"
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -30,6 +32,7 @@
                 "value": "\\"
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -41,6 +44,7 @@
                 "value": "'"
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -52,6 +56,7 @@
                 "value": "@{123}"
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -63,6 +68,7 @@
                 "value": "Incorrect string escape"
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -74,6 +80,7 @@
                 "value": "a@bc.de"
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -85,6 +92,7 @@
                 "value": "Error tokenizing '@{ Hello there'."
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -96,6 +104,7 @@
                 "value": "@{ Hello there"
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         },
@@ -107,6 +116,7 @@
                 "value": "\\"
             },
             "platforms": [
+                "ios",
                 "web"
             ]
         }

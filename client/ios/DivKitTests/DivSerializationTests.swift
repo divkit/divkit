@@ -102,6 +102,6 @@ final class DivSerializationTests: XCTestCase {
   }
 
   private func makeLink<T>(_ rawValue: String) -> Expression<T> {
-    .link(ExpressionLink(rawValue: rawValue, validator: nil)!)
+    .link(try! ExpressionLink(rawValue: rawValue, validator: nil)!)
   }
 }

@@ -20,8 +20,8 @@ public struct ExpressionLink<T> {
     validator: ExpressionValueValidator<T>?,
     errorTracker: ExpressionErrorTracker? = nil,
     resolveNested: Bool = true
-  ) {
-    self.init(
+  ) throws {
+    try self.init(
       rawValue: "@{\(expression)}",
       validator: validator,
       errorTracker: errorTracker,
@@ -35,7 +35,7 @@ public struct ExpressionLink<T> {
     validator: ExpressionValueValidator<T>?,
     errorTracker: ExpressionErrorTracker? = nil,
     resolveNested: Bool = true
-  ) {
+  ) throws {
     guard !rawValue.isEmpty else {
       errorTracker?(.emptyValue)
       return nil
@@ -50,8 +50,8 @@ public struct ExpressionLink<T> {
       let currentValue = rawValue[index..<endIndex]
       if rawValue.hasExpression(at: index) {
         guard let (start, end) = currentValue.makeLinkIndices() else {
-          errorTracker?(.incorrectExpression(expression: rawValue))
-          return nil
+          errorTracker?(.tokenizing(expression: rawValue))
+          throw ExpressionError.tokenizing(expression: rawValue)
         }
         if !currentString.isEmpty {
           items.append(.string(currentString))
@@ -61,7 +61,7 @@ public struct ExpressionLink<T> {
           items.append(.string(""))
         } else {
           let value = String(currentValue[start...end])
-          if resolveNested, let link = ExpressionLink<String>(
+          if resolveNested, let link = try ExpressionLink<String>(
             rawValue: value,
             validator: nil,
             errorTracker: errorTracker
@@ -78,6 +78,9 @@ public struct ExpressionLink<T> {
         currentString = currentString + String(currentValue[index])
         index = currentValue.index(after: index)
         if index == endIndex {
+          if currentString == rawValue {
+            return nil
+          }
           items.append(.string(currentString))
         }
       }
@@ -114,17 +117,19 @@ extension StringProtocol {
           return i
         }
       }
-      if char == "'" {
-        if i == startIndex || self[index(before: i)] != "\\" {
-          stringStarted[nestedExpressionCounter] = !stringStarted[nestedExpressionCounter]!
-        }
+      if char == "'" && notEscaped(at: i) {
+        stringStarted[nestedExpressionCounter] = !stringStarted[nestedExpressionCounter]!
       }
     }
     return nil
   }
 
   fileprivate func hasExpression(at i: String.Index) -> Bool {
-    self[i...].hasPrefix(expressionPrefix) && (i == startIndex || self[index(before: i)] != "\\")
+    self[i...].hasPrefix(expressionPrefix) && notEscaped(at: i)
+  }
+
+  fileprivate func notEscaped(at i: String.Index) -> Bool {
+    i == startIndex || self[index(before: i)] != "\\" || !notEscaped(at: index(before: i))
   }
 }
 

@@ -52,14 +52,13 @@ public final class ExpressionResolver {
     ) ?? T(rawValue: expression)
   }
 
-  @inlinable
   func resolveStringBasedValue<T>(
     expression: Expression<T>?,
     initializer: (String) -> T?
   ) -> T? {
     switch expression {
     case let .value(val):
-      return val
+      return resolveEscaping(val)
     case let .link(link):
       return evaluateStringBasedValue(
         link: link,
@@ -68,6 +67,39 @@ public final class ExpressionResolver {
     case .none:
       return nil
     }
+  }
+
+  func resolveEscaping<T>(_ value: T?) -> T? {
+    guard let value = value as? String else {
+      return value
+    }
+    var result = ""
+
+    var index = value.startIndex
+    let escapingValues = ["@{", "'", "\\"]
+
+    while (index < value.endIndex) {
+      if value[index] == "\\" {
+        index = value.index(index, offsetBy: 1)
+        let next = value[index...]
+        if let escaped = escapingValues.first(where: { next.starts(with: $0) }) {
+          result += escaped
+          index = value.index(index, offsetBy: escaped.count)
+        } else {
+          if next.isEmpty {
+            errorTracker(ExpressionError.tokenizing(expression: value))
+          } else {
+            errorTracker(ExpressionError.escaping)
+          }
+          return nil
+        }
+      } else {
+        result += value[index]
+        index = value.index(after: index)
+      }
+    }
+
+    return result as? T
   }
 
   @inlinable
@@ -146,13 +178,13 @@ public final class ExpressionResolver {
           return nil
         }
       case let .string(value):
-        stringValue += value.replacingOccurrences(of: "\\@{", with: "@{")
+        stringValue += value
       case let .nestedCalcExpression(link):
         if let expression = evaluateStringBasedValue(
           link: link,
           initializer: { $0 }
         ) {
-          let link = ExpressionLink<String>(
+          let link = try? ExpressionLink<String>(
             expression: expression,
             validator: nil,
             errorTracker: link.errorTracker,
@@ -181,7 +213,6 @@ public final class ExpressionResolver {
   @inlinable
   func getVariableValue<T>(_ name: String) -> T? {
     guard let value: T = variables[DivVariableName(rawValue: name)]?.typedValue() else {
-      DivKitLogger.error("No variable: \(name)")
       return nil
     }
     return value
@@ -207,7 +238,7 @@ public final class ExpressionResolver {
     expression: String,
     initializer: (String) -> T?
   ) -> T? {
-    guard let expressionLink = ExpressionLink<T>(rawValue: expression, validator: nil) else {
+    guard let expressionLink = try? ExpressionLink<T>(rawValue: expression, validator: nil) else {
       return nil
     }
     return resolveStringBasedValue(

@@ -27,7 +27,7 @@ final class DivTriggerTests: XCTestCase {
     for mode in DivTrigger.Mode.allCases {
       let trigger = DivTrigger(
         actions: [DivAction(logId: "1", url: .value(actionURL))],
-        condition: .link(ExpressionLink(rawValue: "@{sample_variable}", validator: nil)!),
+        condition: .link(try! ExpressionLink(rawValue: "@{sample_variable}", validator: nil)!),
         mode: .value(mode)
       )
       triggerStorage.set(cardId: "id", triggers: [trigger])
@@ -41,7 +41,7 @@ final class DivTriggerTests: XCTestCase {
     for mode in DivTrigger.Mode.allCases {
       let trigger = DivTrigger(
         actions: [DivAction(logId: "1", url: .value(actionURL))],
-        condition: .link(ExpressionLink(rawValue: "@{sample_variable}", validator: nil)!),
+        condition: .link(try! ExpressionLink(rawValue: "@{sample_variable}", validator: nil)!),
         mode: .value(mode)
       )
       variablesStorage.set(variables: ["sample_variable": .bool(true)], triggerUpdate: true)

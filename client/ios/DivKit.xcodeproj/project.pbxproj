@@ -131,7 +131,6 @@
 		8C7B18952864CA380036EF4C /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B18832864CA380036EF4C /* Alert.swift */; };
 		8C7B18962864CA380036EF4C /* UrlOpener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B18842864CA380036EF4C /* UrlOpener.swift */; };
 		8C7B1BF12865C01C0036EF4C /* ExpressionResolvingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */; };
-		8C7B1BF22865C01C0036EF4C /* ExpressionParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B232865C01C0036EF4C /* ExpressionParsingTests.swift */; };
 		8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */; };
 		8C7B1BF42865C01C0036EF4C /* DivGridExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B262865C01C0036EF4C /* DivGridExtensionsTests.swift */; };
 		8C7B1BF52865C01C0036EF4C /* DivGalleryExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7B1B272865C01C0036EF4C /* DivGalleryExtensionsTests.swift */; };
@@ -354,7 +353,6 @@
 		8C7B18842864CA380036EF4C /* UrlOpener.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UrlOpener.swift; sourceTree = "<group>"; };
 		8C7B1B1A2865BFF10036EF4C /* DivKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DivKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionResolvingTests.swift; sourceTree = "<group>"; };
-		8C7B1B232865C01C0036EF4C /* ExpressionParsingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExpressionParsingTests.swift; sourceTree = "<group>"; };
 		8C7B1B252865C01C0036EF4C /* DivTabsExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTabsExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B262865C01C0036EF4C /* DivGridExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGridExtensionsTests.swift; sourceTree = "<group>"; };
 		8C7B1B272865C01C0036EF4C /* DivGalleryExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivGalleryExtensionsTests.swift; sourceTree = "<group>"; };
@@ -854,7 +852,6 @@
 		8C7B1B212865C01C0036EF4C /* Expressions */ = {
 			isa = PBXGroup;
 			children = (
-				8C7B1B232865C01C0036EF4C /* ExpressionParsingTests.swift */,
 				8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */,
 				8C7B1B222865C01C0036EF4C /* ExpressionResolvingTests.swift */,
 				8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */,
@@ -1581,7 +1578,6 @@
 				8C7B1C392865C01D0036EF4C /* DivBuilders.swift in Sources */,
 				8C7B1CA72865C01E0036EF4C /* TemplatesExpectedModels.swift in Sources */,
 				8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */,
-				8C7B1BF22865C01C0036EF4C /* ExpressionParsingTests.swift in Sources */,
 				8C7B1CA82865C01E0036EF4C /* DivBlockStateStorageTests.swift in Sources */,
 				8C7B1BF12865C01C0036EF4C /* ExpressionResolvingTests.swift in Sources */,
 				8C7B1BF92865C01C0036EF4C /* DivImageExtensionsTests.swift in Sources */,

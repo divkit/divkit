@@ -9,9 +9,17 @@ func expressionTransform<T, U>(
   transform: (U) -> T?,
   validator: ExpressionValueValidator<T>? = nil
 ) -> Expression<T>? {
-  if let rawValue = value as? String,
-     let resolver = ExpressionLink<T>(rawValue: rawValue, validator: validator) {
-    return .link(resolver)
+  do {
+    if let rawValue = value as? String,
+       let resolver = try ExpressionLink<T>(
+        rawValue: rawValue,
+        validator: validator,
+        errorTracker: { DivKitLogger.error($0.description) }
+       ) {
+      return .link(resolver)
+    }
+  } catch {
+    return nil
   }
 
   guard let value = value else {

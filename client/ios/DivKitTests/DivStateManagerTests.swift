@@ -10,7 +10,7 @@ final class DivStateManagerTests: XCTestCase {
   private let transition = DivAppearanceTransition.divFadeTransition(DivFadeTransition())
 
   private let visibilityExpression = Expression<DivVisibility>.link(
-    ExpressionLink(rawValue: "@{visibility}", validator: nil)!
+    try! ExpressionLink(rawValue: "@{visibility}", validator: nil)!
   )
 
   func test_shouldBlockAppearWithTransition_isFalseForNewBlock() {

@@ -253,6 +253,12 @@ final class ExpressionResolvingTests: XCTestCase {
     perform(on: testCases, type: type)
   }
 
+  func test_String_Escape() throws {
+    let testCases = try makeTestCases(for: "string_escape")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
   func test_String_Templates() throws {
     let testCases = try makeTestCases(for: "string_templates")
     let type: ExpressionType<String> = .stringBased(initializer: { $0 })
@@ -363,11 +369,11 @@ extension ExpressionTestCase {
     type: ExpressionType<T>,
     errorTracker: ExpressionErrorTracker? = nil
   ) -> T? {
-    let expression: Expression<T>? = ExpressionLink<T>(
+    let expression: Expression<T>? = try? ExpressionLink<T>(
       rawValue: expression,
       validator: nil,
       errorTracker: errorTracker
-    ).map { .link($0) }
+    ).map { .link($0) } ?? .value(expression as! T)
     let resolver = ExpressionResolver(variables: variables, errorTracker: errorTracker)
     switch type {
     case .singleItem:
@@ -381,7 +387,7 @@ extension ExpressionTestCase {
   }
 
   private func testResolveSingleItem<T: Equatable>(expectedValue: T) {
-    let expression: Expression<T>? = ExpressionLink<T>(
+    let expression: Expression<T>? = try? ExpressionLink<T>(
       rawValue: expression,
       validator: nil
     ).map { .link($0) }
@@ -394,7 +400,7 @@ extension ExpressionTestCase {
     expectedValue: T,
     initializer: (String) -> T?
   ) {
-    let expression: Expression<T>? = ExpressionLink<T>(
+    let expression: Expression<T>? = try? ExpressionLink<T>(
       rawValue: expression,
       validator: nil
     ).map { .link($0) } ?? .value(expression as! T)
