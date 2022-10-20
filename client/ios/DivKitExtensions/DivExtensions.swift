@@ -6,6 +6,9 @@ extension Div {
   public func makeImageURLs(with expressionResolver: ExpressionResolver) -> [URL] {
     var urls: [URL] = value.background?.compactMap { $0.makeImageURL(with: expressionResolver) }
       ?? []
+    if let url = LottieExtensionHandler.getPreloadURL(div: value) {
+      urls.append(url)
+    }
     switch self {
     case let .divImage(divImage):
       if let url = divImage.resolveImageUrl(expressionResolver) {

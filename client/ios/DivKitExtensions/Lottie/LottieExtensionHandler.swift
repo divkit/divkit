@@ -57,6 +57,13 @@ public final class LottieExtensionHandler: DivExtensionHandler {
       sizeProvider: block
     )
   }
+
+  static func getPreloadURL(div: DivBase) -> URL? {
+    let extensionData = div.extensions?.first { $0.id == "lottie" }
+    guard let paramsDict = extensionData?.params,
+          let params = LottieExtensionParams(params: paramsDict) else { return nil }
+    return params.source.url
+  }
 }
 
 private class JSONAnimationHolder: AnimationHolder {
@@ -130,6 +137,15 @@ private struct LottieExtensionParams {
       }
     } else {
       self.repeatMode = .restart
+    }
+  }
+}
+
+extension LottieExtensionParams.Source {
+  fileprivate var url: URL? {
+    switch self {
+    case let .url(url): return url
+    case .json: return nil
     }
   }
 }
