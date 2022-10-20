@@ -17,7 +17,8 @@
     }
 }
 
-.root__clickable {
+.root__clickable,
+.root__clickable-no-transition {
     cursor: pointer;
 }
 

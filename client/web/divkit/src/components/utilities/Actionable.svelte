@@ -20,7 +20,7 @@
     export let attrs: Record<string, string | undefined> | undefined = undefined;
     export let use: ((element: HTMLElement, opts?: any) => void) = doNothing;
     export let customAction: ((event: Event) => boolean) | null = null;
-    export let hasActionAnimation = false;
+    export let isNativeActionAnimation = true;
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
     const actionCtx = getContext<ActionCtxValue>(ACTION_CTX);
@@ -164,7 +164,7 @@
         {href}
         {target}
         {style}
-        class="{cls} {hasActionAnimation ? '' : rootCss.root__clickable} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
+        class="{cls} {isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
         on:click={onClick}
         on:click
         on:dblclick={doubleTapActions?.length ? onDoubleClick : null}
@@ -180,7 +180,7 @@
 {:else}
     <span
         use:use
-        class="{cls}{hasJSAction ? ` ${hasActionAnimation ? '' : rootCss.root__clickable} ${rootCss.root__unselectable}` : ''} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
+        class="{cls}{hasJSAction ? ` ${isNativeActionAnimation ? rootCss.root__clickable : rootCss['root__clickable-no-transition']} ${rootCss.root__unselectable}` : ''} {longTapActions?.length ? rootCss['root_disabled-context-menu'] : ''}"
         {style}
         role={hasJSAction ? 'button' : null}
         tabindex={hasJSAction ? 0 : null}

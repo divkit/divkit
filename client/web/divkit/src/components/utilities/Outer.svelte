@@ -5,7 +5,7 @@
 
     import type { DivBaseData } from '../../types/base';
     import type { Mods, Style } from '../../types/general';
-    import type { ActionAnimation, DivActionableData } from '../../types/actionable';
+    import type { ActionAnimation, AnyAnimation, DivActionableData } from '../../types/actionable';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { Visibility } from '../../types/base';
@@ -31,6 +31,7 @@
     import OuterBackground from './OuterBackground.svelte';
     import { correctCSSInterpolator } from '../../utils/correctCSSInterpolator';
     import { correctNumber } from '../../utils/correctNumber';
+    import { flattenAnimation } from '../../utils/flattenAnimation';
 
     export let json: Partial<DivBaseData & DivActionableData> = {};
     export let origJson: DivBase | undefined = undefined;
@@ -411,6 +412,7 @@
     }
 
     $: jsonActionAnimation = rootCtx.getDerivedFromVars(json.action_animation);
+    let actionAnimationList: AnyAnimation[] = [];
     let actionAnimationTransition = '';
     let animationOpacityStart: number | undefined = undefined;
     let animationOpacityEnd: number | undefined = undefined;
@@ -418,11 +420,16 @@
     let animationScaleEnd: number | undefined = undefined;
     $: {
         if ($jsonActionAnimation) {
-            actionAnimationTransition = parseActionAnimation($jsonActionAnimation);
+            actionAnimationList = flattenAnimation($jsonActionAnimation as ActionAnimation);
+            actionAnimationTransition = actionAnimationList.map(parseActionAnimation).filter(Boolean).join(', ');
         }
     }
 
-    function parseActionAnimation(animation: MaybeMissing<ActionAnimation>): string {
+    function hasNativeAnimation(list: AnyAnimation[]) {
+        return list.some(it => it.name === 'native');
+    }
+
+    function parseActionAnimation(animation: MaybeMissing<AnyAnimation>): string {
         const startValue = correctNumber(animation.start_value, 1);
         const endValue = correctNumber(animation.end_value, 1);
         const delay = correctNonNegativeNumber(animation.start_delay, 0);
@@ -438,13 +445,9 @@
                 animationScaleStart = startValue;
                 animationScaleEnd = endValue;
                 return `transform ${duration}ms ${interpolator} ${delay}ms`;
-            case 'set':
-                if (!animation.items?.length) {
-                    rootCtx.logError(wrapError(new Error("Empty items value for action_animation with name='set'")));
-                    return '';
-                }
-
-                return animation.items.map(parseActionAnimation).join(', ');
+            case 'native':
+            case 'no_animation':
+                return '';
             default:
                 rootCtx.logError(wrapError(new Error('Unknown action_animation name'), {
                     additional: {
@@ -663,7 +666,7 @@
         {doubleTapActions}
         {longTapActions}
         {attrs}
-        hasActionAnimation={Boolean(actionAnimationTransition)}
+        isNativeActionAnimation={!actionAnimationList.length || hasNativeAnimation(actionAnimationList)}
     >
         {#if hasImagesBg}<OuterBackground background={$jsonBackground} />{/if}<slot />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
     </Actionable>
