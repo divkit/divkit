@@ -1,11 +1,14 @@
 package com.yandex.div.core.widget.wraplayout
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import androidx.annotation.Px
 import androidx.core.view.children
 import kotlin.math.max
 
@@ -16,11 +19,19 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         set(value) {
             if (field != value) {
                 field = value
-                isRowDirection = when (field) {
-                    WrapDirection.ROW -> true
-                    WrapDirection.COLUMN -> false
+                when (field) {
+                    WrapDirection.ROW -> {
+                        isRowDirection = true
+                        separatorLength = separatorDrawable?.intrinsicWidth ?: 0
+                        lineSeparatorLength = lineSeparatorDrawable?.intrinsicHeight ?: 0
+                    }
+                    WrapDirection.COLUMN -> {
+                        isRowDirection = false
+                        separatorLength = separatorDrawable?.intrinsicHeight ?: 0
+                        lineSeparatorLength = lineSeparatorDrawable?.intrinsicWidth ?: 0
+                    }
                     else -> throw IllegalStateException(
-                            "Invalid value for the wrap direction is set: $wrapDirection")
+                        "Invalid value for the wrap direction is set: $wrapDirection")
                 }
                 requestLayout()
             }
@@ -44,13 +55,56 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             }
         }
 
+    @WrapShowSeparatorsMode
+    var showSeparators: Int = WrapShowSeparatorsMode.NONE
+        set(value) {
+            if (field != value) {
+                field = value
+                requestLayout()
+            }
+        }
+
+    @WrapShowSeparatorsMode
+    var showLineSeparators: Int = WrapShowSeparatorsMode.NONE
+        set(value) {
+            if (field != value) {
+                field = value
+                requestLayout()
+            }
+        }
+
+    var separatorDrawable: Drawable? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                separatorLength = value?.run {
+                    if (isRowDirection) intrinsicWidth else intrinsicHeight
+                } ?: 0
+                requestLayout()
+            }
+        }
+
+    var lineSeparatorDrawable: Drawable? = null
+        set(value) {
+            if (field != value) {
+                field = value
+                lineSeparatorLength = value?.run {
+                    if (isRowDirection) intrinsicHeight else intrinsicWidth
+                } ?: 0
+                requestLayout()
+            }
+        }
+
     private var isRowDirection = true
 
     private val lines: MutableList<WrapLine> = mutableListOf()
 
     private var childState = 0
 
-    private var indexToLine: IntArray? = null
+    @Px
+    private var separatorLength = 0
+    @Px
+    private var lineSeparatorLength = 0
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         lines.clear()
@@ -69,24 +123,24 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
         val calculatedMaxWidth =
-                if (isRowDirection) largestMainSize else sumOfCrossSize + paddingLeft + paddingRight
+            if (isRowDirection) largestMainSize else sumOfCrossSize + paddingLeft + paddingRight
         val calculatedMaxHeight =
-                if (isRowDirection) sumOfCrossSize + paddingTop + paddingBottom else largestMainSize
+            if (isRowDirection) sumOfCrossSize + paddingTop + paddingBottom else largestMainSize
 
         childState = getState(widthMode, childState, widthSize, calculatedMaxWidth,
-                MEASURED_STATE_TOO_SMALL)
+            MEASURED_STATE_TOO_SMALL)
         val widthSizeAndState = resolveSizeAndState(
-                getSize(widthMode, widthSize, calculatedMaxWidth),
-                widthMeasureSpec,
-                childState
+            getSize(widthMode, widthSize, calculatedMaxWidth),
+            widthMeasureSpec,
+            childState
         )
 
         childState = getState(heightMode, childState, heightSize, calculatedMaxHeight,
-                MEASURED_STATE_TOO_SMALL shr MEASURED_HEIGHT_STATE_SHIFT)
+            MEASURED_STATE_TOO_SMALL shr MEASURED_HEIGHT_STATE_SHIFT)
         val heightSizeAndState = resolveSizeAndState(
-                getSize(heightMode, heightSize, calculatedMaxHeight),
-                heightMeasureSpec,
-                childState
+            getSize(heightMode, heightSize, calculatedMaxHeight),
+            heightMeasureSpec,
+            childState
         )
 
         setMeasuredDimension(widthSizeAndState, heightSizeAndState)
@@ -94,16 +148,16 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
 
     private fun calculateLines(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var largestSizeInCross = Int.MIN_VALUE
-        var sumCrossSize = 0
+        var sumCrossSize = edgeLineSeparatorsLength
 
         val mainMeasureSpec = if (isRowDirection) widthMeasureSpec else heightMeasureSpec
         val mainMode = MeasureSpec.getMode(mainMeasureSpec)
         val mainSize = MeasureSpec.getSize(mainMeasureSpec)
         val parentHorizontalPaddings = paddingLeft + paddingRight
         val parentVerticalPaddings = paddingTop + paddingBottom
-        val mainPaddings = if (isRowDirection) parentHorizontalPaddings else parentVerticalPaddings
+        val mainPaddings = edgeSeparatorsLength +
+            if (isRowDirection) parentHorizontalPaddings else parentVerticalPaddings
 
-        var indexInLine = 0
         var line = WrapLine(mainSize = mainPaddings)
 
         children.forEachIndexed { index, child ->
@@ -127,9 +181,9 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             }
 
             val childWidthMeasureSpec =
-                    getChildMeasureSpec(widthMeasureSpec, horizontalPaddings, item.width)
+                getChildMeasureSpec(widthMeasureSpec, horizontalPaddings, item.width)
             val childHeightMeasureSpec =
-                    getChildMeasureSpec(heightMeasureSpec, verticalPaddings, item.height)
+                getChildMeasureSpec(heightMeasureSpec, verticalPaddings, item.height)
 
             child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
             childState = View.combineMeasuredStates(childState, child.measuredState)
@@ -146,19 +200,19 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
                 childCrossSize = childWidth
             }
 
-            if (isWrapRequired(mainMode, mainSize, line.mainSize, childMainSize)) {
+            if (isWrapRequired(mainMode, mainSize, line.mainSize, childMainSize, line.itemCount)) {
                 if (line.itemCountNotGone > 0) {
                     lines.add(line)
                     sumCrossSize += line.crossSize
                 }
                 line = WrapLine(firstIndex = index, mainSize = mainPaddings, itemCount = 1)
-                indexInLine = 0
                 largestSizeInCross = Int.MIN_VALUE
             } else {
+                if (line.itemCount > 0) {
+                    line.mainSize += middleSeparatorLength
+                }
                 line.itemCount++
-                indexInLine++
             }
-            indexToLine?.set(index, lines.size)
             line.mainSize += childMainSize
             largestSizeInCross = max(largestSizeInCross, childCrossSize)
             line.crossSize = max(line.crossSize, largestSizeInCross)
@@ -168,6 +222,37 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             }
         }
     }
+
+    private val edgeSeparatorsLength get() = startSeparatorLength + endSeparatorLength
+
+    private val edgeLineSeparatorsLength get() = startLineSeparatorLength + endLineSeparatorLength
+
+    private val startSeparatorLength get() =
+        if (showSeparatorAtStart(showSeparators)) separatorLength else 0
+
+    private val middleSeparatorLength get() =
+        if (showSeparatorBetween(showSeparators)) separatorLength else 0
+
+    private val endSeparatorLength get() =
+        if (showSeparatorAtEnd(showSeparators)) separatorLength else 0
+
+    private val startLineSeparatorLength get() =
+        if (showSeparatorAtStart(showLineSeparators)) lineSeparatorLength else 0
+
+    private val middleLineSeparatorLength get() =
+        if (showSeparatorBetween(showLineSeparators)) lineSeparatorLength else 0
+
+    private val endLineSeparatorLength get() =
+        if (showSeparatorAtEnd(showLineSeparators)) lineSeparatorLength else 0
+
+    private fun showSeparatorAtStart(@WrapShowSeparatorsMode mode: Int) =
+        (mode and WrapShowSeparatorsMode.SHOW_AT_START) != 0
+
+    private fun showSeparatorBetween(@WrapShowSeparatorsMode mode: Int) =
+        (mode and WrapShowSeparatorsMode.SHOW_BETWEEN) != 0
+
+    private fun showSeparatorAtEnd(@WrapShowSeparatorsMode mode: Int) =
+        (mode and WrapShowSeparatorsMode.SHOW_AT_END) != 0
 
     private val View.isHidden get() = when {
         visibility == View.GONE -> true
@@ -183,13 +268,22 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         return isLastItem
     }
 
-    private fun isWrapRequired(mode: Int, maxSize: Int, currentLength: Int, childLength: Int) =
-            mode != MeasureSpec.UNSPECIFIED && maxSize < currentLength + childLength
+    private fun isWrapRequired(
+        mode: Int,
+        maxSize: Int,
+        currentLength: Int,
+        childLength: Int,
+        lineItemsCount: Int
+    ): Boolean {
+        val length = currentLength + childLength +
+            if (lineItemsCount != 0) middleSeparatorLength else 0
+        return mode != MeasureSpec.UNSPECIFIED && maxSize < length
+    }
 
     private fun determineCrossSize(
-            measureSpec: Int,
-            @WrapAlignment crossAlignment: Int,
-            paddingAlongCrossAxis: Int
+        measureSpec: Int,
+        @WrapAlignment crossAlignment: Int,
+        paddingAlongCrossAxis: Int
     ) {
         if (lines.size == 0) {
             return
@@ -232,11 +326,11 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
     }
 
     private fun getState(
-            mode: Int,
-            state: Int,
-            size: Int,
-            maxSize: Int,
-            tooSmallState: Int
+        mode: Int,
+        state: Int,
+        size: Int,
+        maxSize: Int,
+        tooSmallState: Int
     ) = when {
         mode == MeasureSpec.UNSPECIFIED -> state
         size < maxSize -> combineMeasuredStates(state, tooSmallState)
@@ -245,57 +339,58 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
 
     private val largestMainSize get() = lines.maxOfOrNull { it.mainSize } ?: 0
 
-    private val sumOfCrossSize get() = lines.sumOf { it.crossSize }
+    private val sumOfCrossSize get() = lines.sumOf { it.crossSize } +
+        edgeLineSeparatorsLength + middleLineSeparatorLength * (lines.size - 1)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         if (isRowDirection) {
-            layoutHorizontal(left, top, right, bottom)
+            layoutHorizontal(left, right)
         } else {
-            layoutVertical(left, top, right, bottom)
+            layoutVertical(top, bottom)
         }
     }
 
-    private fun layoutHorizontal(left: Int, top: Int, right: Int, bottom: Int) {
+    private fun layoutHorizontal(left: Int, right: Int) {
         val width = right - left
-        var childBottom = bottom - top - paddingBottom
-        var childTop = paddingTop
+        var childTop = paddingTop + startLineSeparatorLength
 
         var childLeft: Int
-        var childRight: Int
+        var needLineSeparator = false
         lines.forEach { line ->
-            when (alignmentHorizontal) {
-                WrapAlignment.START -> {
-                    childLeft = paddingLeft
-                    childRight = width - paddingRight
-                }
-                WrapAlignment.END -> {
-                    childLeft = width - line.mainSize + paddingRight
-                    childRight = line.mainSize - paddingLeft
-                }
-                WrapAlignment.CENTER -> {
-                    childLeft = paddingLeft + (width - line.mainSize) / 2
-                    childRight = width - paddingRight - (width - line.mainSize) / 2
-                }
+            childLeft = startSeparatorLength + when (alignmentHorizontal) {
+                WrapAlignment.START -> paddingLeft
+                WrapAlignment.END -> width - line.mainSize - paddingRight
+                WrapAlignment.CENTER -> paddingLeft + (width - line.mainSize) / 2
                 else -> throw java.lang.IllegalStateException(
-                        "Invalid alignmentHorizontal is set: $alignmentHorizontal")
+                    "Invalid alignmentHorizontal is set: $alignmentHorizontal")
             }
+
+            if (needLineSeparator) {
+                childTop += middleLineSeparatorLength
+            }
+            needLineSeparator = true
+
+            var needSeparator = false
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
-                if (child == null || child.isHidden) {
+                if (child?.isHidden != false) {
                     continue
                 }
                 val lp = child.layoutParams as LayoutParams
                 childLeft += lp.leftMargin
-                childRight -= lp.rightMargin
+                if (needSeparator) {
+                    childLeft += middleSeparatorLength
+                }
                 val currentTop = childTop + getTopOffsetForHorizontalLayout(child, line.crossSize)
                 child.layout(childLeft, currentTop,
-                        childLeft + child.measuredWidth, currentTop + child.measuredHeight)
+                    childLeft + child.measuredWidth, currentTop + child.measuredHeight)
                 childLeft += child.measuredWidth + lp.rightMargin
-                childRight -= child.measuredWidth + lp.leftMargin
+                needSeparator = true
             }
             childTop += line.crossSize
-            childBottom -= line.crossSize
+            line.right = childLeft
+            line.bottom = childTop
         }
     }
 
@@ -309,47 +404,47 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         }
     }
 
-    private fun layoutVertical(left: Int, top: Int, right: Int, bottom: Int) {
+    private fun layoutVertical(top: Int, bottom: Int) {
         val height = bottom - top
-        var childLeft = paddingLeft
-        var childRight = right - left - paddingRight
+        var childLeft = paddingLeft + startLineSeparatorLength
 
         var childTop: Int
-        var childBottom: Int
+        var needLineSeparator = false
         lines.forEach { line ->
-            when (alignmentVertical) {
-                WrapAlignment.START -> {
-                    childTop = paddingTop
-                    childBottom = height - paddingBottom
-                }
-                WrapAlignment.END -> {
-                    childTop = height - line.mainSize + paddingBottom
-                    childBottom = line.mainSize - paddingTop
-                }
-                WrapAlignment.CENTER -> {
-                    childTop = paddingTop + (height - line.mainSize) / 2
-                    childBottom = height - paddingBottom - (height - line.mainSize) / 2
-                }
+            childTop = startSeparatorLength + when (alignmentVertical) {
+                WrapAlignment.START -> paddingTop
+                WrapAlignment.END -> height - line.mainSize + paddingBottom
+                WrapAlignment.CENTER -> paddingTop + (height - line.mainSize) / 2
                 else -> throw java.lang.IllegalStateException(
-                        "Invalid alignmentVertical is set: $alignmentVertical")
+                    "Invalid alignmentVertical is set: $alignmentVertical")
             }
+
+            if (needLineSeparator) {
+                childLeft += middleLineSeparatorLength
+            }
+            needLineSeparator = true
+
+            var needSeparator = false
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
-                if (child == null || child.isHidden) {
+                if (child?.isHidden != false) {
                     continue
                 }
                 val lp = child.layoutParams as LayoutParams
                 childTop += lp.topMargin
-                childBottom -= lp.bottomMargin
+                if (needSeparator) {
+                    childTop += middleSeparatorLength
+                }
                 val currentLeft = childLeft + getLeftOffsetForVerticalLayout(child, line.crossSize)
                 child.layout(currentLeft, childTop,
-                        currentLeft + child.measuredWidth, childTop + child.measuredHeight)
+                    currentLeft + child.measuredWidth, childTop + child.measuredHeight)
                 childTop += child.measuredHeight + lp.bottomMargin
-                childBottom -= child.measuredHeight + lp.topMargin
+                needSeparator = true
             }
             childLeft += line.crossSize
-            childRight -= line.crossSize
+            line.right = childLeft
+            line.bottom = childTop
         }
     }
 
@@ -363,6 +458,144 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         }
     }
 
+    override fun onDraw(canvas: Canvas) {
+        separatorDrawable ?: lineSeparatorDrawable ?: return
+        if (showSeparators == WrapShowSeparatorsMode.NONE &&
+            showLineSeparators == WrapShowSeparatorsMode.NONE) {
+            return
+        }
+        if (isRowDirection) {
+            drawSeparatorsHorizontal(canvas)
+        } else {
+            drawSeparatorsVertical(canvas)
+        }
+    }
+
+    private fun drawSeparatorsHorizontal(canvas: Canvas) {
+        var lineTop: Int
+        var lineBottom = 0
+        val drawLineSeparator = { top: Int -> drawSeparator(lineSeparatorDrawable, canvas,
+            paddingLeft, top - lineSeparatorLength, width - paddingRight, top) }
+        if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
+            lineTop = lines.find { it.bottom > 0 }?.let { it.bottom - it.crossSize } ?: 0
+            drawLineSeparator(lineTop)
+        }
+        var needLineSeparator = false
+        lines.forEach { line ->
+            if (line.itemCountNotGone == 0) {
+                return@forEach
+            }
+
+            lineBottom = line.bottom
+            lineTop = lineBottom - line.crossSize
+            if (needLineSeparator && showSeparatorBetween(showLineSeparators)) {
+                drawLineSeparator(lineTop)
+            }
+            needLineSeparator = true
+
+            var childLeft: Int
+            var childRight = 0
+            var needStartSeparator = true
+            for (j in 0 until line.itemCount) {
+                val index = line.firstIndex + j
+                val child = getChildAt(index)
+                if (child?.isHidden != false) {
+                    continue
+                }
+
+                val lp = child.layoutParams as LayoutParams
+                childLeft = child.left - lp.leftMargin
+                childRight = child.right + lp.rightMargin
+                if (needStartSeparator) {
+                    if (showSeparatorAtStart(showSeparators)) {
+                        drawSeparator(separatorDrawable, canvas,
+                            childLeft - separatorLength, lineTop, childLeft, lineBottom)
+                    }
+                    needStartSeparator = false
+                } else if (showSeparatorBetween(showSeparators)) {
+                    drawSeparator(separatorDrawable, canvas,
+                        childLeft - separatorLength, lineTop, childLeft, lineBottom)
+                }
+            }
+            if (childRight > 0 && showSeparatorAtEnd(showSeparators)) {
+                drawSeparator(separatorDrawable, canvas,
+                    childRight, lineTop, childRight + separatorLength, lineBottom)
+            }
+        }
+        if (lineBottom > 0 && showSeparatorAtEnd(showLineSeparators)) {
+            drawLineSeparator(lineBottom + lineSeparatorLength)
+        }
+    }
+
+    private fun drawSeparatorsVertical(canvas: Canvas) {
+        var lineLeft: Int
+        var lineRight = 0
+        val drawLineSeparator = { left: Int -> drawSeparator(lineSeparatorDrawable, canvas,
+            left - lineSeparatorLength, paddingTop, left, height - paddingBottom) }
+        if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
+            lineLeft = lines.find { it.right > 0 }?.let { it.right - it.crossSize } ?: 0
+            drawLineSeparator(lineLeft)
+        }
+        var needLineSeparator = false
+        lines.forEach { line ->
+            if (line.itemCountNotGone == 0) {
+                return@forEach
+            }
+
+            lineRight = line.right
+            lineLeft = lineRight - line.crossSize
+            if (needLineSeparator && showSeparatorBetween(showLineSeparators)) {
+                drawLineSeparator(lineLeft)
+            }
+            needLineSeparator = lineSeparatorDrawable != null
+
+            var childTop: Int
+            var childBottom = 0
+            var needStartSeparator = true
+            for (j in 0 until line.itemCount) {
+                val index = line.firstIndex + j
+                val child = getChildAt(index)
+                if (child?.isHidden != false) {
+                    continue
+                }
+
+                val lp = child.layoutParams as LayoutParams
+                childTop = child.top - lp.topMargin
+                childBottom = child.bottom + lp.bottomMargin
+                if (needStartSeparator) {
+                    if (showSeparatorAtStart(showSeparators)) {
+                        drawSeparator(separatorDrawable, canvas,
+                            lineLeft, childTop - separatorLength, lineRight, childTop)
+                    }
+                    needStartSeparator = false
+                } else if (showSeparatorBetween(showSeparators)) {
+                    drawSeparator(separatorDrawable, canvas,
+                        lineLeft, childTop - separatorLength, lineRight, childTop)
+                }
+            }
+            if (childBottom > 0 && showSeparatorAtEnd(showSeparators)) {
+                drawSeparator(separatorDrawable, canvas,
+                    lineLeft, childBottom, lineRight, childBottom + separatorLength)
+            }
+        }
+        if (lineRight > 0 && showSeparatorAtEnd(showLineSeparators)) {
+            drawLineSeparator(lineRight + lineSeparatorLength)
+        }
+    }
+
+    private fun drawSeparator(
+        separator: Drawable?, canvas: Canvas,
+        left: Int, top: Int, right: Int, bottom: Int
+    ) = separator?.run {
+        val centerHorizontal = (left + right) / 2f
+        val centerVertical = (top + bottom) / 2f
+        val halfWidth = intrinsicWidth / 2f
+        val halfHeight = intrinsicHeight / 2f
+        setBounds((centerHorizontal - halfWidth).toInt(), (centerVertical - halfHeight).toInt(),
+            (centerHorizontal + halfWidth).toInt(), (centerVertical + halfHeight).toInt())
+        draw(canvas)
+    }
+
     private val LayoutParams.childAlignment get() = when {
         alignSelf != WrapAlignment.AUTO -> alignSelf
         isRowDirection -> alignmentVertical
@@ -374,11 +607,11 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
     override fun generateLayoutParams(attrs: AttributeSet?) = LayoutParams(context, attrs)
 
     override fun generateLayoutParams(lp: ViewGroup.LayoutParams?): ViewGroup.LayoutParams =
-            when (lp) {
-                is LayoutParams -> LayoutParams(lp)
-                is MarginLayoutParams -> LayoutParams(lp)
-                else -> LayoutParams(lp)
-            }
+        when (lp) {
+            is LayoutParams -> LayoutParams(lp)
+            is MarginLayoutParams -> LayoutParams(lp)
+            else -> LayoutParams(lp)
+        }
 
     internal class LayoutParams : MarginLayoutParams {
         var alignSelf = WrapAlignment.AUTO
@@ -393,11 +626,15 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
     }
 
     private data class WrapLine(
-            val firstIndex: Int = 0,
-            var mainSize: Int = 0,
-            var crossSize: Int = 0,
-            var itemCount: Int = 0,
-            var goneItemCount: Int = 0
+        val firstIndex: Int = 0,
+        var mainSize: Int = 0,
+        var crossSize: Int = 0,
+
+        var right: Int = 0,
+        var bottom: Int = 0,
+
+        var itemCount: Int = 0,
+        var goneItemCount: Int = 0
     ) {
         val itemCountNotGone get() = itemCount - goneItemCount
     }

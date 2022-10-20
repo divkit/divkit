@@ -23,6 +23,7 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChild
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.widget.wraplayout.WrapDirection
+import com.yandex.div.core.widget.wraplayout.WrapShowSeparatorsMode
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -191,6 +192,19 @@ internal class DivContainerBinder @Inject constructor(
             alignmentVertical = it.toWrapAlignment()
         })
 
+        div.separator?.let { separator ->
+            observeSeparatorShowMode(separator, resolver) {
+                showSeparators = getWrapShowSeparatorsMode(separator, resolver)
+            }
+            observeSeparatorDrawable(this, separator, resolver) { separatorDrawable = it }
+        }
+        div.lineSeparator?.let { separator ->
+            observeSeparatorShowMode(separator, resolver) {
+                showLineSeparators = getWrapShowSeparatorsMode(separator, resolver)
+            }
+            observeSeparatorDrawable(this, separator, resolver) { lineSeparatorDrawable = it }
+        }
+
         this.div = div
     }
 
@@ -212,6 +226,24 @@ internal class DivContainerBinder @Inject constructor(
         applyDrawable: (Drawable?) -> Unit
     ) = observeDrawable(resolver, separator.style) {
         applyDrawable(it.toDrawable(view.resources.displayMetrics, resolver))
+    }
+
+    @WrapShowSeparatorsMode
+    private fun getWrapShowSeparatorsMode(
+        separator: DivContainer.Separator,
+        resolver: ExpressionResolver
+    ): Int {
+        var showSeparators = WrapShowSeparatorsMode.NONE
+        if (separator.showAtStart.evaluate(resolver)) {
+            showSeparators = showSeparators or WrapShowSeparatorsMode.SHOW_AT_START
+        }
+        if (separator.showBetween.evaluate(resolver)) {
+            showSeparators = showSeparators or WrapShowSeparatorsMode.SHOW_BETWEEN
+        }
+        if (separator.showAtEnd.evaluate(resolver)) {
+            showSeparators = showSeparators or WrapShowSeparatorsMode.SHOW_AT_END
+        }
+        return showSeparators
     }
 
     private fun observeChildViewAlignment(
