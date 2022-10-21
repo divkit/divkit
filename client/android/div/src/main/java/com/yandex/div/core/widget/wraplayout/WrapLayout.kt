@@ -339,8 +339,8 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
 
     private val largestMainSize get() = lines.maxOfOrNull { it.mainSize } ?: 0
 
-    private val sumOfCrossSize get() = lines.sumOf { it.crossSize } +
-        edgeLineSeparatorsLength + middleLineSeparatorLength * (lines.size - 1)
+    private val sumOfCrossSize get() = lines.sumOf { it.crossSize } + edgeLineSeparatorsLength +
+        middleLineSeparatorLength * (lines.count { it.itemCountNotGone > 0 } - 1)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         if (isRowDirection) {
@@ -365,16 +365,18 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
                     "Invalid alignmentHorizontal is set: $alignmentHorizontal")
             }
 
-            if (needLineSeparator) {
-                childTop += middleLineSeparatorLength
+            if (line.itemCountNotGone > 0) {
+                if (needLineSeparator) {
+                    childTop += middleLineSeparatorLength
+                }
+                needLineSeparator = true
             }
-            needLineSeparator = true
 
             var needSeparator = false
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
-                if (child?.isHidden != false) {
+                if (child == null || child.isHidden) {
                     continue
                 }
                 val lp = child.layoutParams as LayoutParams
@@ -419,16 +421,18 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
                     "Invalid alignmentVertical is set: $alignmentVertical")
             }
 
-            if (needLineSeparator) {
-                childLeft += middleLineSeparatorLength
+            if (line.itemCountNotGone > 0) {
+                if (needLineSeparator) {
+                    childLeft += middleLineSeparatorLength
+                }
+                needLineSeparator = true
             }
-            needLineSeparator = true
 
             var needSeparator = false
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
-                if (child?.isHidden != false) {
+                if (child == null || child.isHidden) {
                     continue
                 }
                 val lp = child.layoutParams as LayoutParams
@@ -477,7 +481,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         val drawLineSeparator = { top: Int -> drawSeparator(lineSeparatorDrawable, canvas,
             paddingLeft, top - lineSeparatorLength, width - paddingRight, top) }
         if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
-            lineTop = lines.find { it.bottom > 0 }?.let { it.bottom - it.crossSize } ?: 0
+            lineTop = lines.find { it.itemCountNotGone > 0 }?.let { it.bottom - it.crossSize } ?: 0
             drawLineSeparator(lineTop)
         }
         var needLineSeparator = false
@@ -499,7 +503,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
-                if (child?.isHidden != false) {
+                if (child == null || child.isHidden) {
                     continue
                 }
 
@@ -533,7 +537,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         val drawLineSeparator = { left: Int -> drawSeparator(lineSeparatorDrawable, canvas,
             left - lineSeparatorLength, paddingTop, left, height - paddingBottom) }
         if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
-            lineLeft = lines.find { it.right > 0 }?.let { it.right - it.crossSize } ?: 0
+            lineLeft = lines.find { it.itemCountNotGone > 0 }?.let { it.right - it.crossSize } ?: 0
             drawLineSeparator(lineLeft)
         }
         var needLineSeparator = false
@@ -555,7 +559,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             for (j in 0 until line.itemCount) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
-                if (child?.isHidden != false) {
+                if (child == null || child.isHidden) {
                     continue
                 }
 
