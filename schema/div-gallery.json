@@ -37,7 +37,10 @@
         "cross_spacing": {
           "$ref": "common.json#/non_negative_integer",
           "$description": "translations.json#/div_gallery_cross_spacing",
-          "platforms": ["web"]
+          "platforms": [
+            "android",
+            "web"
+          ]
         },
         "scroll_mode": {
           "type": "string",
