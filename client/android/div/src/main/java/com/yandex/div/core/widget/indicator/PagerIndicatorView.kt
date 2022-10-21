@@ -6,10 +6,11 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.widget.indicator.animations.ScaleIndicatorAnimator
-import com.yandex.div.core.widget.indicator.animations.SliderIndicatorAnimator
-import com.yandex.div.core.widget.indicator.animations.WormIndicatorAnimator
+import com.yandex.div.core.widget.indicator.animations.*
+import com.yandex.div.core.widget.indicator.forms.Circle
 import com.yandex.div.core.widget.indicator.forms.RoundedRect
+import com.yandex.div.core.widget.indicator.forms.SingleIndicatorDrawer
+import com.yandex.div.core.widget.indicator.forms.getIndicatorDrawer
 import kotlin.math.min
 
 @SuppressWarnings("rawtypes")
@@ -29,15 +30,9 @@ open class PagerIndicatorView @JvmOverloads constructor(
 
     fun setStyle(style: IndicatorParams.Style) {
         this.style = style
-        val singleIndicatorDrawer = when(style.shape) {
-            IndicatorParams.Shape.ROUND_RECT -> RoundedRect(style)
-        }
-        val animator = when(style.animation) {
-            IndicatorParams.Animation.SCALE -> ScaleIndicatorAnimator(style)
-            IndicatorParams.Animation.WORM -> WormIndicatorAnimator(style)
-            IndicatorParams.Animation.SLIDER -> SliderIndicatorAnimator(style)
-        }
-        stripDrawer = IndicatorsStripDrawer(style, singleIndicatorDrawer, animator)
+
+        stripDrawer = IndicatorsStripDrawer(style, getIndicatorDrawer(style), getIndicatorAnimator(style))
+
         stripDrawer?.calculateMaximumVisibleItems(
             measuredWidth - paddingLeft - paddingRight,
             measuredHeight - paddingTop - paddingBottom
@@ -53,7 +48,7 @@ open class PagerIndicatorView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        val selectedHeight = style?.selectedHeight ?: 0.0f
+        val selectedHeight = style?.shape?.height ?: 0f
         val desiredHeight = (selectedHeight + paddingTop + paddingBottom).toInt()
         val measuredHeight = when (heightMode) {
             MeasureSpec.EXACTLY -> heightSize
@@ -64,7 +59,7 @@ open class PagerIndicatorView @JvmOverloads constructor(
 
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val selectedWidth = style?.selectedWidth ?: 0.0f
+        val selectedWidth = style?.shape?.width ?: 0f
         val spaceBetweenCenters = style?.spaceBetweenCenters ?: 0.0f
         val desiredWidth = (spaceBetweenCenters * (pagerAdapter?.itemCount ?: 0) + selectedWidth).toInt() + paddingLeft + paddingRight
         val measuredWidth = when (widthMode) {
@@ -119,7 +114,7 @@ open class PagerIndicatorView @JvmOverloads constructor(
         pager = pager2
     }
 
-    fun detachPager() {
+    private fun detachPager() {
         onPageChangeListener?.let {
             pager?.unregisterOnPageChangeCallback(it)
         }

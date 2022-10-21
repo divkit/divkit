@@ -15,18 +15,19 @@ class IndicatorStripDrawerTest {
         val style = IndicatorParams.Style(
             color = 0,
             selectedColor = 0,
-            normalWidth = 10f,
-            selectedWidth = 10f,
-            minimumWidth = 10f,
-            normalHeight = 10f,
-            selectedHeight = 10f,
-            minimumHeight = 10f,
-            cornerRadius = 5f,
-            selectedCornerRadius = 5f,
-            minimumCornerRadius = 5f,
+            shape = IndicatorParams.Shape.RoundedRect(
+                normalWidth = 10f,
+                selectedWidth = 10f,
+                minimumWidth = 10f,
+                normalHeight = 10f,
+                selectedHeight = 10f,
+                minimumHeight = 10f,
+                cornerRadius = 5f,
+                selectedCornerRadius = 5f,
+                minimumCornerRadius = 5f,
+            ),
             spaceBetweenCenters = 15f,
-            IndicatorParams.Animation.SCALE,
-            IndicatorParams.Shape.ROUND_RECT,
+            animation = IndicatorParams.Animation.SCALE,
         )
 
         val indicatorsStripDrawer = IndicatorsStripDrawer(style, RoundedRect(style), ScaleIndicatorAnimator(style))
@@ -41,18 +42,19 @@ class IndicatorStripDrawerTest {
         val style = IndicatorParams.Style(
             color = 0,
             selectedColor = 0,
-            normalWidth = 10f,
-            selectedWidth = 10f,
-            minimumWidth = 10f,
-            normalHeight = 10f,
-            selectedHeight = 10f,
-            minimumHeight = 10f,
-            cornerRadius = 10f,
-            selectedCornerRadius = 10f,
-            minimumCornerRadius = 10f,
+            shape = IndicatorParams.Shape.RoundedRect(
+                normalWidth = 10f,
+                selectedWidth = 10f,
+                minimumWidth = 10f,
+                normalHeight = 10f,
+                selectedHeight = 10f,
+                minimumHeight = 10f,
+                cornerRadius = 10f,
+                selectedCornerRadius = 10f,
+                minimumCornerRadius = 10f,
+            ),
             spaceBetweenCenters = 15f,
-            IndicatorParams.Animation.SCALE,
-            IndicatorParams.Shape.ROUND_RECT,
+            animation = IndicatorParams.Animation.SCALE,
         )
 
         val indicatorsStripDrawer = IndicatorsStripDrawer(style, RoundedRect(style), ScaleIndicatorAnimator(style))

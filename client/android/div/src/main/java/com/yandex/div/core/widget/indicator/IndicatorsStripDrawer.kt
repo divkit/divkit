@@ -1,19 +1,20 @@
 package com.yandex.div.core.widget.indicator
 
+import android.annotation.SuppressLint
 import android.graphics.Canvas
 import com.yandex.div.core.widget.indicator.animations.IndicatorAnimator
 import com.yandex.div.core.widget.indicator.forms.SingleIndicatorDrawer
 
 class IndicatorsStripDrawer(
     private val styleParams: IndicatorParams.Style,
-    private var singleIndicatorDrawer: SingleIndicatorDrawer,
-    private var animator: IndicatorAnimator,
+    private val singleIndicatorDrawer: SingleIndicatorDrawer,
+    private val animator: IndicatorAnimator,
 ) {
     private var itemsCount: Int = 0
     private var maxVisibleCount: Int = 0
 
-    private var baseYOffset = styleParams.selectedWidth / 2f
-    private var baseXOffset = styleParams.selectedWidth
+    private var baseYOffset: Float = styleParams.shape.width
+    private var baseXOffset: Float = styleParams.shape.width / 2
     private var spaceBetweenCenters = styleParams.spaceBetweenCenters
 
     private var viewportWidth: Int = 0
@@ -38,18 +39,16 @@ class IndicatorsStripDrawer(
         adjustVisibleItems(position, 0f)
     }
 
+    @SuppressLint("DrawAllocation")
     fun onDraw(canvas: Canvas) {
         for (index in startIndex..endIndex) {
             val xOffset = getItemOffsetAt(index) - firstVisibleItemOffset
 
             if (xOffset !in 0f..viewportWidth.toFloat()) continue
-
-            var itemWidth = animator.getItemWidthAt(index)
-            var itemHeight = animator.getItemHeightAt(index)
-            var cornerRadius = animator.getItemCornerRadiusAt(index)
+            var itemSize = animator.getItemSizeAt(index)
             if (itemsCount > maxVisibleCount) {
                 val scaleDistance = spaceBetweenCenters * 1.3f
-                val smallScaleDistance = styleParams.selectedWidth / 2
+                val smallScaleDistance = styleParams.shape.width / 2
                 val currentScaleDistance = if (index == 0 || index == itemsCount - 1) {
                     smallScaleDistance
                 } else {
@@ -57,24 +56,36 @@ class IndicatorsStripDrawer(
                 }
                 val viewportSize = viewportWidth
                 if (xOffset < currentScaleDistance) { // left border
-                    val calculatedSize = itemWidth * xOffset / currentScaleDistance
-                    if (calculatedSize <= styleParams.minimumWidth) {
-                        itemWidth = styleParams.minimumWidth
-                        itemHeight = styleParams.minimumHeight
-                        cornerRadius = styleParams.cornerRadius
-                    } else if (calculatedSize < itemWidth) {
-                        itemWidth = calculatedSize
-                        itemHeight = itemHeight * xOffset / currentScaleDistance
+                    val calculatedSize = itemSize.width * xOffset / currentScaleDistance
+                    if (calculatedSize <= styleParams.shape.minimumSize) {
+                        itemSize = styleParams.shape.minimumItemSize
+                    } else if (calculatedSize < itemSize.width) {
+                        itemSize = when (itemSize) {
+                            is IndicatorParams.ItemSize.RoundedRect -> IndicatorParams.ItemSize.RoundedRect(
+                                calculatedSize,
+                                itemSize.itemHeight * xOffset / currentScaleDistance,
+                                itemSize.cornerRadius
+                            )
+                            is IndicatorParams.ItemSize.Circle -> IndicatorParams.ItemSize.Circle(
+                                calculatedSize
+                            )
+                        }
                     }
                 } else if (xOffset > viewportSize - currentScaleDistance) { // right border
-                    val calculatedSize = itemWidth * (-xOffset + viewportSize) / currentScaleDistance
-                    if (calculatedSize <= styleParams.minimumWidth) {
-                        itemWidth = styleParams.minimumWidth
-                        itemHeight = styleParams.minimumHeight
-                        cornerRadius = styleParams.minimumCornerRadius
-                    } else if (calculatedSize < itemWidth) {
-                        itemWidth = calculatedSize
-                        itemHeight = itemHeight * (-xOffset + viewportSize) / currentScaleDistance;
+                    val calculatedSize = itemSize.width * (-xOffset + viewportSize) / currentScaleDistance
+                    if (calculatedSize <= styleParams.shape.minimumSize) {
+                        itemSize = styleParams.shape.minimumItemSize
+                    } else if (calculatedSize < itemSize.width) {
+                        itemSize = when (itemSize) {
+                            is IndicatorParams.ItemSize.RoundedRect -> IndicatorParams.ItemSize.RoundedRect(
+                                calculatedSize,
+                                itemSize.itemHeight * (-xOffset + viewportSize) / currentScaleDistance,
+                                itemSize.cornerRadius
+                            )
+                            is IndicatorParams.ItemSize.Circle -> IndicatorParams.ItemSize.Circle(
+                                calculatedSize
+                            )
+                        }
                     }
                 }
             }
@@ -83,16 +94,14 @@ class IndicatorsStripDrawer(
                 canvas,
                 xOffset,
                 baseYOffset,
-                itemWidth,
-                itemHeight,
-                cornerRadius,
+                itemSize,
                 animator.getColorAt(index)
             )
         }
         val xOffset = getItemOffsetAt(selectedItemPosition) - firstVisibleItemOffset
         val rect = animator.getSelectedItemRect(xOffset, baseYOffset)
         if (rect != null) {
-            singleIndicatorDrawer.drawSelected(canvas, rect, styleParams.selectedCornerRadius)
+            singleIndicatorDrawer.drawSelected(canvas, rect)
         }
     }
 
@@ -118,7 +127,7 @@ class IndicatorsStripDrawer(
     fun getMaxVisibleItems() = maxVisibleCount
 
     private fun calculateMaximumVisibleItems() {
-        maxVisibleCount = (((viewportWidth - styleParams.selectedWidth) / spaceBetweenCenters).toInt()).coerceAtMost(itemsCount)
+        maxVisibleCount = (((viewportWidth - styleParams.shape.width) / spaceBetweenCenters).toInt()).coerceAtMost(itemsCount)
     }
 
     private fun adjustVisibleItems(position: Int, positionOffset: Float) {
@@ -144,5 +153,4 @@ class IndicatorsStripDrawer(
     }
 
     private fun getItemOffsetAt(position: Int) = baseXOffset + spaceBetweenCenters * position
-
 }

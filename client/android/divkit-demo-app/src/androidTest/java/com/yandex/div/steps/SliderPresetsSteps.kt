@@ -9,18 +9,18 @@ import org.hamcrest.Matchers.allOf
 internal fun sliderPreferences(f: SliderPreferencesSteps.() -> Unit) = f(SliderPreferencesSteps())
 
 class SliderPreferencesSteps {
-    val defaultSlider get() = onView(allOf(withContentDescription("Дефолтный слайдер"),
+    val defaultSlider get() = onView(allOf(withContentDescription("Default slider"),
         isAssignableFrom(SliderView::class.java)))
 
-    val max10Slider get() = onView(allOf(withContentDescription("Мин - 0, макс - 10"),
+    val max10Slider get() = onView(allOf(withContentDescription("Min - 0, max - 10"),
         isAssignableFrom(SliderView::class.java)))
 
-    val max3Slider get() = onView(allOf(withContentDescription("Мин - 0, макс - 3"),
+    val max3Slider get() = onView(allOf(withContentDescription("Min - 0, max - 3"),
         isAssignableFrom(SliderView::class.java)))
 
-    val doubleDefaultSlider get() = onView(allOf(withContentDescription("Двойной без делений"),
+    val doubleDefaultSlider get() = onView(allOf(withContentDescription("Double without ticks"),
         isAssignableFrom(SliderView::class.java)))
 
-    val doubleWithDivisionsSlider get() = onView(allOf(withContentDescription("Двойной с делениями"),
+    val doubleWithDivisionsSlider get() = onView(allOf(withContentDescription("Double with ticks"),
         isAssignableFrom(SliderView::class.java)))
 }

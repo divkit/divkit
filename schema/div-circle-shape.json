@@ -17,5 +17,7 @@
   "required": [
     "type"
   ],
-  "platforms": []
+  "platforms": [
+    "android"
+  ]
 }

@@ -1,0 +1,195 @@
+{
+  "templates": {
+    "pager_preset": {
+      "type": "pager",
+      "item_spacing": {
+        "type": "fixed",
+        "value": 8
+      },
+      "height": {
+        "type": "fixed",
+        "value": 300
+      },
+      "items": [
+        {
+          "type": "text_block",
+          "text": "Item 0"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 1"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 2"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 3"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 4"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 5"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 6"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 7"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 8"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 9"
+        },
+        {
+          "type": "text_block",
+          "text": "Item 10"
+        }
+      ],
+      "layout_mode": {
+        "type": "fixed",
+        "neighbour_page_width": {
+          "type": "fixed",
+          "value": 16
+        }
+      },
+      "paddings": {
+        "right": 4,
+        "left": 4
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "font_size": 14,
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "alignment_horizontal": "center",
+      "paddings": {
+        "top": 4,
+        "bottom": 4,
+        "left": 8,
+        "right": 8
+      },
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "match_parent"
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#f1f1f1"
+        }
+      ],
+      "border": {
+        "corner_radius": 16
+      }
+    },
+    "title_preset": {
+      "type": "text",
+      "text": "text",
+      "margins": {
+        "top": 20,
+        "left": 12,
+        "right": 12
+      },
+      "font_size": 18
+    },
+    "indicator_preset": {
+      "type": "indicator",
+      "active_item_color": "#000000",
+      "active_item_size": 1.5,
+      "height": {
+        "type": "fixed",
+        "value": 10
+      },
+      "margins": {
+        "top": 10,
+        "bottom": 10
+      },
+      "space_between_centers": 10,
+      "inactive_item_color": "#D0D1D9",
+      "shape": {
+        "type": "rounded_rectangle",
+        "corner_radius": {
+          "type": "fixed",
+          "value": 2
+        },
+        "item_height": {
+          "type": "fixed",
+          "value": 2
+        },
+        "item_width": {
+          "type": "fixed",
+          "value": 10
+        }
+      }
+    },
+    "indicator_circle": {
+      "type": "indicator_preset",
+      "shape": {
+        "type": "circle",
+        "radius": {
+          "type": "fixed",
+          "value": 2
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          },
+          "items": [
+            {
+              "type": "title_preset",
+              "text": "Pager with Indicator of Rounded Rectangle Shape."
+            },
+            {
+              "type": "indicator_preset",
+              "id": "indicator_round_rect",
+              "pager_id": "pager_round_rect"
+            },
+            {
+              "type": "pager_preset",
+              "id": "pager_round_rect"
+            },
+            {
+              "type": "title_preset",
+              "text": "Pager with Indicator of Circle Shape."
+            },
+            {
+              "type": "indicator_circle",
+              "id": "indicator_circle",
+              "pager_id": "pager_circle"
+            },
+            {
+              "type": "pager_preset",
+              "id": "pager_circle"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -6,25 +6,27 @@ import android.graphics.RectF
 import com.yandex.div.core.widget.indicator.IndicatorParams
 
 class RoundedRect(private val params: IndicatorParams.Style) : SingleIndicatorDrawer {
-    private val paint = Paint().apply {
-        color = params.color
-    }
-    private val rect = RectF(0f, 0f, params.normalWidth, params.normalHeight)
 
-    override fun draw(canvas: Canvas, x: Float, y: Float, width: Float, height: Float, cornerRadius: Float, color: Int) {
+    private val paint = Paint()
+    private val shape = params.shape as IndicatorParams.Shape.RoundedRect
+    private val rect = RectF(0f, 0f, shape.normalWidth, shape.normalHeight)
+
+    override fun draw(canvas: Canvas, x: Float, y: Float, itemSize: IndicatorParams.ItemSize, color: Int) {
+        val rectSize = itemSize as IndicatorParams.ItemSize.RoundedRect
         paint.color = color
         rect.apply {
-            left = x - width / 2f
-            top = y - height / 2f
-            right = x + width / 2f
-            bottom = y + height / 2f
+            left = x - rectSize.itemWidth / 2f
+            top = y - rectSize.itemHeight / 2f
+            right = x + rectSize.itemWidth / 2f
+            bottom = y + rectSize.itemHeight / 2f
         }
-        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint)
+        canvas.drawRoundRect(rect, rectSize.cornerRadius, rectSize.cornerRadius, paint)
     }
 
-    override fun drawSelected(canvas: Canvas, rect: RectF, cornerRadius: Float) {
+    override fun drawSelected(canvas: Canvas, rect: RectF) {
+        val rectSize = params.shape.normalItemSize as IndicatorParams.ItemSize.RoundedRect
         paint.color = params.selectedColor
 
-        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint)
+        canvas.drawRoundRect(rect, rectSize.cornerRadius, rectSize.cornerRadius, paint)
     }
 }

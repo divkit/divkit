@@ -45,43 +45,39 @@ internal class DivIndicatorBinder @Inject constructor(
         addSubscription(indicator.spaceBetweenCenters.value.observe(resolver, callback))
         addSubscription(indicator.spaceBetweenCenters.unit.observe(resolver, callback))
         addSubscription(indicator.animation.observe(resolver, callback))
-        when (val shape = indicator.shape) {
-            is DivShape.RoundedRectangle -> {
-                addSubscription(shape.value.itemWidth.value.observe(resolver, callback))
-                addSubscription(shape.value.itemWidth.unit.observe(resolver, callback))
-                addSubscription(shape.value.itemHeight.value.observe(resolver, callback))
-                addSubscription(shape.value.itemHeight.unit.observe(resolver, callback))
-                addSubscription(shape.value.cornerRadius.value.observe(resolver, callback))
-                addSubscription(shape.value.cornerRadius.unit.observe(resolver, callback))
-            }
-        }
+
+        observeShape(resolver, indicator.shape, callback)
+
         baseBinder.observeWidthAndHeightSubscription(resolver, this, indicator, callback)
     }
 
     private fun DivPagerIndicatorView.applyStyle(resolver: ExpressionResolver, indicator: DivIndicator) {
         val metrics = resources.displayMetrics
-        val style = when (val shape = indicator.shape) {
-            is DivShape.RoundedRectangle -> IndicatorParams.Style(
-                color = indicator.inactiveItemColor.evaluate(resolver),
-                selectedColor = indicator.activeItemColor.evaluate(resolver),
-                normalWidth = shape.value.itemWidth.toPx(metrics, resolver).toFloat(),
-                normalHeight = shape.value.itemHeight.toPx(metrics, resolver).toFloat(),
-                selectedWidth = shape.value.itemWidth.toPx(metrics, resolver) * indicator.activeItemSize.evaluate(resolver).toFloat(),
-                selectedHeight = shape.value.itemHeight.toPx(metrics, resolver) * indicator.activeItemSize.evaluate(resolver).toFloat(),
-                minimumWidth = shape.value.itemWidth.toPx(metrics, resolver) * indicator.minimumItemSize.evaluate(resolver).toFloat(),
-                minimumHeight = shape.value.itemHeight.toPx(metrics, resolver) * indicator.minimumItemSize.evaluate(resolver).toFloat(),
-                cornerRadius = shape.value.cornerRadius.toPx(metrics, resolver).toFloat(),
-                selectedCornerRadius = shape.value.cornerRadius.toPx(metrics, resolver) * indicator.activeItemSize.evaluate(resolver).toFloat(),
-                minimumCornerRadius = shape.value.cornerRadius.toPx(metrics, resolver) * indicator.minimumItemSize.evaluate(resolver).toFloat(),
-                spaceBetweenCenters = indicator.spaceBetweenCenters.toPx(metrics, resolver).toFloat(),
-                animation = indicator.animation.evaluate(resolver).convert(),
-                shape = IndicatorParams.Shape.ROUND_RECT
-            )
-            else -> null
-        }
-        if (style != null) {
-            setStyle(style)
-        }
+        val style = IndicatorParams.Style(
+            color = indicator.inactiveItemColor.evaluate(resolver),
+            selectedColor = indicator.activeItemColor.evaluate(resolver),
+            spaceBetweenCenters = indicator.spaceBetweenCenters.toPx(metrics, resolver).toFloat(),
+            animation = indicator.animation.evaluate(resolver).convert(),
+            shape = when (val shape = indicator.shape) {
+                is DivShape.RoundedRectangle -> IndicatorParams.Shape.RoundedRect(
+                    normalWidth = shape.value.itemWidth.toPx(metrics, resolver).toFloat(),
+                    normalHeight = shape.value.itemHeight.toPx(metrics, resolver).toFloat(),
+                    selectedWidth = shape.value.itemWidth.toPx(metrics, resolver) * indicator.activeItemSize.evaluate(resolver).toFloat(),
+                    selectedHeight = shape.value.itemHeight.toPx(metrics, resolver) * indicator.activeItemSize.evaluate(resolver).toFloat(),
+                    minimumWidth = shape.value.itemWidth.toPx(metrics, resolver) * indicator.minimumItemSize.evaluate(resolver).toFloat(),
+                    minimumHeight = shape.value.itemHeight.toPx(metrics, resolver) * indicator.minimumItemSize.evaluate(resolver).toFloat(),
+                    cornerRadius = shape.value.cornerRadius.toPx(metrics, resolver).toFloat(),
+                    selectedCornerRadius = shape.value.cornerRadius.toPx(metrics, resolver) * indicator.activeItemSize.evaluate(resolver).toFloat(),
+                    minimumCornerRadius = shape.value.cornerRadius.toPx(metrics, resolver) * indicator.minimumItemSize.evaluate(resolver).toFloat(),
+                )
+                is DivShape.Circle -> IndicatorParams.Shape.Circle(
+                    normalRadius = shape.value.radius.toPx(metrics, resolver).toFloat(),
+                    selectedRadius = shape.value.radius.toPx(metrics, resolver) * indicator.activeItemSize.evaluate(resolver).toFloat(),
+                    minimumRadius = shape.value.radius.toPx(metrics, resolver) * indicator.minimumItemSize.evaluate(resolver).toFloat(),
+                )
+            },
+        )
+        setStyle(style)
     }
 
     fun attachAll() {

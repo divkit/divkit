@@ -28,6 +28,7 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectImageView
 import com.yandex.div.core.widget.GridContainer
 import com.yandex.div.core.widget.shapes.RoundedRectDrawable
+import com.yandex.div.core.widget.shapes.CircleDrawable
 import com.yandex.div.core.widget.wraplayout.WrapAlignment
 import com.yandex.div.core.widget.wraplayout.WrapLayout
 import com.yandex.div.drawables.ScalingDrawable
@@ -592,15 +593,31 @@ internal fun ExpressionSubscriber.observeDrawable(
                 addSubscription(it.width.observe(resolver, callback))
                 addSubscription(it.unit.observe(resolver, callback))
             }
+            observeShape(resolver, shapeDrawable.shape, callback)
+        }
+    }
+}
 
-            val roundedRect = shapeDrawable.shape as? DivShape.RoundedRectangle
-            roundedRect?.value?.let {
+internal fun ExpressionSubscriber.observeShape(
+    resolver: ExpressionResolver,
+    shape: DivShape,
+    callback: (Any) -> Unit
+) {
+    when (shape) {
+        is DivShape.RoundedRectangle -> {
+            shape.value.let {
                 addSubscription(it.itemWidth.value.observe(resolver, callback))
                 addSubscription(it.itemWidth.unit.observe(resolver, callback))
                 addSubscription(it.itemHeight.value.observe(resolver, callback))
                 addSubscription(it.itemHeight.unit.observe(resolver, callback))
                 addSubscription(it.cornerRadius.value.observe(resolver, callback))
                 addSubscription(it.cornerRadius.unit.observe(resolver, callback))
+            }
+        }
+        is DivShape.Circle -> {
+            shape.value.let {
+                addSubscription(it.radius.value.observe(resolver, callback))
+                addSubscription(it.radius.unit.observe(resolver, callback))
             }
         }
     }
@@ -620,16 +637,26 @@ internal fun DivShapeDrawable.toDrawable(
     resolver: ExpressionResolver
 ): Drawable? {
     return when (val shape = this.shape) {
-        is DivShape.RoundedRectangle -> RoundedRectDrawable(
-            RoundedRectDrawable.Params(
-                width = shape.value.itemWidth.toPxF(metrics, resolver),
-                height = shape.value.itemHeight.toPxF(metrics, resolver),
-                color = color.evaluate(resolver),
-                radius = shape.value.cornerRadius.toPxF(metrics, resolver),
-                strokeColor = stroke?.color?.evaluate(resolver),
-                strokeWidth = stroke?.width?.evaluate(resolver)?.toFloat()
+        is DivShape.RoundedRectangle ->
+            RoundedRectDrawable(
+                RoundedRectDrawable.Params(
+                    width = shape.value.itemWidth.toPxF(metrics, resolver),
+                    height = shape.value.itemHeight.toPxF(metrics, resolver),
+                    color = color.evaluate(resolver),
+                    radius = shape.value.cornerRadius.toPxF(metrics, resolver),
+                    strokeColor = stroke?.color?.evaluate(resolver),
+                    strokeWidth = stroke?.width?.evaluate(resolver)?.toFloat()
+                )
             )
-        )
+        is DivShape.Circle ->
+            CircleDrawable(
+                CircleDrawable.Params(
+                    radius = shape.value.radius.toPxF(metrics, resolver),
+                    color = color.evaluate(resolver),
+                    strokeColor = stroke?.color?.evaluate(resolver),
+                    strokeWidth = stroke?.width?.evaluate(resolver)?.toFloat()
+                )
+            )
         else -> null
     }
 }

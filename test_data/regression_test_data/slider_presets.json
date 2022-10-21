@@ -456,7 +456,7 @@
               "div_id": "slider_default",
               "thumb_value_variable": "first_thumb_value",
               "accessibility": {
-                "description": "Дефолтный слайдер"
+                "description": "Default slider"
               }
             },
             {
@@ -470,7 +470,7 @@
               "max_value": 10,
               "thumb_value_variable": "second_thumb_value",
               "accessibility": {
-                "description": "Мин - 0, макс - 10"
+                "description": "Min - 0, max - 10"
               },
               "tick_mark_active_style": {
                 "type": "shape_drawable",
@@ -530,7 +530,7 @@
               "max_value": 3,
               "thumb_value_variable": "third_thumb_value",
               "accessibility": {
-                "description": "Мин - 0, макс - 3"
+                "description": "Min - 0, max - 3"
               },
               "tick_mark_active_style": {
                 "type": "shape_drawable",
@@ -590,7 +590,7 @@
               "max_value": 10,
               "thumb_value_variable": "fourth_thumb_value",
               "accessibility": {
-                "description": "Двойной с делениями"
+                "description": "Double with ticks"
               },
               "thumb_secondary_value_variable": "fourth_thumb_secondary_value",
               "thumb_secondary_style": {
@@ -669,7 +669,7 @@
               "thumb_value_variable": "fifth_thumb_value",
               "thumb_secondary_value_variable": "fifth_thumb_secondary_value",
               "accessibility": {
-                "description": "Двойной без делений"
+                "description": "Double without ticks"
               },
               "thumb_secondary_style": {
                 "type": "shape_drawable",

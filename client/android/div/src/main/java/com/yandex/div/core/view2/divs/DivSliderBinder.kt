@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.util.DisplayMetrics
+import android.view.View.GONE
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.dagger.ExperimentFlag
@@ -17,6 +18,8 @@ import com.yandex.div.core.widget.slider.shapes.TextDrawable
 import com.yandex.div.font.DivTypefaceProvider
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivDrawable
+import com.yandex.div2.DivShape
+import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSlider
 import javax.inject.Inject
 import kotlin.math.max

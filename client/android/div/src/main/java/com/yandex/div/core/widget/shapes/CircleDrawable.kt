@@ -1,22 +1,16 @@
 package com.yandex.div.core.widget.shapes
 
-import android.graphics.Canvas
-import android.graphics.ColorFilter
-import android.graphics.Paint
-import android.graphics.PixelFormat
-import android.graphics.RectF
+import android.graphics.*
 import android.graphics.drawable.Drawable
 import androidx.annotation.Px
 import androidx.core.graphics.toRect
 import com.yandex.div.core.util.Assert
 
-class RoundedRectDrawable(private val params: Params) : Drawable() {
+class CircleDrawable(private val params: Params) : Drawable() {
 
     data class Params(
-        @Px val width: Float,
-        @Px val height: Float,
-        val color: Int,
         @Px val radius: Float,
+        val color: Int,
         val strokeColor: Int? = null,
         val strokeWidth: Float? = null
     )
@@ -34,25 +28,26 @@ class RoundedRectDrawable(private val params: Params) : Drawable() {
     else
         null
 
-    private val rect = RectF(0f, 0f, params.width, params.height)
-    init {
-        bounds = rect.toRect()
-    }
-
     override fun getIntrinsicHeight(): Int {
-        return params.height.toInt()
+        return 2 * params.radius.toInt()
     }
 
     override fun getIntrinsicWidth(): Int {
-        return params.width.toInt()
+        return 2 * params.radius.toInt()
+    }
+
+    private val rect = RectF(0f, 0f, params.radius * 2, params.radius * 2)
+
+    init {
+        bounds = rect.toRect()
     }
 
     override fun draw(canvas: Canvas) {
         mainPaint.color = params.color
         rect.set(bounds)
-        canvas.drawRoundRect(rect, params.radius, params.radius, mainPaint)
+        canvas.drawCircle(rect.centerX(), rect.centerY(), params.radius, mainPaint)
         if (strokePaint != null) {
-            canvas.drawRoundRect(rect, params.radius, params.radius, strokePaint)
+            canvas.drawCircle(rect.centerX(), rect.centerY(), params.radius, strokePaint)
         }
     }
 

@@ -1342,6 +1342,29 @@
         "If item 'Visible' or 'Invisible' - blue background visible, otherwise hidden"
       ],
       "file": "animations/transition/transition_triggers_complex_src.json"
+    },
+    {
+      "title": "Slider shapes",
+      "platforms": [
+        "android"
+      ],
+      "expected_results": [
+        "Two sliders with different thumb shapes - Rounded Rectangle and Circle"
+      ],
+      "file": "slider_shapes.json",
+      "tags": [
+        "Slider"
+      ]
+    },
+    {
+      "title": "Indicator shapes",
+      "platforms": [
+        "android"
+      ],
+      "expected_results": [
+        "Two pagers with indicator of different shapes - Rounded Rectangle and Circle"
+      ],
+      "file": "indicator_shapes.json"
     }
   ]
 }

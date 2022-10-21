@@ -1,0 +1,126 @@
+{
+  "templates": {
+    "title_preset": {
+      "type": "text",
+      "text": "text",
+      "margins": {
+        "top": 20,
+        "left": 12,
+        "right": 12
+      },
+      "font_size": 18
+    },
+    "slider_preset": {
+      "type": "slider",
+      "width": {
+        "type": "match_parent"
+      },
+      "paddings": {
+        "left": 8,
+        "right": 8,
+        "top": 8,
+        "bottom": 8
+      },
+      "max_value": 10,
+      "min_value": 1,
+      "thumb_style": {
+        "type": "shape_drawable",
+        "color": "#FFCC00",
+        "stroke": {
+          "color": "#ffffff",
+          "width": 3
+        },
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 30
+          },
+          "item_width": {
+            "type": "fixed",
+            "value": 10
+          },
+          "corner_radius": {
+            "type": "fixed",
+            "value": 5
+          }
+        }
+      },
+      "track_active_style": {
+        "type": "shape_drawable",
+        "color": "#FFCC00",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 6
+          }
+        }
+      },
+      "track_inactive_style": {
+        "type": "shape_drawable",
+        "color": "#20000000",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 6
+          }
+        }
+      }
+    },
+    "slider_circle": {
+      "type": "slider_preset",
+      "thumb_style": {
+        "type": "shape_drawable",
+        "color": "#FFCC00",
+        "stroke": {
+          "color": "#ffffff",
+          "width": 3
+        },
+        "shape": {
+          "type": "circle",
+          "radius": {
+            "type": "fixed",
+            "value": 15
+          }
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          },
+          "items": [
+            {
+              "type": "title_preset",
+              "text": "Slider with Rounded Rectangle Shape."
+            },
+            {
+              "type": "slider_preset",
+              "div_id": "slider_round_rect"
+            },
+            {
+              "type": "title_preset",
+              "text": "Slider with Circle Shape."
+            },
+            {
+              "type": "slider_circle",
+              "div_id": "slider_circle"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
