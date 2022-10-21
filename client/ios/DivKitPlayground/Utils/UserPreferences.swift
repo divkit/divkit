@@ -5,6 +5,7 @@ enum UserPreferences {
   static let isQrScannerEnabledKey = "isQrScannerEnabled"
   static let lastUrlKey = "lastUrl"
   static let playgroundThemeKey = "playgroundTheme"
+  static let showRenderingTimeKey = "showRenderingTime"
 
   static let isQrScannerEnabledDefault = {
   #if targetEnvironment(simulator)
@@ -13,6 +14,11 @@ enum UserPreferences {
     true
   #endif
   }()
+
+  static let showRenderingTimeDefault = false
+  static var showRenderingTime: Bool {
+    defaults.value(forKey: showRenderingTimeKey) as? Bool ?? showRenderingTimeDefault
+  }
 
   static let playgroundThemeDefault = Theme.system
 

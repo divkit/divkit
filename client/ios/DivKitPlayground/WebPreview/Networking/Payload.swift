@@ -47,6 +47,23 @@ struct UIStatePayload: Encodable {
     let device: Device
     let screenshot: String
     let errors: [Error]
+    let rendering_time: RenderingTime
+  }
+
+  struct RenderingTime: Encodable {
+    let div_render_total: Time
+    let div_parsing_data: Time
+    let div_parsing_templates: Time
+
+    enum HistogramType: Encodable {
+      case cold
+      case warm
+    }
+
+    struct Time: Encodable {
+      let value: Int
+      let histogram_type: HistogramType
+    }
   }
 
   let type: String = "ui_state"
@@ -55,12 +72,14 @@ struct UIStatePayload: Encodable {
   init(
     device: UIStatePayload.Device,
     screenshot: Data,
-    errors: [UIStatePayload.Error]
+    errors: [UIStatePayload.Error],
+    renderingTime: RenderingTime
   ) {
     message = Message(
       device: device,
       screenshot: screenshot.base64EncodedString(),
-      errors: errors
+      errors: errors,
+      rendering_time: renderingTime
     )
   }
 }

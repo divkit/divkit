@@ -35,6 +35,9 @@ final class DivBlockProvider {
 
   private var divData: DivData?
   public weak var parentScrollView: ScrollView?
+  let divRenderTime = TimeMeasure()
+  let divDataParsingTime = TimeMeasure()
+  let divTemplateParsingTime = TimeMeasure()
 
   @ObservableProperty
   private(set) var block: Block = noDataBlock
@@ -69,13 +72,20 @@ final class DivBlockProvider {
     }
     
     do {
-      block = try divData.makeBlock(
+      divRenderTime.start()
+      let newBlock = try divData.makeBlock(
         context: divKitComponents.makeContext(
           cardId: cardId,
           cachedImageHolders: block.getImageHolders(),
           debugParams: AppComponents.debugParams,
           parentScrollView: parentScrollView
         )
+      )
+      divRenderTime.stop()
+      block = newBlock.addingTime(
+        dataParsing: divDataParsingTime.time,
+        templateParsing: divTemplateParsingTime.time,
+        render: divRenderTime.time
       )
     } catch {
       block = makeErrorBlock("\(error)")
@@ -99,7 +109,8 @@ final class DivBlockProvider {
       divKitComponents.variablesStorage
         .set(variables: palette.makeVariables(theme: UserPreferences.playgroundTheme), triggerUpdate: false)
 
-      let result = try divKitComponents.parseDivDataWithTemplates(json, cardId: cardId)
+      let result = try parseDivDataWithTemplates(json, cardId: cardId)
+      
       divData = result.value
       errors = result.errorsOrWarnings.map {
         $0.map {
@@ -116,6 +127,37 @@ final class DivBlockProvider {
 
     update(patch: nil)
   }
+
+  private func parseDivDataWithTemplates(
+    _ jsonDict: [String: Any],
+    cardId: DivCardID
+  ) throws -> DeserializationResult<DivData> {
+    let rawDivData = try RawDivData(dictionary: jsonDict)
+    divTemplateParsingTime.start()
+    let templates = DivTemplates(dictionary: rawDivData.templates)
+    divTemplateParsingTime.stop()
+    divDataParsingTime.start()
+    let result = templates.parseValue(type: DivDataTemplate.self, from: rawDivData.card)
+    if let divData = result.value {
+      setVariablesAndTriggers(divData: divData, cardId: cardId)
+    }
+    divDataParsingTime.stop()
+    return result
+  }
+
+  private func setVariablesAndTriggers(divData: DivData?, cardId: DivCardID) {
+    let divDataVariables = divData?.variables?.extractDivVariableValues() ?? [:]
+    divKitComponents.variablesStorage.append(
+      variables: divDataVariables,
+      for: cardId,
+      replaceExisting: false
+    )
+
+    divKitComponents.triggersStorage.set(
+      cardId: cardId,
+      triggers: divData?.variableTriggers ?? []
+    )
+  }
 }
 
 private let cardId: DivCardID = "sample_card"
@@ -127,4 +169,46 @@ private func makeErrorBlock(_ text: String) -> Block {
     widthTrait: .resizable,
     text: text.with(typo: Typo(size: 18, weight: .regular))
   ).addingEdgeGaps(20)
+}
+
+extension Block {
+  func addingTime(
+    dataParsing: TimeMeasure.Time?,
+    templateParsing: TimeMeasure.Time?,
+    render: TimeMeasure.Time?
+  ) -> Block {
+    guard UserPreferences.showRenderingTime,
+      let render = render,
+      let dataParsing = dataParsing,
+      let templateParsing = templateParsing else {
+      return self
+    }
+
+    let text =
+      """
+      Rendering time:
+
+      - Div.Render.Total.\(render.description) ms
+      - Div.Parsing.Data.\(dataParsing.description) ms
+      - Div.Parsing.Templates.\(templateParsing.description) ms
+      """
+
+    let textBlock = TextBlock(
+      widthTrait: .resizable,
+      text: text.with(typo: Typo(size: 18, weight: .regular))
+    ).addingEdgeGaps(20)
+
+    let block = try? ContainerBlock(
+      layoutDirection: .vertical,
+      children: [self, textBlock]
+    )
+
+    return block ?? self
+  }
+}
+
+extension TimeMeasure.Time {
+  fileprivate var description: String {
+    "\(status.rawValue.capitalized): \(value)"
+  }
 }

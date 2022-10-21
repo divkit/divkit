@@ -7,6 +7,8 @@ struct SettingsView: View {
   var presentationMode: Binding<PresentationMode>
   @AppStorage(UserPreferences.isQrScannerEnabledKey)
   var isQrScannerEnabledKeymeMode: Bool = UserPreferences.isQrScannerEnabledDefault
+  @AppStorage(UserPreferences.showRenderingTimeKey)
+  var showRenderingTime: Bool = UserPreferences.showRenderingTimeDefault
   @AppStorage(UserPreferences.playgroundThemeKey)
   var playgroundTheme: String = UserPreferences.playgroundThemeDefault.rawValue
 
@@ -16,19 +18,23 @@ struct SettingsView: View {
       background: ThemeColor.settings,
       presentationMode: presentationMode
     ) {
-      VStack(alignment: .leading, spacing: 0) {
+      VStack(alignment: .leading, spacing: 20) {
         Toggle(isOn: $isQrScannerEnabledKeymeMode) {
           Text("QR Scanner")
             .font(ThemeFont.text)
         }
-
-        Text("Playground theme")
-          .font(ThemeFont.text)
-          .padding(EdgeInsets(top: 20, leading: 0, bottom: 10, trailing: 0))
-        RadioButtonsView(
-          options: Theme.allCases.map { $0.rawValue },
-          selected: $playgroundTheme
-        )
+        Toggle(isOn: $showRenderingTime) {
+          Text("Show rendering time")
+            .font(ThemeFont.text)
+        }
+        VStack(alignment: .leading, spacing: 10) {
+          Text("Playground theme")
+            .font(ThemeFont.text)
+          RadioButtonsView(
+            options: Theme.allCases.map { $0.rawValue },
+            selected: $playgroundTheme
+          )
+        }
         
         Spacer()
 

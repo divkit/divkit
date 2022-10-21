@@ -35,7 +35,14 @@ private struct WebPreviewModel {
   private(set) var divKitComponents: DivKitComponents!
   private(set) var blockProvider: DivBlockProvider!
   private(set) var payloadFactory: UIStatePayloadFactory!
-  
+  private var renderingTime: UIStatePayload.RenderingTime {
+    UIStatePayload.RenderingTime(
+      div_render_total: blockProvider.divRenderTime.webTime,
+      div_parsing_data: blockProvider.divDataParsingTime.webTime,
+      div_parsing_templates: blockProvider.divTemplateParsingTime.webTime
+    )
+  }
+
   init() {
     divKitComponents = AppComponents.makeDivKitComponents(
       updateCardAction: { [weak blockProvider] _, patch in
@@ -63,7 +70,26 @@ private struct WebPreviewModel {
   
   func sendScreenshot(_ screenshotInfo: ScreenshotInfo) {
     socket.send(
-      state: payloadFactory.makePayload(screenshotInfo: screenshotInfo)
+      state: payloadFactory.makePayload(
+        screenshotInfo: screenshotInfo,
+        renderingTime: renderingTime
+      )
     )
+  }
+}
+
+extension TimeMeasure {
+  fileprivate var webTime: UIStatePayload.RenderingTime.Time {
+    .init(value: time?.value ?? 0, histogram_type: time?.status.histogramType ?? .cold)
+  }
+}
+extension TimeMeasure.Status {
+  fileprivate var histogramType: UIStatePayload.RenderingTime.HistogramType {
+    switch self {
+    case .cold:
+      return .cold
+    case .warm:
+      return .warm
+    }
   }
 }

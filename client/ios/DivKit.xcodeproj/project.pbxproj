@@ -15,6 +15,7 @@
 		6178F77328E2097A00FE1648 /* UIViewRenderable+AccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */; };
 		6178F77428E2097A00FE1648 /* TabListSelectionDataSourceImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74428E2042200FE1648 /* TabListSelectionDataSourceImplTests.swift */; };
 		7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */; };
+		893D19642902AD8F005540DF /* TimeMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893D19632902AD8F005540DF /* TimeMeasure.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
 		89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1928C8EBC40041EC18 /* Palette.swift */; };
 		8C0149982873297900BA5402 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0149972873297900BA5402 /* DivKit */; };
@@ -237,6 +238,7 @@
 		6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabInterimItemExtensionsTests.swift; sourceTree = "<group>"; };
 		6178F77028E2095100FE1648 /* LayoutKit_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoutKit_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivDeserializationErrorsTests.swift; sourceTree = "<group>"; };
+		893D19632902AD8F005540DF /* TimeMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMeasure.swift; sourceTree = "<group>"; };
 		89D02B1328C891890041EC18 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
 		89D02B1928C8EBC40041EC18 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
 		8C01499B287329D000BA5402 /* unit_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = unit_test_data; path = ../../../test_data/unit_test_data; sourceTree = "<group>"; };
@@ -816,6 +818,7 @@
 				8C7B18842864CA380036EF4C /* UrlOpener.swift */,
 				8CF1296228B0021F00351F65 /* UserPreferences.swift */,
 				89D02B1928C8EBC40041EC18 /* Palette.swift */,
+				893D19632902AD8F005540DF /* TimeMeasure.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1532,6 +1535,7 @@
 				8C2BFA5428C10EA000A16E9B /* RegressionTestModel.swift in Sources */,
 				8C440A042864C55400EF4175 /* DivKitPlaygroundApp.swift in Sources */,
 				8C1A374928B4187B00A047C8 /* DeviceInfo.swift in Sources */,
+				893D19642902AD8F005540DF /* TimeMeasure.swift in Sources */,
 				8C1A375228B4189E00A047C8 /* ScannerView.swift in Sources */,
 				8C1A375128B4189E00A047C8 /* ScannerViewController.swift in Sources */,
 			);

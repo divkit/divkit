@@ -25,7 +25,10 @@ final class UIStatePayloadFactory {
     _errors = errors
   }
 
-  func makePayload(screenshotInfo: ScreenshotInfo) -> UIStatePayload {
+  func makePayload(
+    screenshotInfo: ScreenshotInfo,
+    renderingTime: UIStatePayload.RenderingTime
+  ) -> UIStatePayload {
     let bundleInfo = Bundle.main.infoDictionary
     return UIStatePayload(
       device: UIStatePayload.Device(
@@ -46,7 +49,8 @@ final class UIStatePayloadFactory {
           message: $0.message,
           stack: $0.stack
         )
-      }
+      },
+      renderingTime: renderingTime
     )
   }
 }
