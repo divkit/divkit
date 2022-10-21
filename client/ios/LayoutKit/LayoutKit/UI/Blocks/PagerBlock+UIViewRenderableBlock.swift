@@ -43,8 +43,6 @@ private final class PagerView: BlockView {
   private weak var observer: ElementStateObserver?
   private weak var overscrollDelegate: ScrollDelegate?
 
-  private var isConfiguring = false
-
   var effectiveBackgroundColor: UIColor? { backgroundColor }
 
   func configure(
@@ -56,8 +54,6 @@ private final class PagerView: BlockView {
     overscrollDelegate: ScrollDelegate?,
     renderingDelegate: RenderingDelegate?
   ) {
-    guard !isConfiguring else { return }
-
     self.observer = observer
     self.overscrollDelegate = overscrollDelegate
 
@@ -84,7 +80,7 @@ private final class PagerView: BlockView {
       renderingDelegate: renderingDelegate
     )
 
-    let oldModel: GalleryViewModel? = self.model
+    let oldModel = self.model
     self.model = model
     self.selectedActions = selectedActions
 
@@ -101,7 +97,6 @@ private final class PagerView: BlockView {
     let lastStateCurrentPage = lastState?.currentPage
     if lastState != state, lastStateCurrentPage != currentPage {
       lastState = state
-      isConfiguring = true
 
       if notifyingObservers {
         observer?.elementStateChanged(state, forPath: model.path)
@@ -115,8 +110,6 @@ private final class PagerView: BlockView {
       ).sendFrom(self)
 
       selectedActions[pageIndex].perform(sendingFrom: self)
-
-      isConfiguring = false
     }
   }
 
@@ -144,19 +137,16 @@ extension PagerView: ElementStateObserver {
       assertionFailure()
       return
     }
-
-    let lastCurrentPage = lastState?.currentPage ?? 0
-    let roundedPageIndex = pageIndex.rounded()
-    let currentPage = abs(pageIndex - roundedPageIndex) < 0.1
-      ? Int(roundedPageIndex)
-      : Int(round(lastCurrentPage))
-    setState(
-      PagerViewState(
-        numberOfPages: model.items.count,
-        currentPage: currentPage
-      ),
-      notifyingObservers: true
-    )
+    
+    if !galleryState.isScrolling {
+      setState(
+        PagerViewState(
+          numberOfPages: model.items.count,
+          currentPage: Int(pageIndex.rounded())
+        ),
+        notifyingObservers: true
+      )
+    }
   }
 }
 

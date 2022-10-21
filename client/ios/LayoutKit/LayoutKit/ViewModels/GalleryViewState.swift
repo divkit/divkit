@@ -51,20 +51,27 @@ public struct GalleryViewState: ElementState, Equatable {
     }
   }
 
-  public var contentPosition: Position
+  public private(set) var contentPosition: Position
+  public let isScrolling: Bool
 
   public static let `default` = GalleryViewState(contentOffset: 0)
 
   public init(contentOffset: CGFloat) {
     self.contentPosition = .offset(contentOffset)
+    self.isScrolling = false
   }
 
   public init(contentPageIndex: CGFloat) {
     self.contentPosition = .paging(index: contentPageIndex)
+    self.isScrolling = false
   }
 
-  public init(contentPosition: Position) {
+  public init(
+    contentPosition: Position,
+    isScrolling: Bool
+  ) {
     self.contentPosition = contentPosition
+    self.isScrolling = isScrolling
   }
 }
 

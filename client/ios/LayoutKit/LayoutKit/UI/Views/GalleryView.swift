@@ -288,9 +288,8 @@ extension GalleryView: ScrollDelegate {
       contentPosition = .paging(index: pageIndex)
     }
 
-    var state = self.state
-    state.contentPosition = contentPosition
-    setState(state, notifyingObservers: true)
+    let newState = GalleryViewState(contentPosition: contentPosition, isScrolling: true)
+    setState(newState, notifyingObservers: true)
     updatesDelegate?.onContentOffsetChanged(offset, in: model)
     visibilityDelegate?.onGalleryVisibilityChanged()
   }
@@ -312,6 +311,8 @@ extension GalleryView: ScrollDelegate {
   }
 
   private func onDidEndScroll(_ scrollView: ScrollView) {
+    let newState = GalleryViewState(contentPosition: state.contentPosition, isScrolling: false)
+    setState(newState, notifyingObservers: true)
     visibilityDelegate?.onGalleryVisibilityChanged()
 
     let firstVisibleItemOffset = getOffset(scrollView)

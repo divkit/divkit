@@ -120,7 +120,7 @@ extension GalleryBlock {
       direction: direction,
       crossAlignment: crossAlignment,
       scrollMode: scrollMode,
-      state: GalleryViewState(contentPosition: contentPosition),
+      state: GalleryViewState(contentPosition: contentPosition, isScrolling: false),
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       areEmptySpaceTouchesEnabled: areEmptySpaceTouchesEnabled,
