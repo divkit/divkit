@@ -124,7 +124,8 @@
           "url": "div-action://set_next_item?id=test_pager",
           "log_id": "second item"
         }
-      ]
+      ],
+      "delay": 500
     },
     {
       "div_actions": [
@@ -132,7 +133,8 @@
           "url": "div-action://set_previous_item?id=test_pager",
           "log_id": "first item"
         }
-      ]
+      ],
+      "delay": 500
     },
     {
       "div_actions": [
@@ -140,7 +142,8 @@
           "url": "div-action://set_previous_item?id=test_pager&overflow=clamp",
           "log_id": "first item"
         }
-      ]
+      ],
+      "delay": 500
     },
     {
       "div_actions": [
@@ -148,7 +151,8 @@
           "url": "div-action://set_previous_item?id=test_pager&overflow=ring",
           "log_id": "last item"
         }
-      ]
+      ],
+      "delay": 500
     },
     {
       "div_actions": [
@@ -156,7 +160,8 @@
           "url": "div-action://set_next_item?id=test_pager&overflow=clamp",
           "log_id": "last item"
         }
-      ]
+      ],
+      "delay": 500
     },
     {
       "div_actions": [
@@ -164,7 +169,8 @@
           "url": "div-action://set_next_item?id=test_pager&overflow=ring",
           "log_id": "first item"
         }
-      ]
+      ],
+      "delay": 500
     },
     {
       "div_actions": [
@@ -172,7 +178,8 @@
           "url": "div-action://set_current_item?id=test_pager&item=2",
           "log_id": "middle item"
         }
-      ]
+      ],
+      "delay": 500
     },
     {
       "div_actions": [
@@ -180,7 +187,8 @@
           "url": "div-action://set_current_item?id=test_pager&item=-1",
           "log_id": "middle (nonexistent) item"
         }
-      ]
+      ],
+      "delay": 500
     },
     {
       "div_actions": [
@@ -189,7 +197,8 @@
           "log_id": "first item"
         }
       ],
-      "expected_screenshot": "step0.png"
+      "expected_screenshot": "step0.png",
+      "delay": 500
     }
   ]
 }
