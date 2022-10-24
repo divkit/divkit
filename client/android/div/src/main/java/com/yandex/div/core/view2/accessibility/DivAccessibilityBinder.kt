@@ -1,4 +1,4 @@
-package com.yandex.div.core.view2
+package com.yandex.div.core.view2.accessibility
 
 import android.view.View
 import androidx.core.view.ViewCompat
@@ -7,6 +7,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
