@@ -133,6 +133,34 @@
                 "web",
                 "ios"
             ]
+        },
+        {
+            "name": "true ? 0 : true ? 1 : 2 => 0",
+            "expression": "@{true ? 0 : true ? 1 : 2}",
+            "expected": {
+                "type": "integer",
+                "value": 0
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "web",
+                "ios"
+            ]
+        },
+        {
+            "name": "true ? false ? 1 : 2 : 0 => 2",
+            "expression": "@{true ? false ? 1 : 2 : 0}",
+            "expected": {
+                "type": "integer",
+                "value": 2
+            },
+            "variables": [],
+            "platforms": [
+                "android",
+                "web",
+                "ios"
+            ]
         }
     ]
 }

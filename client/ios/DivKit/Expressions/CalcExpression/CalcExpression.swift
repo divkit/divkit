@@ -458,10 +458,11 @@ extension CalcExpression {
       // comparison: -4
       "&&": -5, "and": -5, // and
       "||": -6, "or": -6, // or
-      "?": -7, ":": -7, // ternary
-      // assignment: -8
+      ":": -8, // ternary
+      // assignment: -9
       ",": -100,
     ].mapValues { ($0, false) }
+    precedences["?"] = (-7, true) // ternary
     let comparisonOperators = [
       "<", "<=", ">=", ">",
       "==", "!=", "===", "!==",
@@ -475,7 +476,7 @@ extension CalcExpression {
       "<<=", ">>=", "&=", "^=", "|=", ":=",
     ]
     for op in assignmentOperators {
-      precedences[op] = (-8, true)
+      precedences[op] = (-9, true)
     }
     return precedences
   }()
@@ -1224,7 +1225,8 @@ extension UnicodeScalarView {
               } else {
                 stack[i...i + 2] = [.symbol(.infix(symbol.name), [lhs, rhs], nil)]
               }
-              try collapseStack(from: 0)
+              let from = symbol.name == "?" ? i : 0
+              try collapseStack(from: from)
             } else if case let .symbol(symbol2, _, _) = rhs {
               if case .prefix = symbol2 {
                 try collapseStack(from: i + 2)
