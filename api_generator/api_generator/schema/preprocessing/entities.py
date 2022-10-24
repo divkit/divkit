@@ -291,7 +291,11 @@ class DescriptionReference:
         file: SchemaFile
         path: List[str]
         _, file, path = utils.get_full_reference_location(location, ref)
-        self._value = utils.enclosed_dict_for(keys=path, dictionary=file.contents)
+        description_value = utils.enclosed_dict_for(keys=path, dictionary=file.contents)
+        if description_value:
+            self._value = description_value
+        else:
+            raise errors.InvalidFileReferenceError(location, ref)
 
     @property
     def value(self) -> Dict[str, str]:
