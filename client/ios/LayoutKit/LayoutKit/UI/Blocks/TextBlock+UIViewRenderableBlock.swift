@@ -72,6 +72,7 @@ private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
         return
       }
       textBlockView.model = model
+      isUserInteractionEnabled = model.isUserInteractionEnabled
       applyAccessibility(model.accessibility)
     }
   }
@@ -162,13 +163,7 @@ private final class TextBlockView: UIView {
         .filter { model.attachments[$0].image == nil }
         .compactMap(requestImage)
 
-      if model.canSelect
-        || model.text.hasActions
-        || model.truncationToken?.hasActions == true {
-        isUserInteractionEnabled = true
-      } else {
-        isUserInteractionEnabled = false
-      }
+      isUserInteractionEnabled = model.isUserInteractionEnabled
 
       if model.canSelect {
         addGestureRecognizer(longTapSelectionRecognizer)
@@ -468,5 +463,11 @@ extension Gradient {
     case let .box(color):
       return BoxShadowView(shadowColor: color)
     }
+  }
+}
+
+fileprivate extension TextBlockView.Model {
+  var isUserInteractionEnabled: Bool {
+    return canSelect || text.hasActions || truncationToken?.hasActions == true
   }
 }
