@@ -4,7 +4,6 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.LayerDrawable
 import android.graphics.drawable.StateListDrawable
-import android.graphics.Color
 import android.graphics.Rect
 import android.net.Uri
 import android.util.DisplayMetrics
@@ -35,6 +34,7 @@ import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.drawables.LinearGradientDrawable
 import com.yandex.div.drawables.RadialGradientDrawable
+import com.yandex.div.drawables.NinePatchDrawable
 import com.yandex.div.drawables.ScalingDrawable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -596,29 +596,29 @@ internal class DivBaseBinder @Inject constructor(
         resolver: ExpressionResolver
     ): DivBackgroundState = when (this) {
         is DivBackground.LinearGradient -> DivBackgroundState.LinearGradient(
-            value.angle.evaluate(resolver),
-            value.colors.evaluate(resolver),
+            angle = value.angle.evaluate(resolver),
+            colors = value.colors.evaluate(resolver),
         )
         is DivBackground.RadialGradient -> DivBackgroundState.RadialGradient(
-            value.centerX.toBackgroundState(metrics, resolver),
-            value.centerY.toBackgroundState(metrics, resolver),
-            value.colors.evaluate(resolver),
-            value.radius.toBackgroundState(metrics, resolver)
+            centerX = value.centerX.toBackgroundState(metrics, resolver),
+            centerY = value.centerY.toBackgroundState(metrics, resolver),
+            colors = value.colors.evaluate(resolver),
+            radius = value.radius.toBackgroundState(metrics, resolver)
         )
         is DivBackground.Image -> DivBackgroundState.Image(
-            value.alpha.evaluate(resolver),
-            value.contentAlignmentHorizontal.evaluate(resolver),
-            value.contentAlignmentVertical.evaluate(resolver),
-            value.imageUrl.evaluate(resolver),
-            value.preloadRequired.evaluate(resolver),
-            value.scale.evaluate(resolver)
+            alpha = value.alpha.evaluate(resolver),
+            contentAlignmentHorizontal = value.contentAlignmentHorizontal.evaluate(resolver),
+            contentAlignmentVertical = value.contentAlignmentVertical.evaluate(resolver),
+            imageUrl = value.imageUrl.evaluate(resolver),
+            preloadRequired = value.preloadRequired.evaluate(resolver),
+            scale = value.scale.evaluate(resolver)
         )
         is DivBackground.Solid -> DivBackgroundState.Solid(
-            value.color.evaluate(resolver)
+            color = value.color.evaluate(resolver)
         )
         is DivBackground.NinePatch -> DivBackgroundState.NinePatch(
             imageUrl = value.imageUrl.evaluate(resolver),
-            insets = Rect(
+            insets= Rect(
                 value.insets.left.evaluate(resolver),
                 value.insets.top.evaluate(resolver),
                 value.insets.right.evaluate(resolver),
@@ -661,7 +661,7 @@ internal class DivBaseBinder @Inject constructor(
         this ?: return additionalLayer?.let { LayerDrawable(arrayOf(it)) }
 
         val listDrawable = mapNotNull {
-            divBackgroundToDrawable(it, divView, view).mutate()
+            divBackgroundToDrawable(it, divView, view)?.mutate()
         }.toMutableList()
         additionalLayer?.let { listDrawable.add(it) }
 
@@ -674,10 +674,11 @@ internal class DivBaseBinder @Inject constructor(
         target: View
     ): Drawable = when (background) {
         is DivBackgroundState.Image -> getDivImageBackground(background, divView, target)
+        is DivBackgroundState.NinePatch -> getNinePatchDrawable(background, divView, target)
         is DivBackgroundState.Solid -> ColorDrawable(background.color)
         is DivBackgroundState.LinearGradient -> LinearGradientDrawable(
-            background.angle.toFloat(),
-            background.colors.toIntArray()
+            angle = background.angle.toFloat(),
+            colors = background.colors.toIntArray()
         )
         is DivBackgroundState.RadialGradient -> RadialGradientDrawable(
             radius = background.radius.toRadialGradientDrawableRadius(),
@@ -685,7 +686,6 @@ internal class DivBaseBinder @Inject constructor(
             centerY = background.centerY.toRadialGradientDrawableCenter(),
             colors = background.colors.toIntArray()
         )
-        is DivBackgroundState.NinePatch -> ColorDrawable(Color.TRANSPARENT) // TODO: implement 9-patch support
     }
 
     private fun DivBackgroundState.RadialGradient.Radius.toRadialGradientDrawableRadius() =
@@ -728,6 +728,31 @@ internal class DivBaseBinder @Inject constructor(
         divView.addLoadReference(loadReference, target)
 
         return scaleDrawable
+    }
+
+    private fun getNinePatchDrawable(
+        background: DivBackgroundState.NinePatch,
+        divView: Div2View,
+        target: View
+    ): Drawable {
+        val ninePatchDrawable = NinePatchDrawable()
+
+        val url = background.imageUrl.toString()
+        val loadReference = imageLoader.loadImage(url, object : DivIdLoggingImageDownloadCallback(divView) {
+            @UiThread
+            override fun onSuccess(cachedBitmap: CachedBitmap) {
+                ninePatchDrawable.apply {
+                    bottom = background.insets.bottom
+                    left = background.insets.left
+                    right = background.insets.right
+                    top = background.insets.top
+                    bitmap = cachedBitmap.bitmap
+                }
+            }
+        })
+        divView.addLoadReference(loadReference, target)
+
+        return ninePatchDrawable
     }
 
     private fun View.bindFocusActions(
