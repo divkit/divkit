@@ -7,6 +7,7 @@
 * Fixed text style change after slider position change
 * Fixed invalid view visibility on change state
 * Fixed gallery pages position
+* Fixed attaching pager indicator
 
 ## iOS Client:
 * Added text gradient support
