@@ -7,12 +7,12 @@ import LayoutKit
 
 final class AnimationBlock: SizeForwardingBlock {
   let animatableView: Lazy<AnimatableView>
+  let animationHolder: AnimationHolder
+  let sizeProvider: Block
 
-  var sizeProvider: Block
   var debugDescription: String {
     return "Animation Block playing animation with view: \(animatableView)"
   }
-  let holder: AnimationHolder
 
   init(
     animatableView: Lazy<AnimatableView>,
@@ -20,7 +20,7 @@ final class AnimationBlock: SizeForwardingBlock {
     sizeProvider: Block
   ) {
     self.animatableView = animatableView
-    self.holder = animationHolder
+    self.animationHolder = animationHolder
     self.sizeProvider = sizeProvider
   }
 

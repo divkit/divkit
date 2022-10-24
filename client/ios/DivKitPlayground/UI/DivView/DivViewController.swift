@@ -54,6 +54,9 @@ open class DivViewController: UIViewController {
   public override func loadView() {
     scrollView.backgroundColor = .white
     scrollView.cardView = cardView
+
+    blockProvider.parentScrollView = scrollView
+
     view = scrollView
   }
 
@@ -65,13 +68,17 @@ open class DivViewController: UIViewController {
       $0.id != pinchToZoomExtensionHandler.id
     }
     divKitComponents.extensionHandlers.append(pinchToZoomExtensionHandler)
-
-
-    blockProvider.parentScrollView = scrollView
+  }
+  
+  public override func viewWillAppear(_: Bool) {
     blockProvider.$block
       .currentAndNewValues
       .addObserver(updateBlockView)
       .dispose(in: disposePool)
+  }
+
+  public override func viewDidAppear(_: Bool) {
+    onVisibleBoundsChanged(to: scrollView.bounds)
   }
 
   public override func viewWillLayoutSubviews() {
@@ -85,13 +92,10 @@ open class DivViewController: UIViewController {
     onVisibleBoundsChanged(to: scrollView.bounds)
   }
 
-  public override func viewDidAppear(_: Bool) {
-    onVisibleBoundsChanged(to: scrollView.bounds)
-  }
+  public override func viewDidDisappear(_: Bool) {
+    disposePool.drain()
 
-  public override func viewWillDisappear(_: Bool) {
     onVisibleBoundsChanged(to: .zero)
-    divKitComponents.reset()
   }
   
   open func onViewUpdated() {}
