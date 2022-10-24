@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import android.view.View
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
@@ -14,7 +15,7 @@ internal class DivIndicatorBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
 ) : DivViewBinder<DivIndicator, DivPagerIndicatorView> {
 
-    private val lateAttach = mutableListOf<() -> Unit>()
+    private val lateAttach = mutableListOf<(View) -> Unit>()
 
     override fun bindView(view: DivPagerIndicatorView, div: DivIndicator, divView: Div2View) {
         val oldDiv = view.div
@@ -28,9 +29,9 @@ internal class DivIndicatorBinder @Inject constructor(
         if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
         baseBinder.bindView(view, div, oldDiv, divView)
         view.observeStyle(expressionResolver, div)
-        lateAttach.add {
+        lateAttach.add { rootView ->
             val pagerId = div.pagerId
-            divView.findViewWithTag<DivPagerView>(pagerId)?.let { view.attachPager(it.viewPager) }
+            rootView.findViewWithTag<DivPagerView>(pagerId)?.let { view.attachPager(it.viewPager) }
         }
     }
 
@@ -80,8 +81,8 @@ internal class DivIndicatorBinder @Inject constructor(
         setStyle(style)
     }
 
-    fun attachAll() {
-        lateAttach.forEach{ it.invoke() }
+    fun attachAll(view: View) {
+        lateAttach.forEach{ it.invoke(view) }
         lateAttach.clear()
     }
 

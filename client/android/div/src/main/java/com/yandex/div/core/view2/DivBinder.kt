@@ -107,8 +107,8 @@ internal class DivBinder @Inject constructor(
     }
 
     @MainThread
-    fun attachIndicators() {
-        indicatorBinder.attachAll()
+    fun attachIndicators(view: View) {
+        indicatorBinder.attachAll(view)
     }
 
     private fun bindText(view: View, data: DivText, divView: Div2View) {

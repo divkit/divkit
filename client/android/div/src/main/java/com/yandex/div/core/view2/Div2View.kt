@@ -217,7 +217,7 @@ class Div2View private constructor(
             } else {
                 rebind(data, false)
             }
-            div2Component.divBinder.attachIndicators()
+            div2Component.divBinder.attachIndicators(this)
             false
         } else {
             updateNow(data, tag)
@@ -257,7 +257,7 @@ class Div2View private constructor(
         } else {
             updateNow(data, tag)
         }
-        div2Component.divBinder.attachIndicators()
+        div2Component.divBinder.attachIndicators(this)
         sendCreationHistograms()
         return result
     }
@@ -554,7 +554,7 @@ class Div2View private constructor(
                 val rootDivView = buildViewAndUpdateState(it, stateId, temporary)
                 addView(rootDivView)
             }
-            div2Component.divBinder.attachIndicators()
+            div2Component.divBinder.attachIndicators(this)
         }
 
         return newState != null
@@ -592,12 +592,12 @@ class Div2View private constructor(
                 suppressExpressionErrors {
                     div2Component.divBinder.bind(view, newState.div, this, path)
                 }
-                div2Component.divBinder.attachIndicators()
+                div2Component.divBinder.attachIndicators(view)
             }
         } else {
             div2Component.divBinder.bind(view, newState.div, this, path)
             doOnAttach {
-                div2Component.divBinder.attachIndicators()
+                div2Component.divBinder.attachIndicators(view)
             }
         }
         return view
