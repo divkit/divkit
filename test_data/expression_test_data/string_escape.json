@@ -8,6 +8,7 @@
                 "value": "Error tokenizing '\\'."
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
@@ -20,6 +21,7 @@
                 "value": "Incorrect string escape"
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
@@ -32,6 +34,7 @@
                 "value": "\\"
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
@@ -44,9 +47,21 @@
                 "value": "'"
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
+        },
+        {
+          "name": "string escape quote escape with backslash escape",
+          "expression": "\\\\\\'",
+          "expected": {
+            "type": "string",
+            "value": "\\'"
+          },
+          "platforms": [
+            "android"
+          ]
         },
         {
             "name": "string escape expression escape",
@@ -56,6 +71,7 @@
                 "value": "@{123}"
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
@@ -68,6 +84,7 @@
                 "value": "Incorrect string escape"
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
@@ -80,6 +97,7 @@
                 "value": "a@bc.de"
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
@@ -92,6 +110,7 @@
                 "value": "Error tokenizing '@{ Hello there'."
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
@@ -104,6 +123,7 @@
                 "value": "@{ Hello there"
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]
@@ -116,6 +136,7 @@
                 "value": "\\"
             },
             "platforms": [
+                "android",
                 "ios",
                 "web"
             ]

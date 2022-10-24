@@ -1,14 +1,25 @@
 package com.yandex.div.evaluable.internal
 
 import com.yandex.div.evaluable.EvaluableException
+import com.yandex.div.evaluable.TokenizingException
 
 internal object Tokenizer {
 
     private const val EMPTY_CHAR = '\u0000'
 
+    private val ESCAPE_LITERALS = arrayOf("'", "@{")
+
     fun tokenize(input: String): List<Token> {
         val state = TokenizationState(input)
-        processStringTemplate(state, state.tokens, false)
+        try {
+            processStringTemplate(state, state.tokens, false)
+        } catch (exception: EvaluableException) {
+            when (exception) {
+                is TokenizingException ->
+                    throw EvaluableException("Error tokenizing '$input'.", exception)
+                else -> throw exception
+            }
+        }
         return state.tokens
     }
 
@@ -24,7 +35,7 @@ internal object Tokenizer {
 
         if (state.currentChar().isAtEnd()) {
             if (isPartOfExpression) {
-                throw EvaluableException("'\'' expected at end of string literal at ${state.index}")
+                throw TokenizingException("'\'' expected at end of string literal at ${state.index}")
             }
             stringLiteral?.let {  tokens.add(it) }
             return
@@ -67,7 +78,7 @@ internal object Tokenizer {
         }
 
         if (isPartOfExpression && !state.currentChar().isAtEndOfStringLiteral(state)) {
-            throw EvaluableException("'\'' expected at end of string literal at ${state.index}")
+            throw TokenizingException("'\'' expected at end of string literal at ${state.index}")
         }
 
         if (stringTemplateTokens.isNotEmpty()) {
@@ -87,15 +98,69 @@ internal object Tokenizer {
             state.forward()
         }
 
-        val string = state.part(start, state.index)
-            .replace("\\'", "'")
-            .replace("\\@{", "@{")
+        val string = replaceEscapingLiterals(state.part(start, state.index))
 
         return if (string.isNotEmpty()) {
             Token.Operand.Literal.Str(string)
         } else {
             null
         }
+    }
+
+    fun replaceEscapingLiterals(
+        string: String,
+        escapingLiterals: Array<String> = ESCAPE_LITERALS
+    ): String {
+        val literalBuilder = StringBuilder()
+        var index = 0
+        while (index < string.length) {
+            if (string[index] == '\\') {
+                val startIndexOfBackslash = index
+                while (index < string.length && string[index] == '\\') {
+                    index++
+                }
+                val countOfBackslashes = index - startIndexOfBackslash
+                repeat(countOfBackslashes / 2) {
+                    literalBuilder.append('\\')
+                }
+                val remainsEscapingBackslash = countOfBackslashes % 2 == 1
+                if (remainsEscapingBackslash) {
+                    if (index == string.length || string[index] == ' ') {
+                        throw TokenizingException("Alone backslash at ${index - 1}")
+                    }
+
+                    val escapingLiteralsSet = escapingLiterals.toMutableSet()
+                    var literalToReplace: String? = null
+                    var literalIndex = 0
+                    while (literalToReplace.isNullOrEmpty()
+                        && escapingLiteralsSet.isNotEmpty()
+                        && index < string.length
+                    ) {
+                        val escapingLiteralsIterator = escapingLiteralsSet.iterator()
+                        while (escapingLiteralsIterator.hasNext() && index < string.length) {
+                            val literal = escapingLiteralsIterator.next()
+                            if (literal[literalIndex] != string[index]) {
+                                escapingLiteralsIterator.remove()
+                            } else {
+                                if (literalIndex == literal.lastIndex) {
+                                    literalToReplace = literal
+                                    break
+                                }
+                            }
+                        }
+                        literalIndex++
+                        index++
+                    }
+                    if (literalToReplace.isNullOrEmpty()) {
+                        throw EvaluableException("Incorrect string escape")
+                    }
+                    literalBuilder.append(literalToReplace)
+                }
+            } else {
+                literalBuilder.append(string[index++])
+            }
+        }
+        return literalBuilder.toString()
     }
 
     private fun isAtEndOfString(state: TokenizationState, isLiteral: Boolean): Boolean {
@@ -238,7 +303,7 @@ internal object Tokenizer {
         }
 
         if (!state.currentChar().isAtEndOfExpression()) {
-            throw EvaluableException("'}' expected at end of expression at ${state.index}")
+            throw TokenizingException("'}' expected at end of expression at ${state.index}")
         }
         state.forward()
 
@@ -341,11 +406,31 @@ internal object Tokenizer {
     private data class TokenizationState(private val source: String) {
         var index: Int = 0
         val tokens = mutableListOf<Token>()
+        val charIsEscaped = BooleanArray(source.length)
+
+        init {
+            var charIndex = source.lastIndex
+            while (charIndex >= 0) {
+                var currentIndex = charIndex - 1
+                var backslashesCounter = 0
+                while (currentIndex > 0 && source[currentIndex] == '\\') {
+                    backslashesCounter++
+                    currentIndex--
+                }
+                charIsEscaped[charIndex--] = backslashesCounter % 2 == 1
+            }
+        }
 
         fun prevChar(step: Int = 1) = if (index - step >= 0) {
             source[index - step]
         } else {
             EMPTY_CHAR
+        }
+
+        fun currentCharIsEscaped() = if (index >= source.length) {
+            false
+        } else {
+            charIsEscaped[index]
         }
 
         fun currentChar() = if (index >= source.length) {
@@ -389,7 +474,7 @@ internal object Tokenizer {
     private fun Char.isWhiteSpace() = this == ' ' || this == '\t' || this == '\r' || this == '\n'
     private fun Char.isValidIdentifier() = this.isAlphabetic() || this.isNumber() || this == '.'
     private fun Char.isAtEndOfStringLiteral(state: TokenizationState) =
-        this == '\'' && state.prevChar() != '\\'
+        this == '\'' && !state.currentCharIsEscaped()
     private fun Char.isStartOfExpression(state: TokenizationState) =
         this == '@' && state.prevChar() != '\\' && state.nextChar() == '{'
     private fun Char.isAtEndOfExpression() = this == '}'

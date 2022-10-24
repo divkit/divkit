@@ -18,6 +18,11 @@ open class EvaluableException(
     cause: Exception? = null
 ) : RuntimeException(message, cause)
 
+class TokenizingException(
+    message: String,
+    cause: Exception? = null
+) : EvaluableException(message, cause)
+
 class MissingVariableException(
     val variableName: String,
     cause: Exception? = null

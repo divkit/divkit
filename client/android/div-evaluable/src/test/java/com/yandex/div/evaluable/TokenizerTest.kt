@@ -494,6 +494,46 @@ class TokenizerTest {
         assertExpression("'string", s("string"))
     }
 
+    @Test
+    fun `escaping # without escaping literals`() {
+        assertStringLiteralEscaping("Hello", "Hello")
+    }
+
+    @Test
+    fun `escaping # two backslashes`() {
+        assertStringLiteralEscaping("\\\\Hello", "\\Hello")
+    }
+
+    @Test
+    fun `escaping # escaping start expression literal`() {
+        assertStringLiteralEscaping("\\@{Hello", "@{Hello")
+    }
+
+    @Test
+    fun `escaping # escaping quote literal`() {
+        assertStringLiteralEscaping("\\'Hello", "'Hello")
+    }
+
+    @Test
+    fun `escaping # backslashes`() {
+        assertStringLiteralEscaping("\\\\", "\\")
+    }
+
+    @Test
+    fun `escaping # escaping quote literal with backslashes`() {
+        assertStringLiteralEscaping("\\\\\\'", "\\'")
+    }
+
+    @Test(expected = EvaluableException::class)
+    fun `escaping # alone backslashes 1`() {
+        assertStringLiteralEscaping("\\", "\\")
+    }
+
+    @Test(expected = EvaluableException::class)
+    fun `escaping # alone backslashes 2`() {
+        assertStringLiteralEscaping("\\\\\\ '", "\\ '")
+    }
+
     private fun assertUnsignedNumberLiteral(expr: String, value: Number) = assertExpression(expr, n(value))
     private fun assertPositiveNumberLiteral(expr: String, value: Number) = assertExpression(expr, uplus, n(value))
     private fun assertNegativeNumberLiteral(expr: String, value: Int) = assertExpression(expr, n(value))
@@ -634,6 +674,14 @@ class TokenizerTest {
 
     private fun expr(expr: String): List<Token> {
         return Tokenizer.tokenize(expr)
+    }
+
+    private fun assertStringLiteralEscaping(
+        stringLiteral: String,
+        expected: String
+    ) {
+        val actual = Tokenizer.replaceEscapingLiterals(stringLiteral)
+        assertEquals(expected, actual)
     }
 
     companion object {
