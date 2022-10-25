@@ -4,7 +4,7 @@ import Lottie
 
 final class LottieAnimationFactory: AnimatableViewFactory {
   public func createAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float) -> AnimatableView {
-    let animationView = AnimationView()
+    let animationView = LottieAnimationView()
     switch mode {
     case .restart:
       animationView.loopMode = count == -1 ? .loop : .repeat(count)
@@ -15,19 +15,19 @@ final class LottieAnimationFactory: AnimatableViewFactory {
   }
 }
 
-extension Lottie.AnimationView: AnimatableView {
+extension LottieAnimationView: AnimatableView {
   public func play() {
     self.play(completion: nil)
     self.forceDisplayUpdate()
   }
 
   public func setSource(_ source: AnimationSourceType) {
-    var animation: Lottie.Animation?
+    var animation: LottieAnimation?
     switch source {
     case .data(let data):
-      animation = try? JSONDecoder().decode(Animation.self, from: data)
+      animation = try? JSONDecoder().decode(LottieAnimation.self, from: data)
     case .json(let json):
-      animation = try? Lottie.Animation(dictionary: json)
+      animation = try? LottieAnimation(dictionary: json)
     }
     self.animation = animation
   }

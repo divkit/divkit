@@ -1280,7 +1280,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1340;
-				LastUpgradeCheck = 1320;
+				LastUpgradeCheck = 1400;
 				TargetAttributes = {
 					8C1CF633286B58810016D0A1 = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -1932,6 +1932,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1B28AD059600D262E1 /* Debug.xcconfig */;
 			buildSettings = {
+				DEAD_CODE_STRIPPING = YES;
 			};
 			name = Debug;
 		};
@@ -1939,6 +1940,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 8C87CF1C28AD05AB00D262E1 /* Release.xcconfig */;
 			buildSettings = {
+				DEAD_CODE_STRIPPING = YES;
 			};
 			name = Release;
 		};
@@ -2054,7 +2056,7 @@
 			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
 			requirement = {
 				kind = exactVersion;
-				version = 3.4.3;
+				version = 3.5.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
