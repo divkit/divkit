@@ -760,6 +760,24 @@ expect:
 paths:
   - 'regression_test_data/variables/div_indicator.json'
 ---
+title: Variables in DivImage
+tags: [ 'DivImage' ]
+steps:
+  - Click on blue label "tint color"
+  - Click on label "img#1"
+  - Click on red label "tint color"
+  - Click on label "img#2"
+  - Click on blue label "tint color"
+expect:
+  - Initially, there should be a red parallelogram on a green background
+  - The red parallelogram has changed color to blue
+  - The blue parallelogram has changed to the blue camera icon
+  - The blue camera icon has changed color to red
+  - The red camera icon has become a red stripe pattern
+  - The red stripe pattern has changed color to blue
+paths:
+  - 'regression_test_data/variables/div_image.json'
+---
 title: Variables triggers
 tags: [ 'Triggers' ]
 steps:
