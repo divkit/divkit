@@ -128,6 +128,7 @@ class Div2Activity : AppCompatActivity() {
         val data = intent?.data ?: return
 
         variable.setValue(Variable.StringVariable(DIV2_TEXT_INPUT_VARIABLE, data.toString()))
+        checkInputAndShowIfCorrect()
     }
 
 

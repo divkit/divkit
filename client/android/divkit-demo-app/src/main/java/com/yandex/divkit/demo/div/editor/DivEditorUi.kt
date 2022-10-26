@@ -60,24 +60,24 @@ class DivEditorUi(
     }
 
     private fun updateRenderTime() {
+        metadataHost.renderingTimeMessages.clear()
+        val histogramBridge = Container.histogramConfiguration.histogramBridge.get()
+            as LoggingHistogramBridge
+        histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_PARSING_DATA")?.let {
+            metadataHost.renderingTimeMessages.put(DIV_PARSING_DATA, it)
+        }
+        if (hasTemplates) {
+            histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_PARSING_TEMPLATES")?.let {
+                metadataHost.renderingTimeMessages.put(DIV_PARSING_TEMPLATES, it)
+            }
+        }
+        histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_RENDER_TOTAL")?.let {
+            metadataHost.renderingTimeMessages.put(DIV_RENDER_TOTAL, it)
+        }
+
         if (showRenderTime) {
             metadataButton.visibility = VISIBLE
-            metadataHost.renderingTimeMessages.clear()
-            val histogramBridge = Container.histogramConfiguration.histogramBridge.get()
-                as LoggingHistogramBridge
-            histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_RENDER_TOTAL")?.let {
-                metadataHost.renderingTimeMessages.put(DIV_RENDER_TOTAL, it)
-            }
-            histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_PARSING_DATA")?.let {
-                metadataHost.renderingTimeMessages.put(DIV_PARSING_DATA, it)
-            }
-            if (hasTemplates) {
-                histogramBridge.getLastSavedHistogram("$DEMO_ACTIVITY_COMPONENT_NAME.$DIV_PARSING_TEMPLATES")?.let {
-                    metadataHost.renderingTimeMessages.put(DIV_PARSING_TEMPLATES, it)
-                }
-            }
         } else {
-            metadataHost.renderingTimeMessages.clear()
             metadataButton.visibility = GONE
             return
         }

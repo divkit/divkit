@@ -207,13 +207,11 @@ class DivEditorPresenter(
                         .put("screenshot", encodedImage)
                         .put("rendering_time", JSONObject().apply {
                             put("div_render_total", metadataHost.renderingTimeMessages
-                                .getValue(DIV_RENDER_TOTAL).toJSONObject())
+                                .getOrDefault(DIV_RENDER_TOTAL, null)?.toJSONObject())
                             put("div_parsing_data", metadataHost.renderingTimeMessages
-                                .getValue(DIV_PARSING_DATA).toJSONObject())
-                            if (metadataHost.renderingTimeMessages.containsKey(DIV_PARSING_TEMPLATES)) {
-                                put("div_parsing_templates", metadataHost.renderingTimeMessages
-                                    .getValue(DIV_PARSING_TEMPLATES).toJSONObject())
-                            }
+                                .getOrDefault(DIV_PARSING_DATA, null)?.toJSONObject())
+                            put("div_parsing_templates", metadataHost.renderingTimeMessages
+                                .getOrDefault(DIV_PARSING_TEMPLATES, null)?.toJSONObject())
                         })
                     webController.sendMessage(MessageType.UI_STATE, message)
                 } catch (e: Exception) {
