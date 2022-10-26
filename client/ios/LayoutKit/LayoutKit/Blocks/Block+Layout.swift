@@ -184,15 +184,14 @@ public struct ContainerBlockLayout {
           let childSize = child.content.size(forResizableBlockSize: size)
           return result + [[(child, childSize, 0)]]
         }
-        let offset = (result.last?.last?.2 ?? 0) +
+        var offset = (result.last?.last?.2 ?? 0) +
           (result.last?.last?.1[keyPath: buildingDirectionKeyPath] ?? 0)
         let childSize = child.content.size(forResizableBlockSize: .zero)
         if offset + childSize[keyPath: buildingDirectionKeyPath] >
           size[keyPath: buildingDirectionKeyPath] {
-          return result + [[(child, childSize, 0)]]
-        } else {
-          return (result.dropLast()) + [(result.last ?? []) + [(child, childSize, offset)]]
+            offset = .zero
         }
+          return result + [[(child, childSize, offset)]]
       }
 
     var currentLineOffset = 0.0
