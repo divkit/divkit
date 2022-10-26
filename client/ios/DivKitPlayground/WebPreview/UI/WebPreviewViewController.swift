@@ -25,6 +25,7 @@ struct WebPreviewViewRepresentable: UIViewControllerRepresentable {
 private final class WebPreviewViewController: DivViewController {
   private let onScreenshotTaken: ScreenshotCallback
 
+  private var isAppeared = false
   private var lastScreenshotDate: Date?
   private var screenshotCancellationToken: Cancellable?
 
@@ -49,13 +50,28 @@ private final class WebPreviewViewController: DivViewController {
     super.viewDidLayoutSubviews()
     takeScreenshot(afterScreenUpdates: false)
   }
-  
+
+  public override func viewDidAppear(_: Bool) {
+    isAppeared = true
+  }
+
+  public override func viewDidDisappear(_: Bool) {
+    screenshotCancellationToken?.cancel()
+    screenshotCancellationToken = nil
+
+    isAppeared = false
+  }
+
   override func onViewUpdated() {
     super.onViewUpdated()
     takeScreenshot(afterScreenUpdates: true)
   }
 
   private func takeScreenshot(afterScreenUpdates: Bool) {
+    guard isAppeared else {
+      return
+    }
+    
     screenshotCancellationToken?.cancel()
     screenshotCancellationToken = nil
 

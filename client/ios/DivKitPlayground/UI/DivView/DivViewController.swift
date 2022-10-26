@@ -69,7 +69,7 @@ open class DivViewController: UIViewController {
     }
     divKitComponents.extensionHandlers.append(pinchToZoomExtensionHandler)
   }
-  
+
   public override func viewWillAppear(_: Bool) {
     blockProvider.$block
       .currentAndNewValues
