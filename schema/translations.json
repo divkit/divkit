@@ -356,8 +356,8 @@
     "ru": "Выравнивание элементов по умолчанию. Не используется, если из поля элемента задан параметр `alignment_horizontal`."
   },
   "div_container_content_alignment_vertical": {
-    "en": "Default alignment of elements. Not used if the `alignment_vertical` parameter is set from the element field.",
-    "ru": "Выравнивание элементов по умолчанию. Не используется, если из поля элемента задан параметр `alignment_vertical`."
+    "en": "Default alignment of elements. `baseline` value aligns elements having their own baseline along this baseline. Other elements are aligned by top side in this case. Not used if the `alignment_vertical` parameter is set from the element field.",
+    "ru": "Выравнивание элементов по умолчанию. Значение `baseline` означает выравнивание по бейзлайну элементов, которые имеют собственный бейзлайн. Остальные элементы в этом случае будут выровнены по верхнему краю. Не используется, если из поля элемента задан параметр `alignment_vertical`."
   },
   "div_container_items": {
     "en": "Nested elements.",
@@ -368,8 +368,8 @@
     "ru": "Расположение элементов. Значение `overlap` накладывает элементы друг на друга в порядке перечисления. Ниже всего — нулевой элемент массива."
   },
   "div_container_layout_mode": {
-    "en": "Method of placing elements. `wrap` value includes the transfer of elements to the next line if they did not fit in the previous one. If the value is set to `wrap`, then a separate line will be allocated for all elements with a size value of match_parent along the main axis. If the value is set to `wrap`, then elements with a size value of match_parent along the cross axis will be ignored.",
-    "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей. Если установлено значения `wrap`, то для каждого элемента со значением размера match_parent вдоль главной оси будет выделена отдельная строка. Если установлено значения `wrap`, то элементы со значением match_parent вдоль побочной оси будут проигнорированы."
+    "en": "Method of placing elements. `wrap` value includes the transfer of elements to the next line if they did not fit in the previous one. If the value is set to `wrap`, then a separate line will be allocated for all elements with a size value of `match_parent` along the main axis. If the value is set to `wrap`, then elements with a size value of `match_parent` along the cross axis will be ignored.",
+    "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей. Если установлено значения `wrap`, то для каждого элемента со значением размера `match_parent` вдоль главной оси будет выделена отдельная строка. Если установлено значение `wrap`, то элементы со значением `match_parent` вдоль побочной оси будут проигнорированы."
   },
   "div_container_separator": {
     "en": "Separator between elements along the main axis. Not used if the `orientation` parameter has the value `overlap'.",

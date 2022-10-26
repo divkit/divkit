@@ -3,6 +3,7 @@
   "enum": [
     "top",
     "center",
-    "bottom"
+    "bottom",
+    "baseline"
   ]
 }
