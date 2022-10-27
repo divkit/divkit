@@ -406,20 +406,6 @@ internal object Tokenizer {
     private data class TokenizationState(private val source: String) {
         var index: Int = 0
         val tokens = mutableListOf<Token>()
-        val charIsEscaped = BooleanArray(source.length)
-
-        init {
-            var charIndex = source.lastIndex
-            while (charIndex >= 0) {
-                var currentIndex = charIndex - 1
-                var backslashesCounter = 0
-                while (currentIndex > 0 && source[currentIndex] == '\\') {
-                    backslashesCounter++
-                    currentIndex--
-                }
-                charIsEscaped[charIndex--] = backslashesCounter % 2 == 1
-            }
-        }
 
         fun prevChar(step: Int = 1) = if (index - step >= 0) {
             source[index - step]
@@ -430,7 +416,14 @@ internal object Tokenizer {
         fun currentCharIsEscaped() = if (index >= source.length) {
             false
         } else {
-            charIsEscaped[index]
+            var currentIndex = index - 1
+            var backslashesCounter = 0
+            while (currentIndex > 0 && source[currentIndex] == '\\') {
+                backslashesCounter++
+                currentIndex--
+            }
+            val isEscaped = backslashesCounter % 2 == 1
+            isEscaped
         }
 
         fun currentChar() = if (index >= source.length) {
