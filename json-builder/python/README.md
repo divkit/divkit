@@ -1,7 +1,7 @@
 PyDIVKit examples
 =================
 
-This library is for working with DivKit with python.
+This library is designed to work with [DivKit](http://divkit.tech/) with python.
 
 Features:
 * Declarative and imperative DivKit blocks definition
@@ -12,7 +12,7 @@ Features:
 Object construction
 -------------------
 
-The main idea is a provides ability to construct blocks by python objects.
+The main idea is to provide a tool for creating blocks using Python objects.
 
 ```python
 import json
@@ -166,9 +166,9 @@ print(json.dumps(slider.dict(), indent=1))
 Templating and DRY
 ------------------
 
-Of course building blocks from your code every time manually it's
-a very boring. So the first idea it's a move initialization of the 
-DivKit objects to the functions.
+Of course, manually building blocks from your code every time is boring. 
+So, the first idea is to move the initialization of DivKit objects 
+into functions.
 
 ```python
 # Naive DRY example which strictly non-recommended
@@ -213,7 +213,7 @@ this many times in similar items.
 
 **PyDivKit supports defining templates through the inheritance.**
 
-Let's define an example card.
+Let's define an example card:
 
 ```python
 import json
@@ -366,8 +366,8 @@ By default, templates are collecting by the metaclass into shared storage when
 the class is declaring at import time, and have the 
 format `{module_name}.{class_name}`.
 
-The following example, which I am sure will not occur in the wild, shows a 
-warning if suddenly the names of the classes, and hence the templates, conflict.
+The following example, sure will not occur in the wild, shows a warning if 
+suddenly the names of the classes, and hence the templates, conflict.
 
 ```python
 import pydivkit as dk
