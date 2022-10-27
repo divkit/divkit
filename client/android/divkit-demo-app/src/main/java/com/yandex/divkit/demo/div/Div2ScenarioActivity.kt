@@ -28,6 +28,7 @@ import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2ScenarioBinding
@@ -50,6 +51,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     private lateinit var binding: ActivityDiv2ScenarioBinding
     private val metadataBottomSheet = Div2MetadataBottomSheet()
     private lateinit var editorPresenter: DivEditorPresenter
+    private lateinit var editorStateKeeper: DivEditorActivityStateKeeper
     private lateinit var div2Adapter: DivEditorAdapter
     private lateinit var divContext: Div2Context
     private val globalVariableController = DemoGlobalVariablesController()
@@ -117,10 +119,11 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         )
 
         val editorLogger = DivEditorLogger(this::setError)
+        editorStateKeeper = ViewModelProvider(this)[DivEditorActivityStateKeeper::class.java]
         editorPresenter = DivEditorPresenter(
             this,
             coroutineScope,
-            ViewModelProvider(this).get(DivEditorActivityStateKeeper::class.java),
+            editorStateKeeper,
             divEditorUi,
             DivEditorWebController(Container.webSocketFactory.apply {
                 proxySettings.apply {
@@ -216,7 +219,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 try {
                     val divPatch = JSONObject(editText.text.toString())
                         .asDivPatchWithTemplates(errorLogger.apply { clear() })
-                    div2Adapter.applyPath(
+                    applyPath(
                         divPatch,
                         errorCallback = { longToast("Error while applied JSON patch!") }
                     )
@@ -228,7 +231,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                             val loadedJson = loadJson(Uri.parse(url))
                             loadedJson.asDivPatchWithTemplates(errorLogger.apply { clear() })
                         }
-                        div2Adapter.applyPath(
+                        applyPath(
                             divPatch,
                             errorCallback = { longToast("Error while applied loaded patch!") }
                         )
@@ -236,6 +239,24 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 }
             }
         adb.create().show()
+    }
+
+    private fun applyPath(divPatch: DivPatch, errorCallback: () -> Unit) {
+        if (isSingleCardState()) {
+            if (!div2View.applyPatch(divPatch)) {
+                errorCallback()
+            }
+            return
+        }
+        div2Adapter.applyPath(divPatch, errorCallback)
+    }
+
+    private fun isSingleCardState(): Boolean {
+        if (!this::editorStateKeeper.isInitialized) {
+            return false
+        }
+        val state = editorStateKeeper.state
+        return state is DivEditorState.DivReceivedState && state.isSingleCard
     }
 
     private fun setupDiv2View() {
