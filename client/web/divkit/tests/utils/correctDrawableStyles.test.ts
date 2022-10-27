@@ -129,9 +129,9 @@ describe('correctDrawableStyle', () => {
                 }
             }
         }, types, defaultVal)).toEqual({
-            width: 100,
-            height: 100,
-            borderRadius: 100,
+            width: 200,
+            height: 200,
+            borderRadius: 200,
             background: '#ffcc00'
         });
 

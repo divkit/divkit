@@ -33,7 +33,7 @@ export function correctDrawableStyle(
         height = Number(drawable.shape.item_height?.value || 10);
         radius = Number(drawable.shape.corner_radius?.value || 5);
     } else if (drawable.shape.type === 'circle') {
-        width = height = radius = Number(drawable.shape.radius?.value || 10);
+        width = height = radius = Number(drawable.shape.radius?.value || 10) * 2;
     } else {
         return defaultValue;
     }

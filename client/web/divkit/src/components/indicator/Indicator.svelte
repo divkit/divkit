@@ -26,6 +26,7 @@
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     $: jsonShape = rootCtx.getDerivedFromVars(json.shape);
+    let shapeRadius = 5;
     let shapeWidth = 10;
     let shapeHeight = 10;
     let shapeCornerRadius = 5;
@@ -45,8 +46,9 @@
                     shapeCornerRadius = correctNonNegativeNumber($jsonShape.corner_radius.value, shapeCornerRadius);
                 }
             } else if ($jsonShape.type === 'circle') {
-                shapeWidth = shapeHeight = shapeCornerRadius =
-                    correctNonNegativeNumber($jsonShape.radius?.value, shapeWidth);
+                shapeRadius = correctNonNegativeNumber($jsonShape.radius?.value, shapeRadius);
+
+                shapeWidth = shapeHeight = shapeCornerRadius = shapeRadius * 2;
             }
         }
     }
