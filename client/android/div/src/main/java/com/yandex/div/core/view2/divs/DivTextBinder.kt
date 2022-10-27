@@ -691,8 +691,7 @@ internal class DivTextBinder @Inject constructor(
                 val start = image.start.evaluate(resolver) + index
                 sb.getSpans<ImagePlaceholderSpan>(start, start + 1).forEach { sb.removeSpan(it) }
                 sb.setSpan(span, start, start + 1, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
-                textView.setText(sb, TextView.BufferType.NORMAL)
-                textView.requestLayout()
+                textObserver?.invoke(sb)
             }
         }
 

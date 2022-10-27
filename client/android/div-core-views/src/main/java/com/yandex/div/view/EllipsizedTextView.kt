@@ -38,10 +38,8 @@ open class EllipsizedTextView @JvmOverloads constructor(
     @VisibleForTesting
     var ellipsizedText: CharSequence? = null
         private set(value) {
-            if (field != value) {
-                field = value
-                setTextInternal(value)
-            }
+            field = value
+            setTextInternal(value)
         }
 
     @VisibleForTesting
