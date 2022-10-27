@@ -1,9 +1,12 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
+
+from pydivkit.core import BaseDiv, Field
 
 from . import div_point
 
@@ -25,10 +28,19 @@ class DivShadow(BaseDiv):
             offset=offset,
         )
 
-    alpha: typing.Optional[float] = Field(description='Shadow transparency.')
-    blur: typing.Optional[int] = Field(description='Blur intensity.')
-    color: typing.Optional[str] = Field(format="color", description='Shadow color.')
-    offset: div_point.DivPoint = Field(description='Shadow offset.')
+    alpha: typing.Optional[float] = Field(
+        description="Shadow transparency.",
+    )
+    blur: typing.Optional[int] = Field(
+        description="Blur intensity.",
+    )
+    color: typing.Optional[str] = Field(
+        format="color", 
+        description="Shadow color.",
+    )
+    offset: div_point.DivPoint = Field(
+        description="Shadow offset.",
+    )
 
 
 DivShadow.update_forward_refs()

@@ -19,7 +19,9 @@ class EntityWithOptionalProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_optional_property')
-    property: typing.Optional[str] = Field(min_length=1)
+    property: typing.Optional[str] = Field(
+        min_length=1
+    )
 
 
 EntityWithOptionalProperty.update_forward_refs()

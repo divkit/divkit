@@ -23,9 +23,17 @@ class EntityWithPropertyWithDefaultValue(BaseDiv):
         )
 
     type: str = Field(default='entity_with_property_with_default_value')
-    int: typing.Optional[int] = Field()
-    nested: typing.Optional[EntityWithPropertyWithDefaultValueNested] = Field(description='non_optional is used to suppress auto-generation of default value for object withall-optional fields.')
-    url: typing.Optional[str] = Field(format="uri")
+    int: typing.Optional[int] = Field(
+    )
+    nested: typing.Optional[EntityWithPropertyWithDefaultValueNested] = Field(
+        description=(
+            "non_optional is used to suppress auto-generation of default "
+            "value for object withall-optional fields."
+        )
+    )
+    url: typing.Optional[str] = Field(
+        format="uri"
+    )
 
 
 # non_optional is used to suppress auto-generation of default value for object with
@@ -44,9 +52,13 @@ class EntityWithPropertyWithDefaultValueNested(BaseDiv):
             url=url,
         )
 
-    int: typing.Optional[int] = Field()
-    non_optional: str = Field()
-    url: typing.Optional[str] = Field(format="uri")
+    int: typing.Optional[int] = Field(
+    )
+    non_optional: str = Field(
+    )
+    url: typing.Optional[str] = Field(
+        format="uri"
+    )
 
 
 EntityWithPropertyWithDefaultValueNested.update_forward_refs()

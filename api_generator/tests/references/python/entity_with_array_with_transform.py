@@ -19,7 +19,9 @@ class EntityWithArrayWithTransform(BaseDiv):
         )
 
     type: str = Field(default='entity_with_array_with_transform')
-    array: typing.List[str] = Field(min_items=1)
+    array: typing.List[str] = Field(
+        min_items=1
+    )
 
 
 EntityWithArrayWithTransform.update_forward_refs()

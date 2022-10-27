@@ -19,7 +19,9 @@ class EntityWithStringArrayProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_string_array_property')
-    array: typing.List[str] = Field(min_items=1)
+    array: typing.List[str] = Field(
+        min_items=1
+    )
 
 
 EntityWithStringArrayProperty.update_forward_refs()

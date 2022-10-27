@@ -19,7 +19,9 @@ class EntityWithRequiredProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_required_property')
-    property: str = Field(min_length=1)
+    property: str = Field(
+        min_length=1
+    )
 
 
 EntityWithRequiredProperty.update_forward_refs()

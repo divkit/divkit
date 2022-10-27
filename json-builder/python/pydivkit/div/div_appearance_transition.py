@@ -1,16 +1,19 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
-
-from . import div_appearance_set_transition
-from . import div_fade_transition
-from . import div_scale_transition
-from . import div_slide_transition
-
 from typing import Union
+
+from pydivkit.core import BaseDiv, Field
+
+from . import (
+    div_appearance_set_transition, div_fade_transition, div_scale_transition,
+    div_slide_transition,
+)
+
 
 DivAppearanceTransition = Union[
     div_appearance_set_transition.DivAppearanceSetTransition,

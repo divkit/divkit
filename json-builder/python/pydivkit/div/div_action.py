@@ -1,9 +1,12 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
+
+from pydivkit.core import BaseDiv, Field
 
 from . import div_download_callbacks
 
@@ -33,19 +36,47 @@ class DivAction(BaseDiv):
             url=url,
         )
 
-    download_callbacks: typing.Optional[div_download_callbacks.DivDownloadCallbacks] = Field(description='Callbacks that are called after [dataloading](../../interaction.dita#loading-data).')
-    log_id: str = Field(min_length=1, description='Logging ID.')
-    log_url: typing.Optional[str] = Field(format="uri", description='URL for logging.')
-    menu_items: typing.Optional[typing.List[DivActionMenuItem]] = Field(min_items=1, description='Context menu.')
-    payload: typing.Optional[typing.Dict[str, typing.Any]] = Field(description='Additional parameters, passed to the host application.')
-    referer: typing.Optional[str] = Field(format="uri", description='Referer URL for logging.')
-    target: typing.Optional[DivActionTarget] = Field(description='The tab in which the URL must be opened.')
-    url: typing.Optional[str] = Field(format="uri", description='URL. Possible values: `url` or `div-action://`. To learn more, see [Interactionwith elements](../../interaction.dita).')
+    download_callbacks: typing.Optional[div_download_callbacks.DivDownloadCallbacks] = Field(
+        description=(
+            "Callbacks that are called after "
+            "[dataloading](../../interaction.dita#loading-data)."
+        ),
+    )
+    log_id: str = Field(
+        min_length=1, 
+        description="Logging ID.",
+    )
+    log_url: typing.Optional[str] = Field(
+        format="uri", 
+        description="URL for logging.",
+    )
+    menu_items: typing.Optional[typing.List[DivActionMenuItem]] = Field(
+        min_items=1, 
+        description="Context menu.",
+    )
+    payload: typing.Optional[typing.Dict[str, typing.Any]] = Field(
+        description="Additional parameters, passed to the host application.",
+    )
+    referer: typing.Optional[str] = Field(
+        format="uri", 
+        description="Referer URL for logging.",
+    )
+    target: typing.Optional[DivActionTarget] = Field(
+        description="The tab in which the URL must be opened.",
+    )
+    url: typing.Optional[str] = Field(
+        format="uri", 
+        description=(
+            "URL. Possible values: `url` or `div-action://`. To learn "
+            "more, see [Interactionwith "
+            "elements](../../interaction.dita)."
+        ),
+    )
 
 
 class DivActionTarget(str, enum.Enum):
-    SELF = '_self'
-    BLANK = '_blank'
+    SELF = "_self"
+    BLANK = "_blank"
 
 
 class DivActionMenuItem(BaseDiv):
@@ -62,9 +93,20 @@ class DivActionMenuItem(BaseDiv):
             text=text,
         )
 
-    action: typing.Optional[DivAction] = Field(description='One action when clicking on a menu item. Not used if the `actions` parameter isset.')
-    actions: typing.Optional[typing.List[DivAction]] = Field(min_items=1, description='Multiple actions when clicking on a menu item.')
-    text: str = Field(min_length=1, description='Menu item title.')
+    action: typing.Optional[DivAction] = Field(
+        description=(
+            "One action when clicking on a menu item. Not used if the "
+            "`actions` parameter isset."
+        ),
+    )
+    actions: typing.Optional[typing.List[DivAction]] = Field(
+        min_items=1, 
+        description="Multiple actions when clicking on a menu item.",
+    )
+    text: str = Field(
+        min_length=1, 
+        description="Menu item title.",
+    )
 
 
 DivActionMenuItem.update_forward_refs()

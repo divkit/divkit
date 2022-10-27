@@ -19,7 +19,8 @@ class EntityWithStringEnumProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_string_enum_property')
-    property: EntityWithStringEnumPropertyProperty = Field()
+    property: EntityWithStringEnumPropertyProperty = Field(
+    )
 
 
 class EntityWithStringEnumPropertyProperty(str, enum.Enum):

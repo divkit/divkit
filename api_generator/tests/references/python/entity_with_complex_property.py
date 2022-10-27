@@ -19,7 +19,8 @@ class EntityWithComplexProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_complex_property')
-    property: EntityWithComplexPropertyProperty = Field()
+    property: EntityWithComplexPropertyProperty = Field(
+    )
 
 
 class EntityWithComplexPropertyProperty(BaseDiv):
@@ -32,7 +33,9 @@ class EntityWithComplexPropertyProperty(BaseDiv):
             value=value,
         )
 
-    value: str = Field(format="uri")
+    value: str = Field(
+        format="uri"
+    )
 
 
 EntityWithComplexPropertyProperty.update_forward_refs()

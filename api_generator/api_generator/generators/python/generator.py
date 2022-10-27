@@ -30,7 +30,10 @@ class PythonGenerator(Generator):
 
     def __generate_package_file(self, objects: List[Declarable]):
         file_content = Text('# Generated code. Do not modify.')
+        file_content += "# flake8: noqa: F405"
         file_content += EMPTY
+
+        all_imports = set()
 
         def sort_key(d: Declarable):
             return d.name
@@ -47,6 +50,7 @@ class PythonGenerator(Generator):
             imports = [utils.capitalize_camel_case(obj.name)]
             if isinstance(obj, PythonEntity):
                 imports += self.__inner_types_classes(obj)
+            all_imports = all_imports | set(imports)
             imports = ', '.join(imports)
             file_content += f'from .{utils.snake_case(obj.name)} import {imports}'
 
@@ -61,6 +65,7 @@ class PythonGenerator(Generator):
             file_content += f'{e}.update_forward_refs()'
 
         file_content += EMPTY
+        file_content += f"__all__ = ({', '.join(sorted(repr(imp) for imp in all_imports))})"
 
         with open(f'{self._config.output_path}/__init__.py', 'w') as file:
             file.write(str(file_content))

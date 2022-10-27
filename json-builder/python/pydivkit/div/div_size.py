@@ -1,15 +1,16 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
-
-from . import div_fixed_size
-from . import div_match_parent_size
-from . import div_wrap_content_size
-
 from typing import Union
+
+from pydivkit.core import BaseDiv, Field
+
+from . import div_fixed_size, div_match_parent_size, div_wrap_content_size
+
 
 DivSize = Union[
     div_fixed_size.DivFixedSize,

@@ -21,7 +21,9 @@ class EntityWithArrayOfNestedItems(BaseDiv):
         )
 
     type: str = Field(default='entity_with_array_of_nested_items')
-    items: typing.List[EntityWithArrayOfNestedItemsItem] = Field(min_items=1)
+    items: typing.List[EntityWithArrayOfNestedItemsItem] = Field(
+        min_items=1
+    )
 
 
 class EntityWithArrayOfNestedItemsItem(BaseDiv):
@@ -36,8 +38,11 @@ class EntityWithArrayOfNestedItemsItem(BaseDiv):
             property=property,
         )
 
-    entity: entity.Entity = Field()
-    property: str = Field(min_length=1)
+    entity: entity.Entity = Field(
+    )
+    property: str = Field(
+        min_length=1
+    )
 
 
 EntityWithArrayOfNestedItemsItem.update_forward_refs()

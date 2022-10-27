@@ -19,7 +19,9 @@ class EntityWithArrayOfExpressions(BaseDiv):
         )
 
     type: str = Field(default='entity_with_array_of_expressions')
-    items: typing.List[str] = Field(min_items=1)
+    items: typing.List[str] = Field(
+        min_items=1
+    )
 
 
 EntityWithArrayOfExpressions.update_forward_refs()

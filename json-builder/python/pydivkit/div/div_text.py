@@ -1,34 +1,22 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
 
-from . import div_accessibility
-from . import div_action
-from . import div_alignment_horizontal
-from . import div_alignment_vertical
-from . import div_animation
-from . import div_appearance_transition
-from . import div_background
-from . import div_border
-from . import div_change_transition
-from . import div_edge_insets
-from . import div_extension
-from . import div_fixed_size
-from . import div_focus
-from . import div_font_family
-from . import div_font_weight
-from . import div_line_style
-from . import div_size
-from . import div_size_unit
-from . import div_text_gradient
-from . import div_tooltip
-from . import div_transform
-from . import div_transition_trigger
-from . import div_visibility
-from . import div_visibility_action
+from pydivkit.core import BaseDiv, Field
+
+from . import (
+    div_accessibility, div_action, div_alignment_horizontal,
+    div_alignment_vertical, div_animation, div_appearance_transition,
+    div_background, div_blend_mode, div_border, div_change_transition,
+    div_edge_insets, div_extension, div_fixed_size, div_focus, div_font_family,
+    div_font_weight, div_line_style, div_size, div_size_unit, div_text_gradient,
+    div_tooltip, div_transform, div_transition_trigger, div_visibility,
+    div_visibility_action,
+)
 
 
 # Text.
@@ -37,7 +25,7 @@ class DivText(BaseDiv):
     def __init__(
         self, *,
         text: str,
-        type: str = 'text',
+        type: str = "text",
         accessibility: typing.Optional[div_accessibility.DivAccessibility] = None,
         action: typing.Optional[div_action.DivAction] = None,
         action_animation: typing.Optional[div_animation.DivAnimation] = None,
@@ -146,66 +134,267 @@ class DivText(BaseDiv):
             width=width,
         )
 
-    type: str = Field(default='text')
-    accessibility: typing.Optional[div_accessibility.DivAccessibility] = Field(description='Accessibility for disabled people.')
-    action: typing.Optional[div_action.DivAction] = Field(description='One action when clicking on an element. Not used if the `actions` parameter isset.')
-    action_animation: typing.Optional[div_animation.DivAnimation] = Field(description='Action animation. Web supports `fade`, `scale` and `set` only.')
-    actions: typing.Optional[typing.List[div_action.DivAction]] = Field(min_items=1, description='Multiple actions when clicking on an element.')
-    alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = Field(description='Horizontal alignment of an element inside the parent element.')
-    alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = Field(description='Vertical alignment of an element inside the parent element.')
-    alpha: typing.Optional[float] = Field(description='Sets transparency of the entire element: `0` — completely transparent, `1` —opaque.')
-    auto_ellipsize: typing.Optional[bool] = Field(description='Automatic text cropping to fit the container size.')
-    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(min_items=1, description='Element background. It can contain multiple layers.')
-    border: typing.Optional[div_border.DivBorder] = Field(description='Element stroke.')
-    column_span: typing.Optional[int] = Field(description='Merges cells in a column of the [grid](div-grid.md) element.')
-    doubletap_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(min_items=1, description='Action when double-clicking on an element.')
-    ellipsis: typing.Optional[DivTextEllipsis] = Field(description='Text cropping marker. It is displayed when text size exceeds the limit on thenumber of lines.')
-    extensions: typing.Optional[typing.List[div_extension.DivExtension]] = Field(min_items=1, description='Extensions for additional processing of an element. The list of extensions isgiven in  [DivExtension](../../extensions.dita).')
-    focus: typing.Optional[div_focus.DivFocus] = Field(description='Parameters when focusing on an element or losing focus.')
-    focused_text_color: typing.Optional[str] = Field(format="color", description='Text color when focusing on the element.')
-    font_family: typing.Optional[div_font_family.DivFontFamily] = Field(description='Font family:`text` — a standard text font;`display` — a family of fonts with alarge font size.')
-    font_size: typing.Optional[int] = Field(description='Font size.')
-    font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = Field()
-    font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(description='Style.')
-    height: typing.Optional[div_size.DivSize] = Field(description='Element height. For Android: if there is text in this or in a child element,specify height in `sp` to scale the element together with the text. To learn moreabout units of size measurement, see [Layout inside the card](../../layout.dita).')
-    id: typing.Optional[str] = Field(min_length=1, description='Element ID. It must be unique within the root element. It is used as`accessibilityIdentifier` on iOS.')
-    images: typing.Optional[typing.List[DivTextImage]] = Field(min_items=1, description='Images embedded in text.')
-    letter_spacing: typing.Optional[float] = Field(description='Spacing between characters.')
-    line_height: typing.Optional[int] = Field(description='Line spacing of the text range. The count is taken from the font baseline.')
-    longtap_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(min_items=1, description='Action when long-clicking on an element.')
-    margins: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(description='External margins from the element stroke.')
-    max_lines: typing.Optional[int] = Field(description='Maximum number of lines not to be cropped when breaking the limits.')
-    min_hidden_lines: typing.Optional[int] = Field(description='Minimum number of cropped lines when breaking the limits.')
-    paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(description='Internal margins from the element stroke.')
-    ranges: typing.Optional[typing.List[DivTextRange]] = Field(min_items=1, description='A character range in which additional style parameters can be set. Defined bymandatory `start` and `end` fields.')
-    row_span: typing.Optional[int] = Field(description='Merges cells in a string of the [grid](div-grid.md) element.')
-    selectable: typing.Optional[bool] = Field(description='Selecting and copying text.')
-    selected_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(min_items=1, description='List of [actions](div-action.md) to be executed when selecting an element in[pager](div-pager.md).')
-    strike: typing.Optional[div_line_style.DivLineStyle] = Field(description='Strikethrough.')
-    text: str = Field(min_length=1, description='Text.')
-    text_alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = Field(description='Horizontal text alignment.')
-    text_alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = Field(description='Vertical text alignment.')
-    text_color: typing.Optional[str] = Field(format="color", description='Text color. Not used if the `text_gradient` parameter is set.')
-    text_gradient: typing.Optional[div_text_gradient.DivTextGradient] = Field(description='Gradient text color.')
-    tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = Field(min_items=1, description='Tooltips linked to an element. A tooltip can be shown by`div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where`id` — tooltip id.')
-    transform: typing.Optional[div_transform.DivTransform] = Field(description='Transformation of the element. Applies the passed transform to the element. Thecontent that does not fit into the original view will be cut off.')
-    transition_change: typing.Optional[div_change_transition.DivChangeTransition] = Field(description='Change animation. It is played when the position or size of an element changes inthe new layout.')
-    transition_in: typing.Optional[div_appearance_transition.DivAppearanceTransition] = Field(description='Appearance animation. It is played when an element with a new ID appears. Tolearn more about the concept of transitions, see [Animatedtransitions](../../interaction.dita#animation/transition-animation).')
-    transition_out: typing.Optional[div_appearance_transition.DivAppearanceTransition] = Field(description='Disappearance animation. It is played when an element disappears in the newlayout.')
-    transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = Field(min_items=1, description='Animation starting triggers. Default value: `[state_change, visibility_change]`.')
-    truncate: typing.Optional[DivTextTruncate] = Field(description='Text cropping method. Use `ellipsis` instead. @deprecated')
-    underline: typing.Optional[div_line_style.DivLineStyle] = Field(description='Underline.')
-    visibility: typing.Optional[div_visibility.DivVisibility] = Field(description='Element visibility.')
-    visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = Field(description='Tracking visibility of a single element. Not used if the `visibility_actions`parameter is set.')
-    visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = Field(min_items=1, description='Actions when an element appears on the screen.')
-    width: typing.Optional[div_size.DivSize] = Field(description='Element width.')
+    type: str = Field(default="text")
+    accessibility: typing.Optional[div_accessibility.DivAccessibility] = Field(
+        description="Accessibility for disabled people.",
+    )
+    action: typing.Optional[div_action.DivAction] = Field(
+        description=(
+            "One action when clicking on an element. Not used if the "
+            "`actions` parameter isset."
+        ),
+    )
+    action_animation: typing.Optional[div_animation.DivAnimation] = Field(
+        description=(
+            "Action animation. Web supports `fade`, `scale` and `set` "
+            "only."
+        ),
+    )
+    actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+        min_items=1, 
+        description="Multiple actions when clicking on an element.",
+    )
+    alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = Field(
+        description=(
+            "Horizontal alignment of an element inside the parent "
+            "element."
+        ),
+    )
+    alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = Field(
+        description=(
+            "Vertical alignment of an element inside the parent element."
+        ),
+    )
+    alpha: typing.Optional[float] = Field(
+        description=(
+            "Sets transparency of the entire element: `0` — completely "
+            "transparent, `1` —opaque."
+        ),
+    )
+    auto_ellipsize: typing.Optional[bool] = Field(
+        description="Automatic text cropping to fit the container size.",
+    )
+    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(
+        min_items=1, 
+        description="Element background. It can contain multiple layers.",
+    )
+    border: typing.Optional[div_border.DivBorder] = Field(
+        description="Element stroke.",
+    )
+    column_span: typing.Optional[int] = Field(
+        description=(
+            "Merges cells in a column of the [grid](div-grid.md) "
+            "element."
+        ),
+    )
+    doubletap_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+        min_items=1, 
+        description="Action when double-clicking on an element.",
+    )
+    ellipsis: typing.Optional[DivTextEllipsis] = Field(
+        description=(
+            "Text cropping marker. It is displayed when text size "
+            "exceeds the limit on thenumber of lines."
+        ),
+    )
+    extensions: typing.Optional[typing.List[div_extension.DivExtension]] = Field(
+        min_items=1, 
+        description=(
+            "Extensions for additional processing of an element. The "
+            "list of extensions isgiven in "
+            "[DivExtension](../../extensions.dita)."
+        ),
+    )
+    focus: typing.Optional[div_focus.DivFocus] = Field(
+        description="Parameters when focusing on an element or losing focus.",
+    )
+    focused_text_color: typing.Optional[str] = Field(
+        format="color", 
+        description="Text color when focusing on the element.",
+    )
+    font_family: typing.Optional[div_font_family.DivFontFamily] = Field(
+        description=(
+            "Font family:`text` — a standard text font;`display` — a "
+            "family of fonts with alarge font size."
+        ),
+    )
+    font_size: typing.Optional[int] = Field(
+        description="Font size.",
+    )
+    font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+    )
+    font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(
+        description="Style.",
+    )
+    height: typing.Optional[div_size.DivSize] = Field(
+        description=(
+            "Element height. For Android: if there is text in this or in "
+            "a child element,specify height in `sp` to scale the element "
+            "together with the text. To learn moreabout units of size "
+            "measurement, see [Layout inside the "
+            "card](../../layout.dita)."
+        ),
+    )
+    id: typing.Optional[str] = Field(
+        min_length=1, 
+        description=(
+            "Element ID. It must be unique within the root element. It "
+            "is used as`accessibilityIdentifier` on iOS."
+        ),
+    )
+    images: typing.Optional[typing.List[DivTextImage]] = Field(
+        min_items=1, 
+        description="Images embedded in text.",
+    )
+    letter_spacing: typing.Optional[float] = Field(
+        description="Spacing between characters.",
+    )
+    line_height: typing.Optional[int] = Field(
+        description=(
+            "Line spacing of the text range. The count is taken from the "
+            "font baseline."
+        ),
+    )
+    longtap_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+        min_items=1, 
+        description=(
+            "Action when long-clicking on an element. Doesn\'t work on "
+            "the devices w/o touchgestures."
+        ),
+    )
+    margins: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
+        description="External margins from the element stroke.",
+    )
+    max_lines: typing.Optional[int] = Field(
+        description=(
+            "Maximum number of lines not to be cropped when breaking the "
+            "limits."
+        ),
+    )
+    min_hidden_lines: typing.Optional[int] = Field(
+        description="Minimum number of cropped lines when breaking the limits.",
+    )
+    paddings: typing.Optional[div_edge_insets.DivEdgeInsets] = Field(
+        description="Internal margins from the element stroke.",
+    )
+    ranges: typing.Optional[typing.List[DivTextRange]] = Field(
+        min_items=1, 
+        description=(
+            "A character range in which additional style parameters can "
+            "be set. Defined bymandatory `start` and `end` fields."
+        ),
+    )
+    row_span: typing.Optional[int] = Field(
+        description=(
+            "Merges cells in a string of the [grid](div-grid.md) "
+            "element."
+        ),
+    )
+    selectable: typing.Optional[bool] = Field(
+        description="Selecting and copying text.",
+    )
+    selected_actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+        min_items=1, 
+        description=(
+            "List of [actions](div-action.md) to be executed when "
+            "selecting an element in[pager](div-pager.md)."
+        ),
+    )
+    strike: typing.Optional[div_line_style.DivLineStyle] = Field(
+        description="Strikethrough.",
+    )
+    text: str = Field(
+        min_length=1, 
+        description="Text.",
+    )
+    text_alignment_horizontal: typing.Optional[div_alignment_horizontal.DivAlignmentHorizontal] = Field(
+        description="Horizontal text alignment.",
+    )
+    text_alignment_vertical: typing.Optional[div_alignment_vertical.DivAlignmentVertical] = Field(
+        description="Vertical text alignment.",
+    )
+    text_color: typing.Optional[str] = Field(
+        format="color", 
+        description=(
+            "Text color. Not used if the `text_gradient` parameter is "
+            "set."
+        ),
+    )
+    text_gradient: typing.Optional[div_text_gradient.DivTextGradient] = Field(
+        description="Gradient text color.",
+    )
+    tooltips: typing.Optional[typing.List[div_tooltip.DivTooltip]] = Field(
+        min_items=1, 
+        description=(
+            "Tooltips linked to an element. A tooltip can be shown "
+            "by`div-action://show_tooltip?id=`, hidden by "
+            "`div-action://hide_tooltip?id=` where`id` — tooltip id."
+        ),
+    )
+    transform: typing.Optional[div_transform.DivTransform] = Field(
+        description=(
+            "Transformation of the element. Applies the passed transform "
+            "to the element. Thecontent that does not fit into the "
+            "original view will be cut off."
+        ),
+    )
+    transition_change: typing.Optional[div_change_transition.DivChangeTransition] = Field(
+        description=(
+            "Change animation. It is played when the position or size of "
+            "an element changes inthe new layout."
+        ),
+    )
+    transition_in: typing.Optional[div_appearance_transition.DivAppearanceTransition] = Field(
+        description=(
+            "Appearance animation. It is played when an element with a "
+            "new ID appears. Tolearn more about the concept of "
+            "transitions, see "
+            "[Animatedtransitions](../../interaction.dita#animation/tran"
+            "sition-animation)."
+        ),
+    )
+    transition_out: typing.Optional[div_appearance_transition.DivAppearanceTransition] = Field(
+        description=(
+            "Disappearance animation. It is played when an element "
+            "disappears in the newlayout."
+        ),
+    )
+    transition_triggers: typing.Optional[typing.List[div_transition_trigger.DivTransitionTrigger]] = Field(
+        min_items=1, 
+        description=(
+            "Animation starting triggers. Default value: `[state_change, "
+            "visibility_change]`."
+        ),
+    )
+    truncate: typing.Optional[DivTextTruncate] = Field(
+        description="Text cropping method. Use `ellipsis` instead. @deprecated",
+    )
+    underline: typing.Optional[div_line_style.DivLineStyle] = Field(
+        description="Underline.",
+    )
+    visibility: typing.Optional[div_visibility.DivVisibility] = Field(
+        description="Element visibility.",
+    )
+    visibility_action: typing.Optional[div_visibility_action.DivVisibilityAction] = Field(
+        description=(
+            "Tracking visibility of a single element. Not used if the "
+            "`visibility_actions`parameter is set."
+        ),
+    )
+    visibility_actions: typing.Optional[typing.List[div_visibility_action.DivVisibilityAction]] = Field(
+        min_items=1, 
+        description="Actions when an element appears on the screen.",
+    )
+    width: typing.Optional[div_size.DivSize] = Field(
+        description="Element width.",
+    )
 
 
 class DivTextTruncate(str, enum.Enum):
-    NONE = 'none'
-    START = 'start'
-    END = 'end'
-    MIDDLE = 'middle'
+    NONE = "none"
+    START = "start"
+    END = "end"
+    MIDDLE = "middle"
 
 
 # Text cropping marker. It is displayed when text size exceeds the limit on the
@@ -226,10 +415,25 @@ class DivTextEllipsis(BaseDiv):
             text=text,
         )
 
-    actions: typing.Optional[typing.List[div_action.DivAction]] = Field(min_items=1, description='Actions when clicking on a crop marker.')
-    images: typing.Optional[typing.List[DivTextImage]] = Field(min_items=1, description='Images embedded in a crop marker.')
-    ranges: typing.Optional[typing.List[DivTextRange]] = Field(min_items=1, description='Character ranges inside a crop marker with different text styles.')
-    text: str = Field(min_length=1, description='Marker text.')
+    actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+        min_items=1, 
+        description="Actions when clicking on a crop marker.",
+    )
+    images: typing.Optional[typing.List[DivTextImage]] = Field(
+        min_items=1, 
+        description="Images embedded in a crop marker.",
+    )
+    ranges: typing.Optional[typing.List[DivTextRange]] = Field(
+        min_items=1, 
+        description=(
+            "Character ranges inside a crop marker with different text "
+            "styles."
+        ),
+    )
+    text: str = Field(
+        min_length=1, 
+        description="Marker text.",
+    )
 
 
 DivTextEllipsis.update_forward_refs()
@@ -244,21 +448,42 @@ class DivTextImage(BaseDiv):
         url: str,
         height: typing.Optional[div_fixed_size.DivFixedSize] = None,
         tint_color: typing.Optional[str] = None,
+        tint_mode: typing.Optional[div_blend_mode.DivBlendMode] = None,
         width: typing.Optional[div_fixed_size.DivFixedSize] = None,
     ):
         super().__init__(
             height=height,
             start=start,
             tint_color=tint_color,
+            tint_mode=tint_mode,
             url=url,
             width=width,
         )
 
-    height: typing.Optional[div_fixed_size.DivFixedSize] = Field(description='Image height.')
-    start: int = Field(description='A symbol to insert prior to an image. To insert an image at the end of the text,specify the number of the last character plus one.')
-    tint_color: typing.Optional[str] = Field(format="color", description='New color of a contour image.')
-    url: str = Field(format="uri", description='Image URL.')
-    width: typing.Optional[div_fixed_size.DivFixedSize] = Field(description='Image width.')
+    height: typing.Optional[div_fixed_size.DivFixedSize] = Field(
+        description="Image height.",
+    )
+    start: int = Field(
+        description=(
+            "A symbol to insert prior to an image. To insert an image at "
+            "the end of the text,specify the number of the last "
+            "character plus one."
+        ),
+    )
+    tint_color: typing.Optional[str] = Field(
+        format="color", 
+        description="New color of a contour image.",
+    )
+    tint_mode: typing.Optional[div_blend_mode.DivBlendMode] = Field(
+        description="The blend mode of color specified in tint_color.",
+    )
+    url: str = Field(
+        format="uri", 
+        description="Image URL.",
+    )
+    width: typing.Optional[div_fixed_size.DivFixedSize] = Field(
+        description="Image width.",
+    )
 
 
 DivTextImage.update_forward_refs()
@@ -299,19 +524,68 @@ class DivTextRange(BaseDiv):
             underline=underline,
         )
 
-    actions: typing.Optional[typing.List[div_action.DivAction]] = Field(min_items=1, description='Action when clicking on text.')
-    end: int = Field(description='Ordinal number of the last character to be included in the range.')
-    font_family: typing.Optional[div_font_family.DivFontFamily] = Field(description='Font family:`text` — a standard text font;`display` — a family of fonts with alarge font size.')
-    font_size: typing.Optional[int] = Field(description='Font size.')
-    font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(description='Unit of measurement:`px` — a physical pixel.`dp` — a logical pixel that doesn\'tdepend on screen density.`sp` — a logical pixel that depends on the font size ona device. Specify height in `sp`. Only available on Android.')
-    font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(description='Style.')
-    letter_spacing: typing.Optional[float] = Field(description='Spacing between characters.')
-    line_height: typing.Optional[int] = Field(description='Line spacing of the text range. The count is taken from the font baseline.Measured in units specified in `font_size_unit`.')
-    start: int = Field(description='Ordinal number of a character which the range begins from. The first characterhas a number `0`.')
-    strike: typing.Optional[div_line_style.DivLineStyle] = Field(description='Strikethrough.')
-    text_color: typing.Optional[str] = Field(format="color", description='Text color.')
-    top_offset: typing.Optional[int] = Field(description='The top margin of the text range. Measured in units specified in`font_size_unit`.')
-    underline: typing.Optional[div_line_style.DivLineStyle] = Field(description='Underline.')
+    actions: typing.Optional[typing.List[div_action.DivAction]] = Field(
+        min_items=1, 
+        description="Action when clicking on text.",
+    )
+    end: int = Field(
+        description=(
+            "Ordinal number of the last character to be included in the "
+            "range."
+        ),
+    )
+    font_family: typing.Optional[div_font_family.DivFontFamily] = Field(
+        description=(
+            "Font family:`text` — a standard text font;`display` — a "
+            "family of fonts with alarge font size."
+        ),
+    )
+    font_size: typing.Optional[int] = Field(
+        description="Font size.",
+    )
+    font_size_unit: typing.Optional[div_size_unit.DivSizeUnit] = Field(
+        description=(
+            "Unit of measurement:`px` — a physical pixel.`dp` — a "
+            "logical pixel that doesn\'tdepend on screen density.`sp` — "
+            "a logical pixel that depends on the font size ona device. "
+            "Specify height in `sp`. Only available on Android."
+        ),
+    )
+    font_weight: typing.Optional[div_font_weight.DivFontWeight] = Field(
+        description="Style.",
+    )
+    letter_spacing: typing.Optional[float] = Field(
+        description="Spacing between characters.",
+    )
+    line_height: typing.Optional[int] = Field(
+        description=(
+            "Line spacing of the text range. The count is taken from the "
+            "font baseline.Measured in units specified in "
+            "`font_size_unit`."
+        ),
+    )
+    start: int = Field(
+        description=(
+            "Ordinal number of a character which the range begins from. "
+            "The first characterhas a number `0`."
+        ),
+    )
+    strike: typing.Optional[div_line_style.DivLineStyle] = Field(
+        description="Strikethrough.",
+    )
+    text_color: typing.Optional[str] = Field(
+        format="color", 
+        description="Text color.",
+    )
+    top_offset: typing.Optional[int] = Field(
+        description=(
+            "The top margin of the text range. Measured in units "
+            "specified in`font_size_unit`."
+        ),
+    )
+    underline: typing.Optional[div_line_style.DivLineStyle] = Field(
+        description="Underline.",
+    )
 
 
 DivTextRange.update_forward_refs()

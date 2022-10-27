@@ -1,9 +1,12 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
+
+from pydivkit.core import BaseDiv, Field
 
 from . import div_pivot
 
@@ -23,9 +26,18 @@ class DivTransform(BaseDiv):
             rotation=rotation,
         )
 
-    pivot_x: typing.Optional[div_pivot.DivPivot] = Field(description='The X coordinate of the rotation axis.')
-    pivot_y: typing.Optional[div_pivot.DivPivot] = Field(description='The Y coordinate of the rotation axis.')
-    rotation: typing.Optional[float] = Field(description='The number of degrees by which the element must be rotated. A positive valuedescribes a clockwise rotation.')
+    pivot_x: typing.Optional[div_pivot.DivPivot] = Field(
+        description="The X coordinate of the rotation axis.",
+    )
+    pivot_y: typing.Optional[div_pivot.DivPivot] = Field(
+        description="The Y coordinate of the rotation axis.",
+    )
+    rotation: typing.Optional[float] = Field(
+        description=(
+            "The number of degrees by which the element must be rotated. "
+            "A positive valuedescribes a clockwise rotation."
+        ),
+    )
 
 
 DivTransform.update_forward_refs()

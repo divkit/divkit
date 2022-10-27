@@ -1,13 +1,14 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
 
-from . import div_action
-from . import div_background
-from . import div_border
+from pydivkit.core import BaseDiv, Field
+
+from . import div_action, div_background, div_border
 
 
 # Element behavior when focusing or losing focus.
@@ -29,11 +30,27 @@ class DivFocus(BaseDiv):
             on_focus=on_focus,
         )
 
-    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(min_items=1, description='Background of an element when it is in focus. It can contain multiple layers.')
-    border: typing.Optional[div_border.DivBorder] = Field(description='Border of an element when it is in focus')
-    next_focus_ids: typing.Optional[DivFocusNextFocusIds] = Field(description='IDs of elements that will be next to get focus.')
-    on_blur: typing.Optional[typing.List[div_action.DivAction]] = Field(min_items=1, description='Actions when an element loses focus.')
-    on_focus: typing.Optional[typing.List[div_action.DivAction]] = Field(min_items=1, description='Actions when an element gets focus.')
+    background: typing.Optional[typing.List[div_background.DivBackground]] = Field(
+        min_items=1, 
+        description=(
+            "Background of an element when it is in focus. It can "
+            "contain multiple layers."
+        ),
+    )
+    border: typing.Optional[div_border.DivBorder] = Field(
+        description="Border of an element when it is in focus",
+    )
+    next_focus_ids: typing.Optional[DivFocusNextFocusIds] = Field(
+        description="IDs of elements that will be next to get focus.",
+    )
+    on_blur: typing.Optional[typing.List[div_action.DivAction]] = Field(
+        min_items=1, 
+        description="Actions when an element loses focus.",
+    )
+    on_focus: typing.Optional[typing.List[div_action.DivAction]] = Field(
+        min_items=1, 
+        description="Actions when an element gets focus.",
+    )
 
 
 # IDs of elements that will be next to get focus.
@@ -55,11 +72,21 @@ class DivFocusNextFocusIds(BaseDiv):
             up=up,
         )
 
-    down: typing.Optional[str] = Field(min_length=1)
-    forward: typing.Optional[str] = Field(min_length=1)
-    left: typing.Optional[str] = Field(min_length=1)
-    right: typing.Optional[str] = Field(min_length=1)
-    up: typing.Optional[str] = Field(min_length=1)
+    down: typing.Optional[str] = Field(
+        min_length=1,
+    )
+    forward: typing.Optional[str] = Field(
+        min_length=1,
+    )
+    left: typing.Optional[str] = Field(
+        min_length=1,
+    )
+    right: typing.Optional[str] = Field(
+        min_length=1,
+    )
+    up: typing.Optional[str] = Field(
+        min_length=1,
+    )
 
 
 DivFocusNextFocusIds.update_forward_refs()

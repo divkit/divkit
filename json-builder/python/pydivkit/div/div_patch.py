@@ -1,9 +1,12 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
+
+from pydivkit.core import BaseDiv, Field
 
 from . import div
 
@@ -21,13 +24,23 @@ class DivPatch(BaseDiv):
             mode=mode,
         )
 
-    changes: typing.List[DivPatchChange] = Field(min_items=1, description='Element changes.')
-    mode: typing.Optional[DivPatchMode] = Field(description='Procedure for applying changes:`transactional` — if an error occurs duringapplication of at least one element, the changes aren\'t applied.`partial` — allpossible changes are applied. If there are errors, they are reported.')
+    changes: typing.List[DivPatchChange] = Field(
+        min_items=1, 
+        description="Element changes.",
+    )
+    mode: typing.Optional[DivPatchMode] = Field(
+        description=(
+            "Procedure for applying changes:`transactional` — if an "
+            "error occurs duringapplication of at least one element, the "
+            "changes aren\'t applied.`partial` — allpossible changes are "
+            "applied. If there are errors, they are reported."
+        ),
+    )
 
 
 class DivPatchMode(str, enum.Enum):
-    TRANSACTIONAL = 'transactional'
-    PARTIAL = 'partial'
+    TRANSACTIONAL = "transactional"
+    PARTIAL = "partial"
 
 
 class DivPatchChange(BaseDiv):
@@ -42,8 +55,16 @@ class DivPatchChange(BaseDiv):
             items=items,
         )
 
-    id: str = Field(description='ID of an element to be replaced or removed.')
-    items: typing.Optional[typing.List[div.Div]] = Field(min_items=1, description='Elements to be inserted. If the parameter isn\'t specified, the element will beremoved.')
+    id: str = Field(
+        description="ID of an element to be replaced or removed.",
+    )
+    items: typing.Optional[typing.List[div.Div]] = Field(
+        min_items=1, 
+        description=(
+            "Elements to be inserted. If the parameter isn\'t specified, "
+            "the element will beremoved."
+        ),
+    )
 
 
 DivPatchChange.update_forward_refs()

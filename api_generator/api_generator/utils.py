@@ -1,3 +1,4 @@
+from io import StringIO
 from typing import List, Dict, Any
 import re
 import os
@@ -112,3 +113,56 @@ def sha256_for_filenames(filenames: List[str]) -> str:
     for name in sorted(filenames):
         hash.update(name.encode())
     return str(hash.hexdigest())
+
+
+def indent(
+    data: str, indent: int, spacer=" ",
+    indent_first_line: bool = True,
+    indent_last_line: bool = True,
+) -> str:
+    with StringIO() as fp:
+        lines = data.splitlines()
+        first_line = 0
+        last_line = len(lines) - 1
+
+        for idx, line in enumerate(lines):
+            if idx == first_line and not indent_first_line:
+                fp.write(line)
+                fp.write("\n")
+                continue
+            if idx == last_line and not indent_last_line:
+                fp.write(line)
+                fp.write("\n")
+                continue
+            fp.write((spacer * indent) + line)
+            fp.write("\n")
+        return fp.getvalue()
+
+
+def python_long_sting_split(string: str, max_len: int = 59) -> str:
+    if len(string) < max_len:
+        string = string.replace('"', '\\"')
+        return f'"{string}"'
+
+    with StringIO() as fp:
+        fp.write("(\n")
+        line = ""
+
+        for word in string.split():
+            # check if line too long after adding word
+            if (len(line) + len(word)) > max_len:
+                fp.write(f'"{line}"\n')
+                line = ""
+
+            line += word.replace('"', '\\"')
+            # force split
+            if len(line) > max_len:
+                head, line = line[:max_len], line[max_len:]
+                fp.write(f'"{head}"\n')
+            line += " "
+
+        if line:
+            fp.write(f'"{line.strip()}"')
+
+        fp.write("\n)")
+        return fp.getvalue()

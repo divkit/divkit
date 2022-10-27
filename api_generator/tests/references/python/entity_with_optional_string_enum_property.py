@@ -19,7 +19,8 @@ class EntityWithOptionalStringEnumProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_optional_string_enum_property')
-    property: typing.Optional[EntityWithOptionalStringEnumPropertyProperty] = Field()
+    property: typing.Optional[EntityWithOptionalStringEnumPropertyProperty] = Field(
+    )
 
 
 class EntityWithOptionalStringEnumPropertyProperty(str, enum.Enum):

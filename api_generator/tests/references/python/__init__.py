@@ -1,4 +1,5 @@
 # Generated code. Do not modify.
+# flake8: noqa: F405
 
 from .entity import Entity
 from .entity_with_array import EntityWithArray
@@ -45,3 +46,5 @@ EntityWithStringArrayProperty.update_forward_refs()
 EntityWithStringEnumProperty.update_forward_refs()
 EntityWithStringEnumPropertyWithDefaultValue.update_forward_refs()
 EntityWithoutProperties.update_forward_refs()
+
+__all__ = ('Entity', 'EntityWithArray', 'EntityWithArrayOfEnums', 'EntityWithArrayOfEnumsItem', 'EntityWithArrayOfExpressions', 'EntityWithArrayOfNestedItems', 'EntityWithArrayOfNestedItemsItem', 'EntityWithArrayWithTransform', 'EntityWithComplexProperty', 'EntityWithComplexPropertyProperty', 'EntityWithComplexPropertyWithDefaultValue', 'EntityWithComplexPropertyWithDefaultValueProperty', 'EntityWithEntityProperty', 'EntityWithOptionalComplexProperty', 'EntityWithOptionalComplexPropertyProperty', 'EntityWithOptionalProperty', 'EntityWithOptionalStringEnumProperty', 'EntityWithOptionalStringEnumPropertyProperty', 'EntityWithPropertyWithDefaultValue', 'EntityWithPropertyWithDefaultValueNested', 'EntityWithRequiredProperty', 'EntityWithSimpleProperties', 'EntityWithStrictArray', 'EntityWithStringArrayProperty', 'EntityWithStringEnumProperty', 'EntityWithStringEnumPropertyProperty', 'EntityWithStringEnumPropertyWithDefaultValue', 'EntityWithStringEnumPropertyWithDefaultValueValue', 'EntityWithoutProperties')

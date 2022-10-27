@@ -36,15 +36,35 @@ class EntityWithSimpleProperties(BaseDiv):
         )
 
     type: str = Field(default='entity_with_simple_properties')
-    boolean: typing.Optional[bool] = Field(description='Boolean property.')
-    boolean_int: typing.Optional[bool] = Field(description='Boolean value in numeric format. @deprecated')
-    color: typing.Optional[str] = Field(format="color", description='Color.')
-    double: typing.Optional[float] = Field(description='Floating point number.')
-    id: typing.Optional[int] = Field(description='ID. Can\'t contain expressions.')
-    integer: typing.Optional[int] = Field(description='Integer.')
-    positive_integer: typing.Optional[int] = Field(description='Positive integer.')
-    string: typing.Optional[str] = Field(min_length=1, description='String.')
-    url: typing.Optional[str] = Field(format="uri")
+    boolean: typing.Optional[bool] = Field(
+        description="Boolean property."
+    )
+    boolean_int: typing.Optional[bool] = Field(
+        description="Boolean value in numeric format. @deprecated"
+    )
+    color: typing.Optional[str] = Field(
+        format="color", 
+        description="Color."
+    )
+    double: typing.Optional[float] = Field(
+        description="Floating point number."
+    )
+    id: typing.Optional[int] = Field(
+        description="ID. Can\'t contain expressions."
+    )
+    integer: typing.Optional[int] = Field(
+        description="Integer."
+    )
+    positive_integer: typing.Optional[int] = Field(
+        description="Positive integer."
+    )
+    string: typing.Optional[str] = Field(
+        min_length=1, 
+        description="String."
+    )
+    url: typing.Optional[str] = Field(
+        format="uri"
+    )
 
 
 EntityWithSimpleProperties.update_forward_refs()

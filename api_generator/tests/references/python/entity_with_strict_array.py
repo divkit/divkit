@@ -21,7 +21,9 @@ class EntityWithStrictArray(BaseDiv):
         )
 
     type: str = Field(default='entity_with_strict_array')
-    array: typing.List[entity.Entity] = Field(min_items=1)
+    array: typing.List[entity.Entity] = Field(
+        min_items=1
+    )
 
 
 EntityWithStrictArray.update_forward_refs()

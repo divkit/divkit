@@ -19,7 +19,9 @@ class EntityWithArrayOfEnums(BaseDiv):
         )
 
     type: str = Field(default='entity_with_array_of_enums')
-    items: typing.List[EntityWithArrayOfEnumsItem] = Field(min_items=1)
+    items: typing.List[EntityWithArrayOfEnumsItem] = Field(
+        min_items=1
+    )
 
 
 class EntityWithArrayOfEnumsItem(str, enum.Enum):

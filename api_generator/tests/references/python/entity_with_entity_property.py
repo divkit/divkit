@@ -21,7 +21,8 @@ class EntityWithEntityProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_entity_property')
-    entity: typing.Optional[entity.Entity] = Field()
+    entity: typing.Optional[entity.Entity] = Field(
+    )
 
 
 EntityWithEntityProperty.update_forward_refs()

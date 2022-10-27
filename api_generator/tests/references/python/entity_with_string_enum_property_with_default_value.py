@@ -19,7 +19,8 @@ class EntityWithStringEnumPropertyWithDefaultValue(BaseDiv):
         )
 
     type: str = Field(default='entity_with_string_enum_property_with_default_value')
-    value: typing.Optional[EntityWithStringEnumPropertyWithDefaultValueValue] = Field()
+    value: typing.Optional[EntityWithStringEnumPropertyWithDefaultValueValue] = Field(
+    )
 
 
 class EntityWithStringEnumPropertyWithDefaultValueValue(str, enum.Enum):

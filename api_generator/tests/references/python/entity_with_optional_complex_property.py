@@ -19,7 +19,8 @@ class EntityWithOptionalComplexProperty(BaseDiv):
         )
 
     type: str = Field(default='entity_with_optional_complex_property')
-    property: typing.Optional[EntityWithOptionalComplexPropertyProperty] = Field()
+    property: typing.Optional[EntityWithOptionalComplexPropertyProperty] = Field(
+    )
 
 
 class EntityWithOptionalComplexPropertyProperty(BaseDiv):
@@ -32,7 +33,9 @@ class EntityWithOptionalComplexPropertyProperty(BaseDiv):
             value=value,
         )
 
-    value: str = Field(format="uri")
+    value: str = Field(
+        format="uri"
+    )
 
 
 EntityWithOptionalComplexPropertyProperty.update_forward_refs()

@@ -1,13 +1,16 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
+from typing import Union
+
+from pydivkit.core import BaseDiv, Field
 
 from . import div_shape_drawable
 
-from typing import Union
 
 DivDrawable = Union[
     div_shape_drawable.DivShapeDrawable,

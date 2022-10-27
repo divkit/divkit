@@ -1,9 +1,12 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
+
+from pydivkit.core import BaseDiv, Field
 
 
 # A floating-point variable.
@@ -13,7 +16,7 @@ class NumberVariable(BaseDiv):
         self, *,
         name: str,
         value: float,
-        type: str = 'number',
+        type: str = "number",
     ):
         super().__init__(
             type=type,
@@ -21,9 +24,14 @@ class NumberVariable(BaseDiv):
             value=value,
         )
 
-    type: str = Field(default='number')
-    name: str = Field(min_length=1, description='Variable name.')
-    value: float = Field(description='Value.')
+    type: str = Field(default="number")
+    name: str = Field(
+        min_length=1, 
+        description="Variable name.",
+    )
+    value: float = Field(
+        description="Value.",
+    )
 
 
 NumberVariable.update_forward_refs()

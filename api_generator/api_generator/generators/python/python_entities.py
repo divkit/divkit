@@ -151,7 +151,12 @@ class PythonEntity(Entity):
             commentary = p.commentary
             if commentary is not None:
                 commentary = ' '.join(commentary.lines).replace('\n', '').replace('# ', '').replace("'", "\\'")
-                field += f", description='{commentary}'"
+                commentary = utils.python_long_sting_split(commentary)
+                indent = len(field) + 4
+                commentary = utils.indent(
+                    commentary, indent=indent, indent_first_line=False
+                )
+                field += f", description={commentary}"
             result += Text(f'{p.escaped_name}: str = Field({field})').indented(indent_width=4)
         dynamic_declaration = self.dynamic_properties_declaration
         if dynamic_declaration.lines:
@@ -219,7 +224,9 @@ class PythonProperty(Property):
         commentary = self.commentary
         if commentary is not None:
             commentary = ' '.join(commentary.lines).replace('\n', '').replace('# ', '').replace("'", "\\'")
-            fields.append(f"description='{commentary}'")
+            commentary = utils.python_long_sting_split(commentary)
+            commentary = utils.indent(commentary, indent=4, indent_first_line=False, indent_last_line=False)
+            fields.append(f"description={commentary}")
 
         if utils.snake_case(self.name) != self.name:
             fields.append(f"name='{self.name}'")
@@ -232,7 +239,8 @@ class PythonProperty(Property):
             suffix = ''
         type_decl = f'{prefix}{self.property_type_py.type_name(filename)}{suffix}'
 
-        return Text(f'{self.escaped_name}: {type_decl} = Field({", ".join(fields)})')
+        fields_text = utils.indent(", \n".join(fields), indent=4)
+        return Text(f'{self.escaped_name}: {type_decl} = Field(\n{fields_text})')
 
 
 class PythonPropertyType(PropertyType):

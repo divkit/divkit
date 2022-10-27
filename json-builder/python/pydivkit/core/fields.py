@@ -23,10 +23,7 @@ class _Field:
 
     def apply_constraints(self, constraints: Mapping[str, Any]) -> None:
         for c_key, c_value in constraints.items():
-            if (
-                self.constraints.get(c_key)
-                and self.constraints[c_key] != c_value
-            ):
+            if self.constraints.get(c_key) and self.constraints[c_key] != c_value:
                 raise ValueError(
                     f"Incompatible constraints: {c_key} = "
                     f"{self.constraints[c_key]} and {c_key} = {c_value}",

@@ -1,9 +1,12 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
+
+from pydivkit.core import BaseDiv, Field
 
 
 # An integer variable.
@@ -13,7 +16,7 @@ class IntegerVariable(BaseDiv):
         self, *,
         name: str,
         value: int,
-        type: str = 'integer',
+        type: str = "integer",
     ):
         super().__init__(
             type=type,
@@ -21,9 +24,14 @@ class IntegerVariable(BaseDiv):
             value=value,
         )
 
-    type: str = Field(default='integer')
-    name: str = Field(min_length=1, description='Variable name.')
-    value: int = Field(description='Value.')
+    type: str = Field(default="integer")
+    name: str = Field(
+        min_length=1, 
+        description="Variable name.",
+    )
+    value: int = Field(
+        description="Value.",
+    )
 
 
 IntegerVariable.update_forward_refs()

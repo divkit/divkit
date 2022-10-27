@@ -4,6 +4,7 @@ import enum
 import hashlib
 import json
 import uuid
+import warnings
 from collections import defaultdict
 from functools import reduce
 from types import MappingProxyType
@@ -12,8 +13,7 @@ from typing import (
     get_args, get_origin, get_type_hints,
 )
 
-import inflection
-
+from .compat import classproperty
 from .fields import _Field
 from .types.union import inject_types
 
@@ -273,6 +273,7 @@ class BaseEntity:
 
     __subclasses__: Dict[str, Type[BaseEntity]] = {}
     __related_templates__: FrozenSet[Type[BaseDiv]] = frozenset({})
+    __template_name__: Optional[str] = None
 
     def __init__(self, **kwargs: Any) -> None:
         if self.__fields__ and not self.__field_types__:
@@ -289,11 +290,22 @@ class BaseEntity:
             if field_name not in kwargs:
                 setattr(self, field_name, field.default)
 
+    @classproperty
+    @classmethod
+    def template_name(cls) -> str:
+        if cls.__template_name__ is not None:
+            return cls.__template_name__
+        return f"{cls.__module__}.{cls.__name__}"
+
     def __init_subclass__(cls, *args: Any, **kwargs: Any) -> None:
         super().__init_subclass__()
-        if cls.__name__ in cls.__subclasses__:
-            raise TypeError(f"Component named {cls.__name__} already exists")
-        cls.__subclasses__[cls.__name__] = cls
+        if cls.template_name in cls.__subclasses__:
+            warnings.warn(
+                f"Template {cls.template_name!r} already defined in "
+                f"{cls.__subclasses__[cls.template_name]!r} "
+                f"and will be replaced to {cls!r}", RuntimeWarning,
+            )
+        cls.__subclasses__[cls.template_name] = cls
         cls.__fields__ = cls._extract_fields()
         cls.__field_names__ = cls._extract_field_names(cls.__fields__)
         cls._remove_fields_from_cls_attrs()
@@ -497,9 +509,7 @@ class BaseEntity:
             field_value = getattr(self, field_name, field.default)
             if field_value is not None:
                 if isinstance(field_value, _Field) and field_value.ref_to:
-                    result[
-                        f"${field.field_name}"
-                    ] = field_value.ref_to.field_name
+                    result[f"${field.field_name}"] = field_value.ref_to.field_name
                 else:
                     result[field.field_name] = dump(field_value)
         return result
@@ -708,7 +718,7 @@ class BaseDiv(BaseEntity):
     @classmethod
     def _inject_type_field(cls) -> None:
         if cls.__base_type__:
-            type_value = inflection.underscore(cls.__name__)
+            type_value = cls.template_name
             setattr(cls, TYPE_FIELD, _Field(default=type_value))
 
     @classmethod

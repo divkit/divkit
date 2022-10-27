@@ -19,7 +19,8 @@ class EntityWithComplexPropertyWithDefaultValue(BaseDiv):
         )
 
     type: str = Field(default='entity_with_complex_property_with_default_value')
-    property: typing.Optional[EntityWithComplexPropertyWithDefaultValueProperty] = Field()
+    property: typing.Optional[EntityWithComplexPropertyWithDefaultValueProperty] = Field(
+    )
 
 
 class EntityWithComplexPropertyWithDefaultValueProperty(BaseDiv):
@@ -32,7 +33,8 @@ class EntityWithComplexPropertyWithDefaultValueProperty(BaseDiv):
             value=value,
         )
 
-    value: str = Field()
+    value: str = Field(
+    )
 
 
 EntityWithComplexPropertyWithDefaultValueProperty.update_forward_refs()

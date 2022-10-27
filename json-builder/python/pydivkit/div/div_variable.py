@@ -1,18 +1,19 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
-
-from . import boolean_variable
-from . import color_variable
-from . import integer_variable
-from . import number_variable
-from . import string_variable
-from . import url_variable
-
 from typing import Union
+
+from pydivkit.core import BaseDiv, Field
+
+from . import (
+    boolean_variable, color_variable, integer_variable, number_variable,
+    string_variable, url_variable,
+)
+
 
 DivVariable = Union[
     string_variable.StringVariable,

@@ -1,26 +1,20 @@
 # Generated code. Do not modify.
+# flake8: noqa: F401, F405, F811
 
 from __future__ import annotations
-from pydivkit.core import BaseDiv, Field
+
 import enum
 import typing
-
-from . import div_container
-from . import div_custom
-from . import div_gallery
-from . import div_gif_image
-from . import div_grid
-from . import div_image
-from . import div_indicator
-from . import div_input
-from . import div_pager
-from . import div_separator
-from . import div_slider
-from . import div_state
-from . import div_tabs
-from . import div_text
-
 from typing import Union
+
+from pydivkit.core import BaseDiv, Field
+
+from . import (
+    div_container, div_custom, div_gallery, div_gif_image, div_grid, div_image,
+    div_indicator, div_input, div_pager, div_separator, div_slider, div_state,
+    div_tabs, div_text,
+)
+
 
 Div = Union[
     div_image.DivImage,
