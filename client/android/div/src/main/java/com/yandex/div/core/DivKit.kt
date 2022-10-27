@@ -27,9 +27,6 @@ class DivKit private constructor(
     val parsingHistogramReporter: DivParsingHistogramReporter
         get() = component.parsingHistogramReporter
 
-    val versionName: String
-        get() = BuildConfig.VERSION_NAME
-
     companion object {
 
         private val DEFAULT_CONFIGURATION = DivKitConfiguration.Builder().build()
@@ -66,5 +63,10 @@ class DivKit private constructor(
                 return divKit.also { instance = it }
             }
         }
+
+        @JvmStatic
+        val versionName: String
+            get() = BuildConfig.VERSION_NAME
     }
+
 }
