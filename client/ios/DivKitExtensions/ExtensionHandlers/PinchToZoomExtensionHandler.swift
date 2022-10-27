@@ -2,7 +2,7 @@ import DivKit
 import LayoutKit
 
 public final class PinchToZoomExtensionHandler: DivExtensionHandler {
-  private let overlayView: ViewType
+  private weak var overlayView: ViewType?
 
   public let id = "pinch-to-zoom"
 
@@ -15,6 +15,11 @@ public final class PinchToZoomExtensionHandler: DivExtensionHandler {
     div _: DivBase,
     context _: DivBlockModelingContext
   ) -> Block {
-    PinchToZoomBlock(child: block, overlayView: overlayView)
+    guard let overlayView = overlayView else {
+      DivKitLogger.error("PinchToZoomExtensionHandler.overlayView is nil")
+      return EmptyBlock()
+    }
+    
+    return PinchToZoomBlock(child: block, overlayView: overlayView)
   }
 }
