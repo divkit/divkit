@@ -27,7 +27,8 @@ public struct ContainerBlockLayout {
     }
   }
 
-  let children: [ContainerBlock.Child]
+  public private(set) var childrenWithSeparators: [ContainerBlock.Child] = []
+  public private(set) var blockFrames: [CGRect] = []
   let gaps: [CGFloat]
   let layoutDirection: ContainerBlock.LayoutDirection
   let layoutMode: ContainerBlock.LayoutMode
@@ -36,6 +37,8 @@ public struct ContainerBlockLayout {
 
   public init(
     children: [ContainerBlock.Child],
+    separator: ContainerBlock.Separator? = nil,
+    lineSeparator: ContainerBlock.Separator? = nil,
     gaps: [CGFloat],
     layoutDirection: ContainerBlock.LayoutDirection,
     layoutMode: ContainerBlock.LayoutMode,
@@ -43,25 +46,40 @@ public struct ContainerBlockLayout {
     size: CGSize
   ) {
     precondition(gaps.count == children.count + 1)
-    self.children = children
     self.gaps = gaps
     self.layoutDirection = layoutDirection
     self.layoutMode = layoutMode
     self.axialAlignment = axialAlignment
     self.size = size
-    self.blockFrames = calculateBlockFrames()
+    (self.childrenWithSeparators, self.blockFrames) = calculateBlockFrames(
+      children: children,
+      separator: separator,
+      lineSeparator: lineSeparator
+    )
   }
 
-  private func calculateBlockFrames() -> [CGRect] {
+  private func calculateBlockFrames(
+    children: [ContainerBlock.Child],
+    separator: ContainerBlock.Separator? = nil,
+    lineSeparator: ContainerBlock.Separator? = nil
+  ) -> ([ContainerBlock.Child], [CGRect]) {
     switch layoutMode {
     case .noWrap:
-      return calculateNoWrapLayoutFrames()
+      return calculateNoWrapLayoutFrames(
+        children: children
+      )
     case .wrap:
-      return calculateWrapLayoutFrames()
+      return calculateWrapLayoutFrames(
+        children: children,
+        separator: separator,
+        lineSeparator: lineSeparator
+      )
     }
   }
 
-  private func calculateNoWrapLayoutFrames() -> [CGRect] {
+  private func calculateNoWrapLayoutFrames(
+    children: [ContainerBlock.Child]
+  ) -> ([ContainerBlock.Child], [CGRect]) {
     var frames = [CGRect]()
     let gapsSize = gaps.reduce(0, +)
     var shift = CGPoint(x: 0, y: 0)
@@ -69,11 +87,8 @@ public struct ContainerBlockLayout {
     case .horizontal:
       let horizontallyResizableBlocks = children.map { $0.content }
         .filter { $0.isHorizontallyResizable }
-      let widthOfHorizontallyNonResizableBlocks = widthsOfHorizontallyNonResizableBlocks
-        .reduce(
-          0,
-          +
-        )
+      let widthOfHorizontallyNonResizableBlocks =
+      widthsOfHorizontallyNonResizableBlocksIn(children.map { $0.content }).reduce(0,+)
       let widthAvailableForResizableBlocks = (
         size.width - widthOfHorizontallyNonResizableBlocks - gapsSize
       )
@@ -114,7 +129,7 @@ public struct ContainerBlockLayout {
       let verticallyResizableBlocks = children.map { $0.content }
         .filter { $0.isVerticallyResizable }
       let heightOfVerticallyNonResizableBlocks =
-        heightsOfVerticallyNonResizableBlocks(forWidth: size.width).reduce(0, +)
+      heightsOfVerticallyNonResizableBlocksIn(children.map { $0.content }, forWidth: size.width).reduce(0, +)
       let heightAvailableForResizableBlocks = (
         size.height - heightOfVerticallyNonResizableBlocks - gapsSize
       )
@@ -148,14 +163,18 @@ public struct ContainerBlockLayout {
       shift.y = axialAlignment.offset(forAvailableSpace: size.height, contentSize: y)
     }
 
-    return frames.map {
+    return (children, frames.map {
       let frame = $0.offset(by: shift).roundedToScreenScale
       precondition(frame.isValidAndFinite)
       return frame
-    }
+    })
   }
 
-  private func calculateWrapLayoutFrames() -> [CGRect] {
+  private func calculateWrapLayoutFrames(
+    children: [ContainerBlock.Child],
+    separator: ContainerBlock.Separator?,
+    lineSeparator: ContainerBlock.Separator?
+  ) -> ([ContainerBlock.Child], [CGRect]) {
     #if INTERNAL_BUILD
     assert(gaps.allSatisfy { $0.isApproximatelyEqualTo(0) }, "You cannot use gaps in wrap container.")
     assert(
@@ -166,37 +185,19 @@ public struct ContainerBlockLayout {
     )
     #endif
     var frames = [CGRect]()
-    let buildingDirectionKeyPath: KeyPath<CGSize, CGFloat>
-    let transferDirectionKeyPath: KeyPath<CGSize, CGFloat>
+    let buildingDirectionKeyPath = layoutDirection.buildingDirectionKeyPath
+    let transferDirectionKeyPath = layoutDirection.transferDirectionKeyPath
 
-    switch layoutDirection {
-    case .horizontal:
-      buildingDirectionKeyPath = \.width
-      transferDirectionKeyPath = \.height
-    case .vertical:
-      buildingDirectionKeyPath = \.height
-      transferDirectionKeyPath = \.width
-    }
-
-    let groups: [[(child: ContainerBlock.Child, childSize: CGSize, lineOffset: CGFloat)]] =
-      children.reduce([[]]) { result, child in
-        if child.isResizable(for: layoutDirection) {
-          let childSize = child.content.size(forResizableBlockSize: size)
-          return result + [[(child, childSize, 0)]]
-        }
-        let offset = (result.last?.last?.2 ?? 0) +
-          (result.last?.last?.1[keyPath: buildingDirectionKeyPath] ?? 0)
-        let childSize = child.content.size(forResizableBlockSize: .zero)
-        if offset + childSize[keyPath: buildingDirectionKeyPath] >
-          size[keyPath: buildingDirectionKeyPath] {
-          return result + [[(child, childSize, 0)]]
-        } else {
-          return (result.dropLast()) + [(result.last ?? []) + [(child, childSize, offset)]]
-        }
-      }
+    let wrapLayoutGroups = WrapLayoutGroups(
+      children: children,
+      separator: separator,
+      lineSeparator: lineSeparator,
+      size: size,
+      layoutDirection: layoutDirection
+    )
 
     var currentLineOffset = 0.0
-    groups.forEach {
+    wrapLayoutGroups.groups.forEach {
       let groupHeight = $0.map(\.childSize).map(to: transferDirectionKeyPath).max() ?? 0
       let contentLength = $0.map(\.childSize).map(to: buildingDirectionKeyPath).reduce(0, +)
 
@@ -227,10 +228,8 @@ public struct ContainerBlockLayout {
 
       currentLineOffset += groupHeight
     }
-    return frames
+    return (wrapLayoutGroups.childrenWithSeparators, frames)
   }
-
-  public private(set) var blockFrames: [CGRect] = []
 
   public var leftInset: CGFloat {
     let leftMargin = layoutDirection == .horizontal ? gaps.first! : 0
@@ -257,17 +256,10 @@ public struct ContainerBlockLayout {
       height: blockFrames.map { $0.maxY }.max()!
     )
   }
+}
 
-  private var widthsOfHorizontallyNonResizableBlocks: [CGFloat] {
-    widthsOfHorizontallyNonResizableBlocksIn(children.map { $0.content })
-  }
-
-  private func heightsOfVerticallyNonResizableBlocks(forWidth width: CGFloat) -> [CGFloat] {
-    children
-      .map { $0.content }
-      .filter { !$0.isVerticallyResizable }
-      .map { $0.heightOfVerticallyNonResizableBlock(forWidth: width) }
-  }
+private func heightsOfVerticallyNonResizableBlocksIn(_ blocks: [Block], forWidth width: CGFloat) -> [CGFloat] {
+  blocks.filter { !$0.isVerticallyResizable }.map { $0.heightOfVerticallyNonResizableBlock(forWidth: width) }
 }
 
 func widthsOfHorizontallyNonResizableBlocksIn(_ blocks: [Block]) -> [CGFloat] {
@@ -278,19 +270,8 @@ extension Block {
   fileprivate var horizontalMeasure: ResizableBlockMeasure.Measure {
     isHorizontallyResizable ? .resizable(weightOfHorizontallyResizableBlock) : .nonResizable
   }
-
+  
   fileprivate var verticalMeasure: ResizableBlockMeasure.Measure {
     isVerticallyResizable ? .resizable(weightOfVerticallyResizableBlock) : .nonResizable
-  }
-}
-
-fileprivate extension ContainerBlock.Child {
-  func isResizable(for layoutDirection: ContainerBlock.LayoutDirection) -> Bool {
-    switch layoutDirection {
-    case .horizontal:
-      return content.isHorizontallyResizable
-    case .vertical:
-      return content.isVerticallyResizable
-    }
   }
 }

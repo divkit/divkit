@@ -210,7 +210,47 @@ extension DivContainer: DivBlockModeling {
       widthTrait: makeContentWidthTrait(with: childContext),
       heightTrait: makeContentHeightTrait(with: childContext),
       axialAlignment: axialAlignment,
-      children: children
+      children: children,
+      separator: makeSeparator(with: childContext),
+      lineSeparator: makeLineSeparator(with: childContext)
+    )
+  }
+
+  private func makeSeparator(
+    with context: DivBlockModelingContext
+  ) throws -> ContainerBlock.Separator? {
+    guard let separator = separator else {
+      return nil
+    }
+    let separatorBlock = try separator.style.makeBlock(context: context, corners: .all)
+    let style = ContainerBlock.Child(
+      content: separatorBlock,
+      crossAlignment: .center
+    )
+    return ContainerBlock.Separator(
+      style: style,
+      showAtEnd: separator.resolveShowAtEnd(context.expressionResolver),
+      showAtStart: separator.resolveShowAtStart(context.expressionResolver),
+      showBetween: separator.resolveShowBetween(context.expressionResolver)
+    )
+  }
+
+  private func makeLineSeparator(
+    with context: DivBlockModelingContext
+  ) throws -> ContainerBlock.Separator? {
+    guard let lineSeparator = lineSeparator else {
+      return nil
+    }
+    let lineSeparatorBlock = try lineSeparator.style.makeBlock(context: context, corners: .all)
+    let style = ContainerBlock.Child(
+      content: lineSeparatorBlock,
+      crossAlignment: .center
+    )
+    return ContainerBlock.Separator(
+      style: style,
+      showAtEnd: lineSeparator.resolveShowAtEnd(context.expressionResolver),
+      showAtStart: lineSeparator.resolveShowAtStart(context.expressionResolver),
+      showBetween: lineSeparator.resolveShowBetween(context.expressionResolver)
     )
   }
 }

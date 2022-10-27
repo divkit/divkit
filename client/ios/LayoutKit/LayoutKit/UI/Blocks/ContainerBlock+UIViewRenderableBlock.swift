@@ -24,6 +24,8 @@ extension ContainerBlock {
 
     let model = ContainerBlockView.Model(
       children: children,
+      separator: separator,
+      lineSeparator: lineSeparator,
       gaps: gaps,
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
@@ -48,6 +50,8 @@ extension ContainerBlock {
 private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBoundsTrackingContainer {
   struct Model: ReferenceEquatable {
     let children: [ContainerBlock.Child]
+    let separator: ContainerBlock.Separator?
+    let lineSeparator: ContainerBlock.Separator?
     let gaps: [CGFloat]
     let layoutDirection: ContainerBlock.LayoutDirection
     let layoutMode: ContainerBlock.LayoutMode
@@ -75,6 +79,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
   }
 
   private weak var observer: ElementStateObserver?
+  private weak var overscrollDelegate: ScrollDelegate?
   private weak var renderingDelegate: RenderingDelegate?
 
   func configure(
@@ -93,6 +98,7 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
     applyAccessibility(model.accessibility)
     modelAndLastLayoutSize = (model: model, lastLayoutSize: nil)
     self.observer = observer
+    self.overscrollDelegate = overscrollDelegate
     self.renderingDelegate = renderingDelegate
 
     // Configuring views may lead to unpredictable side effects,
@@ -131,12 +137,24 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
 
     let layout = model.layout ?? ContainerBlockLayout(
       children: model.children,
+      separator: model.separator,
+      lineSeparator: model.lineSeparator,
       gaps: model.gaps,
       layoutDirection: model.layoutDirection,
       layoutMode: model.layoutMode,
       axialAlignment: model.axialAlignment,
       size: bounds.size
     )
+
+    if model.children != layout.childrenWithSeparators {
+      blockViews = blockViews.reused(
+        with: layout.childrenWithSeparators.map(\.content),
+        attachTo: self,
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate
+      )
+    }
 
     for (view, frame) in zip(blockViews, layout.blockFrames) {
       // if a view’s transform is not the identity transform, you should not set its frame
