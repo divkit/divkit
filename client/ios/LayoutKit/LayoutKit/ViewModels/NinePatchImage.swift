@@ -1,13 +1,12 @@
 import CommonCore
-import UIKit
 
 public struct NinePatchImage {
   let imageHolder: ImageHolder
-  let insets: UIEdgeInsets
+  let insets: EdgeInsets
 
   public init(
     imageHolder: ImageHolder,
-    insets: UIEdgeInsets
+    insets: EdgeInsets
   ) {
     self.imageHolder = imageHolder
     self.insets = insets

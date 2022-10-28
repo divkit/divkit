@@ -51,7 +51,7 @@ public struct GalleryViewState: ElementState, Equatable {
     }
   }
 
-  public private(set) var contentPosition: Position
+  public var contentPosition: Position
   public let isScrolling: Bool
 
   public static let `default` = GalleryViewState(contentOffset: 0)
