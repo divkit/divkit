@@ -7,8 +7,13 @@ public protocol DivCustomBlockFactory {
 public struct EmptyDivCustomBlockFactory: DivCustomBlockFactory {
   public init() {}
 
-  public func makeBlock(data: DivCustomData, context _: DivBlockModelingContext) -> Block {
-    DivKitLogger.error("No block factory for DivCustom: \(data.name)")
+  public func makeBlock(data: DivCustomData, context: DivBlockModelingContext) -> Block {
+    context.warningsStorage.add(
+      DivBlockModelingWarning(
+        "No block factory for DivCustom: \(data.name)",
+        path: context.parentPath
+      )
+    )
     return EmptyBlock.zeroSized
   }
 }

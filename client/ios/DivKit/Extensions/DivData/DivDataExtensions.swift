@@ -39,7 +39,7 @@ extension DivData: DivBlockModeling {
       )
       .addingDebugInfo(
         debugParams: divContext.debugParams,
-        errors: divContext.expressionErrorsStorage.errors,
+        errors: divContext.expressionErrorsStorage.underlyingArray,
         parentPath: divContext.parentPath
       )
   }

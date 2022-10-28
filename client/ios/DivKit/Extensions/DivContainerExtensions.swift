@@ -51,13 +51,19 @@ extension DivContainer: DivBlockModeling {
 
   private func getFallbackWidth(
     orientation: Orientation,
-    layoutMode: LayoutMode = .noWrap
+    layoutMode: LayoutMode = .noWrap,
+    context: DivBlockModelingContext
   ) -> DivOverridenSize? {
     if layoutMode == .wrap {
       switch orientation {
       case .vertical:
         if items.hasHorizontallyMatchParent {
-          DivKitLogger.error("Vertical DivContainer with wrap layout mode contains item with match_parent width")
+          context.warningsStorage.add(
+            DivBlockModelingWarning(
+              "Vertical DivContainer with wrap layout mode contains item with match_parent width",
+              path: context.parentPath
+            )
+          )
           return defaultFallbackSize
         }
       case .horizontal, .overlap:
@@ -69,12 +75,22 @@ extension DivContainer: DivBlockModeling {
       switch orientation {
       case .horizontal:
         if items.hasHorizontallyMatchParent {
-          DivKitLogger.error("Horizontal DivContainer with wrap_content width contains item with match_parent width")
+          context.warningsStorage.add(
+            DivBlockModelingWarning(
+              "Horizontal DivContainer with wrap_content width contains item with match_parent width",
+              path: context.parentPath
+            )
+          )
           return defaultFallbackSize
         }
       case .vertical, .overlap:
         if items.allHorizontallyMatchParent {
-          DivKitLogger.error("All items in DivContainer with wrap_content width has match_parent width")
+          context.warningsStorage.add(
+            DivBlockModelingWarning(
+              "All items in DivContainer with wrap_content width has match_parent width",
+              path: context.parentPath
+            )
+          )
           return defaultFallbackSize
         }
       }
@@ -85,13 +101,19 @@ extension DivContainer: DivBlockModeling {
 
   private func getFallbackHeight(
     orientation: Orientation,
-    layoutMode: LayoutMode = .noWrap
+    layoutMode: LayoutMode = .noWrap,
+    context: DivBlockModelingContext
   ) -> DivOverridenSize? {
     if layoutMode == .wrap {
       switch orientation {
       case .horizontal:
         if items.hasVerticallyMatchParent {
-          DivKitLogger.error("Horizontal DivContainer with wrap layout mode contains item with match_parent height")
+          context.warningsStorage.add(
+            DivBlockModelingWarning(
+              "Horizontal DivContainer with wrap layout mode contains item with match_parent height",
+              path: context.parentPath
+            )
+          )
           return defaultFallbackSize
         }
       case .vertical, .overlap:
@@ -103,12 +125,22 @@ extension DivContainer: DivBlockModeling {
       switch orientation {
       case .horizontal, .overlap:
         if items.allVerticallyMatchParent {
-          DivKitLogger.error("All items in DivContainer with wrap_content height has match_parent height")
+          context.warningsStorage.add(
+            DivBlockModelingWarning(
+              "All items in DivContainer with wrap_content height has match_parent height",
+              path: context.parentPath
+            )
+          )
           return defaultFallbackSize
         }
       case .vertical:
         if items.hasVerticallyMatchParent {
-          DivKitLogger.error("Vertical DivContainer with wrap_content height contains item with match_parent height")
+          context.warningsStorage.add(
+            DivBlockModelingWarning(
+              "Vertical DivContainer with wrap_content height contains item with match_parent height",
+              path: context.parentPath
+            )
+          )
           return defaultFallbackSize
         }
       }
@@ -126,8 +158,8 @@ extension DivContainer: DivBlockModeling {
       vertical: resolveContentAlignmentVertical(childContext.expressionResolver).alignment
     )
 
-    let fallbackWidth = getFallbackWidth(orientation: orientation)
-    let fallbackHeight = getFallbackHeight(orientation: orientation)
+    let fallbackWidth = getFallbackWidth(orientation: orientation, context: childContext)
+    let fallbackHeight = getFallbackHeight(orientation: orientation, context: childContext)
     
     let children = try items.makeBlocks(
       context: childContext,
@@ -181,8 +213,16 @@ extension DivContainer: DivBlockModeling {
       .alignment
     }
 
-    let fallbackWidth = getFallbackWidth(orientation: orientation, layoutMode: layoutMode)
-    let fallbackHeight = getFallbackHeight(orientation: orientation, layoutMode: layoutMode)
+    let fallbackWidth = getFallbackWidth(
+      orientation: orientation,
+      layoutMode: layoutMode,
+      context: childContext
+    )
+    let fallbackHeight = getFallbackHeight(
+      orientation: orientation,
+      layoutMode: layoutMode,
+      context: childContext
+    )
 
     let children = try items.makeBlocks(
       context: childContext,

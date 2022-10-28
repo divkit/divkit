@@ -15,3 +15,12 @@ public struct DivBlockModelingError: Error, CustomStringConvertible, Equatable {
     DivKitLogger.error(description)
   }
 }
+
+public struct DivBlockModelingWarning: CustomStringConvertible {
+  public let description: String
+
+  init(_ message: String, path: UIElementPath) {
+    description = "\(message) [\(path)]"
+    DivKitLogger.warning(description)
+  }
+}

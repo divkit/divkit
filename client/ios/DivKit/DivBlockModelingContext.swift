@@ -25,9 +25,14 @@ public struct DivBlockModelingContext {
   public let debugParams: DebugParams
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
-  let expressionErrorsStorage = ExpressionErrorsStorage()
+  let expressionErrorsStorage = Storage<ExpressionError>()
+  let warningsStorage = Storage<DivBlockModelingWarning>()
   var overridenWidth: DivOverridenSize? = nil
   var overridenHeight: DivOverridenSize? = nil
+
+  public var warnings: [DivBlockModelingWarning] {
+    warningsStorage.underlyingArray
+  }
 
   public init(
     cardId: DivCardID,
@@ -71,7 +76,7 @@ public struct DivBlockModelingContext {
       self.expressionResolver = ExpressionResolver(
         variables: variables,
         errorTracker: { [weak expressionErrorsStorage] error in
-          expressionErrorsStorage?.add(error: error)
+          expressionErrorsStorage?.add(error)
         }
       )
     } else {
@@ -109,7 +114,9 @@ public struct DivBlockModelingContext {
       let id = $0.id
       let handler = extensionHandlers[id]
       if handler == nil {
-        DivKitLogger.error("No DivExtensionHandler for: \(id)")
+        warningsStorage.add(
+          DivBlockModelingWarning("No DivExtensionHandler for: \(id)", path: parentPath)
+        )
       }
       return handler
     }
@@ -137,5 +144,13 @@ public struct DivBlockModelingContext {
       return overridenHeight.overriden
     }
     return height
+  }
+}
+
+final class Storage<T> {
+  private(set) var underlyingArray: [T] = []
+
+  func add(_ element: T) {
+    underlyingArray.append(element)
   }
 }

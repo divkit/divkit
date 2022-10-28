@@ -19,6 +19,13 @@ public enum DivKitLogger {
     }
   }
 
+  static func warning(_ message: String) {
+    if isEnabled {
+      print("[DivKit] [WARNING] \(message)")
+      externalLogger(message)
+    }
+  }
+
   public static func setLogger(_ logger: @escaping (String) -> Void) {
     Thread.assertIsMain()
     externalLogger = logger

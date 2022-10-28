@@ -20,8 +20,8 @@ extension DivGalleryProtocol {
     columnCount: Int? = nil
   ) throws -> GalleryViewModel {
     let expressionResolver = context.expressionResolver
-    let fallbackWidth = getFallbackWidth(direction: direction)
-    let fallbackHeight = getFallbackHeight(direction: direction)
+    let fallbackWidth = getFallbackWidth(direction: direction, context: context)
+    let fallbackHeight = getFallbackHeight(direction: direction, context: context)
     let children: [GalleryViewModel.Item] = try items.makeBlocks(
       context: context,
       overridenWidth: fallbackWidth,
@@ -98,13 +98,19 @@ extension DivGalleryProtocol {
   }
 
   private func getFallbackWidth(
-    direction: GalleryViewModel.Direction
+    direction: GalleryViewModel.Direction,
+    context: DivBlockModelingContext
   ) -> DivOverridenSize? {
     if width.isIntrinsic {
       switch direction {
       case .vertical:
         if items.allHorizontallyMatchParent {
-          DivKitLogger.error("All items in vertical \(typeName) with wrap_content width has match_parent width")
+          context.warningsStorage.add(
+            DivBlockModelingWarning(
+              "All items in vertical \(typeName) with wrap_content width has match_parent width",
+              path: context.parentPath
+            )
+          )
           return defaultFallbackSize
         }
       case .horizontal:
@@ -116,13 +122,19 @@ extension DivGalleryProtocol {
   }
 
   private func getFallbackHeight(
-    direction: GalleryViewModel.Direction
+    direction: GalleryViewModel.Direction,
+    context: DivBlockModelingContext
   ) -> DivOverridenSize? {
     if height.isIntrinsic {
       switch direction {
       case .horizontal:
         if items.allVerticallyMatchParent {
-          DivKitLogger.error("All items in horizontal \(typeName) with wrap_content height has match_parent height")
+          context.warningsStorage.add(
+            DivBlockModelingWarning(
+              "All items in horizontal \(typeName) with wrap_content height has match_parent height",
+              path: context.parentPath
+            )
+          )
           return defaultFallbackSize
         }
       case .vertical:
