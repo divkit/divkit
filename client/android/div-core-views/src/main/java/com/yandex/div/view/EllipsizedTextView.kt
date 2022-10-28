@@ -1,14 +1,17 @@
 package com.yandex.div.view
 
 import android.content.Context
+import android.os.Build
 import android.text.Layout
 import android.text.SpannableStringBuilder
 import android.text.StaticLayout
 import android.text.TextUtils
 import android.util.AttributeSet
+import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.core.views.R
+import com.yandex.div.util.isHyphenationEnabled
 
 open class EllipsizedTextView @JvmOverloads constructor(
     context: Context,
@@ -210,7 +213,12 @@ open class EllipsizedTextView @JvmOverloads constructor(
         val textWidth = availableWidth()
         if (textWidth <= 0) return 0
 
-        val textLayout = layoutText(text, textWidth)
+        val textLayout = if (isHyphenationEnabled()) {
+            layoutTextWithHyphenation(text, textWidth)
+        } else {
+            layoutText(text, textWidth)
+        }
+
         val lines = textLayout.lineCount
         val lastLineWidth = textLayout.getLineWidth(lines - 1)
         if (lines < maxLines || lines == maxLines && lastLineWidth <= textWidth) {
@@ -227,7 +235,9 @@ open class EllipsizedTextView @JvmOverloads constructor(
 
         val ellipsizedTextWidth = textWidth - cachedEllipsisWidth
         var fittedSymbols = textLayout.getOffsetForHorizontal(maxLines - 1, ellipsizedTextWidth)
-        if (textLayout.getPrimaryHorizontal(fittedSymbols) > ellipsizedTextWidth) {
+        //It may be required to remove the last symbol from the text to fit ellipsis
+        //But there can be a non-printable zero-width symbol, so we need to iterate until ellipsis fits
+        while (textLayout.getPrimaryHorizontal(fittedSymbols) > ellipsizedTextWidth && fittedSymbols > 0) {
             fittedSymbols--
         }
 
@@ -256,6 +266,17 @@ open class EllipsizedTextView @JvmOverloads constructor(
             lineSpacingExtra,
             true
         )
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    private fun layoutTextWithHyphenation(text: CharSequence, textWidth: Int = Int.MAX_VALUE): Layout {
+        val builder = StaticLayout.Builder.obtain(text, 0, text.length, paint, textWidth)
+        return builder
+            .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+            .setLineSpacing(lineSpacingExtra, lineSpacingMultiplier)
+            .setIncludePad(true)
+            .setHyphenationFrequency(hyphenationFrequency)
+            .build()
     }
 
     companion object {

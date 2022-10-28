@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Paint
-import android.os.Build
 import android.text.Layout
 import android.text.Spannable
 import android.text.SpannableStringBuilder
@@ -43,6 +42,7 @@ import com.yandex.div.spannable.LetterSpacingSpan
 import com.yandex.div.spannable.NoStrikethroughSpan
 import com.yandex.div.spannable.NoUnderlineSpan
 import com.yandex.div.spannable.TypefaceSpan
+import com.yandex.div.util.checkHyphenationSupported
 import com.yandex.div.view.EllipsizedTextView
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
@@ -74,7 +74,7 @@ internal class DivTextBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
     private val imageLoader: DivImageLoader,
-    @ExperimentFlag(HYPHENATION_SUPPORT_ENABLED) private val isHyphenationSupported: Boolean
+    @ExperimentFlag(HYPHENATION_SUPPORT_ENABLED) private val isHyphenationEnabled: Boolean
 ) : DivViewBinder<DivText, DivLineHeightTextView> {
 
     override fun bindView(view: DivLineHeightTextView, div: DivText, divView: Div2View) {
@@ -113,19 +113,12 @@ internal class DivTextBinder @Inject constructor(
     }
 
     private fun TextView.applyHyphenation(resolver: ExpressionResolver, div: DivText) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            // Rendering of Yandex Sans font with soft hyphens is broken on lower APIs.
-            // See MORDAANDROID-767
+        if (!checkHyphenationSupported()) {
             return
         }
         val oldHyphenFreq = hyphenationFrequency
         val newHyphenFreq = when {
-            !isHyphenationSupported -> Layout.HYPHENATION_FREQUENCY_NONE
-            div.ellipsis != null -> {
-                // TODO(MORDAANDROID-767): Custom ellipsis rendered improperly with hyphenation
-                Layout.HYPHENATION_FREQUENCY_NONE
-            }
-
+            !isHyphenationEnabled -> Layout.HYPHENATION_FREQUENCY_NONE
             TextUtils.indexOf(
                 div.text.evaluate(resolver),
                 SOFT_HYPHEN,

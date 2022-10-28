@@ -73,8 +73,8 @@ internal class EllipsizedTextViewAssertions {
         Assert.assertEquals(TextUtils.TruncateAt.END, ellipsize)
     }
 
-    fun hasCustomEllipsis(): Unit = step("Check text has custom ellipsis") {
-        firstText().check(matches(allOf(not(isEllipsized()), withCustomEllipsis(CUSTOM_ELLIPSIS))))
+    fun hasCustomEllipsis(ellipsis: String = CUSTOM_ELLIPSIS): Unit = step("Check text has custom ellipsis") {
+        firstText().check(matches(allOf(not(isEllipsized()), withCustomEllipsis(ellipsis))))
     }
 
     fun hasHeight(lines: Int): Unit = step("Check text has proper height for $lines lines") {

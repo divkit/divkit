@@ -42,6 +42,17 @@ class EllipsizedTextViewTest {
     }
 
     @Test
+    fun ellipsizeTextWithHyphensCustomEllipsis() {
+        ellipsizedTextView {
+            testAsset = "div2-test/ellipsized_text_view_long_text_custom_ellipsis_with_hyphenation.json"
+            activityRule.buildContainer()
+            assert {
+                hasCustomEllipsis("… more")
+            }
+        }
+    }
+
+    @Test
     fun rebindDoesNotResetEllipsizedText() {
         ellipsizedTextView {
             testAsset = "div2-test/ellipsized_text_view_long_text_custom_ellipsis.json"

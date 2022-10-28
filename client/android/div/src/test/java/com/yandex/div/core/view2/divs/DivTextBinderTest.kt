@@ -70,7 +70,7 @@ class DivTextBinderTest : DivBinderTest() {
     @Test
     @Config(sdk = [Build.VERSION_CODES.O])
     fun `set hyphenation frequency to none if hyphenation is not supported`() {
-        val binder = createBinder(isHyphenationSupported = false)
+        val binder = createBinder(isHyphenationEnabled = false)
         val (divText, view) = createTestData("with_hyphenation.json")
 
         binder.bindView(view, divText, divView)
@@ -80,12 +80,12 @@ class DivTextBinderTest : DivBinderTest() {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.O])
-    fun `do not apply hyphenation if text has ellipsis`() {
+    fun `apply hyphenation if text has ellipsis`() {
         val (divText, view) = createTestData("with_hyphenation_ellipsis.json")
 
         binder.bindView(view, divText, divView)
 
-        Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NONE, view.hyphenationFrequency)
+        Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NORMAL, view.hyphenationFrequency)
     }
 
     @Test
@@ -102,19 +102,6 @@ class DivTextBinderTest : DivBinderTest() {
         Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NONE, newView.hyphenationFrequency)
     }
 
-    @Test
-    @Config(sdk = [Build.VERSION_CODES.O])
-    fun `reset hyphenation after text has ellipsis`() {
-        val (divText, view) = createTestData("with_hyphenation.json")
-
-        binder.bindView(view, divText, divView)
-
-        val (newDivText, newView) = createTestData("with_hyphenation_ellipsis.json")
-
-        binder.bindView(newView, newDivText, divView)
-
-        Assert.assertEquals(Layout.HYPHENATION_FREQUENCY_NONE, newView.hyphenationFrequency)
-    }
 
     private fun createTestData(filename: String): Pair<DivText, DivLineHeightTextView> {
         val div = UnitTestData(TEXT_DIR, filename).div
@@ -124,8 +111,8 @@ class DivTextBinderTest : DivBinderTest() {
         return divText to view
     }
 
-    private fun createBinder(isHyphenationSupported: Boolean = true) = DivTextBinder(
-        baseBinder, typefaceResolver, imageLoader, isHyphenationSupported = isHyphenationSupported
+    private fun createBinder(isHyphenationEnabled: Boolean = true) = DivTextBinder(
+        baseBinder, typefaceResolver, imageLoader, isHyphenationEnabled = isHyphenationEnabled
     )
 
     companion object {
