@@ -758,18 +758,24 @@ class Div2View private constructor(
         } ?: false
     }
 
-    @Throws(VariableMutationException::class)
-    fun setVariable(name: String, value: String) {
+    /**
+     * @return exception if setting variable failed, null otherwise.
+     */
+    fun setVariable(name: String, value: String): VariableMutationException? {
         val mutableVariable = variableController?.getMutableVariable(name) ?: run {
-            Assert.fail("Variable '$name' not defined!")
-            return
+            val error = VariableMutationException("Variable '$name' not defined!")
+            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
+            return error
         }
 
         try {
             mutableVariable.set(value)
         } catch (e: VariableMutationException) {
-            Assert.fail("Variable '$name' mutation failed!", e)
+            val error = VariableMutationException("Variable '$name' mutation failed!", e)
+            viewComponent.errorCollectors.getOrCreate(divTag, divData).logError(error)
+            return error
         }
+        return null
     }
 
     internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)

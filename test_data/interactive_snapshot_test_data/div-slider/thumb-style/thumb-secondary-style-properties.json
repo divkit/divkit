@@ -171,7 +171,7 @@
           "log_id": "thumb_secondary_style_stroke_color"
         },
         {
-          "url": "div-action://set_variable?name=thumb_style_stroke_width&value=5",
+          "url": "div-action://set_variable?name=thumb_secondary_style_stroke_width&value=5",
           "log_id": "thumb_secondary_style_stroke_width"
         }
       ]
