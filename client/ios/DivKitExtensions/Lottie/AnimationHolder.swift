@@ -1,12 +1,14 @@
-import UIKit
+import Foundation
+
 import Base
+import LayoutKit
 
 public protocol AnimatableViewFactory: AnyObject {
   func createAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float) -> AnimatableView
 }
 
-public protocol AnimatableView: UIView {
-  func play()	
+public protocol AnimatableView: ViewType {
+  func play()
   func setSource(_ source: AnimationSourceType)
 }
 
