@@ -1,0 +1,111 @@
+{
+  "templates": {
+    "bottom_item": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#afa"
+        }
+      ],
+      "alignment_vertical": "bottom",
+      "paddings": {
+        "top": 16,
+        "right": 16,
+        "bottom": 16,
+        "left": 16
+      },
+      "margins": {
+        "top": 16,
+        "left": 16,
+        "bottom": 16,
+        "right": 16
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "width": {
+        "type": "wrap_content"
+      }
+    },
+    "close_button": {
+      "type": "text",
+      "text": "X",
+      "alignment_horizontal": "right",
+      "alignment_vertical": "top",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#faa"
+        }
+      ],
+      "border": {
+        "corner_radius": 8
+      },
+      "height": {
+        "type": "fixed",
+        "value": 32
+      },
+      "width": {
+        "type": "fixed",
+        "value": 32
+      },
+      "margins": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "overlap",
+          "width": {
+            "type": "match_parent"
+          },
+          "height": {
+            "type": "match_parent"
+          },
+          "items": [
+            {
+              "type": "container",
+              "orientation": "overlap",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "match_parent"
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#aaf"
+                }
+              ],
+              "items": [
+                {
+                  "type": "bottom_item",
+                  "text": "Item"
+                }
+              ]
+            },
+            {
+              "type": "close_button"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

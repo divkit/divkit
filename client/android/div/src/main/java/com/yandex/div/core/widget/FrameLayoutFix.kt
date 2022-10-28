@@ -7,6 +7,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.FrameLayout
 import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Fix for a bug in [FrameLayout.onMeasure] that causes wrong dimensions of child with
@@ -107,14 +108,16 @@ open class FrameLayoutFix @JvmOverloads constructor(
                 val childVerticalPadding = verticalPadding + lp.topMargin + lp.bottomMargin
 
                 val childWidthMeasureSpec = if (lp.width == LayoutParams.MATCH_PARENT) {
-                    val width = measuredWidth - childHorizontalPadding
+                    val width = (measuredWidth - childHorizontalPadding)
+                        .coerceAtLeast(min(child.measuredWidth, maxWidth))
                     MeasureSpec.makeMeasureSpec(width.coerceAtLeast(0), MeasureSpec.EXACTLY)
                 } else {
                     getChildMeasureSpec(widthMeasureSpec, childHorizontalPadding, lp.width)
                 }
 
                 val childHeightMeasureSpec = if (lp.height == LayoutParams.MATCH_PARENT) {
-                    val height = measuredHeight - childVerticalPadding
+                    val height = (measuredHeight - childVerticalPadding)
+                        .coerceAtLeast(min(child.measuredHeight, maxHeight))
                     MeasureSpec.makeMeasureSpec(height.coerceAtLeast(0), MeasureSpec.EXACTLY)
                 } else {
                     getChildMeasureSpec(heightMeasureSpec, childVerticalPadding, lp.height)

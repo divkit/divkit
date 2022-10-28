@@ -98,6 +98,6 @@ internal class ImageComparator(private val logger: Logger) {
          * Empirical value for difference in pixel components due to compression artifacts
          * (r1-r2)^2 + (g1-g2)^2 + (b1-b2)^2 <= MAX, so 12 means maximum components delta 2 is allowed
          */
-        private const val MAX_COMPONENTS_DELTA = 12
+        private const val MAX_COMPONENTS_DELTA = 21
     }
 }
