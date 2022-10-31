@@ -2,21 +2,12 @@ import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { ImageScale } from './imageScale';
 import type { FixedSize } from './sizes';
 import type { EdgeInsets } from './edgeInserts';
+import type { Filter } from './filter';
 
 export interface GradientBackground {
     type: 'gradient';
     colors: string[];
     angle?: number;
-}
-
-export interface ImageScaleSegment {
-    start: number;
-    end: number;
-}
-
-export interface ImageScaleSegments {
-    x_segments?: ImageScaleSegment[];
-    y_segments?: ImageScaleSegment[];
 }
 
 export interface ImageBackground {
@@ -27,7 +18,7 @@ export interface ImageBackground {
     scale?: ImageScale;
     alpha?: number;
     // preload_required
-    scale_segments?: ImageScaleSegments;
+    filters?: Filter[];
 }
 
 export interface NinePatchImageBackground {

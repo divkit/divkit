@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`filters getCssFilter with correct blur 1`] = `"blur(0.4em)"`;
+
+exports[`filters getCssFilter with correct blur 2`] = `Array []`;
+
+exports[`filters getCssFilter with incorrect object 1`] = `""`;
+
+exports[`filters getCssFilter with incorrect object 2`] = `Array []`;
+
+exports[`filters getCssFilter with incorrect object 2 1`] = `""`;
+
+exports[`filters getCssFilter with incorrect object 2 2`] = `
+Array [
+  Array [
+    [Error: Unknown filter],
+  ],
+]
+`;
+
+exports[`filters getCssFilter with incorrect object 3 1`] = `""`;
+
+exports[`filters getCssFilter with incorrect object 3 2`] = `
+Array [
+  Array [
+    [Error: Unknown filter],
+  ],
+]
+`;
+
+exports[`filters getCssFilter with incorrect object 4 1`] = `""`;
+
+exports[`filters getCssFilter with incorrect object 4 2`] = `Array []`;

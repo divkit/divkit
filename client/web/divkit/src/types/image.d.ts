@@ -2,6 +2,7 @@ import type { DivBaseData } from './base';
 import type { DivActionableData } from './actionable';
 import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { FadeTransition } from './base';
+import type { Filter } from './filter';
 
 export type ImageScale = 'no_scale' | 'fill' | 'fit';
 
@@ -27,4 +28,5 @@ export interface DivImageData extends DivBaseData, DivActionableData {
     tint_color?: string;
     tint_mode?: TintMode;
     appearance_animation?: FadeTransition;
+    filters?: Filter[];
 }

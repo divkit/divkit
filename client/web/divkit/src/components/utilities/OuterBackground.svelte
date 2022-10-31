@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { getContext } from 'svelte';
+
     import css from './OuterBackground.module.css';
 
     import type { Style } from '../../types/general';
@@ -6,8 +8,12 @@
     import type { MaybeMissing } from '../../expressions/json';
     import { getBackground } from '../../utils/background';
     import { makeStyle } from '../../utils/makeStyle';
+    import { ROOT_CTX, RootCtxValue } from '../../context/root';
+    import { getCssFilter } from '../../utils/filters';
 
     export let background: MaybeMissing<Background[]> = [];
+
+    const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     const styles: {
         image_url?: string;
@@ -38,6 +44,10 @@
                 obj.image_url = bg.image_url;
                 stl['object-fit'] = res.size;
                 stl['object-position'] = res.position;
+
+                if (Array.isArray(bg.filters) && bg.filters.length) {
+                    stl.filter = getCssFilter(bg.filters, rootCtx.logError);
+                }
             }
         }
 

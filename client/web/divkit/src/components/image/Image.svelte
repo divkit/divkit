@@ -20,6 +20,7 @@
     import { correctCSSInterpolator } from '../../utils/correctCSSInterpolator';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { correctTintMode } from '../../utils/correctTintMode';
+    import { getCssFilter } from '../../utils/filters';
 
     export let json: Partial<DivImageData> = {};
     export let templateContext: TemplateContext;
@@ -157,6 +158,22 @@
         animationFadeStart = correctNonNegativeNumber(animation.alpha, 0);
     }
 
+    $: jsonFilters = rootCtx.getDerivedFromVars(json.filters);
+    let filter = '';
+    let filterClipPath = '';
+    $: {
+        let newFilter = '';
+        let newClipPath = '';
+        if (Array.isArray($jsonFilters) && $jsonFilters.length) {
+            newFilter = getCssFilter($jsonFilters, rootCtx.logError);
+        }
+        if (newFilter) {
+            newClipPath = 'polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%)';
+        }
+        filter = newFilter;
+        filterClipPath = newClipPath;
+    }
+
     $: mods = {
         aspect: aspectPaddingBottom !== '0',
         'is-width-content': isWidthContent,
@@ -173,7 +190,11 @@
     $: style = {
         'object-fit': scale,
         'object-position': position,
-        filter: state === STATE_LOADED && svgFilterId ? `url(#${svgFilterId})` : '',
+        filter: [
+            state === STATE_LOADED && svgFilterId ? `url(#${svgFilterId})` : '',
+            filter
+        ].filter(Boolean).join(' '),
+        'clip-path': filterClipPath || undefined,
         '--divkit-appearance-interpolator': animationInterpolator || undefined,
         '--divkit-appearance-fade-start': animationInterpolator ? animationFadeStart : undefined,
         '--divkit-appearance-delay': animationInterpolator ? `${animationDelay}ms` : undefined,
