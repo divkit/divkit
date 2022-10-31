@@ -40,7 +40,7 @@ fun divConfiguration(
         .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
         .divStateChangeListener(divStateChangeListener ?: DivStateChangeListener.STUB)
         .divCustomViewFactory(DemoDivCustomViewFactory())
-        .divCustomViewAdapter(DemoDivCustomViewAdapter())
+        .divCustomViewAdapter(DemoDivCustomViewAdapter(Container.videoCustomViewController))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
         .enableLongtapActionsPassingToChild()
