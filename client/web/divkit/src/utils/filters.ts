@@ -8,7 +8,7 @@ export function getCssFilter(filters: MaybeMissing<Filter>[], logError: LogError
     return filters.map(filter => {
         if (filter?.type === 'blur') {
             if (isPositiveNumber(filter.radius)) {
-                return `blur(${pxToEmWithUnits(filter.radius)})`;
+                return `blur(${pxToEmWithUnits(filter.radius / 2)})`;
             }
         } else {
             logError(wrapError(new Error('Unknown filter'), {

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`filters getCssFilter with correct blur 1`] = `"blur(0.4em)"`;
+exports[`filters getCssFilter with correct blur 1`] = `"blur(0.2em)"`;
 
 exports[`filters getCssFilter with correct blur 2`] = `Array []`;
 
