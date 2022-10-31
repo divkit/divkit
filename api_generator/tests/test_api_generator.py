@@ -46,6 +46,13 @@ def test_schema_preprocessor():
     assert_json_preprocessor_test(filename='reference_clean_unused_definitions.json')
 
 
+def test_divan_generator():
+    # assert_test_generator(config_filename='divan_config.json',
+    #                       schema_path=TEST_SCHEMA_PATH,
+    #                       references_folder_name='divan')
+    pass
+
+
 def test_swift_generator():
     assert_test_generator(config_filename='swift_config.json',
                           schema_path=TEST_SCHEMA_PATH,

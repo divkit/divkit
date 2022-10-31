@@ -107,15 +107,17 @@ class Declarable(ABC):
 
 
 def _super_entities(config: Config.GenerationConfig, dictionary: Dict[str, any]) -> Optional[str]:
-    if config.lang in [GeneratedLanguage.SWIFT, GeneratedLanguage.DOCUMENTATION]:
-        super_entities_key = 'swift_protocols'
-    elif config.lang in [GeneratedLanguage.KOTLIN, GeneratedLanguage.KOTLIN_DSL]:
-        super_entities_key = 'kotlin_interfaces'
-    elif config.lang is GeneratedLanguage.TYPE_SCRIPT:
-        super_entities_key = 'typescript_interfaces'
-    elif config.lang is GeneratedLanguage.PYTHON:
-        super_entities_key = 'python_classes'
-    else:
+    super_entities_dict = {
+        GeneratedLanguage.DIVAN: 'kotlin_interfaces',
+        GeneratedLanguage.DOCUMENTATION: 'swift_protocols',
+        GeneratedLanguage.KOTLIN: 'kotlin_interfaces',
+        GeneratedLanguage.KOTLIN_DSL: 'kotlin_interfaces',
+        GeneratedLanguage.PYTHON: 'python_classes',
+        GeneratedLanguage.SWIFT: 'swift_protocols',
+        GeneratedLanguage.TYPE_SCRIPT: 'typescript_interfaces',
+    }
+    super_entities_key: str = super_entities_dict[config.lang]
+    if super_entities_key is None:
         raise NotImplementedError
 
     super_entities: Optional[str] = dictionary.get(super_entities_key, dictionary.get(f'{super_entities_key}_local'))

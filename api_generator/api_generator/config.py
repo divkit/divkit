@@ -18,6 +18,7 @@ class GeneratedLanguage(str, Enum):
     KOTLIN_DSL = 'kotlinDsl'
     TYPE_SCRIPT = 'typescript'
     PYTHON = 'python'
+    DIVAN = 'divan'
     DOCUMENTATION = 'documentation'
 
 
