@@ -88,36 +88,6 @@
                   ],
                   "item_text": "Item 6",
                   "type": "item_text"
-                },
-                {
-                  "item_selected_actions": [
-                    {
-                      "log_id": "7",
-                      "url": "div-action://set_state?state_id=0/description/7"
-                    }
-                  ],
-                  "item_text": "Item 7",
-                  "type": "item_text"
-                },
-                {
-                  "item_selected_actions": [
-                    {
-                      "log_id": "8",
-                      "url": "div-action://set_state?state_id=0/description/8"
-                    }
-                  ],
-                  "item_text": "Item 8",
-                  "type": "item_text"
-                },
-                {
-                  "item_selected_actions": [
-                    {
-                      "log_id": "9",
-                      "url": "div-action://set_state?state_id=0/description/9"
-                    }
-                  ],
-                  "item_text": "Item 9",
-                  "type": "item_text"
                 }
               ],
               "layout_mode": {
@@ -181,27 +151,6 @@
                     "type": "description"
                   },
                   "state_id": "6"
-                },
-                {
-                  "div": {
-                    "description_text": "Selected position 7",
-                    "type": "description"
-                  },
-                  "state_id": "7"
-                },
-                {
-                  "div": {
-                    "description_text": "Selected position 8",
-                    "type": "description"
-                  },
-                  "state_id": "8"
-                },
-                {
-                  "div": {
-                    "description_text": "Selected position 9",
-                    "type": "description"
-                  },
-                  "state_id": "9"
                 }
               ],
               "type": "state"
@@ -236,9 +185,6 @@
           "color": "#0e000000"
         }
       ],
-      "width": {
-        "type": "match_parent"
-      },
       "height": {
         "type": "fixed",
         "value": 240,

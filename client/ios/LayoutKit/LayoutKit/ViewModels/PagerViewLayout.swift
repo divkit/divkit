@@ -113,6 +113,7 @@ extension GalleryViewModel {
     let lastOrigin = lastFrame.origin.dimension(in: direction)
     let lastSize = lastFrame.size.dimension(in: direction)
     let lastEdge = lastOrigin + lastSize + lastGap(forSize: size)
+    let maxOffset = lastEdge - (size?.dimension(in: direction) ?? lastSize)
     let origins = frames.enumerated().map { index, frame -> CGFloat in
       let origin = frame.origin.dimension(in: direction)
       let bound = (size ?? .zero).dimension(in: direction)
@@ -121,7 +122,7 @@ extension GalleryViewModel {
         fitting: size,
         layoutMode: layoutMode
       )
-      return max(0, origin - (bound - pageSize) / 2)
+      return min(max(0, origin - (bound - pageSize) / 2), maxOffset)
     }
 
     return (0..<frames.count).map { index in
@@ -164,14 +165,14 @@ extension GalleryViewModel {
     layoutMode: PagerBlock.LayoutMode
   ) -> CGFloat {
     let availableSize = size?.dimension(in: direction) ?? 0
-    let gaps = gaps(forSize: nil)
-    let leadingMargin = gaps.element(at: index) ?? 0
-    let trailingMargin = gaps.element(at: index + 1) ?? 0
-    let margins = leadingMargin + trailingMargin
     switch layoutMode {
     case let .pageSize(relative):
       return relative.absoluteValue(in: availableSize)
     case let .neighbourPageSize(neighbourPageSize):
+      let gaps = gaps(forSize: nil)
+      let leadingMargin = gaps.element(at: index) ?? 0
+      let trailingMargin = gaps.element(at: index + 1) ?? 0
+      let margins = leadingMargin + trailingMargin
       return availableSize - neighbourPageSize - margins
     }
   }

@@ -39,9 +39,6 @@
           "color": "#0e000000"
         }
       ],
-      "width": {
-        "type": "match_parent"
-      },
       "height": {
         "type": "fixed",
         "value": 240,
@@ -64,13 +61,6 @@
       "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
       "placeholder_color": "#C0C0B0",
       "preload_required": 1,
-      "visibility_actions": [
-        {
-          "log_id": "content_item_show:2",
-          "visibility_percentage": 80,
-          "visibility_duration": 0
-        }
-      ],
       "width": {
         "type": "match_parent"
       },
@@ -162,48 +152,6 @@
                       "visibility_duration": 0
                     }
                   ]
-                },
-                {
-                  "type": "text_block",
-                  "text": "Item 6",
-                  "visibility_actions": [
-                    {
-                      "log_id": "content_item_show:6",
-                      "visibility_percentage": 80,
-                      "visibility_duration": 0
-                    }
-                  ]
-                },
-                {
-                  "type": "image_block",
-                  "visibility_actions": [
-                    {
-                      "log_id": "content_item_show:7",
-                      "visibility_percentage": 80,
-                      "visibility_duration": 0
-                    }
-                  ]
-                },
-                {
-                  "type": "text_block",
-                  "text": "Item 8",
-                  "visibility_actions": [
-                    {
-                      "log_id": "content_item_show:8",
-                      "visibility_percentage": 80,
-                      "visibility_duration": 0
-                    }
-                  ]
-                },
-                {
-                  "type": "image_block",
-                  "visibility_actions": [
-                    {
-                      "log_id": "content_item_show:9",
-                      "visibility_percentage": 80,
-                      "visibility_duration": 0
-                    }
-                  ]
                 }
               ],
               "layout_mode": {
@@ -255,7 +203,7 @@
                   "actions": [
                     {
                       "log_id": "next",
-                      "url": "div-action://set_current_item?id=my_pager&item=9"
+                      "url": "div-action://set_current_item?id=my_pager&item=5"
                     }
                   ],
                   "text": ">>",

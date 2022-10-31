@@ -8,9 +8,6 @@
           "color": "#0e000000"
         }
       ],
-      "width": {
-        "type": "match_parent"
-      },
       "height": {
         "type": "fixed",
         "value": 240,
@@ -32,17 +29,7 @@
       "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
       "placeholder_color": "#C0C0B0",
       "preload_required": 1,
-      "visibility_actions": [
-        {
-          "log_id": "content_item_show:2",
-          "visibility_percentage": 80,
-          "visibility_duration": 0
-        }
-      ],
       "alpha": 0.8,
-      "width": {
-        "type": "match_parent"
-      },
       "height": {
         "type": "fixed",
         "value": 240
@@ -67,155 +54,94 @@
           },
           "items": [
             {
-              "type": "state",
-              "div_id": "body",
-              "states": [
+              "type": "container",
+              "items": [
                 {
-                  "state_id": "card",
-                  "div": {
-                    "type": "container",
-                    "items": [
-                      {
-                        "type": "state",
-                        "div_id": "slider",
-                        "states": [
-                          {
-                            "state_id": "without_ad",
-                            "div": {
-                              "type": "pager",
-                              "id": "gallery",
-                              "item_spacing": {
-                                "type": "fixed",
-                                "value": 4
-                              },
-                              "items": [
-                                {
-                                  "type": "text_block",
-                                  "text": "Item 0",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:0",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "image_block",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:1",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "text_block",
-                                  "text": "Item 2",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:2",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "image_block",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:3",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "text_block",
-                                  "text": "Item 4",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:4",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "image_block",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:5",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "text_block",
-                                  "text": "Item 6",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:6",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "image_block",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:7",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "text_block",
-                                  "text": "Item 8",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:8",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                },
-                                {
-                                  "type": "image_block",
-                                  "visibility_actions": [
-                                    {
-                                      "log_id": "content_item_show:9",
-                                      "visibility_percentage": 80,
-                                      "visibility_duration": 0
-                                    }
-                                  ]
-                                }
-                              ],
-                              "layout_mode": {
-                                "type": "fixed",
-                                "neighbour_page_width": {
-                                  "type": "fixed",
-                                  "value": 10
-                                }
-                              },
-                              "margins": {
-                                "top": 8
-                              },
-                              "paddings": {
-                                "right": 4,
-                                "left": 4
-                              },
-                              "restrict_parent_scroll": 1
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
+                  "type": "pager",
+                  "item_spacing": {
+                    "type": "fixed",
+                    "value": 5
+                  },
+                  "items": [
+                    {
+                      "type": "text_block",
+                      "text": "Item 0",
+                      "visibility_actions": [
+                        {
+                          "log_id": "content_item_show:0",
+                          "visibility_percentage": 80,
+                          "visibility_duration": 0
+                        }
+                      ]
+                    },
+                    {
+                      "type": "image_block",
+                      "visibility_actions": [
+                        {
+                          "log_id": "content_item_show:1",
+                          "visibility_percentage": 80,
+                          "visibility_duration": 0
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text_block",
+                      "text": "Item 2",
+                      "visibility_actions": [
+                        {
+                          "log_id": "content_item_show:2",
+                          "visibility_percentage": 80,
+                          "visibility_duration": 0
+                        }
+                      ]
+                    },
+                    {
+                      "type": "image_block",
+                      "visibility_actions": [
+                        {
+                          "log_id": "content_item_show:3",
+                          "visibility_percentage": 80,
+                          "visibility_duration": 0
+                        }
+                      ]
+                    },
+                    {
+                      "type": "text_block",
+                      "text": "Item 4",
+                      "visibility_actions": [
+                        {
+                          "log_id": "content_item_show:4",
+                          "visibility_percentage": 80,
+                          "visibility_duration": 0
+                        }
+                      ]
+                    },
+                    {
+                      "type": "image_block",
+                      "visibility_actions": [
+                        {
+                          "log_id": "content_item_show:5",
+                          "visibility_percentage": 80,
+                          "visibility_duration": 0
+                        }
+                      ]
+                    }
+                  ],
+                  "layout_mode": {
+                    "type": "fixed",
+                    "neighbour_page_width": {
+                      "type": "fixed",
+                      "value": 20
+                    }
+                  },
+                  "margins": {
+                    "top": 8
+                  },
+                  "paddings": {
+                    "right": 10,
+                    "left": 10
+                  },
+                  "restrict_parent_scroll": 1
                 }
               ]
             },
