@@ -50,8 +50,7 @@
             "type": "wrap_content"
           },
           "accessibility": {
-            "mode": "merge",
-            "hint": "Открыть меню"
+            "mode": "merge"
           },
           "actions": [
             {

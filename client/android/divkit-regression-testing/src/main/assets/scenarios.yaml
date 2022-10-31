@@ -260,7 +260,7 @@ steps:
 expect:
   - On "Элемент 1" TalkBack should say "Cейчас в состоянии 0; Элемент 1; Кнопка; Коснитесь дважды, чтобы активировать"
   - After double tap TalkBack should say "Сейчас в состоянии 1"
-  - On "Элемент 2" TalkBack should say "Элемент 2; Кнопка; Коснитесь дважды, чтобы что-то произошло"
+  - On "Элемент 2" TalkBack should say "Элемент 2; Кнопка; Нажмите на кнопку, чтобы что-то произошло"
   - On "Элемент 3" TalkBack should say "Элемент 3; Кнопка"
 paths:
   - 'regression_test_data/accessibility/descriptions.json'
@@ -297,7 +297,7 @@ steps:
   - Focus on items from top to bottom
 expect:
   - Focusing on all card
-  - You will hear "Кнопка; Это Элемент 1, Это Элемент 2, Это Элемент 3; Коснитесь дважды, чтобы открыть меню"
+  - You will hear "Это Элемент 1, Это Элемент 2, Это Элемент 3"
   - On activation menu with text "Элемент 1, Элемент 2, Элемент 3" appears
   - On focus TalkBack should not say "Коснитесь дважды и удерживайте"
 paths:

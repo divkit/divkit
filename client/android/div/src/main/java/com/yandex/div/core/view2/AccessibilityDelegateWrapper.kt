@@ -1,4 +1,4 @@
-package com.yandex.div.core.view2.accessibility
+package com.yandex.div.core.view2
 
 import android.os.Bundle
 import android.view.View

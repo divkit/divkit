@@ -23,7 +23,6 @@ import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.util.Log
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.accessibility.addActionClickHint
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectImageView
@@ -430,15 +429,11 @@ fun View.applyId(divId: String?, viewId: Int = View.NO_ID) {
     id = viewId
 }
 
-internal fun View.applyContentDescription(contentDescription: String?) {
-    this.contentDescription = contentDescription
-}
-
-internal fun View.applyHint(hint: String?) {
-    if (!hint.isNullOrEmpty()) {
-        val delegate = ViewCompat.getAccessibilityDelegate(this).addActionClickHint(hint)
-
-        ViewCompat.setAccessibilityDelegate(this, delegate)
+fun View.applyDescriptionAndHint(contentDescription: String?, hint: String?) {
+    this.contentDescription = when {
+        contentDescription == null -> hint
+        hint == null -> contentDescription
+        else -> "$contentDescription\n$hint"
     }
 }
 

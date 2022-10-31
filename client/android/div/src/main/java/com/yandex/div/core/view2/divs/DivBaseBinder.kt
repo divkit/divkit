@@ -28,7 +28,7 @@ import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.accessibility.DivAccessibilityBinder
+import com.yandex.div.core.view2.DivAccessibilityBinder
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
@@ -254,12 +254,10 @@ internal class DivBaseBinder @Inject constructor(
         val accessibility = div.accessibility
         val hint = accessibility.hint?.evaluate(resolver)
 
-        applyContentDescription(accessibility.description?.evaluate(resolver))
-        applyHint(hint)
-
+        applyDescriptionAndHint(accessibility.description?.evaluate(resolver), hint)
         subscriber.addSubscription(
             accessibility.description?.observe(resolver) { description ->
-                applyContentDescription(description)
+                applyDescriptionAndHint(description, hint)
             } ?: Disposable.NULL
         )
 
