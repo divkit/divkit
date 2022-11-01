@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "name": "undefinedFunc() => error",
+      "expression": "@{undefinedFunc()}",
+      "expected": {
+        "type": "error",
+        "value": "Unknown function name: undefinedFunc."
+      },
+      "variables": [],
+      "platforms": [
+        "web",
+        "android"
+      ]
+    }
+  ]
+}

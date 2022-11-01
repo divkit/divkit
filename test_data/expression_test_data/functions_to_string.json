@@ -57,6 +57,38 @@
       ]
     },
     {
+      "name": "exponential number => string",
+      "expression": "@{toString(1e23)}",
+      "expected": {
+        "type": "string",
+        "value": "1.0E23"
+      },
+      "variables": [],
+      "platforms": [
+        "web",
+        "android"
+      ]
+    },
+    {
+      "name": "number variable => string",
+      "expression": "@{toString(val)}",
+      "expected": {
+        "type": "string",
+        "value": "123.0"
+      },
+      "variables": [
+        {
+          "type": "number",
+          "name": "val",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "web",
+        "android"
+      ]
+    },
+    {
       "name": "true boolean to string => string",
       "expression": "@{toString(true)}",
       "expected": {

@@ -1,0 +1,17 @@
+{
+  "cases": [
+    {
+      "name": "a + b => ab",
+      "expression": "@{'a' + 'b'}",
+      "expected": {
+        "type": "string",
+        "value": "ab"
+      },
+      "variables": [],
+      "platforms": [
+        "web",
+        "android"
+      ]
+    }
+  ]
+}
