@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getContext, setContext, tick } from 'svelte';
+    import { getContext, setContext } from 'svelte';
 
     import rootCss from '../Root.module.css';
 
@@ -151,7 +151,7 @@
             return;
         }
 
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && Array.isArray(actions) && actions.length) {
             rootCtx.execAnyActions(actions);
             event.preventDefault();
         }
