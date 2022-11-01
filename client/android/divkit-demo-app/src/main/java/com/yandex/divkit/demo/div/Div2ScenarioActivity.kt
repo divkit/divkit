@@ -90,6 +90,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
                 )
             )
             .extension(DivLottieExtensionHandler())
+            .extension(CheckBoundsExtensionHandler())
             .divDataChangeListener(transitionScheduler)
             .actionHandler(TransitionActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
