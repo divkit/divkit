@@ -287,6 +287,12 @@ Divjson along with the `card` and `templates` can contain a `palette` property w
 }
 ```
 
+The theme can be changed at any time:
+
+```js
+instance.setTheme('dark');
+```
+
 ### API: other
 
 #### Variables

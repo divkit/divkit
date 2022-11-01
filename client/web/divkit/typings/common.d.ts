@@ -134,6 +134,7 @@ export interface DivkitInstance {
     getVariable(name: string): string | number | undefined;
     /** @deprecated */
     setVariable(name: string, value: string | number): void;
+    setTheme(theme: Theme): void;
 }
 
 export type Platform = 'desktop' | 'touch' | 'auto';

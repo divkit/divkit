@@ -68,22 +68,37 @@
     }
 
     let currentTheme: 'light' | 'dark' = 'light';
-    if (theme === 'light' || theme === 'dark') {
+    let themeQuery: MediaQueryList | null = null;
+    $: if (theme === 'light' || theme === 'dark') {
         currentTheme = theme;
     } else if (theme === 'system') {
         if (typeof matchMedia !== 'undefined') {
-            const themeQuery = matchMedia('(prefers-color-scheme: dark)');
+            if (!themeQuery) {
+                themeQuery = matchMedia('(prefers-color-scheme: dark)');
+                themeQuery.addListener(themeQueryListener);
+            }
             currentTheme = themeQuery.matches ? 'dark' : 'light';
-            themeQuery.addListener(() => {
-                currentTheme = themeQuery.matches ? 'dark' : 'light';
-
-                updateTheme();
-            });
         } else {
             currentTheme = 'light';
         }
     } else {
         logError(wrapError(new Error('Unsupported theme')));
+    }
+
+    $: if (currentTheme) {
+        updateTheme();
+    }
+
+    function themeQueryListener(): void {
+        if (theme !== 'system' || !themeQuery) {
+            return;
+        }
+
+        currentTheme = themeQuery.matches ? 'dark' : 'light';
+    }
+
+    export function setTheme(newTheme: Theme): void {
+        theme = newTheme;
     }
 
     let hasError = false;
