@@ -299,6 +299,14 @@
     "en": "Blend mode.",
     "ru": "Метод наложения."
   },
+  "div_blur": {
+    "en": "Gaussian image blur.",
+    "ru": "Размытие изображения по Гауссу."
+  },
+  "div_blur_radius": {
+    "en": "Defines how many pixels on the screen blend into each other. It is specified in `dp`.",
+    "ru": "Определяет то, как много пикселей будут смешиваться друг с другом. Единица измерения - `dp`."
+  },
   "div_border": {
     "en": "Stroke around the element.",
     "ru": "Рамка вокруг элемента."
@@ -542,6 +550,10 @@
   "div_fade_transition_alpha": {
     "en": "Value of the alpha channel which the element starts appearing from or at which it finishes disappearing.",
     "ru": "Значение альфа-канала, с которого начнется появление или на котором закончится исчезновение элемента."
+  },
+  "div_filter": {
+    "en": "Image filters.",
+    "ru": "Фильтры для изображений."
   },
   "div_fixed_count": {
     "en": "Fixed number of repetitions.",

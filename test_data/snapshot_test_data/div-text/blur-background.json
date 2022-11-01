@@ -1,0 +1,37 @@
+{
+  "templates": {},
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "It is a dark time for the Rebellion.",
+          "font_size": 12,
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "font_weight": "bold",
+          "text_color": "#ff0000",
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "image",
+              "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+              "filters": [
+                {
+                  "type": "blur",
+                  "radius": 4
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

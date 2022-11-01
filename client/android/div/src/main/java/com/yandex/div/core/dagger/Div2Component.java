@@ -1,5 +1,6 @@
 package com.yandex.div.core.dagger;
 
+import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -119,6 +120,9 @@ public interface Div2Component {
 
     @NonNull
     DivCreationTracker getDivCreationTracker();
+
+    @NonNull
+    RenderScript getRenderScript();
 
     @NonNull
     @ExperimentFlag(experiment = Experiment.BIND_ON_ATTACH_ENABLED)

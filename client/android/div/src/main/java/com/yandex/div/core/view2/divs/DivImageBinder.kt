@@ -1,24 +1,29 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
 import android.widget.ImageView
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.util.androidInterpolator
+import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivImageView
+import com.yandex.div.core.view2.divs.widgets.applyFilters
 import com.yandex.div.core.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivAspect
-import com.yandex.div2.DivImage
 import com.yandex.div2.DivBlendMode
+import com.yandex.div2.DivFilter
+import com.yandex.div2.DivImage
 import javax.inject.Inject
 
 @DivScope
@@ -28,11 +33,14 @@ internal class DivImageBinder @Inject constructor(
     private val placeholderLoader: DivPlaceholderLoader
 ) : DivViewBinder<DivImage, DivImageView> {
 
+    private var loadedBitmap: Bitmap? = null
+
     override fun bindView(view: DivImageView, div: DivImage, divView: Div2View) {
         val oldDiv = view.div
         if (div == oldDiv) return
 
         val expressionResolver = divView.expressionResolver
+        val subscriber = view.expressionSubscriber
         view.closeAllSubscription()
 
         view.div = div
@@ -50,6 +58,7 @@ internal class DivImageBinder @Inject constructor(
             div.imageUrl.observeAndGet(expressionResolver) { view.applyImage(divView, expressionResolver, div) }
         )
         view.observeTint(expressionResolver, div.tintColor, div.tintMode)
+        view.observeFilters(div.filters, divView, subscriber, expressionResolver)
     }
 
     private fun DivImageView.observeAspectRatio(resolver: ExpressionResolver, aspect: DivAspect?) {
@@ -85,6 +94,33 @@ internal class DivImageBinder @Inject constructor(
         gravity = evaluateGravity(horizontalAlignment.evaluate(resolver), verticalAlignment.evaluate(resolver))
     }
 
+    private fun DivImageView.observeFilters(
+        filters: List<DivFilter>?,
+        divView: Div2View,
+        subscriber: ExpressionSubscriber,
+        resolver: ExpressionResolver,
+    ) {
+        if (filters == null) return
+        val callback =  { _: Any -> applyFiltersAndSetBitmap(filters, divView, resolver) }
+
+        for (filter in filters) {
+            when (filter) {
+                is DivFilter.Blur -> {
+                    subscriber.addSubscription(filter.value.radius.observe(resolver, callback))
+                }
+            }
+        }
+    }
+
+    private fun DivImageView.applyFiltersAndSetBitmap(
+        filters: List<DivFilter>?,
+        divView: Div2View,
+        resolver: ExpressionResolver,
+    ) {
+        loadedBitmap?.applyFilters(this, filters, divView.div2Component, resolver) { setImage(it) }
+    }
+
+
     private fun DivImageView.applyImage(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
         val newImageUrl = div.imageUrl.evaluate(resolver)
         if (isImageLoaded && newImageUrl == imageUrl) {
@@ -111,7 +147,8 @@ internal class DivImageBinder @Inject constructor(
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
                     super.onSuccess(cachedBitmap)
                     imageUrl = newImageUrl
-                    setImage(cachedBitmap.bitmap)
+                    loadedBitmap = cachedBitmap.bitmap
+                    applyFiltersAndSetBitmap(div.filters, divView, resolver)
                     applyLoadingFade(div, resolver, cachedBitmap.from)
                     imageLoaded()
                     applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))

@@ -1,6 +1,7 @@
 package com.yandex.div.core.dagger;
 
 import android.content.Context;
+import android.renderscript.RenderScript;
 import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,5 +64,12 @@ abstract class Div2Module {
             @NonNull ViewPoolProfiler.Reporter reporter
     ) {
         return profilingEnabled ? new ViewPoolProfiler(reporter) : null;
+    }
+
+    @Provides
+    @DivScope
+    @NonNull
+    static RenderScript provideRenderScript(@NonNull @Named(Names.CONTEXT) Context context) {
+        return RenderScript.create(context);
     }
 }
