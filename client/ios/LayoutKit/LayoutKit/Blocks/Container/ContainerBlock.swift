@@ -115,8 +115,16 @@ public final class ContainerBlock: BlockWithLayout {
     self.widthTrait = widthTrait
     self.heightTrait = heightTrait
     self.axialAlignment = axialAlignment
-    self.gaps = gaps
-    self.children = children
+    self.gaps = makeGapsWithSeparators(
+      gaps: gaps,
+      separator: separator,
+      layoutMode: layoutMode
+    )
+    self.children = makeChildrenWithSeparators(
+      children: children,
+      separator: separator,
+      layoutMode: layoutMode
+    )
     self.separator = separator
     self.lineSeparator = lineSeparator
     self.contentAnimation = contentAnimation
@@ -403,6 +411,63 @@ public final class ContainerBlock: BlockWithLayout {
     let block = try! modifying(children: newChildren)
 
     return (block, layout)
+  }
+}
+
+private func makeGapsWithSeparators(
+  gaps: [CGFloat],
+  separator: ContainerBlock.Separator?,
+  layoutMode: ContainerBlock.LayoutMode
+) -> [CGFloat] {
+  guard layoutMode == .noWrap, let separator = separator else {
+    return gaps
+  }
+  return Array<CGFloat>.build {
+    for (index, gap) in gaps.enumerated() {
+      switch index {
+      case 0:
+        gap
+        if separator.showAtStart {
+          0
+        }
+      case gaps.count - 1:
+        if separator.showAtEnd {
+          0
+        }
+        gap
+      default:
+        if separator.showBetween {
+          gap/2
+          gap/2
+        } else {
+          gap
+        }
+      }
+    }
+  }
+}
+
+private func makeChildrenWithSeparators(
+  children: [ContainerBlock.Child],
+  separator: ContainerBlock.Separator?,
+  layoutMode: ContainerBlock.LayoutMode
+) -> [ContainerBlock.Child] {
+  guard layoutMode == .noWrap, let separator = separator else {
+    return children
+  }
+  return Array<ContainerBlock.Child>.build {
+    if separator.showAtStart {
+      separator.style
+    }
+    for (index, child) in children.enumerated() {
+      if separator.showBetween && index > 0 {
+        separator.style
+      }
+      child
+    }
+    if separator.showAtEnd {
+      separator.style
+    }
   }
 }
 
