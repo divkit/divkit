@@ -1,3 +1,32 @@
+## 13.0.0
+## JSON Schema:
+* Added `tint_mode` for images in `div-text`
+
+## Android Client:
+* Added circle shape
+* Implemented Nine-patch background
+* Implement separators in wrap container
+* Implemented tint_mode for images in div-text
+* Fixed applying patches in demo app
+* Fixed escaping symbols processing in expressions 
+* Fixed expression result convertion for string properties
+
+## iOS Client:
+* Updated Lottie dependency to 3.5.0
+* Added Lottie prefetching
+* Combined video and images prefetching
+* Supported nested ternary operator
+* Added rendering time in Playground
+* Fixed pager state change behavior
+* Fixed Lottie animation strarting
+* Fixed escaping symbols processing in expressions
+* Fixed animations for div-text
+
+## Web Client:
+* Added `circle` shape support
+* Supported `no_animation` and `native` values for the `action_anmation`
+* Supported `tint_mode`
+
 ## 12.0.0
 ## JSON Schema:
 * Added Nine-patch background

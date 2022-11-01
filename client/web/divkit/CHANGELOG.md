@@ -1,3 +1,10 @@
+## 13.0.0 (October 30, 2022)
+
+Additions:
+* Added `circle` shape support
+* Supported `no_animation` and `native` values for the `action_anmation`
+* Supported `tint_mode`
+
 ## 12.0.0 (October 18, 2022)
 
 Additions:
