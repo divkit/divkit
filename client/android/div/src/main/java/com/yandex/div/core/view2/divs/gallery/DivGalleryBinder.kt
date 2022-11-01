@@ -31,7 +31,7 @@ import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
-import com.yandex.div.core.widget.ViewWrapper
+import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.dpToPx
 import com.yandex.div.view.OnInterceptTouchEventListenerHost
@@ -318,7 +318,7 @@ internal class DivGalleryBinder @Inject constructor(
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
-            val view = ViewWrapper(div2View.context)
+            val view = DivViewWrapper(div2View.context)
             return GalleryViewHolder(view, divBinder, viewCreator)
         }
 
@@ -346,7 +346,7 @@ internal class DivGalleryBinder @Inject constructor(
     }
 
     internal class GalleryViewHolder(
-        val rootView: ViewWrapper,
+        val rootView: DivViewWrapper,
         private val divBinder: DivBinder,
         private val viewCreator: DivViewCreator
     ) : RecyclerView.ViewHolder(rootView) {

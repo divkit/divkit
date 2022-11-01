@@ -5,18 +5,22 @@ import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
+import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
+import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
+import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivBorder
 
 /**
  * ViewGroup that mimics its child view dimensions.
  * NOTE: there is a limited support of [LayoutParams] forwarding, so to reduce unwanted effects follow next steps:
- * - first, add [ViewWrapper] to view hierarchy
+ * - first, add [DivViewWrapper] to view hierarchy
  * - next, add child view to it.
  */
-internal class ViewWrapper @JvmOverloads constructor(
+internal class DivViewWrapper @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ViewGroup(context, attrs, defStyleAttr) {
+) : ViewGroup(context, attrs, defStyleAttr), DivBorderSupports {
 
     val child: View?
         get() = if (childCount == 0) null else getChildAt(0)
@@ -79,6 +83,15 @@ internal class ViewWrapper @JvmOverloads constructor(
         constructor(source: LayoutParams) : super(source)
 
         constructor(source: MarginLayoutParams) : super(source)
+    }
+
+    override val border: DivBorder?
+        get() = (child as? DivBorderSupports)?.border
+
+    override fun getDivBorderDrawer(): DivBorderDrawer? = (child as? DivBorderSupports)?.getDivBorderDrawer()
+
+    override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
+        (child as? DivBorderSupports)?.setBorder(border, resolver)
     }
 }
 
