@@ -47,6 +47,7 @@
                 <data android:host="divkit.tech" android:pathPrefix="/playground/api" />
                 <data android:host="divview.yandex-team.ru" android:pathPrefix="/api" />
                 <data android:host="divview-test.in.yandex.net" android:pathPrefix="/api" />
+                <data android:host="divview.in.yandex.net" android:pathPrefix="/api" />
             </intent-filter>
         </activity>
 
