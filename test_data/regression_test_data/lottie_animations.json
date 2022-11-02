@@ -158,7 +158,7 @@
               "image_id": "DivGif 5",
               "lottie_image_text": "DivGif 5",
               "lottie_params": {
-                "lottie_url": "res://love",
+                "lottie_url": "https://yastatic.net/s3/home/yandex-app/div_test_data/love_anim.json",
                 "repeat_count": -1,
                 "repeat_mode": "reverse"
               }
@@ -168,7 +168,7 @@
               "image_id": "DivGif 6",
               "lottie_image_text": "DivGif 6",
               "lottie_params": {
-                "lottie_url": "res://none"
+                "lottie_url": "empty://"
               }
             },
             {
@@ -176,7 +176,7 @@
               "image_id": "DivGif 7",
               "lottie_image_text": "DivGif 7",
               "lottie_params": {
-                "lottie_url": "asset://banana",
+                "lottie_url": "https://yastatic.net/s3/home/yandex-app/div_test_data/banana.json",
                 "repeat_count": -1,
                 "repeat_mode": "reverse"
               }
@@ -186,7 +186,9 @@
               "image_id": "DivGif 8",
               "lottie_image_text": "DivGif 8",
               "lottie_params": {
-                "lottie_url": "asset://none"
+                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif28.json",
+                "repeat_count": -1,
+                "repeat_mode": "restart"
               }
             },
             {
@@ -380,14 +382,8 @@
               }
             },
             {
-              "type": "lottie_gif_card",
-              "image_id": "DivGif 28",
-              "lottie_image_text": "DivGif 28",
-              "lottie_params": {
-                "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif28.json",
-                "repeat_count": -1,
-                "repeat_mode": "restart"
-              }
+              "type": "separator",
+              "alpha": 0
             }
           ]
         }

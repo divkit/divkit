@@ -746,10 +746,6 @@
       "file": "animations/transition/inner_state_transition_data_change.json"
     },
     {
-      "title": "Inner state transition data change",
-      "file": "animations/transition/inner_state_transition_data_change.json"
-    },
-    {
       "title": "Lottie animation (repeat_mode=restart, repeat_count=5)",
       "platforms": [
         "android",
