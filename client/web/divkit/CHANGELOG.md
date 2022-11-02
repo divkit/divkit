@@ -1,3 +1,13 @@
+## 14.0.0 (November 1, 2022)
+
+Additions:
+* Added `setTheme` instance method
+* `filters` (only `blur` is supported so far) implemented for the `image` and image background
+
+Fixed:
+* `Enter` handling in multiline input
+
+
 ## 13.0.0 (October 30, 2022)
 
 Additions:

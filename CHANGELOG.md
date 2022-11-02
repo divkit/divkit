@@ -1,3 +1,40 @@
+## 14.0.0
+# JSON Schema:
+* Added `div-blur` and `div-blur-background`
+* Added `baseline_alignment` to `div-container`
+
+# Android Client:
+* Added blur implementation
+* Added extensions unbind for DivCustom
+* Added static method for version name
+* Added hyphenation support for DivText with custom ellipsis
+* Fixed DivCustom behaviour in regression tests
+* Fixed overlap DivContainer children size measure
+* Fixed applying paths in Playground
+* Fixed missing ellipses
+* Open url if DemoActivity opened from intent
+
+# iOS Client:
+* Added image blur implementation
+* Added separators support in DivContainer
+* Fixed DivPager last page layout
+* Fixed overlap DivContainer children size measure
+* Fixed memory leak in PinchToZoomExtensionHandler
+* Fixed screen capture for web preview
+
+# Web Client:
+
+Additions:
+* Added `setTheme` instance method
+* `filters` (only `blur` is supported so far) implemented for the `image` and image background
+
+Fixed:
+* `Enter` handling in multiline input
+
+# TypeScript JSON Builder:
+* Synchronized version number with DivKit version
+
+
 ## 13.0.0
 ## JSON Schema:
 * Added `tint_mode` for images in `div-text`
