@@ -124,6 +124,13 @@
                 target: root,
                 json,
                 platform: 'touch',
+                onStat(arg) {
+                    if (!Array.isArray(window.divkitLogs)) {
+                        window.divkitLogs = [];
+                    }
+
+                    window.divkitLogs.push(arg);
+                },
                 onError(err) {
                     if (err && err.error && err.error.level === 'warn') {
                         return;
