@@ -27,6 +27,12 @@ class EntityWithArrayOfEnums(
         return json
     }
 
+    fun copyWithNewArray(
+        items: List<EntityWithArrayOfEnums.Item>,
+    ) = EntityWithArrayOfEnums(
+        items,
+    )
+
     companion object {
         const val TYPE = "entity_with_array_of_enums"
 

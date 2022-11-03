@@ -233,6 +233,55 @@ class KotlinEntity(Entity):
                 result += EMPTY
         return result
 
+    @property
+    def copy_with_new_array_declaration(self) -> Optional[Text]:
+        if not self.__contains_array_of_objects:
+            return None
+
+        result = EMPTY
+        result += '    fun copyWithNewArray('
+
+        method_params: List[str] = []
+        constructor_params: List[str] = []
+
+        def append_arg(name: str):
+            constructor_params.append(f'        {name},')
+
+        for p in sorted(filter(lambda prop: not isinstance(prop.property_type, StaticString),
+                               self.properties), key=lambda prop: prop.name):
+            property_name = utils.lower_camel_case(p.name)
+            if p.optional:
+                append_arg(property_name)
+                continue
+
+            if not isinstance(p.property_type, Array):
+                append_arg(property_name)
+                continue
+
+            if not isinstance(p.property_type.property_type, Object):
+                append_arg(property_name)
+                continue
+
+            item = p.property_type.property_type.object
+            item_class = utils.capitalize_camel_case(item.prefixed_declaration)
+            method_params.append(f'        {property_name}: List<{item_class}>,')
+            constructor_params.append(f'        {property_name},')
+
+        result += '\n'.join(method_params)
+        result += f'    ) = {utils.capitalize_camel_case(self.name)}('
+        result += '\n'.join(constructor_params)
+        result += '    )'
+        return result
+
+    @property
+    def __contains_array_of_objects(self) -> bool:
+        for p in self.properties:
+            if not p.optional and \
+                    isinstance(p.property_type, Array) and \
+                    isinstance(p.property_type.property_type, Object):
+                return True
+        return False
+
 
 class KotlinProperty(Property):
     @property

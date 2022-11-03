@@ -27,6 +27,12 @@ class EntityWithStrictArray(
         return json
     }
 
+    fun copyWithNewArray(
+        array: List<Entity>,
+    ) = EntityWithStrictArray(
+        array,
+    )
+
     companion object {
         const val TYPE = "entity_with_strict_array"
 

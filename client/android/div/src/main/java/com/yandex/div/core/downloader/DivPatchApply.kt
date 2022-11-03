@@ -63,205 +63,25 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
         return listOf(this)
     }
 
-    private fun applyPatch(div: DivContainer, resolver: ExpressionResolver): Div.Container {
-        return Div.Container(
-            DivContainer(
-                div.accessibility,
-                div.action,
-                div.actionAnimation,
-                div.actions,
-                div.alignmentHorizontal,
-                div.alignmentVertical,
-                div.alpha,
-                div.background,
-                div.border,
-                div.columnSpan,
-                div.contentAlignmentHorizontal,
-                div.contentAlignmentVertical,
-                div.doubletapActions,
-                div.extensions,
-                div.focus,
-                div.height,
-                div.id,
-                applyPatchForListOfDivs(div.items, resolver),
-                div.layoutMode,
-                div.lineSeparator,
-                div.longtapActions,
-                div.margins,
-                div.orientation,
-                div.paddings,
-                div.rowSpan,
-                div.selectedActions,
-                div.separator,
-                div.tooltips,
-                div.transform,
-                div.transitionChange,
-                div.transitionIn,
-                div.transitionOut,
-                div.transitionTriggers,
-                div.visibility,
-                div.visibilityAction,
-                div.visibilityActions,
-                div.width
-            )
-        )
-    }
+    private fun applyPatch(div: DivContainer, resolver: ExpressionResolver) = Div.Container(
+        div.copyWithNewArray(applyPatchForListOfDivs(div.items, resolver))
+    )
 
-    private fun applyPatch(div: DivGrid, resolver: ExpressionResolver): Div.Grid {
-        return Div.Grid(
-            DivGrid(
-                div.accessibility,
-                div.action,
-                div.actionAnimation,
-                div.actions,
-                div.alignmentHorizontal,
-                div.alignmentVertical,
-                div.alpha,
-                div.background,
-                div.border,
-                div.columnCount,
-                div.columnSpan,
-                div.contentAlignmentHorizontal,
-                div.contentAlignmentVertical,
-                div.doubletapActions,
-                div.extensions,
-                div.focus,
-                div.height,
-                div.id,
-                applyPatchForListOfDivs(div.items, resolver),
-                div.longtapActions,
-                div.margins,
-                div.paddings,
-                div.rowSpan,
-                div.selectedActions,
-                div.tooltips,
-                div.transform,
-                div.transitionChange,
-                div.transitionIn,
-                div.transitionOut,
-                div.transitionTriggers,
-                div.visibility,
-                div.visibilityAction,
-                div.visibilityActions,
-                div.width
-            )
-        )
-    }
+    private fun applyPatch(div: DivGrid, resolver: ExpressionResolver): Div.Grid  = Div.Grid(
+        div.copyWithNewArray(applyPatchForListOfDivs(div.items, resolver))
+    )
 
-    private fun applyPatch(div: DivGallery, resolver: ExpressionResolver): Div.Gallery {
-        return Div.Gallery(
-            DivGallery(
-                div.accessibility,
-                div.alignmentHorizontal,
-                div.alignmentVertical,
-                div.alpha,
-                div.background,
-                div.border,
-                div.columnCount,
-                div.columnSpan,
-                div.crossContentAlignment,
-                div.crossSpacing,
-                div.defaultItem,
-                div.extensions,
-                div.focus,
-                div.height,
-                div.id,
-                div.itemSpacing,
-                applyPatchForListOfDivs(div.items, resolver),
-                div.margins,
-                div.orientation,
-                div.paddings,
-                div.restrictParentScroll,
-                div.rowSpan,
-                div.scrollMode,
-                div.selectedActions,
-                div.tooltips,
-                div.transform,
-                div.transitionChange,
-                div.transitionIn,
-                div.transitionOut,
-                div.transitionTriggers,
-                div.visibility,
-                div.visibilityAction,
-                div.visibilityActions,
-                div.width
-            )
-        )
-    }
+    private fun applyPatch(div: DivGallery, resolver: ExpressionResolver) = Div.Gallery(
+        div.copyWithNewArray(applyPatchForListOfDivs(div.items, resolver))
+    )
 
-    private fun applyPatch(div: DivPager, resolver: ExpressionResolver): Div.Pager {
-        return Div.Pager(
-            DivPager(
-                div.accessibility,
-                div.alignmentHorizontal,
-                div.alignmentVertical,
-                div.alpha,
-                div.background,
-                div.border,
-                div.columnSpan,
-                div.defaultItem,
-                div.extensions,
-                div.focus,
-                div.height,
-                div.id,
-                div.itemSpacing,
-                applyPatchForListOfDivs(div.items, resolver),
-                div.layoutMode,
-                div.margins,
-                div.orientation,
-                div.paddings,
-                div.restrictParentScroll,
-                div.rowSpan,
-                div.selectedActions,
-                div.tooltips,
-                div.transform,
-                div.transitionChange,
-                div.transitionIn,
-                div.transitionOut,
-                div.transitionTriggers,
-                div.visibility,
-                div.visibilityAction,
-                div.visibilityActions,
-                div.width
-            )
-        )
-    }
+    private fun applyPatch(div: DivPager, resolver: ExpressionResolver) = Div.Pager(
+        div.copyWithNewArray(applyPatchForListOfDivs(div.items, resolver))
+    )
 
-    private fun applyPatch(div: DivState, resolver: ExpressionResolver): Div.State {
-        return Div.State(
-            DivState(
-                div.accessibility,
-                div.alignmentHorizontal,
-                div.alignmentVertical,
-                div.alpha,
-                div.background,
-                div.border,
-                div.columnSpan,
-                div.defaultStateId,
-                div.divId,
-                div.extensions,
-                div.focus,
-                div.height,
-                div.id,
-                div.margins,
-                div.paddings,
-                div.rowSpan,
-                div.selectedActions,
-                applyPatchForListStates(div.states, resolver),
-                div.tooltips,
-                div.transform,
-                div.transitionAnimationSelector,
-                div.transitionChange,
-                div.transitionIn,
-                div.transitionOut,
-                div.transitionTriggers,
-                div.visibility,
-                div.visibilityAction,
-                div.visibilityActions,
-                div.width
-            )
-        )
-    }
+    private fun applyPatch(div: DivState, resolver: ExpressionResolver) = Div.State(
+        div.copyWithNewArray(applyPatchForListStates(div.states, resolver))
+    )
 
     private fun applyPatchForListStates(states: List<DivState.State>,
                                         resolver: ExpressionResolver): List<DivState.State> {
@@ -323,44 +143,7 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
             }
         }
         return Div.Tabs(
-            DivTabs(
-                div.accessibility,
-                div.alignmentHorizontal,
-                div.alignmentVertical,
-                div.alpha,
-                div.background,
-                div.border,
-                div.columnSpan,
-                div.dynamicHeight,
-                div.extensions,
-                div.focus,
-                div.hasSeparator,
-                div.height,
-                div.id,
-                newTabItems,
-                div.margins,
-                div.paddings,
-                div.restrictParentScroll,
-                div.rowSpan,
-                div.selectedActions,
-                div.selectedTab,
-                div.separatorColor,
-                div.separatorPaddings,
-                div.switchTabsByContentSwipeEnabled,
-                div.tabTitleStyle,
-                div.titlePaddings,
-                div.tooltips,
-                div.transform,
-                div.transitionChange,
-                div.transitionIn,
-                div.transitionOut,
-                div.transitionTriggers,
-                div.visibility,
-                div.visibilityAction,
-                div.visibilityActions,
-                div.width
-            )
+            div.copyWithNewArray(newTabItems)
         )
     }
-
 }

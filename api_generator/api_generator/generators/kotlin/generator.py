@@ -65,6 +65,11 @@ class KotlinGenerator(Generator):
             result += EMPTY
             result += self.__manual_equals_hash_code_declaration.indented(indent_width=4)
 
+        if not is_template:
+            patch = entity.copy_with_new_array_declaration
+            if patch:
+                result += patch
+
         static_declarations = entity.static_declarations
         if static_declarations.lines:
             result += EMPTY

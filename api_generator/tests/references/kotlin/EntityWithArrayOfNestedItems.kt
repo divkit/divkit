@@ -27,6 +27,12 @@ class EntityWithArrayOfNestedItems(
         return json
     }
 
+    fun copyWithNewArray(
+        items: List<EntityWithArrayOfNestedItems.Item>,
+    ) = EntityWithArrayOfNestedItems(
+        items,
+    )
+
     companion object {
         const val TYPE = "entity_with_array_of_nested_items"
 

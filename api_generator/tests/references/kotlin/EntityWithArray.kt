@@ -27,6 +27,12 @@ class EntityWithArray(
         return json
     }
 
+    fun copyWithNewArray(
+        array: List<Entity>,
+    ) = EntityWithArray(
+        array,
+    )
+
     companion object {
         const val TYPE = "entity_with_array"
 
