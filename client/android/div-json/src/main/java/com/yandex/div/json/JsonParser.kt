@@ -360,7 +360,16 @@ fun <T : Any, R> JSONObject.writeExpressionsList(
                 return
             }
 
-            put(key, JSONArray(rawExpressions.map { it.rawValue }))
+            put(key, JSONArray(
+                rawExpressions.map { expression ->
+                    when (expression) {
+                        is Expression.ConstantExpression<T> ->
+                            return@map converter(expression.evaluate(ExpressionResolver.EMPTY))
+                        else ->
+                            return@map expression.rawValue
+                    }
+                }
+            ))
         }
         is ConstantExpressionsList -> {
             put(key, JSONArray(value.evaluate(ExpressionResolver.EMPTY).map { converter(it) }))
