@@ -58,11 +58,9 @@ extension DivContainer: DivBlockModeling {
       switch orientation {
       case .vertical:
         if items.hasHorizontallyMatchParent {
-          context.warningsStorage.add(
-            DivBlockModelingWarning(
-              "Vertical DivContainer with wrap layout mode contains item with match_parent width",
-              path: context.parentPath
-            )
+          context.addError(
+            level: .warning,
+            message: "Vertical DivContainer with wrap layout mode contains item with match_parent width"
           )
           return defaultFallbackSize
         }
@@ -75,21 +73,17 @@ extension DivContainer: DivBlockModeling {
       switch orientation {
       case .horizontal:
         if items.hasHorizontallyMatchParent {
-          context.warningsStorage.add(
-            DivBlockModelingWarning(
-              "Horizontal DivContainer with wrap_content width contains item with match_parent width",
-              path: context.parentPath
-            )
+          context.addError(
+            level: .warning,
+            message: "Horizontal DivContainer with wrap_content width contains item with match_parent width"
           )
           return defaultFallbackSize
         }
       case .vertical, .overlap:
         if items.allHorizontallyMatchParent {
-          context.warningsStorage.add(
-            DivBlockModelingWarning(
-              "All items in DivContainer with wrap_content width has match_parent width",
-              path: context.parentPath
-            )
+          context.addError(
+            level: .warning,
+            message: "All items in DivContainer with wrap_content width has match_parent width"
           )
           return defaultFallbackSize
         }
@@ -108,11 +102,9 @@ extension DivContainer: DivBlockModeling {
       switch orientation {
       case .horizontal:
         if items.hasVerticallyMatchParent {
-          context.warningsStorage.add(
-            DivBlockModelingWarning(
-              "Horizontal DivContainer with wrap layout mode contains item with match_parent height",
-              path: context.parentPath
-            )
+          context.addError(
+            level: .warning,
+            message: "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
           )
           return defaultFallbackSize
         }
@@ -125,21 +117,17 @@ extension DivContainer: DivBlockModeling {
       switch orientation {
       case .horizontal, .overlap:
         if items.allVerticallyMatchParent {
-          context.warningsStorage.add(
-            DivBlockModelingWarning(
-              "All items in DivContainer with wrap_content height has match_parent height",
-              path: context.parentPath
-            )
+          context.addError(
+            level: .warning,
+            message: "All items in DivContainer with wrap_content height has match_parent height"
           )
           return defaultFallbackSize
         }
       case .vertical:
         if items.hasVerticallyMatchParent {
-          context.warningsStorage.add(
-            DivBlockModelingWarning(
-              "Vertical DivContainer with wrap_content height contains item with match_parent height",
-              path: context.parentPath
-            )
+          context.addError(
+            level: .warning,
+            message: "Vertical DivContainer with wrap_content height contains item with match_parent height"
           )
           return defaultFallbackSize
         }

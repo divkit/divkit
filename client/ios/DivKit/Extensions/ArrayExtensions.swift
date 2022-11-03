@@ -18,7 +18,7 @@ extension Array where Element == Div {
       do {
         block = try div.value.makeBlock(context: itemContext)
       } catch {
-        DivKitLogger.error("Failed to create block: \(error)")
+        context.addError(level: .error, message: "Failed to create block: \(error)")
         return nil
       }
       return try modificator(div, block)

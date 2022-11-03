@@ -8,7 +8,7 @@ extension DivData: DivBlockModeling {
 
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
     let stateManager = context.stateManager
-    guard let state = getCurrentState(stateManager: stateManager) else {
+    guard let state = getCurrentState(stateManager: stateManager, context: context) else {
       throw DivBlockModelingError("DivData has no states", path: context.parentPath)
     }
 
@@ -39,12 +39,15 @@ extension DivData: DivBlockModeling {
       )
       .addingDebugInfo(
         debugParams: divContext.debugParams,
-        errors: divContext.expressionErrorsStorage.underlyingArray,
+        errors: divContext.errors,
         parentPath: divContext.parentPath
       )
   }
 
-  private func getCurrentState(stateManager: DivStateManager) -> DivData.State? {
+  private func getCurrentState(
+    stateManager: DivStateManager,
+    context: DivBlockModelingContext
+  ) -> DivData.State? {
     guard let item = stateManager.get(stateBlockPath: DivData.rootPath) else {
       return states.first
     }
@@ -54,7 +57,7 @@ extension DivData: DivBlockModeling {
       return state
     }
 
-    DivKitLogger.error("DivData.State not found: \(stateId)")
+    context.addError(level: .error, message: "DivData.State not found: \(stateId)")
     return states.first
   }
 }

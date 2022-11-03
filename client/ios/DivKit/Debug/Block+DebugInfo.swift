@@ -8,7 +8,7 @@ import LayoutKit
 extension Block {
   func addingDebugInfo(
     debugParams: DebugParams,
-    errors: [ExpressionError],
+    errors: [DivError],
     parentPath: UIElementPath
   ) -> Block {
     guard debugParams.isDebugInfoEnabled else {

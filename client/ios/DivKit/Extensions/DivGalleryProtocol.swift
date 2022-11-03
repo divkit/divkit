@@ -105,11 +105,9 @@ extension DivGalleryProtocol {
       switch direction {
       case .vertical:
         if items.allHorizontallyMatchParent {
-          context.warningsStorage.add(
-            DivBlockModelingWarning(
-              "All items in vertical \(typeName) with wrap_content width has match_parent width",
-              path: context.parentPath
-            )
+          context.addError(
+            level: .warning,
+            message: "All items in vertical \(typeName) with wrap_content width has match_parent width"
           )
           return defaultFallbackSize
         }
@@ -129,11 +127,9 @@ extension DivGalleryProtocol {
       switch direction {
       case .horizontal:
         if items.allVerticallyMatchParent {
-          context.warningsStorage.add(
-            DivBlockModelingWarning(
-              "All items in horizontal \(typeName) with wrap_content height has match_parent height",
-              path: context.parentPath
-            )
+          context.addError(
+            level: .warning,
+            message: "All items in horizontal \(typeName) with wrap_content height has match_parent height"
           )
           return defaultFallbackSize
         }

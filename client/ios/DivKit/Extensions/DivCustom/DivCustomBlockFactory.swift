@@ -8,11 +8,9 @@ public struct EmptyDivCustomBlockFactory: DivCustomBlockFactory {
   public init() {}
 
   public func makeBlock(data: DivCustomData, context: DivBlockModelingContext) -> Block {
-    context.warningsStorage.add(
-      DivBlockModelingWarning(
-        "No block factory for DivCustom: \(data.name)",
-        path: context.parentPath
-      )
+    context.addError(
+      level: .error,
+      message: "No block factory for DivCustom: \(data.name)"
     )
     return EmptyBlock.zeroSized
   }

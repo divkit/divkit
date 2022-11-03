@@ -44,7 +44,7 @@ extension DivShapeDrawable {
           backgroundColor: resolveColor(context.expressionResolver)
         )
     case .divCircleShape(_):
-      DivKitLogger.error("unsupported block")
+      context.addError(level: .error, message: "unsupported block")
       return EmptyBlock()
     }
   }
@@ -54,7 +54,7 @@ extension DivShapeDrawable {
     case let .divRoundedRectangleShape(rectangle):
       return CGFloat(rectangle.itemWidth.resolveValue(context.expressionResolver) ?? 0)
     case .divCircleShape(_):
-      DivKitLogger.error("unsuppoted circle shape")
+      context.addError(level: .error, message: "unsupported circle shape")
       return 0
     }
   }
@@ -67,7 +67,7 @@ extension DivShapeDrawable {
         (rectangle.itemHeight.resolveValue(context.expressionResolver) ?? 0) + stroke
       )
     case .divCircleShape(_):
-      DivKitLogger.error("unsuppoted circle shape")
+      context.addError(level: .error, message: "unsupported circle shape")
       return 0
     }
   }

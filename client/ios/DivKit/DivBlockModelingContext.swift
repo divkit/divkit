@@ -25,13 +25,12 @@ public struct DivBlockModelingContext {
   public let debugParams: DebugParams
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
-  let expressionErrorsStorage = Storage<ExpressionError>()
-  let warningsStorage = Storage<DivBlockModelingWarning>()
   var overridenWidth: DivOverridenSize? = nil
   var overridenHeight: DivOverridenSize? = nil
+  private let errorsStorage = DivErrorsStorage()
 
-  public var warnings: [DivBlockModelingWarning] {
-    warningsStorage.underlyingArray
+  public var errors: [DivError] {
+    errorsStorage.underlyingArray
   }
 
   public init(
@@ -75,8 +74,8 @@ public struct DivBlockModelingContext {
     if debugParams.isDebugInfoEnabled {
       self.expressionResolver = ExpressionResolver(
         variables: variables,
-        errorTracker: { [weak expressionErrorsStorage] error in
-          expressionErrorsStorage?.add(error)
+        errorTracker: { [weak errorsStorage] error in
+          errorsStorage?.add(error)
         }
       )
     } else {
@@ -114,9 +113,7 @@ public struct DivBlockModelingContext {
       let id = $0.id
       let handler = extensionHandlers[id]
       if handler == nil {
-        warningsStorage.add(
-          DivBlockModelingWarning("No DivExtensionHandler for: \(id)", path: parentPath)
-        )
+        addError(level: .warning, message: "No DivExtensionHandler for: \(id)")
       }
       return handler
     }
@@ -124,6 +121,17 @@ public struct DivBlockModelingContext {
 
   public func getStateInterceptor(for divState: DivState) -> DivStateInterceptor? {
     divState.extensions?.compactMap { stateInterceptors[$0.id] }.first
+  }
+
+  public func addError(level: DivErrorLevel, message: String) {
+    let error: DivError
+    switch level {
+    case .warning:
+      error = DivBlockModelingError(message, path: parentPath)
+    case .error:
+      error = DivBlockModelingWarning(message, path: parentPath)
+    }
+    errorsStorage.add(error)
   }
 
   func override(width: DivSize) -> DivSize {
@@ -147,10 +155,17 @@ public struct DivBlockModelingContext {
   }
 }
 
-final class Storage<T> {
-  private(set) var underlyingArray: [T] = []
+public typealias DivError = CustomStringConvertible
 
-  func add(_ element: T) {
-    underlyingArray.append(element)
+public enum DivErrorLevel {
+  case warning
+  case error
+}
+
+private final class DivErrorsStorage {
+  private(set) var underlyingArray: [DivError] = []
+
+  func add(_ error: DivError) {
+    underlyingArray.append(error)
   }
 }

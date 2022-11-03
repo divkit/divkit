@@ -13,10 +13,13 @@ public final class PinchToZoomExtensionHandler: DivExtensionHandler {
   public func applyAfterBaseProperties(
     to block: Block,
     div _: DivBase,
-    context _: DivBlockModelingContext
+    context: DivBlockModelingContext
   ) -> Block {
     guard let overlayView = overlayView else {
-      DivKitLogger.error("PinchToZoomExtensionHandler.overlayView is nil")
+      context.addError(
+        level: .error,
+        message: "PinchToZoomExtensionHandler.overlayView is nil"
+      )
       return EmptyBlock()
     }
     
