@@ -1,0 +1,10 @@
+.container-separator {}
+
+.container-separator__item {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container-separator__shape {}

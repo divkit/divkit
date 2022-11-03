@@ -11,6 +11,7 @@
     import type { Visibility } from '../../types/base';
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
+    import type { EdgeInsets } from '../../types/edgeInserts';
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
@@ -32,6 +33,9 @@
     import { correctCSSInterpolator } from '../../utils/correctCSSInterpolator';
     import { correctNumber } from '../../utils/correctNumber';
     import { flattenAnimation } from '../../utils/flattenAnimation';
+    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
+    import { sumEdgeInsets } from '../../utils/sumEdgeInsets';
 
     export let json: Partial<DivBaseData & DivActionableData> = {};
     export let origJson: DivBase | undefined = undefined;
@@ -44,6 +48,7 @@
     export let customActions = '';
     export let forceWidth = false;
     export let forceHeight = false;
+    export let additionalPaddings: EdgeInsets | null = null;
 
     const HORIZONTAL_ALIGN_TO_GENERAL = {
         left: 'start',
@@ -108,10 +113,12 @@
     }
 
     $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
-    let padding = '';
+    let selfPadding: EdgeInsets | null = null;
     $: {
-        padding = correctEdgeInserts(($jsonPaddings && !customPaddings) ? $jsonPaddings : undefined, padding);
+        selfPadding = correctEdgeInsertsObject(($jsonPaddings && !customPaddings) ? $jsonPaddings : undefined, selfPadding);
     }
+
+    $: padding = edgeInsertsToCss(sumEdgeInsets(selfPadding, additionalPaddings));
 
     $: jsonMargins = rootCtx.getDerivedFromVars(json.margins);
     let margin = '';

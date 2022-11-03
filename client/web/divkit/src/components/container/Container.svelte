@@ -8,15 +8,20 @@
     import type { DivBase, TemplateContext } from '../../../typings/common';
     import type { DivBaseData } from '../../types/base';
     import type { AlignmentHorizontal, AlignmentVertical } from '../../types/alignment';
+    import type { SeparatorStyle } from '../../utils/container';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
-    import Outer from '../utilities/Outer.svelte';
-    import Unknown from '../utilities/Unknown.svelte';
     import { wrapError } from '../../utils/wrapError';
     import { genClassName } from '../../utils/genClassName';
     import { correctContainerOrientation } from '../../utils/correctContainerOrientation';
     import { correctAlignmentVertical } from '../../utils/correctAlignmentVertical';
     import { correctAlignmentHorizontal } from '../../utils/correctAlignmentHorizontal';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
+    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { calcAdditionalPaddings, calcItemsGap } from '../../utils/container';
+    import ContainerSeparators from './ContainerSeparators.svelte';
+    import Unknown from '../utilities/Unknown.svelte';
+    import Outer from '../utilities/Outer.svelte';
+    import { hasGapSupport } from '../../utils/hasGapSupport';
 
     export let json: Partial<DivContainerData> = {};
     export let templateContext: TemplateContext;
@@ -34,6 +39,8 @@
         center: 'center',
         bottom: 'end'
     } as const;
+
+    const AVAIL_SEPARATOR_SHAPES = ['rounded_rectangle', 'circle'];
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
@@ -84,6 +91,60 @@
 
     $: jsonLayoutMode = rootCtx.getDerivedFromVars(json.layout_mode);
     $: wrap = $jsonLayoutMode === 'wrap';
+
+    $: jsonSeparator = rootCtx.getDerivedFromVars(json.separator);
+    let separator: SeparatorStyle | null = null;
+    $: {
+        if ($jsonSeparator?.style && orientation !== 'overlap' && hasGapSupport()) {
+            const style = correctDrawableStyle<DrawableStyle | null>(
+                $jsonSeparator.style,
+                AVAIL_SEPARATOR_SHAPES,
+                separator?.style || null
+            );
+
+            if (style) {
+                separator = {
+                    show_at_start: Boolean($jsonSeparator.show_at_start ?? false),
+                    show_at_end: Boolean($jsonSeparator.show_at_end ?? false),
+                    show_between: Boolean($jsonSeparator.show_between ?? true),
+                    style
+                };
+            } else {
+                separator = null;
+            }
+        } else {
+            separator = null;
+        }
+    }
+
+    $: jsonLineSeparator = rootCtx.getDerivedFromVars(json.line_separator);
+    let lineSeparator: SeparatorStyle | null = null;
+    $: {
+        if ($jsonLineSeparator?.style && orientation !== 'overlap' && hasGapSupport()) {
+            const style = correctDrawableStyle<DrawableStyle | null>(
+                $jsonLineSeparator.style,
+                AVAIL_SEPARATOR_SHAPES,
+                lineSeparator?.style || null
+            );
+
+            if (style) {
+                lineSeparator = {
+                    show_at_start: Boolean($jsonLineSeparator.show_at_start ?? false),
+                    show_at_end: Boolean($jsonLineSeparator.show_at_end ?? false),
+                    show_between: Boolean($jsonLineSeparator.show_between ?? true),
+                    style
+                };
+            } else {
+                lineSeparator = null;
+            }
+        } else {
+            lineSeparator = null;
+        }
+    }
+
+    $: additionalPaddings = (separator || lineSeparator) ?
+        calcAdditionalPaddings(orientation, separator, lineSeparator) :
+        null;
 
     $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
     $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
@@ -136,18 +197,34 @@
         halign: contentHAlign,
         wrap
     };
+
+    $: style = {
+        gap: (separator || lineSeparator) ?
+            calcItemsGap(orientation, separator, lineSeparator) :
+            undefined
+    };
 </script>
 
 {#if !hasItemsError}
     <Outer
         cls={genClassName('container', css, mods)}
+        {style}
         {json}
         {origJson}
         {templateContext}
         {layoutParams}
+        {additionalPaddings}
     >
         {#each items as item}
             <Unknown layoutParams={childLayoutParams} div={item.json} templateContext={item.templateContext} origJson={item.origJson} />
         {/each}
+
+        {#if separator || lineSeparator}
+            <ContainerSeparators
+                {separator}
+                {lineSeparator}
+                {orientation}
+            />
+        {/if}
     </Outer>
 {/if}

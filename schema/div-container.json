@@ -73,18 +73,15 @@
             "wrap"
           ],
           "default_value": "no_wrap",
-          "$description": "translations.json#/div_container_layout_mode",
-          "platforms": []
+          "$description": "translations.json#/div_container_layout_mode"
         },
         "separator": {
           "$ref": "#/definitions/separator",
-          "$description": "translations.json#/div_container_separator",
-          "platforms": []
+          "$description": "translations.json#/div_container_separator"
         },
         "line_separator": {
           "$ref": "#/definitions/separator",
-          "$description": "translations.json#/div_container_line_separator",
-          "platforms": []
+          "$description": "translations.json#/div_container_line_separator"
         },
         "items": {
           "type": "array",

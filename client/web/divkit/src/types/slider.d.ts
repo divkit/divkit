@@ -1,16 +1,8 @@
 import type { Accessibility, DivBaseData } from './base';
 import type { DivActionableData } from './actionable';
 import type { Dimension } from './sizes';
-import type { Stroke } from './border';
 import type { FontWeight } from './text';
-import type { Shape } from './shape';
-
-export interface Drawable {
-    type: 'shape_drawable';
-    shape: Shape;
-    color: string;
-    stroke?: Stroke;
-}
+import type { Drawable } from './drawable';
 
 export interface Point {
     x: Dimension;

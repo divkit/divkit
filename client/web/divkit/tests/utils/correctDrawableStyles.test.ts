@@ -72,6 +72,27 @@ describe('correctDrawableStyle', () => {
                     type: 'fixed',
                     value: 100
                 },
+                corner_radius: {
+                    type: 'fixed',
+                    value: 0
+                }
+            }
+        }, types, defaultVal)).toEqual({
+            width: 100,
+            height: 10,
+            borderRadius: 0,
+            background: '#ffcc00'
+        });
+
+        expect(correctDrawableStyle({
+            type: 'shape_drawable',
+            color: '#fc0',
+            shape: {
+                type: 'rounded_rectangle',
+                item_width: {
+                    type: 'fixed',
+                    value: 100
+                },
                 item_height: {
                     type: 'fixed',
                     value: 200
@@ -116,6 +137,35 @@ describe('correctDrawableStyle', () => {
             borderRadius: 10,
             background: '#ffcc00',
             boxShadow: 'inset 0 0 0 1em #ff0000'
+        });
+
+        expect(correctDrawableStyle({
+            type: 'shape_drawable',
+            color: '#fc0',
+            shape: {
+                type: 'rounded_rectangle',
+                item_width: {
+                    type: 'fixed',
+                    value: 100
+                },
+                item_height: {
+                    type: 'fixed',
+                    value: 200
+                },
+                corner_radius: {
+                    type: 'fixed',
+                    value: 10
+                }
+            },
+            stroke: {
+                width: 0,
+                color: '#f00'
+            }
+        }, types, defaultVal)).toEqual({
+            width: 100,
+            height: 200,
+            borderRadius: 10,
+            background: '#ffcc00'
         });
 
         expect(correctDrawableStyle({
