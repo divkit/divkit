@@ -1,0 +1,137 @@
+{
+  "templates": {
+    "slider_template": {
+      "type": "slider",
+      "paddings": {
+        "top": 15,
+        "bottom": 15,
+        "left": 15,
+        "right": 15
+      },
+      "thumb_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "circle",
+          "radius": {
+            "type": "fixed",
+            "value": 10
+          }
+        },
+        "color": "#ff0000"
+      },
+      "thumb_value_variable": "slider_variable",
+      "track_inactive_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 8
+          }
+        },
+        "color": "#000000"
+      },
+      "track_active_style": {
+        "type": "shape_drawable",
+        "shape": {
+          "type": "rounded_rectangle",
+          "item_height": {
+            "type": "fixed",
+            "value": 8
+          }
+        },
+        "color": "#0000ff"
+      },
+      "min_value": 0,
+      "max_value": 8
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "variables": [
+      {
+        "name": "slider_variable",
+        "type": "integer",
+        "value": 4
+      }
+    ],
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "id": "container_demo",
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "slider_template",
+              "tick_mark_active_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 16
+                  },
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 16
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 3
+                  }
+                },
+                "color": "#0000ff"
+              },
+              "tick_mark_inactive_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "rounded_rectangle",
+                  "item_width": {
+                    "type": "fixed",
+                    "value": 16
+                  },
+                  "item_height": {
+                    "type": "fixed",
+                    "value": 16
+                  },
+                  "corner_radius": {
+                    "type": "fixed",
+                    "value": 3
+                  }
+                },
+                "color": "#000000"
+              }
+            },
+            {
+              "type": "slider_template",
+              "tick_mark_active_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "circle",
+                  "radius": {
+                    "type": "fixed",
+                    "value": 8
+                  }
+                },
+                "color": "#0000ff"
+              },
+              "tick_mark_inactive_style": {
+                "type": "shape_drawable",
+                "shape": {
+                  "type": "circle",
+                  "radius": {
+                    "type": "fixed",
+                    "value": 8
+                  }
+                },
+                "color": "#000000"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

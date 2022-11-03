@@ -1,0 +1,295 @@
+{
+  "div_data": {
+    "templates": {
+      "div_base": {
+        "type": "slider",
+        "background": [
+          {
+            "type": "solid",
+            "color": "#0000FF"
+          }
+        ],
+        "paddings": {
+          "left": 15,
+          "top": 15,
+          "right": 15,
+          "bottom": 15
+        },
+        "width": {
+          "type": "fixed",
+          "value": 360
+        },
+        "height": {
+          "type": "fixed",
+          "value": 250
+        },
+        "min_value": 0,
+        "max_value": 8
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "slider_value",
+          "type": "integer",
+          "value": 4
+        },
+        {
+          "name": "slider_rect_width",
+          "type": "integer",
+          "value": 32
+        },
+        {
+          "name": "slider_rect_height",
+          "type": "integer",
+          "value": 32
+        },
+        {
+          "name": "slider_rect_radius",
+          "type": "integer",
+          "value": 10
+        },
+        {
+          "name": "slider_circle_radius",
+          "type": "integer",
+          "value": 16
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "state",
+            "div_id": "state_container",
+            "height": {
+              "type": "fixed",
+              "value": 300
+            },
+            "border": {
+              "stroke": {
+                "color": "#000000"
+              }
+            },
+            "states": [
+              {
+                "state_id": "rect",
+                "div": {
+                  "type": "div_base",
+                  "thumb_style": {
+                    "type": "shape_drawable",
+                    "color": "#ff0000",
+                    "stroke": {
+                      "color": "#ffffff",
+                      "width": 3
+                    },
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": "@{slider_rect_height}"
+                      },
+                      "item_width": {
+                        "type": "fixed",
+                        "value": "@{slider_rect_width}"
+                      },
+                      "corner_radius": {
+                        "type": "fixed",
+                        "value": "@{slider_rect_radius}"
+                      }
+                    }
+                  },
+                  "track_active_style": {
+                    "type": "shape_drawable",
+                    "color": "#ff0000",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 6
+                      }
+                    }
+                  },
+                  "track_inactive_style": {
+                    "type": "shape_drawable",
+                    "color": "#20000000",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 6
+                      }
+                    }
+                  },
+                  "tick_mark_active_style": {
+                    "type": "shape_drawable",
+                    "color": "#ff0000",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 15
+                      },
+                      "item_width": {
+                        "type": "fixed",
+                        "value": 15
+                      }
+                    }
+                  },
+                  "tick_mark_inactive_style": {
+                    "type": "shape_drawable",
+                    "color": "#20000000",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 15
+                      },
+                      "item_width": {
+                        "type": "fixed",
+                        "value": 15
+                      }
+                    }
+                  },
+                  "thumb_value_variable": "slider_value"
+                }
+              },
+              {
+                "state_id": "circle",
+                "div": {
+                "type": "div_base",
+                "thumb_style": {
+                  "type": "shape_drawable",
+                  "color": "#ff0000",
+                  "stroke": {
+                    "color": "#ffffff",
+                    "width": 3
+                  },
+                  "shape": {
+                    "type": "circle",
+                    "radius": {
+                      "type": "fixed",
+                      "value": "@{slider_circle_radius}"
+                    }
+                  }
+                },
+                "track_active_style": {
+                  "type": "shape_drawable",
+                  "color": "#ff0000",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 6
+                    }
+                  }
+                },
+                "track_inactive_style": {
+                  "type": "shape_drawable",
+                  "color": "#20000000",
+                  "shape": {
+                    "type": "rounded_rectangle",
+                    "item_height": {
+                      "type": "fixed",
+                      "value": 6
+                    }
+                  }
+                },
+                "tick_mark_active_style": {
+                  "type": "shape_drawable",
+                  "color": "#ff0000",
+                  "shape": {
+                    "type": "circle",
+                    "radius": {
+                      "type": "fixed",
+                      "value": 8
+                    }
+                  }
+                },
+                "tick_mark_inactive_style": {
+                  "type": "shape_drawable",
+                  "color": "#20000000",
+                  "shape": {
+                    "type": "circle",
+                    "radius": {
+                      "type": "fixed",
+                      "value": 8
+                    }
+                  }
+                },
+                "thumb_value_variable": "slider_value"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=slider_rect_height&value=48",
+          "log_id": "bigger thumb height"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=slider_rect_width&value=48",
+          "log_id": "bigger thumb width"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=slider_rect_radius&value=15",
+          "log_id": "bigger thumb corner radius"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_state?state_id=0/state_container/circle",
+          "log_id": "state with circle shapes"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=slider_circle_radius&value=24",
+          "log_id": "bigger thumb radius"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=slider_rect_height&value=32",
+          "log_id": "restore: slider_rect_height"
+        },
+        {
+          "url": "div-action://set_variable?name=slider_rect_width&value=32",
+          "log_id": "restore: slider_rect_width"
+        },
+        {
+          "url": "div-action://set_variable?name=slider_rect_radius&value=10",
+          "log_id": "restore: slider_rect_radius"
+        },
+        {
+          "url": "div-action://set_state?state_id=0/state_container/rect",
+          "log_id": "restore: state"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}

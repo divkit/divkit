@@ -36,6 +36,8 @@ private let exclusions = [
   "div-container/overlap-with-match-parent-child.json",
 
   "div-text/variables-rendering.json",
+
+  "div-indicator/shapes.json",
 ]
 
 private let casesWithPlaceholerOnly = [
