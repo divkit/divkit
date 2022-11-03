@@ -175,9 +175,11 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
             var verticalPaddings = parentVerticalPaddings + verticalMargins
 
             if (isRowDirection) {
+                horizontalPaddings += edgeSeparatorsLength
                 verticalPaddings += sumCrossSize
             } else {
                 horizontalPaddings += sumCrossSize
+                verticalPaddings += edgeSeparatorsLength
             }
 
             val childWidthMeasureSpec =
