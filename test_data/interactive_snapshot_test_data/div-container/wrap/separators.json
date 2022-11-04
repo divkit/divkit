@@ -1,0 +1,358 @@
+{
+  "div_data": {
+    "templates": {
+      "item_text": {
+        "type": "text",
+        "width": {
+          "type": "wrap_content"
+        },
+        "height": {
+          "type": "wrap_content"
+        },
+        "paddings": {
+          "left": 10,
+          "top": 10,
+          "right": 10,
+          "bottom": 10
+        },
+        "border": {
+          "stroke": {
+            "color": "#B2B2B2"
+          }
+        },
+        "font_size": 12,
+        "text_alignment_horizontal": "center",
+        "text_alignment_vertical": "center"
+      }
+    },
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "title",
+          "type": "string",
+          "value": "Wrap container with all separators"
+        },
+        {
+          "name": "separator_show_at_start",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "separator_show_at_end",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "separator_show_between",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "line_separator_show_at_start",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "line_separator_show_at_end",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "name": "line_separator_show_between",
+          "type": "boolean",
+          "value": true
+        }
+      ],
+      "states": [
+        {
+          "state_id": 1,
+          "div": {
+            "type": "container",
+            "orientation": "vertical",
+            "width": {
+              "type": "fixed",
+              "value": 300
+            },
+            "height": {
+              "type": "wrap_content"
+            },
+            "background": [
+              {
+                "type": "solid",
+                "color": "#FFFFFF"
+              }
+            ],
+            "items": [
+              {
+                "type": "text",
+                "text": "@{title}:",
+                "paddings": {
+                  "left": 10,
+                  "top": 10,
+                  "right": 10,
+                  "bottom": 10
+                }
+              },
+              {
+                "type": "container",
+                "orientation": "horizontal",
+                "width": {
+                  "type": "match_parent"
+                },
+                "height": {
+                  "type": "wrap_content"
+                },
+                "layout_mode": "wrap",
+                "content_alignment_horizontal": "center",
+                "border": {
+                  "stroke": {
+                    "color": "#FF00EE"
+                  }
+                },
+                "separator": {
+                  "show_at_start": "@{separator_show_at_start}",
+                  "show_at_end": "@{separator_show_at_end}",
+                  "show_between": "@{separator_show_between}",
+                  "style": {
+                    "type": "shape_drawable",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_width": {
+                        "type": "fixed",
+                        "value": 10
+                      },
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 15
+                      },
+                      "corner_radius": {
+                        "type": "fixed",
+                        "value": 0
+                      }
+                    },
+                    "color": "#ff0000"
+                  }
+                },
+                "line_separator": {
+                  "show_at_start": "@{line_separator_show_at_start}",
+                  "show_at_end": "@{line_separator_show_at_end}",
+                  "show_between": "@{line_separator_show_between}",
+                  "style": {
+                    "type": "shape_drawable",
+                    "shape": {
+                      "type": "rounded_rectangle",
+                      "item_width": {
+                        "type": "fixed",
+                        "value": 100
+                      },
+                      "item_height": {
+                        "type": "fixed",
+                        "value": 5
+                      }
+                    },
+                    "color": "#0000ff"
+                  }
+                },
+                "items": [
+                  {
+                    "type": "item_text",
+                    "text": "match_parent",
+                    "width": {
+                      "type": "match_parent"
+                    }
+                  },
+                  {
+                    "type": "item_text",
+                    "text": "50",
+                    "width": {
+                      "type": "fixed",
+                      "value": 50
+                    }
+                  },
+                  {
+                    "type": "item_text",
+                    "text": "50",
+                    "width": {
+                      "type": "fixed",
+                      "value": 50
+                    }
+                  },
+                  {
+                    "type": "item_text",
+                    "text": "50",
+                    "width": {
+                      "type": "fixed",
+                      "value": 50
+                    }
+                  },
+                  {
+                    "type": "item_text",
+                    "text": "100",
+                    "width": {
+                      "type": "fixed",
+                      "value": 100
+                    }
+                  },
+                  {
+                    "type": "item_text",
+                    "text": "50",
+                    "width": {
+                      "type": "fixed",
+                      "value": 50
+                    }
+                  },
+                  {
+                    "type": "item_text",
+                    "text": "50",
+                    "width": {
+                      "type": "fixed",
+                      "value": 50
+                    }
+                  },
+                  {
+                    "type": "item_text",
+                    "text": "50",
+                    "width": {
+                      "type": "fixed",
+                      "value": 50
+                    }
+                  },
+                  {
+                    "type": "item_text",
+                    "text": "150",
+                    "width": {
+                      "type": "fixed",
+                      "value": 150
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_show_between&value=false",
+          "log_id": "change_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=line_separator_show_between&value=false",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=title&value=Between%20separators%20were%20disabled",
+          "log_id": "change_title"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_show_at_start&value=false",
+          "log_id": "change_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=line_separator_show_at_start&value=false",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=title&value=Start%20and%20between%20separators%20were%20disabled",
+          "log_id": "change_title"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_show_at_end&value=false",
+          "log_id": "change_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=line_separator_show_at_end&value=false",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=title&value=All%20separators%20were%20disabled",
+          "log_id": "change_title"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_show_between&value=true",
+          "log_id": "change_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=line_separator_show_between&value=true",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=title&value=Between%20separators%20were%20enabled",
+          "log_id": "change_title"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_show_at_start&value=true",
+          "log_id": "change_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=line_separator_show_at_start&value=true",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=title&value=Start%20and%20between%20separators%20were%20enabled",
+          "log_id": "change_title"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=separator_show_at_end&value=true",
+          "log_id": "change_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=line_separator_show_at_end&value=true",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=title&value=All%20separators%20were%20enabled",
+          "log_id": "change_title"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=line_separator_show_at_start&value=false",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=line_separator_show_at_end&value=false",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=line_separator_show_between&value=false",
+          "log_id": "change_line_separator"
+        },
+        {
+          "url": "div-action://set_variable?name=title&value=Line%20separators%20were%20disabled",
+          "log_id": "change_title"
+        }
+      ]
+    }
+  ]
+}
