@@ -41,6 +41,25 @@ class EllipsizedTextViewTest {
         }
     }
 
+    /**
+     * Check that custom ellipsize is applied correctly when TextView's text changes
+     * but the ellipsizedText remains the same.
+     */
+    @Test
+    fun ellipsizeAppliedWhenTextIsSlightlyChanged() {
+        ellipsizedTextView {
+            testAsset = "div2-test/ellipsized_text_view_long_text_custom_ellipsis.json"
+            activityRule.buildContainer()
+            setText(REDICULOUSLY_LONG_TEXT)
+            val currentText = displayText
+            setText(REDICULOUSLY_LONG_TEXT + "BLA BLA BLA")
+            val newText = displayText
+            assert {
+                checkEllipsizedTextIsDisplayed(newText!!, currentText!!)
+            }
+        }
+    }
+
     @Test
     fun ellipsizeTextWithHyphensCustomEllipsis() {
         ellipsizedTextView {
@@ -139,5 +158,11 @@ class EllipsizedTextViewTest {
                 hasNullEllipsize()
             }
         }
+    }
+
+    companion object {
+        private const val REDICULOUSLY_LONG_TEXT =
+            "This is a very long text. This text should be broken into multiple lines. Very very loooong text " +
+                    "As u can see it is even longer. OMG. This text should not exist! Make America Great Again!"
     }
 }
