@@ -400,7 +400,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
 
     private fun getTopOffsetForHorizontalLayout(view: View, lineHeight: Int): Int {
         val lp = view.layoutParams as LayoutParams
-        return when (lp.childAlignment) {
+        return when (lp.alignSelf) {
             WrapAlignment.END -> lineHeight - view.measuredHeight - lp.bottomMargin
             WrapAlignment.CENTER ->
                 (lineHeight - view.measuredHeight + lp.topMargin - lp.bottomMargin) / 2
@@ -456,7 +456,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
 
     private fun getLeftOffsetForVerticalLayout(view: View, lineWidth: Int): Int {
         val lp = view.layoutParams as LayoutParams
-        return when (lp.childAlignment) {
+        return when (lp.alignSelf) {
             WrapAlignment.END -> lineWidth - view.measuredWidth - lp.rightMargin
             WrapAlignment.CENTER ->
                 (lineWidth - view.measuredWidth + lp.leftMargin - lp.rightMargin) / 2
@@ -602,12 +602,6 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         draw(canvas)
     }
 
-    private val LayoutParams.childAlignment get() = when {
-        alignSelf != WrapAlignment.AUTO -> alignSelf
-        isRowDirection -> alignmentVertical
-        else -> alignmentHorizontal
-    }
-
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
 
     override fun generateLayoutParams(attrs: AttributeSet?) = LayoutParams(context, attrs)
@@ -620,7 +614,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         }
 
     internal class LayoutParams : MarginLayoutParams {
-        var alignSelf = WrapAlignment.AUTO
+        var alignSelf = WrapAlignment.START
 
         constructor(source: LayoutParams): super(source) {
             alignSelf = source.alignSelf

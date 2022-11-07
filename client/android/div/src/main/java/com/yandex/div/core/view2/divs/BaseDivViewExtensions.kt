@@ -232,8 +232,11 @@ private fun evaluateAlignSelf(
         horizontal: DivAlignmentHorizontal?,
         vertical: DivAlignmentVertical?,
         orientation: DivContainer.Orientation?
-) = if (orientation == DivContainer.Orientation.HORIZONTAL)
-    vertical.toWrapAlignment(WrapAlignment.AUTO) else horizontal.toWrapAlignment(WrapAlignment.AUTO)
+) = if (orientation == DivContainer.Orientation.HORIZONTAL) {
+    vertical.toWrapAlignment()
+} else {
+    horizontal.toWrapAlignment()
+}
 
 internal fun DivAlignmentHorizontal?.toWrapAlignment(
         @WrapAlignment default: Int = WrapAlignment.START

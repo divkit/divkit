@@ -254,11 +254,22 @@ internal class DivContainerBinder @Inject constructor(
         expressionSubscriber: ExpressionSubscriber,
     ) {
         val applyAlignments = { _: Any ->
-            val alignmentHorizontal = childDivValue.alignmentHorizontal ?: div.contentAlignmentHorizontal
-            val alignmentVertical = childDivValue.alignmentVertical ?: div.contentAlignmentVertical
+            val childAlignmentHorizontal = childDivValue.alignmentHorizontal
+            val alignmentHorizontal = when {
+                childAlignmentHorizontal != null -> childAlignmentHorizontal
+                div.isWrapContainer(resolver) -> null
+                else -> div.contentAlignmentHorizontal
+            }
 
-            childView.applyAlignment(alignmentHorizontal.evaluate(resolver),
-                alignmentVertical.evaluate(resolver), div.orientation.evaluate(resolver))
+            val childAlignmentVertical = childDivValue.alignmentVertical
+            val alignmentVertical = when {
+                childAlignmentVertical != null -> childAlignmentVertical
+                div.isWrapContainer(resolver) -> null
+                else -> div.contentAlignmentVertical
+            }
+
+            childView.applyAlignment(alignmentHorizontal?.evaluate(resolver),
+                alignmentVertical?.evaluate(resolver), div.orientation.evaluate(resolver))
 
             if (div.isVertical(resolver) && childDivValue.height is DivSize.MatchParent) {
                 childView.applyWeight(childDivValue.height.value() as DivMatchParentSize, resolver)
