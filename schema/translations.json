@@ -487,6 +487,10 @@
     "en": "Declaration of variables that can be used in an element.",
     "ru": "Объявление переменных, которые могут быть использованы в элементе."
   },
+  "div_data_timers": {
+    "en": "List of timers.",
+    "ru": "Список таймеров."
+  },
   "div_dimension": {
     "en": "Element dimension value.",
     "ru": "Значение измерения элемента."
@@ -1610,6 +1614,34 @@
   "div_text_underline": {
     "en": "Underline.",
     "ru": "Подчеркивание."
+  },
+  "div_timer": {
+    "en": "Timer.",
+    "ru": "Таймер."
+  },
+  "div_timer_duration": {
+    "en": "The duration of the timer in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).",
+    "ru": "Длительность работы таймера в миллисекундах. Если параметр равен `0` или не указан, таймер работает бесконечно (до тех пор пока не придёт событие остановки таймера)."
+  },
+  "div_timer_end_actions": {
+    "en": "Actions performed when the timer is ended: when the timer has counted to `duration` or the command `div-action://stop_timer?id=<id>` has received.",
+    "ru": "Действия, выполняемые при завершении работы таймера: когда таймер досчитал до `duration` или пришла команда `div-action://stop_timer?id=<id>`."
+  },
+  "div_timer_id": {
+    "en": "Timer ID. Must be unique. It is used when calling actions for the selected timer, for example: start, stop.",
+    "ru": "Идентификатор таймера. Должен быть уникальным. Используется при вызове действий для выбранного таймера, например: запуск, остановка."
+  },
+  "div_timer_tick_actions": {
+    "en": "Actions that are performed on each tick of the timer.",
+    "ru": "Действия, которые выполняются на каждый тик таймера."
+  },
+  "div_timer_tick_interval": {
+    "en": "Duration of time intervals in milliseconds between ticks. If the parameter is not specified, the timer counts down from `0` to `duration` without calling `tick_actions`.",
+    "ru": "Длительность промежутков времени в миллисекундах между тиками. Если параметр не указан, то таймер отсчитывает от `0` до `duration` без вызова `tick_actions`."
+  },
+  "div_timer_value_variable": {
+    "en": "The name of the variable in which the current timer value is stored. It is updated on each tick or when commands for the timer are called (start, stop, etc.), with the exception of the cancel command.",
+    "ru": "Название переменной, в которую сохраняется текущее значение таймера. Обновляется по каждому тику или при вызове команд для таймера (запуск, остановка и т.д.), за исключением команды отмена."
   },
   "div_tooltip": {
     "en": "Tooltip.",

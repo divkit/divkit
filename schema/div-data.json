@@ -69,6 +69,16 @@
       "minItems": 1,
       "clientMinItems": 1,
       "$description": "translations.json#/div_data_variable_triggers"
+    },
+    "timers": {
+      "type": "array",
+      "items": {
+        "$ref": "div-timer.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_data_timers",
+      "platforms": []
     }
   },
   "required": [

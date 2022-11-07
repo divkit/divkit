@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_timer",
+  "properties": {
+    "id": {
+      "$ref": "common.json#/non_empty_string",
+      "supports_expressions": false,
+      "$description": "translations.json#/div_timer_id"
+    },
+    "duration": {
+      "$ref": "common.json#/non_negative_integer",
+      "default_value": "0",
+      "$description": "translations.json#/div_timer_duration"
+    },
+    "tick_interval": {
+      "$ref": "common.json#/positive_integer",
+      "$description": "translations.json#/div_timer_tick_interval"
+    },
+    "value_variable": {
+      "$ref": "div-variable-name.json",
+      "$description": "translations.json#/div_timer_value_variable"
+    },
+    "tick_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_timer_tick_actions"
+    },
+    "end_actions": {
+      "type": "array",
+      "items": {
+        "$ref": "div-action.json"
+      },
+      "minItems": 1,
+      "clientMinItems": 1,
+      "$description": "translations.json#/div_timer_end_actions"
+    }
+  },
+  "required": [
+    "id"
+  ]
+}
