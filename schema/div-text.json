@@ -66,6 +66,14 @@
         "top_offset": {
           "$ref": "common.json#/non_negative_integer",
           "$description": "translations.json#/div_text_range_top_offset"
+        },
+        "border": {
+          "$ref": "div-text-range-border.json",
+          "$description": "translations.json#/div_text_range_border"
+        },
+        "background": {
+          "$ref": "div-text-range-background.json",
+          "$description": "translations.json#/div_text_range_background"
         }
       },
       "required": [

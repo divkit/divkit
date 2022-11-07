@@ -1527,6 +1527,18 @@
     "en": "Action when clicking on text.",
     "ru": "Действие при нажатии на текст."
   },
+  "div_text_range_background": {
+    "en": "Text range background.",
+    "ru": "Фон для диапазона текста."
+  },
+  "div_text_range_border": {
+    "en": "Text range border.",
+    "ru": "Рамка для диапазона текста."
+  },
+  "div_border_corner_radius": {
+    "en": "Text range border.",
+    "ru": "Рамка для диапазона текста."
+  },
   "div_text_range_end": {
     "en": "Ordinal number of the last character to be included in the range.",
     "ru": "Порядковый номер последнего символа, который будет включен в диапазон."
