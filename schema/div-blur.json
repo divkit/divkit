@@ -3,7 +3,7 @@
   "$description": "translations.json#/div_blur",
   "properties": {
     "radius": {
-      "$ref": "common.json#/positive_integer",
+      "$ref": "common.json#/non_negative_integer",
       "$description": "translations.json#/div_blur_radius"
     },
     "type": {
