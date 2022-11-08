@@ -9,10 +9,10 @@ import com.yandex.div.dsl.context.*
 import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
-class StrVariable internal constructor(
+class StringVariable internal constructor(
     @JsonIgnore val name: Property<String>?,
     @JsonIgnore val value: Property<String>?,
-) : DivVariable() {
+) : DivVariable {
 
     @JsonProperty("type") override val type = "string"
 
@@ -25,48 +25,48 @@ class StrVariable internal constructor(
     }
 }
 
-fun <T> TemplateContext<T>.strVariable(): LiteralProperty<StrVariable> {
-    return value(StrVariable(
+fun <T> TemplateContext<T>.stringVariable(): LiteralProperty<StringVariable> {
+    return value(StringVariable(
         name = null,
         value = null,
     ))
 }
 
-fun <T> TemplateContext<T>.strVariable(
+fun <T> TemplateContext<T>.stringVariable(
     name: Property<String>? = null,
     value: Property<String>? = null,
-): LiteralProperty<StrVariable> {
-    return value(StrVariable(
+): LiteralProperty<StringVariable> {
+    return value(StringVariable(
         name = name,
         value = value,
     ))
 }
 
-fun <T> TemplateContext<T>.strVariable(
+fun <T> TemplateContext<T>.stringVariable(
     name: String? = null,
     value: String? = null,
-): LiteralProperty<StrVariable> {
-    return value(StrVariable(
+): LiteralProperty<StringVariable> {
+    return value(StringVariable(
         name = optionalValue(name),
         value = optionalValue(value),
     ))
 }
 
-fun CardContext.strVariable(
+fun CardContext.stringVariable(
     name: ValueProperty<String>,
     value: ValueProperty<String>,
-): StrVariable {
-    return StrVariable(
+): StringVariable {
+    return StringVariable(
         name = name,
         value = value,
     )
 }
 
-fun CardContext.strVariable(
+fun CardContext.stringVariable(
     name: String,
     value: String,
-): StrVariable {
-    return StrVariable(
+): StringVariable {
+    return StringVariable(
         name = value(name),
         value = value(value),
     )

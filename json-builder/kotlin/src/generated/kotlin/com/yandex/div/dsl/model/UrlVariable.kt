@@ -12,7 +12,7 @@ import com.yandex.div.dsl.util.*
 class UrlVariable internal constructor(
     @JsonIgnore val name: Property<String>?,
     @JsonIgnore val value: Property<URI>?,
-) : DivVariable() {
+) : DivVariable {
 
     @JsonProperty("type") override val type = "url"
 

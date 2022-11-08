@@ -278,8 +278,8 @@ class Entity(Declarable):
         return self._implemented_protocol
 
     @property
-    def enclosing_enumeration(self) -> Optional[EntityEnumeration]:
-        return self._enclosing_enumeration
+    def enclosing_enumerations(self) -> List[EntityEnumeration]:
+        return self._enclosing_enumerations
 
     @property
     def inner_types(self) -> List[Declarable]:
@@ -344,15 +344,14 @@ class Entity(Declarable):
                                           None)
 
         if self._lang is GeneratedLanguage.KOTLIN_DSL:
-            self._enclosing_enumeration = None
+            self._enclosing_enumerations = list()
             for enumeration in global_objects:
                 valid_enumeration = False
                 if isinstance(enumeration, EntityEnumeration):
                     valid_names = [self._name, self._resolved_name, self._original_name]
                     valid_enumeration = any(ent[0] in valid_names for ent in enumeration.entities)
                 if valid_enumeration:
-                    self._enclosing_enumeration = enumeration
-                    break
+                    self._enclosing_enumerations.append(enumeration)
 
     def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
         if self in stack:

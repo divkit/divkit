@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class DivMatchParentSize internal constructor(
     @JsonIgnore val weight: Property<Double>?,
-) : DivSize() {
+) : DivSize {
 
     @JsonProperty("type") override val type = "match_parent"
 

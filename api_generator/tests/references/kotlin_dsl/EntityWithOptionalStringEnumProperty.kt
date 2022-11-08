@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class EntityWithOptionalStringEnumProperty internal constructor(
     @JsonIgnore val property: Property<Property>?,
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_optional_string_enum_property"
 

@@ -9,7 +9,6 @@ import com.yandex.div.dsl.context.*
 import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
-sealed class DivShape {
-    abstract val type: String
+sealed interface DivShape {
+    val type: String
 }
-

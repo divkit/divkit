@@ -12,7 +12,7 @@ import com.yandex.div.dsl.util.*
 class ColorVariable internal constructor(
     @JsonIgnore val name: Property<String>?,
     @JsonIgnore val value: Property<Color>?,
-) : DivVariable() {
+) : DivVariable {
 
     @JsonProperty("type") override val type = "color"
 

@@ -9,10 +9,10 @@ import com.yandex.div.dsl.context.*
 import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
-class DivGradientBackground internal constructor(
+class DivLinearGradient internal constructor(
     @JsonIgnore val angle: Property<Int>?,
     @JsonIgnore val colors: Property<List<Color>>?,
-) : DivBackground() {
+) : DivTextGradient, DivBackground {
 
     @JsonProperty("type") override val type = "gradient"
 
@@ -25,48 +25,48 @@ class DivGradientBackground internal constructor(
     }
 }
 
-fun <T> TemplateContext<T>.divGradientBackground(): LiteralProperty<DivGradientBackground> {
-    return value(DivGradientBackground(
+fun <T> TemplateContext<T>.divLinearGradient(): LiteralProperty<DivLinearGradient> {
+    return value(DivLinearGradient(
         angle = null,
         colors = null,
     ))
 }
 
-fun <T> TemplateContext<T>.divGradientBackground(
+fun <T> TemplateContext<T>.divLinearGradient(
     colors: Property<List<Color>>? = null,
     angle: Property<Int>? = null,
-): LiteralProperty<DivGradientBackground> {
-    return value(DivGradientBackground(
+): LiteralProperty<DivLinearGradient> {
+    return value(DivLinearGradient(
         angle = angle,
         colors = colors,
     ))
 }
 
-fun <T> TemplateContext<T>.divGradientBackground(
+fun <T> TemplateContext<T>.divLinearGradient(
     colors: List<Color>? = null,
     angle: Int? = null,
-): LiteralProperty<DivGradientBackground> {
-    return value(DivGradientBackground(
+): LiteralProperty<DivLinearGradient> {
+    return value(DivLinearGradient(
         angle = optionalValue(angle),
         colors = optionalValue(colors),
     ))
 }
 
-fun CardContext.divGradientBackground(
+fun CardContext.divLinearGradient(
     colors: ValueProperty<List<Color>>,
     angle: ValueProperty<Int>? = null,
-): DivGradientBackground {
-    return DivGradientBackground(
+): DivLinearGradient {
+    return DivLinearGradient(
         angle = angle,
         colors = colors,
     )
 }
 
-fun CardContext.divGradientBackground(
+fun CardContext.divLinearGradient(
     colors: List<Color>,
     angle: Int? = null,
-): DivGradientBackground {
-    return DivGradientBackground(
+): DivLinearGradient {
+    return DivLinearGradient(
         angle = optionalValue(angle),
         colors = value(colors),
     )

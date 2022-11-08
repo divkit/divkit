@@ -15,7 +15,7 @@ class DivSlideTransition internal constructor(
     @JsonIgnore val edge: Property<Edge>?,
     @JsonIgnore override val interpolator: Property<DivAnimationInterpolator>?,
     @JsonIgnore override val startDelay: Property<Int>?,
-) : DivAppearanceTransition(), DivTransitionBase {
+) : DivAppearanceTransition, DivTransitionBase {
 
     @JsonProperty("type") override val type = "slide"
 

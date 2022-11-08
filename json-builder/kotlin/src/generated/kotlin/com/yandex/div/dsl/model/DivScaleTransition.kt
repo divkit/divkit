@@ -16,7 +16,7 @@ class DivScaleTransition internal constructor(
     @JsonIgnore val pivotY: Property<Double>?,
     @JsonIgnore val scale: Property<Double>?,
     @JsonIgnore override val startDelay: Property<Int>?,
-) : DivAppearanceTransition(), DivTransitionBase {
+) : DivAppearanceTransition, DivTransitionBase {
 
     @JsonProperty("type") override val type = "scale"
 

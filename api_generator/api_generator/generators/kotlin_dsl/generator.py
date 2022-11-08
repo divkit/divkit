@@ -68,7 +68,7 @@ class KotlinDSLGenerator(Generator):
 
     def __body_declaration(self, entity: KotlinDSLEntity) -> Text:
         result = Text()
-        if entity.enclosing_enumeration is not None:
+        if entity.enclosing_enumerations:
             static_type = entity.static_type
             if static_type is not None:
                 result += EMPTY
@@ -116,8 +116,8 @@ class KotlinDSLGenerator(Generator):
         result = Text()
         for annotation in self.kotlin_annotations:
             result += annotation
-        result += f'sealed class {entity_enumeration.enumeration_name}{entity_enumeration.supertype_declaration} {{'
-        result += '    abstract val type: String'
+        result += f'sealed interface {entity_enumeration.enumeration_name}{entity_enumeration.supertype_declaration} {{'
+        result += '    val type: String'
         result += '}'
         result += EMPTY
         if entity_enumeration.generate_case_for_templates:

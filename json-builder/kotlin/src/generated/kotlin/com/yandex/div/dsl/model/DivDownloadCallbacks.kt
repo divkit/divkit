@@ -9,7 +9,7 @@ import com.yandex.div.dsl.context.*
 import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
-class DownloadCallbacks internal constructor(
+class DivDownloadCallbacks internal constructor(
     @JsonIgnore val onFailActions: Property<List<DivAction>>?,
     @JsonIgnore val onSuccessActions: Property<List<DivAction>>?,
 ) {
@@ -23,55 +23,55 @@ class DownloadCallbacks internal constructor(
     }
 }
 
-fun <T> TemplateContext<T>.downloadCallbacks(): LiteralProperty<DownloadCallbacks> {
-    return value(DownloadCallbacks(
+fun <T> TemplateContext<T>.divDownloadCallbacks(): LiteralProperty<DivDownloadCallbacks> {
+    return value(DivDownloadCallbacks(
         onFailActions = null,
         onSuccessActions = null,
     ))
 }
 
-fun <T> TemplateContext<T>.downloadCallbacks(
+fun <T> TemplateContext<T>.divDownloadCallbacks(
     onFailActions: Property<List<DivAction>>? = null,
     onSuccessActions: Property<List<DivAction>>? = null,
-): LiteralProperty<DownloadCallbacks> {
-    return value(DownloadCallbacks(
+): LiteralProperty<DivDownloadCallbacks> {
+    return value(DivDownloadCallbacks(
         onFailActions = onFailActions,
         onSuccessActions = onSuccessActions,
     ))
 }
 
-fun <T> TemplateContext<T>.downloadCallbacks(
+fun <T> TemplateContext<T>.divDownloadCallbacks(
     onFailActions: List<DivAction>? = null,
     onSuccessActions: List<DivAction>? = null,
-): LiteralProperty<DownloadCallbacks> {
-    return value(DownloadCallbacks(
+): LiteralProperty<DivDownloadCallbacks> {
+    return value(DivDownloadCallbacks(
         onFailActions = optionalValue(onFailActions),
         onSuccessActions = optionalValue(onSuccessActions),
     ))
 }
 
-fun CardContext.downloadCallbacks(): DownloadCallbacks {
-    return DownloadCallbacks(
+fun CardContext.divDownloadCallbacks(): DivDownloadCallbacks {
+    return DivDownloadCallbacks(
         onFailActions = null,
         onSuccessActions = null,
     )
 }
 
-fun CardContext.downloadCallbacks(
+fun CardContext.divDownloadCallbacks(
     onFailActions: ValueProperty<List<DivAction>>? = null,
     onSuccessActions: ValueProperty<List<DivAction>>? = null,
-): DownloadCallbacks {
-    return DownloadCallbacks(
+): DivDownloadCallbacks {
+    return DivDownloadCallbacks(
         onFailActions = onFailActions,
         onSuccessActions = onSuccessActions,
     )
 }
 
-fun CardContext.downloadCallbacks(
+fun CardContext.divDownloadCallbacks(
     onFailActions: List<DivAction>? = null,
     onSuccessActions: List<DivAction>? = null,
-): DownloadCallbacks {
-    return DownloadCallbacks(
+): DivDownloadCallbacks {
+    return DivDownloadCallbacks(
         onFailActions = optionalValue(onFailActions),
         onSuccessActions = optionalValue(onSuccessActions),
     )

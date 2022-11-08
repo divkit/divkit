@@ -14,7 +14,7 @@ class DivFadeTransition internal constructor(
     @JsonIgnore override val duration: Property<Int>?,
     @JsonIgnore override val interpolator: Property<DivAnimationInterpolator>?,
     @JsonIgnore override val startDelay: Property<Int>?,
-) : DivAppearanceTransition(), DivTransitionBase {
+) : DivAppearanceTransition, DivTransitionBase {
 
     @JsonProperty("type") override val type = "fade"
 

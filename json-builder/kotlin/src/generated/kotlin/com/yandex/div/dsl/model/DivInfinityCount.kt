@@ -10,7 +10,7 @@ import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
 class DivInfinityCount internal constructor(
-) : DivCount() {
+) : DivCount {
 
     @JsonProperty("type") override val type = "infinity"
 }

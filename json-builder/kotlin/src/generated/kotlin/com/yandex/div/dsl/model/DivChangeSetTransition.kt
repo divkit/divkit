@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class DivChangeSetTransition internal constructor(
     @JsonIgnore val items: Property<List<DivChangeTransition>>?,
-) : DivChangeTransition() {
+) : DivChangeTransition {
 
     @JsonProperty("type") override val type = "set"
 

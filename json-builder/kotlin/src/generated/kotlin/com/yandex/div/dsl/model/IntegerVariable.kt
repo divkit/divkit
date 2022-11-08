@@ -12,7 +12,7 @@ import com.yandex.div.dsl.util.*
 class IntegerVariable internal constructor(
     @JsonIgnore val name: Property<String>?,
     @JsonIgnore val value: Property<Int>?,
-) : DivVariable() {
+) : DivVariable {
 
     @JsonProperty("type") override val type = "integer"
 

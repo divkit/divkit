@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class DivSolidBackground internal constructor(
     @JsonIgnore val color: Property<Color>?,
-) : DivBackground() {
+) : DivBackground {
 
     @JsonProperty("type") override val type = "solid"
 

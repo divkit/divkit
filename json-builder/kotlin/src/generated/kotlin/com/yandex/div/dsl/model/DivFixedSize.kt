@@ -12,7 +12,7 @@ import com.yandex.div.dsl.util.*
 class DivFixedSize internal constructor(
     @JsonIgnore val unit: Property<DivSizeUnit>?,
     @JsonIgnore val value: Property<Int>?,
-) : DivSize() {
+) : DivSize, DivRadialGradientRadius {
 
     @JsonProperty("type") override val type = "fixed"
 

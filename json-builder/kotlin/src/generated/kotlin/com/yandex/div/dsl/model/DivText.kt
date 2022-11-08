@@ -49,8 +49,9 @@ class DivText internal constructor(
     @JsonIgnore val textAlignmentHorizontal: Property<DivAlignmentHorizontal>?,
     @JsonIgnore val textAlignmentVertical: Property<DivAlignmentVertical>?,
     @JsonIgnore val textColor: Property<Color>?,
-    @JsonIgnore val textGradient: Property<DivGradientBackground>?,
+    @JsonIgnore val textGradient: Property<DivTextGradient>?,
     @JsonIgnore override val tooltips: Property<List<DivTooltip>>?,
+    @JsonIgnore override val transform: Property<DivTransform>?,
     @JsonIgnore override val transitionChange: Property<DivChangeTransition>?,
     @JsonIgnore override val transitionIn: Property<DivAppearanceTransition>?,
     @JsonIgnore override val transitionOut: Property<DivAppearanceTransition>?,
@@ -61,7 +62,7 @@ class DivText internal constructor(
     @JsonIgnore override val visibilityAction: Property<DivVisibilityAction>?,
     @JsonIgnore override val visibilityActions: Property<List<DivVisibilityAction>>?,
     @JsonIgnore override val width: Property<DivSize>?,
-) : Div(), DivBase {
+) : Div, DivBase {
 
     @JsonProperty("type") override val type = "text"
 
@@ -109,6 +110,7 @@ class DivText internal constructor(
             "text_color" to textColor,
             "text_gradient" to textGradient,
             "tooltips" to tooltips,
+            "transform" to transform,
             "transition_change" to transitionChange,
             "transition_in" to transitionIn,
             "transition_out" to transitionOut,
@@ -151,6 +153,7 @@ class DivText internal constructor(
         @JsonIgnore val height: Property<DivFixedSize>?,
         @JsonIgnore val start: Property<Int>?,
         @JsonIgnore val tintColor: Property<Color>?,
+        @JsonIgnore val tintMode: Property<DivBlendMode>?,
         @JsonIgnore val url: Property<URI>?,
         @JsonIgnore val width: Property<DivFixedSize>?,
     ) {
@@ -161,6 +164,7 @@ class DivText internal constructor(
                 "height" to height,
                 "start" to start,
                 "tint_color" to tintColor,
+                "tint_mode" to tintMode,
                 "url" to url,
                 "width" to width,
             )
@@ -247,6 +251,7 @@ fun <T> TemplateContext<T>.divText(): LiteralProperty<DivText> {
         textColor = null,
         textGradient = null,
         tooltips = null,
+        transform = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
@@ -300,8 +305,9 @@ fun <T> TemplateContext<T>.divText(
     textAlignmentHorizontal: Property<DivAlignmentHorizontal>? = null,
     textAlignmentVertical: Property<DivAlignmentVertical>? = null,
     textColor: Property<Color>? = null,
-    textGradient: Property<DivGradientBackground>? = null,
+    textGradient: Property<DivTextGradient>? = null,
     tooltips: Property<List<DivTooltip>>? = null,
+    transform: Property<DivTransform>? = null,
     transitionChange: Property<DivChangeTransition>? = null,
     transitionIn: Property<DivAppearanceTransition>? = null,
     transitionOut: Property<DivAppearanceTransition>? = null,
@@ -355,6 +361,7 @@ fun <T> TemplateContext<T>.divText(
         textColor = textColor,
         textGradient = textGradient,
         tooltips = tooltips,
+        transform = transform,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -408,8 +415,9 @@ fun <T> TemplateContext<T>.divText(
     textAlignmentHorizontal: DivAlignmentHorizontal? = null,
     textAlignmentVertical: DivAlignmentVertical? = null,
     textColor: Color? = null,
-    textGradient: DivGradientBackground? = null,
+    textGradient: DivTextGradient? = null,
     tooltips: List<DivTooltip>? = null,
+    transform: DivTransform? = null,
     transitionChange: DivChangeTransition? = null,
     transitionIn: DivAppearanceTransition? = null,
     transitionOut: DivAppearanceTransition? = null,
@@ -463,6 +471,7 @@ fun <T> TemplateContext<T>.divText(
         textColor = optionalValue(textColor),
         textGradient = optionalValue(textGradient),
         tooltips = optionalValue(tooltips),
+        transform = optionalValue(transform),
         transitionChange = optionalValue(transitionChange),
         transitionIn = optionalValue(transitionIn),
         transitionOut = optionalValue(transitionOut),
@@ -518,6 +527,7 @@ fun <T> TemplateContext<T>.image(): LiteralProperty<DivText.Image> {
         height = null,
         start = null,
         tintColor = null,
+        tintMode = null,
         url = null,
         width = null,
     ))
@@ -528,12 +538,14 @@ fun <T> TemplateContext<T>.image(
     url: Property<URI>? = null,
     height: Property<DivFixedSize>? = null,
     tintColor: Property<Color>? = null,
+    tintMode: Property<DivBlendMode>? = null,
     width: Property<DivFixedSize>? = null,
 ): LiteralProperty<DivText.Image> {
     return value(DivText.Image(
         height = height,
         start = start,
         tintColor = tintColor,
+        tintMode = tintMode,
         url = url,
         width = width,
     ))
@@ -544,12 +556,14 @@ fun <T> TemplateContext<T>.image(
     url: URI? = null,
     height: DivFixedSize? = null,
     tintColor: Color? = null,
+    tintMode: DivBlendMode? = null,
     width: DivFixedSize? = null,
 ): LiteralProperty<DivText.Image> {
     return value(DivText.Image(
         height = optionalValue(height),
         start = optionalValue(start),
         tintColor = optionalValue(tintColor),
+        tintMode = optionalValue(tintMode),
         url = optionalValue(url),
         width = optionalValue(width),
     ))
@@ -677,8 +691,9 @@ fun CardContext.divText(
     textAlignmentHorizontal: ValueProperty<DivAlignmentHorizontal>? = null,
     textAlignmentVertical: ValueProperty<DivAlignmentVertical>? = null,
     textColor: ValueProperty<Color>? = null,
-    textGradient: ValueProperty<DivGradientBackground>? = null,
+    textGradient: ValueProperty<DivTextGradient>? = null,
     tooltips: ValueProperty<List<DivTooltip>>? = null,
+    transform: ValueProperty<DivTransform>? = null,
     transitionChange: ValueProperty<DivChangeTransition>? = null,
     transitionIn: ValueProperty<DivAppearanceTransition>? = null,
     transitionOut: ValueProperty<DivAppearanceTransition>? = null,
@@ -732,6 +747,7 @@ fun CardContext.divText(
         textColor = textColor,
         textGradient = textGradient,
         tooltips = tooltips,
+        transform = transform,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -785,8 +801,9 @@ fun CardContext.divText(
     textAlignmentHorizontal: DivAlignmentHorizontal? = null,
     textAlignmentVertical: DivAlignmentVertical? = null,
     textColor: Color? = null,
-    textGradient: DivGradientBackground? = null,
+    textGradient: DivTextGradient? = null,
     tooltips: List<DivTooltip>? = null,
+    transform: DivTransform? = null,
     transitionChange: DivChangeTransition? = null,
     transitionIn: DivAppearanceTransition? = null,
     transitionOut: DivAppearanceTransition? = null,
@@ -840,6 +857,7 @@ fun CardContext.divText(
         textColor = optionalValue(textColor),
         textGradient = optionalValue(textGradient),
         tooltips = optionalValue(tooltips),
+        transform = optionalValue(transform),
         transitionChange = optionalValue(transitionChange),
         transitionIn = optionalValue(transitionIn),
         transitionOut = optionalValue(transitionOut),
@@ -886,12 +904,14 @@ fun CardContext.image(
     url: ValueProperty<URI>,
     height: ValueProperty<DivFixedSize>? = null,
     tintColor: ValueProperty<Color>? = null,
+    tintMode: ValueProperty<DivBlendMode>? = null,
     width: ValueProperty<DivFixedSize>? = null,
 ): DivText.Image {
     return DivText.Image(
         height = height,
         start = start,
         tintColor = tintColor,
+        tintMode = tintMode,
         url = url,
         width = width,
     )
@@ -902,12 +922,14 @@ fun CardContext.image(
     url: URI,
     height: DivFixedSize? = null,
     tintColor: Color? = null,
+    tintMode: DivBlendMode? = null,
     width: DivFixedSize? = null,
 ): DivText.Image {
     return DivText.Image(
         height = optionalValue(height),
         start = value(start),
         tintColor = optionalValue(tintColor),
+        tintMode = optionalValue(tintMode),
         url = value(url),
         width = optionalValue(width),
     )

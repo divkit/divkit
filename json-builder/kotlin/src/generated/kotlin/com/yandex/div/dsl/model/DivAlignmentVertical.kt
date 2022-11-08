@@ -13,4 +13,5 @@ enum class DivAlignmentVertical(@JsonValue val value: String) {
     TOP("top"),
     CENTER("center"),
     BOTTOM("bottom"),
+    BASELINE("baseline"),
 }

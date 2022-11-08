@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class DivNeighbourPageSize internal constructor(
     @JsonIgnore val neighbourPageWidth: Property<DivFixedSize>?,
-) : DivPagerLayoutMode() {
+) : DivPagerLayoutMode {
 
     @JsonProperty("type") override val type = "fixed"
 

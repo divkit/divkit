@@ -10,7 +10,7 @@ import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
 class DivVisibilityAction internal constructor(
-    @JsonIgnore val downloadCallbacks: Property<DownloadCallbacks>?,
+    @JsonIgnore val downloadCallbacks: Property<DivDownloadCallbacks>?,
     @JsonIgnore val logId: Property<String>?,
     @JsonIgnore val logLimit: Property<Int>?,
     @JsonIgnore val payload: Property<Map<String, Any>>?,
@@ -50,7 +50,7 @@ fun <T> TemplateContext<T>.divVisibilityAction(): LiteralProperty<DivVisibilityA
 
 fun <T> TemplateContext<T>.divVisibilityAction(
     logId: Property<String>? = null,
-    downloadCallbacks: Property<DownloadCallbacks>? = null,
+    downloadCallbacks: Property<DivDownloadCallbacks>? = null,
     logLimit: Property<Int>? = null,
     payload: Property<Map<String, Any>>? = null,
     referer: Property<URI>? = null,
@@ -72,7 +72,7 @@ fun <T> TemplateContext<T>.divVisibilityAction(
 
 fun <T> TemplateContext<T>.divVisibilityAction(
     logId: String? = null,
-    downloadCallbacks: DownloadCallbacks? = null,
+    downloadCallbacks: DivDownloadCallbacks? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: URI? = null,
@@ -94,7 +94,7 @@ fun <T> TemplateContext<T>.divVisibilityAction(
 
 fun CardContext.divVisibilityAction(
     logId: ValueProperty<String>,
-    downloadCallbacks: ValueProperty<DownloadCallbacks>? = null,
+    downloadCallbacks: ValueProperty<DivDownloadCallbacks>? = null,
     logLimit: ValueProperty<Int>? = null,
     payload: ValueProperty<Map<String, Any>>? = null,
     referer: ValueProperty<URI>? = null,
@@ -116,7 +116,7 @@ fun CardContext.divVisibilityAction(
 
 fun CardContext.divVisibilityAction(
     logId: String,
-    downloadCallbacks: DownloadCallbacks? = null,
+    downloadCallbacks: DivDownloadCallbacks? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: URI? = null,

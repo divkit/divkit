@@ -19,7 +19,7 @@ class EntityWithSimpleProperties internal constructor(
     @JsonIgnore val positiveInteger: Property<Int>?,
     @JsonIgnore val string: Property<String>?,
     @JsonIgnore val url: Property<URI>?,
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_simple_properties"
 

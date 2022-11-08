@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class DivPageSize internal constructor(
     @JsonIgnore val pageWidth: Property<DivPercentageSize>?,
-) : DivPagerLayoutMode() {
+) : DivPagerLayoutMode {
 
     @JsonProperty("type") override val type = "percentage"
 

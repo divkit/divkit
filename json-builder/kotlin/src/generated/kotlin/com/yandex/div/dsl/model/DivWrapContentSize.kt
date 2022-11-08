@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class DivWrapContentSize internal constructor(
     @JsonIgnore val constrained: Property<BoolInt>?,
-) : DivSize() {
+) : DivSize {
 
     @JsonProperty("type") override val type = "wrap_content"
 

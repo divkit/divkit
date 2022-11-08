@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class DivFixedCount internal constructor(
     @JsonIgnore val value: Property<Int>?,
-) : DivCount() {
+) : DivCount {
 
     @JsonProperty("type") override val type = "fixed"
 

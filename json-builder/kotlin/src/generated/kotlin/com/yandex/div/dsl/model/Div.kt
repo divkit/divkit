@@ -9,14 +9,14 @@ import com.yandex.div.dsl.context.*
 import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
-sealed class Div {
-    abstract val type: String
+sealed interface Div {
+    val type: String
 }
 
 private class TemplatedDiv constructor(
     @JsonProperty("type") override val type: String,
     @JsonIgnore val bindings: Array<out TemplateBinding<*>>
-) : Div() {
+) : Div {
 
     @JsonAnyGetter
     fun properties(): Map<String, Any> {

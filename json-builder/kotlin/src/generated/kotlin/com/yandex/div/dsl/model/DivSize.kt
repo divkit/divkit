@@ -9,7 +9,6 @@ import com.yandex.div.dsl.context.*
 import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
-sealed class DivSize {
-    abstract val type: String
+sealed interface DivSize {
+    val type: String
 }
-

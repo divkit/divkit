@@ -13,7 +13,7 @@ class DivShapeDrawable internal constructor(
     @JsonIgnore val color: Property<Color>?,
     @JsonIgnore val shape: Property<DivShape>?,
     @JsonIgnore val stroke: Property<DivStroke>?,
-) : DivDrawable() {
+) : DivDrawable {
 
     @JsonProperty("type") override val type = "shape_drawable"
 

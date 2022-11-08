@@ -13,7 +13,7 @@ class EntityWithPropertyWithDefaultValue internal constructor(
     @JsonIgnore val int: Property<Int>?,
     @JsonIgnore val nested: Property<Nested>?,
     @JsonIgnore val url: Property<URI>?,
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_property_with_default_value"
 

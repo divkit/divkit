@@ -13,7 +13,7 @@ class DivRoundedRectangleShape internal constructor(
     @JsonIgnore val cornerRadius: Property<DivFixedSize>?,
     @JsonIgnore val itemHeight: Property<DivFixedSize>?,
     @JsonIgnore val itemWidth: Property<DivFixedSize>?,
-) : DivShape() {
+) : DivShape {
 
     @JsonProperty("type") override val type = "rounded_rectangle"
 

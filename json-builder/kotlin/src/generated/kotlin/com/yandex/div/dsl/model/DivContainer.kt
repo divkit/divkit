@@ -28,13 +28,17 @@ class DivContainer internal constructor(
     @JsonIgnore override val height: Property<DivSize>?,
     @JsonIgnore override val id: Property<String>?,
     @JsonIgnore val items: Property<List<Div>>?,
+    @JsonIgnore val layoutMode: Property<LayoutMode>?,
+    @JsonIgnore val lineSeparator: Property<Separator>?,
     @JsonIgnore val longtapActions: Property<List<DivAction>>?,
     @JsonIgnore override val margins: Property<DivEdgeInsets>?,
     @JsonIgnore val orientation: Property<Orientation>?,
     @JsonIgnore override val paddings: Property<DivEdgeInsets>?,
     @JsonIgnore override val rowSpan: Property<Int>?,
     @JsonIgnore override val selectedActions: Property<List<DivAction>>?,
+    @JsonIgnore val separator: Property<Separator>?,
     @JsonIgnore override val tooltips: Property<List<DivTooltip>>?,
+    @JsonIgnore override val transform: Property<DivTransform>?,
     @JsonIgnore override val transitionChange: Property<DivChangeTransition>?,
     @JsonIgnore override val transitionIn: Property<DivAppearanceTransition>?,
     @JsonIgnore override val transitionOut: Property<DivAppearanceTransition>?,
@@ -43,7 +47,7 @@ class DivContainer internal constructor(
     @JsonIgnore override val visibilityAction: Property<DivVisibilityAction>?,
     @JsonIgnore override val visibilityActions: Property<List<DivVisibilityAction>>?,
     @JsonIgnore override val width: Property<DivSize>?,
-) : Div(), DivBase {
+) : Div, DivBase {
 
     @JsonProperty("type") override val type = "container"
 
@@ -68,13 +72,17 @@ class DivContainer internal constructor(
             "height" to height,
             "id" to id,
             "items" to items,
+            "layout_mode" to layoutMode,
+            "line_separator" to lineSeparator,
             "longtap_actions" to longtapActions,
             "margins" to margins,
             "orientation" to orientation,
             "paddings" to paddings,
             "row_span" to rowSpan,
             "selected_actions" to selectedActions,
+            "separator" to separator,
             "tooltips" to tooltips,
+            "transform" to transform,
             "transition_change" to transitionChange,
             "transition_in" to transitionIn,
             "transition_out" to transitionOut,
@@ -86,10 +94,33 @@ class DivContainer internal constructor(
         )
     }
 
+    enum class LayoutMode(@JsonValue val value: String) {
+        NO_WRAP("no_wrap"),
+        WRAP("wrap"),
+    }
+
     enum class Orientation(@JsonValue val value: String) {
         VERTICAL("vertical"),
         HORIZONTAL("horizontal"),
         OVERLAP("overlap"),
+    }
+
+    class Separator internal constructor(
+        @JsonIgnore val showAtEnd: Property<BoolInt>?,
+        @JsonIgnore val showAtStart: Property<BoolInt>?,
+        @JsonIgnore val showBetween: Property<BoolInt>?,
+        @JsonIgnore val style: Property<DivDrawable>?,
+    ) {
+
+        @JsonAnyGetter
+        internal fun properties(): Map<String, Any> {
+            return propertyMapOf(
+                "show_at_end" to showAtEnd,
+                "show_at_start" to showAtStart,
+                "show_between" to showBetween,
+                "style" to style,
+            )
+        }
     }
 }
 
@@ -113,13 +144,17 @@ fun <T> TemplateContext<T>.divContainer(): LiteralProperty<DivContainer> {
         height = null,
         id = null,
         items = null,
+        layoutMode = null,
+        lineSeparator = null,
         longtapActions = null,
         margins = null,
         orientation = null,
         paddings = null,
         rowSpan = null,
         selectedActions = null,
+        separator = null,
         tooltips = null,
+        transform = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
@@ -150,13 +185,17 @@ fun <T> TemplateContext<T>.divContainer(
     focus: Property<DivFocus>? = null,
     height: Property<DivSize>? = null,
     id: Property<String>? = null,
+    layoutMode: Property<DivContainer.LayoutMode>? = null,
+    lineSeparator: Property<DivContainer.Separator>? = null,
     longtapActions: Property<List<DivAction>>? = null,
     margins: Property<DivEdgeInsets>? = null,
     orientation: Property<DivContainer.Orientation>? = null,
     paddings: Property<DivEdgeInsets>? = null,
     rowSpan: Property<Int>? = null,
     selectedActions: Property<List<DivAction>>? = null,
+    separator: Property<DivContainer.Separator>? = null,
     tooltips: Property<List<DivTooltip>>? = null,
+    transform: Property<DivTransform>? = null,
     transitionChange: Property<DivChangeTransition>? = null,
     transitionIn: Property<DivAppearanceTransition>? = null,
     transitionOut: Property<DivAppearanceTransition>? = null,
@@ -185,13 +224,17 @@ fun <T> TemplateContext<T>.divContainer(
         height = height,
         id = id,
         items = items,
+        layoutMode = layoutMode,
+        lineSeparator = lineSeparator,
         longtapActions = longtapActions,
         margins = margins,
         orientation = orientation,
         paddings = paddings,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
+        separator = separator,
         tooltips = tooltips,
+        transform = transform,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -222,13 +265,17 @@ fun <T> TemplateContext<T>.divContainer(
     focus: DivFocus? = null,
     height: DivSize? = null,
     id: String? = null,
+    layoutMode: DivContainer.LayoutMode? = null,
+    lineSeparator: DivContainer.Separator? = null,
     longtapActions: List<DivAction>? = null,
     margins: DivEdgeInsets? = null,
     orientation: DivContainer.Orientation? = null,
     paddings: DivEdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<DivAction>? = null,
+    separator: DivContainer.Separator? = null,
     tooltips: List<DivTooltip>? = null,
+    transform: DivTransform? = null,
     transitionChange: DivChangeTransition? = null,
     transitionIn: DivAppearanceTransition? = null,
     transitionOut: DivAppearanceTransition? = null,
@@ -257,13 +304,17 @@ fun <T> TemplateContext<T>.divContainer(
         height = optionalValue(height),
         id = optionalValue(id),
         items = optionalValue(items),
+        layoutMode = optionalValue(layoutMode),
+        lineSeparator = optionalValue(lineSeparator),
         longtapActions = optionalValue(longtapActions),
         margins = optionalValue(margins),
         orientation = optionalValue(orientation),
         paddings = optionalValue(paddings),
         rowSpan = optionalValue(rowSpan),
         selectedActions = optionalValue(selectedActions),
+        separator = optionalValue(separator),
         tooltips = optionalValue(tooltips),
+        transform = optionalValue(transform),
         transitionChange = optionalValue(transitionChange),
         transitionIn = optionalValue(transitionIn),
         transitionOut = optionalValue(transitionOut),
@@ -272,6 +323,43 @@ fun <T> TemplateContext<T>.divContainer(
         visibilityAction = optionalValue(visibilityAction),
         visibilityActions = optionalValue(visibilityActions),
         width = optionalValue(width),
+    ))
+}
+
+fun <T> TemplateContext<T>.separator(): LiteralProperty<DivContainer.Separator> {
+    return value(DivContainer.Separator(
+        showAtEnd = null,
+        showAtStart = null,
+        showBetween = null,
+        style = null,
+    ))
+}
+
+fun <T> TemplateContext<T>.separator(
+    style: Property<DivDrawable>? = null,
+    showAtEnd: Property<BoolInt>? = null,
+    showAtStart: Property<BoolInt>? = null,
+    showBetween: Property<BoolInt>? = null,
+): LiteralProperty<DivContainer.Separator> {
+    return value(DivContainer.Separator(
+        showAtEnd = showAtEnd,
+        showAtStart = showAtStart,
+        showBetween = showBetween,
+        style = style,
+    ))
+}
+
+fun <T> TemplateContext<T>.separator(
+    style: DivDrawable? = null,
+    showAtEnd: BoolInt? = null,
+    showAtStart: BoolInt? = null,
+    showBetween: BoolInt? = null,
+): LiteralProperty<DivContainer.Separator> {
+    return value(DivContainer.Separator(
+        showAtEnd = optionalValue(showAtEnd),
+        showAtStart = optionalValue(showAtStart),
+        showBetween = optionalValue(showBetween),
+        style = optionalValue(style),
     ))
 }
 
@@ -294,13 +382,17 @@ fun CardContext.divContainer(
     focus: ValueProperty<DivFocus>? = null,
     height: ValueProperty<DivSize>? = null,
     id: ValueProperty<String>? = null,
+    layoutMode: ValueProperty<DivContainer.LayoutMode>? = null,
+    lineSeparator: ValueProperty<DivContainer.Separator>? = null,
     longtapActions: ValueProperty<List<DivAction>>? = null,
     margins: ValueProperty<DivEdgeInsets>? = null,
     orientation: ValueProperty<DivContainer.Orientation>? = null,
     paddings: ValueProperty<DivEdgeInsets>? = null,
     rowSpan: ValueProperty<Int>? = null,
     selectedActions: ValueProperty<List<DivAction>>? = null,
+    separator: ValueProperty<DivContainer.Separator>? = null,
     tooltips: ValueProperty<List<DivTooltip>>? = null,
+    transform: ValueProperty<DivTransform>? = null,
     transitionChange: ValueProperty<DivChangeTransition>? = null,
     transitionIn: ValueProperty<DivAppearanceTransition>? = null,
     transitionOut: ValueProperty<DivAppearanceTransition>? = null,
@@ -329,13 +421,17 @@ fun CardContext.divContainer(
         height = height,
         id = id,
         items = items,
+        layoutMode = layoutMode,
+        lineSeparator = lineSeparator,
         longtapActions = longtapActions,
         margins = margins,
         orientation = orientation,
         paddings = paddings,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
+        separator = separator,
         tooltips = tooltips,
+        transform = transform,
         transitionChange = transitionChange,
         transitionIn = transitionIn,
         transitionOut = transitionOut,
@@ -366,13 +462,17 @@ fun CardContext.divContainer(
     focus: DivFocus? = null,
     height: DivSize? = null,
     id: String? = null,
+    layoutMode: DivContainer.LayoutMode? = null,
+    lineSeparator: DivContainer.Separator? = null,
     longtapActions: List<DivAction>? = null,
     margins: DivEdgeInsets? = null,
     orientation: DivContainer.Orientation? = null,
     paddings: DivEdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<DivAction>? = null,
+    separator: DivContainer.Separator? = null,
     tooltips: List<DivTooltip>? = null,
+    transform: DivTransform? = null,
     transitionChange: DivChangeTransition? = null,
     transitionIn: DivAppearanceTransition? = null,
     transitionOut: DivAppearanceTransition? = null,
@@ -401,13 +501,17 @@ fun CardContext.divContainer(
         height = optionalValue(height),
         id = optionalValue(id),
         items = value(items),
+        layoutMode = optionalValue(layoutMode),
+        lineSeparator = optionalValue(lineSeparator),
         longtapActions = optionalValue(longtapActions),
         margins = optionalValue(margins),
         orientation = optionalValue(orientation),
         paddings = optionalValue(paddings),
         rowSpan = optionalValue(rowSpan),
         selectedActions = optionalValue(selectedActions),
+        separator = optionalValue(separator),
         tooltips = optionalValue(tooltips),
+        transform = optionalValue(transform),
         transitionChange = optionalValue(transitionChange),
         transitionIn = optionalValue(transitionIn),
         transitionOut = optionalValue(transitionOut),
@@ -416,5 +520,33 @@ fun CardContext.divContainer(
         visibilityAction = optionalValue(visibilityAction),
         visibilityActions = optionalValue(visibilityActions),
         width = optionalValue(width),
+    )
+}
+
+fun CardContext.separator(
+    style: ValueProperty<DivDrawable>,
+    showAtEnd: ValueProperty<BoolInt>? = null,
+    showAtStart: ValueProperty<BoolInt>? = null,
+    showBetween: ValueProperty<BoolInt>? = null,
+): DivContainer.Separator {
+    return DivContainer.Separator(
+        showAtEnd = showAtEnd,
+        showAtStart = showAtStart,
+        showBetween = showBetween,
+        style = style,
+    )
+}
+
+fun CardContext.separator(
+    style: DivDrawable,
+    showAtEnd: BoolInt? = null,
+    showAtStart: BoolInt? = null,
+    showBetween: BoolInt? = null,
+): DivContainer.Separator {
+    return DivContainer.Separator(
+        showAtEnd = optionalValue(showAtEnd),
+        showAtStart = optionalValue(showAtStart),
+        showBetween = optionalValue(showBetween),
+        style = value(style),
     )
 }

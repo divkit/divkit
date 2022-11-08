@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class EntityWithEntityProperty internal constructor(
     @JsonIgnore val entity: Property<Entity>?,
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_entity_property"
 

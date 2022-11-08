@@ -83,9 +83,8 @@ class KotlinDSLEntity(Entity):
     @property
     def supertype_declaration(self) -> str:
         supertypes = []
-        enumeration = self.enclosing_enumeration
-        if enumeration is not None:
-            supertypes.append(f'{utils.capitalize_camel_case(enumeration.name)}()')
+        for enumeration in self.enclosing_enumerations:
+            supertypes.append(f'{utils.capitalize_camel_case(enumeration.name)}')
         if self.root_entity:
             supertypes.append('Root')
         additional_supertypes = self.protocol_plus_super_entities
@@ -377,7 +376,7 @@ class KotlinDSLEntityEnumeration(EntityEnumeration):
         result += f'private class {self.template_case_name} constructor('
         result += '    @JsonProperty(\"type\") override val type: String,'
         result += '    @JsonIgnore val bindings: Array<out TemplateBinding<*>>'
-        result += f') : {self.enumeration_name}() {{'
+        result += f') : {self.enumeration_name} {{'
         result += EMPTY
         result += '    @JsonAnyGetter'
         result += '    fun properties(): Map<String, Any> {'
@@ -389,7 +388,7 @@ class KotlinDSLEntityEnumeration(EntityEnumeration):
         result += '    type: String,'
         result += '    vararg bindings: PropertyOverriding<*>'
         result += f'): LiteralProperty<{self.enumeration_name}> {{'
-        result += f'    return LiteralProperty{self.template_case_name}(type, bindings))'
+        result += f'    return LiteralProperty({self.template_case_name}(type, bindings))'
         result += '}'
         result += EMPTY
         result += 'fun CardContext.template('

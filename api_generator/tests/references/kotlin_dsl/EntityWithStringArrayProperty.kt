@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class EntityWithStringArrayProperty internal constructor(
     @JsonIgnore val array: Property<List<String>>?,
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_string_array_property"
 

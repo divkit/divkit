@@ -10,7 +10,7 @@ import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
 class EntityWithoutProperties internal constructor(
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_without_properties"
 }

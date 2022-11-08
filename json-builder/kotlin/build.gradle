@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.20"
     }
 }
 
@@ -19,13 +19,22 @@ sourceSets {
     }
 }
 
+def versions = [
+    jackson: "2.14.0",
+    jsonAssert: "1.5.1",
+    junit5: "5.9.1",
+    kotlin: "1.7.20"
+]
+
 dependencies {
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10'
-    implementation "org.jetbrains.kotlin:kotlin-reflect:1.7.10"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$versions.kotlin"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
 
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.13.2'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
-    implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.13.2'
+    implementation "com.fasterxml.jackson.core:jackson-annotations:$versions.jackson"
+    implementation "com.fasterxml.jackson.core:jackson-databind:$versions.jackson"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$versions.jackson"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$versions.junit5"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$versions.junit5"
+    testImplementation "org.skyscreamer:jsonassert:$versions.jsonAssert"
 }

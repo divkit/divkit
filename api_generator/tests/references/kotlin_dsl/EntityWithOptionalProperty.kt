@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class EntityWithOptionalProperty internal constructor(
     @JsonIgnore val property: Property<String>?,
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_optional_property"
 

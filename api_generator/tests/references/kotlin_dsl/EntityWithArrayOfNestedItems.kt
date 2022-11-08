@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class EntityWithArrayOfNestedItems internal constructor(
     @JsonIgnore val items: Property<List<Item>>?,
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_array_of_nested_items"
 

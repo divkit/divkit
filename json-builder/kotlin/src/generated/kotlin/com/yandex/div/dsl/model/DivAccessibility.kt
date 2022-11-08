@@ -13,6 +13,7 @@ class DivAccessibility internal constructor(
     @JsonIgnore val description: Property<String>?,
     @JsonIgnore val hint: Property<String>?,
     @JsonIgnore val mode: Property<Mode>?,
+    @JsonIgnore val muteAfterAction: Property<BoolInt>?,
     @JsonIgnore val stateDescription: Property<String>?,
     @JsonIgnore val type: Property<Type>?,
 ) {
@@ -23,6 +24,7 @@ class DivAccessibility internal constructor(
             "description" to description,
             "hint" to hint,
             "mode" to mode,
+            "mute_after_action" to muteAfterAction,
             "state_description" to stateDescription,
             "type" to type,
         )
@@ -50,6 +52,7 @@ fun <T> TemplateContext<T>.divAccessibility(): LiteralProperty<DivAccessibility>
         description = null,
         hint = null,
         mode = null,
+        muteAfterAction = null,
         stateDescription = null,
         type = null,
     ))
@@ -59,6 +62,7 @@ fun <T> TemplateContext<T>.divAccessibility(
     description: Property<String>? = null,
     hint: Property<String>? = null,
     mode: Property<DivAccessibility.Mode>? = null,
+    muteAfterAction: Property<BoolInt>? = null,
     stateDescription: Property<String>? = null,
     type: Property<DivAccessibility.Type>? = null,
 ): LiteralProperty<DivAccessibility> {
@@ -66,6 +70,7 @@ fun <T> TemplateContext<T>.divAccessibility(
         description = description,
         hint = hint,
         mode = mode,
+        muteAfterAction = muteAfterAction,
         stateDescription = stateDescription,
         type = type,
     ))
@@ -75,6 +80,7 @@ fun <T> TemplateContext<T>.divAccessibility(
     description: String? = null,
     hint: String? = null,
     mode: DivAccessibility.Mode? = null,
+    muteAfterAction: BoolInt? = null,
     stateDescription: String? = null,
     type: DivAccessibility.Type? = null,
 ): LiteralProperty<DivAccessibility> {
@@ -82,6 +88,7 @@ fun <T> TemplateContext<T>.divAccessibility(
         description = optionalValue(description),
         hint = optionalValue(hint),
         mode = optionalValue(mode),
+        muteAfterAction = optionalValue(muteAfterAction),
         stateDescription = optionalValue(stateDescription),
         type = optionalValue(type),
     ))
@@ -92,6 +99,7 @@ fun CardContext.divAccessibility(): DivAccessibility {
         description = null,
         hint = null,
         mode = null,
+        muteAfterAction = null,
         stateDescription = null,
         type = null,
     )
@@ -101,6 +109,7 @@ fun CardContext.divAccessibility(
     description: ValueProperty<String>? = null,
     hint: ValueProperty<String>? = null,
     mode: ValueProperty<DivAccessibility.Mode>? = null,
+    muteAfterAction: ValueProperty<BoolInt>? = null,
     stateDescription: ValueProperty<String>? = null,
     type: ValueProperty<DivAccessibility.Type>? = null,
 ): DivAccessibility {
@@ -108,6 +117,7 @@ fun CardContext.divAccessibility(
         description = description,
         hint = hint,
         mode = mode,
+        muteAfterAction = muteAfterAction,
         stateDescription = stateDescription,
         type = type,
     )
@@ -117,6 +127,7 @@ fun CardContext.divAccessibility(
     description: String? = null,
     hint: String? = null,
     mode: DivAccessibility.Mode? = null,
+    muteAfterAction: BoolInt? = null,
     stateDescription: String? = null,
     type: DivAccessibility.Type? = null,
 ): DivAccessibility {
@@ -124,6 +135,7 @@ fun CardContext.divAccessibility(
         description = optionalValue(description),
         hint = optionalValue(hint),
         mode = optionalValue(mode),
+        muteAfterAction = optionalValue(muteAfterAction),
         stateDescription = optionalValue(stateDescription),
         type = optionalValue(type),
     )

@@ -10,8 +10,7 @@ import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
 class DivAction internal constructor(
-    @JsonIgnore val downloadCallbacks: Property<DownloadCallbacks>?,
-    @JsonIgnore val hover: Property<DivHover>?,
+    @JsonIgnore val downloadCallbacks: Property<DivDownloadCallbacks>?,
     @JsonIgnore val logId: Property<String>?,
     @JsonIgnore val logUrl: Property<URI>?,
     @JsonIgnore val menuItems: Property<List<MenuItem>>?,
@@ -25,7 +24,6 @@ class DivAction internal constructor(
     internal fun properties(): Map<String, Any> {
         return propertyMapOf(
             "download_callbacks" to downloadCallbacks,
-            "hover" to hover,
             "log_id" to logId,
             "log_url" to logUrl,
             "menu_items" to menuItems,
@@ -61,7 +59,6 @@ class DivAction internal constructor(
 fun <T> TemplateContext<T>.divAction(): LiteralProperty<DivAction> {
     return value(DivAction(
         downloadCallbacks = null,
-        hover = null,
         logId = null,
         logUrl = null,
         menuItems = null,
@@ -74,8 +71,7 @@ fun <T> TemplateContext<T>.divAction(): LiteralProperty<DivAction> {
 
 fun <T> TemplateContext<T>.divAction(
     logId: Property<String>? = null,
-    downloadCallbacks: Property<DownloadCallbacks>? = null,
-    hover: Property<DivHover>? = null,
+    downloadCallbacks: Property<DivDownloadCallbacks>? = null,
     logUrl: Property<URI>? = null,
     menuItems: Property<List<DivAction.MenuItem>>? = null,
     payload: Property<Map<String, Any>>? = null,
@@ -85,7 +81,6 @@ fun <T> TemplateContext<T>.divAction(
 ): LiteralProperty<DivAction> {
     return value(DivAction(
         downloadCallbacks = downloadCallbacks,
-        hover = hover,
         logId = logId,
         logUrl = logUrl,
         menuItems = menuItems,
@@ -98,8 +93,7 @@ fun <T> TemplateContext<T>.divAction(
 
 fun <T> TemplateContext<T>.divAction(
     logId: String? = null,
-    downloadCallbacks: DownloadCallbacks? = null,
-    hover: DivHover? = null,
+    downloadCallbacks: DivDownloadCallbacks? = null,
     logUrl: URI? = null,
     menuItems: List<DivAction.MenuItem>? = null,
     payload: Map<String, Any>? = null,
@@ -109,7 +103,6 @@ fun <T> TemplateContext<T>.divAction(
 ): LiteralProperty<DivAction> {
     return value(DivAction(
         downloadCallbacks = optionalValue(downloadCallbacks),
-        hover = optionalValue(hover),
         logId = optionalValue(logId),
         logUrl = optionalValue(logUrl),
         menuItems = optionalValue(menuItems),
@@ -154,8 +147,7 @@ fun <T> TemplateContext<T>.menuItem(
 
 fun CardContext.divAction(
     logId: ValueProperty<String>,
-    downloadCallbacks: ValueProperty<DownloadCallbacks>? = null,
-    hover: ValueProperty<DivHover>? = null,
+    downloadCallbacks: ValueProperty<DivDownloadCallbacks>? = null,
     logUrl: ValueProperty<URI>? = null,
     menuItems: ValueProperty<List<DivAction.MenuItem>>? = null,
     payload: ValueProperty<Map<String, Any>>? = null,
@@ -165,7 +157,6 @@ fun CardContext.divAction(
 ): DivAction {
     return DivAction(
         downloadCallbacks = downloadCallbacks,
-        hover = hover,
         logId = logId,
         logUrl = logUrl,
         menuItems = menuItems,
@@ -178,8 +169,7 @@ fun CardContext.divAction(
 
 fun CardContext.divAction(
     logId: String,
-    downloadCallbacks: DownloadCallbacks? = null,
-    hover: DivHover? = null,
+    downloadCallbacks: DivDownloadCallbacks? = null,
     logUrl: URI? = null,
     menuItems: List<DivAction.MenuItem>? = null,
     payload: Map<String, Any>? = null,
@@ -189,7 +179,6 @@ fun CardContext.divAction(
 ): DivAction {
     return DivAction(
         downloadCallbacks = optionalValue(downloadCallbacks),
-        hover = optionalValue(hover),
         logId = value(logId),
         logUrl = optionalValue(logUrl),
         menuItems = optionalValue(menuItems),

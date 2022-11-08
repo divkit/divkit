@@ -13,7 +13,7 @@ class DivChangeBoundsTransition internal constructor(
     @JsonIgnore override val duration: Property<Int>?,
     @JsonIgnore override val interpolator: Property<DivAnimationInterpolator>?,
     @JsonIgnore override val startDelay: Property<Int>?,
-) : DivChangeTransition(), DivTransitionBase {
+) : DivChangeTransition, DivTransitionBase {
 
     @JsonProperty("type") override val type = "change_bounds"
 

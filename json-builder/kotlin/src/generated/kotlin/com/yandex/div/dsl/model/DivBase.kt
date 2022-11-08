@@ -26,6 +26,7 @@ interface DivBase {
     val rowSpan: Property<Int>?
     val selectedActions: Property<List<DivAction>>?
     val tooltips: Property<List<DivTooltip>>?
+    val transform: Property<DivTransform>?
     val transitionChange: Property<DivChangeTransition>?
     val transitionIn: Property<DivAppearanceTransition>?
     val transitionOut: Property<DivAppearanceTransition>?

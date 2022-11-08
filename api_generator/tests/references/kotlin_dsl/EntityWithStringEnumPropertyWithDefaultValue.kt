@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class EntityWithStringEnumPropertyWithDefaultValue internal constructor(
     @JsonIgnore val value: Property<Value>?,
-) : Entity() {
+) : Entity {
 
     @JsonProperty("type") override val type = "entity_with_string_enum_property_with_default_value"
 

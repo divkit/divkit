@@ -9,12 +9,12 @@ import com.yandex.div.dsl.context.*
 import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
-class BoolIntVariable internal constructor(
+class BooleanVariable internal constructor(
     @JsonIgnore val name: Property<String>?,
     @JsonIgnore val value: Property<BoolInt>?,
-) : DivVariable() {
+) : DivVariable {
 
-    @JsonProperty("type") override val type = "bool_int"
+    @JsonProperty("type") override val type = "boolean"
 
     @JsonAnyGetter
     internal fun properties(): Map<String, Any> {
@@ -25,48 +25,48 @@ class BoolIntVariable internal constructor(
     }
 }
 
-fun <T> TemplateContext<T>.boolIntVariable(): LiteralProperty<BoolIntVariable> {
-    return value(BoolIntVariable(
+fun <T> TemplateContext<T>.booleanVariable(): LiteralProperty<BooleanVariable> {
+    return value(BooleanVariable(
         name = null,
         value = null,
     ))
 }
 
-fun <T> TemplateContext<T>.boolIntVariable(
+fun <T> TemplateContext<T>.booleanVariable(
     name: Property<String>? = null,
     value: Property<BoolInt>? = null,
-): LiteralProperty<BoolIntVariable> {
-    return value(BoolIntVariable(
+): LiteralProperty<BooleanVariable> {
+    return value(BooleanVariable(
         name = name,
         value = value,
     ))
 }
 
-fun <T> TemplateContext<T>.boolIntVariable(
+fun <T> TemplateContext<T>.booleanVariable(
     name: String? = null,
     value: BoolInt? = null,
-): LiteralProperty<BoolIntVariable> {
-    return value(BoolIntVariable(
+): LiteralProperty<BooleanVariable> {
+    return value(BooleanVariable(
         name = optionalValue(name),
         value = optionalValue(value),
     ))
 }
 
-fun CardContext.boolIntVariable(
+fun CardContext.booleanVariable(
     name: ValueProperty<String>,
     value: ValueProperty<BoolInt>,
-): BoolIntVariable {
-    return BoolIntVariable(
+): BooleanVariable {
+    return BooleanVariable(
         name = name,
         value = value,
     )
 }
 
-fun CardContext.boolIntVariable(
+fun CardContext.booleanVariable(
     name: String,
     value: BoolInt,
-): BoolIntVariable {
-    return BoolIntVariable(
+): BooleanVariable {
+    return BooleanVariable(
         name = value(name),
         value = value(value),
     )

@@ -9,7 +9,6 @@ import com.yandex.div.dsl.context.*
 import com.yandex.div.dsl.type.*
 import com.yandex.div.dsl.util.*
 
-sealed class DivDrawable {
-    abstract val type: String
+sealed interface DivDrawable {
+    val type: String
 }
-

@@ -11,7 +11,7 @@ import com.yandex.div.dsl.util.*
 
 class DivAppearanceSetTransition internal constructor(
     @JsonIgnore val items: Property<List<DivAppearanceTransition>>?,
-) : DivAppearanceTransition() {
+) : DivAppearanceTransition {
 
     @JsonProperty("type") override val type = "set"
 
