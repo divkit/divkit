@@ -39,6 +39,14 @@
     },
     "lottie_card": {
       "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "fixed",
+        "value": 250
+      },
       "margins": {
         "left": 4,
         "right": 4,
