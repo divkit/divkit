@@ -33,6 +33,7 @@ class DivKitSnapshotTestCase: XCTestCase {
     }
 
     let divKitComponents = DivKitComponents(
+      flagsInfo: .init(isTextSelectingEnabled: false, appendVariablesEnabled: true, metalImageRenderingEnabled: true),
       imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
       updateCardAction: nil,
       urlOpener: { _ in }

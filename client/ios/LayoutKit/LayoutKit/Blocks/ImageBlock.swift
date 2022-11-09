@@ -12,6 +12,7 @@ public final class ImageBlock: ImageBaseBlock {
   public let tintColor: Color?
   public let accessibilityElement: AccessibilityElement?
   public let appearanceAnimation: TransitioningAnimation?
+  public let metalImageRenderingEnabled: Bool
 
   public init(
     imageHolder: ImageHolder,
@@ -19,6 +20,7 @@ public final class ImageBlock: ImageBaseBlock {
     height: ImageBlockHeight,
     contentMode: ImageContentMode,
     tintColor: Color?,
+    metalImageRenderingEnabled: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
   ) {
@@ -27,6 +29,7 @@ public final class ImageBlock: ImageBaseBlock {
     self.height = height
     self.contentMode = contentMode
     self.tintColor = tintColor
+    self.metalImageRenderingEnabled = metalImageRenderingEnabled
     self.accessibilityElement = accessibilityElement
     self.appearanceAnimation = appearanceAnimation
   }
@@ -37,6 +40,7 @@ public final class ImageBlock: ImageBaseBlock {
     heightTrait: LayoutTrait = .intrinsic,
     contentMode: ImageContentMode = .default,
     tintColor: Color? = nil,
+    metalImageRenderingEnabled: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
   ) {
@@ -46,6 +50,7 @@ public final class ImageBlock: ImageBaseBlock {
       height: .trait(heightTrait),
       contentMode: contentMode,
       tintColor: tintColor,
+      metalImageRenderingEnabled: metalImageRenderingEnabled,
       accessibilityElement: accessibilityElement,
       appearanceAnimation: appearanceAnimation
     )
@@ -56,6 +61,7 @@ public final class ImageBlock: ImageBaseBlock {
     size: CGSize,
     contentMode: ImageContentMode = .default,
     tintColor: Color? = nil,
+    metalImageRenderingEnabled: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
   ) {
@@ -65,6 +71,7 @@ public final class ImageBlock: ImageBaseBlock {
       heightTrait: .fixed(size.height),
       contentMode: contentMode,
       tintColor: tintColor,
+      metalImageRenderingEnabled: metalImageRenderingEnabled,
       accessibilityElement: accessibilityElement,
       appearanceAnimation: appearanceAnimation
     )

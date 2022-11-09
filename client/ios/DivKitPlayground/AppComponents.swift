@@ -15,7 +15,9 @@ enum AppComponents {
     return DivKitComponents(
       divCustomBlockFactory: DemoDivCustomBlockFactory(),
       extensionHandlers: [lottieExtensionHanlder],
-      flagsInfo: DivFlagsInfo(isTextSelectingEnabled: true, appendVariablesEnabled: true),
+      flagsInfo: DivFlagsInfo(isTextSelectingEnabled: true,
+                              appendVariablesEnabled: true,
+                              metalImageRenderingEnabled: true),
       patchProvider: DemoPatchProvider(),
       updateCardAction: updateCardAction,
       urlOpener: DemoUrlOpener.openUrl(_:)

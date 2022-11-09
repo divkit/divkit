@@ -1,10 +1,10 @@
-// Copyright 2022 Yandex LLC. All rights reserved.
-
 import UIKit
+
+import Base
 
 public protocol ImageViewProtocol {
   var appearanceAnimation: ImageViewAnimation? { get set }
-  var imageRedrawingColor: Color? { get set }
+  var imageRedrawingStyle: ImageRedrawingStyle? { get set }
   var imageContentMode: ImageContentMode { get set }
 }
 
@@ -27,5 +27,24 @@ public struct ImageViewAnimation {
     self.startAlpha = startAlpha
     self.endAlpha = endAlpha
     self.options = options
+  }
+}
+
+public struct ImageRedrawingStyle: Equatable {
+  let tintColor: Color
+  let tintMode: TintMode?
+
+  public init(tintColor: Color, tintMode: TintMode? = nil) {
+    self.tintColor = tintColor
+    self.tintMode = tintMode
+  }
+
+  public enum TintMode {
+    case sourceIn
+    case sourceAtop
+    case darken
+    case lighten
+    case multiply
+    case screen
   }
 }

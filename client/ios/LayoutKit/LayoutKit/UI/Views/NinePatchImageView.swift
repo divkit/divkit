@@ -13,7 +13,7 @@ public final class NinePatchImageView: UIView, RemoteImageViewContentProtocol {
   }
   
   public var appearanceAnimation: ImageViewAnimation?
-  public var imageRedrawingColor: Color?
+  public var imageRedrawingStyle: ImageRedrawingStyle?
   public var imageContentMode = ImageContentMode.default
   
   init() {

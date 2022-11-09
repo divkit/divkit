@@ -6,7 +6,7 @@ extension UIView {
     assert(!bounds.isEmpty, "View bounds should not be empty")
     UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
     layer.layoutIfNeeded()
-    layer.render(in: UIGraphicsGetCurrentContext()!)
+    drawHierarchy(in: bounds, afterScreenUpdates: true)
     let image = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
     removeFromSuperview()

@@ -1,5 +1,3 @@
-// Copyright 2015 Yandex LLC. All rights reserved.
-
 import UIKit
 
 import Base
@@ -19,7 +17,7 @@ public final class RemoteImageView: UIView, RemoteImageViewContentProtocol {
   private func updateContent() {
     let content = Content(
       image: image,
-      imageRedrawingColor: imageRedrawingColor
+      imageRedrawingColor: imageRedrawingStyle?.tintColor
     )
 
     let gravity = imageContentMode
@@ -66,7 +64,7 @@ public final class RemoteImageView: UIView, RemoteImageViewContentProtocol {
 
   private var image: UIImage?
 
-  public var imageRedrawingColor: Color? {
+  public var imageRedrawingStyle: ImageRedrawingStyle? {
     didSet { updateContent() }
   }
 
