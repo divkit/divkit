@@ -61,14 +61,17 @@ class KotlinGenerator(Generator):
         result += EMPTY
         result += entity.serialization_declaration.indented(indent_width=4)
 
-        if not is_template and self._generate_equality and not entity.instance_properties:
-            result += EMPTY
-            result += self.__manual_equals_hash_code_declaration.indented(indent_width=4)
-
         if not is_template:
-            patch = entity.copy_with_new_array_declaration
-            if patch:
-                result += patch
+            if self._generate_equality and not entity.instance_properties:
+                result += EMPTY
+                result += self.__manual_equals_hash_code_declaration.indented(indent_width=4)
+
+            if entity.instance_properties:
+                result += entity.deep_equals_declaration
+
+            if entity.contains_array_of_objects:
+                result += entity.equals_except_array_declaration
+                result += entity.copy_with_new_array_declaration
 
         static_declarations = entity.static_declarations
         if static_declarations.lines:

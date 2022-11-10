@@ -27,6 +27,20 @@ class EntityWithEntityProperty(
         return json
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        other ?: return false
+        if (other !is EntityWithEntityProperty) {
+            return false
+        }
+        if (entity != other.entity) {
+            return false
+        }
+        return true
+    }
+
     companion object {
         const val TYPE = "entity_with_entity_property"
 

@@ -27,6 +27,20 @@ class EntityWithArrayWithTransform(
         return json
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        other ?: return false
+        if (other !is EntityWithArrayWithTransform) {
+            return false
+        }
+        if (array != other.array) {
+            return false
+        }
+        return true
+    }
+
     companion object {
         const val TYPE = "entity_with_array_with_transform"
 

@@ -31,6 +31,26 @@ class EntityWithPropertyWithDefaultValue(
         return json
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        other ?: return false
+        if (other !is EntityWithPropertyWithDefaultValue) {
+            return false
+        }
+        if (int != other.int) {
+            return false
+        }
+        if (nested != other.nested) {
+            return false
+        }
+        if (url != other.url) {
+            return false
+        }
+        return true
+    }
+
     companion object {
         const val TYPE = "entity_with_property_with_default_value"
 
@@ -70,6 +90,26 @@ class EntityWithPropertyWithDefaultValue(
             json.writeExpression(key = "non_optional", value = nonOptional)
             json.writeExpression(key = "url", value = url, converter = URI_TO_STRING)
             return json
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+            other ?: return false
+            if (other !is Nested) {
+                return false
+            }
+            if (int != other.int) {
+                return false
+            }
+            if (nonOptional != other.nonOptional) {
+                return false
+            }
+            if (url != other.url) {
+                return false
+            }
+            return true
         }
 
         companion object {

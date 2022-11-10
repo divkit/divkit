@@ -27,6 +27,20 @@ class EntityWithStringEnumPropertyWithDefaultValue(
         return json
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        other ?: return false
+        if (other !is EntityWithStringEnumPropertyWithDefaultValue) {
+            return false
+        }
+        if (value != other.value) {
+            return false
+        }
+        return true
+    }
+
     companion object {
         const val TYPE = "entity_with_string_enum_property_with_default_value"
 

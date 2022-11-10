@@ -43,6 +43,44 @@ class EntityWithSimpleProperties(
         return json
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        other ?: return false
+        if (other !is EntityWithSimpleProperties) {
+            return false
+        }
+        if (boolean != other.boolean) {
+            return false
+        }
+        if (booleanInt != other.booleanInt) {
+            return false
+        }
+        if (color != other.color) {
+            return false
+        }
+        if (double != other.double) {
+            return false
+        }
+        if (id != other.id) {
+            return false
+        }
+        if (integer != other.integer) {
+            return false
+        }
+        if (positiveInteger != other.positiveInteger) {
+            return false
+        }
+        if (string != other.string) {
+            return false
+        }
+        if (url != other.url) {
+            return false
+        }
+        return true
+    }
+
     companion object {
         const val TYPE = "entity_with_simple_properties"
 

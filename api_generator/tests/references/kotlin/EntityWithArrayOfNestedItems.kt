@@ -27,6 +27,27 @@ class EntityWithArrayOfNestedItems(
         return json
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        other ?: return false
+        if (other !is EntityWithArrayOfNestedItems) {
+            return false
+        }
+        if (items != other.items) {
+            return false
+        }
+        return true
+    }
+
+    fun equalsExceptArray(other: EntityWithArrayOfNestedItems): Boolean {
+        if (this === other) {
+            return true
+        }
+        return true
+    }
+
     fun copyWithNewArray(
         items: List<EntityWithArrayOfNestedItems.Item>,
     ) = EntityWithArrayOfNestedItems(
@@ -62,6 +83,23 @@ class EntityWithArrayOfNestedItems(
             json.write(key = "entity", value = entity)
             json.writeExpression(key = "property", value = property)
             return json
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+            other ?: return false
+            if (other !is Item) {
+                return false
+            }
+            if (entity != other.entity) {
+                return false
+            }
+            if (property != other.property) {
+                return false
+            }
+            return true
         }
 
         companion object {

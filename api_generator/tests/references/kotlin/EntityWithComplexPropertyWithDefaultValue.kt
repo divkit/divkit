@@ -27,6 +27,20 @@ class EntityWithComplexPropertyWithDefaultValue(
         return json
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        other ?: return false
+        if (other !is EntityWithComplexPropertyWithDefaultValue) {
+            return false
+        }
+        if (property != other.property) {
+            return false
+        }
+        return true
+    }
+
     companion object {
         const val TYPE = "entity_with_complex_property_with_default_value"
 
@@ -54,6 +68,20 @@ class EntityWithComplexPropertyWithDefaultValue(
             val json = JSONObject()
             json.writeExpression(key = "value", value = value)
             return json
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+            other ?: return false
+            if (other !is Property) {
+                return false
+            }
+            if (value != other.value) {
+                return false
+            }
+            return true
         }
 
         companion object {

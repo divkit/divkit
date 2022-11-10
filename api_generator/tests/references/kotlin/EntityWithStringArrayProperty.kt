@@ -27,6 +27,20 @@ class EntityWithStringArrayProperty(
         return json
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+        other ?: return false
+        if (other !is EntityWithStringArrayProperty) {
+            return false
+        }
+        if (array != other.array) {
+            return false
+        }
+        return true
+    }
+
     companion object {
         const val TYPE = "entity_with_string_array_property"
 
