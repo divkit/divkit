@@ -1,6 +1,5 @@
 package com.yandex.div.core.widget.indicator
 
-import android.annotation.SuppressLint
 import android.graphics.Canvas
 import com.yandex.div.core.widget.indicator.animations.IndicatorAnimator
 import com.yandex.div.core.widget.indicator.forms.SingleIndicatorDrawer
@@ -39,7 +38,6 @@ class IndicatorsStripDrawer(
         adjustVisibleItems(position, 0f)
     }
 
-    @SuppressLint("DrawAllocation")
     fun onDraw(canvas: Canvas) {
         for (index in startIndex..endIndex) {
             val xOffset = getItemOffsetAt(index) - firstVisibleItemOffset
@@ -60,15 +58,14 @@ class IndicatorsStripDrawer(
                     if (calculatedSize <= styleParams.shape.minimumSize) {
                         itemSize = styleParams.shape.minimumItemSize
                     } else if (calculatedSize < itemSize.width) {
-                        itemSize = when (itemSize) {
-                            is IndicatorParams.ItemSize.RoundedRect -> IndicatorParams.ItemSize.RoundedRect(
-                                calculatedSize,
-                                itemSize.itemHeight * xOffset / currentScaleDistance,
-                                itemSize.cornerRadius
-                            )
-                            is IndicatorParams.ItemSize.Circle -> IndicatorParams.ItemSize.Circle(
-                                calculatedSize
-                            )
+                        when (itemSize) {
+                            is IndicatorParams.ItemSize.RoundedRect -> {
+                                itemSize.itemWidth = calculatedSize
+                                itemSize.itemHeight = itemSize.itemHeight * xOffset / currentScaleDistance
+                            }
+                            is IndicatorParams.ItemSize.Circle -> {
+                                itemSize.radius = calculatedSize
+                            }
                         }
                     }
                 } else if (xOffset > viewportSize - currentScaleDistance) { // right border
@@ -76,15 +73,14 @@ class IndicatorsStripDrawer(
                     if (calculatedSize <= styleParams.shape.minimumSize) {
                         itemSize = styleParams.shape.minimumItemSize
                     } else if (calculatedSize < itemSize.width) {
-                        itemSize = when (itemSize) {
-                            is IndicatorParams.ItemSize.RoundedRect -> IndicatorParams.ItemSize.RoundedRect(
-                                calculatedSize,
-                                itemSize.itemHeight * (-xOffset + viewportSize) / currentScaleDistance,
-                                itemSize.cornerRadius
-                            )
-                            is IndicatorParams.ItemSize.Circle -> IndicatorParams.ItemSize.Circle(
-                                calculatedSize
-                            )
+                        when (itemSize) {
+                            is IndicatorParams.ItemSize.RoundedRect -> {
+                                itemSize.itemWidth = calculatedSize
+                                itemSize.itemHeight = itemSize.itemHeight * (-xOffset + viewportSize) / currentScaleDistance
+                            }
+                            is IndicatorParams.ItemSize.Circle -> {
+                                itemSize.radius = calculatedSize
+                            }
                         }
                     }
                 }

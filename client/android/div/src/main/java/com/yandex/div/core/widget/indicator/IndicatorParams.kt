@@ -24,13 +24,31 @@ class IndicatorParams {
             val cornerRadius: Float,
             val selectedCornerRadius: Float,
             val minimumCornerRadius: Float
-        ): Shape()
+        ): Shape() {
+            val minimumItemSizeRect = ItemSize.RoundedRect(
+                itemWidth = this.minimumWidth,
+                itemHeight = this.minimumHeight,
+                cornerRadius = this.minimumCornerRadius,
+            )
+            val normalItemSizeRect = ItemSize.RoundedRect(
+                itemWidth = this.normalWidth,
+                itemHeight = this.normalHeight,
+                cornerRadius = this.cornerRadius,
+            )
+        }
 
         data class Circle(
             val normalRadius: Float,
             val selectedRadius: Float,
             val minimumRadius: Float
-        ): Shape()
+        ): Shape() {
+            val minimumItemSizeCircle = ItemSize.Circle(
+                radius = this.minimumRadius,
+            )
+            val normalItemSizeCircle = ItemSize.Circle(
+                radius = this.normalRadius,
+            )
+        }
 
         val width get() = when (this) {
             is RoundedRect -> selectedWidth
@@ -47,35 +65,27 @@ class IndicatorParams {
             is Circle -> selectedRadius * 2
         }
 
-        val minimumItemSize get(): ItemSize = when (this) {
-            is RoundedRect -> ItemSize.RoundedRect(
-                minimumWidth, minimumHeight, minimumCornerRadius
-            )
-            is Circle -> ItemSize.Circle(
-                minimumRadius
-            )
+        val minimumItemSize get() = when (this) {
+            is RoundedRect -> this.minimumItemSizeRect
+            is Circle -> this.minimumItemSizeCircle
         }
 
-        val normalItemSize get(): ItemSize = when (this) {
-            is RoundedRect -> ItemSize.RoundedRect(
-                normalWidth, normalHeight, cornerRadius
-            )
-            is Circle -> ItemSize.Circle(
-                normalRadius
-            )
+        val normalItemSize get() = when(this) {
+            is RoundedRect -> this.normalItemSizeRect
+            is Circle -> this.normalItemSizeCircle
         }
     }
 
     sealed class ItemSize {
 
         data class RoundedRect(
-            val itemWidth: Float,
-            val itemHeight: Float,
-            val cornerRadius: Float,
+            var itemWidth: Float,
+            var itemHeight: Float,
+            var cornerRadius: Float,
         ): ItemSize()
 
         data class Circle (
-            val radius: Float,
+            var radius: Float,
         ): ItemSize()
 
         val width get() = when (this) {
