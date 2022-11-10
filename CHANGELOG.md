@@ -1,4 +1,21 @@
 ## 14.0.0
+
+# JSON Schema:
+* Added `div-timer`
+* Added zero blur radius support
+* Added `border` and `background` for text range
+
+# Android Client:
+* Align elements in wrap container rows by default
+* Added generated method to apply patch
+* Fixed expressions serialization
+* Fixed shadows in DivGallery
+
+# Web Client:
+* Added separators support in DivContainer
+
+
+## 14.0.0
 # JSON Schema:
 * Added `div-blur` and `div-blur-background`
 * Added `baseline_alignment` to `div-container`

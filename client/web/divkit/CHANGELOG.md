@@ -1,4 +1,9 @@
-## 14.0.0 (November 1, 2022)
+## 15.0.0 (November 14, 2022)
+
+* Added separators support in DivContainer
+
+
+## 14.0.0 (November 7, 2022)
 
 Additions:
 * Added `setTheme` instance method
