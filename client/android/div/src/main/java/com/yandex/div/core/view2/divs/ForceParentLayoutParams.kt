@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import androidx.appcompat.widget.LinearLayoutCompat
 
 internal class ForceParentLayoutParams(
     private val wrappedParams: ViewGroup.LayoutParams
@@ -36,7 +37,7 @@ internal class ForceParentLayoutParams(
         }
     }
 
-    class Linear(source: LinearLayout.LayoutParams) : LinearLayout.LayoutParams(source) {
+    class Linear(source: LinearLayout.LayoutParams) : LinearLayoutCompat.LayoutParams(source) {
         val parentParams = ForceParentLayoutParams(this)
     }
 

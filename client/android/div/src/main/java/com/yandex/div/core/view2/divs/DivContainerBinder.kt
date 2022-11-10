@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.graphics.drawable.Drawable
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
@@ -146,8 +146,11 @@ internal class DivContainerBinder @Inject constructor(
 
     private fun DivLinearLayout.bindProperties(div: DivContainer, resolver: ExpressionResolver) {
         addSubscription(div.orientation.observeAndGet(resolver) {
-            orientation =
-                if (div.isHorizontal(resolver)) LinearLayout.HORIZONTAL else LinearLayout.VERTICAL
+            orientation = if (div.isHorizontal(resolver)) {
+                LinearLayoutCompat.HORIZONTAL
+            } else {
+                LinearLayoutCompat.VERTICAL
+            }
         })
         addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
             gravity = evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver))
@@ -165,15 +168,15 @@ internal class DivContainerBinder @Inject constructor(
         resolver: ExpressionResolver
     ) {
         observeSeparatorShowMode(separator, resolver) {
-            var showSeparators = LinearLayout.SHOW_DIVIDER_NONE
+            var showSeparators = LinearLayoutCompat.SHOW_DIVIDER_NONE
             if (separator.showAtStart.evaluate(resolver)) {
-                showSeparators = showSeparators or LinearLayout.SHOW_DIVIDER_BEGINNING
+                showSeparators = showSeparators or LinearLayoutCompat.SHOW_DIVIDER_BEGINNING
             }
             if (separator.showBetween.evaluate(resolver)) {
-                showSeparators = showSeparators or LinearLayout.SHOW_DIVIDER_MIDDLE
+                showSeparators = showSeparators or LinearLayoutCompat.SHOW_DIVIDER_MIDDLE
             }
             if (separator.showAtEnd.evaluate(resolver)) {
-                showSeparators = showSeparators or LinearLayout.SHOW_DIVIDER_END
+                showSeparators = showSeparators or LinearLayoutCompat.SHOW_DIVIDER_END
             }
             showDividers = showSeparators
         }
@@ -272,15 +275,15 @@ internal class DivContainerBinder @Inject constructor(
                 alignmentVertical?.evaluate(resolver), div.orientation.evaluate(resolver))
 
             if (div.isVertical(resolver) && childDivValue.height is DivSize.MatchParent) {
-                childView.applyWeight(childDivValue.height.value() as DivMatchParentSize, resolver)
                 if (!div.isWrapContainer(resolver)) {
                     ForceParentLayoutParams.setSizeFromParent(childView, h = 0)
                 }
+                childView.applyWeight(childDivValue.height.value() as DivMatchParentSize, resolver)
             } else if (div.isHorizontal(resolver) && childDivValue.width is DivSize.MatchParent) {
-                childView.applyWeight(childDivValue.width.value() as DivMatchParentSize, resolver)
                 if (!div.isWrapContainer(resolver)) {
                     ForceParentLayoutParams.setSizeFromParent(childView, w = 0)
                 }
+                childView.applyWeight(childDivValue.width.value() as DivMatchParentSize, resolver)
             }
         }
 
@@ -334,7 +337,7 @@ internal class DivContainerBinder @Inject constructor(
 
     private fun View.applyWeight(size: DivMatchParentSize, resolver: ExpressionResolver) {
         val params = layoutParams
-        if (params is LinearLayout.LayoutParams) {
+        if (params is LinearLayoutCompat.LayoutParams) {
             params.weight = size.weight?.evaluate(resolver)?.toFloat() ?: 1.0f
         }
     }

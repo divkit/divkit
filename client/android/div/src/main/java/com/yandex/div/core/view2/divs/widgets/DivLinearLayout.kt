@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
-import android.widget.LinearLayout
+import androidx.appcompat.widget.LinearLayoutWithCenteredDividers
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.divs.drawChildrenShadows
@@ -17,7 +17,8 @@ internal class DivLinearLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr), DivAnimator, DivBorderSupports, TransientView, ExpressionSubscriber {
+) : LinearLayoutWithCenteredDividers(context, attrs, defStyleAttr), DivAnimator, DivBorderSupports,
+    TransientView, ExpressionSubscriber {
 
     internal var div: DivContainer? = null
 
