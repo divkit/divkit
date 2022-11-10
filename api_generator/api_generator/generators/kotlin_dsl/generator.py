@@ -1,9 +1,8 @@
-from typing import cast, List
+from typing import List
 
 from .kotlin_dsl_entities import (
     update_base,
     KotlinDSLEntity,
-    KotlinDSLProperty,
     KotlinDSLEntityEnumeration
 )
 from ..base import Generator
@@ -34,7 +33,7 @@ class KotlinDSLGenerator(Generator):
 
     def __entity_declaration_with(self, entity: KotlinDSLEntity, with_factory_methods: bool) -> Text:
         if entity.generate_as_protocol:
-            return self.__interface_declaration(entity)
+            return Text()
         result = Text()
         for annotation in self.kotlin_annotations:
             result += annotation
@@ -53,17 +52,6 @@ class KotlinDSLGenerator(Generator):
                 result += entity.factory_methods_declaration(for_templates=True)
             result += EMPTY
             result += entity.factory_methods_declaration(for_templates=False)
-        return result
-
-    def __interface_declaration(self, entity: KotlinDSLEntity) -> Text:
-        result = Text()
-        for annotation in self.kotlin_annotations:
-            result += annotation
-        result += f'interface {utils.capitalize_camel_case(entity.name)} {{'
-        for prop in cast(List[KotlinDSLProperty], entity.instance_properties):
-            result += prop.constructor_parameter_declaration(is_abstract=True,
-                                                             is_overridden=False).indented(indent_width=4)
-        result += '}'
         return result
 
     def __body_declaration(self, entity: KotlinDSLEntity) -> Text:

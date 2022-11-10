@@ -261,7 +261,7 @@ class SwiftGenerator(Generator):
         return result
 
     def __main_declaration_header(self, entity: SwiftEntity) -> str:
-        protocols = list(filter(None, [entity.protocol_plus_super_entities,
+        protocols = list(filter(None, [entity.protocol_plus_super_entities(),
                                        swift_utils.implemented_swift_protocol(entity.generation_mode)]))
         conformance = '' if not protocols else f': {", ".join(protocols)}'
         access_modifier = self._access_level.value

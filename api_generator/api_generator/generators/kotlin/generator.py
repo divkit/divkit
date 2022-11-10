@@ -109,7 +109,7 @@ class KotlinGenerator(Generator):
         prefix = f'{data_prefix}class {utils.capitalize_camel_case(entity.name)}'
 
         interfaces = 'JSONSerializable'
-        protocol_plus_super_entities = entity.protocol_plus_super_entities
+        protocol_plus_super_entities = entity.protocol_plus_super_entities()
         if protocol_plus_super_entities is not None:
             interfaces += f', {protocol_plus_super_entities}'
         suffix = f' : {interfaces} {{'

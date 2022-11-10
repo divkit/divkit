@@ -74,10 +74,7 @@ class KotlinDSLEntity(Entity):
     def constructor_parameter_declaration(self) -> Text:
         result = Text()
         for prop in cast(List[KotlinDSLProperty], self.instance_properties):
-            present_in_supertype = False
-            if self.implemented_protocol is not None:
-                present_in_supertype = any(p.name == prop.name for p in self.implemented_protocol.properties)
-            result += f'{prop.constructor_parameter_declaration(is_abstract=False, is_overridden=present_in_supertype)},'
+            result += f'{prop.constructor_parameter_declaration(is_abstract=False)},'
         return result
 
     @property
@@ -87,7 +84,7 @@ class KotlinDSLEntity(Entity):
             supertypes.append(f'{utils.capitalize_camel_case(enumeration.name)}')
         if self.root_entity:
             supertypes.append('Root')
-        additional_supertypes = self.protocol_plus_super_entities
+        additional_supertypes = self.protocol_plus_super_entities(with_impl_protocol=False)
         if additional_supertypes is not None:
             supertypes.append(additional_supertypes)
         if not supertypes:
@@ -229,13 +226,10 @@ class KotlinDSLProperty(Property):
     def update_base(self):
         update_property_type_base(self.property_type)
 
-    def constructor_parameter_declaration(self, is_abstract: bool, is_overridden: bool) -> Text:
+    def constructor_parameter_declaration(self, is_abstract: bool) -> Text:
         qualifiers = ''
         if not is_abstract:
             qualifiers += '@JsonIgnore '
-        if is_overridden:
-            qualifiers += 'override '
-            assert not is_abstract
         prop_type = cast(KotlinDSLPropertyType, self.property_type)
         type = f'Property<{cast(KotlinDSLPropertyType, prop_type.declaration(prefixed=False))}>'
         return Text(f'{qualifiers}val {self.name_declaration}: {type}?')

@@ -236,10 +236,9 @@ class Entity(Declarable):
     def swift_super_protocol(self) -> Optional[str]:
         return self._swift_super_protocol
 
-    @property
-    def protocol_plus_super_entities(self) -> Optional[str]:
+    def protocol_plus_super_entities(self, with_impl_protocol=True) -> Optional[str]:
         protocols = []
-        if self._implemented_protocol is not None:
+        if with_impl_protocol and self._implemented_protocol is not None:
             protocols.append(capitalize_camel_case(self._implemented_protocol.name))
         protocol_name = self.generation_mode.protocol_name(self._lang, self.resolved_prefixed_declaration)
         if protocol_name is not None:
@@ -344,14 +343,12 @@ class Entity(Declarable):
                                           None)
 
         if self._lang is GeneratedLanguage.KOTLIN_DSL:
-            self._enclosing_enumerations = list()
-            for enumeration in global_objects:
-                valid_enumeration = False
-                if isinstance(enumeration, EntityEnumeration):
-                    valid_names = [self._name, self._resolved_name, self._original_name]
-                    valid_enumeration = any(ent[0] in valid_names for ent in enumeration.entities)
-                if valid_enumeration:
-                    self._enclosing_enumerations.append(enumeration)
+            valid_names = (self._name, self._resolved_name, self._original_name)
+            self._enclosing_enumerations = [
+                enumeration for enumeration in global_objects
+                if isinstance(enumeration, EntityEnumeration)
+                and any(entities[0] in valid_names for entities in enumeration.entities)
+            ]
 
     def check_dependencies_resolved(self, location: ElementLocation, stack: List[Declarable]) -> None:
         if self in stack:
