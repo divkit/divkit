@@ -1389,6 +1389,20 @@
         "Two pagers with indicator of different shapes - Rounded Rectangle and Circle"
       ],
       "file": "indicator_shapes.json"
+    },
+    {
+      "title": "Gallery items posing",
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Scroll the items to the gallery end",
+        "Try to scroll again"
+      ],
+      "expected_results": [
+        "Current item always stick to the text"
+      ],
+      "file": "gallery/gallery-items-posing.json"
     }
   ]
 }
