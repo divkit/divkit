@@ -4,6 +4,7 @@ import Base
 import BaseUI
 import LayoutKit
 import Networking
+import Serialization
 
 public struct DivBlockModelingContext {
   public let cardId: DivCardID
@@ -25,13 +26,9 @@ public struct DivBlockModelingContext {
   public let debugParams: DebugParams
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
+  public let errorsStorage: DivErrorsStorage
   var overridenWidth: DivOverridenSize? = nil
   var overridenHeight: DivOverridenSize? = nil
-  private let errorsStorage = DivErrorsStorage()
-
-  public var errors: [DivError] {
-    errorsStorage.underlyingArray
-  }
 
   public init(
     cardId: DivCardID,
@@ -52,7 +49,8 @@ public struct DivBlockModelingContext {
     variables: DivVariables = [:],
     debugParams: DebugParams = DebugParams(),
     childrenA11yDescription: String? = nil,
-    parentScrollView: ScrollView? = nil
+    parentScrollView: ScrollView? = nil,
+    errorsStorage: DivErrorsStorage = DivErrorsStorage(errors: [])
   ) {
     self.cardId = cardId
     self.cardLogId = cardLogId
@@ -70,6 +68,7 @@ public struct DivBlockModelingContext {
     self.debugParams = debugParams
     self.childrenA11yDescription = childrenA11yDescription
     self.parentScrollView = parentScrollView
+    self.errorsStorage = errorsStorage
 
     if debugParams.isDebugInfoEnabled {
       self.expressionResolver = ExpressionResolver(
@@ -152,20 +151,5 @@ public struct DivBlockModelingContext {
       return overridenHeight.overriden
     }
     return height
-  }
-}
-
-public typealias DivError = CustomStringConvertible
-
-public enum DivErrorLevel {
-  case warning
-  case error
-}
-
-private final class DivErrorsStorage {
-  private(set) var underlyingArray: [DivError] = []
-
-  func add(_ error: DivError) {
-    underlyingArray.append(error)
   }
 }

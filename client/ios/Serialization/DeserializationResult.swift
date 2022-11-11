@@ -275,3 +275,14 @@ extension Either where T == DeserializationError, U == FieldError {
   }
   #endif
 }
+
+extension Either: CustomStringConvertible where T == DeserializationError, U == FieldError {
+  public var description: String {
+    switch self {
+    case let .left(deserializationError):
+      return deserializationError.localizedDescription
+    case let .right(fieldError):
+      return fieldError.description
+    }
+  }
+}
