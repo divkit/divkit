@@ -326,8 +326,8 @@ class DivFocusBinderTest {
     fun `apply blurred border on blur after rebind actions`() {
         val oldBorder = borderWithCornerRadius
         val newBorder = borderWithShadow
-        bindBorder(borderWithCornerRadius, oldBorder)
-        bindBorder(borderWithCornerRadius, newBorder)
+        bindBorder(defaultBorder, oldBorder)
+        bindBorder(defaultBorder, newBorder)
 
         onFocusChange(false)
 
