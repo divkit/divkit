@@ -41,6 +41,9 @@ extension DivAlignmentVertical {
       return .center
     case .bottom:
       return .bottom
+    case .baseline:
+      assertionFailure("baseline alignment not supported")
+      return .top
     }
   }
 }

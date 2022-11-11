@@ -8,6 +8,7 @@ import Serialization
 import TemplatesSupport
 
 public final class EntityWithStringEnumProperty {
+  @frozen
   public enum Property: String, CaseIterable {
     case first = "first"
     case second = "second"

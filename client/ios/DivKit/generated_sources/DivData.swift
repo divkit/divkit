@@ -21,6 +21,7 @@ public final class DivData {
 
   public let logId: String // at least 1 char
   public let states: [State] // at least 1 elements; all received elements must be valid
+  public let timers: [DivTimer]? // at least 1 elements
   public let transitionAnimationSelector: Expression<DivTransitionSelector> // default value: none
   public let variableTriggers: [DivTrigger]? // at least 1 elements
   public let variables: [DivVariable]? // at least 1 elements
@@ -35,6 +36,9 @@ public final class DivData {
   static let statesValidator: AnyArrayValueValidator<DivData.State> =
     makeStrictArrayValidator(minItems: 1)
 
+  static let timersValidator: AnyArrayValueValidator<DivTimer> =
+    makeArrayValidator(minItems: 1)
+
   static let transitionAnimationSelectorValidator: AnyValueValidator<DivTransitionSelector> =
     makeNoOpValueValidator()
 
@@ -47,12 +51,14 @@ public final class DivData {
   init(
     logId: String,
     states: [State],
+    timers: [DivTimer]?,
     transitionAnimationSelector: Expression<DivTransitionSelector>?,
     variableTriggers: [DivTrigger]?,
     variables: [DivVariable]?
   ) {
     self.logId = logId
     self.states = states
+    self.timers = timers
     self.transitionAnimationSelector = transitionAnimationSelector ?? .value(.none)
     self.variableTriggers = variableTriggers
     self.variables = variables
@@ -65,11 +71,12 @@ extension DivData: Equatable {
     guard
       lhs.logId == rhs.logId,
       lhs.states == rhs.states,
-      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector
+      lhs.timers == rhs.timers
     else {
       return false
     }
     guard
+      lhs.transitionAnimationSelector == rhs.transitionAnimationSelector,
       lhs.variableTriggers == rhs.variableTriggers,
       lhs.variables == rhs.variables
     else {
@@ -85,6 +92,7 @@ extension DivData: Serializable {
     var result: [String: ValidSerializationValue] = [:]
     result["log_id"] = logId
     result["states"] = states.map { $0.toDictionary() }
+    result["timers"] = timers?.map { $0.toDictionary() }
     result["transition_animation_selector"] = transitionAnimationSelector.toValidSerializationValue()
     result["variable_triggers"] = variableTriggers?.map { $0.toDictionary() }
     result["variables"] = variables?.map { $0.toDictionary() }

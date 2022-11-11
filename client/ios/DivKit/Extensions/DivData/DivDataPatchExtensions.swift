@@ -8,6 +8,7 @@ extension DivData {
     return DivData(
       logId: logId,
       states: states,
+      timers: timers,
       transitionAnimationSelector: transitionAnimationSelector,
       variableTriggers: variableTriggers,
       variables: variables

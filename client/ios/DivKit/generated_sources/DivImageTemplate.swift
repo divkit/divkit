@@ -24,6 +24,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
   public let contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? // default value: center
   public let doubletapActions: Field<[DivActionTemplate]>? // at least 1 elements
   public let extensions: Field<[DivExtensionTemplate]>? // at least 1 elements
+  public let filters: Field<[DivFilterTemplate]>? // at least 1 elements
   public let focus: Field<DivFocusTemplate>?
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let highPriorityPreviewShow: Field<Expression<Bool>>? // default value: false
@@ -74,6 +75,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
         contentAlignmentVertical: try dictionary.getOptionalExpressionField("content_alignment_vertical"),
         doubletapActions: try dictionary.getOptionalArray("doubletap_actions", templateToType: templateToType),
         extensions: try dictionary.getOptionalArray("extensions", templateToType: templateToType),
+        filters: try dictionary.getOptionalArray("filters", templateToType: templateToType),
         focus: try dictionary.getOptionalField("focus", templateToType: templateToType),
         height: try dictionary.getOptionalField("height", templateToType: templateToType),
         highPriorityPreviewShow: try dictionary.getOptionalExpressionField("high_priority_preview_show"),
@@ -124,6 +126,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     contentAlignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     doubletapActions: Field<[DivActionTemplate]>? = nil,
     extensions: Field<[DivExtensionTemplate]>? = nil,
+    filters: Field<[DivFilterTemplate]>? = nil,
     focus: Field<DivFocusTemplate>? = nil,
     height: Field<DivSizeTemplate>? = nil,
     highPriorityPreviewShow: Field<Expression<Bool>>? = nil,
@@ -168,6 +171,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     self.contentAlignmentVertical = contentAlignmentVertical
     self.doubletapActions = doubletapActions
     self.extensions = extensions
+    self.filters = filters
     self.focus = focus
     self.height = height
     self.highPriorityPreviewShow = highPriorityPreviewShow
@@ -213,6 +217,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     let contentAlignmentVerticalValue = parent?.contentAlignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.contentAlignmentVerticalValidator) ?? .noValue
     let doubletapActionsValue = parent?.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true) ?? .noValue
     let extensionsValue = parent?.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true) ?? .noValue
+    let filtersValue = parent?.filters?.resolveOptionalValue(context: context, validator: ResolvedValue.filtersValidator, useOnlyLinks: true) ?? .noValue
     let focusValue = parent?.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true) ?? .noValue
     let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
     let highPriorityPreviewShowValue = parent?.highPriorityPreviewShow?.resolveOptionalValue(context: context, validator: ResolvedValue.highPriorityPreviewShowValidator) ?? .noValue
@@ -256,6 +261,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       contentAlignmentVerticalValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "content_alignment_vertical", level: .warning)) },
       doubletapActionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "doubletap_actions", level: .warning)) },
       extensionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "extensions", level: .warning)) },
+      filtersValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "filters", level: .warning)) },
       focusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "focus", level: .warning)) },
       heightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "height", level: .warning)) },
       highPriorityPreviewShowValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "high_priority_preview_show", level: .warning)) },
@@ -308,6 +314,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       contentAlignmentVertical: contentAlignmentVerticalValue.value,
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
+      filters: filtersValue.value,
       focus: focusValue.value,
       height: heightValue.value,
       highPriorityPreviewShow: highPriorityPreviewShowValue.value,
@@ -358,6 +365,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
     var contentAlignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.contentAlignmentVertical?.value() ?? .noValue
     var doubletapActionsValue: DeserializationResult<[DivAction]> = .noValue
     var extensionsValue: DeserializationResult<[DivExtension]> = .noValue
+    var filtersValue: DeserializationResult<[DivFilter]> = .noValue
     var focusValue: DeserializationResult<DivFocus> = .noValue
     var heightValue: DeserializationResult<DivSize> = .noValue
     var highPriorityPreviewShowValue: DeserializationResult<Expression<Bool>> = parent?.highPriorityPreviewShow?.value() ?? .noValue
@@ -418,6 +426,8 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
         doubletapActionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self).merged(with: doubletapActionsValue)
       case "extensions":
         extensionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self).merged(with: extensionsValue)
+      case "filters":
+        filtersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.filtersValidator, type: DivFilterTemplate.self).merged(with: filtersValue)
       case "focus":
         focusValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.focusValidator, type: DivFocusTemplate.self).merged(with: focusValue)
       case "height":
@@ -502,6 +512,8 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
         doubletapActionsValue = doubletapActionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.doubletapActionsValidator, type: DivActionTemplate.self))
       case parent?.extensions?.link:
         extensionsValue = extensionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.extensionsValidator, type: DivExtensionTemplate.self))
+      case parent?.filters?.link:
+        filtersValue = filtersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.filtersValidator, type: DivFilterTemplate.self))
       case parent?.focus?.link:
         focusValue = focusValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.focusValidator, type: DivFocusTemplate.self))
       case parent?.height?.link:
@@ -568,6 +580,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
       doubletapActionsValue = doubletapActionsValue.merged(with: parent.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
+      filtersValue = filtersValue.merged(with: parent.filters?.resolveOptionalValue(context: context, validator: ResolvedValue.filtersValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
       longtapActionsValue = longtapActionsValue.merged(with: parent.longtapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.longtapActionsValidator, useOnlyLinks: true))
@@ -600,6 +613,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       contentAlignmentVerticalValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "content_alignment_vertical", level: .warning)) },
       doubletapActionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "doubletap_actions", level: .warning)) },
       extensionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "extensions", level: .warning)) },
+      filtersValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "filters", level: .warning)) },
       focusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "focus", level: .warning)) },
       heightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "height", level: .warning)) },
       highPriorityPreviewShowValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "high_priority_preview_show", level: .warning)) },
@@ -652,6 +666,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       contentAlignmentVertical: contentAlignmentVerticalValue.value,
       doubletapActions: doubletapActionsValue.value,
       extensions: extensionsValue.value,
+      filters: filtersValue.value,
       focus: focusValue.value,
       height: heightValue.value,
       highPriorityPreviewShow: highPriorityPreviewShowValue.value,
@@ -707,6 +722,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       contentAlignmentVertical: contentAlignmentVertical ?? mergedParent.contentAlignmentVertical,
       doubletapActions: doubletapActions ?? mergedParent.doubletapActions,
       extensions: extensions ?? mergedParent.extensions,
+      filters: filters ?? mergedParent.filters,
       focus: focus ?? mergedParent.focus,
       height: height ?? mergedParent.height,
       highPriorityPreviewShow: highPriorityPreviewShow ?? mergedParent.highPriorityPreviewShow,
@@ -757,6 +773,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       contentAlignmentVertical: merged.contentAlignmentVertical,
       doubletapActions: merged.doubletapActions?.tryResolveParent(templates: templates),
       extensions: merged.extensions?.tryResolveParent(templates: templates),
+      filters: merged.filters?.tryResolveParent(templates: templates),
       focus: merged.focus?.tryResolveParent(templates: templates),
       height: merged.height?.tryResolveParent(templates: templates),
       highPriorityPreviewShow: merged.highPriorityPreviewShow,

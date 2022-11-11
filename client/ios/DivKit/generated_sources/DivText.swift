@@ -45,6 +45,7 @@ public final class DivText: DivBase {
     public let height: DivFixedSize // default value: DivFixedSize(value: .value(20))
     public let start: Expression<Int> // constraint: number >= 0
     public let tintColor: Expression<Color>?
+    public let tintMode: Expression<DivBlendMode> // default value: source_in
     public let url: Expression<URL>
     public let width: DivFixedSize // default value: DivFixedSize(value: .value(20))
 
@@ -54,6 +55,10 @@ public final class DivText: DivBase {
 
     public func resolveTintColor(_ resolver: ExpressionResolver) -> Color? {
       resolver.resolveStringBasedValue(expression: tintColor, initializer: Color.color(withHexString:))
+    }
+
+    public func resolveTintMode(_ resolver: ExpressionResolver) -> DivBlendMode {
+      resolver.resolveStringBasedValue(expression: tintMode, initializer: DivBlendMode.init(rawValue:)) ?? DivBlendMode.sourceIn
     }
 
     public func resolveUrl(_ resolver: ExpressionResolver) -> URL? {
@@ -69,6 +74,9 @@ public final class DivText: DivBase {
     static let tintColorValidator: AnyValueValidator<Color> =
       makeNoOpValueValidator()
 
+    static let tintModeValidator: AnyValueValidator<DivBlendMode> =
+      makeNoOpValueValidator()
+
     static let widthValidator: AnyValueValidator<DivFixedSize> =
       makeNoOpValueValidator()
 
@@ -76,12 +84,14 @@ public final class DivText: DivBase {
       height: DivFixedSize? = nil,
       start: Expression<Int>,
       tintColor: Expression<Color>? = nil,
+      tintMode: Expression<DivBlendMode>? = nil,
       url: Expression<URL>,
       width: DivFixedSize? = nil
     ) {
       self.height = height ?? DivFixedSize(value: .value(20))
       self.start = start
       self.tintColor = tintColor
+      self.tintMode = tintMode ?? .value(.sourceIn)
       self.url = url
       self.width = width ?? DivFixedSize(value: .value(20))
     }
@@ -89,6 +99,8 @@ public final class DivText: DivBase {
 
   public final class Range {
     public let actions: [DivAction]? // at least 1 elements
+    public let background: DivTextRangeBackground?
+    public let border: DivTextRangeBorder?
     public let end: Expression<Int> // constraint: number > 0
     public let fontFamily: Expression<DivFontFamily>?
     public let fontSize: Expression<Int>? // constraint: number >= 0
@@ -153,6 +165,12 @@ public final class DivText: DivBase {
     static let actionsValidator: AnyArrayValueValidator<DivAction> =
       makeArrayValidator(minItems: 1)
 
+    static let backgroundValidator: AnyValueValidator<DivTextRangeBackground> =
+      makeNoOpValueValidator()
+
+    static let borderValidator: AnyValueValidator<DivTextRangeBorder> =
+      makeNoOpValueValidator()
+
     static let endValidator: AnyValueValidator<Int> =
       makeValueValidator(valueValidator: { $0 > 0 })
 
@@ -188,6 +206,8 @@ public final class DivText: DivBase {
 
     init(
       actions: [DivAction]? = nil,
+      background: DivTextRangeBackground? = nil,
+      border: DivTextRangeBorder? = nil,
       end: Expression<Int>,
       fontFamily: Expression<DivFontFamily>? = nil,
       fontSize: Expression<Int>? = nil,
@@ -202,6 +222,8 @@ public final class DivText: DivBase {
       underline: Expression<DivLineStyle>? = nil
     ) {
       self.actions = actions
+      self.background = background
+      self.border = border
       self.end = end
       self.fontFamily = fontFamily
       self.fontSize = fontSize
@@ -836,6 +858,7 @@ extension DivText.Image: Equatable {
       return false
     }
     guard
+      lhs.tintMode == rhs.tintMode,
       lhs.url == rhs.url,
       lhs.width == rhs.width
     else {
@@ -851,33 +874,35 @@ extension DivText.Range: Equatable {
   public static func ==(lhs: DivText.Range, rhs: DivText.Range) -> Bool {
     guard
       lhs.actions == rhs.actions,
+      lhs.background == rhs.background,
+      lhs.border == rhs.border
+    else {
+      return false
+    }
+    guard
       lhs.end == rhs.end,
-      lhs.fontFamily == rhs.fontFamily
+      lhs.fontFamily == rhs.fontFamily,
+      lhs.fontSize == rhs.fontSize
     else {
       return false
     }
     guard
-      lhs.fontSize == rhs.fontSize,
       lhs.fontSizeUnit == rhs.fontSizeUnit,
-      lhs.fontWeight == rhs.fontWeight
+      lhs.fontWeight == rhs.fontWeight,
+      lhs.letterSpacing == rhs.letterSpacing
     else {
       return false
     }
     guard
-      lhs.letterSpacing == rhs.letterSpacing,
       lhs.lineHeight == rhs.lineHeight,
-      lhs.start == rhs.start
+      lhs.start == rhs.start,
+      lhs.strike == rhs.strike
     else {
       return false
     }
     guard
-      lhs.strike == rhs.strike,
       lhs.textColor == rhs.textColor,
-      lhs.topOffset == rhs.topOffset
-    else {
-      return false
-    }
-    guard
+      lhs.topOffset == rhs.topOffset,
       lhs.underline == rhs.underline
     else {
       return false
@@ -904,6 +929,7 @@ extension DivText.Image: Serializable {
     result["height"] = height.toDictionary()
     result["start"] = start.toValidSerializationValue()
     result["tint_color"] = tintColor?.toValidSerializationValue()
+    result["tint_mode"] = tintMode.toValidSerializationValue()
     result["url"] = url.toValidSerializationValue()
     result["width"] = width.toDictionary()
     return result
@@ -914,6 +940,8 @@ extension DivText.Range: Serializable {
   public func toDictionary() -> [String: ValidSerializationValue] {
     var result: [String: ValidSerializationValue] = [:]
     result["actions"] = actions?.map { $0.toDictionary() }
+    result["background"] = background?.toDictionary()
+    result["border"] = border?.toDictionary()
     result["end"] = end.toValidSerializationValue()
     result["font_family"] = fontFamily?.toValidSerializationValue()
     result["font_size"] = fontSize?.toValidSerializationValue()

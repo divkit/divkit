@@ -142,6 +142,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     public let height: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(20))
     public let start: Field<Expression<Int>>? // constraint: number >= 0
     public let tintColor: Field<Expression<Color>>?
+    public let tintMode: Field<Expression<DivBlendMode>>? // default value: source_in
     public let url: Field<Expression<URL>>?
     public let width: Field<DivFixedSizeTemplate>? // default value: DivFixedSize(value: .value(20))
 
@@ -151,6 +152,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
           height: try dictionary.getOptionalField("height", templateToType: templateToType),
           start: try dictionary.getOptionalExpressionField("start"),
           tintColor: try dictionary.getOptionalExpressionField("tint_color", transform: Color.color(withHexString:)),
+          tintMode: try dictionary.getOptionalExpressionField("tint_mode"),
           url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:)),
           width: try dictionary.getOptionalField("width", templateToType: templateToType)
         )
@@ -163,12 +165,14 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       height: Field<DivFixedSizeTemplate>? = nil,
       start: Field<Expression<Int>>? = nil,
       tintColor: Field<Expression<Color>>? = nil,
+      tintMode: Field<Expression<DivBlendMode>>? = nil,
       url: Field<Expression<URL>>? = nil,
       width: Field<DivFixedSizeTemplate>? = nil
     ) {
       self.height = height
       self.start = start
       self.tintColor = tintColor
+      self.tintMode = tintMode
       self.url = url
       self.width = width
     }
@@ -177,12 +181,14 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
       let startValue = parent?.start?.resolveValue(context: context, validator: ResolvedValue.startValidator) ?? .noValue
       let tintColorValue = parent?.tintColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.tintColorValidator) ?? .noValue
+      let tintModeValue = parent?.tintMode?.resolveOptionalValue(context: context, validator: ResolvedValue.tintModeValidator) ?? .noValue
       let urlValue = parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
       let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
         heightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "height", level: .warning)) },
         startValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "start", level: .error)) },
         tintColorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "tint_color", level: .warning)) },
+        tintModeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "tint_mode", level: .warning)) },
         urlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "url", level: .error)) },
         widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
       )
@@ -202,6 +208,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         height: heightValue.value,
         start: startNonNil,
         tintColor: tintColorValue.value,
+        tintMode: tintModeValue.value,
         url: urlNonNil,
         width: widthValue.value
       )
@@ -215,6 +222,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       var heightValue: DeserializationResult<DivFixedSize> = .noValue
       var startValue: DeserializationResult<Expression<Int>> = parent?.start?.value() ?? .noValue
       var tintColorValue: DeserializationResult<Expression<Color>> = parent?.tintColor?.value() ?? .noValue
+      var tintModeValue: DeserializationResult<Expression<DivBlendMode>> = parent?.tintMode?.value() ?? .noValue
       var urlValue: DeserializationResult<Expression<URL>> = parent?.url?.value() ?? .noValue
       var widthValue: DeserializationResult<DivFixedSize> = .noValue
       context.templateData.forEach { key, __dictValue in
@@ -225,6 +233,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
           startValue = deserialize(__dictValue, validator: ResolvedValue.startValidator).merged(with: startValue)
         case "tint_color":
           tintColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.tintColorValidator).merged(with: tintColorValue)
+        case "tint_mode":
+          tintModeValue = deserialize(__dictValue, validator: ResolvedValue.tintModeValidator).merged(with: tintModeValue)
         case "url":
           urlValue = deserialize(__dictValue, transform: URL.init(string:)).merged(with: urlValue)
         case "width":
@@ -235,6 +245,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
           startValue = startValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.startValidator))
         case parent?.tintColor?.link:
           tintColorValue = tintColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.tintColorValidator))
+        case parent?.tintMode?.link:
+          tintModeValue = tintModeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.tintModeValidator))
         case parent?.url?.link:
           urlValue = urlValue.merged(with: deserialize(__dictValue, transform: URL.init(string:)))
         case parent?.width?.link:
@@ -250,6 +262,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         heightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "height", level: .warning)) },
         startValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "start", level: .error)) },
         tintColorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "tint_color", level: .warning)) },
+        tintModeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "tint_mode", level: .warning)) },
         urlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "url", level: .error)) },
         widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
       )
@@ -269,6 +282,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         height: heightValue.value,
         start: startNonNil,
         tintColor: tintColorValue.value,
+        tintMode: tintModeValue.value,
         url: urlNonNil,
         width: widthValue.value
       )
@@ -286,6 +300,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         height: merged.height?.tryResolveParent(templates: templates),
         start: merged.start,
         tintColor: merged.tintColor,
+        tintMode: merged.tintMode,
         url: merged.url,
         width: merged.width?.tryResolveParent(templates: templates)
       )
@@ -294,6 +309,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
 
   public final class RangeTemplate: TemplateValue, TemplateDeserializable {
     public let actions: Field<[DivActionTemplate]>? // at least 1 elements
+    public let background: Field<DivTextRangeBackgroundTemplate>?
+    public let border: Field<DivTextRangeBorderTemplate>?
     public let end: Field<Expression<Int>>? // constraint: number > 0
     public let fontFamily: Field<Expression<DivFontFamily>>?
     public let fontSize: Field<Expression<Int>>? // constraint: number >= 0
@@ -311,6 +328,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       do {
         self.init(
           actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
+          background: try dictionary.getOptionalField("background", templateToType: templateToType),
+          border: try dictionary.getOptionalField("border", templateToType: templateToType),
           end: try dictionary.getOptionalExpressionField("end"),
           fontFamily: try dictionary.getOptionalExpressionField("font_family"),
           fontSize: try dictionary.getOptionalExpressionField("font_size"),
@@ -331,6 +350,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
 
     init(
       actions: Field<[DivActionTemplate]>? = nil,
+      background: Field<DivTextRangeBackgroundTemplate>? = nil,
+      border: Field<DivTextRangeBorderTemplate>? = nil,
       end: Field<Expression<Int>>? = nil,
       fontFamily: Field<Expression<DivFontFamily>>? = nil,
       fontSize: Field<Expression<Int>>? = nil,
@@ -345,6 +366,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       underline: Field<Expression<DivLineStyle>>? = nil
     ) {
       self.actions = actions
+      self.background = background
+      self.border = border
       self.end = end
       self.fontFamily = fontFamily
       self.fontSize = fontSize
@@ -361,6 +384,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
 
     private static func resolveOnlyLinks(context: Context, parent: RangeTemplate?) -> DeserializationResult<DivText.Range> {
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
+      let backgroundValue = parent?.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true) ?? .noValue
+      let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
       let endValue = parent?.end?.resolveValue(context: context, validator: ResolvedValue.endValidator) ?? .noValue
       let fontFamilyValue = parent?.fontFamily?.resolveOptionalValue(context: context, validator: ResolvedValue.fontFamilyValidator) ?? .noValue
       let fontSizeValue = parent?.fontSize?.resolveOptionalValue(context: context, validator: ResolvedValue.fontSizeValidator) ?? .noValue
@@ -375,6 +400,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       let underlineValue = parent?.underline?.resolveOptionalValue(context: context, validator: ResolvedValue.underlineValidator) ?? .noValue
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "actions", level: .warning)) },
+        backgroundValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "background", level: .warning)) },
+        borderValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "border", level: .warning)) },
         endValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "end", level: .error)) },
         fontFamilyValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "font_family", level: .warning)) },
         fontSizeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "font_size", level: .warning)) },
@@ -402,6 +429,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       }
       let result = DivText.Range(
         actions: actionsValue.value,
+        background: backgroundValue.value,
+        border: borderValue.value,
         end: endNonNil,
         fontFamily: fontFamilyValue.value,
         fontSize: fontSizeValue.value,
@@ -423,6 +452,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         return resolveOnlyLinks(context: context, parent: parent)
       }
       var actionsValue: DeserializationResult<[DivAction]> = .noValue
+      var backgroundValue: DeserializationResult<DivTextRangeBackground> = .noValue
+      var borderValue: DeserializationResult<DivTextRangeBorder> = .noValue
       var endValue: DeserializationResult<Expression<Int>> = parent?.end?.value() ?? .noValue
       var fontFamilyValue: DeserializationResult<Expression<DivFontFamily>> = parent?.fontFamily?.value() ?? .noValue
       var fontSizeValue: DeserializationResult<Expression<Int>> = parent?.fontSize?.value() ?? .noValue
@@ -439,6 +470,10 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         switch key {
         case "actions":
           actionsValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self).merged(with: actionsValue)
+        case "background":
+          backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.backgroundValidator, type: DivTextRangeBackgroundTemplate.self).merged(with: backgroundValue)
+        case "border":
+          borderValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivTextRangeBorderTemplate.self).merged(with: borderValue)
         case "end":
           endValue = deserialize(__dictValue, validator: ResolvedValue.endValidator).merged(with: endValue)
         case "font_family":
@@ -465,6 +500,10 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
           underlineValue = deserialize(__dictValue, validator: ResolvedValue.underlineValidator).merged(with: underlineValue)
         case parent?.actions?.link:
           actionsValue = actionsValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.actionsValidator, type: DivActionTemplate.self))
+        case parent?.background?.link:
+          backgroundValue = backgroundValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.backgroundValidator, type: DivTextRangeBackgroundTemplate.self))
+        case parent?.border?.link:
+          borderValue = borderValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.borderValidator, type: DivTextRangeBorderTemplate.self))
         case parent?.end?.link:
           endValue = endValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.endValidator))
         case parent?.fontFamily?.link:
@@ -494,9 +533,13 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       }
       if let parent = parent {
         actionsValue = actionsValue.merged(with: parent.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
+        backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
+        borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
       }
       var errors = mergeErrors(
         actionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "actions", level: .warning)) },
+        backgroundValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "background", level: .warning)) },
+        borderValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "border", level: .warning)) },
         endValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "end", level: .error)) },
         fontFamilyValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "font_family", level: .warning)) },
         fontSizeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "font_size", level: .warning)) },
@@ -524,6 +567,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       }
       let result = DivText.Range(
         actions: actionsValue.value,
+        background: backgroundValue.value,
+        border: borderValue.value,
         end: endNonNil,
         fontFamily: fontFamilyValue.value,
         fontSize: fontSizeValue.value,
@@ -549,6 +594,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
 
       return RangeTemplate(
         actions: merged.actions?.tryResolveParent(templates: templates),
+        background: merged.background?.tryResolveParent(templates: templates),
+        border: merged.border?.tryResolveParent(templates: templates),
         end: merged.end,
         fontFamily: merged.fontFamily,
         fontSize: merged.fontSize,

@@ -116,6 +116,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
 
   public let logId: Field<String>? // at least 1 char
   public let states: Field<[StateTemplate]>? // at least 1 elements; all received elements must be valid
+  public let timers: Field<[DivTimerTemplate]>? // at least 1 elements
   public let transitionAnimationSelector: Field<Expression<DivTransitionSelector>>? // default value: none
   public let variableTriggers: Field<[DivTriggerTemplate]>? // at least 1 elements
   public let variables: Field<[DivVariableTemplate]>? // at least 1 elements
@@ -128,6 +129,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       self.init(
         logId: try dictionary.getOptionalField("log_id"),
         states: try dictionary.getOptionalArray("states", templateToType: templateToType, validator: Self.statesValidator),
+        timers: try dictionary.getOptionalArray("timers", templateToType: templateToType),
         transitionAnimationSelector: try dictionary.getOptionalExpressionField("transition_animation_selector"),
         variableTriggers: try dictionary.getOptionalArray("variable_triggers", templateToType: templateToType),
         variables: try dictionary.getOptionalArray("variables", templateToType: templateToType)
@@ -140,12 +142,14 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
   init(
     logId: Field<String>? = nil,
     states: Field<[StateTemplate]>? = nil,
+    timers: Field<[DivTimerTemplate]>? = nil,
     transitionAnimationSelector: Field<Expression<DivTransitionSelector>>? = nil,
     variableTriggers: Field<[DivTriggerTemplate]>? = nil,
     variables: Field<[DivVariableTemplate]>? = nil
   ) {
     self.logId = logId
     self.states = states
+    self.timers = timers
     self.transitionAnimationSelector = transitionAnimationSelector
     self.variableTriggers = variableTriggers
     self.variables = variables
@@ -154,12 +158,14 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
   private static func resolveOnlyLinks(context: Context, parent: DivDataTemplate?) -> DeserializationResult<DivData> {
     let logIdValue = parent?.logId?.resolveValue(context: context, validator: ResolvedValue.logIdValidator) ?? .noValue
     let statesValue = parent?.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true) ?? .noValue
+    let timersValue = parent?.timers?.resolveOptionalValue(context: context, validator: ResolvedValue.timersValidator, useOnlyLinks: true) ?? .noValue
     let transitionAnimationSelectorValue = parent?.transitionAnimationSelector?.resolveOptionalValue(context: context, validator: ResolvedValue.transitionAnimationSelectorValidator) ?? .noValue
     let variableTriggersValue = parent?.variableTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.variableTriggersValidator, useOnlyLinks: true) ?? .noValue
     let variablesValue = parent?.variables?.resolveOptionalValue(context: context, validator: ResolvedValue.variablesValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
       logIdValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "log_id", level: .error)) },
       statesValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "states", level: .error)) },
+      timersValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "timers", level: .warning)) },
       transitionAnimationSelectorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transition_animation_selector", level: .warning)) },
       variableTriggersValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "variable_triggers", level: .warning)) },
       variablesValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "variables", level: .warning)) }
@@ -179,6 +185,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     let result = DivData(
       logId: logIdNonNil,
       states: statesNonNil,
+      timers: timersValue.value,
       transitionAnimationSelector: transitionAnimationSelectorValue.value,
       variableTriggers: variableTriggersValue.value,
       variables: variablesValue.value
@@ -192,6 +199,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     }
     var logIdValue: DeserializationResult<String> = parent?.logId?.value(validatedBy: ResolvedValue.logIdValidator) ?? .noValue
     var statesValue: DeserializationResult<[DivData.State]> = .noValue
+    var timersValue: DeserializationResult<[DivTimer]> = .noValue
     var transitionAnimationSelectorValue: DeserializationResult<Expression<DivTransitionSelector>> = parent?.transitionAnimationSelector?.value() ?? .noValue
     var variableTriggersValue: DeserializationResult<[DivTrigger]> = .noValue
     var variablesValue: DeserializationResult<[DivVariable]> = .noValue
@@ -201,6 +209,8 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
         logIdValue = deserialize(__dictValue, validator: ResolvedValue.logIdValidator).merged(with: logIdValue)
       case "states":
         statesValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self).merged(with: statesValue)
+      case "timers":
+        timersValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.timersValidator, type: DivTimerTemplate.self).merged(with: timersValue)
       case "transition_animation_selector":
         transitionAnimationSelectorValue = deserialize(__dictValue, validator: ResolvedValue.transitionAnimationSelectorValidator).merged(with: transitionAnimationSelectorValue)
       case "variable_triggers":
@@ -211,6 +221,8 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
         logIdValue = logIdValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.logIdValidator))
       case parent?.states?.link:
         statesValue = statesValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.statesValidator, type: DivDataTemplate.StateTemplate.self))
+      case parent?.timers?.link:
+        timersValue = timersValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.timersValidator, type: DivTimerTemplate.self))
       case parent?.transitionAnimationSelector?.link:
         transitionAnimationSelectorValue = transitionAnimationSelectorValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.transitionAnimationSelectorValidator))
       case parent?.variableTriggers?.link:
@@ -222,12 +234,14 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     }
     if let parent = parent {
       statesValue = statesValue.merged(with: parent.states?.resolveValue(context: context, validator: ResolvedValue.statesValidator, useOnlyLinks: true))
+      timersValue = timersValue.merged(with: parent.timers?.resolveOptionalValue(context: context, validator: ResolvedValue.timersValidator, useOnlyLinks: true))
       variableTriggersValue = variableTriggersValue.merged(with: parent.variableTriggers?.resolveOptionalValue(context: context, validator: ResolvedValue.variableTriggersValidator, useOnlyLinks: true))
       variablesValue = variablesValue.merged(with: parent.variables?.resolveOptionalValue(context: context, validator: ResolvedValue.variablesValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
       logIdValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "log_id", level: .error)) },
       statesValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "states", level: .error)) },
+      timersValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "timers", level: .warning)) },
       transitionAnimationSelectorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transition_animation_selector", level: .warning)) },
       variableTriggersValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "variable_triggers", level: .warning)) },
       variablesValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "variables", level: .warning)) }
@@ -247,6 +261,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     let result = DivData(
       logId: logIdNonNil,
       states: statesNonNil,
+      timers: timersValue.value,
       transitionAnimationSelector: transitionAnimationSelectorValue.value,
       variableTriggers: variableTriggersValue.value,
       variables: variablesValue.value
@@ -264,6 +279,7 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
     return DivDataTemplate(
       logId: merged.logId,
       states: try merged.states?.resolveParent(templates: templates, validator: Self.statesValidator),
+      timers: merged.timers?.tryResolveParent(templates: templates),
       transitionAnimationSelector: merged.transitionAnimationSelector,
       variableTriggers: merged.variableTriggers?.tryResolveParent(templates: templates),
       variables: merged.variables?.tryResolveParent(templates: templates)

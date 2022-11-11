@@ -23,6 +23,7 @@ public final class DivImage: DivBase {
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
   public let doubletapActions: [DivAction]? // at least 1 elements
   public let extensions: [DivExtension]? // at least 1 elements
+  public let filters: [DivFilter]? // at least 1 elements
   public let focus: DivFocus?
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let highPriorityPreviewShow: Expression<Bool> // default value: false
@@ -162,6 +163,9 @@ public final class DivImage: DivBase {
   static let extensionsValidator: AnyArrayValueValidator<DivExtension> =
     makeArrayValidator(minItems: 1)
 
+  static let filtersValidator: AnyArrayValueValidator<DivFilter> =
+    makeArrayValidator(minItems: 1)
+
   static let focusValidator: AnyValueValidator<DivFocus> =
     makeNoOpValueValidator()
 
@@ -254,6 +258,7 @@ public final class DivImage: DivBase {
     contentAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
     doubletapActions: [DivAction]? = nil,
     extensions: [DivExtension]? = nil,
+    filters: [DivFilter]? = nil,
     focus: DivFocus? = nil,
     height: DivSize? = nil,
     highPriorityPreviewShow: Expression<Bool>? = nil,
@@ -297,6 +302,7 @@ public final class DivImage: DivBase {
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.center)
     self.doubletapActions = doubletapActions
     self.extensions = extensions
+    self.filters = filters
     self.focus = focus
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.highPriorityPreviewShow = highPriorityPreviewShow ?? .value(false)
@@ -366,63 +372,68 @@ extension DivImage: Equatable {
     }
     guard
       lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus,
-      lhs.height == rhs.height
+      lhs.filters == rhs.filters,
+      lhs.focus == rhs.focus
     else {
       return false
     }
     guard
+      lhs.height == rhs.height,
       lhs.highPriorityPreviewShow == rhs.highPriorityPreviewShow,
-      lhs.id == rhs.id,
-      lhs.imageUrl == rhs.imageUrl
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.imageUrl == rhs.imageUrl,
       lhs.longtapActions == rhs.longtapActions,
-      lhs.margins == rhs.margins,
-      lhs.paddings == rhs.paddings
+      lhs.margins == rhs.margins
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.placeholderColor == rhs.placeholderColor,
-      lhs.preloadRequired == rhs.preloadRequired,
-      lhs.preview == rhs.preview
+      lhs.preloadRequired == rhs.preloadRequired
     else {
       return false
     }
     guard
+      lhs.preview == rhs.preview,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.scale == rhs.scale,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.scale == rhs.scale
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.tintColor == rhs.tintColor,
-      lhs.tintMode == rhs.tintMode,
-      lhs.tooltips == rhs.tooltips
+      lhs.tintMode == rhs.tintMode
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -452,6 +463,7 @@ extension DivImage: Serializable {
     result["content_alignment_vertical"] = contentAlignmentVertical.toValidSerializationValue()
     result["doubletap_actions"] = doubletapActions?.map { $0.toDictionary() }
     result["extensions"] = extensions?.map { $0.toDictionary() }
+    result["filters"] = filters?.map { $0.toDictionary() }
     result["focus"] = focus?.toDictionary()
     result["height"] = height.toDictionary()
     result["high_priority_preview_show"] = highPriorityPreviewShow.toValidSerializationValue()

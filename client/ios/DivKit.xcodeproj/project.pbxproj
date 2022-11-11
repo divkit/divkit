@@ -177,6 +177,10 @@
 		8C9284FE288ADEEA00BEA1FA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284FD288ADEEA00BEA1FA /* ViewController.swift */; };
 		8C928503288ADEEA00BEA1FA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C928502288ADEEA00BEA1FA /* Assets.xcassets */; };
 		8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 8CA382DE287C5CF000C99F4F /* DivKitExtensions */; };
+		8CAC3405291E7B71000E8072 /* EntityWithArrayOfEnumsTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAC3401291E7B71000E8072 /* EntityWithArrayOfEnumsTemplate.swift */; };
+		8CAC3406291E7B71000E8072 /* EntityWithArrayOfExpressionsTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAC3402291E7B71000E8072 /* EntityWithArrayOfExpressionsTemplate.swift */; };
+		8CAC3407291E7B71000E8072 /* EntityWithArrayOfEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAC3403291E7B71000E8072 /* EntityWithArrayOfEnums.swift */; };
+		8CAC3408291E7B71000E8072 /* EntityWithArrayOfExpressions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CAC3404291E7B71000E8072 /* EntityWithArrayOfExpressions.swift */; };
 		8CB960E428883B8300D16E47 /* DivTriggerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E328883B8300D16E47 /* DivTriggerTests.swift */; };
 		8CB960E628883B8E00D16E47 /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E528883B8E00D16E47 /* Platform.swift */; };
 		8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */; };
@@ -406,6 +410,10 @@
 		8C9284FD288ADEEA00BEA1FA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8C928502288ADEEA00BEA1FA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8C928507288ADEEA00BEA1FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8CAC3401291E7B71000E8072 /* EntityWithArrayOfEnumsTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfEnumsTemplate.swift; sourceTree = "<group>"; };
+		8CAC3402291E7B71000E8072 /* EntityWithArrayOfExpressionsTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfExpressionsTemplate.swift; sourceTree = "<group>"; };
+		8CAC3403291E7B71000E8072 /* EntityWithArrayOfEnums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfEnums.swift; sourceTree = "<group>"; };
+		8CAC3404291E7B71000E8072 /* EntityWithArrayOfExpressions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntityWithArrayOfExpressions.swift; sourceTree = "<group>"; };
 		8CB960E328883B8300D16E47 /* DivTriggerTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivTriggerTests.swift; sourceTree = "<group>"; };
 		8CB960E528883B8E00D16E47 /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionSignaturesTests.swift; sourceTree = "<group>"; };
@@ -667,6 +675,10 @@
 				8C1CF669286B5A3B0016D0A1 /* Entity.swift */,
 				8C1CF675286B5A3B0016D0A1 /* EntityTemplate.swift */,
 				8C1CF66D286B5A3B0016D0A1 /* EntityWithArray.swift */,
+				8CAC3403291E7B71000E8072 /* EntityWithArrayOfEnums.swift */,
+				8CAC3401291E7B71000E8072 /* EntityWithArrayOfEnumsTemplate.swift */,
+				8CAC3404291E7B71000E8072 /* EntityWithArrayOfExpressions.swift */,
+				8CAC3402291E7B71000E8072 /* EntityWithArrayOfExpressionsTemplate.swift */,
 				8C1CF680286B5A3B0016D0A1 /* EntityWithArrayOfNestedItems.swift */,
 				8C1CF66B286B5A3B0016D0A1 /* EntityWithArrayOfNestedItemsTemplate.swift */,
 				8C1CF685286B5A3B0016D0A1 /* EntityWithArrayTemplate.swift */,
@@ -1441,6 +1453,7 @@
 			files = (
 				8C1CF68B286B5A3B0016D0A1 /* EntityWithEntityPropertyTemplate.swift in Sources */,
 				8C1CF69F286B5A3B0016D0A1 /* EntityWithArrayWithTransformTemplate.swift in Sources */,
+				8CAC3405291E7B71000E8072 /* EntityWithArrayOfEnumsTemplate.swift in Sources */,
 				8C1CF6AD286B5A3B0016D0A1 /* EntityWithArrayTemplate.swift in Sources */,
 				8C1CF650286B58A70016D0A1 /* ArrayWithTransformTests.swift in Sources */,
 				8C8C6D8728CA2E5600DC16F4 /* SimplePropertiesTests.swift in Sources */,
@@ -1455,10 +1468,12 @@
 				8C1CF697286B5A3B0016D0A1 /* EntityWithSimplePropertiesTemplate.swift in Sources */,
 				8C1CF694286B5A3B0016D0A1 /* EntityWithStringArrayPropertyTemplate.swift in Sources */,
 				8C1CF68A286B5A3B0016D0A1 /* EntityWithStrictArrayTemplate.swift in Sources */,
+				8CAC3408291E7B71000E8072 /* EntityWithArrayOfExpressions.swift in Sources */,
 				8C1CF69B286B5A3B0016D0A1 /* EntityWithStringArrayProperty.swift in Sources */,
 				8C1CF657286B58A70016D0A1 /* OptionalStringEnumPropertyTests.swift in Sources */,
 				8C1CF6A9286B5A3B0016D0A1 /* EntityWithStringEnumPropertyWithDefaultValue.swift in Sources */,
 				8C1CF695286B5A3B0016D0A1 /* EntityWithArray.swift in Sources */,
+				8CAC3406291E7B71000E8072 /* EntityWithArrayOfExpressionsTemplate.swift in Sources */,
 				8C1CF65A286B58A70016D0A1 /* ArrayOfNestedItemsTests.swift in Sources */,
 				8C1CF6A5286B5A3B0016D0A1 /* EntityWithComplexProperty.swift in Sources */,
 				8C1CF65B286B58A70016D0A1 /* StrictArrayTests.swift in Sources */,
@@ -1491,6 +1506,7 @@
 				8C1CF654286B58A70016D0A1 /* StringEnumPropertyTests.swift in Sources */,
 				8C1CF6B1286B5A3B0016D0A1 /* EntityWithComplexPropertyWithDefaultValue.swift in Sources */,
 				8C1CF652286B58A70016D0A1 /* DefaultValueTests.swift in Sources */,
+				8CAC3407291E7B71000E8072 /* EntityWithArrayOfEnums.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,6 +10,7 @@ public final class DivImageBackground {
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
   public let contentAlignmentHorizontal: Expression<DivAlignmentHorizontal> // default value: center
   public let contentAlignmentVertical: Expression<DivAlignmentVertical> // default value: center
+  public let filters: [DivFilter]? // at least 1 elements
   public let imageUrl: Expression<URL>
   public let preloadRequired: Expression<Bool> // default value: false
   public let scale: Expression<DivImageScale> // default value: fill
@@ -47,6 +48,9 @@ public final class DivImageBackground {
   static let contentAlignmentVerticalValidator: AnyValueValidator<DivAlignmentVertical> =
     makeNoOpValueValidator()
 
+  static let filtersValidator: AnyArrayValueValidator<DivFilter> =
+    makeArrayValidator(minItems: 1)
+
   static let preloadRequiredValidator: AnyValueValidator<Bool> =
     makeNoOpValueValidator()
 
@@ -57,6 +61,7 @@ public final class DivImageBackground {
     alpha: Expression<Double>? = nil,
     contentAlignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     contentAlignmentVertical: Expression<DivAlignmentVertical>? = nil,
+    filters: [DivFilter]? = nil,
     imageUrl: Expression<URL>,
     preloadRequired: Expression<Bool>? = nil,
     scale: Expression<DivImageScale>? = nil
@@ -64,6 +69,7 @@ public final class DivImageBackground {
     self.alpha = alpha ?? .value(1.0)
     self.contentAlignmentHorizontal = contentAlignmentHorizontal ?? .value(.center)
     self.contentAlignmentVertical = contentAlignmentVertical ?? .value(.center)
+    self.filters = filters
     self.imageUrl = imageUrl
     self.preloadRequired = preloadRequired ?? .value(false)
     self.scale = scale ?? .value(.fill)
@@ -81,8 +87,13 @@ extension DivImageBackground: Equatable {
       return false
     }
     guard
+      lhs.filters == rhs.filters,
       lhs.imageUrl == rhs.imageUrl,
-      lhs.preloadRequired == rhs.preloadRequired,
+      lhs.preloadRequired == rhs.preloadRequired
+    else {
+      return false
+    }
+    guard
       lhs.scale == rhs.scale
     else {
       return false
@@ -99,6 +110,7 @@ extension DivImageBackground: Serializable {
     result["alpha"] = alpha.toValidSerializationValue()
     result["content_alignment_horizontal"] = contentAlignmentHorizontal.toValidSerializationValue()
     result["content_alignment_vertical"] = contentAlignmentVertical.toValidSerializationValue()
+    result["filters"] = filters?.map { $0.toDictionary() }
     result["image_url"] = imageUrl.toValidSerializationValue()
     result["preload_required"] = preloadRequired.toValidSerializationValue()
     result["scale"] = scale.toValidSerializationValue()

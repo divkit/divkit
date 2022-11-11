@@ -7,6 +7,7 @@ func makeDivData(
   DivData(
     logId: logId,
     states: states,
+    timers: nil,
     transitionAnimationSelector: nil,
     variableTriggers: nil,
     variables: nil
