@@ -25,7 +25,7 @@ import java.io.File
 class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<ExpressionTestCase>) {
 
     private val variableProvider = mock<VariableProvider>()
-    private val evaluator = Evaluator(variableProvider, BuiltinFunctionProvider())
+    private val evaluator = Evaluator(variableProvider, BuiltinFunctionProvider)
     private lateinit var testCase: ExpressionTestCase
 
     @Before

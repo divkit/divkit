@@ -17,7 +17,7 @@ import java.lang.RuntimeException
 
 @RunWith(Parameterized::class)
 class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase>) {
-    private val functionProvider = BuiltinFunctionProvider()
+    private val functionProvider = BuiltinFunctionProvider
     private val signature = caseOrError.getCaseOrThrow()
 
     @Test

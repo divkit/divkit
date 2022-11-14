@@ -5,7 +5,7 @@ import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.FunctionProvider
 
-class BuiltinFunctionProvider : FunctionProvider {
+object BuiltinFunctionProvider : FunctionProvider {
 
     private val registry = FunctionRegistry()
 

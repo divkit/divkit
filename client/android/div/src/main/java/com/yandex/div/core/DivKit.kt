@@ -9,6 +9,7 @@ import com.yandex.div.core.dagger.DivKitComponent
 import com.yandex.div.core.util.Assert
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.BuildConfig
+import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 
 @PublicApi
 class DivKit private constructor(
@@ -67,6 +68,15 @@ class DivKit private constructor(
         @JvmStatic
         val versionName: String
             get() = BuildConfig.VERSION_NAME
+
+        // Put any classes with heavy <clinit> here so it could be warmed up by DivKit client
+        // (possibly on background thread).
+        @JvmStatic
+        @AnyThread
+        fun warmUpStatics() {
+            // Bootstraps all built in expression functions.
+            BuiltinFunctionProvider
+        }
     }
 
 }
