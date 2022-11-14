@@ -1,4 +1,5 @@
 // Copyright 2018 Yandex LLC. All rights reserved.
+
 import Foundation
 
 public struct Signal<T> {

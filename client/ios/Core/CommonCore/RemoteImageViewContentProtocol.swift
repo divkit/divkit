@@ -4,5 +4,5 @@ import Foundation
 import UIKit
 
 public protocol RemoteImageViewContentProtocol: UIView, ImageViewProtocol {
-    func setImage(_ image: UIImage?, animated: Bool?)
+  func setImage(_ image: UIImage?, animated: Bool?)
 }

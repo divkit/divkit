@@ -1,5 +1,6 @@
 import Foundation
 
+import BaseUI
 import CommonCore
 import Networking
 import LayoutKit
@@ -39,8 +40,35 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
       height: resolveHeight(context),
       contentMode: resolveContentMode(expressionResolver),
       tintColor: resolveTintColor(expressionResolver),
+      tintMode: resolveTintMode(expressionResolver).tintMode,
+      effects: makeEffects(with: expressionResolver),
       metalImageRenderingEnabled: context.flagsInfo.metalImageRenderingEnabled,
       appearanceAnimation: appearanceAnimation?.makeAppearanceAnimation(with: expressionResolver)
     )
+  }
+}
+
+extension DivBlendMode {
+  fileprivate var tintMode: TintMode {
+    switch self {
+    case .sourceIn:
+      return .sourceIn
+    case .sourceAtop:
+      return .sourceAtop
+    case .darken:
+      return .darken
+    case .lighten:
+      return .lighten
+    case .multiply:
+      return .multiply
+    case .screen:
+      return .screen
+    }
+  }
+}
+
+extension DivImage {
+  fileprivate func makeEffects(with resolver: ExpressionResolver) -> [ImageEffect] {
+    filters?.compactMap { $0.makeImageEffect(with: resolver)} ?? []
   }
 }

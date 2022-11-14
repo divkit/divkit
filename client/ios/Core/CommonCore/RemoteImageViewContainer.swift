@@ -1,4 +1,4 @@
-// Copyright 2015 Yandex LLC. All rights reserved.
+// Copyright 2022 Yandex LLC. All rights reserved.
 
 import UIKit
 

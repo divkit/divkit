@@ -201,3 +201,18 @@ extension Property: ExpressibleByBooleanLiteral where T == Bool {
     self.init(initialValue: value)
   }
 }
+
+extension Property: ExpressibleByIntegerLiteral where T == Int {
+  public init(integerLiteral value: Int) {
+    self.init(initialValue: value)
+  }
+}
+
+extension Property: ExpressibleByUnicodeScalarLiteral where T == String {}
+extension Property: ExpressibleByExtendedGraphemeClusterLiteral where T == String {}
+
+extension Property: ExpressibleByStringLiteral where T == String {
+  public init(stringLiteral value: String) {
+    self.init(initialValue: value)
+  }
+}

@@ -67,3 +67,47 @@ extension HTTPHeaders {
 extension HTTPHeaders {
   public static let yandexUID = "X-Yandex-RandomUID"
 }
+
+extension HTTPHeaders {
+  /**
+     Creates a new instance, combining current headers with newHeaders.
+     Conflicting keys get a value from newHeaders.
+     "Cookies" field is merged separately, all cookies are stored,
+     conflicting cookie keys get a value from newHeaders' cookies.
+   **/
+  public func merged(with newHeaders: HTTPHeaders) -> HTTPHeaders {
+    let cookie = mergeCookies(self["Cookie"], newHeaders["Cookie"])
+    return self + newHeaders +
+      (cookie != "" ? HTTPHeaders(headersDictionary: ["Cookie": cookie]) : HTTPHeaders.empty)
+  }
+
+  private func mergeCookies(_ cookies: String?, _ newCookies: String?) -> String {
+    var result = parseCookies(cookies ?? "")
+    parseCookies(newCookies ?? "").forEach { newCookie in
+      if let index = result.firstIndex(where: { $0.name == newCookie.name }) {
+        result[index] = newCookie
+      } else {
+        result.append(newCookie)
+      }
+    }
+    return result.map { "\($0.name)=\($0.value)" }.joined(separator: "; ")
+  }
+
+  private func parseCookies(_ cookies: String) -> [(name: String, value: String)] {
+    cookies
+      .components(separatedBy: "; ")
+      .filter { $0 != "" }
+      .map {
+        let keyVal = $0.components(separatedByFirst: "=")
+        return (name: keyVal[0], value: keyVal.count > 1 ? keyVal[1] : "")
+      }
+  }
+}
+
+extension String {
+  fileprivate func components(separatedByFirst delimiter: String) -> [String] {
+    let comps = components(separatedBy: delimiter)
+    guard comps.count > 1 else { return comps }
+    return [comps[0], comps.suffix(from: 1).joined(separator: delimiter)]
+  }
+}

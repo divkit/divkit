@@ -21,9 +21,9 @@ extension ImageBlock {
       remoteImageViewContainer.imageHolder = imageHolder
     }
     remoteImageViewContainer.contentView.imageContentMode = contentMode
-    if let tintColor = tintColor {
-      remoteImageViewContainer.contentView.imageRedrawingStyle = .init(tintColor: tintColor)
-    }
+    remoteImageViewContainer.contentView.imageRedrawingStyle = ImageRedrawingStyle(tintColor: tintColor,
+                                                                                   tintMode: tintMode,
+                                                                                   effects: effects)
     remoteImageViewContainer.contentView.isUserInteractionEnabled = false
     remoteImageViewContainer.isUserInteractionEnabled = false
     remoteImageViewContainer.applyAccessibility(accessibilityElement)

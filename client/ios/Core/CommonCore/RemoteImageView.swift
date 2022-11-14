@@ -1,3 +1,5 @@
+// Copyright 2022 Yandex LLC. All rights reserved.
+
 import UIKit
 
 import Base
@@ -43,6 +45,7 @@ public final class RemoteImageView: UIView, RemoteImageViewContentProtocol {
       }
     }
     setNeedsLayout()
+    layoutIfNeeded()
   }
 
   public func setImage(_ image: UIImage?, animated: Bool?) {
@@ -60,6 +63,8 @@ public final class RemoteImageView: UIView, RemoteImageViewContentProtocol {
     } else {
       updateContent()
     }
+    setNeedsLayout()
+    layoutIfNeeded()
   }
 
   private var image: UIImage?

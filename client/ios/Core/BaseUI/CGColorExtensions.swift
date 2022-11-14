@@ -1,7 +1,10 @@
+// Copyright 2021 Yandex LLC. All rights reserved.
+
 import CoreGraphics
-import CoreImage
 
 import BaseTiny
+
+@_implementationOnly import CoreImage
 
 extension CGColor {
   public var rgba: RGBAColor {

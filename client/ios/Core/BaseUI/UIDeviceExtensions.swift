@@ -31,6 +31,8 @@ extension UIDevice {
     public static let iPhone12mini = "iPhone13,1"
     public static let iPhone12Pro = "iPhone13,3"
     public static let iPhone12ProMax = "iPhone13,4"
+
+    public static let iPadAir_5gen = "iPad13,17"
   }
 
   public var systemModelName: String {

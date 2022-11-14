@@ -9,7 +9,7 @@ public final class Lazy<T> {
 
   private enum State {
     case willLoad(getter: Getter, deferredActions: [Action])
-    case loading
+    case loading(deferredActions: [Action])
     case loaded(value: T)
 
     var value: T? {
@@ -74,8 +74,8 @@ public final class Lazy<T> {
     switch state {
     case let .willLoad(getter, deferredActions):
       state = .willLoad(getter: getter, deferredActions: deferredActions + [action])
-    case .loading:
-      assertionFailure()
+    case let .loading(deferredActions):
+      state = .loading(deferredActions: deferredActions + [action])
     case let .loaded(value):
       action(value)
     }
@@ -85,8 +85,11 @@ public final class Lazy<T> {
     ensureIsValidThread()
     switch state {
     case let .willLoad(getter, deferredActions):
-      state = .loading
+      state = .loading(deferredActions: deferredActions)
       let value = getter()
+      guard case let .loading(deferredActions) = state else {
+        return assertionFailure()
+      }
       state = .loaded(value: value)
       deferredActions.forEach { $0(value) }
     case .loading, .loaded:

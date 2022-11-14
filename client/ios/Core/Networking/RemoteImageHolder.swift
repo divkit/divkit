@@ -118,6 +118,6 @@ extension RemoteImageHolder: CustomDebugStringConvertible {
 
 extension RemoteImageHolder {
   public func reused(with placeholder: ImagePlaceholder?, remoteImageURL: URL?) -> ImageHolder? {
-    (placeholder === placeholder && url == remoteImageURL) ? self : nil
+    (self.placeholder === placeholder && url == remoteImageURL) ? self : nil
   }
 }

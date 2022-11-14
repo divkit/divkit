@@ -345,6 +345,25 @@ extension Dictionary where Key == String, Value == JSONObject {
   }
 }
 
+extension Dictionary where Key == String, Value == JSONObject {
+  public func value(atPath path: JSONObject.Path) throws -> JSONObject {
+    try JSONObject.object(self).value(atPath: path)
+  }
+}
+
+extension Dictionary where Key == String, Value == JSONObject {
+  public func flatten() -> JSONDictionary {
+    reduce(into: [:]) { result, entry in
+      let (key, value) = entry
+      if case let .object(dict) = value {
+        dict.flatten().forEach { result[key + "." + $0] = $1 }
+      } else {
+        result[key] = value
+      }
+    }
+  }
+}
+
 extension JSONObject {
   public struct Path: Codable, CustomDebugStringConvertible, ExpressibleByStringLiteral, Hashable {
     public typealias Component = JSONPathComponent

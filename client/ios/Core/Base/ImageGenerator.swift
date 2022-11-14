@@ -1,3 +1,5 @@
+// Copyright 2022 Yandex LLC. All rights reserved.
+
 import CoreImage
 
 public enum ImageGeneratorType: FilterProtocol {

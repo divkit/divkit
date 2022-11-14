@@ -31,7 +31,9 @@ public final class ImageExtensionHandler: DivExtensionHandler {
       widthTrait: block.widthTrait,
       height: block.height,
       contentMode: block.contentMode,
-      tintColor: block.tintColor
+      tintColor: block.tintColor,
+      tintMode: block.tintMode,
+      effects: block.effects
     )
   }
 }

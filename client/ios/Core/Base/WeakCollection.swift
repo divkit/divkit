@@ -42,6 +42,10 @@ public struct WeakCollection<T> {
   public func contains(_ object: T) -> Bool {
     array.contains(where: { $0.value === (object as AnyObject) })
   }
+
+  public mutating func removeAll() {
+    array.removeAll()
+  }
 }
 
 extension WeakCollection: CustomStringConvertible {

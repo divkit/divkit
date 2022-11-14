@@ -42,7 +42,10 @@ extension Comparable {
 }
 
 extension Comparable where Self: Strideable, Self.Stride: SignedInteger {
-  public func clamp(_ range: Range<Self>) -> Self {
-    clamp(ClosedRange(range))
+  public func clamp(_ range: Range<Self>) -> Self? {
+    guard !range.isEmpty else {
+      return nil
+    }
+    return clamp(ClosedRange(range))
   }
 }

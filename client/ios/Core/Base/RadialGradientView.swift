@@ -37,7 +37,6 @@ public final class RadialGradientView: UIView {
       + [gradient.outerColor.cgColor]
     gradientLayer.locations =
       ([0] + gradient.intermediatePoints.map { $0.location } + [1]) as [NSNumber]
-    
   }
 
   public override func layoutSubviews() {
@@ -79,12 +78,20 @@ public final class RadialGradientView: UIView {
         }
         radius = min(startPoint.x.nearestDistance / kx, startPoint.y.nearestDistance / ky)
       case .nearestCorner:
-        if startPoint.x.isOnBorder && startPoint.y.isOnBorder {
+        if startPoint.x.isOnBorder, startPoint.y.isOnBorder {
           return CGPoint(x: startPoint.x + .ulpOfOne, y: startPoint.y + .ulpOfOne)
         }
-        radius = sqrt(pow(startPoint.x.nearestDistance / kx, 2) + pow(startPoint.y.nearestDistance / ky, 2))
+        radius =
+          sqrt(
+            pow(startPoint.x.nearestDistance / kx, 2) +
+              pow(startPoint.y.nearestDistance / ky, 2)
+          )
       case .farthestCorner:
-        radius = sqrt(pow(startPoint.x.farthestDistance / kx, 2) + pow(startPoint.y.farthestDistance / ky, 2))
+        radius =
+          sqrt(
+            pow(startPoint.x.farthestDistance / kx, 2) +
+              pow(startPoint.y.farthestDistance / ky, 2)
+          )
       case .farthestSide:
         radius = max(startPoint.x.farthestDistance / kx, startPoint.y.farthestDistance / ky)
       }
@@ -104,24 +111,24 @@ public final class RadialGradientView: UIView {
   }
 }
 
-fileprivate extension CGFloat {
-  var nearest: CGFloat {
+extension CGFloat {
+  fileprivate var nearest: CGFloat {
     self < 0.5 ? 0 : 1
   }
 
-  var farthest: CGFloat {
+  fileprivate var farthest: CGFloat {
     self > 0.5 ? 0 : 1
   }
 
-  var nearestDistance: CGFloat {
+  fileprivate var nearestDistance: CGFloat {
     abs(self.nearest - self)
   }
 
-  var farthestDistance: CGFloat {
+  fileprivate var farthestDistance: CGFloat {
     abs(self.farthest - self)
   }
 
-  var isOnBorder: Bool {
+  fileprivate var isOnBorder: Bool {
     self == 0 || self == 1
   }
 }

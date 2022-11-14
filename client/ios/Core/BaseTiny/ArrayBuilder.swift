@@ -15,6 +15,10 @@ public enum ArrayBuilder<Element> {
     element.map { [$0] } ?? []
   }
 
+  public static func buildExpression(_ component: Component) -> Component {
+    component
+  }
+
   public static func buildOptional(_ component: Component?) -> Component {
     component ?? []
   }

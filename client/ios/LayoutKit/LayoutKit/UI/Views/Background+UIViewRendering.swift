@@ -88,8 +88,12 @@ extension BackgroundView {
     case .solidColor, .tiledImage:
       view = ColoredView()
 
-    case .image:
-      view = RemoteImageViewContainer(contentView: RemoteImageView())
+    case .image(let backgroundImage):
+      if backgroundImage.metalImageRenderingEnabled {
+        view = RemoteImageViewContainer(contentView: MetalImageView())
+      } else {
+        view = RemoteImageViewContainer(contentView: RemoteImageView())
+      }
       
     case .ninePatchImage:
       view = RemoteImageViewContainer(contentView: NinePatchImageView())
@@ -148,6 +152,7 @@ extension BackgroundView {
       imageViewContainer.contentView.clipsToBounds = true
       imageViewContainer.contentView.alpha = CGFloat(image.alpha)
       imageViewContainer.contentView.imageContentMode = image.contentMode
+      imageViewContainer.contentView.imageRedrawingStyle = ImageRedrawingStyle(tintColor: nil, effects: image.effects)
       if imageViewContainer.imageHolder != image.imageHolder {
         imageViewContainer.imageHolder = image.imageHolder
       }

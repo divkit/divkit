@@ -53,6 +53,14 @@ cp $1/src/base/ios/yandex/storage/KeyValueDirectStoringSupporting.swift Base
 cp $1/src/base/ios/yandex/storage/KeyValueStorage.swift Base
 cp $1/src/base/ios/yandex/storage/SettingProperty.swift Base
 cp $1/src/base/ios/yandex/storage/SingleValueCoder.swift Base
+cp $1/src/base/ios/yandex/thick_ui/filters/FilterProtocol.swift Base
+cp $1/src/base/ios/yandex/thick_ui/filters/ImageComposer.swift Base
+cp $1/src/base/ios/yandex/thick_ui/filters/ImageFilters.swift Base
+cp $1/src/base/ios/yandex/thick_ui/filters/ImageGenerator.swift Base
+cp $1/src/base/ios/yandex/thick_ui/filters/TintMode.swift Base
+cp $1/src/base/ios/yandex/thick_ui/filters/ImageBlur.swift Base
+cp $1/src/base/ios/yandex/thick_ui/filters/ImageCrop.swift Base
+cp $1/src/base/ios/yandex/thick_ui/filters/ImageEffect.swift Base
 cp $1/src/base/ios/yandex/thick_ui/graphics/InternalImageDescriptor.swift Base
 cp $1/src/base/ios/yandex/thick_ui/types/color/ColorExtensions.swift Base
 cp $1/src/base/ios/yandex/thick_ui/types/color/RGBAColorExtensions.swift Base
@@ -126,6 +134,11 @@ cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ImageContaining.swift
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ImageLayerLayout.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ObjectsReusability.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/RemoteImageView.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/RemoteImageViewContainer.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/RemoteImageViewContentProtocol.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/MetalImageView.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ImageViewProtocol.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ImageRedrawingStyle.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Resetting.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Theme.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/UIStyles.swift CommonCore

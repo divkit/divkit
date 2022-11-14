@@ -76,25 +76,26 @@ extension SettingProperty where T: NSCoding {
 
 extension SettingProperty where T: Codable {
   public static func codableStorage(_ storage: KeyValueStorage, key: String) -> Property<T?> {
-    Property(getter: {
-      guard let object = storage.object(forKey: key) else { return nil }
-      guard let data = object as? Data else {
-        assertionFailure()
+    SettingProperty<Data>.storage(storage, key: key).decoded(T.self)
+  }
+}
+
+extension Property where T == Data? {
+  public func decoded<U: Codable>(_: U.Type) -> Property<U?> {
+    bimap(
+      get: { $0.flatMap { try? SingleValueDecoder().decode(U.self, from: $0) } },
+      set: {
+        if let newValue = $0 {
+          do {
+            return try SingleValueEncoder().encode(newValue)
+          } catch {
+            assertionFailure(error.localizedDescription)
+          }
+        }
+
         return nil
       }
-      return try? SingleValueDecoder().decode(T.self, from: data)
-    }, setter: {
-      if let newValue = $0 {
-        do {
-          let encodedValue = try SingleValueEncoder().encode(newValue)
-          storage.set(encodedValue, forKey: key)
-        } catch {
-          assertionFailure(error.localizedDescription)
-        }
-      } else {
-        storage.removeObject(forKey: key)
-      }
-    })
+    )
   }
 }
 

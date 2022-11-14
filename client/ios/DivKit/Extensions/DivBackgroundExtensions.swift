@@ -9,7 +9,8 @@ import Networking
 extension DivBackground {
   func makeBlockBackground(
     with imageHolderFactory: ImageHolderFactory,
-    expressionResolver: ExpressionResolver
+    expressionResolver: ExpressionResolver,
+    metalImageRenderingEnabled: Bool
   ) -> LayoutKit.Background? {
     switch self {
     case let .divLinearGradient(gradient):
@@ -38,7 +39,9 @@ extension DivBackground {
           imageBackground.resolveImageUrl(expressionResolver)
         ),
         contentMode: imageBackground.resolveContentMode(expressionResolver),
-        alpha: imageBackground.resolveAlpha(expressionResolver)
+        alpha: imageBackground.resolveAlpha(expressionResolver),
+        effects: imageBackground.makeEffects(with: expressionResolver),
+        metalImageRenderingEnabled: metalImageRenderingEnabled
       )
       return .image(image)
     case let .divSolidBackground(solidBackground):
@@ -56,3 +59,9 @@ extension DivBackground {
 }
 
 extension DivImageBackground: DivImageContentMode {}
+
+extension DivImageBackground {
+  fileprivate func makeEffects(with resolver: ExpressionResolver) -> [ImageEffect] {
+    filters?.compactMap { $0.makeImageEffect(with: resolver)} ?? []
+  }
+}

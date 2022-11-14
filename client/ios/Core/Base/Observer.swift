@@ -1,4 +1,5 @@
 // Copyright 2018 Yandex LLC. All rights reserved.
+
 public struct Observer<T> {
   public let action: (T) -> Void
 
