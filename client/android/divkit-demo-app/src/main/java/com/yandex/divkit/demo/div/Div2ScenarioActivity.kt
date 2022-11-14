@@ -217,19 +217,19 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         val adb = AlertDialog.Builder(this)
             .setView(editText)
             .setPositiveButton("Apply") { _, _ ->
+                val fieldValue = editText.text.toString()
+                preferences.edit().putString(DIV2_PATCH_KEY_URL, fieldValue).apply()
                 try {
-                    val divPatch = JSONObject(editText.text.toString())
+                    val divPatch = JSONObject(fieldValue)
                         .asDivPatchWithTemplates(errorLogger.apply { clear() })
                     applyPath(
                         divPatch,
                         errorCallback = { longToast("Error while applied JSON patch!") }
                     )
                 } catch (e: JSONException) {
-                    val url = editText.text.toString()
-                    preferences.edit().putString(DIV2_PATCH_KEY_URL, url).apply()
                     lifecycleScope.launch {
                         val divPatch = withContext(Dispatchers.IO) {
-                            val loadedJson = loadJson(Uri.parse(url))
+                            val loadedJson = loadJson(Uri.parse(fieldValue))
                             loadedJson.asDivPatchWithTemplates(errorLogger.apply { clear() })
                         }
                         applyPath(
