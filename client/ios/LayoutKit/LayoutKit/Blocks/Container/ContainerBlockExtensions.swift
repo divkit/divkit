@@ -50,15 +50,15 @@ extension ContainerBlock {
     accessibilityElement: AccessibilityElement? = nil
   ) throws {
     let axialAlignment: Alignment
-    let crossAlignment: Alignment
+    let crossAlignment: CrossAlignment
 
     switch layoutDirection {
     case .horizontal:
       axialAlignment = horizontalChildrenAlignment
-      crossAlignment = verticalChildrenAlignment
+      crossAlignment = verticalChildrenAlignment.crossAlignment
     case .vertical:
       axialAlignment = verticalChildrenAlignment
-      crossAlignment = horizontalChildrenAlignment
+      crossAlignment = horizontalChildrenAlignment.crossAlignment
     }
 
     let alignedChildren = children.map {
@@ -79,5 +79,18 @@ extension ContainerBlock {
       clipContent: clipContent,
       accessibilityElement: accessibilityElement
     )
+  }
+}
+
+fileprivate extension Alignment {
+  var crossAlignment: ContainerBlock.CrossAlignment {
+    switch self {
+    case .leading:
+      return .leading
+    case .center:
+      return .center
+    case .trailing:
+      return .trailing
+    }
   }
 }

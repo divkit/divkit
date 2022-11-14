@@ -183,22 +183,21 @@ extension DivContainer: DivBlockModeling {
   ) throws -> ContainerBlock {
     let layoutDirection = orientation.layoutDirection
     let axialAlignment: Alignment
-    let defaultCrossAlignment: Alignment
+    let defaultCrossAlignment: ContainerBlock.CrossAlignment
     switch layoutDirection {
     case .horizontal:
       axialAlignment = resolveContentAlignmentHorizontal(childContext.expressionResolver)
         .alignment
       defaultCrossAlignment = resolveContentAlignmentVertical(
         childContext.expressionResolver
-      )
-      .alignment
+      ).crossAlignment
     case .vertical:
       axialAlignment = resolveContentAlignmentVertical(childContext.expressionResolver)
         .alignment
       defaultCrossAlignment = resolveContentAlignmentHorizontal(
         childContext.expressionResolver
       )
-      .alignment
+      .crossAlignment
     }
 
     let fallbackWidth = getFallbackWidth(
@@ -287,10 +286,10 @@ extension DivBase {
   fileprivate func crossAlignment(
     for direction: ContainerBlock.LayoutDirection,
     expressionResolver: ExpressionResolver
-  ) -> Alignment? {
+  ) -> ContainerBlock.CrossAlignment? {
     switch direction {
-    case .horizontal: return resolveAlignmentVertical(expressionResolver)?.alignment
-    case .vertical: return resolveAlignmentHorizontal(expressionResolver)?.alignment
+    case .horizontal: return resolveAlignmentVertical(expressionResolver)?.crossAlignment
+    case .vertical: return resolveAlignmentHorizontal(expressionResolver)?.crossAlignment
     }
   }
 }
@@ -319,6 +318,17 @@ extension DivAlignmentHorizontal {
       return .trailing
     }
   }
+
+  var crossAlignment: ContainerBlock.CrossAlignment {
+    switch self {
+    case .left:
+      return .leading
+    case .center:
+      return .center
+    case .right:
+      return .trailing
+    }
+  }
 }
 
 extension DivAlignmentVertical {
@@ -333,6 +343,19 @@ extension DivAlignmentVertical {
     case .baseline:
       assertionFailure("baseline alignment not supported")
       return .leading
+    }
+  }
+
+  var crossAlignment: ContainerBlock.CrossAlignment {
+    switch self {
+    case .top:
+      return .leading
+    case .center:
+      return .center
+    case .bottom:
+      return .trailing
+    case .baseline:
+      return .baseline
     }
   }
 }

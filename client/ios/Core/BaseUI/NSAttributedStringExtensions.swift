@@ -44,6 +44,16 @@ extension NSAttributedString {
   public func sizeThatFits(_ size: CGSize, maxNumberOfLines: Int) -> CGSize {
     sizeForString(self, size, maxNumberOfLines)
   }
+
+  public func ascent(forWidth width: CGFloat) -> CGFloat? {
+    let maxTextSize = CGSize(width: width, height: .infinity)
+    let layout = computeLayout(
+      for: self,
+      maxTextSize: maxTextSize,
+      maxNumberOfLines: 1
+    )
+    return layout.ascent
+  }
 }
 
 public func measureString(
@@ -145,6 +155,13 @@ struct TextLayout {
 
   var textLength: Int {
     lines.reduce(0) { $0 + $1.range.length }
+  }
+
+  var ascent: CGFloat? {
+    guard lines.count > 0 else {
+      return nil
+    }
+    return lines[0].bounds.ascent
   }
 
   init(lines: [LineLayout], sourceLength: Int) {

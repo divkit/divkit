@@ -28,12 +28,19 @@ public final class ContainerBlock: BlockWithLayout {
   public struct Child: Equatable {
     public var content: Block
     /// Alignment for dimension crossing container direction
-    public let crossAlignment: Alignment
+    public let crossAlignment: CrossAlignment
 
-    public init(content: Block, crossAlignment: Alignment = .leading) {
+    public init(content: Block, crossAlignment: CrossAlignment = .leading) {
       self.content = content
       self.crossAlignment = crossAlignment
     }
+  }
+
+  public enum CrossAlignment {
+    case leading
+    case center
+    case trailing
+    case baseline
   }
 
   public struct Separator: Equatable {
@@ -134,6 +141,23 @@ public final class ContainerBlock: BlockWithLayout {
     self.accessibilityElement = accessibilityElement
 
     try validateLayoutTraits()
+  }
+
+  public func ascent(forWidth width: CGFloat) -> CGFloat? {
+    guard layoutDirection == .horizontal else {
+      return nil
+    }
+    let layout = ContainerBlockLayout(
+      children: children,
+      separator: separator,
+      lineSeparator: lineSeparator,
+      gaps: gaps,
+      layoutDirection: layoutDirection,
+      layoutMode: layoutMode,
+      axialAlignment: axialAlignment,
+      size: CGSize(width: width, height: .zero)
+    )
+    return layout.ascent
   }
 
   private func validateLayoutTraits() throws {
@@ -511,6 +535,22 @@ extension ContainerBlock: ElementStateUpdating {
 extension ContainerBlock.Child {
   public static func ==(_ lhs: ContainerBlock.Child, _ rhs: ContainerBlock.Child) -> Bool {
     lhs.content == rhs.content && lhs.crossAlignment == rhs.crossAlignment
+  }
+}
+
+extension ContainerBlock.CrossAlignment {
+  public func offset(
+    forAvailableSpace availableSpace: CGFloat,
+    contentSize: CGFloat = 0
+  ) -> CGFloat {
+    switch self {
+    case .leading, .baseline:
+      return 0
+    case .center:
+      return ((availableSpace - contentSize) * 0.5).roundedToScreenScale
+    case .trailing:
+      return availableSpace - contentSize
+    }
   }
 }
 

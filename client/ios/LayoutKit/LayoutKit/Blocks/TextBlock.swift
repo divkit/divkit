@@ -132,6 +132,10 @@ public final class TextBlock: BlockWithTraits {
     }
   }
 
+  public func ascent(forWidth width: CGFloat) -> CGFloat? {
+    return text.ascent(forWidth: width)
+  }
+
   public func equals(_ other: Block) -> Bool {
     guard let other = other as? TextBlock else {
       return false

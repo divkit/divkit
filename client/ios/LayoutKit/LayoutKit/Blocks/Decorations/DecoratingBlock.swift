@@ -82,6 +82,13 @@ final class DecoratingBlock: WrapperBlock {
     intrinsicContentHeight(forWidth: width)
   }
 
+  public func ascent(forWidth width: CGFloat) -> CGFloat? {
+    guard let childAscent = child.ascent(forWidth: width) else {
+      return nil
+    }
+    return childAscent + paddings.verticalInsets.leading
+  }
+
   func laidOut(for width: CGFloat) -> Block {
     let childWidth = width - paddings.horizontalInsets.sum
     return updatingChild(child.laidOut(for: childWidth))

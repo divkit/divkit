@@ -31,6 +31,10 @@ public protocol Block: AnyObject,
   var intrinsicContentWidth: CGFloat { get }
   func intrinsicContentHeight(forWidth: CGFloat) -> CGFloat
 
+  /// The top offset from the baseline.
+  /// Returns nil if the block has no baseline.
+  func ascent(forWidth: CGFloat) -> CGFloat?
+
   var weightOfHorizontallyResizableBlock: LayoutTrait.Weight { get }
   var weightOfVerticallyResizableBlock: LayoutTrait.Weight { get }
 
@@ -93,6 +97,10 @@ extension Block {
     isVerticallyResizable
       ? .weighted(weightOfVerticallyResizableBlock)
       : .intrinsic
+  }
+
+  public func ascent(forWidth width: CGFloat) -> CGFloat? {
+    return nil
   }
 }
 

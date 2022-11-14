@@ -10,7 +10,7 @@ extension ContainerBlockLayout {
     gaps: [CGFloat],
     layoutDirection: ContainerBlock.LayoutDirection,
     layoutMode: ContainerBlock.LayoutMode = .noWrap,
-    crossAlignment: Alignment = .leading,
+    crossAlignment: ContainerBlock.CrossAlignment = .leading,
     axialAlignment: Alignment = .leading,
     size: CGSize
   ) {
