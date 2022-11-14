@@ -49,7 +49,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         textValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "text", level: .error)) }
       )
       if case .noValue = textValue {
-        errors.append(.right(FieldError(fieldName: "text", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text")))
       }
       guard
         let textNonNil = textValue.value
@@ -106,7 +106,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         textValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "text", level: .error)) }
       )
       if case .noValue = textValue {
-        errors.append(.right(FieldError(fieldName: "text", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text")))
       }
       guard
         let textNonNil = textValue.value
@@ -193,10 +193,10 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
       )
       if case .noValue = startValue {
-        errors.append(.right(FieldError(fieldName: "start", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "start")))
       }
       if case .noValue = urlValue {
-        errors.append(.right(FieldError(fieldName: "url", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "url")))
       }
       guard
         let startNonNil = startValue.value,
@@ -267,10 +267,10 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
       )
       if case .noValue = startValue {
-        errors.append(.right(FieldError(fieldName: "start", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "start")))
       }
       if case .noValue = urlValue {
-        errors.append(.right(FieldError(fieldName: "url", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "url")))
       }
       guard
         let startNonNil = startValue.value,
@@ -416,10 +416,10 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         underlineValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "underline", level: .warning)) }
       )
       if case .noValue = endValue {
-        errors.append(.right(FieldError(fieldName: "end", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "end")))
       }
       if case .noValue = startValue {
-        errors.append(.right(FieldError(fieldName: "start", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "start")))
       }
       guard
         let endNonNil = endValue.value,
@@ -554,10 +554,10 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         underlineValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "underline", level: .warning)) }
       )
       if case .noValue = endValue {
-        errors.append(.right(FieldError(fieldName: "end", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "end")))
       }
       if case .noValue = startValue {
-        errors.append(.right(FieldError(fieldName: "start", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "start")))
       }
       guard
         let endNonNil = endValue.value,
@@ -944,7 +944,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = textValue {
-      errors.append(.right(FieldError(fieldName: "text", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text")))
     }
     guard
       let textNonNil = textValue.value
@@ -1353,7 +1353,7 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = textValue {
-      errors.append(.right(FieldError(fieldName: "text", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text")))
     }
     guard
       let textNonNil = textValue.value

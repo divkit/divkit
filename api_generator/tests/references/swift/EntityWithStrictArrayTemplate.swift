@@ -40,7 +40,7 @@ public final class EntityWithStrictArrayTemplate: TemplateValue, TemplateDeseria
       arrayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "array", level: .error)) }
     )
     if case .noValue = arrayValue {
-      errors.append(.right(FieldError(fieldName: "array", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "array")))
     }
     guard
       let arrayNonNil = arrayValue.value
@@ -74,7 +74,7 @@ public final class EntityWithStrictArrayTemplate: TemplateValue, TemplateDeseria
       arrayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "array", level: .error)) }
     )
     if case .noValue = arrayValue {
-      errors.append(.right(FieldError(fieldName: "array", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "array")))
     }
     guard
       let arrayNonNil = arrayValue.value

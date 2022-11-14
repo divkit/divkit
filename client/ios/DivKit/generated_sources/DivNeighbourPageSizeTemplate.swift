@@ -38,7 +38,7 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
       neighbourPageWidthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "neighbour_page_width", level: .error)) }
     )
     if case .noValue = neighbourPageWidthValue {
-      errors.append(.right(FieldError(fieldName: "neighbour_page_width", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "neighbour_page_width")))
     }
     guard
       let neighbourPageWidthNonNil = neighbourPageWidthValue.value
@@ -72,7 +72,7 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
       neighbourPageWidthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "neighbour_page_width", level: .error)) }
     )
     if case .noValue = neighbourPageWidthValue {
-      errors.append(.right(FieldError(fieldName: "neighbour_page_width", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "neighbour_page_width")))
     }
     guard
       let neighbourPageWidthNonNil = neighbourPageWidthValue.value

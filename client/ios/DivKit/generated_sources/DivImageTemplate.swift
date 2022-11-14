@@ -290,7 +290,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = imageUrlValue {
-      errors.append(.right(FieldError(fieldName: "image_url", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "image_url")))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value
@@ -642,7 +642,7 @@ public final class DivImageTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = imageUrlValue {
-      errors.append(.right(FieldError(fieldName: "image_url", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "image_url")))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value

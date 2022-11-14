@@ -199,8 +199,8 @@ class SwiftEntity(Entity):
 
         for prop in required_props:
             result += f'  if case .noValue = {prop.value_resolving_local_var_name} {{'
-            field_error = f'FieldError(fieldName: "{prop.dict_field}", level: .error, error: .requiredFieldIsMissing)'
-            result += f'    errors.append(.right({field_error}))'
+            field_error = f'DeserializationError.requiredFieldIsMissing(fieldName: "{prop.dict_field}")'
+            result += f'    errors.append(.left({field_error}))'
             result += '  }'
 
         if required_props:
@@ -298,8 +298,8 @@ class SwiftEntity(Entity):
 
         for prop in required_props:
             result += f'  if case .noValue = {prop.value_resolving_local_var_name} {{'
-            field_error = f'FieldError(fieldName: "{prop.dict_field}", level: .error, error: .requiredFieldIsMissing)'
-            result += f'    errors.append(.right({field_error}))'
+            field_error = f'DeserializationError.requiredFieldIsMissing(fieldName: "{prop.dict_field}")'
+            result += f'    errors.append(.left({field_error}))'
             result += '  }'
 
         if required_props:
@@ -894,7 +894,7 @@ class SwiftEntityEnumeration(EntityEnumeration):
         return_type = f'DeserializationResult<{self.resolved_prefixed_declaration}>'
         result = Text(f'private static func resolveUnknownValue({params}) -> {return_type} {{')
         result += '  guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {'
-        result += '    return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))'
+        result += '    return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))'
         result += '  }'
         result += EMPTY
         result += '  switch type {'
@@ -910,7 +910,7 @@ class SwiftEntityEnumeration(EntityEnumeration):
             result += '    case .noValue: return .noValue'
             result += '    }'
         result += '  default:'
-        result += '    return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))'
+        result += '    return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))'
         result += '  }'
         result += '}'
         return result

@@ -44,7 +44,7 @@ public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializa
       colorsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "colors", level: .error)) }
     )
     if case .noValue = colorsValue {
-      errors.append(.right(FieldError(fieldName: "colors", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "colors")))
     }
     guard
       let colorsNonNil = colorsValue.value
@@ -82,7 +82,7 @@ public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializa
       colorsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "colors", level: .error)) }
     )
     if case .noValue = colorsValue {
-      errors.append(.right(FieldError(fieldName: "colors", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "colors")))
     }
     guard
       let colorsNonNil = colorsValue.value

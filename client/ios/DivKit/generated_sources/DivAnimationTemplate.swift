@@ -74,7 +74,7 @@ public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
       startValueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "start_value", level: .warning)) }
     )
     if case .noValue = nameValue {
-      errors.append(.right(FieldError(fieldName: "name", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "name")))
     }
     guard
       let nameNonNil = nameValue.value
@@ -158,7 +158,7 @@ public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
       startValueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "start_value", level: .warning)) }
     )
     if case .noValue = nameValue {
-      errors.append(.right(FieldError(fieldName: "name", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "name")))
     }
     guard
       let nameNonNil = nameValue.value

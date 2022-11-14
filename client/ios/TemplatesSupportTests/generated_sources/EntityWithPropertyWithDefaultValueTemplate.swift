@@ -45,7 +45,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
         urlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "url", level: .warning)) }
       )
       if case .noValue = nonOptionalValue {
-        errors.append(.right(FieldError(fieldName: "non_optional", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "non_optional")))
       }
       guard
         let nonOptionalNonNil = nonOptionalValue.value
@@ -90,7 +90,7 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
         urlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "url", level: .warning)) }
       )
       if case .noValue = nonOptionalValue {
-        errors.append(.right(FieldError(fieldName: "non_optional", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "non_optional")))
       }
       guard
         let nonOptionalNonNil = nonOptionalValue.value

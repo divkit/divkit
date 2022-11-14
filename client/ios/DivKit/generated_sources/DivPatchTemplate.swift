@@ -37,7 +37,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
         itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .warning)) }
       )
       if case .noValue = idValue {
-        errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
       }
       guard
         let idNonNil = idValue.value
@@ -78,7 +78,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
         itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .warning)) }
       )
       if case .noValue = idValue {
-        errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
       }
       guard
         let idNonNil = idValue.value
@@ -138,7 +138,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
       modeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "mode", level: .warning)) }
     )
     if case .noValue = changesValue {
-      errors.append(.right(FieldError(fieldName: "changes", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "changes")))
     }
     guard
       let changesNonNil = changesValue.value
@@ -179,7 +179,7 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
       modeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "mode", level: .warning)) }
     )
     if case .noValue = changesValue {
-      errors.append(.right(FieldError(fieldName: "changes", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "changes")))
     }
     guard
       let changesNonNil = changesValue.value

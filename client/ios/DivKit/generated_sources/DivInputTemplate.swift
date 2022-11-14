@@ -31,7 +31,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         colorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "color", level: .error)) }
       )
       if case .noValue = colorValue {
-        errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
       }
       guard
         let colorNonNil = colorValue.value
@@ -62,7 +62,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
         colorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "color", level: .error)) }
       )
       if case .noValue = colorValue {
-        errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
       }
       guard
         let colorNonNil = colorValue.value
@@ -352,7 +352,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = textVariableValue {
-      errors.append(.right(FieldError(fieldName: "text_variable", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text_variable")))
     }
     guard
       let textVariableNonNil = textVariableValue.value
@@ -676,7 +676,7 @@ public final class DivInputTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = textVariableValue {
-      errors.append(.right(FieldError(fieldName: "text_variable", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text_variable")))
     }
     guard
       let textVariableNonNil = textVariableValue.value

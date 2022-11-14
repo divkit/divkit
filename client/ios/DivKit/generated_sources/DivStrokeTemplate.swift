@@ -42,7 +42,7 @@ public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = colorValue {
-      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
     }
     guard
       let colorNonNil = colorValue.value
@@ -87,7 +87,7 @@ public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = colorValue {
-      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
     }
     guard
       let colorNonNil = colorValue.value

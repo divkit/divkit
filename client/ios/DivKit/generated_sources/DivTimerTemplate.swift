@@ -60,7 +60,7 @@ public final class DivTimerTemplate: TemplateValue, TemplateDeserializable {
       valueVariableValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value_variable", level: .warning)) }
     )
     if case .noValue = idValue {
-      errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
     }
     guard
       let idNonNil = idValue.value
@@ -130,7 +130,7 @@ public final class DivTimerTemplate: TemplateValue, TemplateDeserializable {
       valueVariableValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value_variable", level: .warning)) }
     )
     if case .noValue = idValue {
-      errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
     }
     guard
       let idNonNil = idValue.value

@@ -33,7 +33,7 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
         valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .error)) }
       )
       if case .noValue = valueValue {
-        errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "value")))
       }
       guard
         let valueNonNil = valueValue.value
@@ -64,7 +64,7 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
         valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .error)) }
       )
       if case .noValue = valueValue {
-        errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "value")))
       }
       guard
         let valueNonNil = valueValue.value

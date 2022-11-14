@@ -44,7 +44,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeseri
       insetsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "insets", level: .warning)) }
     )
     if case .noValue = imageUrlValue {
-      errors.append(.right(FieldError(fieldName: "image_url", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "image_url")))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value
@@ -85,7 +85,7 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeseri
       insetsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "insets", level: .warning)) }
     )
     if case .noValue = imageUrlValue {
-      errors.append(.right(FieldError(fieldName: "image_url", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "image_url")))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value

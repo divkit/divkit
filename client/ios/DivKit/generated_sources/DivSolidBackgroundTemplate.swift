@@ -38,7 +38,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
       colorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "color", level: .error)) }
     )
     if case .noValue = colorValue {
-      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
     }
     guard
       let colorNonNil = colorValue.value
@@ -69,7 +69,7 @@ public final class DivSolidBackgroundTemplate: TemplateValue, TemplateDeserializ
       colorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "color", level: .error)) }
     )
     if case .noValue = colorValue {
-      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
     }
     guard
       let colorNonNil = colorValue.value

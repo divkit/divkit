@@ -55,7 +55,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
         swipeOutActionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "swipe_out_actions", level: .warning)) }
       )
       if case .noValue = stateIdValue {
-        errors.append(.right(FieldError(fieldName: "state_id", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "state_id")))
       }
       guard
         let stateIdNonNil = stateIdValue.value
@@ -120,7 +120,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
         swipeOutActionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "swipe_out_actions", level: .warning)) }
       )
       if case .noValue = stateIdValue {
-        errors.append(.right(FieldError(fieldName: "state_id", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "state_id")))
       }
       guard
         let stateIdNonNil = stateIdValue.value
@@ -354,7 +354,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = statesValue {
-      errors.append(.right(FieldError(fieldName: "states", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "states")))
     }
     guard
       let statesNonNil = statesValue.value
@@ -601,7 +601,7 @@ public final class DivStateTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = statesValue {
-      errors.append(.right(FieldError(fieldName: "states", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "states")))
     }
     guard
       let statesNonNil = statesValue.value

@@ -68,13 +68,13 @@ public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
       positionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "position", level: .error)) }
     )
     if case .noValue = divValue {
-      errors.append(.right(FieldError(fieldName: "div", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "div")))
     }
     if case .noValue = idValue {
-      errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
     }
     if case .noValue = positionValue {
-      errors.append(.right(FieldError(fieldName: "position", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "position")))
     }
     guard
       let divNonNil = divValue.value,
@@ -155,13 +155,13 @@ public final class DivTooltipTemplate: TemplateValue, TemplateDeserializable {
       positionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "position", level: .error)) }
     )
     if case .noValue = divValue {
-      errors.append(.right(FieldError(fieldName: "div", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "div")))
     }
     if case .noValue = idValue {
-      errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
     }
     if case .noValue = positionValue {
-      errors.append(.right(FieldError(fieldName: "position", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "position")))
     }
     guard
       let divNonNil = divValue.value,

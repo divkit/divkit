@@ -30,7 +30,7 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
       ratioValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "ratio", level: .error)) }
     )
     if case .noValue = ratioValue {
-      errors.append(.right(FieldError(fieldName: "ratio", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "ratio")))
     }
     guard
       let ratioNonNil = ratioValue.value
@@ -61,7 +61,7 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
       ratioValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "ratio", level: .error)) }
     )
     if case .noValue = ratioValue {
-      errors.append(.right(FieldError(fieldName: "ratio", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "ratio")))
     }
     guard
       let ratioNonNil = ratioValue.value

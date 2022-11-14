@@ -72,7 +72,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeseriali
       visibilityPercentageValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "visibility_percentage", level: .warning)) }
     )
     if case .noValue = logIdValue {
-      errors.append(.right(FieldError(fieldName: "log_id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "log_id")))
     }
     guard
       let logIdNonNil = logIdValue.value
@@ -155,7 +155,7 @@ public final class DivVisibilityActionTemplate: TemplateValue, TemplateDeseriali
       visibilityPercentageValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "visibility_percentage", level: .warning)) }
     )
     if case .noValue = logIdValue {
-      errors.append(.right(FieldError(fieldName: "log_id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "log_id")))
     }
     guard
       let logIdNonNil = logIdValue.value

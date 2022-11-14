@@ -40,7 +40,7 @@ public final class EntityWithArrayOfExpressionsTemplate: TemplateValue, Template
       itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .error)) }
     )
     if case .noValue = itemsValue {
-      errors.append(.right(FieldError(fieldName: "items", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
     }
     guard
       let itemsNonNil = itemsValue.value
@@ -71,7 +71,7 @@ public final class EntityWithArrayOfExpressionsTemplate: TemplateValue, Template
       itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .error)) }
     )
     if case .noValue = itemsValue {
-      errors.append(.right(FieldError(fieldName: "items", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
     }
     guard
       let itemsNonNil = itemsValue.value

@@ -48,7 +48,7 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
       offsetValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "offset", level: .error)) }
     )
     if case .noValue = offsetValue {
-      errors.append(.right(FieldError(fieldName: "offset", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "offset")))
     }
     guard
       let offsetNonNil = offsetValue.value
@@ -103,7 +103,7 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
       offsetValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "offset", level: .error)) }
     )
     if case .noValue = offsetValue {
-      errors.append(.right(FieldError(fieldName: "offset", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "offset")))
     }
     guard
       let offsetNonNil = offsetValue.value

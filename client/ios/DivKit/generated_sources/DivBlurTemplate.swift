@@ -38,7 +38,7 @@ public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
       radiusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "radius", level: .error)) }
     )
     if case .noValue = radiusValue {
-      errors.append(.right(FieldError(fieldName: "radius", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "radius")))
     }
     guard
       let radiusNonNil = radiusValue.value
@@ -69,7 +69,7 @@ public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
       radiusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "radius", level: .error)) }
     )
     if case .noValue = radiusValue {
-      errors.append(.right(FieldError(fieldName: "radius", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "radius")))
     }
     guard
       let radiusNonNil = radiusValue.value

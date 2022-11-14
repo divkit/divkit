@@ -38,7 +38,7 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
       pageWidthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "page_width", level: .error)) }
     )
     if case .noValue = pageWidthValue {
-      errors.append(.right(FieldError(fieldName: "page_width", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "page_width")))
     }
     guard
       let pageWidthNonNil = pageWidthValue.value
@@ -72,7 +72,7 @@ public final class DivPageSizeTemplate: TemplateValue, TemplateDeserializable {
       pageWidthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "page_width", level: .error)) }
     )
     if case .noValue = pageWidthValue {
-      errors.append(.right(FieldError(fieldName: "page_width", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "page_width")))
     }
     guard
       let pageWidthNonNil = pageWidthValue.value

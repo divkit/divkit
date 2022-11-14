@@ -43,7 +43,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
         textValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "text", level: .error)) }
       )
       if case .noValue = textValue {
-        errors.append(.right(FieldError(fieldName: "text", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text")))
       }
       guard
         let textNonNil = textValue.value
@@ -92,7 +92,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
         textValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "text", level: .error)) }
       )
       if case .noValue = textValue {
-        errors.append(.right(FieldError(fieldName: "text", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text")))
       }
       guard
         let textNonNil = textValue.value
@@ -182,7 +182,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
       urlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "url", level: .warning)) }
     )
     if case .noValue = logIdValue {
-      errors.append(.right(FieldError(fieldName: "log_id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "log_id")))
     }
     guard
       let logIdNonNil = logIdValue.value
@@ -259,7 +259,7 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
       urlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "url", level: .warning)) }
     )
     if case .noValue = logIdValue {
-      errors.append(.right(FieldError(fieldName: "log_id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "log_id")))
     }
     guard
       let logIdNonNil = logIdValue.value

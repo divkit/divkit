@@ -103,13 +103,7 @@ private let dictWithTypeMismatch: [String: Any] = [
 ]
 
 private let missingRequiredFieldErrors: [DeserializationResult<DivData>.Error] = [
-  .right(
-    FieldError(
-      fieldName: logIdKey,
-      level: .error,
-      error: DeserializationError.requiredFieldIsMissing
-    )
-  ),
+  .left(DeserializationError.requiredFieldIsMissing(fieldName: logIdKey))
 ]
 
 private let invalidFieldErrors: [DeserializationResult<DivData>.Error] = [
@@ -203,11 +197,7 @@ private let missingTypeErrors: [DeserializationResult<DivData>.Error] = [
       error: FieldError(
         fieldName: divKey,
         level: .error,
-        error: FieldError(
-          fieldName: typeKey,
-          level: .error,
-          error: DeserializationError.requiredFieldIsMissing
-        )
+        error: DeserializationError.requiredFieldIsMissing(fieldName: typeKey)
       )
     )
   ),
@@ -231,10 +221,10 @@ private let missingTypeErrors: [DeserializationResult<DivData>.Error] = [
 extension DeserializationError: Equatable {
   public static func ==(lhs: DeserializationError, rhs: DeserializationError) -> Bool {
     switch (lhs, rhs) {
-    case (.generic, .generic), (.invalidDictionary, .invalidDictionary),
+    case (.generic, .generic),
          (.missingType, .missingType), (.invalidValue, .invalidValue),
          (.requiredFieldIsMissing, .requiredFieldIsMissing),
-         (.optionalFieldIsMissing, .optionalFieldIsMissing), (.noData, .noData),
+         (.noData, .noData),
          (.unexpectedError, .unexpectedError):
       return true
     case let (.nonUTF8String(lhsStr), .nonUTF8String(rhsStr)):
@@ -252,14 +242,12 @@ extension DeserializationError: Equatable {
       case .generic,
           .nonUTF8String,
           .invalidJSONData,
-          .invalidDictionary,
           .missingType,
           .unknownType,
           .invalidFieldRepresentation,
           .typeMismatch,
           .invalidValue,
           .requiredFieldIsMissing,
-          .optionalFieldIsMissing,
           .noData,
           .unexpectedError:
         return false

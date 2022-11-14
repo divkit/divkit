@@ -43,10 +43,10 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
         titleClickActionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "title_click_action", level: .warning)) }
       )
       if case .noValue = divValue {
-        errors.append(.right(FieldError(fieldName: "div", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "div")))
       }
       if case .noValue = titleValue {
-        errors.append(.right(FieldError(fieldName: "title", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "title")))
       }
       guard
         let divNonNil = divValue.value,
@@ -96,10 +96,10 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
         titleClickActionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "title_click_action", level: .warning)) }
       )
       if case .noValue = divValue {
-        errors.append(.right(FieldError(fieldName: "div", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "div")))
       }
       if case .noValue = titleValue {
-        errors.append(.right(FieldError(fieldName: "title", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "title")))
       }
       guard
         let divNonNil = divValue.value,
@@ -689,7 +689,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = itemsValue {
-      errors.append(.right(FieldError(fieldName: "items", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
     }
     guard
       let itemsNonNil = itemsValue.value
@@ -981,7 +981,7 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = itemsValue {
-      errors.append(.right(FieldError(fieldName: "items", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
     }
     guard
       let itemsNonNil = itemsValue.value

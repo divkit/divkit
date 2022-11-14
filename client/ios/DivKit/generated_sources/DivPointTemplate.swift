@@ -36,10 +36,10 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
       yValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "y", level: .error)) }
     )
     if case .noValue = xValue {
-      errors.append(.right(FieldError(fieldName: "x", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "x")))
     }
     if case .noValue = yValue {
-      errors.append(.right(FieldError(fieldName: "y", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "y")))
     }
     guard
       let xNonNil = xValue.value,
@@ -82,10 +82,10 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
       yValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "y", level: .error)) }
     )
     if case .noValue = xValue {
-      errors.append(.right(FieldError(fieldName: "x", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "x")))
     }
     if case .noValue = yValue {
-      errors.append(.right(FieldError(fieldName: "y", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "y")))
     }
     guard
       let xNonNil = xValue.value,

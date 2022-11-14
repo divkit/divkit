@@ -467,6 +467,6 @@ public func safeValueForLink<T>(
     return .failure(NonEmptyArray(error))
   } catch {
     assertionFailure("Closure should throw only DeserializationError")
-    return .failure(NonEmptyArray(.unexpectedError(additional: link)))
+    return .failure(NonEmptyArray(.unexpectedError(message: error.localizedDescription)))
   }
 }

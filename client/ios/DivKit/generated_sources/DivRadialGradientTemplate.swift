@@ -56,7 +56,7 @@ public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializa
       radiusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "radius", level: .warning)) }
     )
     if case .noValue = colorsValue {
-      errors.append(.right(FieldError(fieldName: "colors", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "colors")))
     }
     guard
       let colorsNonNil = colorsValue.value
@@ -113,7 +113,7 @@ public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializa
       radiusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "radius", level: .warning)) }
     )
     if case .noValue = colorsValue {
-      errors.append(.right(FieldError(fieldName: "colors", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "colors")))
     }
     guard
       let colorsNonNil = colorsValue.value

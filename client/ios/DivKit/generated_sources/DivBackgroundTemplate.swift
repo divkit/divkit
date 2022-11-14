@@ -98,7 +98,7 @@ public enum DivBackgroundTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivBackground> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
+      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
     }
 
     switch type {
@@ -143,7 +143,7 @@ public enum DivBackgroundTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
+      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
     }
   }
 }

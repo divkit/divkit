@@ -36,7 +36,7 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
       paramsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "params", level: .warning)) }
     )
     if case .noValue = idValue {
-      errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
     }
     guard
       let idNonNil = idValue.value
@@ -74,7 +74,7 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
       paramsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "params", level: .warning)) }
     )
     if case .noValue = idValue {
-      errors.append(.right(FieldError(fieldName: "id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
     }
     guard
       let idNonNil = idValue.value

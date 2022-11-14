@@ -242,7 +242,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = itemsValue {
-      errors.append(.right(FieldError(fieldName: "items", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
     }
     guard
       let itemsNonNil = itemsValue.value
@@ -524,7 +524,7 @@ public final class DivGalleryTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = itemsValue {
-      errors.append(.right(FieldError(fieldName: "items", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
     }
     guard
       let itemsNonNil = itemsValue.value

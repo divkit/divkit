@@ -171,14 +171,12 @@ extension DeserializationError {
     case .generic: return "generic"
     case .nonUTF8String: return "nonUTF8String"
     case .invalidJSONData: return "invalidJSONData"
-    case .invalidDictionary: return "invalidDictionary"
     case .missingType: return "missingType"
     case .unknownType: return "unknownType"
     case .invalidFieldRepresentation: return "invalidFieldRepresentation"
     case .typeMismatch: return "typeMismatch"
     case .invalidValue: return "invalidValue"
     case .requiredFieldIsMissing: return "requiredFieldIsMissing"
-    case .optionalFieldIsMissing: return "optionalFieldIsMissing"
     case .noData: return "noData"
     case .unexpectedError: return "unexpectedError"
     }
@@ -188,14 +186,12 @@ extension DeserializationError {
     var userInfo = ["path": path, "subkind": subkind]
 
     switch self {
-    case .generic, .requiredFieldIsMissing, .optionalFieldIsMissing, .noData:
+    case .generic, .requiredFieldIsMissing, .noData:
       break
     case let .nonUTF8String(string):
       userInfo["string"] = string
     case let .invalidJSONData(data):
       userInfo["data"] = "\(data)"
-    case let .invalidDictionary(JSON):
-      userInfo["json"] = "\(JSON)"
     case let .missingType(representation):
       userInfo["representation"] = "\(representation)"
     case let .unknownType(type):
@@ -209,8 +205,8 @@ extension DeserializationError {
     case let .invalidValue(result, value):
       userInfo["result"] = dbgStr(result)
       userInfo["value"] = dbgStr(value)
-    case let .unexpectedError(error):
-      userInfo["error"] = "\(error)"
+    case let .unexpectedError(message):
+      userInfo["error"] = message
     }
 
     return userInfo

@@ -7,16 +7,14 @@ public indirect enum DeserializationError: Error {
   case generic
   case nonUTF8String(string: String)
   case invalidJSONData(data: Data)
-  case invalidDictionary(JSON: Any)
   case missingType(representation: [String: Any])
   case unknownType(type: String)
   case invalidFieldRepresentation(field: String, representation: Any?)
   case typeMismatch(expected: String, representation: Any)
   case invalidValue(result: Any?, value: Any?)
-  case requiredFieldIsMissing
-  case optionalFieldIsMissing
+  case requiredFieldIsMissing(fieldName: String)
   case noData
-  case unexpectedError(additional: Any)
+  case unexpectedError(message: String)
 }
 
 extension DeserializationError {
@@ -28,8 +26,6 @@ extension DeserializationError {
       return "non-UTF8 string - \(string)"
     case .invalidJSONData:
       return "invalid JSON data"
-    case let .invalidDictionary(dict):
-      return "invalid dictionary - \(dict)"
     case let .missingType(representation):
       return "missing type - \(representation)"
     case let .unknownType(type):
@@ -42,12 +38,10 @@ extension DeserializationError {
       return "invalid value - \(dbgStr(result)), \(dbgStr(value))"
     case .requiredFieldIsMissing:
       return "required field is missing"
-    case .optionalFieldIsMissing:
-      return "optional field is missing"
     case .noData:
       return "no data"
-    case let .unexpectedError(additional):
-      return "unexpected error - \(dbgStr(additional))"
+    case let .unexpectedError(message):
+      return "unexpected error: \(message)"
     }
   }
 }

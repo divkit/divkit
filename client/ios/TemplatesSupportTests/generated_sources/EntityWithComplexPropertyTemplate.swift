@@ -33,7 +33,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
         valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .error)) }
       )
       if case .noValue = valueValue {
-        errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "value")))
       }
       guard
         let valueNonNil = valueValue.value
@@ -64,7 +64,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
         valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .error)) }
       )
       if case .noValue = valueValue {
-        errors.append(.right(FieldError(fieldName: "value", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "value")))
       }
       guard
         let valueNonNil = valueValue.value
@@ -118,7 +118,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
       propertyValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "property", level: .error)) }
     )
     if case .noValue = propertyValue {
-      errors.append(.right(FieldError(fieldName: "property", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "property")))
     }
     guard
       let propertyNonNil = propertyValue.value
@@ -152,7 +152,7 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
       propertyValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "property", level: .error)) }
     )
     if case .noValue = propertyValue {
-      errors.append(.right(FieldError(fieldName: "property", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "property")))
     }
     guard
       let propertyNonNil = propertyValue.value

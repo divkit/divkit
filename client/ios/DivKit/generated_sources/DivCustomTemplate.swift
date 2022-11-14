@@ -200,7 +200,7 @@ public final class DivCustomTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = customTypeValue {
-      errors.append(.right(FieldError(fieldName: "custom_type", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "custom_type")))
     }
     guard
       let customTypeNonNil = customTypeValue.value
@@ -440,7 +440,7 @@ public final class DivCustomTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = customTypeValue {
-      errors.append(.right(FieldError(fieldName: "custom_type", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "custom_type")))
     }
     guard
       let customTypeNonNil = customTypeValue.value

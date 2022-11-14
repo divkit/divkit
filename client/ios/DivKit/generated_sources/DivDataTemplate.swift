@@ -37,10 +37,10 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
         stateIdValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "state_id", level: .error)) }
       )
       if case .noValue = divValue {
-        errors.append(.right(FieldError(fieldName: "div", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "div")))
       }
       if case .noValue = stateIdValue {
-        errors.append(.right(FieldError(fieldName: "state_id", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "state_id")))
       }
       guard
         let divNonNil = divValue.value,
@@ -82,10 +82,10 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
         stateIdValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "state_id", level: .error)) }
       )
       if case .noValue = divValue {
-        errors.append(.right(FieldError(fieldName: "div", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "div")))
       }
       if case .noValue = stateIdValue {
-        errors.append(.right(FieldError(fieldName: "state_id", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "state_id")))
       }
       guard
         let divNonNil = divValue.value,
@@ -171,10 +171,10 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       variablesValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "variables", level: .warning)) }
     )
     if case .noValue = logIdValue {
-      errors.append(.right(FieldError(fieldName: "log_id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "log_id")))
     }
     if case .noValue = statesValue {
-      errors.append(.right(FieldError(fieldName: "states", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "states")))
     }
     guard
       let logIdNonNil = logIdValue.value,
@@ -247,10 +247,10 @@ public final class DivDataTemplate: TemplateValue, TemplateDeserializable {
       variablesValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "variables", level: .warning)) }
     )
     if case .noValue = logIdValue {
-      errors.append(.right(FieldError(fieldName: "log_id", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "log_id")))
     }
     if case .noValue = statesValue {
-      errors.append(.right(FieldError(fieldName: "states", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "states")))
     }
     guard
       let logIdNonNil = logIdValue.value,

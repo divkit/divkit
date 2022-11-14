@@ -59,7 +59,7 @@ public enum DivRadialGradientRadiusTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientRadius> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
+      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
     }
 
     switch type {
@@ -80,7 +80,7 @@ public enum DivRadialGradientRadiusTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(FieldError(fieldName: "type", level: .error, error: .requiredFieldIsMissing)))
+      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
     }
   }
 }

@@ -44,10 +44,10 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
       modeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "mode", level: .warning)) }
     )
     if case .noValue = actionsValue {
-      errors.append(.right(FieldError(fieldName: "actions", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "actions")))
     }
     if case .noValue = conditionValue {
-      errors.append(.right(FieldError(fieldName: "condition", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "condition")))
     }
     guard
       let actionsNonNil = actionsValue.value,
@@ -96,10 +96,10 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
       modeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "mode", level: .warning)) }
     )
     if case .noValue = actionsValue {
-      errors.append(.right(FieldError(fieldName: "actions", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "actions")))
     }
     if case .noValue = conditionValue {
-      errors.append(.right(FieldError(fieldName: "condition", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "condition")))
     }
     guard
       let actionsNonNil = actionsValue.value,

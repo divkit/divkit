@@ -55,7 +55,7 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
         textColorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "text_color", level: .warning)) }
       )
       if case .noValue = fontSizeValue {
-        errors.append(.right(FieldError(fieldName: "font_size", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "font_size")))
       }
       guard
         let fontSizeNonNil = fontSizeValue.value
@@ -117,7 +117,7 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
         textColorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "text_color", level: .warning)) }
       )
       if case .noValue = fontSizeValue {
-        errors.append(.right(FieldError(fieldName: "font_size", level: .error, error: .requiredFieldIsMissing)))
+        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "font_size")))
       }
       guard
         let fontSizeNonNil = fontSizeValue.value
@@ -405,13 +405,13 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = thumbStyleValue {
-      errors.append(.right(FieldError(fieldName: "thumb_style", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "thumb_style")))
     }
     if case .noValue = trackActiveStyleValue {
-      errors.append(.right(FieldError(fieldName: "track_active_style", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "track_active_style")))
     }
     if case .noValue = trackInactiveStyleValue {
-      errors.append(.right(FieldError(fieldName: "track_inactive_style", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "track_inactive_style")))
     }
     guard
       let thumbStyleNonNil = thumbStyleValue.value,
@@ -731,13 +731,13 @@ public final class DivSliderTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = thumbStyleValue {
-      errors.append(.right(FieldError(fieldName: "thumb_style", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "thumb_style")))
     }
     if case .noValue = trackActiveStyleValue {
-      errors.append(.right(FieldError(fieldName: "track_active_style", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "track_active_style")))
     }
     if case .noValue = trackInactiveStyleValue {
-      errors.append(.right(FieldError(fieldName: "track_inactive_style", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "track_inactive_style")))
     }
     guard
       let thumbStyleNonNil = thumbStyleValue.value,

@@ -260,7 +260,7 @@ public final class DivGifImageTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = gifUrlValue {
-      errors.append(.right(FieldError(fieldName: "gif_url", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "gif_url")))
     }
     guard
       let gifUrlNonNil = gifUrlValue.value
@@ -575,7 +575,7 @@ public final class DivGifImageTemplate: TemplateValue, TemplateDeserializable {
       widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
     )
     if case .noValue = gifUrlValue {
-      errors.append(.right(FieldError(fieldName: "gif_url", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "gif_url")))
     }
     guard
       let gifUrlNonNil = gifUrlValue.value

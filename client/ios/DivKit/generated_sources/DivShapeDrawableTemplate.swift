@@ -50,10 +50,10 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
       strokeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "stroke", level: .warning)) }
     )
     if case .noValue = colorValue {
-      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
     }
     if case .noValue = shapeValue {
-      errors.append(.right(FieldError(fieldName: "shape", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "shape")))
     }
     guard
       let colorNonNil = colorValue.value,
@@ -103,10 +103,10 @@ public final class DivShapeDrawableTemplate: TemplateValue, TemplateDeserializab
       strokeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "stroke", level: .warning)) }
     )
     if case .noValue = colorValue {
-      errors.append(.right(FieldError(fieldName: "color", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
     }
     if case .noValue = shapeValue {
-      errors.append(.right(FieldError(fieldName: "shape", level: .error, error: .requiredFieldIsMissing)))
+      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "shape")))
     }
     guard
       let colorNonNil = colorValue.value,
