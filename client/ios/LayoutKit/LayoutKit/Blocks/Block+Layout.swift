@@ -205,18 +205,29 @@ public struct ContainerBlockLayout {
 
     var currentLineOffset = 0.0
     wrapLayoutGroups.groups.forEach {
-      let groupHeight = $0.map(\.childSize).map(to: transferDirectionKeyPath).max() ?? 0
-      let contentLength = $0.map(\.childSize).map(to: buildingDirectionKeyPath).reduce(0, +)
-
       var lineAscent: CGFloat? = nil
-      $0.forEach {
-        lineAscent = getMaxAscent(
-          current: lineAscent, child: $0.child, childSize: $0.childSize
-        )
+      if layoutDirection == .horizontal {
+        $0.forEach {
+          lineAscent = getMaxAscent(
+            current: lineAscent, child: $0.child, childSize: $0.childSize
+          )
+        }
+        if containerAscent == nil {
+          containerAscent = lineAscent
+        }
       }
-      if containerAscent == nil {
-        containerAscent = lineAscent
+
+      let groupHeight: CGFloat
+      switch layoutDirection {
+      case .horizontal:
+        groupHeight = $0
+          .map { item in item.childSize.height + item.child.baselineOffset(ascent: lineAscent, width: item.childSize.width) }
+          .max() ?? 0
+      case .vertical:
+        groupHeight = $0.map{ item in item.childSize.width }.max() ?? 0
       }
+
+      let contentLength = $0.map(\.childSize).map(to: buildingDirectionKeyPath).reduce(0, +)
 
       $0.forEach {
         let alignmentSpace = groupHeight - $0.childSize[keyPath: transferDirectionKeyPath]
@@ -229,13 +240,7 @@ public struct ContainerBlockLayout {
 
         switch layoutDirection {
         case .horizontal:
-          let baselineOffset: CGFloat
-          if let lineAscent = lineAscent, lineAscent > 0,
-              let childAscent = $0.child.ascent(forWidth: $0.childSize.width) {
-            baselineOffset = lineAscent - childAscent
-          } else {
-            baselineOffset = 0
-          }
+          let baselineOffset = $0.child.baselineOffset(ascent: lineAscent, width: $0.childSize.width)
           frames
             .append(CGRect(origin: CGPoint(
               x: alignedElementOffset,
@@ -286,7 +291,7 @@ public struct ContainerBlockLayout {
     child: ContainerBlock.Child,
     childSize: CGSize
   ) -> CGFloat? {
-    let childAscent = child.ascent(forWidth: childSize.width)
+    let childAscent = child.contentAscent(forWidth: childSize.width)
     guard let containerAscent = containerAscent else {
       return childAscent
     }
@@ -325,12 +330,7 @@ fileprivate extension Array where Element == CGRect {
     }
     var framesWithOffset = [CGRect]()
     zip(children, self).forEach { child, frame in
-      let baselineOffset: CGFloat
-      if let childAscent = child.ascent(forWidth: frame.size.width) {
-        baselineOffset = ascent - childAscent
-      } else {
-        baselineOffset = 0
-      }
+      let baselineOffset = child.baselineOffset(ascent: ascent, width: frame.size.width)
       let y = frame.origin.y + baselineOffset
       framesWithOffset.append(CGRect(origin: CGPoint(x: frame.origin.x, y: y), size: frame.size))
     }
@@ -339,10 +339,18 @@ fileprivate extension Array where Element == CGRect {
 }
 
 fileprivate extension ContainerBlock.Child {
-  func ascent(forWidth width: CGFloat) -> CGFloat? {
+  func contentAscent(forWidth width: CGFloat) -> CGFloat? {
     guard crossAlignment == .baseline else {
       return nil
     }
     return content.ascent(forWidth: width)
+  }
+
+  func baselineOffset(ascent: CGFloat?, width: CGFloat) -> CGFloat {
+    guard let ascent = ascent, ascent > 0,
+          let childAscent = contentAscent(forWidth: width) else {
+      return 0
+    }
+    return ascent - childAscent
   }
 }
