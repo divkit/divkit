@@ -234,53 +234,10 @@ class KotlinEntity(Entity):
         return result
 
     @property
-    def contains_array_of_objects(self) -> bool:
-        for p in self.instance_properties_kotlin:
-            if p.is_required_array_of_objects:
-                return True
-        return False
+    def copy_with_new_array_declaration(self) -> Optional[Text]:
+        if not self.__contains_array_of_objects:
+            return None
 
-    @property
-    def deep_equals_declaration(self) -> Text:
-        result = EMPTY
-        result += '    override fun equals(other: Any?): Boolean {'
-        result += self.__same_object_check
-        result += '        other ?: return false'
-        result += f'        if (other !is {utils.capitalize_camel_case(self.name)}) {{'
-        result += '            return false'
-        result += '        }'
-
-        for p in self.instance_properties_kotlin:
-            result += p.equality_declaration
-
-        result += '        return true'
-        result += '    }'
-        return result
-
-    @property
-    def equals_except_array_declaration(self) -> Text:
-        result = EMPTY
-        class_name = utils.capitalize_camel_case(self.name)
-        result += f'    fun equalsExceptArray(other: {class_name}): Boolean {{'
-        result += self.__same_object_check
-
-        for prop in list(filter(lambda p: not p.is_required_array_of_objects,
-                                self.instance_properties_kotlin)):
-            result += prop.equality_declaration
-
-        result += '        return true'
-        result += '    }'
-        return result
-
-    @property
-    def __same_object_check(self) -> Text:
-        result = Text('        if (this === other) {')
-        result += '            return true'
-        result += '        }'
-        return result
-
-    @property
-    def copy_with_new_array_declaration(self) -> Text:
         result = EMPTY
         result += '    fun copyWithNewArray('
 
@@ -290,7 +247,8 @@ class KotlinEntity(Entity):
         def append_arg(name: str):
             constructor_params.append(f'        {name},')
 
-        for p in self.instance_properties:
+        for p in sorted(filter(lambda prop: not isinstance(prop.property_type, StaticString),
+                               self.properties), key=lambda prop: prop.name):
             property_name = utils.lower_camel_case(p.name)
             if p.optional:
                 append_arg(property_name)
@@ -314,6 +272,15 @@ class KotlinEntity(Entity):
         result += '\n'.join(constructor_params)
         result += '    )'
         return result
+
+    @property
+    def __contains_array_of_objects(self) -> bool:
+        for p in self.properties:
+            if not p.optional and \
+                    isinstance(p.property_type, Array) and \
+                    isinstance(p.property_type.property_type, Object):
+                return True
+        return False
 
 
 class KotlinProperty(Property):
@@ -581,20 +548,6 @@ class KotlinProperty(Property):
         if self.use_expression_type:
             reader_type = f'{EXPRESSION_TYPE_NAME}<{reader_type}>'
         return f'val {self.reader_declaration_name}: Reader<{reader_type}{optional}> = {{ {lambda_val} }}'
-
-    @property
-    def is_required_array_of_objects(self) -> bool:
-        return not self.optional and \
-            isinstance(self.property_type, Array) and \
-            isinstance(self.property_type.property_type, Object)
-
-    @property
-    def equality_declaration(self) -> Text:
-        property_name = utils.lower_camel_case(self.name)
-        result = Text(f'        if ({property_name} != other.{property_name}) {{')
-        result += '            return false'
-        result += '        }'
-        return result
 
 
 class KotlinPropertyType(PropertyType):

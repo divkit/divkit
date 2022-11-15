@@ -27,27 +27,6 @@ class EntityWithArrayOfEnums(
         return json
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-        other ?: return false
-        if (other !is EntityWithArrayOfEnums) {
-            return false
-        }
-        if (items != other.items) {
-            return false
-        }
-        return true
-    }
-
-    fun equalsExceptArray(other: EntityWithArrayOfEnums): Boolean {
-        if (this === other) {
-            return true
-        }
-        return true
-    }
-
     fun copyWithNewArray(
         items: List<EntityWithArrayOfEnums.Item>,
     ) = EntityWithArrayOfEnums(

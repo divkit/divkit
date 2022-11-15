@@ -27,20 +27,6 @@ class EntityWithArrayOfExpressions(
         return json
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-        other ?: return false
-        if (other !is EntityWithArrayOfExpressions) {
-            return false
-        }
-        if (items != other.items) {
-            return false
-        }
-        return true
-    }
-
     companion object {
         const val TYPE = "entity_with_array_of_expressions"
 

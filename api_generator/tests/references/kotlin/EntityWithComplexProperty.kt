@@ -27,20 +27,6 @@ class EntityWithComplexProperty(
         return json
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-        other ?: return false
-        if (other !is EntityWithComplexProperty) {
-            return false
-        }
-        if (property != other.property) {
-            return false
-        }
-        return true
-    }
-
     companion object {
         const val TYPE = "entity_with_complex_property"
 
@@ -66,20 +52,6 @@ class EntityWithComplexProperty(
             val json = JSONObject()
             json.writeExpression(key = "value", value = value, converter = URI_TO_STRING)
             return json
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-            other ?: return false
-            if (other !is Property) {
-                return false
-            }
-            if (value != other.value) {
-                return false
-            }
-            return true
         }
 
         companion object {

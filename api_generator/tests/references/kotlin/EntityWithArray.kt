@@ -27,27 +27,6 @@ class EntityWithArray(
         return json
     }
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-        other ?: return false
-        if (other !is EntityWithArray) {
-            return false
-        }
-        if (array != other.array) {
-            return false
-        }
-        return true
-    }
-
-    fun equalsExceptArray(other: EntityWithArray): Boolean {
-        if (this === other) {
-            return true
-        }
-        return true
-    }
-
     fun copyWithNewArray(
         array: List<Entity>,
     ) = EntityWithArray(
