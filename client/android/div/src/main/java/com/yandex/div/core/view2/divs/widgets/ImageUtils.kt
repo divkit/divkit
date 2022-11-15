@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.yandex.div.core.view2.divs.widgets
 
 import android.graphics.Bitmap
@@ -45,15 +47,21 @@ fun Bitmap.applyFilters(
 private const val RADIUS_MAX_VALUE_PX = 25
 
 fun Bitmap.applyBlur(blur: DivBlur, component: Div2Component, resolver: ExpressionResolver) {
-    val radius = blur.radius.evaluate(resolver).dpToPx().let {
-        if (it > RADIUS_MAX_VALUE_PX) RADIUS_MAX_VALUE_PX else it
-    }.toFloat()
+    var radius = blur.radius.evaluate(resolver)
+    if (radius == 0) {
+        return
+    }
+
+    radius = radius.dpToPx()
+    if (radius > RADIUS_MAX_VALUE_PX) {
+        radius = RADIUS_MAX_VALUE_PX
+    }
 
     val rs = component.renderScript
     val input = Allocation.createFromBitmap(rs, this)
     val output = Allocation.createTyped(rs, input.type)
     ScriptIntrinsicBlur.create(rs, Element.U8_4(rs)).apply {
-        setRadius(radius)
+        setRadius(radius.toFloat())
         setInput(input)
         forEach(output)
     }
