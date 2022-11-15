@@ -26,6 +26,7 @@ import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.core.widget.wraplayout.WrapShowSeparatorsMode
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivMatchParentSize
@@ -156,6 +157,7 @@ internal class DivContainerBinder @Inject constructor(
             gravity = evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver))
         })
         addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
+            isBaselineAligned = it == DivAlignmentVertical.BASELINE
             gravity = evaluateGravity(div.contentAlignmentHorizontal.evaluate(resolver), it)
         })
         div.separator?.let { observeSeparator(it, resolver) }
