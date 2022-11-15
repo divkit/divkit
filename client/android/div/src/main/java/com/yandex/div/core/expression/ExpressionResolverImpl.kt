@@ -104,10 +104,20 @@ internal class ExpressionResolverImpl(
                 converter.invoke(rawValue)
             } catch (e: ClassCastException) {
                 throw typeMismatch(
-                    expressionKey = expressionKey,
-                    rawExpression = rawExpression,
-                    wrongTypeValue = rawValue,
-                    cause = e,
+                        expressionKey = expressionKey,
+                        rawExpression = rawExpression,
+                        wrongTypeValue = rawValue,
+                        cause = e,
+                )
+            } catch (e: Exception) {
+                // okay to catch exceptions here cause convertors may
+                // throw different types of errors from common ClassCastException
+                // up to specific NumberFormatException.
+                throw invalidValue(
+                        expressionKey = expressionKey,
+                        rawExpression = rawExpression,
+                        wrongValue = rawValue,
+                        cause = e,
                 )
             }
         }

@@ -69,7 +69,7 @@ fun typeMismatch(expressionKey: String,
                  cause: Throwable? = null): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
-        message = "Expression \"$expressionKey\": \"$rawExpression\" received value of wrong type: '$wrongTypeValue'",
+        message = "Expression '$expressionKey': '$rawExpression' received value of wrong type: '$wrongTypeValue'",
         cause = cause,
     )
 }
@@ -90,6 +90,17 @@ fun <T> invalidValue(json: JSONObject, key: String, value: T): ParsingException 
         message = "Value '${value.trimLength()}' for key '$key' is not valid",
         source = JsonObject(json),
         jsonSummary = json.summary()
+    )
+}
+
+fun invalidValue(expressionKey: String,
+                 rawExpression: String,
+                 wrongValue: Any?,
+                 cause: Throwable? = null): ParsingException {
+    return ParsingException(
+            reason = ParsingExceptionReason.INVALID_VALUE,
+            message = "Field '$expressionKey' with expression '$rawExpression' received wrong value: '$wrongValue'",
+            cause = cause,
     )
 }
 
