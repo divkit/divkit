@@ -94,7 +94,7 @@ fileprivate func redrawingImage(
   if let tintColor = imageRedrawingStyle?.tintColor,
      let coloredImage = ImageGeneratorType.constantColor(color: tintColor.ciColor)
      .imageGenerator() {
-    let mode = imageRedrawingStyle?.tintMode ?? .sourceAtop
+    let mode = imageRedrawingStyle?.tintMode ?? .sourceIn
     tintModeFilter = { mode.composerType.imageComposer($0)(coloredImage) }
   } else {
     tintModeFilter = identityFilter

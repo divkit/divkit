@@ -12,8 +12,8 @@ public struct BackgroundImage {
     imageHolder: ImageHolder,
     contentMode: ImageContentMode = .default,
     alpha: Double = 1.0,
-    effects: [ImageEffect],
-    metalImageRenderingEnabled: Bool
+    effects: [ImageEffect] = [],
+    metalImageRenderingEnabled: Bool = false
   ) {
     self.imageHolder = imageHolder
     self.contentMode = contentMode

@@ -23,7 +23,7 @@ public final class ImageBlock: ImageBaseBlock {
     contentMode: ImageContentMode,
     tintColor: Color?,
     tintMode: TintMode?,
-    effects: [ImageEffect],
+    effects: [ImageEffect] = [],
     metalImageRenderingEnabled: Bool = false,
     accessibilityElement: AccessibilityElement? = nil,
     appearanceAnimation: TransitioningAnimation? = nil
