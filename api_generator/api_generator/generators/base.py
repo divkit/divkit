@@ -60,6 +60,8 @@ class Generator(ABC):
         self._generate_files(objects)
 
     def _clear_output_directory(self):
+        if not os.path.exists(self._output_path):
+            os.mkdir(self._output_path)
         utils.clear_content_of_directory(self._output_path)
 
     def _generate_files(self, objects: List[Declarable]):
