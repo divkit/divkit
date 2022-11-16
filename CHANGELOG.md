@@ -1,4 +1,15 @@
-## 14.0.0
+## 16.0.0
+
+# Android Client:
+* Added baseline alignment in linear container
+
+# iOS Client:
+* Added blur and tint mode support
+* Added baseline alignment in DivContainer
+* Improved DivErrorsStorage
+
+
+## 15.0.0
 
 # JSON Schema:
 * Added `div-timer`
