@@ -41,9 +41,9 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDese
     let itemHeightValue = parent?.itemHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.itemHeightValidator, useOnlyLinks: true) ?? .noValue
     let itemWidthValue = parent?.itemWidth?.resolveOptionalValue(context: context, validator: ResolvedValue.itemWidthValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corner_radius", error: $0) },
-      itemHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "item_height", error: $0) },
-      itemWidthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "item_width", error: $0) }
+      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
+      itemHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_height", error: $0) },
+      itemWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_width", error: $0) }
     )
     let result = DivRoundedRectangleShape(
       cornerRadius: cornerRadiusValue.value,
@@ -83,9 +83,9 @@ public final class DivRoundedRectangleShapeTemplate: TemplateValue, TemplateDese
       itemWidthValue = itemWidthValue.merged(with: parent.itemWidth?.resolveOptionalValue(context: context, validator: ResolvedValue.itemWidthValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corner_radius", error: $0) },
-      itemHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "item_height", error: $0) },
-      itemWidthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "item_width", error: $0) }
+      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
+      itemHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_height", error: $0) },
+      itemWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "item_width", error: $0) }
     )
     let result = DivRoundedRectangleShape(
       cornerRadius: cornerRadiusValue.value,

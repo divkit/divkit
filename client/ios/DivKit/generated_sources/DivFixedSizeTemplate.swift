@@ -21,8 +21,8 @@ public final class DivFixedSizeTemplate: TemplateValue, TemplateDeserializable {
         unit: try dictionary.getOptionalExpressionField("unit"),
         value: try dictionary.getOptionalExpressionField("value")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-fixed-size_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-fixed-size_template." + field, representation: representation)
     }
   }
 
@@ -40,11 +40,11 @@ public final class DivFixedSizeTemplate: TemplateValue, TemplateDeserializable {
     let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
     var errors = mergeErrors(
-      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) },
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     if case .noValue = valueValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "value"))
+      errors.append(.requiredFieldIsMissing(field: "value"))
     }
     guard
       let valueNonNil = valueValue.value
@@ -78,11 +78,11 @@ public final class DivFixedSizeTemplate: TemplateValue, TemplateDeserializable {
       }
     }
     var errors = mergeErrors(
-      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) },
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(field: "unit", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     if case .noValue = valueValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "value"))
+      errors.append(.requiredFieldIsMissing(field: "value"))
     }
     guard
       let valueNonNil = valueValue.value

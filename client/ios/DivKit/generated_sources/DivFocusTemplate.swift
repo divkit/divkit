@@ -44,11 +44,11 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
       let rightValue = parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue
       let upValue = parent?.up?.resolveOptionalValue(context: context, validator: ResolvedValue.upValidator) ?? .noValue
       let errors = mergeErrors(
-        downValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "down", error: $0) },
-        forwardValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "forward", error: $0) },
-        leftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "left", error: $0) },
-        rightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "right", error: $0) },
-        upValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "up", error: $0) }
+        downValue.errorsOrWarnings?.map { .nestedObjectError(field: "down", error: $0) },
+        forwardValue.errorsOrWarnings?.map { .nestedObjectError(field: "forward", error: $0) },
+        leftValue.errorsOrWarnings?.map { .nestedObjectError(field: "left", error: $0) },
+        rightValue.errorsOrWarnings?.map { .nestedObjectError(field: "right", error: $0) },
+        upValue.errorsOrWarnings?.map { .nestedObjectError(field: "up", error: $0) }
       )
       let result = DivFocus.NextFocusIds(
         down: downValue.value,
@@ -95,11 +95,11 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
         }
       }
       let errors = mergeErrors(
-        downValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "down", error: $0) },
-        forwardValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "forward", error: $0) },
-        leftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "left", error: $0) },
-        rightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "right", error: $0) },
-        upValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "up", error: $0) }
+        downValue.errorsOrWarnings?.map { .nestedObjectError(field: "down", error: $0) },
+        forwardValue.errorsOrWarnings?.map { .nestedObjectError(field: "forward", error: $0) },
+        leftValue.errorsOrWarnings?.map { .nestedObjectError(field: "left", error: $0) },
+        rightValue.errorsOrWarnings?.map { .nestedObjectError(field: "right", error: $0) },
+        upValue.errorsOrWarnings?.map { .nestedObjectError(field: "up", error: $0) }
       )
       let result = DivFocus.NextFocusIds(
         down: downValue.value,
@@ -157,11 +157,11 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
     let onBlurValue = parent?.onBlur?.resolveOptionalValue(context: context, validator: ResolvedValue.onBlurValidator, useOnlyLinks: true) ?? .noValue
     let onFocusValue = parent?.onFocus?.resolveOptionalValue(context: context, validator: ResolvedValue.onFocusValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "background", error: $0) },
-      borderValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "border", error: $0) },
-      nextFocusIdsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "next_focus_ids", error: $0) },
-      onBlurValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "on_blur", error: $0) },
-      onFocusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "on_focus", error: $0) }
+      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
+      borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      nextFocusIdsValue.errorsOrWarnings?.map { .nestedObjectError(field: "next_focus_ids", error: $0) },
+      onBlurValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_blur", error: $0) },
+      onFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_focus", error: $0) }
     )
     let result = DivFocus(
       background: backgroundValue.value,
@@ -215,11 +215,11 @@ public final class DivFocusTemplate: TemplateValue, TemplateDeserializable {
       onFocusValue = onFocusValue.merged(with: parent.onFocus?.resolveOptionalValue(context: context, validator: ResolvedValue.onFocusValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "background", error: $0) },
-      borderValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "border", error: $0) },
-      nextFocusIdsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "next_focus_ids", error: $0) },
-      onBlurValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "on_blur", error: $0) },
-      onFocusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "on_focus", error: $0) }
+      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
+      borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      nextFocusIdsValue.errorsOrWarnings?.map { .nestedObjectError(field: "next_focus_ids", error: $0) },
+      onBlurValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_blur", error: $0) },
+      onFocusValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_focus", error: $0) }
     )
     let result = DivFocus(
       background: backgroundValue.value,

@@ -73,15 +73,15 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
     let stringValue = parent?.string?.resolveOptionalValue(context: context, validator: ResolvedValue.stringValidator) ?? .noValue
     let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
     let errors = mergeErrors(
-      booleanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "boolean", error: $0) },
-      booleanIntValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "boolean_int", error: $0) },
-      colorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "color", error: $0) },
-      doubleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "double", error: $0) },
-      idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
-      integerValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "integer", error: $0) },
-      positiveIntegerValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "positive_integer", error: $0) },
-      stringValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "string", error: $0) },
-      urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) }
+      booleanValue.errorsOrWarnings?.map { .nestedObjectError(field: "boolean", error: $0) },
+      booleanIntValue.errorsOrWarnings?.map { .nestedObjectError(field: "boolean_int", error: $0) },
+      colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
+      doubleValue.errorsOrWarnings?.map { .nestedObjectError(field: "double", error: $0) },
+      idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      integerValue.errorsOrWarnings?.map { .nestedObjectError(field: "integer", error: $0) },
+      positiveIntegerValue.errorsOrWarnings?.map { .nestedObjectError(field: "positive_integer", error: $0) },
+      stringValue.errorsOrWarnings?.map { .nestedObjectError(field: "string", error: $0) },
+      urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) }
     )
     let result = EntityWithSimpleProperties(
       boolean: booleanValue.value,
@@ -152,15 +152,15 @@ public final class EntityWithSimplePropertiesTemplate: TemplateValue, EntityProt
       }
     }
     let errors = mergeErrors(
-      booleanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "boolean", error: $0) },
-      booleanIntValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "boolean_int", error: $0) },
-      colorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "color", error: $0) },
-      doubleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "double", error: $0) },
-      idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
-      integerValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "integer", error: $0) },
-      positiveIntegerValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "positive_integer", error: $0) },
-      stringValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "string", error: $0) },
-      urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) }
+      booleanValue.errorsOrWarnings?.map { .nestedObjectError(field: "boolean", error: $0) },
+      booleanIntValue.errorsOrWarnings?.map { .nestedObjectError(field: "boolean_int", error: $0) },
+      colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
+      doubleValue.errorsOrWarnings?.map { .nestedObjectError(field: "double", error: $0) },
+      idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      integerValue.errorsOrWarnings?.map { .nestedObjectError(field: "integer", error: $0) },
+      positiveIntegerValue.errorsOrWarnings?.map { .nestedObjectError(field: "positive_integer", error: $0) },
+      stringValue.errorsOrWarnings?.map { .nestedObjectError(field: "string", error: $0) },
+      urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) }
     )
     let result = EntityWithSimpleProperties(
       boolean: booleanValue.value,

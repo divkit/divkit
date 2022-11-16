@@ -19,8 +19,8 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
         color: try dictionary.getOptionalExpressionField("color", transform: Color.color(withHexString:)),
         offset: try dictionary.getOptionalField("offset", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-shadow_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-shadow_template." + field, representation: representation)
     }
   }
 
@@ -42,13 +42,13 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
     let colorValue = parent?.color?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorValidator) ?? .noValue
     let offsetValue = parent?.offset?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
-      blurValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "blur", error: $0) },
-      colorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "color", error: $0) },
-      offsetValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "offset", error: $0) }
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      blurValue.errorsOrWarnings?.map { .nestedObjectError(field: "blur", error: $0) },
+      colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
+      offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) }
     )
     if case .noValue = offsetValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "offset"))
+      errors.append(.requiredFieldIsMissing(field: "offset"))
     }
     guard
       let offsetNonNil = offsetValue.value
@@ -97,13 +97,13 @@ public final class DivShadowTemplate: TemplateValue, TemplateDeserializable {
       offsetValue = offsetValue.merged(with: parent.offset?.resolveValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
-      blurValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "blur", error: $0) },
-      colorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "color", error: $0) },
-      offsetValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "offset", error: $0) }
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      blurValue.errorsOrWarnings?.map { .nestedObjectError(field: "blur", error: $0) },
+      colorValue.errorsOrWarnings?.map { .nestedObjectError(field: "color", error: $0) },
+      offsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "offset", error: $0) }
     )
     if case .noValue = offsetValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "offset"))
+      errors.append(.requiredFieldIsMissing(field: "offset"))
     }
     guard
       let offsetNonNil = offsetValue.value

@@ -16,8 +16,8 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
           id: try dictionary.getOptionalField("id"),
           items: try dictionary.getOptionalArray("items", templateToType: templateToType)
         )
-      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(fieldName: "change_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "change_template." + field, representation: representation)
       }
     }
 
@@ -33,11 +33,11 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
       let idValue = parent?.id?.resolveValue(context: context) ?? .noValue
       let itemsValue = parent?.items?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
-        idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
-        itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) }
+        idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+        itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
       )
       if case .noValue = idValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "id"))
+        errors.append(.requiredFieldIsMissing(field: "id"))
       }
       guard
         let idNonNil = idValue.value
@@ -74,11 +74,11 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
         itemsValue = itemsValue.merged(with: parent.items?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
       }
       var errors = mergeErrors(
-        idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
-        itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) }
+        idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+        itemsValue.errorsOrWarnings?.map { .nestedObjectError(field: "items", error: $0) }
       )
       if case .noValue = idValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "id"))
+        errors.append(.requiredFieldIsMissing(field: "id"))
       }
       guard
         let idNonNil = idValue.value
@@ -117,8 +117,8 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
         changes: try dictionary.getOptionalArray("changes", templateToType: templateToType),
         mode: try dictionary.getOptionalExpressionField("mode")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-patch_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-patch_template." + field, representation: representation)
     }
   }
 
@@ -134,11 +134,11 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
     let changesValue = parent?.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true) ?? .noValue
     let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
     var errors = mergeErrors(
-      changesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "changes", error: $0) },
-      modeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "mode", error: $0) }
+      changesValue.errorsOrWarnings?.map { .nestedObjectError(field: "changes", error: $0) },
+      modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) }
     )
     if case .noValue = changesValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "changes"))
+      errors.append(.requiredFieldIsMissing(field: "changes"))
     }
     guard
       let changesNonNil = changesValue.value
@@ -175,11 +175,11 @@ public final class DivPatchTemplate: TemplateValue, TemplateDeserializable {
       changesValue = changesValue.merged(with: parent.changes?.resolveValue(context: context, validator: ResolvedValue.changesValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      changesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "changes", error: $0) },
-      modeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "mode", error: $0) }
+      changesValue.errorsOrWarnings?.map { .nestedObjectError(field: "changes", error: $0) },
+      modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) }
     )
     if case .noValue = changesValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "changes"))
+      errors.append(.requiredFieldIsMissing(field: "changes"))
     }
     guard
       let changesNonNil = changesValue.value

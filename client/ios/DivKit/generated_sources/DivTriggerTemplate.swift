@@ -19,8 +19,8 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
         condition: try dictionary.getOptionalExpressionField("condition"),
         mode: try dictionary.getOptionalExpressionField("mode")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-trigger_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-trigger_template." + field, representation: representation)
     }
   }
 
@@ -39,15 +39,15 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
     let conditionValue = parent?.condition?.resolveValue(context: context) ?? .noValue
     let modeValue = parent?.mode?.resolveOptionalValue(context: context, validator: ResolvedValue.modeValidator) ?? .noValue
     var errors = mergeErrors(
-      actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
-      conditionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "condition", error: $0) },
-      modeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "mode", error: $0) }
+      actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+      conditionValue.errorsOrWarnings?.map { .nestedObjectError(field: "condition", error: $0) },
+      modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) }
     )
     if case .noValue = actionsValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "actions"))
+      errors.append(.requiredFieldIsMissing(field: "actions"))
     }
     if case .noValue = conditionValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "condition"))
+      errors.append(.requiredFieldIsMissing(field: "condition"))
     }
     guard
       let actionsNonNil = actionsValue.value,
@@ -91,15 +91,15 @@ public final class DivTriggerTemplate: TemplateValue, TemplateDeserializable {
       actionsValue = actionsValue.merged(with: parent.actions?.resolveValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
-      conditionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "condition", error: $0) },
-      modeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "mode", error: $0) }
+      actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+      conditionValue.errorsOrWarnings?.map { .nestedObjectError(field: "condition", error: $0) },
+      modeValue.errorsOrWarnings?.map { .nestedObjectError(field: "mode", error: $0) }
     )
     if case .noValue = actionsValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "actions"))
+      errors.append(.requiredFieldIsMissing(field: "actions"))
     }
     if case .noValue = conditionValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "condition"))
+      errors.append(.requiredFieldIsMissing(field: "condition"))
     }
     guard
       let actionsNonNil = actionsValue.value,

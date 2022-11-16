@@ -31,8 +31,8 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
         preloadRequired: try dictionary.getOptionalExpressionField("preload_required"),
         scale: try dictionary.getOptionalExpressionField("scale")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-image-background_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-image-background_template." + field, representation: representation)
     }
   }
 
@@ -65,16 +65,16 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
     let preloadRequiredValue = parent?.preloadRequired?.resolveOptionalValue(context: context, validator: ResolvedValue.preloadRequiredValidator) ?? .noValue
     let scaleValue = parent?.scale?.resolveOptionalValue(context: context, validator: ResolvedValue.scaleValidator) ?? .noValue
     var errors = mergeErrors(
-      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
-      contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "content_alignment_horizontal", error: $0) },
-      contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "content_alignment_vertical", error: $0) },
-      filtersValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "filters", error: $0) },
-      imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "image_url", error: $0) },
-      preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "preload_required", error: $0) },
-      scaleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "scale", error: $0) }
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
+      contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
+      filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
+      imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
+      preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
+      scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) }
     )
     if case .noValue = imageUrlValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "image_url"))
+      errors.append(.requiredFieldIsMissing(field: "image_url"))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value
@@ -141,16 +141,16 @@ public final class DivImageBackgroundTemplate: TemplateValue, TemplateDeserializ
       filtersValue = filtersValue.merged(with: parent.filters?.resolveOptionalValue(context: context, validator: ResolvedValue.filtersValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
-      contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "content_alignment_horizontal", error: $0) },
-      contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "content_alignment_vertical", error: $0) },
-      filtersValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "filters", error: $0) },
-      imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "image_url", error: $0) },
-      preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "preload_required", error: $0) },
-      scaleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "scale", error: $0) }
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      contentAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_horizontal", error: $0) },
+      contentAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "content_alignment_vertical", error: $0) },
+      filtersValue.errorsOrWarnings?.map { .nestedObjectError(field: "filters", error: $0) },
+      imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
+      preloadRequiredValue.errorsOrWarnings?.map { .nestedObjectError(field: "preload_required", error: $0) },
+      scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) }
     )
     if case .noValue = imageUrlValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "image_url"))
+      errors.append(.requiredFieldIsMissing(field: "image_url"))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value

@@ -18,8 +18,8 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         array: try dictionary.getOptionalExpressionArray("array")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "entity_with_string_array_property_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_string_array_property_template." + field, representation: representation)
     }
   }
 
@@ -34,10 +34,10 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
   private static func resolveOnlyLinks(context: Context, parent: EntityWithStringArrayPropertyTemplate?) -> DeserializationResult<EntityWithStringArrayProperty> {
     let arrayValue = parent?.array?.resolveValue(context: context, validator: ResolvedValue.arrayValidator) ?? .noValue
     var errors = mergeErrors(
-      arrayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "array", error: $0) }
+      arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
     )
     if case .noValue = arrayValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "array"))
+      errors.append(.requiredFieldIsMissing(field: "array"))
     }
     guard
       let arrayNonNil = arrayValue.value
@@ -65,10 +65,10 @@ public final class EntityWithStringArrayPropertyTemplate: TemplateValue, Templat
       }
     }
     var errors = mergeErrors(
-      arrayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "array", error: $0) }
+      arrayValue.errorsOrWarnings?.map { .nestedObjectError(field: "array", error: $0) }
     )
     if case .noValue = arrayValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "array"))
+      errors.append(.requiredFieldIsMissing(field: "array"))
     }
     guard
       let arrayNonNil = arrayValue.value

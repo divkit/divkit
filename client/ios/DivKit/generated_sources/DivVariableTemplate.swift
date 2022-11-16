@@ -111,7 +111,7 @@ public enum DivVariableTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivVariable> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
     switch type {
@@ -164,7 +164,7 @@ public enum DivVariableTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
   }
 }
@@ -187,7 +187,7 @@ extension DivVariableTemplate: TemplateDeserializable {
     case UrlVariableTemplate.type:
       self = .urlVariableTemplate(try UrlVariableTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-variable_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(field: "div-variable_template", representation: dictionary)
     }
   }
 }

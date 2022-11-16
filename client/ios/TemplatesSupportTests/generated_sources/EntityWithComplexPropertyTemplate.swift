@@ -16,8 +16,8 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
         self.init(
           value: try dictionary.getOptionalExpressionField("value", transform: URL.init(string:))
         )
-      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(fieldName: "property_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "property_template." + field, representation: representation)
       }
     }
 
@@ -30,10 +30,10 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
     private static func resolveOnlyLinks(context: Context, parent: PropertyTemplate?) -> DeserializationResult<EntityWithComplexProperty.Property> {
       let valueValue = parent?.value?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
       var errors = mergeErrors(
-        valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+        valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
       )
       if case .noValue = valueValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "value"))
+        errors.append(.requiredFieldIsMissing(field: "value"))
       }
       guard
         let valueNonNil = valueValue.value
@@ -61,10 +61,10 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
         }
       }
       var errors = mergeErrors(
-        valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+        valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
       )
       if case .noValue = valueValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "value"))
+        errors.append(.requiredFieldIsMissing(field: "value"))
       }
       guard
         let valueNonNil = valueValue.value
@@ -99,8 +99,8 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         property: try dictionary.getOptionalField("property", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "entity_with_complex_property_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_complex_property_template." + field, representation: representation)
     }
   }
 
@@ -115,10 +115,10 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
   private static func resolveOnlyLinks(context: Context, parent: EntityWithComplexPropertyTemplate?) -> DeserializationResult<EntityWithComplexProperty> {
     let propertyValue = parent?.property?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
+      propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
     if case .noValue = propertyValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "property"))
+      errors.append(.requiredFieldIsMissing(field: "property"))
     }
     guard
       let propertyNonNil = propertyValue.value
@@ -149,10 +149,10 @@ public final class EntityWithComplexPropertyTemplate: TemplateValue, TemplateDes
       propertyValue = propertyValue.merged(with: parent.property?.resolveValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
+      propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
     if case .noValue = propertyValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "property"))
+      errors.append(.requiredFieldIsMissing(field: "property"))
     }
     guard
       let propertyNonNil = propertyValue.value

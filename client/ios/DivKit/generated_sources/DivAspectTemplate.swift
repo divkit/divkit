@@ -13,8 +13,8 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
       self.init(
         ratio: try dictionary.getOptionalExpressionField("ratio")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-aspect_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-aspect_template." + field, representation: representation)
     }
   }
 
@@ -27,10 +27,10 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
   private static func resolveOnlyLinks(context: Context, parent: DivAspectTemplate?) -> DeserializationResult<DivAspect> {
     let ratioValue = parent?.ratio?.resolveValue(context: context, validator: ResolvedValue.ratioValidator) ?? .noValue
     var errors = mergeErrors(
-      ratioValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "ratio", error: $0) }
+      ratioValue.errorsOrWarnings?.map { .nestedObjectError(field: "ratio", error: $0) }
     )
     if case .noValue = ratioValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "ratio"))
+      errors.append(.requiredFieldIsMissing(field: "ratio"))
     }
     guard
       let ratioNonNil = ratioValue.value
@@ -58,10 +58,10 @@ public final class DivAspectTemplate: TemplateValue, TemplateDeserializable {
       }
     }
     var errors = mergeErrors(
-      ratioValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "ratio", error: $0) }
+      ratioValue.errorsOrWarnings?.map { .nestedObjectError(field: "ratio", error: $0) }
     )
     if case .noValue = ratioValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "ratio"))
+      errors.append(.requiredFieldIsMissing(field: "ratio"))
     }
     guard
       let ratioNonNil = ratioValue.value

@@ -29,6 +29,7 @@ public final class DivIndicator: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String? // at least 1 char
   public let inactiveItemColor: Expression<Color> // default value: #33919cb5
+  public let itemsPlacement: DivIndicatorItemPlacement?
   public let margins: DivEdgeInsets
   public let minimumItemSize: Expression<Double> // constraint: number > 0; default value: 0.5
   public let paddings: DivEdgeInsets
@@ -137,6 +138,9 @@ public final class DivIndicator: DivBase {
   static let inactiveItemColorValidator: AnyValueValidator<Color> =
     makeNoOpValueValidator()
 
+  static let itemsPlacementValidator: AnyValueValidator<DivIndicatorItemPlacement> =
+    makeNoOpValueValidator()
+
   static let marginsValidator: AnyValueValidator<DivEdgeInsets> =
     makeNoOpValueValidator()
 
@@ -207,6 +211,7 @@ public final class DivIndicator: DivBase {
     height: DivSize? = nil,
     id: String? = nil,
     inactiveItemColor: Expression<Color>? = nil,
+    itemsPlacement: DivIndicatorItemPlacement? = nil,
     margins: DivEdgeInsets? = nil,
     minimumItemSize: Expression<Double>? = nil,
     paddings: DivEdgeInsets? = nil,
@@ -241,6 +246,7 @@ public final class DivIndicator: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.inactiveItemColor = inactiveItemColor ?? .value(Color.colorWithARGBHexCode(0x33919CB5))
+    self.itemsPlacement = itemsPlacement
     self.margins = margins ?? DivEdgeInsets()
     self.minimumItemSize = minimumItemSize ?? .value(0.5)
     self.paddings = paddings ?? DivEdgeInsets()
@@ -301,43 +307,48 @@ extension DivIndicator: Equatable {
       return false
     }
     guard
+      lhs.itemsPlacement == rhs.itemsPlacement,
       lhs.margins == rhs.margins,
-      lhs.minimumItemSize == rhs.minimumItemSize,
-      lhs.paddings == rhs.paddings
+      lhs.minimumItemSize == rhs.minimumItemSize
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.pagerId == rhs.pagerId,
-      lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions
+      lhs.rowSpan == rhs.rowSpan
     else {
       return false
     }
     guard
+      lhs.selectedActions == rhs.selectedActions,
       lhs.shape == rhs.shape,
-      lhs.spaceBetweenCenters == rhs.spaceBetweenCenters,
-      lhs.tooltips == rhs.tooltips
+      lhs.spaceBetweenCenters == rhs.spaceBetweenCenters
     else {
       return false
     }
     guard
+      lhs.tooltips == rhs.tooltips,
       lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange,
-      lhs.transitionIn == rhs.transitionIn
+      lhs.transitionChange == rhs.transitionChange
     else {
       return false
     }
     guard
+      lhs.transitionIn == rhs.transitionIn,
       lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers,
-      lhs.visibility == rhs.visibility
+      lhs.transitionTriggers == rhs.transitionTriggers
     else {
       return false
     }
     guard
+      lhs.visibility == rhs.visibility,
       lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions,
+      lhs.visibilityActions == rhs.visibilityActions
+    else {
+      return false
+    }
+    guard
       lhs.width == rhs.width
     else {
       return false
@@ -366,6 +377,7 @@ extension DivIndicator: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["inactive_item_color"] = inactiveItemColor.toValidSerializationValue()
+    result["items_placement"] = itemsPlacement?.toDictionary()
     result["margins"] = margins.toDictionary()
     result["minimum_item_size"] = minimumItemSize.toValidSerializationValue()
     result["paddings"] = paddings.toDictionary()

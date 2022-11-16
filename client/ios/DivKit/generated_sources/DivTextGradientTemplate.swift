@@ -59,7 +59,7 @@ public enum DivTextGradientTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivTextGradient> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
     switch type {
@@ -80,7 +80,7 @@ public enum DivTextGradientTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
   }
 }
@@ -95,7 +95,7 @@ extension DivTextGradientTemplate: TemplateDeserializable {
     case DivRadialGradientTemplate.type:
       self = .divRadialGradientTemplate(try DivRadialGradientTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-text-gradient_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(field: "div-text-gradient_template", representation: dictionary)
     }
   }
 }

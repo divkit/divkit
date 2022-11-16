@@ -21,8 +21,8 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeseri
         imageUrl: try dictionary.getOptionalExpressionField("image_url", transform: URL.init(string:)),
         insets: try dictionary.getOptionalField("insets", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-nine-patch-background_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-nine-patch-background_template." + field, representation: representation)
     }
   }
 
@@ -40,11 +40,11 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeseri
     let imageUrlValue = parent?.imageUrl?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
     let insetsValue = parent?.insets?.resolveOptionalValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "image_url", error: $0) },
-      insetsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "insets", error: $0) }
+      imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
+      insetsValue.errorsOrWarnings?.map { .nestedObjectError(field: "insets", error: $0) }
     )
     if case .noValue = imageUrlValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "image_url"))
+      errors.append(.requiredFieldIsMissing(field: "image_url"))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value
@@ -81,11 +81,11 @@ public final class DivNinePatchBackgroundTemplate: TemplateValue, TemplateDeseri
       insetsValue = insetsValue.merged(with: parent.insets?.resolveOptionalValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "image_url", error: $0) },
-      insetsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "insets", error: $0) }
+      imageUrlValue.errorsOrWarnings?.map { .nestedObjectError(field: "image_url", error: $0) },
+      insetsValue.errorsOrWarnings?.map { .nestedObjectError(field: "insets", error: $0) }
     )
     if case .noValue = imageUrlValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "image_url"))
+      errors.append(.requiredFieldIsMissing(field: "image_url"))
     }
     guard
       let imageUrlNonNil = imageUrlValue.value

@@ -16,8 +16,8 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
         self.init(
           value: try dictionary.getOptionalExpressionField("value")
         )
-      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(fieldName: "property_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "property_template." + field, representation: representation)
       }
     }
 
@@ -30,10 +30,10 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
     private static func resolveOnlyLinks(context: Context, parent: PropertyTemplate?) -> DeserializationResult<EntityWithComplexPropertyWithDefaultValue.Property> {
       let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
       var errors = mergeErrors(
-        valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+        valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
       )
       if case .noValue = valueValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "value"))
+        errors.append(.requiredFieldIsMissing(field: "value"))
       }
       guard
         let valueNonNil = valueValue.value
@@ -61,10 +61,10 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
         }
       }
       var errors = mergeErrors(
-        valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+        valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
       )
       if case .noValue = valueValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "value"))
+        errors.append(.requiredFieldIsMissing(field: "value"))
       }
       guard
         let valueNonNil = valueValue.value
@@ -111,7 +111,7 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
   private static func resolveOnlyLinks(context: Context, parent: EntityWithComplexPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithComplexPropertyWithDefaultValue> {
     let propertyValue = parent?.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
+      propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
     let result = EntityWithComplexPropertyWithDefaultValue(
       property: propertyValue.value
@@ -137,7 +137,7 @@ public final class EntityWithComplexPropertyWithDefaultValueTemplate: TemplateVa
       propertyValue = propertyValue.merged(with: parent.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
+      propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
     let result = EntityWithComplexPropertyWithDefaultValue(
       property: propertyValue.value

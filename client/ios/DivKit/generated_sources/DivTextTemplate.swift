@@ -20,8 +20,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
           ranges: try dictionary.getOptionalArray("ranges", templateToType: templateToType),
           text: try dictionary.getOptionalExpressionField("text")
         )
-      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(fieldName: "ellipsis_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "ellipsis_template." + field, representation: representation)
       }
     }
 
@@ -43,13 +43,13 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       let rangesValue = parent?.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true) ?? .noValue
       let textValue = parent?.text?.resolveValue(context: context, validator: ResolvedValue.textValidator) ?? .noValue
       var errors = mergeErrors(
-        actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
-        imagesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "images", error: $0) },
-        rangesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "ranges", error: $0) },
-        textValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text", error: $0) }
+        actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+        imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
+        rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
+        textValue.errorsOrWarnings?.map { .nestedObjectError(field: "text", error: $0) }
       )
       if case .noValue = textValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "text"))
+        errors.append(.requiredFieldIsMissing(field: "text"))
       }
       guard
         let textNonNil = textValue.value
@@ -100,13 +100,13 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         rangesValue = rangesValue.merged(with: parent.ranges?.resolveOptionalValue(context: context, validator: ResolvedValue.rangesValidator, useOnlyLinks: true))
       }
       var errors = mergeErrors(
-        actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
-        imagesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "images", error: $0) },
-        rangesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "ranges", error: $0) },
-        textValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text", error: $0) }
+        actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+        imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
+        rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
+        textValue.errorsOrWarnings?.map { .nestedObjectError(field: "text", error: $0) }
       )
       if case .noValue = textValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "text"))
+        errors.append(.requiredFieldIsMissing(field: "text"))
       }
       guard
         let textNonNil = textValue.value
@@ -156,8 +156,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
           url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:)),
           width: try dictionary.getOptionalField("width", templateToType: templateToType)
         )
-      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(fieldName: "image_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "image_template." + field, representation: representation)
       }
     }
 
@@ -185,18 +185,18 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       let urlValue = parent?.url?.resolveValue(context: context, transform: URL.init(string:)) ?? .noValue
       let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
-        heightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "height", error: $0) },
-        startValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start", error: $0) },
-        tintColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tint_color", error: $0) },
-        tintModeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tint_mode", error: $0) },
-        urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) },
-        widthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "width", error: $0) }
+        heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+        startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
+        tintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_color", error: $0) },
+        tintModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_mode", error: $0) },
+        urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) },
+        widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
       )
       if case .noValue = startValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "start"))
+        errors.append(.requiredFieldIsMissing(field: "start"))
       }
       if case .noValue = urlValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "url"))
+        errors.append(.requiredFieldIsMissing(field: "url"))
       }
       guard
         let startNonNil = startValue.value,
@@ -259,18 +259,18 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true))
       }
       var errors = mergeErrors(
-        heightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "height", error: $0) },
-        startValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start", error: $0) },
-        tintColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tint_color", error: $0) },
-        tintModeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tint_mode", error: $0) },
-        urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) },
-        widthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "width", error: $0) }
+        heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+        startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
+        tintColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_color", error: $0) },
+        tintModeValue.errorsOrWarnings?.map { .nestedObjectError(field: "tint_mode", error: $0) },
+        urlValue.errorsOrWarnings?.map { .nestedObjectError(field: "url", error: $0) },
+        widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
       )
       if case .noValue = startValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "start"))
+        errors.append(.requiredFieldIsMissing(field: "start"))
       }
       if case .noValue = urlValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "url"))
+        errors.append(.requiredFieldIsMissing(field: "url"))
       }
       guard
         let startNonNil = startValue.value,
@@ -343,8 +343,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
           topOffset: try dictionary.getOptionalExpressionField("top_offset"),
           underline: try dictionary.getOptionalExpressionField("underline")
         )
-      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(fieldName: "range_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(field: "range_template." + field, representation: representation)
       }
     }
 
@@ -399,27 +399,27 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       let topOffsetValue = parent?.topOffset?.resolveOptionalValue(context: context, validator: ResolvedValue.topOffsetValidator) ?? .noValue
       let underlineValue = parent?.underline?.resolveOptionalValue(context: context, validator: ResolvedValue.underlineValidator) ?? .noValue
       var errors = mergeErrors(
-        actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
-        backgroundValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "background", error: $0) },
-        borderValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "border", error: $0) },
-        endValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "end", error: $0) },
-        fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_family", error: $0) },
-        fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size", error: $0) },
-        fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size_unit", error: $0) },
-        fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_weight", error: $0) },
-        letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "letter_spacing", error: $0) },
-        lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "line_height", error: $0) },
-        startValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start", error: $0) },
-        strikeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "strike", error: $0) },
-        textColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_color", error: $0) },
-        topOffsetValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top_offset", error: $0) },
-        underlineValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "underline", error: $0) }
+        actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+        backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
+        borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+        endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
+        fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
+        fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
+        fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
+        fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
+        letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
+        lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
+        startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
+        strikeValue.errorsOrWarnings?.map { .nestedObjectError(field: "strike", error: $0) },
+        textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
+        topOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "top_offset", error: $0) },
+        underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) }
       )
       if case .noValue = endValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "end"))
+        errors.append(.requiredFieldIsMissing(field: "end"))
       }
       if case .noValue = startValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "start"))
+        errors.append(.requiredFieldIsMissing(field: "start"))
       }
       guard
         let endNonNil = endValue.value,
@@ -537,27 +537,27 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
       }
       var errors = mergeErrors(
-        actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
-        backgroundValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "background", error: $0) },
-        borderValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "border", error: $0) },
-        endValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "end", error: $0) },
-        fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_family", error: $0) },
-        fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size", error: $0) },
-        fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size_unit", error: $0) },
-        fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_weight", error: $0) },
-        letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "letter_spacing", error: $0) },
-        lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "line_height", error: $0) },
-        startValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start", error: $0) },
-        strikeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "strike", error: $0) },
-        textColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_color", error: $0) },
-        topOffsetValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top_offset", error: $0) },
-        underlineValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "underline", error: $0) }
+        actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+        backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
+        borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+        endValue.errorsOrWarnings?.map { .nestedObjectError(field: "end", error: $0) },
+        fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
+        fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
+        fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
+        fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
+        letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
+        lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
+        startValue.errorsOrWarnings?.map { .nestedObjectError(field: "start", error: $0) },
+        strikeValue.errorsOrWarnings?.map { .nestedObjectError(field: "strike", error: $0) },
+        textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
+        topOffsetValue.errorsOrWarnings?.map { .nestedObjectError(field: "top_offset", error: $0) },
+        underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) }
       )
       if case .noValue = endValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "end"))
+        errors.append(.requiredFieldIsMissing(field: "end"))
       }
       if case .noValue = startValue {
-        errors.append(.requiredFieldIsMissing(fieldName: "start"))
+        errors.append(.requiredFieldIsMissing(field: "start"))
       }
       guard
         let endNonNil = endValue.value,
@@ -725,8 +725,8 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
         visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
         width: try dictionary.getOptionalField("width", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-text_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-text_template." + field, representation: representation)
     }
   }
 
@@ -891,60 +891,60 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true) ?? .noValue
     let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "accessibility", error: $0) },
-      actionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "action", error: $0) },
-      actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "action_animation", error: $0) },
-      actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
-      alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alignment_horizontal", error: $0) },
-      alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alignment_vertical", error: $0) },
-      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
-      autoEllipsizeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "auto_ellipsize", error: $0) },
-      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "background", error: $0) },
-      borderValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "border", error: $0) },
-      columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "column_span", error: $0) },
-      doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "doubletap_actions", error: $0) },
-      ellipsisValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "ellipsis", error: $0) },
-      extensionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "extensions", error: $0) },
-      focusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "focus", error: $0) },
-      focusedTextColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "focused_text_color", error: $0) },
-      fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_family", error: $0) },
-      fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size", error: $0) },
-      fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size_unit", error: $0) },
-      fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_weight", error: $0) },
-      heightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "height", error: $0) },
-      idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
-      imagesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "images", error: $0) },
-      letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "letter_spacing", error: $0) },
-      lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "line_height", error: $0) },
-      longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "longtap_actions", error: $0) },
-      marginsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "margins", error: $0) },
-      maxLinesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "max_lines", error: $0) },
-      minHiddenLinesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "min_hidden_lines", error: $0) },
-      paddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "paddings", error: $0) },
-      rangesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "ranges", error: $0) },
-      rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "row_span", error: $0) },
-      selectableValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "selectable", error: $0) },
-      selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "selected_actions", error: $0) },
-      strikeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "strike", error: $0) },
-      textValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text", error: $0) },
-      textAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_alignment_horizontal", error: $0) },
-      textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_alignment_vertical", error: $0) },
-      textColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_color", error: $0) },
-      textGradientValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_gradient", error: $0) },
-      tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tooltips", error: $0) },
-      transformValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transform", error: $0) },
-      transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_change", error: $0) },
-      transitionInValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_in", error: $0) },
-      transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_out", error: $0) },
-      transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_triggers", error: $0) },
-      underlineValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "underline", error: $0) },
-      visibilityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility", error: $0) },
-      visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility_action", error: $0) },
-      visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility_actions", error: $0) },
-      widthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "width", error: $0) }
+      accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
+      actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
+      actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "action_animation", error: $0) },
+      actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+      alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
+      alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      autoEllipsizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "auto_ellipsize", error: $0) },
+      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
+      borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
+      ellipsisValue.errorsOrWarnings?.map { .nestedObjectError(field: "ellipsis", error: $0) },
+      extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
+      focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
+      focusedTextColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "focused_text_color", error: $0) },
+      fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
+      fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
+      fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
+      fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
+      heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+      idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
+      letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
+      lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
+      longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
+      marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
+      maxLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_lines", error: $0) },
+      minHiddenLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_hidden_lines", error: $0) },
+      paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
+      rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
+      selectableValue.errorsOrWarnings?.map { .nestedObjectError(field: "selectable", error: $0) },
+      selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
+      strikeValue.errorsOrWarnings?.map { .nestedObjectError(field: "strike", error: $0) },
+      textValue.errorsOrWarnings?.map { .nestedObjectError(field: "text", error: $0) },
+      textAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_horizontal", error: $0) },
+      textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_vertical", error: $0) },
+      textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
+      textGradientValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_gradient", error: $0) },
+      tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
+      transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
+      transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
+      transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
+      transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
+      transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) },
+      visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
+      visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
+      visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
+      widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
     if case .noValue = textValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "text"))
+      errors.append(.requiredFieldIsMissing(field: "text"))
     }
     guard
       let textNonNil = textValue.value
@@ -1300,60 +1300,60 @@ public final class DivTextTemplate: TemplateValue, TemplateDeserializable {
       widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "accessibility", error: $0) },
-      actionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "action", error: $0) },
-      actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "action_animation", error: $0) },
-      actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
-      alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alignment_horizontal", error: $0) },
-      alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alignment_vertical", error: $0) },
-      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
-      autoEllipsizeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "auto_ellipsize", error: $0) },
-      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "background", error: $0) },
-      borderValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "border", error: $0) },
-      columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "column_span", error: $0) },
-      doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "doubletap_actions", error: $0) },
-      ellipsisValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "ellipsis", error: $0) },
-      extensionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "extensions", error: $0) },
-      focusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "focus", error: $0) },
-      focusedTextColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "focused_text_color", error: $0) },
-      fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_family", error: $0) },
-      fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size", error: $0) },
-      fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size_unit", error: $0) },
-      fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_weight", error: $0) },
-      heightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "height", error: $0) },
-      idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
-      imagesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "images", error: $0) },
-      letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "letter_spacing", error: $0) },
-      lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "line_height", error: $0) },
-      longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "longtap_actions", error: $0) },
-      marginsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "margins", error: $0) },
-      maxLinesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "max_lines", error: $0) },
-      minHiddenLinesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "min_hidden_lines", error: $0) },
-      paddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "paddings", error: $0) },
-      rangesValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "ranges", error: $0) },
-      rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "row_span", error: $0) },
-      selectableValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "selectable", error: $0) },
-      selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "selected_actions", error: $0) },
-      strikeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "strike", error: $0) },
-      textValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text", error: $0) },
-      textAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_alignment_horizontal", error: $0) },
-      textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_alignment_vertical", error: $0) },
-      textColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_color", error: $0) },
-      textGradientValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text_gradient", error: $0) },
-      tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tooltips", error: $0) },
-      transformValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transform", error: $0) },
-      transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_change", error: $0) },
-      transitionInValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_in", error: $0) },
-      transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_out", error: $0) },
-      transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_triggers", error: $0) },
-      underlineValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "underline", error: $0) },
-      visibilityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility", error: $0) },
-      visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility_action", error: $0) },
-      visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility_actions", error: $0) },
-      widthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "width", error: $0) }
+      accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
+      actionValue.errorsOrWarnings?.map { .nestedObjectError(field: "action", error: $0) },
+      actionAnimationValue.errorsOrWarnings?.map { .nestedObjectError(field: "action_animation", error: $0) },
+      actionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "actions", error: $0) },
+      alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
+      alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      autoEllipsizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "auto_ellipsize", error: $0) },
+      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
+      borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
+      columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
+      doubletapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "doubletap_actions", error: $0) },
+      ellipsisValue.errorsOrWarnings?.map { .nestedObjectError(field: "ellipsis", error: $0) },
+      extensionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "extensions", error: $0) },
+      focusValue.errorsOrWarnings?.map { .nestedObjectError(field: "focus", error: $0) },
+      focusedTextColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "focused_text_color", error: $0) },
+      fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_family", error: $0) },
+      fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size", error: $0) },
+      fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_size_unit", error: $0) },
+      fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "font_weight", error: $0) },
+      heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
+      idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
+      imagesValue.errorsOrWarnings?.map { .nestedObjectError(field: "images", error: $0) },
+      letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(field: "letter_spacing", error: $0) },
+      lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(field: "line_height", error: $0) },
+      longtapActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "longtap_actions", error: $0) },
+      marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
+      maxLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "max_lines", error: $0) },
+      minHiddenLinesValue.errorsOrWarnings?.map { .nestedObjectError(field: "min_hidden_lines", error: $0) },
+      paddingsValue.errorsOrWarnings?.map { .nestedObjectError(field: "paddings", error: $0) },
+      rangesValue.errorsOrWarnings?.map { .nestedObjectError(field: "ranges", error: $0) },
+      rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "row_span", error: $0) },
+      selectableValue.errorsOrWarnings?.map { .nestedObjectError(field: "selectable", error: $0) },
+      selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "selected_actions", error: $0) },
+      strikeValue.errorsOrWarnings?.map { .nestedObjectError(field: "strike", error: $0) },
+      textValue.errorsOrWarnings?.map { .nestedObjectError(field: "text", error: $0) },
+      textAlignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_horizontal", error: $0) },
+      textAlignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_alignment_vertical", error: $0) },
+      textColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_color", error: $0) },
+      textGradientValue.errorsOrWarnings?.map { .nestedObjectError(field: "text_gradient", error: $0) },
+      tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(field: "tooltips", error: $0) },
+      transformValue.errorsOrWarnings?.map { .nestedObjectError(field: "transform", error: $0) },
+      transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_change", error: $0) },
+      transitionInValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_in", error: $0) },
+      transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_out", error: $0) },
+      transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(field: "transition_triggers", error: $0) },
+      underlineValue.errorsOrWarnings?.map { .nestedObjectError(field: "underline", error: $0) },
+      visibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility", error: $0) },
+      visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_action", error: $0) },
+      visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "visibility_actions", error: $0) },
+      widthValue.errorsOrWarnings?.map { .nestedObjectError(field: "width", error: $0) }
     )
     if case .noValue = textValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "text"))
+      errors.append(.requiredFieldIsMissing(field: "text"))
     }
     guard
       let textNonNil = textValue.value

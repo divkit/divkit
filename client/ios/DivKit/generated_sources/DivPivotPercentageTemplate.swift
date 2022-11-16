@@ -19,8 +19,8 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         value: try dictionary.getOptionalExpressionField("value")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-pivot-percentage_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-pivot-percentage_template." + field, representation: representation)
     }
   }
 
@@ -35,10 +35,10 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
   private static func resolveOnlyLinks(context: Context, parent: DivPivotPercentageTemplate?) -> DeserializationResult<DivPivotPercentage> {
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     if case .noValue = valueValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "value"))
+      errors.append(.requiredFieldIsMissing(field: "value"))
     }
     guard
       let valueNonNil = valueValue.value
@@ -66,10 +66,10 @@ public final class DivPivotPercentageTemplate: TemplateValue, TemplateDeserializ
       }
     }
     var errors = mergeErrors(
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     if case .noValue = valueValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "value"))
+      errors.append(.requiredFieldIsMissing(field: "value"))
     }
     guard
       let valueNonNil = valueValue.value

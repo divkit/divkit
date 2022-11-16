@@ -19,8 +19,8 @@ public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         radius: try dictionary.getOptionalExpressionField("radius")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-blur_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-blur_template." + field, representation: representation)
     }
   }
 
@@ -35,10 +35,10 @@ public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
   private static func resolveOnlyLinks(context: Context, parent: DivBlurTemplate?) -> DeserializationResult<DivBlur> {
     let radiusValue = parent?.radius?.resolveValue(context: context, validator: ResolvedValue.radiusValidator) ?? .noValue
     var errors = mergeErrors(
-      radiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "radius", error: $0) }
+      radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
     )
     if case .noValue = radiusValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "radius"))
+      errors.append(.requiredFieldIsMissing(field: "radius"))
     }
     guard
       let radiusNonNil = radiusValue.value
@@ -66,10 +66,10 @@ public final class DivBlurTemplate: TemplateValue, TemplateDeserializable {
       }
     }
     var errors = mergeErrors(
-      radiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "radius", error: $0) }
+      radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
     )
     if case .noValue = radiusValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "radius"))
+      errors.append(.requiredFieldIsMissing(field: "radius"))
     }
     guard
       let radiusNonNil = radiusValue.value

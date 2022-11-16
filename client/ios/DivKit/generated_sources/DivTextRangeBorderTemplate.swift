@@ -28,8 +28,8 @@ public final class DivTextRangeBorderTemplate: TemplateValue, TemplateDeserializ
     let cornerRadiusValue = parent?.cornerRadius?.resolveOptionalValue(context: context, validator: ResolvedValue.cornerRadiusValidator) ?? .noValue
     let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corner_radius", error: $0) },
-      strokeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "stroke", error: $0) }
+      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
+      strokeValue.errorsOrWarnings?.map { .nestedObjectError(field: "stroke", error: $0) }
     )
     let result = DivTextRangeBorder(
       cornerRadius: cornerRadiusValue.value,
@@ -61,8 +61,8 @@ public final class DivTextRangeBorderTemplate: TemplateValue, TemplateDeserializ
       strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corner_radius", error: $0) },
-      strokeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "stroke", error: $0) }
+      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "corner_radius", error: $0) },
+      strokeValue.errorsOrWarnings?.map { .nestedObjectError(field: "stroke", error: $0) }
     )
     let result = DivTextRangeBorder(
       cornerRadius: cornerRadiusValue.value,

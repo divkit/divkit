@@ -31,7 +31,7 @@ public final class DivCircleShapeTemplate: TemplateValue, TemplateDeserializable
   private static func resolveOnlyLinks(context: Context, parent: DivCircleShapeTemplate?) -> DeserializationResult<DivCircleShape> {
     let radiusValue = parent?.radius?.resolveOptionalValue(context: context, validator: ResolvedValue.radiusValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      radiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "radius", error: $0) }
+      radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
     )
     let result = DivCircleShape(
       radius: radiusValue.value
@@ -57,7 +57,7 @@ public final class DivCircleShapeTemplate: TemplateValue, TemplateDeserializable
       radiusValue = radiusValue.merged(with: parent.radius?.resolveOptionalValue(context: context, validator: ResolvedValue.radiusValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      radiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "radius", error: $0) }
+      radiusValue.errorsOrWarnings?.map { .nestedObjectError(field: "radius", error: $0) }
     )
     let result = DivCircleShape(
       radius: radiusValue.value

@@ -59,7 +59,7 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivPagerLayoutMode> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
     switch type {
@@ -80,7 +80,7 @@ public enum DivPagerLayoutModeTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
   }
 }
@@ -95,7 +95,7 @@ extension DivPagerLayoutModeTemplate: TemplateDeserializable {
     case DivNeighbourPageSizeTemplate.type:
       self = .divNeighbourPageSizeTemplate(try DivNeighbourPageSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-pager-layout-mode_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(field: "div-pager-layout-mode_template", representation: dictionary)
     }
   }
 }

@@ -38,10 +38,10 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
     let topLeftValue = parent?.topLeft?.resolveOptionalValue(context: context, validator: ResolvedValue.topLeftValidator) ?? .noValue
     let topRightValue = parent?.topRight?.resolveOptionalValue(context: context, validator: ResolvedValue.topRightValidator) ?? .noValue
     let errors = mergeErrors(
-      bottomLeftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "bottom-left", error: $0) },
-      bottomRightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "bottom-right", error: $0) },
-      topLeftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top-left", error: $0) },
-      topRightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top-right", error: $0) }
+      bottomLeftValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom-left", error: $0) },
+      bottomRightValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom-right", error: $0) },
+      topLeftValue.errorsOrWarnings?.map { .nestedObjectError(field: "top-left", error: $0) },
+      topRightValue.errorsOrWarnings?.map { .nestedObjectError(field: "top-right", error: $0) }
     )
     let result = DivCornersRadius(
       bottomLeft: bottomLeftValue.value,
@@ -82,10 +82,10 @@ public final class DivCornersRadiusTemplate: TemplateValue, TemplateDeserializab
       }
     }
     let errors = mergeErrors(
-      bottomLeftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "bottom-left", error: $0) },
-      bottomRightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "bottom-right", error: $0) },
-      topLeftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top-left", error: $0) },
-      topRightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top-right", error: $0) }
+      bottomLeftValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom-left", error: $0) },
+      bottomRightValue.errorsOrWarnings?.map { .nestedObjectError(field: "bottom-right", error: $0) },
+      topLeftValue.errorsOrWarnings?.map { .nestedObjectError(field: "top-left", error: $0) },
+      topRightValue.errorsOrWarnings?.map { .nestedObjectError(field: "top-right", error: $0) }
     )
     let result = DivCornersRadius(
       bottomLeft: bottomLeftValue.value,

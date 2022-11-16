@@ -35,7 +35,7 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
   private static func resolveOnlyLinks(context: Context, parent: EntityWithStringEnumPropertyWithDefaultValueTemplate?) -> DeserializationResult<EntityWithStringEnumPropertyWithDefaultValue> {
     let valueValue = parent?.value?.resolveOptionalValue(context: context, validator: ResolvedValue.valueValidator) ?? .noValue
     let errors = mergeErrors(
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     let result = EntityWithStringEnumPropertyWithDefaultValue(
       value: valueValue.value
@@ -58,7 +58,7 @@ public final class EntityWithStringEnumPropertyWithDefaultValueTemplate: Templat
       }
     }
     let errors = mergeErrors(
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     let result = EntityWithStringEnumPropertyWithDefaultValue(
       value: valueValue.value

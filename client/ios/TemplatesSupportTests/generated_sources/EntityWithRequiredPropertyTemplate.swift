@@ -21,8 +21,8 @@ public final class EntityWithRequiredPropertyTemplate: TemplateValue, TemplateDe
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         property: try dictionary.getOptionalExpressionField("property")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "entity_with_required_property_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_required_property_template." + field, representation: representation)
     }
   }
 
@@ -37,10 +37,10 @@ public final class EntityWithRequiredPropertyTemplate: TemplateValue, TemplateDe
   private static func resolveOnlyLinks(context: Context, parent: EntityWithRequiredPropertyTemplate?) -> DeserializationResult<EntityWithRequiredProperty> {
     let propertyValue = parent?.property?.resolveValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
     var errors = mergeErrors(
-      propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
+      propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
     if case .noValue = propertyValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "property"))
+      errors.append(.requiredFieldIsMissing(field: "property"))
     }
     guard
       let propertyNonNil = propertyValue.value
@@ -68,10 +68,10 @@ public final class EntityWithRequiredPropertyTemplate: TemplateValue, TemplateDe
       }
     }
     var errors = mergeErrors(
-      propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
+      propertyValue.errorsOrWarnings?.map { .nestedObjectError(field: "property", error: $0) }
     )
     if case .noValue = propertyValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "property"))
+      errors.append(.requiredFieldIsMissing(field: "property"))
     }
     guard
       let propertyNonNil = propertyValue.value

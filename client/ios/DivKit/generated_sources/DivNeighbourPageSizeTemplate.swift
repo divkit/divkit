@@ -19,8 +19,8 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         neighbourPageWidth: try dictionary.getOptionalField("neighbour_page_width", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-neighbour-page-size_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-neighbour-page-size_template." + field, representation: representation)
     }
   }
 
@@ -35,10 +35,10 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
   private static func resolveOnlyLinks(context: Context, parent: DivNeighbourPageSizeTemplate?) -> DeserializationResult<DivNeighbourPageSize> {
     let neighbourPageWidthValue = parent?.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      neighbourPageWidthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "neighbour_page_width", error: $0) }
+      neighbourPageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "neighbour_page_width", error: $0) }
     )
     if case .noValue = neighbourPageWidthValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "neighbour_page_width"))
+      errors.append(.requiredFieldIsMissing(field: "neighbour_page_width"))
     }
     guard
       let neighbourPageWidthNonNil = neighbourPageWidthValue.value
@@ -69,10 +69,10 @@ public final class DivNeighbourPageSizeTemplate: TemplateValue, TemplateDeserial
       neighbourPageWidthValue = neighbourPageWidthValue.merged(with: parent.neighbourPageWidth?.resolveValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      neighbourPageWidthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "neighbour_page_width", error: $0) }
+      neighbourPageWidthValue.errorsOrWarnings?.map { .nestedObjectError(field: "neighbour_page_width", error: $0) }
     )
     if case .noValue = neighbourPageWidthValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "neighbour_page_width"))
+      errors.append(.requiredFieldIsMissing(field: "neighbour_page_width"))
     }
     guard
       let neighbourPageWidthNonNil = neighbourPageWidthValue.value

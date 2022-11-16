@@ -15,8 +15,8 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
         x: try dictionary.getOptionalField("x", templateToType: templateToType),
         y: try dictionary.getOptionalField("y", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-point_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-point_template." + field, representation: representation)
     }
   }
 
@@ -32,14 +32,14 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
     let xValue = parent?.x?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     let yValue = parent?.y?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      xValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "x", error: $0) },
-      yValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "y", error: $0) }
+      xValue.errorsOrWarnings?.map { .nestedObjectError(field: "x", error: $0) },
+      yValue.errorsOrWarnings?.map { .nestedObjectError(field: "y", error: $0) }
     )
     if case .noValue = xValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "x"))
+      errors.append(.requiredFieldIsMissing(field: "x"))
     }
     if case .noValue = yValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "y"))
+      errors.append(.requiredFieldIsMissing(field: "y"))
     }
     guard
       let xNonNil = xValue.value,
@@ -78,14 +78,14 @@ public final class DivPointTemplate: TemplateValue, TemplateDeserializable {
       yValue = yValue.merged(with: parent.y?.resolveValue(context: context, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      xValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "x", error: $0) },
-      yValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "y", error: $0) }
+      xValue.errorsOrWarnings?.map { .nestedObjectError(field: "x", error: $0) },
+      yValue.errorsOrWarnings?.map { .nestedObjectError(field: "y", error: $0) }
     )
     if case .noValue = xValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "x"))
+      errors.append(.requiredFieldIsMissing(field: "x"))
     }
     if case .noValue = yValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "y"))
+      errors.append(.requiredFieldIsMissing(field: "y"))
     }
     guard
       let xNonNil = xValue.value,

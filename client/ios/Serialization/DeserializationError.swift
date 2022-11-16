@@ -9,11 +9,11 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
   case invalidJSONData(data: Data)
   case missingType(representation: [String: Any])
   case unknownType(type: String)
-  case invalidFieldRepresentation(fieldName: String, representation: Any?)
+  case invalidFieldRepresentation(field: String, representation: Any?)
   case typeMismatch(expected: String, representation: Any)
   case invalidValue(result: Any?, value: Any?)
-  case requiredFieldIsMissing(fieldName: String)
-  case nestedObjectError(fieldName: String, error: DeserializationError)
+  case requiredFieldIsMissing(field: String)
+  case nestedObjectError(field: String, error: DeserializationError)
   case noData
   case unexpectedError(message: String)
 
@@ -29,16 +29,16 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
       return "Missing type: \(representation)"
     case let .unknownType(type):
       return "Unknown type: \(type)"
-    case let .invalidFieldRepresentation(fieldName, representation):
-      return "Invalid '\(fieldName)' value: \(dbgStr(representation))]"
+    case let .invalidFieldRepresentation(field, representation):
+      return "Invalid '\(field)' value: \(dbgStr(representation))]"
     case let .typeMismatch(expected, representation):
       return "Type mismatch: \(dbgStr(representation)), but '\(expected)' expected"
     case let .invalidValue(result, value):
       return "Invalid value: \(dbgStr(result)), \(dbgStr(value))"
-    case let .requiredFieldIsMissing(fieldName):
-      return "Required field is missing: \(fieldName)"
-    case let .nestedObjectError(fieldName, error):
-      return "Error in neseted object in field '\(fieldName)': \(error)"
+    case let .requiredFieldIsMissing(field):
+      return "Required field is missing: \(field)"
+    case let .nestedObjectError(field, error):
+      return "Error in neseted object in field '\(field)': \(error)"
     case .noData:
       return "No data"
     case let .unexpectedError(message):
@@ -62,8 +62,8 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
         .noData,
         .nonUTF8String:
       break
-    case let .invalidFieldRepresentation(fieldName, representation):
-      userInfo["fieldName"] = fieldName
+    case let .invalidFieldRepresentation(field, representation):
+      userInfo["field"] = field
       userInfo["representation"] = dbgStr(representation)
     case let .invalidJSONData(data):
       userInfo["data"] = "\(data)"
@@ -72,10 +72,10 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
       userInfo["value"] = dbgStr(value)
     case let .missingType(representation):
       userInfo["representation"] = "\(representation)"
-    case let .nestedObjectError(fieldName, error):
-      return error.getUserInfo(path: path == "" ? fieldName : path + "/" + fieldName)
-    case let .requiredFieldIsMissing(fieldName):
-      userInfo["fieldName"] = fieldName
+    case let .nestedObjectError(field, error):
+      return error.getUserInfo(path: path == "" ? field : path + "/" + field)
+    case let .requiredFieldIsMissing(field):
+      userInfo["field"] = field
     case let .typeMismatch(expected, representation):
       userInfo["expected"] = expected
       userInfo["representation"] = "\(representation)"

@@ -28,8 +28,8 @@ public final class DivDownloadCallbacksTemplate: TemplateValue, TemplateDeserial
     let onFailActionsValue = parent?.onFailActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onFailActionsValidator, useOnlyLinks: true) ?? .noValue
     let onSuccessActionsValue = parent?.onSuccessActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onSuccessActionsValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "on_fail_actions", error: $0) },
-      onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "on_success_actions", error: $0) }
+      onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_fail_actions", error: $0) },
+      onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_success_actions", error: $0) }
     )
     let result = DivDownloadCallbacks(
       onFailActions: onFailActionsValue.value,
@@ -62,8 +62,8 @@ public final class DivDownloadCallbacksTemplate: TemplateValue, TemplateDeserial
       onSuccessActionsValue = onSuccessActionsValue.merged(with: parent.onSuccessActions?.resolveOptionalValue(context: context, validator: ResolvedValue.onSuccessActionsValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "on_fail_actions", error: $0) },
-      onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "on_success_actions", error: $0) }
+      onFailActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_fail_actions", error: $0) },
+      onSuccessActionsValue.errorsOrWarnings?.map { .nestedObjectError(field: "on_success_actions", error: $0) }
     )
     let result = DivDownloadCallbacks(
       onFailActions: onFailActionsValue.value,

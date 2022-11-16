@@ -103,14 +103,14 @@ private let dictWithTypeMismatch: [String: Any] = [
 ]
 
 private let missingRequiredFieldErrors: [DeserializationError] = [
-  DeserializationError.requiredFieldIsMissing(fieldName: logIdKey)
+  DeserializationError.requiredFieldIsMissing(field: logIdKey)
 ]
 
 private let invalidFieldErrors: [DeserializationError] = [
   .nestedObjectError(
-    fieldName: statesKey,
+    field: statesKey,
     error: DeserializationError.nestedObjectError(
-      fieldName: divKey,
+      field: divKey,
       error: DeserializationError.invalidValue(
         result: nil,
         value: [
@@ -121,11 +121,11 @@ private let invalidFieldErrors: [DeserializationError] = [
     )
   ),
   .nestedObjectError(
-    fieldName: statesKey,
+    field: statesKey,
     error: DeserializationError.nestedObjectError(
-      fieldName: divKey,
+      field: divKey,
       error: DeserializationError.nestedObjectError(
-        fieldName: itemsKey,
+        field: itemsKey,
         error: DeserializationError.invalidValue(
           result: [],
           value: []
@@ -134,7 +134,7 @@ private let invalidFieldErrors: [DeserializationError] = [
     )
   ),
   .nestedObjectError(
-    fieldName: statesKey,
+    field: statesKey,
     error: DeserializationError.invalidValue(
       result: [],
       value: [
@@ -150,7 +150,7 @@ private let invalidFieldErrors: [DeserializationError] = [
 
 private let typeMismatchErrors: [DeserializationError] = [
   .nestedObjectError(
-    fieldName: logIdKey,
+    field: logIdKey,
     error: DeserializationError.typeMismatch(
       expected: "String",
       representation: 0
@@ -160,9 +160,9 @@ private let typeMismatchErrors: [DeserializationError] = [
 
 private let missingTypeErrors: [DeserializationError] = [
   .nestedObjectError(
-    fieldName: statesKey,
+    field: statesKey,
     error: DeserializationError.nestedObjectError(
-      fieldName: divKey,
+      field: divKey,
       error: DeserializationError.invalidValue(
         result: nil,
         value: [
@@ -172,14 +172,14 @@ private let missingTypeErrors: [DeserializationError] = [
     )
   ),
   .nestedObjectError(
-    fieldName: statesKey,
+    field: statesKey,
     error: DeserializationError.nestedObjectError(
-      fieldName: divKey,
-      error: DeserializationError.requiredFieldIsMissing(fieldName: typeKey)
+      field: divKey,
+      error: DeserializationError.requiredFieldIsMissing(field: typeKey)
     )
   ),
   .nestedObjectError(
-    fieldName: statesKey,
+    field: statesKey,
     error: DeserializationError.invalidValue(
       result: [],
       value: [

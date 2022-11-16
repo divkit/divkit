@@ -56,12 +56,12 @@ public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializ
     let scaleValue = parent?.scale?.resolveOptionalValue(context: context, validator: ResolvedValue.scaleValidator) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let errors = mergeErrors(
-      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
-      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
-      pivotXValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "pivot_x", error: $0) },
-      pivotYValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "pivot_y", error: $0) },
-      scaleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "scale", error: $0) },
-      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) }
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(field: "duration", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "interpolator", error: $0) },
+      pivotXValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_x", error: $0) },
+      pivotYValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_y", error: $0) },
+      scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(field: "start_delay", error: $0) }
     )
     let result = DivScaleTransition(
       duration: durationValue.value,
@@ -114,12 +114,12 @@ public final class DivScaleTransitionTemplate: TemplateValue, TemplateDeserializ
       }
     }
     let errors = mergeErrors(
-      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
-      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
-      pivotXValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "pivot_x", error: $0) },
-      pivotYValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "pivot_y", error: $0) },
-      scaleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "scale", error: $0) },
-      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) }
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(field: "duration", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(field: "interpolator", error: $0) },
+      pivotXValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_x", error: $0) },
+      pivotYValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_y", error: $0) },
+      scaleValue.errorsOrWarnings?.map { .nestedObjectError(field: "scale", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(field: "start_delay", error: $0) }
     )
     let result = DivScaleTransition(
       duration: durationValue.value,

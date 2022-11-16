@@ -72,7 +72,7 @@ public enum DivSizeTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivSize> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
 
     switch type {
@@ -101,7 +101,7 @@ public enum DivSizeTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))
     }
   }
 }
@@ -118,7 +118,7 @@ extension DivSizeTemplate: TemplateDeserializable {
     case DivWrapContentSizeTemplate.type:
       self = .divWrapContentSizeTemplate(try DivWrapContentSizeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-size_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(field: "div-size_template", representation: dictionary)
     }
   }
 }

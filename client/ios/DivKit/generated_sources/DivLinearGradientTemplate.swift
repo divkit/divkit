@@ -21,8 +21,8 @@ public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializa
         angle: try dictionary.getOptionalExpressionField("angle"),
         colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:))
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-linear-gradient_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "div-linear-gradient_template." + field, representation: representation)
     }
   }
 
@@ -40,11 +40,11 @@ public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializa
     let angleValue = parent?.angle?.resolveOptionalValue(context: context, validator: ResolvedValue.angleValidator) ?? .noValue
     let colorsValue = parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue
     var errors = mergeErrors(
-      angleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "angle", error: $0) },
-      colorsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "colors", error: $0) }
+      angleValue.errorsOrWarnings?.map { .nestedObjectError(field: "angle", error: $0) },
+      colorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "colors", error: $0) }
     )
     if case .noValue = colorsValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "colors"))
+      errors.append(.requiredFieldIsMissing(field: "colors"))
     }
     guard
       let colorsNonNil = colorsValue.value
@@ -78,11 +78,11 @@ public final class DivLinearGradientTemplate: TemplateValue, TemplateDeserializa
       }
     }
     var errors = mergeErrors(
-      angleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "angle", error: $0) },
-      colorsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "colors", error: $0) }
+      angleValue.errorsOrWarnings?.map { .nestedObjectError(field: "angle", error: $0) },
+      colorsValue.errorsOrWarnings?.map { .nestedObjectError(field: "colors", error: $0) }
     )
     if case .noValue = colorsValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "colors"))
+      errors.append(.requiredFieldIsMissing(field: "colors"))
     }
     guard
       let colorsNonNil = colorsValue.value

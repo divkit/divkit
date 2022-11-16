@@ -33,9 +33,9 @@ public final class DivTransformTemplate: TemplateValue, TemplateDeserializable {
     let pivotYValue = parent?.pivotY?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotYValidator, useOnlyLinks: true) ?? .noValue
     let rotationValue = parent?.rotation?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
-      pivotXValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "pivot_x", error: $0) },
-      pivotYValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "pivot_y", error: $0) },
-      rotationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "rotation", error: $0) }
+      pivotXValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_x", error: $0) },
+      pivotYValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_y", error: $0) },
+      rotationValue.errorsOrWarnings?.map { .nestedObjectError(field: "rotation", error: $0) }
     )
     let result = DivTransform(
       pivotX: pivotXValue.value,
@@ -74,9 +74,9 @@ public final class DivTransformTemplate: TemplateValue, TemplateDeserializable {
       pivotYValue = pivotYValue.merged(with: parent.pivotY?.resolveOptionalValue(context: context, validator: ResolvedValue.pivotYValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      pivotXValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "pivot_x", error: $0) },
-      pivotYValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "pivot_y", error: $0) },
-      rotationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "rotation", error: $0) }
+      pivotXValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_x", error: $0) },
+      pivotYValue.errorsOrWarnings?.map { .nestedObjectError(field: "pivot_y", error: $0) },
+      rotationValue.errorsOrWarnings?.map { .nestedObjectError(field: "rotation", error: $0) }
     )
     let result = DivTransform(
       pivotX: pivotXValue.value,

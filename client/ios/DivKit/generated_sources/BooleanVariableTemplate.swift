@@ -21,8 +21,8 @@ public final class BooleanVariableTemplate: TemplateValue, TemplateDeserializabl
         name: try dictionary.getOptionalField("name"),
         value: try dictionary.getOptionalField("value")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(fieldName: "boolean_variable_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(field: "boolean_variable_template." + field, representation: representation)
     }
   }
 
@@ -40,14 +40,14 @@ public final class BooleanVariableTemplate: TemplateValue, TemplateDeserializabl
     let nameValue = parent?.name?.resolveValue(context: context, validator: ResolvedValue.nameValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
-      nameValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "name", error: $0) },
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+      nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     if case .noValue = nameValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "name"))
+      errors.append(.requiredFieldIsMissing(field: "name"))
     }
     if case .noValue = valueValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "value"))
+      errors.append(.requiredFieldIsMissing(field: "value"))
     }
     guard
       let nameNonNil = nameValue.value,
@@ -82,14 +82,14 @@ public final class BooleanVariableTemplate: TemplateValue, TemplateDeserializabl
       }
     }
     var errors = mergeErrors(
-      nameValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "name", error: $0) },
-      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
+      nameValue.errorsOrWarnings?.map { .nestedObjectError(field: "name", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(field: "value", error: $0) }
     )
     if case .noValue = nameValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "name"))
+      errors.append(.requiredFieldIsMissing(field: "name"))
     }
     if case .noValue = valueValue {
-      errors.append(.requiredFieldIsMissing(fieldName: "value"))
+      errors.append(.requiredFieldIsMissing(field: "value"))
     }
     guard
       let nameNonNil = nameValue.value,

@@ -129,8 +129,8 @@ class SwiftEntity(Entity):
         else:
             result += '  do {'
             result += list(map(lambda t: t.indented(indent_width=4), properties_deserialization))
-            result += '  } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {'
-            result += f'    throw DeserializationError.invalidFieldRepresentation(fieldName: "{self.name}." + field, representation: representation)'
+            result += '  } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {'
+            result += f'    throw DeserializationError.invalidFieldRepresentation(field: "{self.name}." + field, representation: representation)'
             result += '  }'
         result += '}'
         return result
@@ -191,14 +191,14 @@ class SwiftEntity(Entity):
         result += f'  {"let" if not required_props else "var"} errors = mergeErrors('
         for index, prop in enumerate(template_props):
             separator = '' if index == (len(template_props) - 1) else ','
-            map_body = f'.nestedObjectError(fieldName: "{prop.dict_field}", error: $0)'
+            map_body = f'.nestedObjectError(field: "{prop.dict_field}", error: $0)'
             var_name = prop.value_resolving_local_var_name
             result += Text(f'    {var_name}.errorsOrWarnings?.map {{ {map_body} }}{separator}')
         result += '  )'
 
         for prop in required_props:
             result += f'  if case .noValue = {prop.value_resolving_local_var_name} {{'
-            field_error = f'.requiredFieldIsMissing(fieldName: "{prop.dict_field}")'
+            field_error = f'.requiredFieldIsMissing(field: "{prop.dict_field}")'
             result += f'    errors.append({field_error})'
             result += '  }'
 
@@ -289,14 +289,14 @@ class SwiftEntity(Entity):
         result += f'  {"let" if not required_props else "var"} errors = mergeErrors('
         for index, prop in enumerate(template_props):
             separator = '' if index == (len(template_props) - 1) else ','
-            map_body = f'.nestedObjectError(fieldName: "{prop.dict_field}", error: $0)'
+            map_body = f'.nestedObjectError(field: "{prop.dict_field}", error: $0)'
             var_name = prop.value_resolving_local_var_name
             result += f'    {var_name}.errorsOrWarnings?.map {{ {map_body} }}{separator}'
         result += '  )'
 
         for prop in required_props:
             result += f'  if case .noValue = {prop.value_resolving_local_var_name} {{'
-            field_error = f'.requiredFieldIsMissing(fieldName: "{prop.dict_field}")'
+            field_error = f'.requiredFieldIsMissing(field: "{prop.dict_field}")'
             result += f'    errors.append({field_error})'
             result += '  }'
 
@@ -892,7 +892,7 @@ class SwiftEntityEnumeration(EntityEnumeration):
         return_type = f'DeserializationResult<{self.resolved_prefixed_declaration}>'
         result = Text(f'private static func resolveUnknownValue({params}) -> {return_type} {{')
         result += '  guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {'
-        result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))'
+        result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))'
         result += '  }'
         result += EMPTY
         result += '  switch type {'
@@ -908,7 +908,7 @@ class SwiftEntityEnumeration(EntityEnumeration):
             result += '    case .noValue: return .noValue'
             result += '    }'
         result += '  default:'
-        result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))'
+        result += '    return .failure(NonEmptyArray(.requiredFieldIsMissing(field: "type")))'
         result += '  }'
         result += '}'
         return result
