@@ -57,6 +57,7 @@ class Config:
             self.header: Text = dictionary.get('header') or ''
             self.errors_collectors: List[str] = dictionary.get('errorsCollectors') or []
             self.kotlin_annotations: List[str] = dictionary.get('kotlinAnnotations') or []
+            self.top_level_annotations: List[str] = dictionary.get('topLevelAnnotations') or []
             self.generate_equality: bool = dictionary.get('generateEquality') or False
 
     def __init__(self, generator_path: Optional[str], config_path: str, schema_path: str, output_path: str):

@@ -35,6 +35,10 @@ def snake_case(string: str) -> str:
     return '_'.join(map(lambda component: component.lower(), filter(lambda s: s, name_components(string))))
 
 
+def capitalize_snake_case(string: str) -> str:
+    return snake_case(string).capitalize()
+
+
 def upper_snake_case(string: str) -> str:
     return '_'.join(map(lambda component: component.upper(), filter(lambda s: s, name_components(string))))
 
