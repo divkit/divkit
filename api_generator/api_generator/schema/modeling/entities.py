@@ -342,7 +342,7 @@ class Entity(Declarable):
         self._implemented_protocol = next((cast(Entity, d) for d in global_objects if d.name in self._protocol_names),
                                           None)
 
-        if self._lang is GeneratedLanguage.KOTLIN_DSL:
+        if self._lang in [GeneratedLanguage.KOTLIN_DSL, GeneratedLanguage.DIVAN]:
             valid_names = (self._name, self._resolved_name, self._original_name)
             self._enclosing_enumerations = [
                 enumeration for enumeration in global_objects

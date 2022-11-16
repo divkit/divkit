@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, cast
 
 from .divan_entities import (
     update_base,
@@ -28,7 +28,7 @@ class DivanGenerator(Generator):
         super(DivanGenerator, self).generate(list(map(lambda obj: update_base(obj), objects)))
 
     def filename(self, name: str) -> str:
-        return f'{utils.capitalize_snake_case(name)}.kt'
+        return f'{utils.capitalize_camel_case(name)}.kt'
 
     def _entity_declaration(self, entity: DivanEntity) -> Text:
         return self.__entity_declaration_with(entity, with_factory_methods=True)
@@ -38,14 +38,21 @@ class DivanGenerator(Generator):
         result_declaration += entity.header_comment_block
         for annotation in self.top_level_annotations + self.kotlin_annotations:
             result_declaration += annotation
-        result_declaration += f'class {utils.capitalize_snake_case(entity.name)} internal constructor('
+
+        result_declaration += f'class {utils.capitalize_camel_case(entity.name)} internal constructor('
         result_declaration += '    @JsonIgnore'
         result_declaration += '    val properties: Properties,'
         result_declaration += f'){entity.supertype_declaration} {{'
+
         serialization_declaration = entity.serialization_declaration.indented(indent_width=4)
+
         if serialization_declaration.lines:
             result_declaration += serialization_declaration
             result_declaration += EMPTY
+
+        result_declaration += entity.operator_plus_declaration.indented(indent_width=4)
+
+        result_declaration += EMPTY
         result_declaration += entity.properties_class_declaration.indented(indent_width=4)
 
         nested_classes_declaration = self.__nested_classes_declaration(entity)
@@ -54,6 +61,46 @@ class DivanGenerator(Generator):
             result_declaration += nested_classes_declaration.indented(indent_width=4)
 
         result_declaration += '}'
+
+        result_declaration += EMPTY
+
+        if with_factory_methods:
+            def add_methods_declarations(for_entity: DivanEntity):
+                nonlocal result_declaration
+
+                method_declaration = for_entity.params_comment_block
+                for annotation in self.top_level_annotations:
+                    method_declaration += annotation
+                method_declaration += for_entity.override_method_declaration
+                result_declaration += method_declaration
+
+                result_declaration += EMPTY
+
+                method_declaration = for_entity.params_comment_block
+                for annotation in self.top_level_annotations:
+                    method_declaration += annotation
+                method_declaration += for_entity.defer_method_declaration
+                result_declaration += method_declaration
+
+                result_declaration += EMPTY
+
+                method_declaration = entity.evaluatable_params_comment_block
+                for annotation in self.top_level_annotations:
+                    method_declaration += annotation
+                method_declaration += entity.evaluate_method_declaration
+                result_declaration += method_declaration
+
+            def sort_predicate(d: Declarable):
+                return d.name
+
+            add_methods_declarations(for_entity=entity)
+            result_declaration += EMPTY
+
+            inner_types = sorted(filter(lambda t: isinstance(t, Entity), entity.inner_types), key=sort_predicate)
+            for ind, nested_entity in enumerate(inner_types):
+                add_methods_declarations(for_entity=cast(DivanEntity, nested_entity))
+                result_declaration += EMPTY
+
         return result_declaration
 
     def __nested_classes_declaration(self, entity: DivanEntity) -> Text:
