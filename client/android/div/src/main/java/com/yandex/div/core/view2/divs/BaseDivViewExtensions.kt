@@ -47,12 +47,15 @@ import com.yandex.div2.DivBase
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivDefaultIndicatorItemPlacement
 import com.yandex.div2.DivDimension
 import com.yandex.div2.DivDrawable
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivImageScale
+import com.yandex.div2.DivIndicator
+import com.yandex.div2.DivIndicatorItemPlacement
 import com.yandex.div2.DivPivot
 import com.yandex.div2.DivPivotFixed
 import com.yandex.div2.DivPivotPercentage
@@ -662,4 +665,12 @@ internal fun DivShapeDrawable.toDrawable(
             )
         else -> null
     }
+}
+
+internal val DivIndicator.itemsPlacementCompat : DivIndicatorItemPlacement get() {
+    return itemsPlacement ?: DivIndicatorItemPlacement.Default(
+        DivDefaultIndicatorItemPlacement(
+            spaceBetweenCenters = spaceBetweenCenters
+        )
+    )
 }

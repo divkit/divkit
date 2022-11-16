@@ -6,10 +6,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.widget.indicator.animations.*
-import com.yandex.div.core.widget.indicator.forms.Circle
-import com.yandex.div.core.widget.indicator.forms.RoundedRect
-import com.yandex.div.core.widget.indicator.forms.SingleIndicatorDrawer
+import com.yandex.div.core.widget.indicator.animations.getIndicatorAnimator
 import com.yandex.div.core.widget.indicator.forms.getIndicatorDrawer
 import kotlin.math.min
 
@@ -60,8 +57,12 @@ open class PagerIndicatorView @JvmOverloads constructor(
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
         val selectedWidth = style?.shape?.width ?: 0f
-        val spaceBetweenCenters = style?.spaceBetweenCenters ?: 0.0f
-        val desiredWidth = (spaceBetweenCenters * (pagerAdapter?.itemCount ?: 0) + selectedWidth).toInt() + paddingLeft + paddingRight
+        val desiredWidth = when (val itemPlacement = style?.itemsPlacement) {
+            is IndicatorParams.ItemPlacement.Default ->
+                (itemPlacement.spaceBetweenCenters * (pagerAdapter?.itemCount ?: 0) + selectedWidth).toInt() + paddingLeft + paddingRight
+            is IndicatorParams.ItemPlacement.Stretch -> widthSize
+            null -> selectedWidth.toInt() + paddingLeft + paddingRight
+        }
         val measuredWidth = when (widthMode) {
             MeasureSpec.EXACTLY -> widthSize
             MeasureSpec.AT_MOST -> min(desiredWidth, widthSize)

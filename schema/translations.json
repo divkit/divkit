@@ -843,10 +843,26 @@
     "en": "Indicator color.",
     "ru": "Цвет индикатора."
   },
+  "div_indicator_item_placement": {
+    "en": "Indicator items placement mode. There are 2 modes: default (indicators width is fixed and defined by the shape parameters) and stretch (indicators will be expanded to fill the whole width).",
+    "ru": "Режим расположения элементов индикатора. Можно задать режим по умолчанию (с фиксированной шириной элементов, которая определяется параметрами shape) либо режим растяжения, при котором индикаторы займут всю предоставленную ширину."
+  },
+  "div_indicator_item_placement_default": {
+    "en": "Fixed width indicator items placement mode.",
+    "ru": "Режим расположения элементов индикатора с фиксированной шириной элементов."
+  },
+  "div_indicator_item_placement_stretch": {
+    "en": "Stretch indicator items placement mode. will be expanded to fill the whole width.",
+    "ru": "Режим расятжения элементов индикатора при котором индикаторы займут всю предоставленную ширину"
+  },
   "div_indicator_minimum_item_size": {
     "en": "A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.",
     "ru": "Множитель размера для минимального индикатора. Используется, когда на экране не помещается нужное количество индикаторов."
   },
+  "div_indicator_max_visible_items": {
+      "en": "Maximum number of visible indicators.",
+      "ru": "Максимальное количество индикаторов, которые будут отображены."
+    },
   "div_indicator_pager_id": {
     "en": "ID of the pager that is a data source for an indicator.",
     "ru": "Идентификатор пейджера-источника данных для индикатора."
@@ -860,9 +876,13 @@
     "ru": "Индикатор прогресса для пейджера."
   },
   "div_indicator_space_between_centers": {
-    "en": "Spacing between indicator centers.",
-    "ru": "Расстояние между центрами индикаторов."
+    "en": "Spacing between indicator centers. It is deprecated for Android. Use items_placement instead",
+    "ru": "Расстояние между центрами индикаторов. Deprecated для Android. Используйте items_placement"
   },
+  "div_indicator_space_between_items": {
+      "en": "Spacing between indicator edges.",
+      "ru": "Расстояние между краями индикаторов."
+    },
   "div_infinity_count": {
     "en": "Infinite number of repetitions.",
     "ru": "Бесконечное число повторов."

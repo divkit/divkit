@@ -14,7 +14,8 @@ class IndicatorsStripDrawer(
 
     private var baseYOffset: Float = styleParams.shape.width
     private var baseXOffset: Float = styleParams.shape.width / 2
-    private var spaceBetweenCenters = styleParams.spaceBetweenCenters
+    private var spaceBetweenCenters: Float = 0f
+    private var itemWidthMultiplier: Float = 1f
 
     private var viewportWidth: Int = 0
     private var viewportHeight: Int = 0
@@ -43,7 +44,7 @@ class IndicatorsStripDrawer(
             val xOffset = getItemOffsetAt(index) - firstVisibleItemOffset
 
             if (xOffset !in 0f..viewportWidth.toFloat()) continue
-            var itemSize = animator.getItemSizeAt(index)
+            var itemSize = getItemSizeAt(index)
             if (itemsCount > maxVisibleCount) {
                 val scaleDistance = spaceBetweenCenters * 1.3f
                 val smallScaleDistance = styleParams.shape.width / 2
@@ -104,8 +105,9 @@ class IndicatorsStripDrawer(
     fun setItemsCount(count: Int) {
         itemsCount = count
         animator.setItemsCount(count)
+
         calculateMaximumVisibleItems()
-        baseXOffset = (viewportWidth - spaceBetweenCenters * (maxVisibleCount - 1) ) / 2f
+        baseXOffset = (viewportWidth - spaceBetweenCenters * (maxVisibleCount - 1)) / 2f
         baseYOffset = viewportHeight / 2f
     }
 
@@ -115,7 +117,9 @@ class IndicatorsStripDrawer(
         this.viewportHeight = viewportHeight
 
         calculateMaximumVisibleItems()
-        baseXOffset = (viewportWidth - spaceBetweenCenters * (maxVisibleCount - 1) ) / 2f
+        adjustItemsPlacement()
+
+        baseXOffset = (viewportWidth - spaceBetweenCenters * (maxVisibleCount - 1)) / 2f
         baseYOffset = viewportHeight / 2f
         adjustVisibleItems(selectedItemPosition, selectedItemOffset)
     }
@@ -123,7 +127,10 @@ class IndicatorsStripDrawer(
     fun getMaxVisibleItems() = maxVisibleCount
 
     private fun calculateMaximumVisibleItems() {
-        maxVisibleCount = (((viewportWidth - styleParams.shape.width) / spaceBetweenCenters).toInt()).coerceAtMost(itemsCount)
+        maxVisibleCount = when (val itemPlacement = styleParams.itemsPlacement) {
+            is IndicatorParams.ItemPlacement.Default -> (((viewportWidth - styleParams.shape.width) / itemPlacement.spaceBetweenCenters).toInt())
+            is IndicatorParams.ItemPlacement.Stretch -> itemPlacement.maxVisibleItems
+        }.coerceAtMost(itemsCount)
     }
 
     private fun adjustVisibleItems(position: Int, positionOffset: Float) {
@@ -131,13 +138,14 @@ class IndicatorsStripDrawer(
             firstVisibleItemOffset = 0f
         } else {
             val minPage = maxVisibleCount / 2
-            val maxPage = itemsCount - maxVisibleCount / 2 - 1
+            val maxPage = itemsCount - maxVisibleCount / 2 - maxVisibleCount % 2
+            val centerOffset = if (maxVisibleCount % 2 == 0) spaceBetweenCenters / 2 else 0f
 
             firstVisibleItemOffset = if (itemsCount > maxVisibleCount) {
                 when {
-                    position < minPage -> getItemOffsetAt(minPage) - viewportWidth / 2
-                    position >= maxPage -> getItemOffsetAt(maxPage) - viewportWidth / 2
-                    else -> getItemOffsetAt(position) + spaceBetweenCenters * positionOffset - viewportWidth / 2
+                    position < minPage -> getItemOffsetAt(minPage) - viewportWidth / 2 - centerOffset
+                    position >= maxPage -> getItemOffsetAt(maxPage) - viewportWidth / 2 - centerOffset
+                    else -> getItemOffsetAt(position) + spaceBetweenCenters * positionOffset - viewportWidth / 2 - centerOffset
                 }
             } else {
                 0f
@@ -148,5 +156,30 @@ class IndicatorsStripDrawer(
         endIndex = ((startIndex + viewportWidth / spaceBetweenCenters + 1).toInt()).coerceAtMost(itemsCount - 1)
     }
 
+    private fun adjustItemsPlacement() {
+        when (val itemPlacement = styleParams.itemsPlacement) {
+            is IndicatorParams.ItemPlacement.Default -> {
+                spaceBetweenCenters = itemPlacement.spaceBetweenCenters
+                itemWidthMultiplier = 1f
+            }
+            is IndicatorParams.ItemPlacement.Stretch -> {
+                spaceBetweenCenters = (viewportWidth + itemPlacement.itemSpacing) / maxVisibleCount
+                itemWidthMultiplier = (spaceBetweenCenters - itemPlacement.itemSpacing) / styleParams.shape.width
+            }
+        }
+        animator.updateSpaceBetweenCenters(spaceBetweenCenters)
+    }
+
     private fun getItemOffsetAt(position: Int) = baseXOffset + spaceBetweenCenters * position
+
+    private fun getItemSizeAt(position: Int): IndicatorParams.ItemSize {
+        var itemSize = animator.getItemSizeAt(position)
+
+        if (itemWidthMultiplier != 1.0f && itemSize is IndicatorParams.ItemSize.RoundedRect) {
+            itemSize = itemSize.copy(itemWidth = itemSize.itemWidth * itemWidthMultiplier)
+            animator.overrideItemWidth(itemSize.itemWidth)
+        }
+
+        return itemSize
+    }
 }

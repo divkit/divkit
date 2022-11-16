@@ -8,6 +8,8 @@ interface IndicatorAnimator {
     fun getColorAt(position: Int): Int
     fun onPageScrolled(position: Int, positionOffset: Float)
     fun onPageSelected(position: Int)
+    fun updateSpaceBetweenCenters(spaceBetweenCenters: Float) = Unit
+    fun overrideItemWidth(width: Float) = Unit
     fun setItemsCount(count: Int)
     fun getSelectedItemRect(xOffset: Float, yOffset: Float): RectF?
     fun getItemSizeAt(position: Int): IndicatorParams.ItemSize

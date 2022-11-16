@@ -1,0 +1,20 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_match_parent_size",
+  "properties": {
+    "space_between_centers": {
+      "$ref": "div-fixed-size.json",
+      "default_value": "{\"type\": \"fixed\",\"value\":15}",
+      "$description": "translations.json#/div_indicator_space_between_centers"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "default"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

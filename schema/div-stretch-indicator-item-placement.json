@@ -1,0 +1,25 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_match_parent_size",
+  "properties": {
+    "item_spacing": {
+      "$ref": "div-fixed-size.json",
+      "default_value": "{\"type\": \"fixed\",\"value\":5}",
+      "$description": "translations.json#/div_indicator_space_between_centers"
+    },
+    "max_visible_items": {
+      "$ref": "common.json#/positive_integer",
+      "default_value": "10",
+      "$description": "translations.json#/div_indicator_max_visible_items"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "stretch"
+      ]
+    }
+  },
+  "required": [
+    "type"
+  ]
+}

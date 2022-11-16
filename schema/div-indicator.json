@@ -18,10 +18,18 @@
           "supports_expressions": false,
           "$description": "translations.json#/div_indicator_pager_id"
         },
+        "items_placement" : {
+          "$ref": "div-indicator-item-placement.json",
+          "$description": "translations.json#/div_indicator_item_placement",
+          "platforms": [
+            "android"
+          ]
+        },
         "space_between_centers": {
           "$ref": "div-fixed-size.json",
           "default_value": "{\"type\": \"fixed\",\"value\":15}",
-          "$description": "translations.json#/div_indicator_space_between_centers"
+          "$description": "translations.json#/div_indicator_space_between_centers",
+          "deprecated": true
         },
         "inactive_item_color": {
           "$ref": "common.json#/color",

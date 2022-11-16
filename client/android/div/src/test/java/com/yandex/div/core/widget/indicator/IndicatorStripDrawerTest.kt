@@ -26,7 +26,9 @@ class IndicatorStripDrawerTest {
                 selectedCornerRadius = 5f,
                 minimumCornerRadius = 5f,
             ),
-            spaceBetweenCenters = 15f,
+            itemsPlacement = IndicatorParams.ItemPlacement.Default(
+                spaceBetweenCenters = 15f
+            ),
             animation = IndicatorParams.Animation.SCALE,
         )
 
@@ -53,7 +55,9 @@ class IndicatorStripDrawerTest {
                 selectedCornerRadius = 10f,
                 minimumCornerRadius = 10f,
             ),
-            spaceBetweenCenters = 15f,
+            itemsPlacement = IndicatorParams.ItemPlacement.Default(
+                spaceBetweenCenters = 15f
+            ),
             animation = IndicatorParams.Animation.SCALE,
         )
 

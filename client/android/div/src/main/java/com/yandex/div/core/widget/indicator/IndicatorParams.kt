@@ -5,9 +5,9 @@ class IndicatorParams {
     data class Style(
         val color: Int,
         val selectedColor: Int,
-        val spaceBetweenCenters: Float,
         val animation: Animation,
         val shape: Shape,
+        val itemsPlacement: ItemPlacement
     )
 
     sealed class Shape {
@@ -92,6 +92,17 @@ class IndicatorParams {
             is RoundedRect -> itemWidth
             is Circle -> radius * 2
         }
+    }
+
+    sealed interface ItemPlacement {
+        data class Default(
+            val spaceBetweenCenters: Float,
+        ) : ItemPlacement
+
+        data class Stretch(
+            val itemSpacing: Float,
+            val maxVisibleItems: Int,
+        ) : ItemPlacement
     }
 
     enum class Animation {

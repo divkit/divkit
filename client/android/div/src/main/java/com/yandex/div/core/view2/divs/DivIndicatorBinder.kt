@@ -8,6 +8,7 @@ import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivIndicator
+import com.yandex.div2.DivIndicatorItemPlacement
 import com.yandex.div2.DivShape
 import javax.inject.Inject
 
@@ -43,9 +44,19 @@ internal class DivIndicatorBinder @Inject constructor(
         addSubscription(indicator.activeItemSize.observe(resolver, callback))
         addSubscription(indicator.inactiveItemColor.observe(resolver, callback))
         addSubscription(indicator.minimumItemSize.observe(resolver, callback))
-        addSubscription(indicator.spaceBetweenCenters.value.observe(resolver, callback))
-        addSubscription(indicator.spaceBetweenCenters.unit.observe(resolver, callback))
         addSubscription(indicator.animation.observe(resolver, callback))
+
+        when(val itemsPlacement = indicator.itemsPlacementCompat) {
+            is DivIndicatorItemPlacement.Default -> {
+                addSubscription(itemsPlacement.value.spaceBetweenCenters.value.observe(resolver, callback))
+                addSubscription(itemsPlacement.value.spaceBetweenCenters.unit.observe(resolver, callback))
+            }
+            is DivIndicatorItemPlacement.Stretch -> {
+                addSubscription(itemsPlacement.value.itemSpacing.value.observe(resolver, callback))
+                addSubscription(itemsPlacement.value.itemSpacing.unit.observe(resolver, callback))
+                addSubscription(itemsPlacement.value.maxVisibleItems.observe(resolver, callback))
+            }
+        }
 
         observeShape(resolver, indicator.shape, callback)
 
@@ -57,7 +68,15 @@ internal class DivIndicatorBinder @Inject constructor(
         val style = IndicatorParams.Style(
             color = indicator.inactiveItemColor.evaluate(resolver),
             selectedColor = indicator.activeItemColor.evaluate(resolver),
-            spaceBetweenCenters = indicator.spaceBetweenCenters.toPx(metrics, resolver).toFloat(),
+            itemsPlacement = when(val itemPlacement = indicator.itemsPlacementCompat){
+                is DivIndicatorItemPlacement.Default -> IndicatorParams.ItemPlacement.Default(
+                    spaceBetweenCenters = itemPlacement.value.spaceBetweenCenters.toPx(metrics, resolver).toFloat()
+                )
+                is DivIndicatorItemPlacement.Stretch -> IndicatorParams.ItemPlacement.Stretch(
+                    itemSpacing = itemPlacement.value.itemSpacing.toPx(metrics, resolver).toFloat(),
+                    maxVisibleItems = itemPlacement.value.maxVisibleItems.evaluate(resolver)
+                )
+            },
             animation = indicator.animation.evaluate(resolver).convert(),
             shape = when (val shape = indicator.shape) {
                 is DivShape.RoundedRectangle -> IndicatorParams.Shape.RoundedRect(
