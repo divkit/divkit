@@ -46,7 +46,7 @@ public enum DivTextRangeBackgroundTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivTextRangeBackground> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
 
     switch type {
@@ -59,7 +59,7 @@ public enum DivTextRangeBackgroundTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
   }
 }
@@ -72,7 +72,7 @@ extension DivTextRangeBackgroundTemplate: TemplateDeserializable {
     case DivSolidBackgroundTemplate.type:
       self = .divSolidBackgroundTemplate(try DivSolidBackgroundTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-text-range-background_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-text-range-background_template", representation: dictionary)
     }
   }
 }

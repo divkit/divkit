@@ -20,7 +20,7 @@ func invalidFieldErrorForKey<T, U>(
 ) -> DeserializationError {
   let keyStrings: [String] = key.map { "\($0)" }
   return .invalidFieldRepresentation(
-    field: "\(keyStrings.joined(separator: "."))" + (element.map { "[\($0)]" } ?? ""),
+    fieldName: "\(keyStrings.joined(separator: "."))" + (element.map { "[\($0)]" } ?? ""),
     representation: representation
   )
 }

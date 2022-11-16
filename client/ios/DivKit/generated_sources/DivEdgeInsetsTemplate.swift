@@ -43,11 +43,11 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
     let topValue = parent?.top?.resolveOptionalValue(context: context, validator: ResolvedValue.topValidator) ?? .noValue
     let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let errors = mergeErrors(
-      bottomValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "bottom", level: .warning)) },
-      leftValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "left", level: .warning)) },
-      rightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "right", level: .warning)) },
-      topValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "top", level: .warning)) },
-      unitValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "unit", level: .warning)) }
+      bottomValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "bottom", error: $0) },
+      leftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "left", error: $0) },
+      rightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "right", error: $0) },
+      topValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top", error: $0) },
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) }
     )
     let result = DivEdgeInsets(
       bottom: bottomValue.value,
@@ -94,11 +94,11 @@ public final class DivEdgeInsetsTemplate: TemplateValue, TemplateDeserializable 
       }
     }
     let errors = mergeErrors(
-      bottomValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "bottom", level: .warning)) },
-      leftValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "left", level: .warning)) },
-      rightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "right", level: .warning)) },
-      topValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "top", level: .warning)) },
-      unitValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "unit", level: .warning)) }
+      bottomValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "bottom", error: $0) },
+      leftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "left", error: $0) },
+      rightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "right", error: $0) },
+      topValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top", error: $0) },
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) }
     )
     let result = DivEdgeInsets(
       bottom: bottomValue.value,

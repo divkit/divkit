@@ -38,10 +38,10 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue, TemplateDeseria
     let rightValue = parent?.right?.resolveOptionalValue(context: context, validator: ResolvedValue.rightValidator) ?? .noValue
     let topValue = parent?.top?.resolveOptionalValue(context: context, validator: ResolvedValue.topValidator) ?? .noValue
     let errors = mergeErrors(
-      bottomValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "bottom", level: .warning)) },
-      leftValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "left", level: .warning)) },
-      rightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "right", level: .warning)) },
-      topValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "top", level: .warning)) }
+      bottomValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "bottom", error: $0) },
+      leftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "left", error: $0) },
+      rightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "right", error: $0) },
+      topValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top", error: $0) }
     )
     let result = DivAbsoluteEdgeInsets(
       bottom: bottomValue.value,
@@ -82,10 +82,10 @@ public final class DivAbsoluteEdgeInsetsTemplate: TemplateValue, TemplateDeseria
       }
     }
     let errors = mergeErrors(
-      bottomValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "bottom", level: .warning)) },
-      leftValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "left", level: .warning)) },
-      rightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "right", level: .warning)) },
-      topValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "top", level: .warning)) }
+      bottomValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "bottom", error: $0) },
+      leftValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "left", error: $0) },
+      rightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "right", error: $0) },
+      topValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "top", error: $0) }
     )
     let result = DivAbsoluteEdgeInsets(
       bottom: bottomValue.value,

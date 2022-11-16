@@ -20,8 +20,8 @@ public final class EntityWithArrayOfEnumsTemplate: TemplateValue, TemplateDeseri
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         items: try dictionary.getOptionalArray("items")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_array_of_enums_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "entity_with_array_of_enums_template." + field, representation: representation)
     }
   }
 
@@ -36,10 +36,10 @@ public final class EntityWithArrayOfEnumsTemplate: TemplateValue, TemplateDeseri
   private static func resolveOnlyLinks(context: Context, parent: EntityWithArrayOfEnumsTemplate?) -> DeserializationResult<EntityWithArrayOfEnums> {
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator) ?? .noValue
     var errors = mergeErrors(
-      itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .error)) }
+      itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) }
     )
     if case .noValue = itemsValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
+      errors.append(.requiredFieldIsMissing(fieldName: "items"))
     }
     guard
       let itemsNonNil = itemsValue.value
@@ -67,10 +67,10 @@ public final class EntityWithArrayOfEnumsTemplate: TemplateValue, TemplateDeseri
       }
     }
     var errors = mergeErrors(
-      itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .error)) }
+      itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) }
     )
     if case .noValue = itemsValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
+      errors.append(.requiredFieldIsMissing(fieldName: "items"))
     }
     guard
       let itemsNonNil = itemsValue.value

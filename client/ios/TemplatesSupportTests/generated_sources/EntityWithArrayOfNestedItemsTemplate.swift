@@ -18,8 +18,8 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
           entity: try dictionary.getOptionalField("entity", templateToType: templateToType),
           property: try dictionary.getOptionalExpressionField("property")
         )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "item_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(fieldName: "item_template." + field, representation: representation)
       }
     }
 
@@ -35,14 +35,14 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
       let entityValue = parent?.entity?.resolveValue(context: context, useOnlyLinks: true) ?? .noValue
       let propertyValue = parent?.property?.resolveValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
       var errors = mergeErrors(
-        entityValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "entity", level: .error)) },
-        propertyValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "property", level: .error)) }
+        entityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "entity", error: $0) },
+        propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
       )
       if case .noValue = entityValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "entity")))
+        errors.append(.requiredFieldIsMissing(fieldName: "entity"))
       }
       if case .noValue = propertyValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "property")))
+        errors.append(.requiredFieldIsMissing(fieldName: "property"))
       }
       guard
         let entityNonNil = entityValue.value,
@@ -80,14 +80,14 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
         entityValue = entityValue.merged(with: parent.entity?.resolveValue(context: context, useOnlyLinks: true))
       }
       var errors = mergeErrors(
-        entityValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "entity", level: .error)) },
-        propertyValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "property", level: .error)) }
+        entityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "entity", error: $0) },
+        propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
       )
       if case .noValue = entityValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "entity")))
+        errors.append(.requiredFieldIsMissing(fieldName: "entity"))
       }
       if case .noValue = propertyValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "property")))
+        errors.append(.requiredFieldIsMissing(fieldName: "property"))
       }
       guard
         let entityNonNil = entityValue.value,
@@ -129,8 +129,8 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         items: try dictionary.getOptionalArray("items", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_array_of_nested_items_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "entity_with_array_of_nested_items_template." + field, representation: representation)
     }
   }
 
@@ -145,10 +145,10 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
   private static func resolveOnlyLinks(context: Context, parent: EntityWithArrayOfNestedItemsTemplate?) -> DeserializationResult<EntityWithArrayOfNestedItems> {
     let itemsValue = parent?.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .error)) }
+      itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) }
     )
     if case .noValue = itemsValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
+      errors.append(.requiredFieldIsMissing(fieldName: "items"))
     }
     guard
       let itemsNonNil = itemsValue.value
@@ -179,10 +179,10 @@ public final class EntityWithArrayOfNestedItemsTemplate: TemplateValue, Template
       itemsValue = itemsValue.merged(with: parent.items?.resolveValue(context: context, validator: ResolvedValue.itemsValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .error)) }
+      itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) }
     )
     if case .noValue = itemsValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
+      errors.append(.requiredFieldIsMissing(fieldName: "items"))
     }
     guard
       let itemsNonNil = itemsValue.value

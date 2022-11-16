@@ -43,11 +43,11 @@ public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
     let shadowValue = parent?.shadow?.resolveOptionalValue(context: context, validator: ResolvedValue.shadowValidator, useOnlyLinks: true) ?? .noValue
     let strokeValue = parent?.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      cornerRadiusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "corner_radius", level: .warning)) },
-      cornersRadiusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "corners_radius", level: .warning)) },
-      hasShadowValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "has_shadow", level: .warning)) },
-      shadowValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "shadow", level: .warning)) },
-      strokeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "stroke", level: .warning)) }
+      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corner_radius", error: $0) },
+      cornersRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corners_radius", error: $0) },
+      hasShadowValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "has_shadow", error: $0) },
+      shadowValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "shadow", error: $0) },
+      strokeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "stroke", error: $0) }
     )
     let result = DivBorder(
       cornerRadius: cornerRadiusValue.value,
@@ -99,11 +99,11 @@ public final class DivBorderTemplate: TemplateValue, TemplateDeserializable {
       strokeValue = strokeValue.merged(with: parent.stroke?.resolveOptionalValue(context: context, validator: ResolvedValue.strokeValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      cornerRadiusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "corner_radius", level: .warning)) },
-      cornersRadiusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "corners_radius", level: .warning)) },
-      hasShadowValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "has_shadow", level: .warning)) },
-      shadowValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "shadow", level: .warning)) },
-      strokeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "stroke", level: .warning)) }
+      cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corner_radius", error: $0) },
+      cornersRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corners_radius", error: $0) },
+      hasShadowValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "has_shadow", error: $0) },
+      shadowValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "shadow", error: $0) },
+      strokeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "stroke", error: $0) }
     )
     let result = DivBorder(
       cornerRadius: cornerRadiusValue.value,

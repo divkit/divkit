@@ -59,7 +59,7 @@ public enum DivShapeTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivShape> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
 
     switch type {
@@ -80,7 +80,7 @@ public enum DivShapeTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
   }
 }
@@ -95,7 +95,7 @@ extension DivShapeTemplate: TemplateDeserializable {
     case DivCircleShapeTemplate.type:
       self = .divCircleShapeTemplate(try DivCircleShapeTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-shape_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-shape_template", representation: dictionary)
     }
   }
 }

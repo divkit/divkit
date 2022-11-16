@@ -31,7 +31,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
   private static func resolveOnlyLinks(context: Context, parent: DivWrapContentSizeTemplate?) -> DeserializationResult<DivWrapContentSize> {
     let constrainedValue = parent?.constrained?.resolveOptionalValue(context: context, validator: ResolvedValue.constrainedValidator) ?? .noValue
     let errors = mergeErrors(
-      constrainedValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "constrained", level: .warning)) }
+      constrainedValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "constrained", error: $0) }
     )
     let result = DivWrapContentSize(
       constrained: constrainedValue.value
@@ -54,7 +54,7 @@ public final class DivWrapContentSizeTemplate: TemplateValue, TemplateDeserializ
       }
     }
     let errors = mergeErrors(
-      constrainedValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "constrained", level: .warning)) }
+      constrainedValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "constrained", error: $0) }
     )
     let result = DivWrapContentSize(
       constrained: constrainedValue.value

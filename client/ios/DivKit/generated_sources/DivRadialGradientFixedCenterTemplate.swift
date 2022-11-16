@@ -21,8 +21,8 @@ public final class DivRadialGradientFixedCenterTemplate: TemplateValue, Template
         unit: try dictionary.getOptionalExpressionField("unit"),
         value: try dictionary.getOptionalExpressionField("value")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-radial-gradient-fixed-center_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-radial-gradient-fixed-center_template." + field, representation: representation)
     }
   }
 
@@ -40,11 +40,11 @@ public final class DivRadialGradientFixedCenterTemplate: TemplateValue, Template
     let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context) ?? .noValue
     var errors = mergeErrors(
-      unitValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "unit", level: .warning)) },
-      valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .error)) }
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
     )
     if case .noValue = valueValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "value")))
+      errors.append(.requiredFieldIsMissing(fieldName: "value"))
     }
     guard
       let valueNonNil = valueValue.value
@@ -78,11 +78,11 @@ public final class DivRadialGradientFixedCenterTemplate: TemplateValue, Template
       }
     }
     var errors = mergeErrors(
-      unitValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "unit", level: .warning)) },
-      valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .error)) }
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
     )
     if case .noValue = valueValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "value")))
+      errors.append(.requiredFieldIsMissing(fieldName: "value"))
     }
     guard
       let valueNonNil = valueValue.value

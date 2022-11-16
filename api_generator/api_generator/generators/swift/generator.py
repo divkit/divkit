@@ -147,7 +147,7 @@ class SwiftGenerator(Generator):
             body += f'case {obj_t}.type:'
             body += f'  self = .{low_name}(try {obj_t}(dictionary: dictionary{args}))'
         body += 'default:'
-        args = f'field: "{entity_enumeration.name}", representation: dictionary'
+        args = f'fieldName: "{entity_enumeration.name}", representation: dictionary'
         body += f'  throw DeserializationError.invalidFieldRepresentation({args})'
         body += '}'
         deserializable_extension += body.indented(level=2)

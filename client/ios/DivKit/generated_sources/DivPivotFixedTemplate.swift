@@ -36,8 +36,8 @@ public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable 
     let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let valueValue = parent?.value?.resolveOptionalValue(context: context) ?? .noValue
     let errors = mergeErrors(
-      unitValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "unit", level: .warning)) },
-      valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .warning)) }
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
     )
     let result = DivPivotFixed(
       unit: unitValue.value,
@@ -66,8 +66,8 @@ public final class DivPivotFixedTemplate: TemplateValue, TemplateDeserializable 
       }
     }
     let errors = mergeErrors(
-      unitValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "unit", level: .warning)) },
-      valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .warning)) }
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
     )
     let result = DivPivotFixed(
       unit: unitValue.value,

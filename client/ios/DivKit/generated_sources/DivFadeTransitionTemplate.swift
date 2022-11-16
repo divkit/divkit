@@ -46,10 +46,10 @@ public final class DivFadeTransitionTemplate: TemplateValue, TemplateDeserializa
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let errors = mergeErrors(
-      alphaValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "alpha", level: .warning)) },
-      durationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "duration", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "interpolator", level: .warning)) },
-      startDelayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "start_delay", level: .warning)) }
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) }
     )
     let result = DivFadeTransition(
       alpha: alphaValue.value,
@@ -90,10 +90,10 @@ public final class DivFadeTransitionTemplate: TemplateValue, TemplateDeserializa
       }
     }
     let errors = mergeErrors(
-      alphaValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "alpha", level: .warning)) },
-      durationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "duration", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "interpolator", level: .warning)) },
-      startDelayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "start_delay", level: .warning)) }
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) }
     )
     let result = DivFadeTransition(
       alpha: alphaValue.value,

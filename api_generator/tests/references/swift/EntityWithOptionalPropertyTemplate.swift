@@ -30,7 +30,7 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
   private static func resolveOnlyLinks(context: Context, parent: EntityWithOptionalPropertyTemplate?) -> DeserializationResult<EntityWithOptionalProperty> {
     let propertyValue = parent?.property?.resolveOptionalValue(context: context, validator: ResolvedValue.propertyValidator) ?? .noValue
     let errors = mergeErrors(
-      propertyValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "property", level: .warning)) }
+      propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
     )
     let result = EntityWithOptionalProperty(
       property: propertyValue.value
@@ -53,7 +53,7 @@ public final class EntityWithOptionalPropertyTemplate: TemplateValue, TemplateDe
       }
     }
     let errors = mergeErrors(
-      propertyValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "property", level: .warning)) }
+      propertyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "property", error: $0) }
     )
     let result = EntityWithOptionalProperty(
       property: propertyValue.value

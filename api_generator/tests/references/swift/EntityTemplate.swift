@@ -279,7 +279,7 @@ public enum EntityTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<Entity> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
 
     switch type {
@@ -436,7 +436,7 @@ public enum EntityTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
   }
 }
@@ -485,7 +485,7 @@ extension EntityTemplate: TemplateDeserializable {
     case EntityWithoutPropertiesTemplate.type:
       self = .entityWithoutPropertiesTemplate(try EntityWithoutPropertiesTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "entity_template", representation: dictionary)
     }
   }
 }

@@ -59,7 +59,7 @@ public enum DivPivotTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivPivot> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
 
     switch type {
@@ -80,7 +80,7 @@ public enum DivPivotTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
   }
 }
@@ -95,7 +95,7 @@ extension DivPivotTemplate: TemplateDeserializable {
     case DivPivotPercentageTemplate.type:
       self = .divPivotPercentageTemplate(try DivPivotPercentageTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-pivot_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-pivot_template", representation: dictionary)
     }
   }
 }

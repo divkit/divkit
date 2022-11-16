@@ -17,8 +17,8 @@ public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
         unit: try dictionary.getOptionalExpressionField("unit"),
         width: try dictionary.getOptionalExpressionField("width")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-stroke_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-stroke_template." + field, representation: representation)
     }
   }
 
@@ -37,12 +37,12 @@ public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
     let unitValue = parent?.unit?.resolveOptionalValue(context: context, validator: ResolvedValue.unitValidator) ?? .noValue
     let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator) ?? .noValue
     var errors = mergeErrors(
-      colorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "color", level: .error)) },
-      unitValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "unit", level: .warning)) },
-      widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
+      colorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "color", error: $0) },
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) },
+      widthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "width", error: $0) }
     )
     if case .noValue = colorValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
+      errors.append(.requiredFieldIsMissing(fieldName: "color"))
     }
     guard
       let colorNonNil = colorValue.value
@@ -82,12 +82,12 @@ public final class DivStrokeTemplate: TemplateValue, TemplateDeserializable {
       }
     }
     var errors = mergeErrors(
-      colorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "color", level: .error)) },
-      unitValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "unit", level: .warning)) },
-      widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
+      colorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "color", error: $0) },
+      unitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "unit", error: $0) },
+      widthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "width", error: $0) }
     )
     if case .noValue = colorValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "color")))
+      errors.append(.requiredFieldIsMissing(fieldName: "color"))
     }
     guard
       let colorNonNil = colorValue.value

@@ -64,7 +64,7 @@ public func deserialize<T: ValidSerializationValue, U>(
 
   let result = transform(typedValue)
   guard let resultValue = result.value, validator?.isValid(resultValue) != false else {
-    var errors = NonEmptyArray(.invalidValue(result: result.value, value: value))
+    var errors: NonEmptyArray<DeserializationError> = NonEmptyArray(.invalidValue(result: result.value, value: value))
     if let resultErrors = result.errorsOrWarnings {
       errors.append(contentsOf: resultErrors)
     }
@@ -119,7 +119,7 @@ public func deserialize<T: ValidSerializationValue, U>(
   }
 
   var result: [U] = []
-  var errors: [Either<DeserializationError, FieldError>] = []
+  var errors: [DeserializationError] = []
   result.reserveCapacity(resultBeforeTransform.count)
 
   for index in resultBeforeTransform.indices {
@@ -132,12 +132,12 @@ public func deserialize<T: ValidSerializationValue, U>(
 
   if result.count != resultBeforeTransform.count,
      validator?.isPartialDeserializationAllowed == false {
-    errors.append(.left(.invalidValue(result: result, value: value)))
+    errors.append(.invalidValue(result: result, value: value))
     return .failure(NonEmptyArray(errors)!)
   }
 
   guard validator?.isValid(result) != false else {
-    errors.append(.left(.invalidValue(result: result, value: value)))
+    errors.append(.invalidValue(result: result, value: value))
     return .failure(NonEmptyArray(errors)!)
   }
 

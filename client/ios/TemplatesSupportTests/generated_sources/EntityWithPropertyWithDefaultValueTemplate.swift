@@ -20,8 +20,8 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
           nonOptional: try dictionary.getOptionalExpressionField("non_optional"),
           url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
         )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "nested_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(fieldName: "nested_template." + field, representation: representation)
       }
     }
 
@@ -40,12 +40,12 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
       let nonOptionalValue = parent?.nonOptional?.resolveValue(context: context) ?? .noValue
       let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
       var errors = mergeErrors(
-        intValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "int", level: .warning)) },
-        nonOptionalValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "non_optional", level: .error)) },
-        urlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "url", level: .warning)) }
+        intValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "int", error: $0) },
+        nonOptionalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "non_optional", error: $0) },
+        urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) }
       )
       if case .noValue = nonOptionalValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "non_optional")))
+        errors.append(.requiredFieldIsMissing(fieldName: "non_optional"))
       }
       guard
         let nonOptionalNonNil = nonOptionalValue.value
@@ -85,12 +85,12 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
         }
       }
       var errors = mergeErrors(
-        intValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "int", level: .warning)) },
-        nonOptionalValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "non_optional", level: .error)) },
-        urlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "url", level: .warning)) }
+        intValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "int", error: $0) },
+        nonOptionalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "non_optional", error: $0) },
+        urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) }
       )
       if case .noValue = nonOptionalValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "non_optional")))
+        errors.append(.requiredFieldIsMissing(fieldName: "non_optional"))
       }
       guard
         let nonOptionalNonNil = nonOptionalValue.value
@@ -149,9 +149,9 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
     let nestedValue = parent?.nested?.resolveOptionalValue(context: context, validator: ResolvedValue.nestedValidator, useOnlyLinks: true) ?? .noValue
     let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
     let errors = mergeErrors(
-      intValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "int", level: .warning)) },
-      nestedValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "nested", level: .warning)) },
-      urlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "url", level: .warning)) }
+      intValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "int", error: $0) },
+      nestedValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "nested", error: $0) },
+      urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) }
     )
     let result = EntityWithPropertyWithDefaultValue(
       int: intValue.value,
@@ -189,9 +189,9 @@ public final class EntityWithPropertyWithDefaultValueTemplate: TemplateValue, Te
       nestedValue = nestedValue.merged(with: parent.nested?.resolveOptionalValue(context: context, validator: ResolvedValue.nestedValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      intValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "int", level: .warning)) },
-      nestedValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "nested", level: .warning)) },
-      urlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "url", level: .warning)) }
+      intValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "int", error: $0) },
+      nestedValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "nested", error: $0) },
+      urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) }
     )
     let result = EntityWithPropertyWithDefaultValue(
       int: intValue.value,

@@ -25,8 +25,8 @@ public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializa
         colors: try dictionary.getOptionalExpressionArray("colors", transform: Color.color(withHexString:)),
         radius: try dictionary.getOptionalField("radius", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-radial-gradient_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-radial-gradient_template." + field, representation: representation)
     }
   }
 
@@ -50,13 +50,13 @@ public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializa
     let colorsValue = parent?.colors?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.colorsValidator) ?? .noValue
     let radiusValue = parent?.radius?.resolveOptionalValue(context: context, validator: ResolvedValue.radiusValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      centerXValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "center_x", level: .warning)) },
-      centerYValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "center_y", level: .warning)) },
-      colorsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "colors", level: .error)) },
-      radiusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "radius", level: .warning)) }
+      centerXValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "center_x", error: $0) },
+      centerYValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "center_y", error: $0) },
+      colorsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "colors", error: $0) },
+      radiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "radius", error: $0) }
     )
     if case .noValue = colorsValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "colors")))
+      errors.append(.requiredFieldIsMissing(fieldName: "colors"))
     }
     guard
       let colorsNonNil = colorsValue.value
@@ -107,13 +107,13 @@ public final class DivRadialGradientTemplate: TemplateValue, TemplateDeserializa
       radiusValue = radiusValue.merged(with: parent.radius?.resolveOptionalValue(context: context, validator: ResolvedValue.radiusValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      centerXValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "center_x", level: .warning)) },
-      centerYValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "center_y", level: .warning)) },
-      colorsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "colors", level: .error)) },
-      radiusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "radius", level: .warning)) }
+      centerXValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "center_x", error: $0) },
+      centerYValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "center_y", error: $0) },
+      colorsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "colors", error: $0) },
+      radiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "radius", error: $0) }
     )
     if case .noValue = colorsValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "colors")))
+      errors.append(.requiredFieldIsMissing(fieldName: "colors"))
     }
     guard
       let colorsNonNil = colorsValue.value

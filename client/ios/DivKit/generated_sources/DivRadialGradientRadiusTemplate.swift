@@ -59,7 +59,7 @@ public enum DivRadialGradientRadiusTemplate: TemplateValue {
 
   private static func resolveUnknownValue(context: Context, useOnlyLinks: Bool) -> DeserializationResult<DivRadialGradientRadius> {
     guard let type = (context.templateData["type"] as? String).flatMap({ context.templateToType[$0] ?? $0 }) else {
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
 
     switch type {
@@ -80,7 +80,7 @@ public enum DivRadialGradientRadiusTemplate: TemplateValue {
       case .noValue: return .noValue
       }
     default:
-      return .failure(NonEmptyArray(DeserializationError.requiredFieldIsMissing(fieldName: "type")))
+      return .failure(NonEmptyArray(.requiredFieldIsMissing(fieldName: "type")))
     }
   }
 }
@@ -95,7 +95,7 @@ extension DivRadialGradientRadiusTemplate: TemplateDeserializable {
     case DivRadialGradientRelativeRadiusTemplate.type:
       self = .divRadialGradientRelativeRadiusTemplate(try DivRadialGradientRelativeRadiusTemplate(dictionary: dictionary, templateToType: templateToType))
     default:
-      throw DeserializationError.invalidFieldRepresentation(field: "div-radial-gradient-radius_template", representation: dictionary)
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-radial-gradient-radius_template", representation: dictionary)
     }
   }
 }

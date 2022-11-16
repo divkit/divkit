@@ -52,12 +52,12 @@ public final class DivAccessibilityTemplate: TemplateValue, TemplateDeserializab
     let stateDescriptionValue = parent?.stateDescription?.resolveOptionalValue(context: context, validator: ResolvedValue.stateDescriptionValidator) ?? .noValue
     let typeValue = parent?.type?.resolveOptionalValue(context: context, validator: ResolvedValue.typeValidator) ?? .noValue
     let errors = mergeErrors(
-      descriptionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "description", level: .warning)) },
-      hintValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "hint", level: .warning)) },
-      modeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "mode", level: .warning)) },
-      muteAfterActionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "mute_after_action", level: .warning)) },
-      stateDescriptionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "state_description", level: .warning)) },
-      typeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "type", level: .warning)) }
+      descriptionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "description", error: $0) },
+      hintValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "hint", error: $0) },
+      modeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "mode", error: $0) },
+      muteAfterActionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "mute_after_action", error: $0) },
+      stateDescriptionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "state_description", error: $0) },
+      typeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "type", error: $0) }
     )
     let result = DivAccessibility(
       description: descriptionValue.value,
@@ -110,12 +110,12 @@ public final class DivAccessibilityTemplate: TemplateValue, TemplateDeserializab
       }
     }
     let errors = mergeErrors(
-      descriptionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "description", level: .warning)) },
-      hintValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "hint", level: .warning)) },
-      modeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "mode", level: .warning)) },
-      muteAfterActionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "mute_after_action", level: .warning)) },
-      stateDescriptionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "state_description", level: .warning)) },
-      typeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "type", level: .warning)) }
+      descriptionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "description", error: $0) },
+      hintValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "hint", error: $0) },
+      modeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "mode", error: $0) },
+      muteAfterActionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "mute_after_action", error: $0) },
+      stateDescriptionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "state_description", error: $0) },
+      typeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "type", error: $0) }
     )
     let result = DivAccessibility(
       description: descriptionValue.value,

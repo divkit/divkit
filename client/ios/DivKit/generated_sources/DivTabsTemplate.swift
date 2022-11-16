@@ -18,8 +18,8 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
           title: try dictionary.getOptionalExpressionField("title"),
           titleClickAction: try dictionary.getOptionalField("title_click_action", templateToType: templateToType)
         )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "item_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(fieldName: "item_template." + field, representation: representation)
       }
     }
 
@@ -38,15 +38,15 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       let titleValue = parent?.title?.resolveValue(context: context, validator: ResolvedValue.titleValidator) ?? .noValue
       let titleClickActionValue = parent?.titleClickAction?.resolveOptionalValue(context: context, validator: ResolvedValue.titleClickActionValidator, useOnlyLinks: true) ?? .noValue
       var errors = mergeErrors(
-        divValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "div", level: .error)) },
-        titleValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "title", level: .error)) },
-        titleClickActionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "title_click_action", level: .warning)) }
+        divValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "div", error: $0) },
+        titleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "title", error: $0) },
+        titleClickActionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "title_click_action", error: $0) }
       )
       if case .noValue = divValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "div")))
+        errors.append(.requiredFieldIsMissing(fieldName: "div"))
       }
       if case .noValue = titleValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "title")))
+        errors.append(.requiredFieldIsMissing(fieldName: "title"))
       }
       guard
         let divNonNil = divValue.value,
@@ -91,15 +91,15 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
         titleClickActionValue = titleClickActionValue.merged(with: parent.titleClickAction?.resolveOptionalValue(context: context, validator: ResolvedValue.titleClickActionValidator, useOnlyLinks: true))
       }
       var errors = mergeErrors(
-        divValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "div", level: .error)) },
-        titleValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "title", level: .error)) },
-        titleClickActionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "title_click_action", level: .warning)) }
+        divValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "div", error: $0) },
+        titleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "title", error: $0) },
+        titleClickActionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "title_click_action", error: $0) }
       )
       if case .noValue = divValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "div")))
+        errors.append(.requiredFieldIsMissing(fieldName: "div"))
       }
       if case .noValue = titleValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "title")))
+        errors.append(.requiredFieldIsMissing(fieldName: "title"))
       }
       guard
         let divNonNil = divValue.value,
@@ -235,24 +235,24 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       let lineHeightValue = parent?.lineHeight?.resolveOptionalValue(context: context, validator: ResolvedValue.lineHeightValidator) ?? .noValue
       let paddingsValue = parent?.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true) ?? .noValue
       let errors = mergeErrors(
-        activeBackgroundColorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "active_background_color", level: .warning)) },
-        activeFontWeightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "active_font_weight", level: .warning)) },
-        activeTextColorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "active_text_color", level: .warning)) },
-        animationDurationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "animation_duration", level: .warning)) },
-        animationTypeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "animation_type", level: .warning)) },
-        cornerRadiusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "corner_radius", level: .warning)) },
-        cornersRadiusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "corners_radius", level: .warning)) },
-        fontFamilyValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "font_family", level: .warning)) },
-        fontSizeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "font_size", level: .warning)) },
-        fontSizeUnitValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "font_size_unit", level: .warning)) },
-        fontWeightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "font_weight", level: .warning)) },
-        inactiveBackgroundColorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "inactive_background_color", level: .warning)) },
-        inactiveFontWeightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "inactive_font_weight", level: .warning)) },
-        inactiveTextColorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "inactive_text_color", level: .warning)) },
-        itemSpacingValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "item_spacing", level: .warning)) },
-        letterSpacingValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "letter_spacing", level: .warning)) },
-        lineHeightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "line_height", level: .warning)) },
-        paddingsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "paddings", level: .warning)) }
+        activeBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "active_background_color", error: $0) },
+        activeFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "active_font_weight", error: $0) },
+        activeTextColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "active_text_color", error: $0) },
+        animationDurationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "animation_duration", error: $0) },
+        animationTypeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "animation_type", error: $0) },
+        cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corner_radius", error: $0) },
+        cornersRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corners_radius", error: $0) },
+        fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_family", error: $0) },
+        fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size", error: $0) },
+        fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size_unit", error: $0) },
+        fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_weight", error: $0) },
+        inactiveBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "inactive_background_color", error: $0) },
+        inactiveFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "inactive_font_weight", error: $0) },
+        inactiveTextColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "inactive_text_color", error: $0) },
+        itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "item_spacing", error: $0) },
+        letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "letter_spacing", error: $0) },
+        lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "line_height", error: $0) },
+        paddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "paddings", error: $0) }
       )
       let result = DivTabs.TabTitleStyle(
         activeBackgroundColor: activeBackgroundColorValue.value,
@@ -381,24 +381,24 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
         paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
       }
       let errors = mergeErrors(
-        activeBackgroundColorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "active_background_color", level: .warning)) },
-        activeFontWeightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "active_font_weight", level: .warning)) },
-        activeTextColorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "active_text_color", level: .warning)) },
-        animationDurationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "animation_duration", level: .warning)) },
-        animationTypeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "animation_type", level: .warning)) },
-        cornerRadiusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "corner_radius", level: .warning)) },
-        cornersRadiusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "corners_radius", level: .warning)) },
-        fontFamilyValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "font_family", level: .warning)) },
-        fontSizeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "font_size", level: .warning)) },
-        fontSizeUnitValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "font_size_unit", level: .warning)) },
-        fontWeightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "font_weight", level: .warning)) },
-        inactiveBackgroundColorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "inactive_background_color", level: .warning)) },
-        inactiveFontWeightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "inactive_font_weight", level: .warning)) },
-        inactiveTextColorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "inactive_text_color", level: .warning)) },
-        itemSpacingValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "item_spacing", level: .warning)) },
-        letterSpacingValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "letter_spacing", level: .warning)) },
-        lineHeightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "line_height", level: .warning)) },
-        paddingsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "paddings", level: .warning)) }
+        activeBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "active_background_color", error: $0) },
+        activeFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "active_font_weight", error: $0) },
+        activeTextColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "active_text_color", error: $0) },
+        animationDurationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "animation_duration", error: $0) },
+        animationTypeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "animation_type", error: $0) },
+        cornerRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corner_radius", error: $0) },
+        cornersRadiusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "corners_radius", error: $0) },
+        fontFamilyValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_family", error: $0) },
+        fontSizeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size", error: $0) },
+        fontSizeUnitValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_size_unit", error: $0) },
+        fontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "font_weight", error: $0) },
+        inactiveBackgroundColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "inactive_background_color", error: $0) },
+        inactiveFontWeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "inactive_font_weight", error: $0) },
+        inactiveTextColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "inactive_text_color", error: $0) },
+        itemSpacingValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "item_spacing", error: $0) },
+        letterSpacingValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "letter_spacing", error: $0) },
+        lineHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "line_height", error: $0) },
+        paddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "paddings", error: $0) }
       )
       let result = DivTabs.TabTitleStyle(
         activeBackgroundColor: activeBackgroundColorValue.value,
@@ -534,8 +534,8 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
         visibilityActions: try dictionary.getOptionalArray("visibility_actions", templateToType: templateToType),
         width: try dictionary.getOptionalField("width", templateToType: templateToType)
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-tabs_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-tabs_template." + field, representation: representation)
     }
   }
 
@@ -652,44 +652,44 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
     let visibilityActionsValue = parent?.visibilityActions?.resolveOptionalValue(context: context, validator: ResolvedValue.visibilityActionsValidator, useOnlyLinks: true) ?? .noValue
     let widthValue = parent?.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true) ?? .noValue
     var errors = mergeErrors(
-      accessibilityValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "accessibility", level: .warning)) },
-      alignmentHorizontalValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "alignment_horizontal", level: .warning)) },
-      alignmentVerticalValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "alignment_vertical", level: .warning)) },
-      alphaValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "alpha", level: .warning)) },
-      backgroundValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "background", level: .warning)) },
-      borderValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "border", level: .warning)) },
-      columnSpanValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "column_span", level: .warning)) },
-      dynamicHeightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "dynamic_height", level: .warning)) },
-      extensionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "extensions", level: .warning)) },
-      focusValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "focus", level: .warning)) },
-      hasSeparatorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "has_separator", level: .warning)) },
-      heightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "height", level: .warning)) },
-      idValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "id", level: .warning)) },
-      itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .error)) },
-      marginsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "margins", level: .warning)) },
-      paddingsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "paddings", level: .warning)) },
-      restrictParentScrollValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "restrict_parent_scroll", level: .warning)) },
-      rowSpanValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "row_span", level: .warning)) },
-      selectedActionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "selected_actions", level: .warning)) },
-      selectedTabValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "selected_tab", level: .warning)) },
-      separatorColorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "separator_color", level: .warning)) },
-      separatorPaddingsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "separator_paddings", level: .warning)) },
-      switchTabsByContentSwipeEnabledValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "switch_tabs_by_content_swipe_enabled", level: .warning)) },
-      tabTitleStyleValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "tab_title_style", level: .warning)) },
-      titlePaddingsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "title_paddings", level: .warning)) },
-      tooltipsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "tooltips", level: .warning)) },
-      transformValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transform", level: .warning)) },
-      transitionChangeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transition_change", level: .warning)) },
-      transitionInValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transition_in", level: .warning)) },
-      transitionOutValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transition_out", level: .warning)) },
-      transitionTriggersValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "transition_triggers", level: .warning)) },
-      visibilityValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "visibility", level: .warning)) },
-      visibilityActionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "visibility_action", level: .warning)) },
-      visibilityActionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "visibility_actions", level: .warning)) },
-      widthValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "width", level: .warning)) }
+      accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "accessibility", error: $0) },
+      alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alignment_horizontal", error: $0) },
+      alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alignment_vertical", error: $0) },
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
+      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "background", error: $0) },
+      borderValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "border", error: $0) },
+      columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "column_span", error: $0) },
+      dynamicHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "dynamic_height", error: $0) },
+      extensionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "extensions", error: $0) },
+      focusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "focus", error: $0) },
+      hasSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "has_separator", error: $0) },
+      heightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "height", error: $0) },
+      idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
+      itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) },
+      marginsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "margins", error: $0) },
+      paddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "paddings", error: $0) },
+      restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "restrict_parent_scroll", error: $0) },
+      rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "row_span", error: $0) },
+      selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "selected_actions", error: $0) },
+      selectedTabValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "selected_tab", error: $0) },
+      separatorColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "separator_color", error: $0) },
+      separatorPaddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "separator_paddings", error: $0) },
+      switchTabsByContentSwipeEnabledValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "switch_tabs_by_content_swipe_enabled", error: $0) },
+      tabTitleStyleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tab_title_style", error: $0) },
+      titlePaddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "title_paddings", error: $0) },
+      tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tooltips", error: $0) },
+      transformValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transform", error: $0) },
+      transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_change", error: $0) },
+      transitionInValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_in", error: $0) },
+      transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_out", error: $0) },
+      transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_triggers", error: $0) },
+      visibilityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility", error: $0) },
+      visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility_action", error: $0) },
+      visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility_actions", error: $0) },
+      widthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "width", error: $0) }
     )
     if case .noValue = itemsValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
+      errors.append(.requiredFieldIsMissing(fieldName: "items"))
     }
     guard
       let itemsNonNil = itemsValue.value
@@ -944,44 +944,44 @@ public final class DivTabsTemplate: TemplateValue, TemplateDeserializable {
       widthValue = widthValue.merged(with: parent.width?.resolveOptionalValue(context: context, validator: ResolvedValue.widthValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      accessibilityValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "accessibility", level: .warning)) },
-      alignmentHorizontalValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "alignment_horizontal", level: .warning)) },
-      alignmentVerticalValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "alignment_vertical", level: .warning)) },
-      alphaValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "alpha", level: .warning)) },
-      backgroundValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "background", level: .warning)) },
-      borderValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "border", level: .warning)) },
-      columnSpanValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "column_span", level: .warning)) },
-      dynamicHeightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "dynamic_height", level: .warning)) },
-      extensionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "extensions", level: .warning)) },
-      focusValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "focus", level: .warning)) },
-      hasSeparatorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "has_separator", level: .warning)) },
-      heightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "height", level: .warning)) },
-      idValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "id", level: .warning)) },
-      itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .error)) },
-      marginsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "margins", level: .warning)) },
-      paddingsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "paddings", level: .warning)) },
-      restrictParentScrollValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "restrict_parent_scroll", level: .warning)) },
-      rowSpanValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "row_span", level: .warning)) },
-      selectedActionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "selected_actions", level: .warning)) },
-      selectedTabValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "selected_tab", level: .warning)) },
-      separatorColorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "separator_color", level: .warning)) },
-      separatorPaddingsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "separator_paddings", level: .warning)) },
-      switchTabsByContentSwipeEnabledValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "switch_tabs_by_content_swipe_enabled", level: .warning)) },
-      tabTitleStyleValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "tab_title_style", level: .warning)) },
-      titlePaddingsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "title_paddings", level: .warning)) },
-      tooltipsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "tooltips", level: .warning)) },
-      transformValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transform", level: .warning)) },
-      transitionChangeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transition_change", level: .warning)) },
-      transitionInValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transition_in", level: .warning)) },
-      transitionOutValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transition_out", level: .warning)) },
-      transitionTriggersValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "transition_triggers", level: .warning)) },
-      visibilityValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "visibility", level: .warning)) },
-      visibilityActionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "visibility_action", level: .warning)) },
-      visibilityActionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "visibility_actions", level: .warning)) },
-      widthValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "width", level: .warning)) }
+      accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "accessibility", error: $0) },
+      alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alignment_horizontal", error: $0) },
+      alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alignment_vertical", error: $0) },
+      alphaValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "alpha", error: $0) },
+      backgroundValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "background", error: $0) },
+      borderValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "border", error: $0) },
+      columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "column_span", error: $0) },
+      dynamicHeightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "dynamic_height", error: $0) },
+      extensionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "extensions", error: $0) },
+      focusValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "focus", error: $0) },
+      hasSeparatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "has_separator", error: $0) },
+      heightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "height", error: $0) },
+      idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
+      itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) },
+      marginsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "margins", error: $0) },
+      paddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "paddings", error: $0) },
+      restrictParentScrollValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "restrict_parent_scroll", error: $0) },
+      rowSpanValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "row_span", error: $0) },
+      selectedActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "selected_actions", error: $0) },
+      selectedTabValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "selected_tab", error: $0) },
+      separatorColorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "separator_color", error: $0) },
+      separatorPaddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "separator_paddings", error: $0) },
+      switchTabsByContentSwipeEnabledValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "switch_tabs_by_content_swipe_enabled", error: $0) },
+      tabTitleStyleValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tab_title_style", error: $0) },
+      titlePaddingsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "title_paddings", error: $0) },
+      tooltipsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "tooltips", error: $0) },
+      transformValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transform", error: $0) },
+      transitionChangeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_change", error: $0) },
+      transitionInValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_in", error: $0) },
+      transitionOutValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_out", error: $0) },
+      transitionTriggersValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "transition_triggers", error: $0) },
+      visibilityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility", error: $0) },
+      visibilityActionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility_action", error: $0) },
+      visibilityActionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "visibility_actions", error: $0) },
+      widthValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "width", error: $0) }
     )
     if case .noValue = itemsValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "items")))
+      errors.append(.requiredFieldIsMissing(fieldName: "items"))
     }
     guard
       let itemsNonNil = itemsValue.value

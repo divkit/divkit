@@ -29,8 +29,8 @@ public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
         startDelay: try dictionary.getOptionalExpressionField("start_delay"),
         startValue: try dictionary.getOptionalExpressionField("start_value")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-animation_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-animation_template." + field, representation: representation)
     }
   }
 
@@ -64,17 +64,17 @@ public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let startValueValue = parent?.startValue?.resolveOptionalValue(context: context) ?? .noValue
     var errors = mergeErrors(
-      durationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "duration", level: .warning)) },
-      endValueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "end_value", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "interpolator", level: .warning)) },
-      itemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "items", level: .warning)) },
-      nameValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "name", level: .error)) },
-      repeatCountValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "repeat", level: .warning)) },
-      startDelayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "start_delay", level: .warning)) },
-      startValueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "start_value", level: .warning)) }
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
+      endValueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "end_value", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
+      itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) },
+      nameValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "name", error: $0) },
+      repeatCountValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "repeat", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) },
+      startValueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_value", error: $0) }
     )
     if case .noValue = nameValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "name")))
+      errors.append(.requiredFieldIsMissing(fieldName: "name"))
     }
     guard
       let nameNonNil = nameValue.value
@@ -148,17 +148,17 @@ public final class DivAnimationTemplate: TemplateValue, TemplateDeserializable {
       repeatCountValue = repeatCountValue.merged(with: parent.repeatCount?.resolveOptionalValue(context: context, validator: ResolvedValue.repeatCountValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      durationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "duration", level: .warning)) },
-      endValueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "end_value", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "interpolator", level: .warning)) },
-      itemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "items", level: .warning)) },
-      nameValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "name", level: .error)) },
-      repeatCountValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "repeat", level: .warning)) },
-      startDelayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "start_delay", level: .warning)) },
-      startValueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "start_value", level: .warning)) }
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
+      endValueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "end_value", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
+      itemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "items", error: $0) },
+      nameValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "name", error: $0) },
+      repeatCountValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "repeat", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) },
+      startValueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_value", error: $0) }
     )
     if case .noValue = nameValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "name")))
+      errors.append(.requiredFieldIsMissing(fieldName: "name"))
     }
     guard
       let nameNonNil = nameValue.value

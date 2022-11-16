@@ -41,9 +41,9 @@ public final class DivChangeBoundsTransitionTemplate: TemplateValue, TemplateDes
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let errors = mergeErrors(
-      durationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "duration", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "interpolator", level: .warning)) },
-      startDelayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "start_delay", level: .warning)) }
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) }
     )
     let result = DivChangeBoundsTransition(
       duration: durationValue.value,
@@ -78,9 +78,9 @@ public final class DivChangeBoundsTransitionTemplate: TemplateValue, TemplateDes
       }
     }
     let errors = mergeErrors(
-      durationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "duration", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "interpolator", level: .warning)) },
-      startDelayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "start_delay", level: .warning)) }
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) }
     )
     let result = DivChangeBoundsTransition(
       duration: durationValue.value,

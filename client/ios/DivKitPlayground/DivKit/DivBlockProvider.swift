@@ -115,7 +115,7 @@ final class DivBlockProvider {
       errors = result.errorsOrWarnings.map {
         $0.map {
           let traceback = $0.traceback
-          return (message: traceback.last, stack: traceback.asArray())
+          return (message: traceback.last!, stack: traceback)
         }
       }
     } catch {
@@ -210,5 +210,21 @@ extension Block {
 extension TimeMeasure.Time {
   fileprivate var description: String {
     "\(status.rawValue.capitalized): \(value)"
+  }
+}
+
+extension DeserializationError {
+  fileprivate var traceback: [String] {
+    var result: [String] = []
+    switch self {
+    case let .nestedObjectError(fieldName, error):
+      result.append("Error in nested object in field '\(fieldName)'")
+      result.append(contentsOf: error.traceback)
+      break
+    default:
+      result.append(description)
+      break
+    }
+    return result
   }
 }

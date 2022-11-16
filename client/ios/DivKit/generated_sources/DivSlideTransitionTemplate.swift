@@ -53,11 +53,11 @@ public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializ
     let interpolatorValue = parent?.interpolator?.resolveOptionalValue(context: context, validator: ResolvedValue.interpolatorValidator) ?? .noValue
     let startDelayValue = parent?.startDelay?.resolveOptionalValue(context: context, validator: ResolvedValue.startDelayValidator) ?? .noValue
     let errors = mergeErrors(
-      distanceValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "distance", level: .warning)) },
-      durationValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "duration", level: .warning)) },
-      edgeValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "edge", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "interpolator", level: .warning)) },
-      startDelayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "start_delay", level: .warning)) }
+      distanceValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "distance", error: $0) },
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
+      edgeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "edge", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) }
     )
     let result = DivSlideTransition(
       distance: distanceValue.value,
@@ -107,11 +107,11 @@ public final class DivSlideTransitionTemplate: TemplateValue, TemplateDeserializ
       distanceValue = distanceValue.merged(with: parent.distance?.resolveOptionalValue(context: context, validator: ResolvedValue.distanceValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      distanceValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "distance", level: .warning)) },
-      durationValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "duration", level: .warning)) },
-      edgeValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "edge", level: .warning)) },
-      interpolatorValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "interpolator", level: .warning)) },
-      startDelayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "start_delay", level: .warning)) }
+      distanceValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "distance", error: $0) },
+      durationValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "duration", error: $0) },
+      edgeValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "edge", error: $0) },
+      interpolatorValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "interpolator", error: $0) },
+      startDelayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "start_delay", error: $0) }
     )
     let result = DivSlideTransition(
       distance: distanceValue.value,

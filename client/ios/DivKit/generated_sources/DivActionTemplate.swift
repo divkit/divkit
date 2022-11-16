@@ -18,8 +18,8 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
           actions: try dictionary.getOptionalArray("actions", templateToType: templateToType),
           text: try dictionary.getOptionalExpressionField("text")
         )
-      } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-        throw DeserializationError.invalidFieldRepresentation(field: "menu_item_template." + field, representation: representation)
+      } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+        throw DeserializationError.invalidFieldRepresentation(fieldName: "menu_item_template." + field, representation: representation)
       }
     }
 
@@ -38,12 +38,12 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
       let actionsValue = parent?.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true) ?? .noValue
       let textValue = parent?.text?.resolveValue(context: context, validator: ResolvedValue.textValidator) ?? .noValue
       var errors = mergeErrors(
-        actionValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "action", level: .warning)) },
-        actionsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "actions", level: .warning)) },
-        textValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "text", level: .error)) }
+        actionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "action", error: $0) },
+        actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
+        textValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text", error: $0) }
       )
       if case .noValue = textValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text")))
+        errors.append(.requiredFieldIsMissing(fieldName: "text"))
       }
       guard
         let textNonNil = textValue.value
@@ -87,12 +87,12 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
         actionsValue = actionsValue.merged(with: parent.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
       }
       var errors = mergeErrors(
-        actionValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "action", level: .warning)) },
-        actionsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "actions", level: .warning)) },
-        textValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "text", level: .error)) }
+        actionValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "action", error: $0) },
+        actionsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "actions", error: $0) },
+        textValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "text", error: $0) }
       )
       if case .noValue = textValue {
-        errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "text")))
+        errors.append(.requiredFieldIsMissing(fieldName: "text"))
       }
       guard
         let textNonNil = textValue.value
@@ -141,8 +141,8 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
         referer: try dictionary.getOptionalExpressionField("referer", transform: URL.init(string:)),
         url: try dictionary.getOptionalExpressionField("url", transform: URL.init(string:))
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-action_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-action_template." + field, representation: representation)
     }
   }
 
@@ -173,16 +173,16 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
     let refererValue = parent?.referer?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.refererValidator) ?? .noValue
     let urlValue = parent?.url?.resolveOptionalValue(context: context, transform: URL.init(string:), validator: ResolvedValue.urlValidator) ?? .noValue
     var errors = mergeErrors(
-      downloadCallbacksValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "download_callbacks", level: .warning)) },
-      logIdValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "log_id", level: .error)) },
-      logUrlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "log_url", level: .warning)) },
-      menuItemsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "menu_items", level: .warning)) },
-      payloadValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "payload", level: .warning)) },
-      refererValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "referer", level: .warning)) },
-      urlValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "url", level: .warning)) }
+      downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "download_callbacks", error: $0) },
+      logIdValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "log_id", error: $0) },
+      logUrlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "log_url", error: $0) },
+      menuItemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "menu_items", error: $0) },
+      payloadValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "payload", error: $0) },
+      refererValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "referer", error: $0) },
+      urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) }
     )
     if case .noValue = logIdValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "log_id")))
+      errors.append(.requiredFieldIsMissing(fieldName: "log_id"))
     }
     guard
       let logIdNonNil = logIdValue.value
@@ -250,16 +250,16 @@ public final class DivActionTemplate: TemplateValue, TemplateDeserializable {
       menuItemsValue = menuItemsValue.merged(with: parent.menuItems?.resolveOptionalValue(context: context, validator: ResolvedValue.menuItemsValidator, useOnlyLinks: true))
     }
     var errors = mergeErrors(
-      downloadCallbacksValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "download_callbacks", level: .warning)) },
-      logIdValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "log_id", level: .error)) },
-      logUrlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "log_url", level: .warning)) },
-      menuItemsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "menu_items", level: .warning)) },
-      payloadValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "payload", level: .warning)) },
-      refererValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "referer", level: .warning)) },
-      urlValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "url", level: .warning)) }
+      downloadCallbacksValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "download_callbacks", error: $0) },
+      logIdValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "log_id", error: $0) },
+      logUrlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "log_url", error: $0) },
+      menuItemsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "menu_items", error: $0) },
+      payloadValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "payload", error: $0) },
+      refererValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "referer", error: $0) },
+      urlValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "url", error: $0) }
     )
     if case .noValue = logIdValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "log_id")))
+      errors.append(.requiredFieldIsMissing(fieldName: "log_id"))
     }
     guard
       let logIdNonNil = logIdValue.value

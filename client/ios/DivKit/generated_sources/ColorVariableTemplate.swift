@@ -21,8 +21,8 @@ public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable 
         name: try dictionary.getOptionalField("name"),
         value: try dictionary.getOptionalField("value", transform: Color.color(withHexString:))
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "color_variable_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "color_variable_template." + field, representation: representation)
     }
   }
 
@@ -40,14 +40,14 @@ public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable 
     let nameValue = parent?.name?.resolveValue(context: context, validator: ResolvedValue.nameValidator) ?? .noValue
     let valueValue = parent?.value?.resolveValue(context: context, transform: Color.color(withHexString:)) ?? .noValue
     var errors = mergeErrors(
-      nameValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "name", level: .error)) },
-      valueValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "value", level: .error)) }
+      nameValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "name", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
     )
     if case .noValue = nameValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "name")))
+      errors.append(.requiredFieldIsMissing(fieldName: "name"))
     }
     if case .noValue = valueValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "value")))
+      errors.append(.requiredFieldIsMissing(fieldName: "value"))
     }
     guard
       let nameNonNil = nameValue.value,
@@ -82,14 +82,14 @@ public final class ColorVariableTemplate: TemplateValue, TemplateDeserializable 
       }
     }
     var errors = mergeErrors(
-      nameValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "name", level: .error)) },
-      valueValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "value", level: .error)) }
+      nameValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "name", error: $0) },
+      valueValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "value", error: $0) }
     )
     if case .noValue = nameValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "name")))
+      errors.append(.requiredFieldIsMissing(fieldName: "name"))
     }
     if case .noValue = valueValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "value")))
+      errors.append(.requiredFieldIsMissing(fieldName: "value"))
     }
     guard
       let nameNonNil = nameValue.value,

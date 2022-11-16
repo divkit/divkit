@@ -21,8 +21,8 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Template
         parent: try dictionary.getOptionalField("type", validator: Self.parentValidator),
         array: try dictionary.getOptionalExpressionArray("array", transform: Color.color(withHexString:))
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "entity_with_array_with_transform_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "entity_with_array_with_transform_template." + field, representation: representation)
     }
   }
 
@@ -37,10 +37,10 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Template
   private static func resolveOnlyLinks(context: Context, parent: EntityWithArrayWithTransformTemplate?) -> DeserializationResult<EntityWithArrayWithTransform> {
     let arrayValue = parent?.array?.resolveValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.arrayValidator) ?? .noValue
     var errors = mergeErrors(
-      arrayValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "array", level: .error)) }
+      arrayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "array", error: $0) }
     )
     if case .noValue = arrayValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "array")))
+      errors.append(.requiredFieldIsMissing(fieldName: "array"))
     }
     guard
       let arrayNonNil = arrayValue.value
@@ -68,10 +68,10 @@ public final class EntityWithArrayWithTransformTemplate: TemplateValue, Template
       }
     }
     var errors = mergeErrors(
-      arrayValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "array", level: .error)) }
+      arrayValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "array", error: $0) }
     )
     if case .noValue = arrayValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "array")))
+      errors.append(.requiredFieldIsMissing(fieldName: "array"))
     }
     guard
       let arrayNonNil = arrayValue.value

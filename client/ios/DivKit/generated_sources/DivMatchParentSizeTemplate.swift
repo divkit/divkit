@@ -31,7 +31,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
   private static func resolveOnlyLinks(context: Context, parent: DivMatchParentSizeTemplate?) -> DeserializationResult<DivMatchParentSize> {
     let weightValue = parent?.weight?.resolveOptionalValue(context: context, validator: ResolvedValue.weightValidator) ?? .noValue
     let errors = mergeErrors(
-      weightValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "weight", level: .warning)) }
+      weightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "weight", error: $0) }
     )
     let result = DivMatchParentSize(
       weight: weightValue.value
@@ -54,7 +54,7 @@ public final class DivMatchParentSizeTemplate: TemplateValue, TemplateDeserializ
       }
     }
     let errors = mergeErrors(
-      weightValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "weight", level: .warning)) }
+      weightValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "weight", error: $0) }
     )
     let result = DivMatchParentSize(
       weight: weightValue.value

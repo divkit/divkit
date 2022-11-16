@@ -30,7 +30,7 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue, TemplateDese
   private static func resolveOnlyLinks(context: Context, parent: EntityWithEntityPropertyTemplate?) -> DeserializationResult<EntityWithEntityProperty> {
     let entityValue = parent?.entity?.resolveOptionalValue(context: context, validator: ResolvedValue.entityValidator, useOnlyLinks: true) ?? .noValue
     let errors = mergeErrors(
-      entityValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "entity", level: .warning)) }
+      entityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "entity", error: $0) }
     )
     let result = EntityWithEntityProperty(
       entity: entityValue.value
@@ -56,7 +56,7 @@ public final class EntityWithEntityPropertyTemplate: TemplateValue, TemplateDese
       entityValue = entityValue.merged(with: parent.entity?.resolveOptionalValue(context: context, validator: ResolvedValue.entityValidator, useOnlyLinks: true))
     }
     let errors = mergeErrors(
-      entityValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "entity", level: .warning)) }
+      entityValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "entity", error: $0) }
     )
     let result = EntityWithEntityProperty(
       entity: entityValue.value

@@ -74,7 +74,7 @@ extension Field {
           link: $0
         )
         if case let .failure(errors) = result {
-          if errors.count == 1, case .left(.noData) = errors.first {
+          if errors.count == 1, case .noData = errors.first {
             return .noValue
           }
         }
@@ -94,7 +94,7 @@ extension Field {
       return .noValue
     }
     guard let resultValue = result.value, validator.isValid(resultValue) else {
-      var errors = NonEmptyArray(.invalidValue(result: result.value, value: nil))
+      var errors: NonEmptyArray<DeserializationError> = NonEmptyArray(.invalidValue(result: result.value, value: nil))
       if let resultErrors = result.errorsOrWarnings {
         errors.append(contentsOf: resultErrors)
       }
@@ -399,7 +399,7 @@ extension Field {
     // swiftformat:disable:next typeSugar
   ) -> DeserializationResult<Array<U>.ResolvedValue> where Array<U> == T {
     let result = resolveValue(context: context, validator: validator, useOnlyLinks: useOnlyLinks)
-    if case let .failure(errors) = result, errors.count == 1, case .left(.noData) = errors.first {
+    if case let .failure(errors) = result, errors.count == 1, case .noData = errors.first {
       return .noValue
     }
     return result
@@ -446,7 +446,7 @@ extension Field {
   ) -> DeserializationResult<T> where T == [U] {
     let result = resolveValue(context: context)
     guard let resultValue = result.value, validator.isValid(resultValue) else {
-      var errors = NonEmptyArray(.invalidValue(result: result.value, value: nil))
+      var errors: NonEmptyArray<DeserializationError> = NonEmptyArray(.invalidValue(result: result.value, value: nil))
       if let resultErrors = result.errorsOrWarnings {
         errors.append(contentsOf: resultErrors)
       }

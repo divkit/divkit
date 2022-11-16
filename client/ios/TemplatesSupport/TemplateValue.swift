@@ -70,7 +70,7 @@ extension Array where Element: TemplateValue {
     validator: AnyArrayValueValidator<Element.ResolvedValue>?
   ) -> DeserializationResult<[Element.ResolvedValue]> {
     var result: [Element.ResolvedValue] = []
-    var errors: [Either<DeserializationError, FieldError>] = []
+    var errors: [DeserializationError] = []
     result.reserveCapacity(count)
     for index in indices {
       let itemResult = self[index].resolveValue(context: context, useOnlyLinks: true)

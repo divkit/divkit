@@ -15,8 +15,8 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
         id: try dictionary.getOptionalField("id"),
         params: try dictionary.getOptionalField("params")
       )
-    } catch let DeserializationError.invalidFieldRepresentation(field: field, representation: representation) {
-      throw DeserializationError.invalidFieldRepresentation(field: "div-extension_template." + field, representation: representation)
+    } catch let DeserializationError.invalidFieldRepresentation(fieldName: field, representation: representation) {
+      throw DeserializationError.invalidFieldRepresentation(fieldName: "div-extension_template." + field, representation: representation)
     }
   }
 
@@ -32,11 +32,11 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
     let idValue = parent?.id?.resolveValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
     let paramsValue = parent?.params?.resolveOptionalValue(context: context, validator: ResolvedValue.paramsValidator) ?? .noValue
     var errors = mergeErrors(
-      idValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "id", level: .error)) },
-      paramsValue.errorsOrWarnings?.map { .right($0.asError(deserializing: "params", level: .warning)) }
+      idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
+      paramsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "params", error: $0) }
     )
     if case .noValue = idValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
+      errors.append(.requiredFieldIsMissing(fieldName: "id"))
     }
     guard
       let idNonNil = idValue.value
@@ -70,11 +70,11 @@ public final class DivExtensionTemplate: TemplateValue, TemplateDeserializable {
       }
     }
     var errors = mergeErrors(
-      idValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "id", level: .error)) },
-      paramsValue.errorsOrWarnings?.map { Either.right($0.asError(deserializing: "params", level: .warning)) }
+      idValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "id", error: $0) },
+      paramsValue.errorsOrWarnings?.map { .nestedObjectError(fieldName: "params", error: $0) }
     )
     if case .noValue = idValue {
-      errors.append(.left(DeserializationError.requiredFieldIsMissing(fieldName: "id")))
+      errors.append(.requiredFieldIsMissing(fieldName: "id"))
     }
     guard
       let idNonNil = idValue.value

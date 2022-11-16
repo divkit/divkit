@@ -79,7 +79,7 @@ class DivKitSnapshotTestCase: XCTestCase {
       if let data = result.value {
         return (data, errors)
       } else {
-        errors += result.getErrorsOrWarnings()
+        errors += result.errorsOrWarnings?.map { $0 as Error } ?? []
       }
     } catch {
       errors.append(error)

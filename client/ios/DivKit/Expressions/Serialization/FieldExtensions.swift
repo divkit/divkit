@@ -129,7 +129,7 @@ extension Field {
     )
     if case let .failure(errors) = result,
        errors.count == 1,
-       case .left(.noData) = errors.first {
+       case .noData = errors.first {
       return .noValue
     }
     return result
@@ -148,7 +148,7 @@ extension Field {
     )
     if case let .failure(errors) = result,
        errors.count == 1,
-       case .left(.noData) = errors.first {
+       case .noData = errors.first {
       return .noValue
     }
     return result
