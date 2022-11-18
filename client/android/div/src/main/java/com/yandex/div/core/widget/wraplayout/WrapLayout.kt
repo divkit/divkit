@@ -106,6 +106,8 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
     @Px
     private var lineSeparatorLength = 0
 
+    private var tempSumCrossSize = 0
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         lines.clear()
         childState = 0
@@ -148,7 +150,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
 
     private fun calculateLines(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var largestSizeInCross = Int.MIN_VALUE
-        var sumCrossSize = edgeLineSeparatorsLength
+        tempSumCrossSize = edgeLineSeparatorsLength
 
         val mainMeasureSpec = if (isRowDirection) widthMeasureSpec else heightMeasureSpec
         val mainMode = MeasureSpec.getMode(mainMeasureSpec)
@@ -176,9 +178,9 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
 
             if (isRowDirection) {
                 horizontalPaddings += edgeSeparatorsLength
-                verticalPaddings += sumCrossSize
+                verticalPaddings += tempSumCrossSize
             } else {
-                horizontalPaddings += sumCrossSize
+                horizontalPaddings += tempSumCrossSize
                 verticalPaddings += edgeSeparatorsLength
             }
 
@@ -204,8 +206,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
 
             if (isWrapRequired(mainMode, mainSize, line.mainSize, childMainSize, line.itemCount)) {
                 if (line.itemCountNotGone > 0) {
-                    lines.add(line)
-                    sumCrossSize += line.crossSize
+                    addLine(line)
                 }
                 line = WrapLine(firstIndex = index, mainSize = mainPaddings, itemCount = 1)
                 largestSizeInCross = Int.MIN_VALUE
@@ -215,13 +216,18 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
                 }
                 line.itemCount++
             }
+
+            if (isRowDirection && item.isBaselineAligned) {
+                line.maxBaseline = max(line.maxBaseline, child.baseline + item.topMargin)
+                line.maxHeightUnderBaseline = max(line.maxHeightUnderBaseline,
+                    child.measuredHeight + item.bottomMargin - child.baseline)
+            }
+
             line.mainSize += childMainSize
             largestSizeInCross = max(largestSizeInCross, childCrossSize)
             line.crossSize = max(line.crossSize, largestSizeInCross)
 
-            if (addLineIfNeeded(index, line)) {
-                sumCrossSize += line.crossSize
-            }
+            addLineIfNeeded(index, line)
         }
     }
 
@@ -262,12 +268,21 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         else -> layoutParams.width == MATCH_PARENT
     }
 
-    private fun addLineIfNeeded(childIndex: Int, line: WrapLine): Boolean {
+    private val LayoutParams.isBaselineAligned get() = alignSelf == WrapAlignment.BASELINE
+
+    private fun addLineIfNeeded(childIndex: Int, line: WrapLine) {
         val isLastItem = childIndex == childCount - 1 && line.itemCountNotGone != 0
         if (isLastItem) {
-            lines.add(line)
+            addLine(line)
         }
-        return isLastItem
+    }
+
+    private fun addLine(line: WrapLine) {
+        lines.add(line)
+        if (line.maxBaseline > 0) {
+            line.crossSize = max(line.crossSize, line.maxBaseline + line.maxHeightUnderBaseline)
+        }
+        tempSumCrossSize += line.crossSize
     }
 
     private fun isWrapRequired(
@@ -296,12 +311,12 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         }
 
         val size = MeasureSpec.getSize(measureSpec)
-        val totalCrossSize: Int = sumOfCrossSize + paddingAlongCrossAxis
         if (lines.size == 1) {
             lines[0].crossSize = size - paddingAlongCrossAxis
             return
         }
 
+        val totalCrossSize: Int = sumOfCrossSize + paddingAlongCrossAxis
         when (crossAlignment) {
             WrapAlignment.END -> {
                 val spaceTop = size - totalCrossSize
@@ -386,7 +401,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
                 if (needSeparator) {
                     childLeft += middleSeparatorLength
                 }
-                val currentTop = childTop + getTopOffsetForHorizontalLayout(child, line.crossSize)
+                val currentTop = childTop + getTopOffsetForHorizontalLayout(child, line)
                 child.layout(childLeft, currentTop,
                     childLeft + child.measuredWidth, currentTop + child.measuredHeight)
                 childLeft += child.measuredWidth + lp.rightMargin
@@ -398,12 +413,13 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         }
     }
 
-    private fun getTopOffsetForHorizontalLayout(view: View, lineHeight: Int): Int {
+    private fun getTopOffsetForHorizontalLayout(view: View, line: WrapLine): Int {
         val lp = view.layoutParams as LayoutParams
         return when (lp.alignSelf) {
-            WrapAlignment.END -> lineHeight - view.measuredHeight - lp.bottomMargin
+            WrapAlignment.END -> line.crossSize - view.measuredHeight - lp.bottomMargin
             WrapAlignment.CENTER ->
-                (lineHeight - view.measuredHeight + lp.topMargin - lp.bottomMargin) / 2
+                (line.crossSize - view.measuredHeight + lp.topMargin - lp.bottomMargin) / 2
+            WrapAlignment.BASELINE -> max(line.maxBaseline - view.baseline, lp.topMargin)
             else -> lp.topMargin
         }
     }
@@ -483,7 +499,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         val drawLineSeparator = { top: Int -> drawSeparator(lineSeparatorDrawable, canvas,
             paddingLeft, top - lineSeparatorLength, width - paddingRight, top) }
         if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
-            lineTop = lines.find { it.itemCountNotGone > 0 }?.let { it.bottom - it.crossSize } ?: 0
+            lineTop = firstVisibleLine?.let { it.bottom - it.crossSize } ?: 0
             drawLineSeparator(lineTop)
         }
         var needLineSeparator = false
@@ -539,7 +555,7 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         val drawLineSeparator = { left: Int -> drawSeparator(lineSeparatorDrawable, canvas,
             left - lineSeparatorLength, paddingTop, left, height - paddingBottom) }
         if (lines.size > 0 && showSeparatorAtStart(showLineSeparators)) {
-            lineLeft = lines.find { it.itemCountNotGone > 0 }?.let { it.right - it.crossSize } ?: 0
+            lineLeft = firstVisibleLine?.let { it.right - it.crossSize } ?: 0
             drawLineSeparator(lineLeft)
         }
         var needLineSeparator = false
@@ -602,6 +618,10 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         draw(canvas)
     }
 
+    private val firstVisibleLine get() = lines.find { it.itemCountNotGone > 0 }
+
+    override fun getBaseline() = firstVisibleLine?.maxBaseline ?: super.getBaseline()
+
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
 
     override fun generateLayoutParams(attrs: AttributeSet?) = LayoutParams(context, attrs)
@@ -629,6 +649,8 @@ open class WrapLayout(context: Context) : ViewGroup(context) {
         val firstIndex: Int = 0,
         var mainSize: Int = 0,
         var crossSize: Int = 0,
+        var maxBaseline: Int = -1,
+        var maxHeightUnderBaseline: Int = 0,
 
         var right: Int = 0,
         var bottom: Int = 0,

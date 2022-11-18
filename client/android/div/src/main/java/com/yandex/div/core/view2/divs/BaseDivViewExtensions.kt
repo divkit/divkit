@@ -256,6 +256,7 @@ internal fun DivAlignmentVertical?.toWrapAlignment(
     DivAlignmentVertical.TOP -> WrapAlignment.START
     DivAlignmentVertical.CENTER -> WrapAlignment.CENTER
     DivAlignmentVertical.BOTTOM -> WrapAlignment.END
+    DivAlignmentVertical.BASELINE -> WrapAlignment.BASELINE
     else -> default
 }
 
