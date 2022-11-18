@@ -82,7 +82,7 @@ class Div2View private constructor(
         .divView(this)
         .build()
 
-    private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled  //TODO(https://st.yandex-team.ru/DIVKIT-580)
+    private val bindOnAttachEnabled = div2Component.isBindOnAttachEnabled
 
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
 
