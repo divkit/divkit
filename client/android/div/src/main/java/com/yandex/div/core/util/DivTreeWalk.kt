@@ -152,29 +152,6 @@ class DivTreeWalk private constructor(
     }
 }
 
-private val Div.isBranch: Boolean
-    get() {
-        return when (this) {
-            is Div.Text -> false
-            is Div.Image -> false
-            is Div.GifImage -> false
-            is Div.Separator -> false
-            is Div.Indicator -> false
-            is Div.Slider -> false
-            is Div.Input -> false
-            is Div.Custom -> false
-            is Div.Container -> true
-            is Div.Grid -> true
-            is Div.Gallery -> true
-            is Div.Pager -> true
-            is Div.Tabs -> true
-            is Div.State -> true
-        }
-    }
-
-private val Div.isLeaf: Boolean
-    get() = !isBranch
-
 private val Div.items: List<Div>
     get() {
         return when (this) {

@@ -12,6 +12,8 @@ import androidx.transition.TransitionSet
 import androidx.transition.Visibility
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.core.downloader.DivPatchCache
+import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivPathUtils.getId
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TemporaryDivStateCache
@@ -50,6 +52,8 @@ internal class DivStateBinder @Inject constructor(
     private val divStateCache: DivStateCache,
     private val temporaryStateCache: TemporaryDivStateCache,
     private val divActionBinder: DivActionBinder,
+    private val divPatchManager: DivPatchManager,
+    private val divPatchCache: DivPatchCache,
     private val div2Logger: Div2Logger,
     private val divVisibilityActionTracker: DivVisibilityActionTracker,
     private val errorCollectors: ErrorCollectors
@@ -147,6 +151,24 @@ internal class DivStateBinder @Inject constructor(
                     divVisibilityActionTracker.trackVisibilityActionsOf(divView, incoming, newStateDiv)
                 }
             }
+        }
+
+        val childDiv = layout.activeStateDiv
+        val childDivId = childDiv?.value()?.id
+
+        // applying div patch
+        if (childDivId != null) {
+            val patchView = divPatchManager.createViewsForId(divView, childDivId)?.firstOrNull()
+            val patchDiv = divPatchCache.getPatchDivListById(divView.dataTag, childDivId)?.firstOrNull()
+            if (patchView != null && patchDiv != null) {
+                layout.removeViewAt(0)
+                layout.addView(patchView, 0)
+                if (patchDiv.value().hasVisibilityActions) {
+                    divView.bindViewToDiv(patchView, patchDiv)
+                }
+            }
+
+            viewBinder.get().bind(layout.children.first(), childDiv, divView, currentPath)
         }
 
         val actions = newState.swipeOutActions

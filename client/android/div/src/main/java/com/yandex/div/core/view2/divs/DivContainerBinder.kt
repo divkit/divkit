@@ -11,6 +11,9 @@ import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
+import com.yandex.div.core.util.isBranch
+import com.yandex.div.core.util.type
+import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
@@ -19,7 +22,7 @@ import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivLinearLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
-import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.widget.wraplayout.WrapDirection
@@ -83,11 +86,8 @@ internal class DivContainerBinder @Inject constructor(
             divView.unbindViewFromDiv(childView)
         }
         if (!areDivsReplaceable && oldDiv != null) {
+            view.replaceWithReuse(oldDiv, div, divView)
             oldDiv = null
-            view.releaseAndRemoveChildren(divView)
-            div.items.forEach { childData: Div ->
-                view.addView(divViewCreator.get().create(childData, divView.expressionResolver))
-            }
         }
         for (i in div.items.indices) {
             if (div.items[i].value().hasVisibilityActions) {
@@ -143,6 +143,55 @@ internal class DivContainerBinder @Inject constructor(
 
         view.trackVisibilityActions(div.items, oldDiv?.items, divView)
         div.checkIncorrectSize(errorCollector, hasChildWithMatchParentHeight, hasChildWithMatchParentWidth)
+    }
+
+    private fun ViewGroup.replaceWithReuse(oldDiv: DivContainer, newDiv: DivContainer, divView: Div2View) {
+        val resolver = divView.expressionResolver
+
+        val oldChildren = mutableMapOf<Div, View>()
+        oldDiv.items.zip(children.toList()) { childDiv, child ->
+            oldChildren[childDiv] = child
+        }
+
+        removeAllViews()
+
+        val createViewIndices = mutableListOf<Int>()
+
+        newDiv.items.forEachIndexed { index, newChild ->
+            val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
+                if (oldChildDiv.isBranch) {
+                    newChild.type == oldChildDiv.type
+                } else {
+                    oldChildDiv.canBeReused(newChild, resolver)
+                }
+            }
+
+            val childView = oldChildren.remove(oldViewIndex)
+
+            if (childView != null) {
+                addView(childView)
+            } else {
+                createViewIndices += index
+            }
+        }
+
+        createViewIndices.forEach { index ->
+            val newChildDiv = newDiv.items[index]
+
+            val oldViewIndex = oldChildren.keys.firstOrNull { oldChildDiv ->
+                oldChildDiv.type == newChildDiv.type
+            }
+
+            val childView = oldChildren
+                .remove(oldViewIndex)
+                ?: divViewCreator.get().create(newChildDiv, divView.expressionResolver)
+
+            addView(childView, index)
+        }
+
+        oldChildren.values.forEach {
+            divView.releaseViewVisitor.visitViewTree(it)
+        }
     }
 
     private fun DivLinearLayout.bindProperties(div: DivContainer, resolver: ExpressionResolver) {

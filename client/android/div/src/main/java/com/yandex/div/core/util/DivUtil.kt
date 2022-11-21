@@ -52,6 +52,23 @@ internal val Div.type: String
         }
     }
 
+internal fun Div.canBeReused(other: Div, resolver: ExpressionResolver): Boolean {
+    if (this.type != other.type) {
+        return false
+    }
+
+    val div = this.value()
+    val otherDiv = other.value()
+
+    if (div is DivImage && otherDiv is DivImage) {
+        return div.imageUrl.evaluate(resolver) == otherDiv.imageUrl.evaluate(resolver)
+    }
+    if (div.background?.equals(otherDiv.background) != true) {
+        return false
+    }
+    return true
+}
+
 internal val DivAnimationInterpolator.androidInterpolator: Interpolator
     get() = when (this) {
         DivAnimationInterpolator.LINEAR -> LinearInterpolator()
@@ -112,3 +129,33 @@ internal fun DivState.getDefaultState(resolver: ExpressionResolver): DivState.St
             states.find { it.stateId == defaultStateId.evaluate(resolver) }
         } ?: states[0]
     }
+
+internal val Div.isBranch: Boolean
+    get() = this.value().isBranch
+
+internal val DivBase.isBranch: Boolean
+    get() {
+        return when (this) {
+            is DivText -> false
+            is DivImage -> false
+            is DivGifImage -> false
+            is DivSeparator -> false
+            is DivIndicator -> false
+            is DivSlider -> false
+            is DivInput -> false
+            is DivCustom -> false
+            is DivContainer -> true
+            is DivGrid -> true
+            is DivGallery -> true
+            is DivPager -> true
+            is DivTabs -> true
+            is DivState -> true
+            else -> throw IllegalArgumentException("Please, handle ${this::class.java.name} is a branch or not")
+        }
+    }
+
+internal val Div.isLeaf: Boolean
+    get() = !isBranch
+
+internal val DivBase.isLeaf: Boolean
+    get() = !isBranch
