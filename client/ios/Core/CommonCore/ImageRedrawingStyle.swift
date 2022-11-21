@@ -5,7 +5,8 @@ import BaseUI
 public struct ImageRedrawingStyle: Equatable {
   public static func ==(lhs: ImageRedrawingStyle, rhs: ImageRedrawingStyle) -> Bool {
     lhs.tintColor == rhs.tintColor &&
-      lhs.tintMode == rhs.tintMode
+      lhs.tintMode == rhs.tintMode &&
+      lhs.effects == rhs.effects
   }
 
   let tintColor: Color?
