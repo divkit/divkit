@@ -219,30 +219,33 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             .setPositiveButton("Apply") { _, _ ->
                 val fieldValue = editText.text.toString()
                 preferences.edit().putString(DIV2_PATCH_KEY_URL, fieldValue).apply()
-                try {
-                    val divPatch = JSONObject(fieldValue)
-                        .asDivPatchWithTemplates(errorLogger.apply { clear() })
-                    applyPath(
-                        divPatch,
-                        errorCallback = { longToast("Error while applied JSON patch!") }
-                    )
-                } catch (e: JSONException) {
-                    lifecycleScope.launch {
-                        val divPatch = withContext(Dispatchers.IO) {
-                            val loadedJson = loadJson(Uri.parse(fieldValue))
-                            loadedJson.asDivPatchWithTemplates(errorLogger.apply { clear() })
+
+                lifecycleScope.launch {
+                    val divPatch = try {
+                        if (!fieldValue.trimStart().startsWith('{')) {
+                            withContext(Dispatchers.IO) {
+                                loadJson(Uri.parse(fieldValue))
+                            }
+                        } else {
+                            JSONObject(fieldValue)
                         }
-                        applyPath(
-                            divPatch,
-                            errorCallback = { longToast("Error while applied loaded patch!") }
-                        )
+                    } catch (e: JSONException) {
+                        longToast("Error while parsing patch!")
+                        return@launch
+                    } catch (e: Exception) {
+                        longToast("Error while downloading patch!")
+                        return@launch
+                    }.asDivPatchWithTemplates(errorLogger.apply { clear() })
+
+                    applyPatch(divPatch) {
+                        longToast("Error while applying patch!")
                     }
                 }
             }
         adb.create().show()
     }
 
-    private fun applyPath(divPatch: DivPatch, errorCallback: () -> Unit) {
+    private fun applyPatch(divPatch: DivPatch, errorCallback: () -> Unit) {
         if (isSingleCardState()) {
             if (!div2View.applyPatch(divPatch)) {
                 errorCallback()
