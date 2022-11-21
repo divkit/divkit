@@ -4,6 +4,12 @@ import CoreGraphics
 import CoreText
 import Foundation
 
+#if os(iOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
+
 import BaseTiny
 
 extension NSAttributedString {
@@ -314,6 +320,8 @@ extension NSAttributedString {
       verticalPosition: verticalPosition,
       rect: rect,
       actionKey: nil,
+      backgroundKey: nil,
+      borderKey: nil,
       selectedRange: nil
     ) as AttributedStringLayout<Void>
   }
@@ -330,6 +338,8 @@ extension NSAttributedString {
       rect: rect,
       truncationToken: truncationToken,
       actionKey: nil,
+      backgroundKey: nil,
+      borderKey: nil,
       selectedRange: nil
     )
   }
@@ -340,6 +350,8 @@ extension NSAttributedString {
     rect: CGRect,
     truncationToken: NSAttributedString? = nil,
     actionKey: NSAttributedString.Key?,
+    backgroundKey: NSAttributedString.Key?,
+    borderKey: NSAttributedString.Key?,
     selectedRange: Range<Int>?
   ) -> AttributedStringLayout<ActionType> {
     context?.saveGState()
@@ -368,6 +380,8 @@ extension NSAttributedString {
           rect: transformedRect,
           truncationToken: truncationToken,
           actionKey: actionKey,
+          backgroundKey: backgroundKey,
+          borderKey: borderKey,
           selectedRange: selectedRange
         )
       }
@@ -378,6 +392,8 @@ extension NSAttributedString {
       rect: transformedRect,
       truncationToken: truncationToken,
       actionKey: actionKey,
+      backgroundKey: backgroundKey,
+      borderKey: borderKey,
       selectedRange: selectedRange
     )
   }
@@ -388,6 +404,8 @@ extension NSAttributedString {
     rect: CGRect,
     truncationToken: NSAttributedString?,
     actionKey: NSAttributedString.Key?,
+    backgroundKey: NSAttributedString.Key?,
+    borderKey: NSAttributedString.Key?,
     selectedRange _: Range<Int>?
   ) -> AttributedStringLayout<ActionType> {
     let layout = makeTextLayout(
@@ -432,7 +450,9 @@ extension NSAttributedString {
           at: textPosition,
           in: context,
           layoutY: rect.maxY - lineOriginY,
-          actionKey: actionKey
+          actionKey: actionKey,
+          backgroundKey: backgroundKey,
+          borderKey: borderKey
         ) as [AttributedStringLayout<ActionType>.Run]
         runsLayout += lineRunsLayout
       } else {
@@ -944,7 +964,9 @@ extension CTLine {
     at position: CGPoint,
     in context: CGContext,
     layoutY: CGFloat,
-    actionKey: NSAttributedString.Key?
+    actionKey: NSAttributedString.Key?,
+    backgroundKey: NSAttributedString.Key?,
+    borderKey: NSAttributedString.Key?
   ) -> [AttributedStringLayout<ActionType>.Run] {
     var runsWithActions = [AttributedStringLayout<ActionType>.Run]()
 
@@ -964,6 +986,59 @@ extension CTLine {
           )
         )
       }
+      #if os(iOS)
+      let border = borderKey.flatMap(run.border)
+      let background = backgroundKey.flatMap(run.background)
+
+      if background != nil || border != nil {
+        var corners: UIRectCorner = []
+
+        if let border {
+          let leftIndex = CTLineGetStringIndexForPosition(self, runPosition - position.x)
+          let rightIndex = CTLineGetStringIndexForPosition(
+            self,
+            runPosition.movingX(by: run.typographicBounds.width - position.x)
+          )
+          if (leftIndex...rightIndex).contains(border.range.location) {
+            corners = [.topLeft, .bottomLeft]
+          }
+          if (leftIndex...rightIndex).contains(border.range.location + border.range.length - 1) {
+            corners.update(with: [.topRight, .bottomRight])
+          }
+        }
+
+        let borderWidth = border?.width ?? 0
+
+        let scaleX = (run.typographicBounds.width - borderWidth) / run.typographicBounds.width
+        let scaleY = (run.typographicBounds.height - borderWidth) / run.typographicBounds.height
+
+        let path = UIBezierPath(
+          roundedRect: CGRect(
+            origin: .zero,
+            size: CGSize(
+              width: run.typographicBounds.width,
+              height: run.typographicBounds.height
+            )
+          ),
+          byRoundingCorners: corners,
+          cornerRadii: CGSize(squareDimension: border?.cornerRadius ?? 0)
+        )
+        path.apply(CGAffineTransform(scaleX: scaleX, y: scaleY))
+        path.apply(CGAffineTransform(
+          translationX: runPosition.x + borderWidth / 2,
+          y: runPosition.y + borderWidth / 2 - run.typographicBounds.descent
+        ))
+
+        context.saveGState()
+        context.setFillColor(background?.color ?? Color.clear.cgColor)
+        context.setStrokeColor(border?.color ?? Color.clear.cgColor)
+        context.setLineWidth(borderWidth)
+        context.addPath(path.cgPath)
+        context.closePath()
+        context.drawPath(using: .fillStroke)
+        context.restoreGState()
+      }
+      #endif
 
       context.textPosition = position
       context.inSeparateGState {
@@ -1094,6 +1169,14 @@ extension CTRun {
 
   fileprivate func action<ActionType>(for key: NSAttributedString.Key) -> ActionType? {
     attribute(withName: key) as ActionType?
+  }
+
+  fileprivate func background(for key: NSAttributedString.Key) -> BackgroundAttribute? {
+    attribute(withName: key) as BackgroundAttribute?
+  }
+
+  fileprivate func border(for key: NSAttributedString.Key) -> BorderAttribute? {
+    attribute(withName: key) as BorderAttribute?
   }
 }
 

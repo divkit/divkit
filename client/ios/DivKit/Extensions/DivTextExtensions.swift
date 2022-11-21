@@ -164,7 +164,7 @@ extension DivText: DivBlockModeling {
     let typos = [fontTypo, colorTypo, heightTypo, spacingTypo, strikethroughTypo, underlineTypo]
       .compactMap { $0 }
     let actions = range.makeActions(context: context.actionContext)
-    if typos.isEmpty, actions == nil {
+    if typos.isEmpty, actions == nil, range.background == nil, range.border == nil {
       return
     }
 
@@ -172,6 +172,12 @@ extension DivText: DivBlockModeling {
     let cfRange = CFRange(location: start, length: actualEnd - start)
     typos.forEach { $0.apply(to: string, at: cfRange) }
     string.apply(actions, at: cfRange)
+
+    range.makeBackground(range: cfRange, resolver: context.expressionResolver)?
+      .apply(to: string, at: cfRange)
+
+    range.makeBorder(range: cfRange, resolver: context.expressionResolver)?
+      .apply(to: string, at: cfRange)
   }
 
   private func makeGradient(_ expressionResolver: ExpressionResolver) -> Gradient? {
@@ -262,6 +268,37 @@ extension DivText.Image {
       location: resolveStart(expressionResolver) ?? 0,
       tintColor: resolveTintColor(expressionResolver)
     )
+  }
+}
+
+extension DivText.Range {
+  fileprivate func makeBorder(
+    range: CFRange,
+    resolver: ExpressionResolver
+  ) -> BorderAttribute? {
+    guard let border else { return nil }
+    let color = border.stroke?.resolveColor(resolver)
+    let width = border.stroke?.resolveWidth(resolver)
+    let cornerRadius = border.resolveCornerRadius(resolver)
+    return BorderAttribute(
+      color: color?.cgColor,
+      width: width.flatMap(CGFloat.init),
+      cornerRadius:
+      cornerRadius.flatMap(CGFloat.init),
+      range: range
+    )
+  }
+
+  fileprivate func makeBackground(
+    range: CFRange,
+    resolver: ExpressionResolver
+  ) -> BackgroundAttribute? {
+    guard let background else { return nil }
+    switch background {
+    case let .divSolidBackground(solid):
+      let color = solid.resolveColor(resolver) ?? .clear
+      return BackgroundAttribute(color: color.cgColor, range: range)
+    }
   }
 }
 

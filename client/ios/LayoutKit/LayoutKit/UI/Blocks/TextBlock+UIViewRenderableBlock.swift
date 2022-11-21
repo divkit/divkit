@@ -205,6 +205,8 @@ private final class TextBlockView: UIView {
       rect: rect,
       truncationToken: model.truncationToken,
       actionKey: ActionsAttribute.Key,
+      backgroundKey: BackgroundAttribute.Key,
+      borderKey: BorderAttribute.Key,
       selectedRange: selectedRange
     )
     self.textLayout = textLayout
