@@ -1,7 +1,7 @@
 import React from 'react';
 import { render as serverRender } from '@divkitframework/divkit/server';
 import { render as clientRender } from '@divkitframework/divkit/client-hydratable';
-import { DivKitProps } from '../typings/divkit';
+import type { DivKitProps } from '../typings/divkit';
 
 export function DivKit(props: DivKitProps) {
     if (process.env.IS_SERVER) {
