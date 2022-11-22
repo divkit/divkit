@@ -315,6 +315,7 @@
     }
 
     .web-viewer__content-inner {
+        display: flex;
         min-width: 100%;
         min-height: 100%;
         color: #000;

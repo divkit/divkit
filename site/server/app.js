@@ -266,7 +266,7 @@ app.use((ctx, next) => {
         ctx.set('Content-Security-Policy', [
             'font-src yastatic.net',
             'style-src \'unsafe-inline\' yastatic.net',
-            'img-src yastatic.net mc.yandex.ru data:',
+            'img-src *',
             'script-src yastatic.net \'self\'',
             'default-src yastatic.net',
             'connect-src \'self\''
