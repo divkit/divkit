@@ -17,6 +17,8 @@
 
                     {#if filterMode === 'source_in' || filterMode === 'source_atop'}
                         <feComposite in2="SourceGraphic" operator={filterMode.split('_')[1]} />
+                    {:else if filterMode === 'multiply'}
+                        <feComposite in2="SourceGraphic" operator="arithmetic" k1="1" k2="0" k3="0" k4="0" />
                     {:else}
                         <feBlend in2="SourceGraphic" mode={filterMode} />
                     {/if}
