@@ -323,6 +323,10 @@
         text-align: center;
     }
 
+    .web-viewer__content-inner > * {
+        width: 100%;
+    }
+
     .web-viewer__content-highlight-overlay-wrapper {
         position: sticky;
         z-index: 1;
