@@ -21,12 +21,23 @@ extension DivImageProtocol {
   func resolvePlaceholder(_ expressionResolver: ExpressionResolver) -> ImagePlaceholder {
     if
       let base64 = resolvePreview(expressionResolver),
-      let data = Data(base64Encoded: base64),
+      let data = decode(base64: base64),
       let image = Image(data: data) {
       return .image(image)
     } else {
       return .color(resolvePlaceholderColor(expressionResolver))
     }
+  }
+  
+  fileprivate func decode(base64: String) -> Data? {
+    if let data = Data(base64Encoded: base64) {
+      return data
+    }
+    if let url = URL(string: base64),
+       let data = try? Data(contentsOf: url) {
+      return data
+    }
+    return nil
   }
 
   func checkLayoutTraits(context: DivBlockModelingContext) throws {
