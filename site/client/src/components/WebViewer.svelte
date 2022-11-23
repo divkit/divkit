@@ -323,7 +323,7 @@
         text-align: center;
     }
 
-    .web-viewer__content-inner > * {
+    .web-viewer__content-inner > :global(*) {
         width: 100%;
     }
 
