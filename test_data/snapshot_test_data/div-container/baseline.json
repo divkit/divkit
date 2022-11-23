@@ -1,0 +1,189 @@
+{
+    "templates": {
+        "inner_text": {
+            "type": "text",
+            "height": {
+                "type": "wrap_content"
+            },
+            "width": {
+                "type": "wrap_content"
+            },
+            "paddings": {
+                "left": 5,
+                "top": 5,
+                "right": 5,
+                "bottom": 5
+            },
+            "border": {
+                "stroke": {
+                    "color": "#0000EE"
+                }
+            },
+            "font_size": 12
+        },
+        "external_text": {
+            "type": "text",
+            "height": {
+                "type": "wrap_content"
+            },
+            "width": {
+                "type": "wrap_content"
+            },
+            "alignment_vertical": "baseline",
+            "paddings": {
+                "left": 5,
+                "top": 5,
+                "right": 5,
+                "bottom": 5
+            },
+            "border": {
+                "stroke": {
+                    "color": "#FF0000"
+                }
+            },
+            "font_size": 12
+        }
+    },
+    "card": {
+        "log_id": "snapshot_test_card",
+        "states": [
+            {
+                "state_id": 0,
+                "div": {
+                    "type": "container",
+                    "orientation": "vertical",
+                    "width": {
+                        "type": "wrap_content"
+                    },
+                    "height": {
+                        "type": "wrap_content"
+                    },
+                    "background": [
+                        {
+                            "type": "solid",
+                            "color": "#FFFFFF"
+                        }
+                    ],
+                    "layout_mode": "no_wrap",
+                    "items": [
+                        {
+                            "type": "text",
+                            "text": "Linear container with baseline alignment:",
+                            "width": {
+                                "type": "wrap_content"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "paddings": {
+                                "left": 10,
+                                "top": 10,
+                                "bottom": 10
+                            }
+                        },
+                        {
+                            "type": "container",
+                            "border": {
+                                "stroke": {
+                                    "color": "#FF0000"
+                                }
+                            },
+                            "orientation": "horizontal",
+                            "width": {
+                                "type": "wrap_content"
+                            },
+                            "height": {
+                                "type": "wrap_content"
+                            },
+                            "content_alignment_horizontal": "center",
+                            "content_alignment_vertical": "center",
+                            "layout_mode": "no_wrap",
+                            "items": [
+                                {
+                                    "type": "external_text",
+                                    "text": "External",
+                                    "font_size": 16,
+                                    "paddings": {
+                                        "left": 5,
+                                        "top": 10,
+                                        "right": 5,
+                                        "bottom": 5
+                                    }
+                                },
+                                {
+                                    "type": "external_text",
+                                    "text": "container.",
+                                    "font_size": 10,
+                                    "paddings": {
+                                        "left": 5,
+                                        "top": 5,
+                                        "right": 5,
+                                        "bottom": 10
+                                    }
+                                },
+                                {
+                                    "type": "container",
+                                    "border": {
+                                        "stroke": {
+                                            "color": "#0000EE"
+                                        }
+                                    },
+                                    "orientation": "horizontal",
+                                    "width": {
+                                        "type": "wrap_content"
+                                    },
+                                    "height": {
+                                        "type": "wrap_content"
+                                    },
+                                    "alignment_vertical": "baseline",
+                                    "content_alignment_horizontal": "center",
+                                    "content_alignment_vertical": "baseline",
+                                    "layout_mode": "no_wrap",
+                                    "items": [
+                                        {
+                                            "type": "inner_text",
+                                            "text": "Inner",
+                                            "font_size": 16,
+                                            "paddings": {
+                                                "left": 5,
+                                                "top": 10,
+                                                "right": 5,
+                                                "bottom": 5
+                                            }
+                                        },
+                                        {
+                                            "type": "inner_text",
+                                            "text": "container.",
+                                            "font_size": 10,
+                                            "paddings": {
+                                                "left": 5,
+                                                "top": 5,
+                                                "right": 5,
+                                                "bottom": 10
+                                            }
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "external_text",
+                                    "text": "Long long long text in multiline.",
+                                    "font_size": 8,
+                                    "width": {
+                                        "type": "fixed",
+                                        "value": 50
+                                    }
+                                },
+                                {
+                                    "type": "external_text",
+                                    "text": "Bottom alignment.",
+                                    "font_size": 8,
+                                    "alignment_vertical": "bottom"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}
