@@ -184,7 +184,8 @@
 
     $: containerStyle = {
         'background-image': backgroundImage,
-        'background-color': placeholderColor
+        'background-color': backgroundImage ? undefined : placeholderColor,
+        'background-size': scale
     };
 
     $: style = {
