@@ -15,7 +15,8 @@
         "text",
         "edit_text",
         "header",
-        "tab_bar"
+        "tab_bar",
+        "list"
       ],
       "supports_expressions": false,
       "$description": "translations.json#/div_accessibility_type",

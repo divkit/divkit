@@ -24,8 +24,8 @@
     "ru": "Описание текущего состояния элемента. Например, в описании можно указать выбранную дату для элемента выбора даты, а для переключателя — состояние включен/выключен."
   },
   "div_accessibility_type": {
-    "en": "Element role. It is used for correct identification of an element by an accessibility service.",
-    "ru": "Роль элемента. Используется для правильной идентификации элемента accessibility-сервисом."
+    "en": "Element role. It is used for correct identification of an element by an accessibility service. The `list` element is used to group list items into a single element; works only on Android/iOS.",
+    "ru": "Роль элемента. Используется для правильной идентификации элемента accessibility-сервисом. Элемент `list` используется для группировки элементов списка в один элемент; работает только на Android/iOS."
   },
   "div_action": {
     "en": "It defines an action when clicking on an element.",
