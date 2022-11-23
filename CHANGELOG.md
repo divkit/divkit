@@ -1,3 +1,21 @@
+## 17.0.0
+
+# JSON Schema:
+* Added indicator items stretching mode
+
+# Android Client:
+* Added baseline alignment in wrap container
+* Fixed patch applying
+* Fixed crash on invalid patch field
+* Fixed blur when radius is 0
+
+# iOS Client:
+* Fixed redrawing after blur radius changed
+* Fixed slider failure.
+* Fixed height for linear container
+* Fixed line height in wrap container
+
+
 ## 16.0.0
 
 # Android Client:
