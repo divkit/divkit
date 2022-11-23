@@ -11,11 +11,11 @@
     "author": "",
     "license": "UNLICENSED",
     "devDependencies": {
-        "@divkitframework/divkit": "3.0.1",
-        "css-loader": "6.7.1",
+        "@divkitframework/divkit": "16.0.0",
+        "css-loader": "6.7.2",
         "html-webpack-plugin": "5.5.0",
-        "mini-css-extract-plugin": "2.6.1",
-        "webpack": "5.74.0",
-        "webpack-cli": "4.10.0"
+        "mini-css-extract-plugin": "2.7.0",
+        "webpack": "5.75.0",
+        "webpack-cli": "5.0.0"
     }
 }

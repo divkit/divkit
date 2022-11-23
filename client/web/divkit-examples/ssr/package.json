@@ -9,6 +9,6 @@
     "author": "",
     "license": "UNLICENSED",
     "devDependencies": {
-        "@divkitframework/divkit": "3.0.1"
+        "@divkitframework/divkit": "16.0.0"
     }
 }
