@@ -1,9 +1,16 @@
 package com.yandex.div.core.expression.triggers
 
+import com.yandex.div.core.expression.triggers.State.Input.EndOfLine
+import com.yandex.div.core.expression.triggers.State.Input.EscapeCharacter
+import com.yandex.div.core.expression.triggers.State.Input.Letter
+import com.yandex.div.core.expression.triggers.State.Input.OpeningBracket
+import com.yandex.div.core.expression.triggers.State.Input.Other
+import com.yandex.div.core.expression.triggers.State.Input.SingleQuote
+import com.yandex.div.core.expression.triggers.State.Input.VarSpecial
 import com.yandex.div.json.invalidCondition
-import com.yandex.div.core.expression.triggers.State.Input.*
 
-sealed interface ConditionPart {
+// TODO(gulevsky): possibly unused
+internal sealed interface ConditionPart {
     data class RawString(val value: String) : ConditionPart
     data class Variable(val name: String) : ConditionPart
 
@@ -167,5 +174,3 @@ private sealed interface State {
             }
     }
 }
-
-

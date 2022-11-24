@@ -15,7 +15,7 @@ import javax.inject.Provider
 
 @DivScope
 @Mockable
-internal class DivPatchManager @Inject internal constructor(
+internal class DivPatchManager @Inject constructor(
     private val divPatchCache: DivPatchCache,
     private val divViewCreator: Provider<Div2Builder>
 )  {
@@ -49,4 +49,3 @@ internal class DivPatchManager @Inject internal constructor(
         divPatchCache.removePatch(tag)
     }
 }
-

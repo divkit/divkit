@@ -6,7 +6,7 @@
     android:orientation="vertical"
     tools:ignore="HardcodedText">
 
-    <com.yandex.div.core.widget.slider.SliderView
+    <com.yandex.div.internal.widget.slider.SliderView
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="100dp"

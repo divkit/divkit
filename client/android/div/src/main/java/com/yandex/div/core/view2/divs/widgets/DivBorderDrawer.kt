@@ -24,6 +24,7 @@ import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.toPx
+import com.yandex.div.internal.widget.isInTransientHierarchy
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.dpToPx
 import com.yandex.div2.DivBorder
@@ -32,7 +33,7 @@ import com.yandex.div2.DivStroke
 import kotlin.math.max
 import kotlin.math.min
 
-class DivBorderDrawer(
+internal class DivBorderDrawer(
     private val metrics: DisplayMetrics,
     private val view: View,
     private var expressionResolver: ExpressionResolver,

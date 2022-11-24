@@ -12,8 +12,8 @@ import com.yandex.div.core.annotations.PublicApi;
 import com.yandex.div.core.images.LoadReference;
 import com.yandex.div.core.state.DivStatePath;
 import com.yandex.div.core.state.DivViewState;
+import com.yandex.div.internal.widget.menu.OverflowMenuSubscriber;
 import com.yandex.div.json.expressions.ExpressionResolver;
-import com.yandex.div.view.menu.OverflowMenuSubscriber;
 
 /**
  * Main class to interact with DivView and DivView2

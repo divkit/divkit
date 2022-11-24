@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs.widgets
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 
-interface DivBorderSupports {
+internal interface DivBorderSupports {
 
     val border: DivBorder?
 

@@ -16,7 +16,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
-import com.yandex.div.core.widget.slider.SliderView
+import com.yandex.div.internal.widget.slider.SliderView
 import com.yandex.div.view.checkIsDisplayed
 import com.yandex.div.view.scrollTo
 import com.yandex.test.util.Report.step

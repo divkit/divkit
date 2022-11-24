@@ -13,7 +13,7 @@ import kotlin.math.min
  * Fix for a bug in [FrameLayout.onMeasure] that causes wrong dimensions of child with
  * [FrameLayout.LayoutParams.MATCH_PARENT] size.
  */
-open class FrameLayoutFix @JvmOverloads constructor(
+internal open class FrameLayoutFix @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

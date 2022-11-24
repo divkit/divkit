@@ -2,7 +2,7 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.view.ViewGroup
 
-interface DivAnimator {
+internal interface DivAnimator {
 
     fun startDivAnimation() {
         if (this is ViewGroup) {

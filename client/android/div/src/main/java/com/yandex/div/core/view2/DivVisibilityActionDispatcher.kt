@@ -11,12 +11,12 @@ import com.yandex.div.core.view2.divs.DivActionBeaconSender
 import com.yandex.div.util.arrayMap
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibilityAction
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 @DivScope
 @Mockable
-class DivVisibilityActionDispatcher @Inject internal constructor(
+internal class DivVisibilityActionDispatcher @Inject constructor(
     private val logger: Div2Logger,
     private val visibilityListener: DivVisibilityChangeListener,
     private val divActionHandler: DivActionHandler,

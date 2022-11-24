@@ -30,8 +30,8 @@ import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.internal.widget.PageItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.view.PageItemDecoration
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
 import com.yandex.div2.DivPagerLayoutMode

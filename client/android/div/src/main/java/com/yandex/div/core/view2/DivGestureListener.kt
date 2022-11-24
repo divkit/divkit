@@ -3,7 +3,7 @@ package com.yandex.div.core.view2
 import android.view.GestureDetector
 import android.view.MotionEvent
 
-class DivGestureListener : GestureDetector.SimpleOnGestureListener() {
+internal class DivGestureListener : GestureDetector.SimpleOnGestureListener() {
     var onSingleTapListener: (() -> Unit)? = null
     var onDoubleTapListener: (() -> Unit)? = null
 

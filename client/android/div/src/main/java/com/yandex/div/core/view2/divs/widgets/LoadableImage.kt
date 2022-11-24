@@ -2,11 +2,13 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import com.yandex.div.core.annotations.PublicApi
 import java.util.concurrent.Future
 
 /**
  * Priority of showing drawables: image -> preview -> placeholder.
  */
+@PublicApi
 interface LoadableImage {
     val isImageLoaded: Boolean
         get() = false

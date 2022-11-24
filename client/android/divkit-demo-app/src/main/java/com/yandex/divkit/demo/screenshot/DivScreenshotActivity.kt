@@ -52,7 +52,7 @@ class DivScreenshotActivity : AppCompatActivity() {
         private set
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        divContext = divContext(this)
+        divContext = divContext(activity = this)
         super.onCreate(savedInstanceState)
 
         var divJson = getTestCaseJson()

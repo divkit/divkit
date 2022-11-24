@@ -9,8 +9,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.expression.ExpressionSubscriber
-import com.yandex.div.core.view.layout.TabsLayout
-import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
+import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
@@ -25,8 +24,9 @@ import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
+import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.view.pooling.ViewPool
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContainer.Orientation
@@ -50,9 +50,9 @@ import javax.inject.Named
 @DivScope
 @Mockable
 internal class DivViewCreator @Inject constructor(
-    @Named(Names.THEMED_CONTEXT) private val context: Context,
-    private val viewPool: ViewPool,
-    private val validator: DivValidator
+        @Named(Names.THEMED_CONTEXT) private val context: Context,
+        private val viewPool: ViewPool,
+        private val validator: DivValidator
 ) : DivVisitor<View>() {
 
     init {

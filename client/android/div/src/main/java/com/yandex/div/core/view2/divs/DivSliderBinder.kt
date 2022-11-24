@@ -1,25 +1,22 @@
 package com.yandex.div.core.view2.divs
 
 import android.util.DisplayMetrics
-import android.view.View.GONE
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.expression.variables.TwoWayIntegerVariableBinder
+import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.core.widget.slider.SliderTextStyle
-import com.yandex.div.core.widget.slider.SliderView
-import com.yandex.div.core.widget.slider.shapes.TextDrawable
-import com.yandex.div.font.DivTypefaceProvider
+import com.yandex.div.internal.widget.slider.SliderTextStyle
+import com.yandex.div.internal.widget.slider.SliderView
+import com.yandex.div.internal.widget.slider.shapes.TextDrawable
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivDrawable
-import com.yandex.div2.DivShape
-import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSlider
 import javax.inject.Inject
 import kotlin.math.max
@@ -28,12 +25,12 @@ import kotlin.math.roundToInt
 private const val SLIDER_TICKS_OVERLAP_WARNING = "Slider ticks overlap each other."
 
 internal class DivSliderBinder @Inject constructor(
-    private val baseBinder: DivBaseBinder,
-    private val logger: Div2Logger,
-    private val typefaceProvider: DivTypefaceProvider,
-    private val variableBinder: TwoWayIntegerVariableBinder,
-    private val errorCollectors: ErrorCollectors,
-    @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
+        private val baseBinder: DivBaseBinder,
+        private val logger: Div2Logger,
+        private val typefaceProvider: DivTypefaceProvider,
+        private val variableBinder: TwoWayIntegerVariableBinder,
+        private val errorCollectors: ErrorCollectors,
+        @ExperimentFlag(Experiment.VISUAL_ERRORS_ENABLED) private val visualErrorsEnabled: Boolean,
 ) : DivViewBinder<DivSlider, DivSliderView> {
 
     private var errorCollector: ErrorCollector? = null
@@ -287,9 +284,9 @@ internal class DivSliderBinder @Inject constructor(
 }
 
 private fun DivSlider.TextStyle.toSliderTextStyle(
-    metrics: DisplayMetrics,
-    typefaceProvider: DivTypefaceProvider,
-    resolver: ExpressionResolver
+        metrics: DisplayMetrics,
+        typefaceProvider: DivTypefaceProvider,
+        resolver: ExpressionResolver
 ): SliderTextStyle {
     return SliderTextStyle(
         fontSize = fontSize.evaluate(resolver).fontSizeToPx(fontSizeUnit.evaluate(resolver), metrics),
@@ -299,4 +296,3 @@ private fun DivSlider.TextStyle.toSliderTextStyle(
         textColor = textColor.evaluate(resolver)
     )
 }
-

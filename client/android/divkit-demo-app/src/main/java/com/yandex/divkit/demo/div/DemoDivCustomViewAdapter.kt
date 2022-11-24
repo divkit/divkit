@@ -4,7 +4,7 @@ import android.util.Log
 import android.view.View
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.DivPreloader
+import com.yandex.div.core.DivPreloader
 import com.yandex.div.video.custom.VideoCustomAdapter
 import com.yandex.div.video.custom.VideoCustomViewController
 import com.yandex.div2.DivCustom

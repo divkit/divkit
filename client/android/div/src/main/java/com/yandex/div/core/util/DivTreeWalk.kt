@@ -5,11 +5,11 @@ import com.yandex.div2.Div
 /**
  * Gets a sequence for visiting this [Div] and all its children.
  */
-fun Div.walk(): DivTreeWalk {
+internal fun Div.walk(): DivTreeWalk {
     return DivTreeWalk(this)
 }
 
-class DivTreeWalk private constructor(
+internal class DivTreeWalk private constructor(
     private val root: Div,
     private val onEnter: ((Div) -> Boolean)?,
     private val onLeave: ((Div) -> Unit)?,

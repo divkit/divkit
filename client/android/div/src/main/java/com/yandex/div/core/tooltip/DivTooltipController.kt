@@ -23,7 +23,7 @@ import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.view2.DivPreloader
+import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div.core.view2.divs.toPx
@@ -33,27 +33,26 @@ import com.yandex.div2.DivTooltip
 import javax.inject.Inject
 import javax.inject.Provider
 
-
-typealias CreatePopupCall = (contentView: View, width: Int, height: Int) -> PopupWindow
+internal typealias CreatePopupCall = (contentView: View, width: Int, height: Int) -> PopupWindow
 
 @Mockable
 @DivScope
 internal class DivTooltipController @VisibleForTesting constructor(
-    private val div2Builder: Provider<Div2Builder>,
-    private val tooltipRestrictor: DivTooltipRestrictor,
-    private val divVisibilityActionTracker: DivVisibilityActionTracker,
-    private val divPreloader: DivPreloader,
-    private val createPopup: CreatePopupCall,
+        private val div2Builder: Provider<Div2Builder>,
+        private val tooltipRestrictor: DivTooltipRestrictor,
+        private val divVisibilityActionTracker: DivVisibilityActionTracker,
+        private val divPreloader: DivPreloader,
+        private val createPopup: CreatePopupCall,
 ) {
     private val tooltips = mutableMapOf<String, TooltipData>()
     private val mainThreadHandler = Handler(Looper.getMainLooper())
 
     @Inject
     constructor(
-        div2Builder: Provider<Div2Builder>,
-        tooltipRestrictor: DivTooltipRestrictor,
-        divVisibilityActionTracker: DivVisibilityActionTracker,
-        divPreloader: DivPreloader,
+            div2Builder: Provider<Div2Builder>,
+            tooltipRestrictor: DivTooltipRestrictor,
+            divVisibilityActionTracker: DivVisibilityActionTracker,
+            divPreloader: DivPreloader,
     ) : this(
         div2Builder,
         tooltipRestrictor,
@@ -195,10 +194,10 @@ internal class DivTooltipController @VisibleForTesting constructor(
 }
 
 private class TooltipData(
-    val popupWindow: PopupWindow,
-    val div: Div,
-    var ticket: DivPreloader.Ticket? = null,
-    var dismissed: Boolean = false
+        val popupWindow: PopupWindow,
+        val div: Div,
+        var ticket: DivPreloader.Ticket? = null,
+        var dismissed: Boolean = false
 )
 
 private fun findChildWithTooltip(tooltipId: String, view: View): Pair<DivTooltip, View>? {

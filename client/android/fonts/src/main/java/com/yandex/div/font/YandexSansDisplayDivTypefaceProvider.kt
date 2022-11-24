@@ -3,6 +3,7 @@ package com.yandex.div.font
 import android.content.Context
 import android.graphics.Typeface
 import androidx.core.content.res.ResourcesCompat
+import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.font.typeface.R
 import javax.inject.Inject
 

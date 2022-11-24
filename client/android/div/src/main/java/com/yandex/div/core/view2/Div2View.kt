@@ -51,12 +51,12 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
+import com.yandex.div.internal.util.hasScrollableChildUnder
+import com.yandex.div.internal.widget.menu.OverflowMenuSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.DivDataUtils.INVALID_STATE_ID
 import com.yandex.div.util.DivDataUtils.getInitialStateId
-import com.yandex.div.util.DivViewScrollHelper.hasScrollableChildUnder
 import com.yandex.div.util.immutableCopy
-import com.yandex.div.view.menu.OverflowMenuSubscriber
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
@@ -64,7 +64,11 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
 import java.lang.ref.WeakReference
-import java.util.WeakHashMap
+import java.util.*
+import kotlin.collections.ArrayDeque
+import kotlin.collections.component1
+import kotlin.collections.component2
+import kotlin.collections.set
 
 /**
  * Main entry point for building Div2s
@@ -77,6 +81,7 @@ class Div2View private constructor(
     defStyleAttr: Int = 0,
     private val constructorCallTime: Long,
 ) : FrameLayout(context, attrs, defStyleAttr), DivViewFacade {
+
     internal val div2Component: Div2Component = context.div2Component
     internal val viewComponent: Div2ViewComponent = div2Component.viewComponent()
         .divView(this)
@@ -207,7 +212,7 @@ class Div2View private constructor(
         dataTag = tag
 
         data.states.forEach {
-            div2Component.preLoader.preload(it.div, expressionResolver)
+            div2Component.preloader.preload(it.div, expressionResolver)
         }
 
 
@@ -246,7 +251,7 @@ class Div2View private constructor(
         dataTag = tag
 
         data.states.forEach {
-            div2Component.preLoader.preload(it.div, expressionResolver)
+            div2Component.preloader.preload(it.div, expressionResolver)
         }
         paths.forEach { path ->
             div2Component.stateManager.updateStates(divTag.id, path, temporary)
@@ -452,6 +457,11 @@ class Div2View private constructor(
             }
             switchToState(firstPath.topLevelStateId)
         }
+    }
+
+    fun isInState(statePath: DivStatePath): Boolean {
+        val stateCache = div2Component.temporaryDivStateCache
+        return stateCache.getState(dataTag.id, statePath.pathToLastState.toString()) == statePath.lastStateId
     }
 
     /**

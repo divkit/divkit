@@ -16,7 +16,7 @@ import androidx.core.graphics.withTranslation
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-object ShadowCache {
+internal object ShadowCache {
     /**
     * The minimum value, that ScriptIntrinsicBlur can use
     **/

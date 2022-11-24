@@ -3,8 +3,12 @@ package com.yandex.div.core.tooltip
 import android.view.View
 import android.widget.PopupWindow
 
-class DivTooltipWindow(contentView: View, width: Int = 0, height: Int = 0, focusable: Boolean = false) :
-    PopupWindow(contentView, width, height, focusable) {
+internal class DivTooltipWindow(
+    contentView: View,
+    width: Int = 0,
+    height: Int = 0,
+    focusable: Boolean = false
+) : PopupWindow(contentView, width, height, focusable) {
     override fun dismiss() {
         try {
             super.dismiss()

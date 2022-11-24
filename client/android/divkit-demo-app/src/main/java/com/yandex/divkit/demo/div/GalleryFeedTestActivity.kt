@@ -12,14 +12,14 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div2.DivData
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.screenshot.DivAssetReader
-import java.util.UUID
+import java.util.*
 
 class GalleryFeedTestActivity : AppCompatActivity() {
 
     private val assetReader = DivAssetReader(this)
 
     private val divContext by lazy {
-        divContext(this, divStateChangeListener = null)
+        divContext(activity = this)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

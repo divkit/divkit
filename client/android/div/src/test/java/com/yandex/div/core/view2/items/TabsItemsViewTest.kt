@@ -2,9 +2,9 @@ package com.yandex.div.core.view2.items
 
 import androidx.viewpager.widget.PagerAdapter
 import com.yandex.div.core.util.Assert
-import com.yandex.div.core.view.layout.TabsLayout
 import com.yandex.div.core.view2.disableDivkitAssert
-import com.yandex.div.view.tabs.ScrollableViewPager
+import com.yandex.div.internal.widget.tabs.ScrollableViewPager
+import com.yandex.div.internal.widget.tabs.TabsLayout
 import org.junit.Test
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn

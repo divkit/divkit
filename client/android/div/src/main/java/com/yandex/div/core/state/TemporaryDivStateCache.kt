@@ -2,11 +2,10 @@ package com.yandex.div.core.state
 
 import androidx.annotation.AnyThread
 import com.yandex.div.core.dagger.DivScope
-import java.util.Collections
 import javax.inject.Inject
 
 @DivScope
-class TemporaryDivStateCache @Inject constructor() {
+internal class TemporaryDivStateCache @Inject constructor() {
     private val temporaryCache = mutableMapOf<String, MutableMap<String, String>>()
 
     @AnyThread

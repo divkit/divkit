@@ -10,8 +10,9 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
+import com.yandex.div.internal.widget.SuperLineHeightEditText
+import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.view.SuperLineHeightEditText
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivInput
 

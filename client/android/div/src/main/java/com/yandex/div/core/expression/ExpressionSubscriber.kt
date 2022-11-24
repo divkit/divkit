@@ -3,7 +3,7 @@ package com.yandex.div.core.expression
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.Releasable
 
-interface ExpressionSubscriber : Releasable {
+internal interface ExpressionSubscriber : Releasable {
 
     val subscriptions: MutableList<Disposable>
 

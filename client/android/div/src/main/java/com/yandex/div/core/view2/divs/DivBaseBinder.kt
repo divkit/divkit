@@ -33,10 +33,10 @@ import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.applyFilters
-import com.yandex.div.drawables.LinearGradientDrawable
-import com.yandex.div.drawables.NinePatchDrawable
-import com.yandex.div.drawables.RadialGradientDrawable
-import com.yandex.div.drawables.ScalingDrawable
+import com.yandex.div.internal.drawable.LinearGradientDrawable
+import com.yandex.div.internal.drawable.NinePatchDrawable
+import com.yandex.div.internal.drawable.RadialGradientDrawable
+import com.yandex.div.internal.drawable.ScalingDrawable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
@@ -60,7 +60,6 @@ import com.yandex.div2.DivSize
 import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivVisibility
 import javax.inject.Inject
-
 
 @DivScope
 internal class DivBaseBinder @Inject constructor(

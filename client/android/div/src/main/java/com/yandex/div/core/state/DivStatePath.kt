@@ -14,8 +14,7 @@ import java.lang.Math.min
  * **Note:** after integer top_level_state_id goes pairs of ```div_id->state_id``` of nested DivState's
  * ignoring other Divs.
  */
-data class DivStatePath
-@VisibleForTesting constructor(
+data class DivStatePath @VisibleForTesting internal constructor(
     val topLevelStateId: Int,
     private val states: MutableList<Pair<String, String>> = mutableListOf()
 ) {

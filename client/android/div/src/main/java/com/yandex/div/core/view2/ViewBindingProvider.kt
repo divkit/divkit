@@ -28,7 +28,7 @@ internal class ViewBindingProvider @Inject constructor() {
     }
 }
 
-class Binding(
+internal class Binding(
     val tag: DivDataTag,
     val data: DivData?,
 )

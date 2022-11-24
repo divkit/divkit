@@ -8,7 +8,7 @@ import androidx.annotation.IntDef
     WrapShowSeparatorsMode.SHOW_BETWEEN,
     WrapShowSeparatorsMode.SHOW_AT_END
 ])
-annotation class WrapShowSeparatorsMode {
+internal annotation class WrapShowSeparatorsMode {
     companion object {
         const val NONE = 0
         const val SHOW_AT_START = 1

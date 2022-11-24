@@ -12,13 +12,14 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.expression.ExpressionSubscriber
+import com.yandex.div.core.font.DivTypefaceType
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
-import com.yandex.div.core.view.layout.TabItemLayout
-import com.yandex.div.core.view.layout.TabsLayout
-import com.yandex.div.core.view.tabs.BaseDivTabbedCardUi
-import com.yandex.div.core.view.tabs.TabTextStyleProvider
-import com.yandex.div.core.view.tabs.TabTitlesLayoutView
+import com.yandex.div.internal.widget.tabs.TabItemLayout
+import com.yandex.div.internal.widget.tabs.TabsLayout
+import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
+import com.yandex.div.internal.widget.tabs.TabTextStyleProvider
+import com.yandex.div.internal.widget.tabs.TabTitlesLayoutView
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
@@ -33,16 +34,15 @@ import com.yandex.div.core.view2.divs.applyPaddings
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
-import com.yandex.div.font.DivTypefaceType
+import com.yandex.div.internal.viewpool.ViewPool
+import com.yandex.div.internal.widget.tabs.BaseIndicatorTabLayout
+import com.yandex.div.internal.widget.tabs.DynamicCardHeightCalculator
+import com.yandex.div.internal.widget.tabs.HeightCalculatorFactory
+import com.yandex.div.internal.widget.tabs.MaxCardHeightCalculator
+import com.yandex.div.internal.widget.tabs.TabView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.UiThreadHandler
-import com.yandex.div.view.pooling.ViewPool
-import com.yandex.div.view.tabs.BaseIndicatorTabLayout
-import com.yandex.div.view.tabs.DynamicCardHeightCalculator
-import com.yandex.div.view.tabs.HeightCalculatorFactory
-import com.yandex.div.view.tabs.MaxCardHeightCalculator
-import com.yandex.div.view.tabs.TabView
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFontWeight
 import com.yandex.div2.DivSize
@@ -210,8 +210,11 @@ internal class DivTabsBinder @Inject constructor(
     ): DivTabsAdapter {
         val eventManager = DivTabsEventManager(divView, actionBinder, div2Logger, visibilityActionTracker, view, div)
         val isDynamicHeight = div.dynamicHeight.evaluate(resolver)
-        val heightCalculatorFactory = if (isDynamicHeight) HeightCalculatorFactory(::DynamicCardHeightCalculator)
-        else HeightCalculatorFactory(::MaxCardHeightCalculator)
+        val heightCalculatorFactory = if (isDynamicHeight) {
+            HeightCalculatorFactory(::DynamicCardHeightCalculator)
+        } else {
+            HeightCalculatorFactory(::MaxCardHeightCalculator)
+        }
         val selectedTab = view.viewPager.currentItem
         val currentTab = view.viewPager.currentItem
         if (currentTab == selectedTab) {
@@ -378,7 +381,7 @@ private fun DivEdgeInsets.observe(resolver: ExpressionResolver, subscriber: Expr
     observer.invoke(null)
 }
 
-fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
+internal fun TabView.observeStyle(style: DivTabs.TabTitleStyle, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
     val applyStyle = { _: Any? ->
         val fontSize = style.fontSize.evaluate(resolver)
         applyFontSize(fontSize, style.fontSizeUnit.evaluate(resolver))

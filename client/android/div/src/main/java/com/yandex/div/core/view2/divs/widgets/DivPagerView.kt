@@ -11,9 +11,10 @@ import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.core.widget.invalidateAfter
+import com.yandex.div.internal.widget.OnInterceptTouchEventListener
+import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
+import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.view.OnInterceptTouchEventListener
-import com.yandex.div.view.OnInterceptTouchEventListenerHost
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivPager
 
@@ -23,7 +24,7 @@ internal class DivPagerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : ViewPager2Wrapper(context, attrs, defStyleAttr), DivBorderSupports,
-    OnInterceptTouchEventListenerHost,
+        OnInterceptTouchEventListenerHost,
     TransientView,
     ExpressionSubscriber {
 

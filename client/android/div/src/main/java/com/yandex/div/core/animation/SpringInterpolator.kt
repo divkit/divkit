@@ -5,7 +5,7 @@ package com.yandex.div.core.animation
  * Tail, where values are bigger than 0.985 is cut, and rest is normalized to 1/0.985.
  * So effective duration of this animation is 0.3s.
  */
-class SpringInterpolator : LookupTableInterpolator(VALUES) {
+internal class SpringInterpolator : LookupTableInterpolator(VALUES) {
     private companion object {
         private val VALUES = floatArrayOf(
             0.0000f, 0.0005f, 0.0020f, 0.0045f, 0.0078f, 0.0119f, 0.0168f,

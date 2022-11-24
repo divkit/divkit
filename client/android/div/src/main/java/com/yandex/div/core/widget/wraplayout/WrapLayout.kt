@@ -12,7 +12,7 @@ import androidx.annotation.Px
 import androidx.core.view.children
 import kotlin.math.max
 
-open class WrapLayout(context: Context) : ViewGroup(context) {
+internal open class WrapLayout(context: Context) : ViewGroup(context) {
 
     @WrapDirection
     var wrapDirection: Int = WrapDirection.ROW

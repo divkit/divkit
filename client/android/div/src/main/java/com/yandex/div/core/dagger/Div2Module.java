@@ -6,18 +6,23 @@ import android.view.ContextThemeWrapper;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StyleRes;
+import com.yandex.div.core.DivCustomViewAdapter;
+import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.experiments.Experiment;
+import com.yandex.div.core.extension.DivExtensionController;
+import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.resources.ContextThemeWrapperWithResourceCache;
-import com.yandex.div.core.view.tabs.TabTextStyleProvider;
-import com.yandex.div.font.DivTypefaceProvider;
-import com.yandex.div.view.pooling.AdvanceViewPool;
-import com.yandex.div.view.pooling.PseudoViewPool;
-import com.yandex.div.view.pooling.ViewCreator;
-import com.yandex.div.view.pooling.ViewPool;
-import com.yandex.div.view.pooling.ViewPoolProfiler;
+import com.yandex.div.internal.widget.tabs.TabTextStyleProvider;
+import com.yandex.div.core.view2.DivImagePreloader;
+import com.yandex.div.internal.viewpool.AdvanceViewPool;
+import com.yandex.div.internal.viewpool.PseudoViewPool;
+import com.yandex.div.internal.viewpool.ViewCreator;
+import com.yandex.div.internal.viewpool.ViewPool;
+import com.yandex.div.internal.viewpool.ViewPoolProfiler;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
+
 import javax.inject.Named;
 
 @Module
@@ -71,5 +76,16 @@ abstract class Div2Module {
     @NonNull
     static RenderScript provideRenderScript(@NonNull @Named(Names.CONTEXT) Context context) {
         return RenderScript.create(context);
+    }
+
+    @Provides
+    @DivScope
+    @NonNull
+    static DivPreloader provideDivPreloader(
+            @NonNull DivImagePreloader imagePreloader,
+            @Nullable DivCustomViewAdapter customViewAdapter,
+            @NonNull DivExtensionController extensionController
+    ) {
+        return new DivPreloader(imagePreloader, customViewAdapter, extensionController);
     }
 }

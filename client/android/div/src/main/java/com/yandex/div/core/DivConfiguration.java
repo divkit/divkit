@@ -8,16 +8,18 @@ import com.yandex.div.core.dagger.Names;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.extension.DivExtensionHandler;
+import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.images.DivImageLoader;
-import com.yandex.div.font.DivTypefaceProvider;
+import com.yandex.div.core.state.DivStateChangeListener;
+import com.yandex.div.internal.viewpool.ViewPoolProfiler;
 import com.yandex.div.state.DivStateCache;
 import com.yandex.div.state.InMemoryDivStateCache;
-import com.yandex.div.view.pooling.ViewPoolProfiler;
 import dagger.Module;
 import dagger.Provides;
+
+import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Named;
 
 /**
  * Holds {@link com.yandex.div.core.view2.Div2View} configuration.

@@ -8,7 +8,7 @@ import com.yandex.div.core.state.DivStatePath
  * @param <TData> - Div data class
  * @param <TView> - binding view
  */
-interface DivViewBinder<TData, TView : View> {
+internal interface DivViewBinder<TData, TView : View> {
 
     /**
      * Binds div's data to templated view

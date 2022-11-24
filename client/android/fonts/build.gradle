@@ -3,7 +3,7 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 dependencies {
-    implementation project(path: ':div-core-views')
+    implementation project(path: ':div-core')
 
     implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
     implementation "androidx.core:core:$versions.androidx.core"

@@ -7,17 +7,17 @@ import com.yandex.div.core.downloader.DivPatchApply
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
-import com.yandex.div.core.view.tabs.BaseDivTabbedCardUi
-import com.yandex.div.core.view.tabs.TabTextStyleProvider
+import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
+import com.yandex.div.internal.widget.tabs.TabTextStyleProvider
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.divs.toLayoutParamsSize
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
+import com.yandex.div.internal.viewpool.ViewPool
+import com.yandex.div.internal.widget.tabs.HeightCalculatorFactory
+import com.yandex.div.internal.widget.tabs.ScrollableViewPager
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.view.pooling.ViewPool
-import com.yandex.div.view.tabs.HeightCalculatorFactory
-import com.yandex.div.view.tabs.ScrollableViewPager
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivSize
@@ -36,7 +36,7 @@ internal class DivTabsAdapter(
     val divTabsEventManager: DivTabsEventManager,
     var path: DivStatePath,
     private val divPatchCache: DivPatchCache,
-    ) : BaseDivTabbedCardUi<DivSimpleTab, ViewGroup, DivAction>(
+) : BaseDivTabbedCardUi<DivSimpleTab, ViewGroup, DivAction>(
     viewPool,
     view,
     tabbedCardConfig,
@@ -133,11 +133,6 @@ internal class DivSimpleTab(
     override fun getActionable(): DivAction? {
         return item.titleClickAction
     }
-
-    //override fun getTextStyle(): TextStyle? {
-        // will be support in future releases
-    //    return null
-    //}
 
     override fun getTabHeight(): Int? {
         val height = item.div.value().height

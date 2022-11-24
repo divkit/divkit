@@ -7,9 +7,9 @@ import android.text.TextWatcher
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
-import com.yandex.div.core.widget.shapes.RoundedRectDrawable
-import com.yandex.div.core.widget.shapes.RoundedRectDrawable.Params
-import com.yandex.div.core.widget.slider.SliderView
+import com.yandex.div.internal.drawable.RoundedRectDrawable
+import com.yandex.div.internal.drawable.RoundedRectDrawable.Params
+import com.yandex.div.internal.widget.slider.SliderView
 import com.yandex.div.util.dpToPx
 
 class SliderActivity : AppCompatActivity() {

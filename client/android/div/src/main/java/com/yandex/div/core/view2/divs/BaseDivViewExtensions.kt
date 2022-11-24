@@ -21,18 +21,18 @@ import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.expression.suppressExpressionErrors
+import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.util.Log
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
-import com.yandex.div.core.widget.AspectImageView
+import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.core.widget.GridContainer
-import com.yandex.div.core.widget.shapes.CircleDrawable
-import com.yandex.div.core.widget.shapes.RoundedRectDrawable
 import com.yandex.div.core.widget.wraplayout.WrapAlignment
 import com.yandex.div.core.widget.wraplayout.WrapLayout
-import com.yandex.div.drawables.ScalingDrawable
-import com.yandex.div.font.DivTypefaceProvider
+import com.yandex.div.internal.drawable.CircleDrawable
+import com.yandex.div.internal.drawable.RoundedRectDrawable
+import com.yandex.div.internal.drawable.ScalingDrawable
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.dpToPx
@@ -71,7 +71,7 @@ import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivVisibilityAction
 import kotlin.math.roundToInt
 
-fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
+internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     val metrics = resources.displayMetrics
     when(insets?.unit?.evaluate(resolver)) {
         DivSizeUnit.DP -> {
@@ -92,7 +92,7 @@ fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     }
 }
 
-fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
+internal fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     val metrics = resources.displayMetrics
     val lp = layoutParams as? ViewGroup.MarginLayoutParams ?: return
 
@@ -119,7 +119,7 @@ fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
     }
 }
 
-fun DivSize?.toLayoutParamsSize(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
+internal fun DivSize?.toLayoutParamsSize(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
     return when (this) {
         null -> ViewGroup.LayoutParams.WRAP_CONTENT
         is DivSize.MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
@@ -131,7 +131,7 @@ fun DivSize?.toLayoutParamsSize(metrics: DisplayMetrics, resolver: ExpressionRes
     }
 }
 
-fun DivFixedSize.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
+internal fun DivFixedSize.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
     return when (unit.evaluate(resolver)) {
         DivSizeUnit.DP -> value.evaluate(resolver).dpToPx(metrics)
         DivSizeUnit.SP -> value.evaluate(resolver).spToPx(metrics)
@@ -139,12 +139,12 @@ fun DivFixedSize.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): In
     }
 }
 
-fun DivFixedSize.toPxF(
+internal fun DivFixedSize.toPxF(
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
 ): Float = evaluatePxFloatByUnit(value.evaluate(resolver), unit.evaluate(resolver), metrics)
 
-fun DivRadialGradientFixedCenter.toPxF(
+internal fun DivRadialGradientFixedCenter.toPxF(
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
 ): Float = evaluatePxFloatByUnit(value.evaluate(resolver), unit.evaluate(resolver), metrics)
@@ -159,7 +159,7 @@ private fun evaluatePxFloatByUnit(
     DivSizeUnit.PX -> value.toFloat()
 }
 
-fun DivDimension.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
+internal fun DivDimension.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
     return when (unit.evaluate(resolver)) {
         DivSizeUnit.DP -> value.evaluate(resolver).dpToPx(metrics)
         DivSizeUnit.SP -> value.evaluate(resolver).spToPx(metrics)
@@ -216,11 +216,11 @@ private fun getPivotValue(len: Int, divPivot: DivPivot, resolver: ExpressionReso
     }
 }
 
-fun View.applyAlpha(alpha: Double) {
+internal fun View.applyAlpha(alpha: Double) {
     this.alpha = alpha.toFloat()
 }
 
-fun View.applyAlignment(
+internal fun View.applyAlignment(
         horizontal: DivAlignmentHorizontal?,
         vertical: DivAlignmentVertical?,
         orientation: DivContainer.Orientation? = null
@@ -278,7 +278,7 @@ private fun View.applyGravity(newGravity: Int) {
     }
 }
 
-fun evaluateGravity(horizontal: DivAlignmentHorizontal?, vertical: DivAlignmentVertical?): Int {
+internal fun evaluateGravity(horizontal: DivAlignmentHorizontal?, vertical: DivAlignmentVertical?): Int {
     val horizontalGravity = when (horizontal) {
         DivAlignmentHorizontal.LEFT -> Gravity.LEFT
         DivAlignmentHorizontal.CENTER -> Gravity.CENTER_HORIZONTAL
@@ -332,7 +332,7 @@ internal fun DivImageScale.toScaleType(): ScalingDrawable.ScaleType {
     }
 }
 
-fun DivAlignmentHorizontal.toHorizontalAlignment(): ScalingDrawable.AlignmentHorizontal {
+internal fun DivAlignmentHorizontal.toHorizontalAlignment(): ScalingDrawable.AlignmentHorizontal {
     return when(this) {
         DivAlignmentHorizontal.CENTER -> ScalingDrawable.AlignmentHorizontal.CENTER
         DivAlignmentHorizontal.RIGHT -> ScalingDrawable.AlignmentHorizontal.RIGHT
@@ -340,7 +340,7 @@ fun DivAlignmentHorizontal.toHorizontalAlignment(): ScalingDrawable.AlignmentHor
     }
 }
 
-fun DivAlignmentVertical.toVerticalAlignment(): ScalingDrawable.AlignmentVertical {
+internal fun DivAlignmentVertical.toVerticalAlignment(): ScalingDrawable.AlignmentVertical {
     return when(this) {
         DivAlignmentVertical.CENTER -> ScalingDrawable.AlignmentVertical.CENTER
         DivAlignmentVertical.BOTTOM -> ScalingDrawable.AlignmentVertical.BOTTOM
@@ -359,7 +359,7 @@ internal fun DivBlendMode.toPorterDuffMode(): PorterDuff.Mode {
     }
 }
 
-fun DivRadialGradientRadius.observe(
+internal fun DivRadialGradientRadius.observe(
     resolver: ExpressionResolver,
     subscriber: ExpressionSubscriber,
     callback: (Any) -> Unit
@@ -375,7 +375,7 @@ fun DivRadialGradientRadius.observe(
     }
 }
 
-fun DivRadialGradientCenter.observe(
+internal fun DivRadialGradientCenter.observe(
     resolver: ExpressionResolver,
     subscriber: ExpressionSubscriber,
     callback: (Any) -> Unit
@@ -391,7 +391,7 @@ fun DivRadialGradientCenter.observe(
     }
 }
 
-fun View.applyDivActions(
+internal fun View.applyDivActions(
     divView: Div2View,
     action: DivAction?,
     actions: List<DivAction>?,
@@ -408,11 +408,11 @@ fun View.applyDivActions(
     actionBinder.bindDivActions(divView, this, tapActions, longTapActions, doubleTapActions, actionAnimation)
 }
 
-fun TextView.applyFontSize(fontSize: Int, unit: DivSizeUnit) {
+internal fun TextView.applyFontSize(fontSize: Int, unit: DivSizeUnit) {
     setTextSize(unit.toAndroidUnit(), fontSize.toFloat())
 }
 
-fun DivSizeUnit.toAndroidUnit(): Int {
+internal fun DivSizeUnit.toAndroidUnit(): Int {
     return when (this) {
         DivSizeUnit.DP -> TypedValue.COMPLEX_UNIT_DIP
         DivSizeUnit.SP -> TypedValue.COMPLEX_UNIT_SP
@@ -420,23 +420,23 @@ fun DivSizeUnit.toAndroidUnit(): Int {
     }
 }
 
-fun TextView.applyLineHeight(lineHeight: Int?, unit: DivSizeUnit) {
+internal fun TextView.applyLineHeight(lineHeight: Int?, unit: DivSizeUnit) {
     val lineSpacingExtra = lineHeight?.let {
         it.unitToPx(resources.displayMetrics, unit) - this.fontHeight
     } ?: 0
     setLineSpacing(lineSpacingExtra.toFloat(), 1f)
 }
 
-fun TextView.applyLetterSpacing(letterSpacing: Double, fontSize: Int) {
+internal fun TextView.applyLetterSpacing(letterSpacing: Double, fontSize: Int) {
     this.letterSpacing = letterSpacing.toFloat() / fontSize
 }
 
-fun View.applyId(divId: String?, viewId: Int = View.NO_ID) {
+internal fun View.applyId(divId: String?, viewId: Int = View.NO_ID) {
     tag = divId
     id = viewId
 }
 
-fun View.applyDescriptionAndHint(contentDescription: String?, hint: String?) {
+internal fun View.applyDescriptionAndHint(contentDescription: String?, hint: String?) {
     this.contentDescription = when {
         contentDescription == null -> hint
         hint == null -> contentDescription
@@ -470,13 +470,13 @@ internal inline fun <T> List<Any?>.applyIfNotEquals(second: List<T>, applyRef: (
     }
 }
 
-val DivBase.hasVisibilityActions: Boolean
+internal val DivBase.hasVisibilityActions: Boolean
     get() = visibilityAction != null || !visibilityActions.isNullOrEmpty()
 
-val DivBase.allVisibilityActions: List<DivVisibilityAction>
+internal val DivBase.allVisibilityActions: List<DivVisibilityAction>
     get() = visibilityActions ?: visibilityAction?.let { listOf(it) }.orEmpty()
 
-fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) = suppressExpressionErrors {
+internal fun View.bindLayoutParams(div: DivBase, resolver: ExpressionResolver) = suppressExpressionErrors {
     applyWidth(div, resolver)
     applyHeight(div, resolver)
     applyAlignment(div.alignmentHorizontal?.evaluate(resolver),
@@ -492,7 +492,7 @@ internal fun DivImageScale.toImageScale(): AspectImageView.Scale {
 }
 
 @MainThread
-fun ViewGroup.trackVisibilityActions(newDivs: List<Div>, oldDivs: List<Div>?, divView: Div2View) {
+internal fun ViewGroup.trackVisibilityActions(newDivs: List<Div>, oldDivs: List<Div>?, divView: Div2View) {
     val visibilityActionTracker = divView.div2Component.visibilityActionTracker
     if (!oldDivs.isNullOrEmpty()) {
         val newLogIds = newDivs.flatMap {it.value().allVisibilityActions }.mapTo(HashSet()) { it.logId }
@@ -530,7 +530,7 @@ internal fun Int.fontSizeToPx(unit: DivSizeUnit, metrics: DisplayMetrics): Float
     }.toFloat()
 }
 
-fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
+internal fun ViewGroup.drawChildrenShadows(canvas: Canvas) {
     for (i in 0 until children.count()) {
         children.elementAt(i).let { child ->
             canvas.withTranslation(child.x, child.y) {

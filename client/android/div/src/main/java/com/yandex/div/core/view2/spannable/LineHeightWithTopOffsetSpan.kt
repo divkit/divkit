@@ -12,7 +12,7 @@ private const val NOT_SET = -1
  * Span with applying line height by text lines not paragraph.
  * Adds top offset to a first line of range text that span belongs to.
  */
-class LineHeightWithTopOffsetSpan(
+internal class LineHeightWithTopOffsetSpan(
     @field:Px private val topOffset: Int,
     @field:Px private val lineHeight: Int
 ) : LineHeightSpan {

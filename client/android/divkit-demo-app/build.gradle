@@ -77,7 +77,6 @@ configurations.all {
 
 dependencies {
     implementation project(path: ':assertion')
-    implementation project(path: ':div-core-views')
     implementation project(path: ':div')
     implementation project(path: ':div-json')
     implementation project(path: ':div-lottie')

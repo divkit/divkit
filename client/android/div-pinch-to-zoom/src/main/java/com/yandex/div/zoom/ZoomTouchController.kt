@@ -5,7 +5,7 @@ import android.graphics.PointF
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
-import com.yandex.div.core.view2.divs.widgets.TransientView
+import com.yandex.div.internal.widget.TransientView
 
 internal class ZoomTouchController(
     private val configuration: DivPinchToZoomConfiguration,

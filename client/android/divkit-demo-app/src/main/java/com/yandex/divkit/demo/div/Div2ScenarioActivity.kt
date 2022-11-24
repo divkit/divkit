@@ -2,7 +2,6 @@ package com.yandex.divkit.demo.div
 
 import android.content.Context
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.annotation.WorkerThread
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +32,13 @@ import com.yandex.div2.DivPatch
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2ScenarioBinding
-import com.yandex.divkit.demo.div.editor.*
+import com.yandex.divkit.demo.div.editor.DivEditorActivityStateKeeper
+import com.yandex.divkit.demo.div.editor.DivEditorLogger
+import com.yandex.divkit.demo.div.editor.DivEditorParsingErrorLogger
+import com.yandex.divkit.demo.div.editor.DivEditorPresenter
+import com.yandex.divkit.demo.div.editor.DivEditorState
+import com.yandex.divkit.demo.div.editor.DivEditorUi
+import com.yandex.divkit.demo.div.editor.DivEditorWebController
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
 import com.yandex.divkit.demo.div.histogram.LoggingHistogramBridge
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
@@ -83,7 +89,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         url = intent.getStringExtra(URL)
 
         val transitionScheduler = Div2Activity.DivParentTransitionScheduler(binding.singleContainer)
-        val divConfiguration = divConfiguration(this, transitionScheduler)
+        val divConfiguration = divConfiguration(this)
             .extension(
                 DivPinchToZoomExtensionHandler(
                     DivPinchToZoomConfiguration.Builder(this).build()
@@ -91,6 +97,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
             )
             .extension(DivLottieExtensionHandler())
             .extension(CheckBoundsExtensionHandler())
+            .divStateChangeListener(transitionScheduler)
             .divDataChangeListener(transitionScheduler)
             .actionHandler(TransitionActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))

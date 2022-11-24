@@ -15,7 +15,9 @@ import com.yandex.div2.DivBlur
 import com.yandex.div2.DivFilter
 import kotlin.math.max
 
-fun Bitmap.applyFilters(
+private const val RADIUS_MAX_VALUE_PX = 25
+
+internal fun Bitmap.applyFilters(
     target: View,
     filters: List<DivFilter>?,
     component: Div2Component,
@@ -44,9 +46,7 @@ fun Bitmap.applyFilters(
     }
 }
 
-private const val RADIUS_MAX_VALUE_PX = 25
-
-fun Bitmap.applyBlur(blur: DivBlur, component: Div2Component, resolver: ExpressionResolver) {
+internal fun Bitmap.applyBlur(blur: DivBlur, component: Div2Component, resolver: ExpressionResolver) {
     var radius = blur.radius.evaluate(resolver)
     if (radius == 0) {
         return

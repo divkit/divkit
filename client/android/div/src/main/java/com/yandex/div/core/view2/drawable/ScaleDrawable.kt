@@ -7,7 +7,7 @@ import android.graphics.drawable.Drawable
 import androidx.core.graphics.withSave
 import kotlin.math.roundToInt
 
-class ScaleDrawable(
+internal class ScaleDrawable(
     private val child: Drawable,
     private val scaleX: Float,
     private val scaleY: Float,

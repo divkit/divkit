@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2
 
+import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.DivImageLoader
@@ -63,9 +64,9 @@ class DivImagePreloader @Inject constructor(
     }
 
     private inner class PreloadVisitor(
-        private val callback: DivPreloader.DownloadCallback,
-        private val resolver: ExpressionResolver,
-        private val visitContainers: Boolean = true,
+            private val callback: DivPreloader.DownloadCallback,
+            private val resolver: ExpressionResolver,
+            private val visitContainers: Boolean = true,
     ) : DivVisitor<Unit>() {
         private val references = ArrayList<LoadReference>()
         private val ticket = TicketImpl()

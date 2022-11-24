@@ -12,7 +12,7 @@ import javax.inject.Inject
  */
 @DivScope
 @AnyThread
-class DivStateManager @Inject internal constructor(
+internal class DivStateManager @Inject constructor(
     private val cache: DivStateCache,
     private val temporaryCache: TemporaryDivStateCache
 ) {

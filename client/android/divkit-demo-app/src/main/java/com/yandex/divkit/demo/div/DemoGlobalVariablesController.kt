@@ -16,7 +16,7 @@ class DemoGlobalVariablesController {
     private val globalVariables = mutableListOf<Variable>()
 
     fun bindWith(context: Div2Context) {
-        lastGlobalVariableController = context.div2Component.globalVariableController
+        lastGlobalVariableController = context.globalVariableController
         dispatchVariableChanged()
     }
 

@@ -14,11 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.transition.TransitionManager
-import com.yandex.div.core.Div2Context
-import com.yandex.div.core.DivStateChangeListener
-import com.yandex.div.core.animation.SpringInterpolator
-import com.yandex.div.core.state.DivStateTransition
+import com.yandex.div.core.state.DefaultDivStateChangeListener
 import com.yandex.div.core.util.Log
 import com.yandex.div.core.utils.IOUtils
 import com.yandex.div.core.view2.Div2View
@@ -84,14 +80,7 @@ open class DivActivity : AppCompatActivity() {
     }
 
     private fun createAdapter(): DivViewAdapter {
-        val stateChangeListener = object : DivStateChangeListener {
-            override fun onDivAnimatedStateChanged(divView: Div2View) {
-                val transition = DivStateTransition(divView)
-                    .setInterpolator(SpringInterpolator())
-                TransitionManager.endTransitions(binding.recycler)
-                TransitionManager.beginDelayedTransition(binding.recycler, transition)
-            }
-        }
+        val stateChangeListener = DefaultDivStateChangeListener(rootViewProvider = { binding.recycler })
 
         val logger = object : DivLottieLogger {
             override fun log(message: String) {
@@ -102,7 +91,8 @@ open class DivActivity : AppCompatActivity() {
                 android.util.Log.e("4444", message, throwable)
             }
         }
-        val configuration = divConfiguration(this, stateChangeListener)
+        val configuration = divConfiguration(this)
+            .divStateChangeListener(stateChangeListener)
             .extension(DivPinchToZoomExtensionHandler(DivPinchToZoomConfiguration.Builder(this).build()))
             .extension(DivLottieExtensionHandler(DemoDivLottieRawResProvider, logger))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))

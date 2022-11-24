@@ -7,4 +7,4 @@ import javax.inject.Scope
  */
 @Scope
 @Retention(AnnotationRetention.RUNTIME)
-annotation class DivViewScope()
+internal annotation class DivViewScope

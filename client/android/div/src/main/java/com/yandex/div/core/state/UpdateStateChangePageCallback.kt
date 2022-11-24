@@ -5,7 +5,7 @@ import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 /**
  * Save view pager position in [DivViewState]
  */
-class UpdateStateChangePageCallback(
+internal class UpdateStateChangePageCallback(
     private val mBlockId: String,
     private val mDivViewState: DivViewState
 ) : OnPageChangeCallback() {

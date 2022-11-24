@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorCircle"
         android:layout_width="120dp"
         android:layout_height="40dp"
@@ -12,7 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorCircleWorm"
         android:layout_width="120dp"
         android:layout_height="40dp"
@@ -21,7 +21,7 @@
         app:layout_constraintStart_toEndOf="@id/pagerIndicatorCircle"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorCircleSlider"
         android:layout_width="120dp"
         android:layout_height="40dp"
@@ -30,7 +30,7 @@
         app:layout_constraintStart_toEndOf="@id/pagerIndicatorCircleWorm"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorRectangle"
         android:layout_width="120dp"
         android:layout_height="40dp"
@@ -39,7 +39,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pagerIndicatorCircle"/>
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorRectangleWorm"
         android:layout_width="120dp"
         android:layout_height="40dp"
@@ -48,7 +48,7 @@
         app:layout_constraintStart_toEndOf="@id/pagerIndicatorRectangle"
         app:layout_constraintTop_toBottomOf="@id/pagerIndicatorCircleWorm"/>
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorRectangleSlider"
         android:layout_width="120dp"
         android:layout_height="40dp"
@@ -57,7 +57,7 @@
         app:layout_constraintStart_toEndOf="@id/pagerIndicatorRectangleWorm"
         app:layout_constraintTop_toBottomOf="@id/pagerIndicatorCircleWorm"/>
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorRoundRectangle"
         android:layout_width="120dp"
         android:layout_height="40dp"
@@ -65,7 +65,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pagerIndicatorRectangle"/>
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorRoundRectangleWorm"
         android:layout_width="120dp"
         android:layout_height="40dp"
@@ -74,7 +74,7 @@
         app:layout_constraintStart_toEndOf="@id/pagerIndicatorRoundRectangle"
         app:layout_constraintTop_toBottomOf="@id/pagerIndicatorRectangleWorm"/>
 
-    <com.yandex.div.core.widget.indicator.PagerIndicatorView
+    <com.yandex.div.internal.widget.indicator.PagerIndicatorView
         android:id="@+id/pagerIndicatorRoundRectangleSlider"
         android:layout_width="120dp"
         android:layout_height="40dp"

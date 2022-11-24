@@ -9,7 +9,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.view.layout.TabsLayout
+import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.core.view2.divs.DivContainerBinder
 import com.yandex.div.core.view2.divs.DivCustomBinder
 import com.yandex.div.core.view2.divs.DivGifImageBinder

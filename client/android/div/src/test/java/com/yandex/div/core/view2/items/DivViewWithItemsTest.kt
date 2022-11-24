@@ -1,7 +1,7 @@
 package com.yandex.div.core.view2.items
 
 import android.widget.FrameLayout
-import com.yandex.div.core.view.layout.TabsLayout
+import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView

@@ -15,6 +15,7 @@ import androidx.annotation.CallSuper
 import com.yandex.div.R
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
 import com.yandex.div.core.view2.drawable.ScaleDrawable
+import com.yandex.div.internal.widget.AspectImageView
 import java.util.concurrent.Future
 
 open class LoadableImageView(

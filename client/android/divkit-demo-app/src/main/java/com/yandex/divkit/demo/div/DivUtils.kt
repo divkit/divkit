@@ -6,24 +6,23 @@ import android.view.ContextThemeWrapper
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
-import com.yandex.div.core.DivStateChangeListener
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.util.KLog
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.templates.InMemoryTemplateProvider
 import com.yandex.div.json.templates.MainTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
-import com.yandex.div.view.pooling.ViewPoolProfiler
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.Container
+import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.MetricaUtils
 import com.yandex.divkit.regression.ScenarioLogDelegate
@@ -31,14 +30,12 @@ import org.json.JSONObject
 
 fun divConfiguration(
     activity: Activity,
-    divStateChangeListener: DivStateChangeListener? = null,
     logDelegate: ScenarioLogDelegate = ScenarioLogDelegate.Stub
 ): DivConfiguration.Builder {
     val reporter = MetricaUtils.getReporter(activity)
     val flagPreferenceProvider = Container.flagPreferenceProvider
     return DivConfiguration.Builder(Container.imageLoader)
         .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
-        .divStateChangeListener(divStateChangeListener ?: DivStateChangeListener.STUB)
         .divCustomViewFactory(DemoDivCustomViewFactory())
         .divCustomViewAdapter(DemoDivCustomViewAdapter(Container.videoCustomViewController))
         .div2Logger(DemoDiv2Logger(logDelegate))
@@ -68,10 +65,9 @@ fun divConfiguration(
 
 fun divContext(
     activity: Activity,
-    divStateChangeListener: DivStateChangeListener? = null,
     configBuilder: DivConfiguration.Builder.() -> DivConfiguration.Builder = { this }
 ): Div2Context {
-    val configuration = divConfiguration(activity, divStateChangeListener)
+    val configuration = divConfiguration(activity)
         .configBuilder()
         .build()
 

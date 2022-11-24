@@ -23,7 +23,7 @@ import javax.inject.Inject
  */
 @DivScope
 @Mockable
-class DivAccessibilityBinder @Inject constructor(
+internal class DivAccessibilityBinder @Inject constructor(
     @ExperimentFlag(ACCESSIBILITY_ENABLED) val enabled: Boolean
 ) {
     fun bindAccessibilityMode(

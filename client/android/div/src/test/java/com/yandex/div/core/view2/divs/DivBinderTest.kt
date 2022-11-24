@@ -13,8 +13,8 @@ import com.yandex.div.core.view2.DivValidator
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.internal.viewpool.PseudoViewPool
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.view.pooling.PseudoViewPool
 import org.mockito.Mockito
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull

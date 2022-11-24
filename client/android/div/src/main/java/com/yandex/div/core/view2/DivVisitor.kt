@@ -19,7 +19,7 @@ import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 
-abstract class DivVisitor<T> {
+internal abstract class DivVisitor<T> {
 
     protected fun visit(div: Div, resolver: ExpressionResolver): T {
         return when (div) {

@@ -3,7 +3,7 @@ package com.yandex.div.steps
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
-import com.yandex.div.core.widget.slider.SliderView
+import com.yandex.div.internal.widget.slider.SliderView
 import org.hamcrest.Matchers.allOf
 
 internal fun sliderPreferences(f: SliderPreferencesSteps.() -> Unit) = f(SliderPreferencesSteps())

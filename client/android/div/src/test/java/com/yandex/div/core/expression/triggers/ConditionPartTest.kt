@@ -8,7 +8,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
 
 @RunWith(Parameterized::class)
-class ConditionPartTest(
+internal class ConditionPartTest(
     private val input: String,
     private val errorText: String?,
     private val expected: List<ConditionPart>

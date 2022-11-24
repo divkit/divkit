@@ -5,7 +5,7 @@ import com.yandex.div.data.Variable
 import com.yandex.div.util.SynchronizedList
 
 @Mockable
-class VariableSource(
+internal class VariableSource(
     private val variables: Map<String, Variable>,
     private val requestObserver: (variableName: String) -> Unit,
     private val declarationObservers: SynchronizedList<(Variable) -> Unit>

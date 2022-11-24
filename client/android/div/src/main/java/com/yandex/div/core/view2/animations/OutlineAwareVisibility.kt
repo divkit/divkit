@@ -4,7 +4,7 @@ import android.animation.Animator
 import android.view.ViewGroup
 import androidx.transition.TransitionValues
 import androidx.transition.Visibility
-import com.yandex.div.core.view2.divs.widgets.TransientView
+import com.yandex.div.internal.widget.TransientView
 
 internal open class OutlineAwareVisibility : Visibility() {
 

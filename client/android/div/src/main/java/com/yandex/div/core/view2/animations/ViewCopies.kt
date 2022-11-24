@@ -93,7 +93,7 @@ private fun View.replace(viewCopy: View, transition: Transition, sceneRoot: View
     })
 }
 
-fun View.setHierarchyImageChangeCallback(callback: (() -> Unit)? = null) {
+internal fun View.setHierarchyImageChangeCallback(callback: (() -> Unit)? = null) {
     when (this) {
         is DivImageView -> setImageChangeCallback(callback)
         is ViewGroup -> children.forEach { it.setHierarchyImageChangeCallback(callback) }

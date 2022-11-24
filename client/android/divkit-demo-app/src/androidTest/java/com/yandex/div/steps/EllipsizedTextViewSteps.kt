@@ -10,13 +10,15 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isAssignableFrom
 import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.rule.ActivityTestRule
+import com.yandex.div.internal.widget.EllipsizedTextView
 import com.yandex.div.utils.CharSequences
 import com.yandex.div.utils.contentView
 import com.yandex.div.utils.runOnView
-import com.yandex.div.view.EllipsizedTextView
 import com.yandex.div.view.lineSpacingAdd
 import com.yandex.test.util.StepsDsl
-import org.hamcrest.CoreMatchers.*
+import org.hamcrest.CoreMatchers.allOf
+import org.hamcrest.CoreMatchers.not
+import org.hamcrest.CoreMatchers.startsWith
 import org.hamcrest.Description
 import org.hamcrest.TypeSafeMatcher
 import org.junit.Assert

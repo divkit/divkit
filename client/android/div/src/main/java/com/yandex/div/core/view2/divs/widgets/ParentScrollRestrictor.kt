@@ -4,10 +4,10 @@ import android.view.MotionEvent
 import android.view.ViewConfiguration
 import android.view.ViewGroup
 import androidx.annotation.IntDef
-import com.yandex.div.view.OnInterceptTouchEventListener
+import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import kotlin.math.abs
 
-class ParentScrollRestrictor(
+internal class ParentScrollRestrictor(
     @Direction private val restrictedDirection: Int
 ) : OnInterceptTouchEventListener {
 

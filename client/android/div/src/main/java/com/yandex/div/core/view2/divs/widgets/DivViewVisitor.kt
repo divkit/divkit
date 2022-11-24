@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.divs.widgets
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
-import com.yandex.div.core.view.layout.TabsLayout
+import com.yandex.div.internal.widget.tabs.TabsLayout
 
 internal abstract class DivViewVisitor {
     open fun visit(view: DivWrapLayout) {}

@@ -17,7 +17,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 @SuppressLint("RtlHardcoded")
-open class GridContainer @JvmOverloads constructor(
+internal open class GridContainer @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

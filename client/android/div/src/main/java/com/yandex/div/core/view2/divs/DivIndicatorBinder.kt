@@ -5,7 +5,7 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
-import com.yandex.div.core.widget.indicator.IndicatorParams
+import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivIndicatorItemPlacement

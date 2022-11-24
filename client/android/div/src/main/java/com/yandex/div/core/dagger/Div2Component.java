@@ -13,26 +13,27 @@ import com.yandex.div.core.DivCustomContainerChildFactory;
 import com.yandex.div.core.DivCustomViewAdapter;
 import com.yandex.div.core.DivCustomViewFactory;
 import com.yandex.div.core.DivDataChangeListener;
-import com.yandex.div.core.DivStateChangeListener;
+import com.yandex.div.core.DivPreloader;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
 import com.yandex.div.core.experiments.Experiment;
 import com.yandex.div.core.expression.ExpressionsRuntimeProvider;
 import com.yandex.div.core.expression.variables.GlobalVariableController;
+import com.yandex.div.core.extension.DivExtensionController;
+import com.yandex.div.core.state.DivStateChangeListener;
 import com.yandex.div.core.state.DivStateManager;
 import com.yandex.div.core.state.TemporaryDivStateCache;
 import com.yandex.div.core.tooltip.DivTooltipController;
 import com.yandex.div.core.view2.Div2Builder;
 import com.yandex.div.core.view2.DivBinder;
 import com.yandex.div.core.view2.DivImagePreloader;
-import com.yandex.div.core.view2.DivPreloader;
 import com.yandex.div.core.view2.DivVisibilityActionDispatcher;
 import com.yandex.div.core.view2.DivVisibilityActionTracker;
-import com.yandex.div.core.view2.ViewVisibilityCalculator;
 import com.yandex.div.core.view2.divs.DivActionBinder;
 import com.yandex.div.histogram.reporter.HistogramReporter;
 import dagger.BindsInstance;
 import dagger.Subcomponent;
+
 import javax.inject.Named;
 
 /**
@@ -49,10 +50,10 @@ public interface Div2Component {
     DivBinder getDivBinder();
 
     @NonNull
-    DivImagePreloader getImagePreLoader();
+    DivImagePreloader getImagePreloader();
 
     @NonNull
-    DivPreloader getPreLoader();
+    DivPreloader getPreloader();
 
     @NonNull
     Div2Logger getDiv2Logger();
@@ -70,9 +71,6 @@ public interface Div2Component {
     TemporaryDivStateCache getTemporaryDivStateCache();
 
     @NonNull
-    ViewVisibilityCalculator getViewVisibilityCalculator();
-
-    @NonNull
     DivCustomContainerChildFactory getDivCustomContainerChildFactory();
 
     /**
@@ -84,6 +82,9 @@ public interface Div2Component {
 
     @Nullable
     DivCustomViewAdapter getDivCustomViewAdapter();
+
+    @NonNull
+    DivExtensionController getExtensionController();
 
     @NonNull
     DivDataChangeListener getDivDataChangeListener();

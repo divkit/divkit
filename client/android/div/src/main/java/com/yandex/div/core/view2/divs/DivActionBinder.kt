@@ -17,8 +17,8 @@ import androidx.core.view.GestureDetectorCompat
 import com.yandex.div.R
 import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
-import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.animation.reversed
+import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
@@ -34,13 +34,13 @@ import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_CLIC
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_DOUBLE_CLICK
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_FOCUS
 import com.yandex.div.core.view2.divs.DivActionBinder.LogType.Companion.LOG_LONG_CLICK
+import com.yandex.div.internal.widget.menu.OverflowMenuWrapper
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.allIsNullOrEmpty
-import com.yandex.div.view.menu.OverflowMenuWrapper
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAnimation
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 @DivScope

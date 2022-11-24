@@ -9,7 +9,7 @@ import androidx.annotation.IntDef
     WrapAlignment.BASELINE
 )
 @Retention(AnnotationRetention.SOURCE)
-annotation class WrapAlignment {
+internal annotation class WrapAlignment {
     companion object {
         const val START = 0
         const val END = 1

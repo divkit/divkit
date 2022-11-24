@@ -172,7 +172,7 @@ private class TranslateAnimation(
     }
 }
 
-class Scale(
+private class Scale(
     private val scaleFactor: Float
 ) : Visibility() {
     override fun onAppear(

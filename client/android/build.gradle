@@ -130,6 +130,8 @@ apiValidation {
         "ui-test-common",
         "unit-test-common"
     ]
+    ignoredPackages += ["com.yandex.div.internal"]
+    nonPublicMarkers += ["dagger.internal.DaggerGenerated"]
 }
 
 task reportVersion {

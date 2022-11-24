@@ -4,7 +4,7 @@ import androidx.annotation.IntDef
 
 @IntDef(WrapDirection.ROW, WrapDirection.COLUMN)
 @Retention(AnnotationRetention.SOURCE)
-annotation class WrapDirection {
+internal annotation class WrapDirection {
     companion object {
         const val ROW = 0
         const val COLUMN = 1

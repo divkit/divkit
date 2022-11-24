@@ -6,13 +6,13 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Path
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.animation.PathInterpolator
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -21,11 +21,9 @@ import androidx.transition.TransitionManager
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import com.yandex.div.DivDataTag
-import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivDataChangeListener
-import com.yandex.div.core.DivStateChangeListener
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.core.animation.SpringInterpolator
+import com.yandex.div.core.state.DivStateChangeListener
 import com.yandex.div.core.state.DivStateTransition
 import com.yandex.div.core.util.Log
 import com.yandex.div.core.view2.Div2View
@@ -42,7 +40,6 @@ import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.databinding.ActivityDiv2Binding
 import com.yandex.divkit.demo.div.editor.DEMO_ACTIVITY_COMPONENT_NAME
 import com.yandex.divkit.demo.div.editor.list.DivEditorAdapter
-import com.yandex.divkit.demo.screenshot.Div2ViewFactory
 import com.yandex.divkit.demo.screenshot.DivAssetReader
 import com.yandex.divkit.demo.ui.SCHEME_DIV_ACTION
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
@@ -88,13 +85,14 @@ class Div2Activity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { onBackPressed() }
 
         val transitionScheduler = DivParentTransitionScheduler(binding.container)
-        val divConfiguration = divConfiguration(this, transitionScheduler)
+        val divConfiguration = divConfiguration(this)
             .extension(
                 DivPinchToZoomExtensionHandler(
                     DivPinchToZoomConfiguration.Builder(this).build()
                 )
             )
             .extension(DivLottieExtensionHandler())
+            .divStateChangeListener(transitionScheduler)
             .divDataChangeListener(transitionScheduler)
             .actionHandler(Div2ActionHandler(Container.uriHandler))
             .typefaceProvider(YandexSansDivTypefaceProvider(this))
@@ -180,6 +178,10 @@ class Div2Activity : AppCompatActivity() {
         private val rootView: ViewGroup
     ) : DivDataChangeListener, DivStateChangeListener {
 
+        private val interpolator = PathInterpolator(
+            Path().apply { cubicTo(0.25f, 0.1f, 0.25f, 1.0f, 1.0f, 1.0f) }
+        )
+
         override fun beforeAnimatedDataChange(divView: Div2View, data: DivData) = scheduleTransition()
 
         override fun afterAnimatedDataChange(divView: Div2View, data: DivData) = Unit
@@ -187,8 +189,7 @@ class Div2Activity : AppCompatActivity() {
         override fun onDivAnimatedStateChanged(divView: Div2View) = scheduleTransition()
 
         private fun scheduleTransition() {
-            val transition = DivStateTransition(rootView)
-                .setInterpolator(SpringInterpolator())
+            val transition = DivStateTransition(rootView).setInterpolator(interpolator)
             TransitionManager.endTransitions(rootView)
             TransitionManager.beginDelayedTransition(rootView, transition)
         }

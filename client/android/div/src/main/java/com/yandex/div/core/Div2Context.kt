@@ -2,6 +2,7 @@ package com.yandex.div.core
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
 import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.ContextThemeWrapper
@@ -9,11 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.annotation.MainThread
 import androidx.annotation.StyleRes
+import androidx.core.view.LayoutInflaterCompat
 import com.yandex.div.R
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.Div2Component
+import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.util.CustomInflaterContext
 
 /**
  * Context to be used to create instance of [Div2View]
@@ -35,8 +37,13 @@ import com.yandex.div.util.CustomInflaterContext
 @Mockable
 class Div2Context @MainThread private constructor(
     baseContext: ContextThemeWrapper,
-    val div2Component: Div2Component
-) : CustomInflaterContext(baseContext) {
+    internal val div2Component: Div2Component
+) : ContextWrapper(baseContext) {
+
+    val globalVariableController: GlobalVariableController
+        get() = div2Component.globalVariableController
+
+    private var inflater: LayoutInflater? = null
 
     @JvmOverloads
     constructor(
@@ -64,7 +71,30 @@ class Div2Context @MainThread private constructor(
         div2Component.divCreationTracker.onContextCreationFinished()
     }
 
-    override fun createInflaterFactory(): LayoutInflater.Factory2 = Div2InflaterFactory(this)
+    override fun getSystemService(name: String): Any? {
+        return if (Context.LAYOUT_INFLATER_SERVICE == name) {
+            getLayoutInflater()
+        } else {
+            baseContext.getSystemService(name)
+        }
+    }
+
+    private fun getLayoutInflater(): LayoutInflater? {
+        var inflater = this.inflater
+        if (inflater != null) {
+            return inflater
+        }
+
+        synchronized(this) {
+            inflater = this.inflater
+            if (inflater == null) {
+                inflater = LayoutInflater.from(baseContext).cloneInContext(this)
+                LayoutInflaterCompat.setFactory2(inflater as LayoutInflater, Div2InflaterFactory(this))
+                this.inflater = inflater
+            }
+            return inflater
+        }
+    }
 
     fun warmUp() {
         div2Component.div2Builder

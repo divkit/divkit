@@ -8,7 +8,7 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 
-open class ViewPager2Wrapper @JvmOverloads constructor(
+internal open class ViewPager2Wrapper @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

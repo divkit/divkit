@@ -7,7 +7,7 @@ package com.yandex.div.core.animation
  * P2 (1.0, 1.0)
  * P3 (1.0, 1.0)
  */
-class EaseInInterpolator : LookupTableInterpolator(VALUES) {
+internal class EaseInInterpolator : LookupTableInterpolator(VALUES) {
 
     private companion object {
         private val VALUES = floatArrayOf(

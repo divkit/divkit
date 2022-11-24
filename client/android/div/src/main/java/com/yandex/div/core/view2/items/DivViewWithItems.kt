@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.util.KAssert
-import com.yandex.div.core.view.layout.TabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
+import com.yandex.div.internal.widget.tabs.TabsLayout
 
 /**
  * Abstract view having items.

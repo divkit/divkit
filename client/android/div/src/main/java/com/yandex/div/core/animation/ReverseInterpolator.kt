@@ -2,7 +2,7 @@ package com.yandex.div.core.animation
 
 import android.view.animation.Interpolator
 
-class ReverseInterpolator(
+internal class ReverseInterpolator(
     private val base: Interpolator
 ) : Interpolator {
 
@@ -11,6 +11,6 @@ class ReverseInterpolator(
     }
 }
 
-fun Interpolator.reversed(): Interpolator {
+internal fun Interpolator.reversed(): Interpolator {
     return ReverseInterpolator(this)
 }

@@ -3,13 +3,11 @@ package com.yandex.divkit.demo.ui
 import android.app.Activity
 import android.content.Context
 import android.view.ViewGroup
-import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.state.DivStateDatabase
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
-import com.yandex.divkit.demo.R
 import com.yandex.divkit.demo.div.Div2Activity
 import com.yandex.divkit.demo.div.divConfiguration
 import com.yandex.divkit.demo.div.divContext
@@ -39,12 +37,13 @@ class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
         val divJson = assetReader.read(scenarioPath)
         val transitionScheduler = Div2Activity.DivParentTransitionScheduler(parent)
         val divConfiguration =
-            divConfiguration(activity, transitionScheduler, logDelegate)
+            divConfiguration(activity, logDelegate)
                 .extension(
                     DivPinchToZoomExtensionHandler(
                         DivPinchToZoomConfiguration.Builder(activity).build()
                     )
                 )
+                .divStateChangeListener(transitionScheduler)
                 .divDataChangeListener(transitionScheduler)
                 .typefaceProvider(YandexSansDivTypefaceProvider(activity))
                 .actionHandler(UIDiv2ActionHandler(uriHandler, context))
@@ -57,4 +56,3 @@ class UIDiv2ViewCreator(private val context: Context) : Div2ViewCreator {
         return Div2ViewFactory(divContext, templateJson).createView(cardJson)
     }
 }
-

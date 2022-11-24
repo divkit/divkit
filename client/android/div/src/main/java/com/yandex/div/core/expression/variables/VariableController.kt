@@ -5,7 +5,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.data.Variable
 
 @Mockable
-class VariableController(
+internal class VariableController(
     private val variables: Map<String, Variable>,
 ) {
     private val extraVariablesSources = mutableListOf<VariableSource>()
