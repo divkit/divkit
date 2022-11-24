@@ -8,6 +8,7 @@ public enum Background: Equatable {
   case gradient(Gradient)
   case transparentAction(UserInterfaceAction)
   case ninePatchImage(NinePatchImage)
+  case block(Block)
   indirect case composite(Background, Background, Float?)
   indirect case withInsets(background: Background, contentInsets: EdgeInsets)
 
@@ -40,6 +41,8 @@ public func ==(lhs: Background, rhs: Background) -> Bool {
     return gradient1 == gradient2
   case let (.transparentAction(action1), .transparentAction(action2)):
     return action1 == action2
+  case let (.block(block1), .block(block2)):
+    return block1 == block2
   case let (
     .composite(background11, background12, blendingCoefficient1),
     .composite(background21, background22, blendingCoefficient2)
@@ -52,6 +55,7 @@ public func ==(lhs: Background, rhs: Background) -> Bool {
        (.tiledImage, _),
        (.image, _),
        (.gradient, _),
+       (.block, _),
        (.transparentAction, _),
        (.composite, _),
        (.withInsets, _),
@@ -75,6 +79,8 @@ extension Background: CustomDebugStringConvertible {
       return "TiledImage \(image.size.width) x \(image.size.height)"
     case let .transparentAction(action):
       return "Action payload: \(action.payload), path:\(action.path)"
+    case let .block(block):
+      return "Block \(block.debugDescription)"
     case let .composite(bck1, bck2, coef):
       #if os(iOS)
       let defaultFrontCoef = CompositeView.defaultBlendingCoefficient
@@ -108,6 +114,8 @@ extension Background: ImageContaining {
       return [image.imageHolder]
     case let .withInsets(background, _):
       return background.getImageHolders()
+    case let .block(block):
+      return block.getImageHolders()
     case .solidColor,
          .tiledImage,
          .gradient,

@@ -94,7 +94,7 @@ extension BackgroundView {
       } else {
         view = RemoteImageViewContainer(contentView: RemoteImageView())
       }
-      
+
     case .ninePatchImage:
       view = RemoteImageViewContainer(contentView: NinePatchImageView())
 
@@ -110,6 +110,12 @@ extension BackgroundView {
 
     case let .transparentAction(action):
       view = ClickableView(action: action)
+
+    case let .block(block):
+      view = block.makeBlockView(
+        observer: observer,
+        overscrollDelegate: overscrollDelegate
+      )
 
     case let .composite(background1, background2, _):
       let view1 = background1.makeBlockView(
@@ -174,6 +180,10 @@ extension BackgroundView {
       let clickableView = innerView as! ClickableView
       clickableView.action = action
 
+    case let .block(block):
+      let blockView = innerView as! BlockView
+      block.configureBlockView(blockView, observer: observer, overscrollDelegate: overscrollDelegate, renderingDelegate: renderingDelegate)
+
     case let .composite(background1, background2, blendingCoefficient):
       let compositeView = innerView as! CompositeView
       background1.configureBlockView(
@@ -216,7 +226,8 @@ extension BackgroundView {
          (.tiledImage, .tiledImage),
          (.image, .image),
          (.transparentAction, .transparentAction),
-         (.ninePatchImage, .ninePatchImage):
+         (.ninePatchImage, .ninePatchImage),
+         (.block, .block):
       return true
 
     case let (.gradient(type1), .gradient(type2)):
@@ -256,6 +267,7 @@ extension BackgroundView {
          (.gradient, _),
          (.composite, _),
          (.withInsets, _),
+      (.block, _),
       (.ninePatchImage, _):
       return false
     }
@@ -271,7 +283,8 @@ extension Background {
          .tiledImage,
          .image,
          .gradient,
-         .ninePatchImage:
+         .ninePatchImage,
+         .block:
       return false
     case .transparentAction:
       return true
