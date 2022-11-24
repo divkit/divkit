@@ -70,20 +70,20 @@ public final class ExpressionResolver {
   }
 
   func resolveEscaping<T>(_ value: T?) -> T? {
-    guard let value = value as? String else {
+    guard var value = value as? String, value.contains("\\") else {
       return value
     }
-    var result = ""
 
     var index = value.startIndex
     let escapingValues = ["@{", "'", "\\"]
 
     while (index < value.endIndex) {
       if value[index] == "\\" {
-        index = value.index(index, offsetBy: 1)
-        let next = value[index...]
+        let nextIndex = value.index(index, offsetBy: 1)
+        let next = value[nextIndex...]
+
         if let escaped = escapingValues.first(where: { next.starts(with: $0) }) {
-          result += escaped
+          value.remove(at: index)
           index = value.index(index, offsetBy: escaped.count)
         } else {
           if next.isEmpty {
@@ -94,12 +94,11 @@ public final class ExpressionResolver {
           return nil
         }
       } else {
-        result += value[index]
         index = value.index(after: index)
       }
     }
 
-    return result as? T
+    return value as? T
   }
 
   @inlinable
