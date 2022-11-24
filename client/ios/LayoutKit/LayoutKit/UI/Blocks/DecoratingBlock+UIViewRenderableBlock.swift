@@ -236,6 +236,14 @@ private final class DecoratingView: UIControl, BlockViewProtocol, VisibleBoundsT
     actions?.perform(sendingFrom: self)
   }
 
+  override func accessibilityActivate() -> Bool {
+    guard let actions = model.actions?.asArray() else {
+      return false
+    }
+    actions.perform(sendingFrom: self)
+    return true
+  }
+  
   override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
     let result = super.hitTest(point, with: event)
     if result === self {
