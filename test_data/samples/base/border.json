@@ -22,7 +22,6 @@
     },
     "text_block": {
       "type": "text",
-      "$text": "visible_text",
       "id": "visible_id",
       "width": {
         "type": "match_parent"
