@@ -1,0 +1,15 @@
+{
+  "templates": {
+    "t_0": {
+      "type": "entity_with_required_property",
+      "$property": "link"
+    },
+    "t_1": {
+      "type": "t_0",
+      "link": "Some text"
+    }
+  },
+  "entity": {
+    "type": "t_1"
+  }
+}

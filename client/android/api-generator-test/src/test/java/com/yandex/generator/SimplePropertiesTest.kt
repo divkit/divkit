@@ -1,7 +1,6 @@
 package com.yandex.generator
 
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.generator.EntityTemplateTestCase
 import com.yandex.testing.EntityWithSimpleProperties
 import org.junit.Assert
 import org.junit.Test

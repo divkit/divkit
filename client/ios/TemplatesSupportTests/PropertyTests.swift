@@ -22,6 +22,14 @@ final class PropertyTests: XCTestCase {
     XCTAssertNil(entity)
   }
 
+  func test_Property_WithLinkValueInTemplate() throws {
+    let entity = try readEntity("test_property_with_link_value_in_template")
+
+    // DIVKIT-1130: not supported
+    // XCTAssertEqual(entity, Expected.withRequiredProperty)
+    XCTAssertNil(entity)
+  }
+
   func test_WhenRequiredPropertyIsMissing_WithLink_NoValue() throws {
     let entity = try readEntity("test_property_with_link_missing_data")
 

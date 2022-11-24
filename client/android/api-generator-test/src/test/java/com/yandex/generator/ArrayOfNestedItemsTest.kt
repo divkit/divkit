@@ -1,8 +1,6 @@
 package com.yandex.generator
 
 import com.yandex.div.json.ParsingException
-import com.yandex.generator.ENTITY_WITH_ARRAY_OF_NESTED_ITEMS
-import com.yandex.generator.EntityTemplateTestCase
 import com.yandex.testing.Entity
 import org.junit.Assert
 import org.junit.Test

@@ -1,8 +1,5 @@
 package com.yandex.generator
 
-import com.yandex.generator.ENTITY_WITH_MISSING_STRING_ENUM_PROPERTY
-import com.yandex.generator.ENTITY_WITH_OPTIONAL_STRING_ENUM_PROPERTY
-import com.yandex.generator.EntityTemplateTestCase
 import com.yandex.testing.Entity
 import org.junit.Assert.assertEquals
 import org.junit.Test
