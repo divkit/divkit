@@ -29,6 +29,7 @@ import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
+import com.yandex.div.core.view2.DivAccessibilityVisitor
 import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
@@ -37,6 +38,7 @@ import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
+import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
@@ -253,13 +255,17 @@ internal class DivBaseBinder @Inject constructor(
         subscriber: ExpressionSubscriber
     ) {
         val accessibility = div.accessibility
-        val hint = accessibility.hint?.evaluate(resolver)
 
-        applyDescriptionAndHint(accessibility.description?.evaluate(resolver), hint)
+        applyDescriptionAndHint(accessibility.description?.evaluate(resolver), accessibility.hint?.evaluate(resolver))
         subscriber.addSubscription(
             accessibility.description?.observe(resolver) { description ->
-                applyDescriptionAndHint(description, hint)
+                applyDescriptionAndHint(description, accessibility.hint?.evaluate(resolver))
             } ?: Disposable.NULL
+        )
+        subscriber.addSubscription(
+                accessibility.hint?.observe(resolver) { hint ->
+                    applyDescriptionAndHint(accessibility.description?.evaluate(resolver), hint)
+                } ?: Disposable.NULL
         )
 
         applyAccessibilityStateDescription(accessibility.stateDescription?.evaluate(resolver))
@@ -272,6 +278,11 @@ internal class DivBaseBinder @Inject constructor(
         divAccessibilityBinder.bindAccessibilityMode(
             this, divView, accessibility.mode.evaluate(resolver)
         )
+        val accessibilityVisitor = DivAccessibilityVisitor(divAccessibilityBinder, divView, resolver)
+        subscriber.addSubscription(
+                accessibility.mode.observe(resolver) {
+                    accessibilityVisitor.visitViewTree(this)
+                })
 
         accessibility.type?.let { type ->
             divAccessibilityBinder.bindType(this, type)
