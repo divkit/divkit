@@ -44,7 +44,7 @@ const configCommon = ({
                         loader: 'css-loader',
                         options: {
                             modules: {
-                                localIdentName: 'divkit-[hash:4]'
+                                localIdentName: 'divkit-[hash:5]'
                             }
                         }
                     },
