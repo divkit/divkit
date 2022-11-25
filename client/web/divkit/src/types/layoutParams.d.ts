@@ -1,11 +1,12 @@
 import { Orientation } from './orientation';
 
 export type Align = 'start' | 'center' | 'end';
+export type AlignPlusBaseline = Align | 'baseline';
 export type ScrollSnap = 'start' | 'center' | 'end';
 
 export interface LayoutParams {
     parentHAlign?: Align;
-    parentVAlign?: Align;
+    parentVAlign?: AlignPlusBaseline;
     parentContainerOrientation?: Orientation;
     parentContainerWrap?: boolean;
     parentLayoutOrientation?: Orientation;

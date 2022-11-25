@@ -37,6 +37,10 @@
     align-items: flex-end;
 }
 
+.text_valign_baseline {
+    align-items: baseline;
+}
+
 .text__inner {
     overflow: hidden;
 }

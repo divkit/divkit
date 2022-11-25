@@ -61,7 +61,8 @@
     const VERTICAL_ALIGN_TO_GENERAL = {
         top: 'start',
         center: 'center',
-        bottom: 'end'
+        bottom: 'end',
+        baseline: 'baseline'
     };
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
@@ -315,7 +316,12 @@
             newHeightMods['valign-self'] = 'stretch';
         } else {
             const align = $jsonAlignmentVertical;
-            if (align === 'top' || align === 'center' || align === 'bottom') {
+            if (
+                align === 'top' ||
+                align === 'center' ||
+                align === 'bottom' ||
+                align === 'baseline' && layoutParams.parentContainerOrientation === 'horizontal'
+            ) {
                 newHeightMods['valign-self'] = VERTICAL_ALIGN_TO_GENERAL[align];
             } else {
                 newHeightMods['valign-self'] = layoutParams.parentVAlign || 'start';

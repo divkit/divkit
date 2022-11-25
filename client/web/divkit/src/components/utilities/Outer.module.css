@@ -90,6 +90,10 @@
     align-self: stretch;
 }
 
+.outer_parent-flex_horizontal.outer_valign-self_baseline {
+    align-self: baseline;
+}
+
 .outer_width_content {
     width: max-content;
 }

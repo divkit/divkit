@@ -7,7 +7,8 @@ export function correctAlignmentVertical(
     if (
         orientation === 'top' ||
         orientation === 'center' ||
-        orientation === 'bottom'
+        orientation === 'bottom' ||
+        orientation === 'baseline'
     ) {
         return orientation;
     }

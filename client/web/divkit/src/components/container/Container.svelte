@@ -37,7 +37,8 @@
     const VALIGN_MAP = {
         top: 'start',
         center: 'center',
-        bottom: 'end'
+        bottom: 'end',
+        baseline: 'baseline'
     } as const;
 
     const AVAIL_SEPARATOR_SHAPES = ['rounded_rectangle', 'circle'];
