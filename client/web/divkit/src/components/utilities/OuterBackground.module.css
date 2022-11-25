@@ -7,6 +7,16 @@
     height: 100%;
 }
 
+.outer-background_clip {
+    overflow: hidden;
+}
+
+@supports (overflow: clip) {
+    .outer-background_clip {
+        overflow: clip;
+    }
+}
+
 .outer-background__item {
     position: absolute;
     top: 0;

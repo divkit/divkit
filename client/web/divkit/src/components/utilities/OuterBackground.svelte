@@ -12,6 +12,7 @@
     import { getCssFilter } from '../../utils/filters';
 
     export let background: MaybeMissing<Background[]> = [];
+    export let radius = '';
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
@@ -61,7 +62,10 @@
     }
 </script>
 
-<span class={css['outer-background']}>
+<span
+    class={css['outer-background'] + (radius ? ' ' + css['outer-background_clip'] : '')}
+    style:border-radius={radius}
+>
     {#each styles as item}
         {#if item.image_url}
             <img

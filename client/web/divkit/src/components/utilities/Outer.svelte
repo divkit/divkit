@@ -12,6 +12,7 @@
     import type { Action } from '../../../typings/common';
     import type { MaybeMissing } from '../../expressions/json';
     import type { EdgeInsets } from '../../types/edgeInserts';
+    import type { CornersRadius } from '../../types/border';
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
@@ -20,7 +21,6 @@
     import { genClassName } from '../../utils/genClassName';
     import { devtool, DevtoolResult } from '../../use/devtool';
     import { STATE_CTX, StateCtxValue } from '../../context/state';
-    import { correctBorderRadius } from '../../utils/correctBorderRadius';
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { correctAlpha } from '../../utils/correctAlpha';
@@ -28,14 +28,16 @@
     import { correctColor } from '../../utils/correctColor';
     import { correctVisibility } from '../../utils/correctVisibility';
     import { wrapError } from '../../utils/wrapError';
-    import Actionable from './Actionable.svelte';
-    import OuterBackground from './OuterBackground.svelte';
     import { correctCSSInterpolator } from '../../utils/correctCSSInterpolator';
     import { correctNumber } from '../../utils/correctNumber';
     import { flattenAnimation } from '../../utils/flattenAnimation';
     import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
     import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
     import { sumEdgeInsets } from '../../utils/sumEdgeInsets';
+    import { correctBorderRadiusObject } from '../../utils/correctBorderRadiusObject';
+    import { borderRadius } from '../../utils/borderRadius';
+    import Actionable from './Actionable.svelte';
+    import OuterBackground from './OuterBackground.svelte';
 
     export let json: Partial<DivBaseData & DivActionableData> = {};
     export let origJson: DivBase | undefined = undefined;
@@ -75,11 +77,19 @@
     let strokeWidth = 1;
     let strokeColor = 'transparent';
     let cornerRadius = 0;
-    let cornersRadius = '';
+    let cornersRadius: CornersRadius = {
+        'top-left': 0,
+        'top-right': 0,
+        'bottom-right': 0,
+        'bottom-left': 0
+    };
+    let backgroundRadius = '';
     $: {
         let newBorderStyle: Style = {};
         let newBorderElemStyle: Style = {};
         let newHasBorder = false;
+        let newBackgroundRadius = '';
+
         if ($jsonBorder) {
             if ($jsonBorder.has_shadow) {
                 const shadow = $jsonBorder.shadow;
@@ -100,16 +110,39 @@
                 newBorderElemStyle.border = `${pxToEm(strokeWidth)} solid ${strokeColor}`;
             }
             if ($jsonBorder.corners_radius) {
-                cornersRadius = correctBorderRadius($jsonBorder.corners_radius, 0, 10, cornersRadius);
-                newBorderElemStyle['border-radius'] = newBorderStyle['border-radius'] = cornersRadius;
+                cornersRadius = correctBorderRadiusObject($jsonBorder.corners_radius, cornersRadius);
+                newBorderElemStyle['border-radius'] = newBorderStyle['border-radius'] = borderRadius(cornersRadius);
             } else if ($jsonBorder.corner_radius) {
                 cornerRadius = correctNonNegativeNumber($jsonBorder.corner_radius, cornerRadius);
+                cornersRadius = {
+                    'top-left': cornerRadius,
+                    'top-right': cornerRadius,
+                    'bottom-right': cornerRadius,
+                    'bottom-left': cornerRadius
+                };
                 newBorderElemStyle['border-radius'] = newBorderStyle['border-radius'] = pxToEm(cornerRadius);
+            }
+
+            // Clip browser rendering artifacts by border-radius + border-width/2
+            if (newHasBorder && strokeWidth && ($jsonBorder.corners_radius || $jsonBorder.corner_radius)) {
+                let radius: CornersRadius = { ...cornersRadius };
+
+                ([
+                    'top-left',
+                    'top-right',
+                    'bottom-right',
+                    'bottom-left'
+                ] as const).forEach(corner => {
+                    radius[corner] = (radius[corner] || 0) + strokeWidth / 2;
+                });
+
+                newBackgroundRadius = borderRadius(radius);
             }
         }
         borderStyle = assignIfDifferent(newBorderStyle, borderStyle);
         borderElemStyle = assignIfDifferent(newBorderElemStyle, borderElemStyle);
         hasBorder = newHasBorder;
+        backgroundRadius = newBackgroundRadius;
     }
 
     $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
@@ -330,15 +363,16 @@
 
     $: jsonBackground = rootCtx.getDerivedFromVars(json.background);
     let backgroundStyle: Style;
-    let hasImagesBg: boolean;
+    let hasSeparateBg: boolean;
     $: {
         backgroundStyle = {};
-        hasImagesBg = false;
+        hasSeparateBg = false;
         if ($jsonBackground) {
-            hasImagesBg = $jsonBackground
-                .some(it => it.type === 'image' || it.type === 'nine_patch_image');
+            hasSeparateBg =
+                $jsonBackground.some(it => it.type === 'image' || it.type === 'nine_patch_image') ||
+                Boolean(backgroundRadius);
 
-            if (!hasImagesBg) {
+            if (!hasSeparateBg) {
                 const res = getBackground($jsonBackground);
                 backgroundStyle['background-color'] = res.color;
                 backgroundStyle['background-image'] = res.image;
@@ -675,6 +709,6 @@
         {attrs}
         isNativeActionAnimation={!actionAnimationList.length || hasNativeAnimation(actionAnimationList)}
     >
-        {#if hasImagesBg}<OuterBackground background={$jsonBackground} />{/if}<slot />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
+        {#if hasSeparateBg}<OuterBackground background={$jsonBackground} radius={backgroundRadius} />{/if}<slot />{#if hasBorder}<span class={css.outer__border} style={makeStyle(borderElemStyle)}></span>{/if}
     </Actionable>
 {/if}

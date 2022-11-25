@@ -1,13 +1,10 @@
 import type { CornersRadius } from '../types/border';
-import { borderRadius } from './borderRadius';
 import { isNonNegativeNumber } from './isNonNegativeNumber';
 
-export function correctBorderRadius(
+export function correctBorderRadiusObject(
     cornersRadius: CornersRadius,
-    defaultRadius: number,
-    fontSize: number,
-    defaultVal: string
-): string {
+    defaultVal: CornersRadius
+): CornersRadius {
     const list = [
         cornersRadius['top-left'],
         cornersRadius['top-right'],
@@ -21,5 +18,5 @@ export function correctBorderRadius(
         }
     }
 
-    return borderRadius(cornersRadius, defaultRadius, fontSize);
+    return cornersRadius;
 }
