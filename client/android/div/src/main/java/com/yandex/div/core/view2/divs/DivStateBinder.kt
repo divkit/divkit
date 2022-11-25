@@ -161,14 +161,13 @@ internal class DivStateBinder @Inject constructor(
             val patchView = divPatchManager.createViewsForId(divView, childDivId)?.firstOrNull()
             val patchDiv = divPatchCache.getPatchDivListById(divView.dataTag, childDivId)?.firstOrNull()
             if (patchView != null && patchDiv != null) {
-                layout.removeViewAt(0)
-                layout.addView(patchView, 0)
+                layout.releaseAndRemoveChildren(divView)
+                layout.addView(patchView)
                 if (patchDiv.value().hasVisibilityActions) {
                     divView.bindViewToDiv(patchView, patchDiv)
                 }
+                viewBinder.get().bind(patchView, patchDiv, divView, currentPath)
             }
-
-            viewBinder.get().bind(layout.children.first(), childDiv, divView, currentPath)
         }
 
         val actions = newState.swipeOutActions
