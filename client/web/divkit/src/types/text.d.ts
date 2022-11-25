@@ -3,9 +3,10 @@ import type { DivActionableData } from './actionable';
 import type { Action } from '../../typings/common';
 import type { FixedSize } from './sizes';
 import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
-import type { GradientBackground } from './background';
+import type { GradientBackground, SolidBackground } from './background';
 import type { BooleanInt } from '../../typings/common';
 import type { TintMode } from './image';
+import type { Stroke } from './border';
 
 export type FontWeight = 'light' | 'regular' | 'medium' | 'bold';
 
@@ -24,11 +25,18 @@ export interface TextStyles {
     line_height?: number;
 }
 
+export interface TextRangeBorder {
+    stroke?: Stroke;
+    corner_radius?: number;
+}
+
 export interface TextRange extends TextStyles {
     start: number;
     end: number;
     actions?: Action[];
     top_offset?: number;
+    border?: TextRangeBorder;
+    background?: SolidBackground;
 }
 
 export interface TextImage {

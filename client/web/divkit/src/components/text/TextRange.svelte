@@ -13,6 +13,7 @@
     import { correctFontWeight } from '../../utils/correctFontWeight';
     import { correctColor } from '../../utils/correctColor';
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
+    import { getBackground } from '../../utils/background';
 
     export let text: string;
     export let rootFontSize: number;
@@ -68,6 +69,23 @@
 
     $: topOffset = textStyles.top_offset ? pxToEm(textStyles.top_offset) : '';
 
+    $: bg = textStyles.background ? getBackground([textStyles.background]) : null;
+
+    let border: {
+        color: string;
+        width: number;
+    } | null = null;
+    $: if (textStyles.border?.stroke && correctColor(textStyles.border.stroke.color) !== 'transparent' && isPositiveNumber(textStyles.border.stroke.width)) {
+        border = {
+            color: textStyles.border.stroke.color,
+            width: textStyles.border.stroke.width
+        };
+    } else {
+        border = null;
+    }
+
+    $: borderRadius = correctPositiveNumber(textStyles.border?.corner_radius, 0);
+
     $: mods = {
         singleline,
         decoration
@@ -78,7 +96,15 @@
         'line-height': lineHeight,
         'letter-spacing': letterSpacing,
         'font-weight': fontWeight,
-        color
+        color,
+        background: bg?.color || undefined,
+        /**
+         * box-shadow instead of border because:
+         * 1) Doesn't take space as border does
+         * 2) There should not be a border-radius on line breaks, but there should be a border
+         */
+        'box-shadow': border ? `inset 0 0 0 ${pxToEm(border.width)} ${border.color}` : undefined,
+        'border-radius': borderRadius ? pxToEm(borderRadius) : undefined
     };
 </script>
 
