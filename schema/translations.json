@@ -1179,6 +1179,14 @@
     "en": "The size that adjusts to the parent element width.",
     "ru": "Размер, который подстраивается под ширину родительского элемента."
   },
+  "div_size_max": {
+    "en": "Maximum element size.",
+    "ru": "Максимальный размер элемента."
+  },
+  "div_size_min": {
+    "en": "Minimum element size.",
+    "ru": "Минимальный размер элемента."
+  },
   "div_size_unit": {
     "en": "Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>",
     "ru": "Единица измерения:<li>`px` — физический пиксель.</li><li>`dp` — логический пиксель, который не зависит от плотности экрана.</li><li>`sp` — логический пиксель, который зависит от размера шрифта на устройстве. Указывайте в `sp` высоту. Доступен только на Android.</li>"
