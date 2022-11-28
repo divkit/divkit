@@ -22,6 +22,7 @@
     import { runCode } from '../utils/shortcuts';
     import { webViewerErrors } from '../data/webViewerErrors';
     import { sampleWarningStore } from '../data/sampleWarningStore';
+    import { templatesCheck } from '../utils/templatesCheck';
 
     const {l10n} = getContext<LanguageContext>(LANGUAGE_CTX);
 
@@ -105,7 +106,7 @@
             divBlock.$destroy();
         }
         components.clear();
-        $webViewerErrors = [];
+        $webViewerErrors = [...templatesCheck(json)];
         let count = 0;
         let renderStart = performance.now();
 
