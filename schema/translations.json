@@ -1652,8 +1652,8 @@
     "ru": "Длительность работы таймера в миллисекундах. Если параметр равен `0` или не указан, таймер работает бесконечно (до тех пор пока не придёт событие остановки таймера)."
   },
   "div_timer_end_actions": {
-    "en": "Actions performed when the timer is ended: when the timer has counted to `duration` or the command `div-action://stop_timer?id=<id>` has received.",
-    "ru": "Действия, выполняемые при завершении работы таймера: когда таймер досчитал до `duration` или пришла команда `div-action://stop_timer?id=<id>`."
+    "en": "Actions performed when the timer is ended: when the timer has counted to `duration` or the command `div-action://timer?action=stop&id=<id>` has received.",
+    "ru": "Действия, выполняемые при завершении работы таймера: когда таймер досчитал до `duration` или пришла команда `div-action://timer?action=stop&id=<id>`."
   },
   "div_timer_id": {
     "en": "Timer ID. Must be unique. It is used when calling actions for the selected timer, for example: start, stop.",
