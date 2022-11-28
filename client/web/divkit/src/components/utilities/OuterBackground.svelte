@@ -16,10 +16,7 @@
 
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
-    const styles: {
-        image_url?: string;
-        style: Style;
-    }[] = background.map(bg => {
+    $: styles = background.map(bg => {
         const stl: Style = {};
         const obj: {
             image_url?: string;
