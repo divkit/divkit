@@ -38,7 +38,13 @@ internal class ForceParentLayoutParams(
     }
 
     class Linear(source: LinearLayout.LayoutParams) : LinearLayoutCompat.LayoutParams(source) {
+
         val parentParams = ForceParentLayoutParams(this)
+
+        init {
+            weight = source.weight
+            gravity = source.gravity
+        }
     }
 
     class Frame(source: FrameLayout.LayoutParams) : FrameLayout.LayoutParams(source) {
