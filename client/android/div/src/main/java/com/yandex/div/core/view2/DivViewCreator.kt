@@ -4,11 +4,9 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Space
-import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
@@ -68,7 +66,7 @@ internal class DivViewCreator @Inject constructor(
         viewPool.register(TAG_PAGER, { DivPagerView(context) }, 2)
         viewPool.register(TAG_TABS, { TabsLayout(context) }, 2)
         viewPool.register(TAG_STATE, { DivStateLayout(context) }, 4)
-        viewPool.register(TAG_CUSTOM, { CustomViewStub(context) }, 2)
+        viewPool.register(TAG_CUSTOM, { DivFrameLayout(context) }, 2)
         viewPool.register(TAG_INDICATOR, { DivPagerIndicatorView(context) }, 2)
         viewPool.register(TAG_SLIDER, { DivSliderView(context) }, 2)
         viewPool.register(TAG_INPUT, { DivInputView(context) }, 2)
@@ -153,8 +151,4 @@ internal class DivViewCreator @Inject constructor(
         const val TAG_SLIDER = "DIV2.SLIDER"
         const val TAG_INPUT = "DIV2.INPUT"
     }
-}
-
-internal class CustomViewStub(context: Context): View(context), ExpressionSubscriber {
-    override val subscriptions = mutableListOf<Disposable>()
 }
