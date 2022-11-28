@@ -2,11 +2,16 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
+import android.text.Spannable
+import android.text.Spanned
 import android.util.AttributeSet
+import androidx.core.graphics.withTranslation
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.ExpressionSubscriber
+import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
+import com.yandex.div.core.view2.divs.DivBackgroundSpan
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.invalidateAfter
@@ -27,6 +32,7 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
 
     internal var div: DivText? = null
     internal var adaptiveMaxLines: AdaptiveMaxLines? = null
+    internal var textRoundedBgHelper: DivTextRangesBackgroundHelper? = null
 
     internal var animationStartDelay = 0L
     private var animationStarted = false
@@ -84,5 +90,22 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
     override fun release() {
         super.release()
         borderDrawer?.release()
+    }
+
+    override fun requestLayout() {
+        super.requestLayout()
+        (text as? Spannable)?.getSpans(0, text.length, DivBackgroundSpan::class.java)?.forEach {
+            it.cache = null
+        }
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        // need to draw bg first so that text can be on top during super.onDraw()
+        if (text is Spanned && layout != null) {
+            canvas.withTranslation(totalPaddingLeft.toFloat(), totalPaddingTop.toFloat()) {
+                textRoundedBgHelper?.draw(canvas, text as Spanned, layout)
+            }
+        }
+        super.onDraw(canvas)
     }
 }

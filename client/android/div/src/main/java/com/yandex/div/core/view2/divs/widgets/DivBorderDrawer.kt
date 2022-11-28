@@ -93,7 +93,7 @@ internal class DivBorderDrawer(
     }
 
     private fun applyBorder(border: DivBorder, resolver: ExpressionResolver) {
-        strokeWidth = border.stroke.widthPx().toFloat()
+        strokeWidth = border.stroke.widthPx(resolver, metrics).toFloat()
         hasBorder = strokeWidth > 0
         if (hasBorder) {
             val borderColor = border.stroke?.color?.evaluate(resolver)
@@ -220,16 +220,6 @@ internal class DivBorderDrawer(
         }
     }
 
-    @Px
-    private fun DivStroke?.widthPx(): Int {
-        return when(this?.unit?.evaluate(expressionResolver)) {
-            DivSizeUnit.DP -> width.evaluate(expressionResolver).dpToPx(metrics)
-            DivSizeUnit.SP -> width.evaluate(expressionResolver).spToPx(metrics)
-            DivSizeUnit.PX -> width.evaluate(expressionResolver)
-            else -> this?.width?.evaluate(expressionResolver) ?: 0
-        }
-    }
-
     private inner class ClipParams {
         val path = Path()
         private val rect = RectF()
@@ -310,6 +300,16 @@ internal class DivBorderDrawer(
         private const val DEFAULT_DY = 0.5f
         private const val DEFAULT_SHADOW_COLOR = Color.BLACK
         private const val DEFAULT_SHADOW_ALPHA = 0.23f
+    }
+}
+
+@Px
+internal fun DivStroke?.widthPx(expressionResolver: ExpressionResolver, metrics: DisplayMetrics): Int {
+    return when(this?.unit?.evaluate(expressionResolver)) {
+        DivSizeUnit.DP -> width.evaluate(expressionResolver).dpToPx(metrics)
+        DivSizeUnit.SP -> width.evaluate(expressionResolver).spToPx(metrics)
+        DivSizeUnit.PX -> width.evaluate(expressionResolver)
+        else -> this?.width?.evaluate(expressionResolver) ?: 0
     }
 }
 

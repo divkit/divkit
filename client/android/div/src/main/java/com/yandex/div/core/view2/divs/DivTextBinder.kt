@@ -26,6 +26,7 @@ import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.HYPHENATION_SUPPORT_ENABLED
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
+import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
@@ -40,7 +41,6 @@ import com.yandex.div.internal.spannable.LetterSpacingSpan
 import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
-import com.yandex.div.internal.widget.EllipsizedTextView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.util.checkHyphenationSupported
@@ -58,8 +58,11 @@ import com.yandex.div2.DivRadialGradientFixedCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRadialGradientRelativeCenter
 import com.yandex.div2.DivRadialGradientRelativeRadius
+import com.yandex.div2.DivSolidBackground
 import com.yandex.div2.DivText
 import com.yandex.div2.DivTextGradient
+import com.yandex.div2.DivTextRangeBackground
+import com.yandex.div2.DivTextRangeBorder
 import javax.inject.Inject
 import kotlin.math.min
 
@@ -83,6 +86,7 @@ internal class DivTextBinder @Inject constructor(
 
         val expressionResolver = divView.expressionResolver
         view.closeAllSubscription()
+        view.textRoundedBgHelper = DivTextRangesBackgroundHelper(view, expressionResolver)
 
         view.div = div
         if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
@@ -434,7 +438,7 @@ internal class DivTextBinder @Inject constructor(
         )
     }
 
-    private fun TextView.applyText(
+    private fun DivLineHeightTextView.applyText(
         divView: Div2View,
         resolver: ExpressionResolver,
         div: DivText
@@ -485,6 +489,11 @@ internal class DivTextBinder @Inject constructor(
             addSubscription(range.textColor?.observe(resolver, callback) ?: Disposable.NULL)
             addSubscription(range.topOffset?.observe(resolver, callback) ?: Disposable.NULL)
             addSubscription(range.underline?.observe(resolver, callback) ?: Disposable.NULL)
+            when (val background = range.background?.value()) {
+                is DivSolidBackground -> addSubscription(background.color.observe(resolver, callback))
+            }
+            addSubscription(range.border?.stroke?.color?.observe(resolver, callback) ?: Disposable.NULL)
+            addSubscription(range.border?.stroke?.width?.observe(resolver, callback) ?: Disposable.NULL)
         }
         ellipsis.images?.forEach { image ->
             addSubscription(image.start.observe(resolver, callback))
@@ -495,7 +504,7 @@ internal class DivTextBinder @Inject constructor(
         }
     }
 
-    private fun EllipsizedTextView.applyEllipsis(
+    private fun DivLineHeightTextView.applyEllipsis(
         divView: Div2View,
         resolver: ExpressionResolver,
         div: DivText
@@ -532,7 +541,7 @@ internal class DivTextBinder @Inject constructor(
 
     private inner class DivTextRanger(
         private val divView: Div2View,
-        private val textView: TextView,
+        private val textView: DivLineHeightTextView,
         private val resolver: ExpressionResolver,
         private val text: String,
         private val fontSize: Int,
@@ -638,10 +647,25 @@ internal class DivTextBinder @Inject constructor(
                 textView.movementMethod = LinkMovementMethod.getInstance()
                 setSpan(DivClickableSpan(it), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
             }
+            if (range.border != null || range.background != null) {
+                val span = DivBackgroundSpan(range.border, range.background)
+                if (!textView.hasSuchSpan(span, start, end)) {
+                    setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                }
+            }
             if (range.lineHeight != null || range.topOffset != null) {
                 val offset = range.topOffset?.evaluate(resolver).unitToPx(metrics, range.fontSizeUnit.evaluate(resolver))
                 val lineHeight = range.lineHeight?.evaluate(resolver).unitToPx(metrics, range.fontSizeUnit.evaluate(resolver))
                 setSpan(LineHeightWithTopOffsetSpan(offset, lineHeight), start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+            }
+        }
+
+        private fun TextView.hasSuchSpan(backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
+            val spannable = text as? Spannable ?: return false
+            val spans = spannable.getSpans(0, text.length, DivBackgroundSpan::class.java)
+            return spans.any { span ->
+                    span.border == backgroundSpan.border && span.background == backgroundSpan.background
+                    && end == spannable.getSpanEnd(span) && start == spannable.getSpanStart(span)
             }
         }
 
@@ -703,4 +727,20 @@ internal class DivTextBinder @Inject constructor(
     private fun View.updateFocusableState(div: DivText) {
         isFocusable = isFocusable || (div.focusedTextColor != null)
     }
+}
+
+internal class DivBackgroundSpan(val border: DivTextRangeBorder?,
+                        val background: DivTextRangeBackground?) : UnderlineSpan() {
+    var cache: Cache? = null
+
+    override fun updateDrawState(ds: TextPaint) {
+        ds.isUnderlineText = false
+    }
+
+    class Cache(
+        val startLine: Int,
+        val endLine: Int,
+        val startOffset: Int,
+        val endOffset: Int
+    )
 }
