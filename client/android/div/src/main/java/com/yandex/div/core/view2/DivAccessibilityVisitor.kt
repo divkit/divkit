@@ -2,9 +2,6 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import com.yandex.div.R
-import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.view2.divs.applyDivActions
 import com.yandex.div.core.view2.divs.widgets.*
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
@@ -22,54 +19,25 @@ import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.*
-import javax.inject.Inject
 
 internal class DivAccessibilityVisitor(
         private val divAccessibilityBinder: DivAccessibilityBinder,
         private val divView: Div2View,
         private val resolver: ExpressionResolver
 ) : DivViewVisitor() {
-    override fun visit(view: DivWrapLayout) {
-        val div = view.div ?: return
-        updateAccessibilityMode(view, div)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-    }
+    override fun visit(view: DivWrapLayout) = updateAccessibilityMode(view, view.div)
 
-    override fun visit(view: DivFrameLayout) {
-        val div = view.div ?: return
-        updateAccessibilityMode(view, div)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-    }
+    override fun visit(view: DivFrameLayout) = updateAccessibilityMode(view, view.div)
 
-    override fun visit(view: DivGifImageView) {
-        val div = view.div ?: return
-        updateAccessibilityMode(view, div)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-    }
+    override fun visit(view: DivGifImageView) = updateAccessibilityMode(view, view.div)
 
-    override fun visit(view: DivGridLayout) {
-        val div = view.div ?: return
-        updateAccessibilityMode(view, div)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-    }
+    override fun visit(view: DivGridLayout) = updateAccessibilityMode(view, view.div)
 
-    override fun visit(view: DivImageView) {
-        val div = view.div ?: return
-        updateAccessibilityMode(view, div)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-    }
+    override fun visit(view: DivImageView) = updateAccessibilityMode(view, view.div)
 
-    override fun visit(view: DivLinearLayout) {
-        val div = view.div ?: return
-        updateAccessibilityMode(view, div)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-    }
+    override fun visit(view: DivLinearLayout) = updateAccessibilityMode(view, view.div)
 
-    override fun visit(view: DivLineHeightTextView) {
-        val div = view.div ?: return
-        updateAccessibilityMode(view, div)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-    }
+    override fun visit(view: DivLineHeightTextView) = updateAccessibilityMode(view, view.div)
 
     override fun visit(view: DivPagerIndicatorView) = updateAccessibilityMode(view, view.div)
 
@@ -77,11 +45,7 @@ internal class DivAccessibilityVisitor(
 
     override fun visit(view: DivRecyclerView) = updateAccessibilityMode(view, view.div)
 
-    override fun visit(view: DivSeparatorView) {
-        val div = view.div ?: return
-        updateAccessibilityMode(view, div)
-        view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
-    }
+    override fun visit(view: DivSeparatorView) = updateAccessibilityMode(view, view.div)
 
     override fun visit(view: DivSnappyRecyclerView) = updateAccessibilityMode(view, view.div)
 
