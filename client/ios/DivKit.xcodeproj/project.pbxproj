@@ -15,6 +15,7 @@
 		6178F77328E2097A00FE1648 /* UIViewRenderable+AccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */; };
 		6178F77428E2097A00FE1648 /* TabListSelectionDataSourceImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74428E2042200FE1648 /* TabListSelectionDataSourceImplTests.swift */; };
 		7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */; };
+		76AD26822935F1B30088A360 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 76AD26812935F1B30088A360 /* RiveRuntime */; };
 		893D19642902AD8F005540DF /* TimeMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893D19632902AD8F005540DF /* TimeMeasure.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
 		89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1928C8EBC40041EC18 /* Palette.swift */; };
@@ -473,6 +474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C01499A2873297D00BA5402 /* DivKit in Frameworks */,
+				76AD26822935F1B30088A360 /* RiveRuntime in Frameworks */,
 				8CA382DF287C5CF000C99F4F /* DivKitExtensions in Frameworks */,
 				0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */,
 			);
@@ -1172,6 +1174,7 @@
 				8C0149992873297D00BA5402 /* DivKit */,
 				8CA382DE287C5CF000C99F4F /* DivKitExtensions */,
 				0A9A9A9F28CB1A9200D1D810 /* Lottie */,
+				76AD26812935F1B30088A360 /* RiveRuntime */,
 			);
 			productName = DivKitPlayground;
 			productReference = 8C4409ED2864C4D200EF4175 /* DivKit Playground.app */;
@@ -1334,6 +1337,7 @@
 			mainGroup = 8C9844F22864C2CC001ED5F3;
 			packageReferences = (
 				0A9A9A9E28CB1A9200D1D810 /* XCRemoteSwiftPackageReference "lottie-ios" */,
+				76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */,
 			);
 			productRefGroup = 8C4409D22864C3A900EF4175 /* Products */;
 			projectDirPath = "";
@@ -1461,12 +1465,10 @@
 				8C1CF6AC286B5A3B0016D0A1 /* EntityWithRequiredPropertyTemplate.swift in Sources */,
 				8C1CF6B0286B5A3B0016D0A1 /* EntityWithOptionalComplexPropertyTemplate.swift in Sources */,
 				8C1CF69A286B5A3B0016D0A1 /* EntityWithPropertyWithDefaultValueTemplate.swift in Sources */,
-				8CAC3400291E794F000E8072 /* EntityWithArrayOfExpressionsTemplate.swift in Sources */,
 				8C1CF693286B5A3B0016D0A1 /* EntityWithArrayOfNestedItemsTemplate.swift in Sources */,
 				8C1CF690286B5A3B0016D0A1 /* EntityWithArrayWithTransform.swift in Sources */,
 				8C1CF65C286B58A70016D0A1 /* EntityProtocol.swift in Sources */,
 				8C1CF6B3286B5BD30016D0A1 /* TemplatesSupportTests.swift in Sources */,
-				8CAC33FD291E794F000E8072 /* EntityWithArrayOfExpressions.swift in Sources */,
 				8C1CF697286B5A3B0016D0A1 /* EntityWithSimplePropertiesTemplate.swift in Sources */,
 				8C1CF694286B5A3B0016D0A1 /* EntityWithStringArrayPropertyTemplate.swift in Sources */,
 				8C1CF68A286B5A3B0016D0A1 /* EntityWithStrictArrayTemplate.swift in Sources */,
@@ -1486,13 +1488,11 @@
 				8C1CF699286B5A3B0016D0A1 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift in Sources */,
 				8C1CF68C286B5A3B0016D0A1 /* EntityWithOptionalProperty.swift in Sources */,
 				8C1CF6AE286B5A3B0016D0A1 /* EntityWithStringEnumPropertyTemplate.swift in Sources */,
-				8CAC33FF291E794F000E8072 /* EntityWithArrayOfEnumsTemplate.swift in Sources */,
 				8C1CF6A8286B5A3B0016D0A1 /* EntityWithArrayOfNestedItems.swift in Sources */,
 				8C1CF692286B5A3B0016D0A1 /* EntityWithOptionalStringEnumProperty.swift in Sources */,
 				8C1CF68E286B5A3B0016D0A1 /* EntityWithStringEnumProperty.swift in Sources */,
 				8C1CF651286B58A70016D0A1 /* PropertyTests.swift in Sources */,
 				8C1CF6A0286B5A3B0016D0A1 /* EntityWithEntityProperty.swift in Sources */,
-				8CAC33FE291E794F000E8072 /* EntityWithArrayOfEnums.swift in Sources */,
 				8C1CF658286B58A70016D0A1 /* OptionalComplexPropertyTests.swift in Sources */,
 				8C1CF655286B58A70016D0A1 /* ArrayTests.swift in Sources */,
 				8C1CF65E286B58A70016D0A1 /* ComplexPropertyTests.swift in Sources */,
@@ -2079,6 +2079,14 @@
 				version = 3.5.0;
 			};
 		};
+		76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rive-app/rive-ios";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 3.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2090,6 +2098,11 @@
 		6178F74E28E2095100FE1648 /* LayoutKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LayoutKit;
+		};
+		76AD26812935F1B30088A360 /* RiveRuntime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */;
+			productName = RiveRuntime;
 		};
 		8C01498F2873296000BA5402 /* DivKit */ = {
 			isa = XCSwiftPackageProductDependency;
