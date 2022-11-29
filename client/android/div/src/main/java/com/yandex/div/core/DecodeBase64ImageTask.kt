@@ -4,10 +4,9 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.annotation.WorkerThread
-import com.yandex.div.core.util.KLog
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
-import com.yandex.div.util.UiThreadHandler
-import java.lang.IllegalArgumentException
+import com.yandex.div.internal.KLog
+import com.yandex.div.internal.util.UiThreadHandler
 
 internal class DecodeBase64ImageTask(
     private var base64string: String,

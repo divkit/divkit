@@ -2,7 +2,7 @@ package com.yandex.morda.perftests.div
 
 import androidx.test.uiautomator.By
 import androidx.test.uiautomator.Until
-import com.yandex.div.json.getStringOrNull
+import com.yandex.div.internal.util.getStringOrNull
 import com.yandex.divkit.perftests.DIV_FEED_BENCHMARK_ACTIVITY
 import com.yandex.divkit.perftests.PACKAGE_NAME
 import com.yandex.divkit.perftests.divFeedBenchmarkActivityExtras

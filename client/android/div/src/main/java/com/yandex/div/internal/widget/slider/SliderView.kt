@@ -10,7 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import androidx.annotation.Px
-import com.yandex.div.core.base.ObserverList
+import com.yandex.div.core.ObserverList
 import com.yandex.div.internal.widget.slider.shapes.TextDrawable
 import kotlin.math.abs
 import kotlin.math.max

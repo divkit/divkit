@@ -19,7 +19,6 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.PagerState
 import com.yandex.div.core.state.UpdateStateChangePageCallback
-import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
@@ -30,6 +29,7 @@ import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.widget.PageItemDecoration
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div

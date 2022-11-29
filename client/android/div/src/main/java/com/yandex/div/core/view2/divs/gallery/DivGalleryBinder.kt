@@ -32,11 +32,11 @@ import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
 import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChildren
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.widget.DivViewWrapper
+import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div.internal.widget.PaddingItemDecoration
 import com.yandex.div.internal.widget.SnappyRecyclerView
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.util.dpToPx
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import java.util.WeakHashMap

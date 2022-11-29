@@ -1,15 +1,19 @@
 package com.yandex.div.json
 
+import com.yandex.div.internal.util.JsonArray
+import com.yandex.div.internal.util.JsonNode
+import com.yandex.div.internal.util.JsonObject
+import com.yandex.div.internal.util.summary
 import org.json.JSONArray
 import org.json.JSONObject
 
 private const val MAX_TO_STRING_LENGTH = 100
 
-class ParsingException(
+class ParsingException internal constructor(
     val reason: ParsingExceptionReason,
     message: String,
     cause: Throwable? = null,
-    val source: Json? = null,
+    val source: JsonNode? = null,
     val jsonSummary: String? = null,
 ) : RuntimeException(message, cause)
 
@@ -63,10 +67,12 @@ fun typeMismatch(path: String): ParsingException {
     )
 }
 
-fun typeMismatch(expressionKey: String,
-                 rawExpression: String,
-                 wrongTypeValue: Any?,
-                 cause: Throwable? = null): ParsingException {
+fun typeMismatch(
+    expressionKey: String,
+    rawExpression: String,
+    wrongTypeValue: Any?,
+    cause: Throwable? = null
+): ParsingException {
     return ParsingException(
         reason = ParsingExceptionReason.TYPE_MISMATCH,
         message = "Expression '$expressionKey': '$rawExpression' received value of wrong type: '$wrongTypeValue'",
@@ -93,10 +99,12 @@ fun <T> invalidValue(json: JSONObject, key: String, value: T): ParsingException 
     )
 }
 
-fun invalidValue(expressionKey: String,
-                 rawExpression: String,
-                 wrongValue: Any?,
-                 cause: Throwable? = null): ParsingException {
+fun invalidValue(
+    expressionKey: String,
+    rawExpression: String,
+    wrongValue: Any?,
+    cause: Throwable? = null
+): ParsingException {
     return ParsingException(
             reason = ParsingExceptionReason.INVALID_VALUE,
             message = "Field '$expressionKey' with expression '$rawExpression' received wrong value: '$wrongValue'",
@@ -163,14 +171,23 @@ fun <T> invalidValue(key: String, path: String, value: T): ParsingException {
     )
 }
 
-fun missingVariable(key: String, expression: String, variableName: String,
-                    cause: Throwable? = null) =
-    ParsingException(reason = ParsingExceptionReason.MISSING_VARIABLE,
-        "Undefined variable '$variableName' at \"$key\": \"$expression\"", cause = cause)
+fun missingVariable(
+    key: String,
+    expression: String,
+    variableName: String,
+    cause: Throwable? = null
+) = ParsingException(
+    reason = ParsingExceptionReason.MISSING_VARIABLE,
+    message = "Undefined variable '$variableName' at \"$key\": \"$expression\"",
+    cause = cause
+)
 
 fun missingVariable(variableName: String, cause: Throwable? = null) =
-    ParsingException(reason = ParsingExceptionReason.MISSING_VARIABLE,
-        "No variable could be resolved for '$variableName", cause = cause)
+    ParsingException(
+        reason = ParsingExceptionReason.MISSING_VARIABLE,
+        message = "No variable could be resolved for '$variableName",
+        cause = cause
+    )
 
 fun dependencyFailed(json: JSONObject, key: String, cause: ParsingException): ParsingException {
     return ParsingException(

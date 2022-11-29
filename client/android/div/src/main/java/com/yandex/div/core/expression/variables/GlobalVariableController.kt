@@ -3,11 +3,11 @@ package com.yandex.div.core.expression.variables
 import android.os.Handler
 import android.os.Looper
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.util.Assert
 import com.yandex.div.data.Variable
 import com.yandex.div.data.VariableDeclarationException
 import com.yandex.div.data.VariableMutationException
-import com.yandex.div.util.SynchronizedList
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.SynchronizedList
 import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Inject
 

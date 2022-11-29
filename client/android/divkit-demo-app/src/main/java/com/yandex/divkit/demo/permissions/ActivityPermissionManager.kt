@@ -1,7 +1,7 @@
 package com.yandex.divkit.demo.permissions
 
 import android.app.Activity
-import com.yandex.div.core.utils.PermissionUtils
+import com.yandex.div.internal.util.PermissionUtils
 
 /**
  * This implementation of [PermissionManager] requests permissions within a [Activity] so that [Activity.onRequestPermissionsResult]

@@ -1,6 +1,6 @@
 package com.yandex.div.zoom
 
-enum class ZoomState {
+internal enum class ZoomState {
     IDLE,
     ACTIVE,
     EXITING

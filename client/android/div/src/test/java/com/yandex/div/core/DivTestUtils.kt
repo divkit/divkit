@@ -9,12 +9,12 @@ import androidx.core.view.children
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.core.dagger.Div2ViewComponent
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.state.DivStateSwitcher
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.expression.Expression
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException

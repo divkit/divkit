@@ -1,6 +1,6 @@
 package com.yandex.div.internal.widget.indicator
 
-import com.yandex.div.core.util.KAssert.assertEquals
+import com.yandex.div.internal.KAssert.assertEquals
 import com.yandex.div.internal.widget.indicator.animations.ScaleIndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.RoundedRect
 import org.junit.Test

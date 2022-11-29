@@ -1,6 +1,6 @@
 package com.yandex.div.internal.viewpool
 
-import com.yandex.div.core.histogram.CpuUsageHistogramReporter
+import com.yandex.div.histogram.CpuUsageHistogramReporter
 import com.yandex.div.internal.util.weak
 import java.util.PriorityQueue
 

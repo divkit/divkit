@@ -6,7 +6,7 @@ import android.os.Build
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.neovisionaries.ws.client.WebSocketFactory
 import com.yandex.div.core.DivKit
-import com.yandex.div.core.histogram.HistogramBridge
+import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.RenderConfiguration
 import com.yandex.div.video.custom.VideoCache
@@ -22,10 +22,7 @@ import com.yandex.divkit.demo.settings.Preferences
 import com.yandex.divkit.demo.utils.DivkitDemoUriHandler
 import com.yandex.divkit.demo.utils.connectivityManager
 import com.yandex.divkit.regression.di.DaggerRegressionComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.SupervisorJob
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
 

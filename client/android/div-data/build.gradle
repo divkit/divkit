@@ -2,8 +2,7 @@ apply from: "${project.projectDir}/../div-library.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
-def generatedSrcDir = new File(buildDir, "generated/source")
-def generatedDivSrcDir = new File(generatedSrcDir, "div")
+def generatedSrcDir = new File(buildDir, "generated/source/api")
 
 allOpen {
     annotation("com.yandex.div.core.annotations.Mockable")
@@ -13,12 +12,12 @@ android {
 
     sourceSets {
         main {
-            java.srcDirs += generatedDivSrcDir
+            java.srcDirs += generatedSrcDir
         }
     }
 
     libraryVariants.all { variant ->
-        variant.preBuildProvider.configure { dependsOn "generateHomePojoTask" }
+        variant.preBuildProvider.configure { dependsOn "generateDivModel" }
     }
 }
 
@@ -31,29 +30,20 @@ dependencies {
     testImplementation "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin"
 }
 
-def schemas = [
-        ["name" : "div2",
-         "scheme": new File(projectDir, "../../../schema"),
-         "generated": generatedDivSrcDir.absolutePath + '/com/yandex/div2',
-         "config": new File(projectDir, 'div2-generator-config.json')]
-]
+task generateDivModel(type: Exec) {
+    def execPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
+    def configPath = new File(projectDir, 'div2-generator-config.json').absolutePath
+    def schemaPath = new File(projectDir, "../../../schema").absolutePath
+    def modelPath = new File(generatedSrcDir, "com/yandex/div2")
 
-schemas.forEach{ item ->
-    tasks.create(name: "scheme_${item['name']}", type: Exec) {
-        def schemasDirectory = item['scheme'].absolutePath
-        def generatedDir = item['generated']
-        def configPath = item['config'].absolutePath
-        def binPath = new File(projectDir, '../../../api_generator/api_generator.sh').absolutePath
-        commandLine binPath, configPath, schemasDirectory, generatedDir
-        doFirst {
-            println "Process schemas: $schemasDirectory"
-            println commandLine
-        }
-
-        inputs.dir item['scheme']
-        inputs.file item['config']
-        outputs.dir generatedDir
+    doFirst {
+        println "Process schema: $schemaPath"
+        println commandLine
     }
-}
 
-task generateHomePojoTask(dependsOn: tasks.findAll {task -> task.name.startsWith('scheme_')})
+    commandLine execPath, configPath, schemaPath, modelPath
+
+    inputs.file configPath
+    inputs.dir schemaPath
+    outputs.dir modelPath
+}

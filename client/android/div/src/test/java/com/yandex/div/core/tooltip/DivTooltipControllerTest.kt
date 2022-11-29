@@ -8,13 +8,13 @@ import android.view.Gravity
 import android.view.View
 import android.widget.PopupWindow
 import com.yandex.div.R
+import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.asExpression
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.view2.DivVisibilityActionTracker
+import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivDimension

@@ -1,7 +1,6 @@
 package com.yandex.divkit.demo.div.editor
 
-import com.yandex.div.core.util.Log
-import java.lang.IllegalStateException
+import com.yandex.div.internal.Log
 
 private const val DIV_EDITOR = "DIV_EDITOR"
 

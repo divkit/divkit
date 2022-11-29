@@ -19,10 +19,10 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.internal.Assert
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration

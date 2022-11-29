@@ -226,7 +226,7 @@ public class DivConfiguration {
     }
 
     /**
-     * @see {@link DivConfiguration.Builder#isContextMenuHandlerOverridden()}.
+     * {@see DivConfiguration.Builder#isContextMenuHandlerOverridden()}.
      */
     @Provides
     @ExperimentFlag(experiment = Experiment.IGNORE_ACTION_MENU_ITEMS_ENABLED)

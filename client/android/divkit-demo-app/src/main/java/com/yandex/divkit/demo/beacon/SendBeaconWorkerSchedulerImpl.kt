@@ -12,7 +12,7 @@ import androidx.work.WorkerParameters
 import com.yandex.android.beacon.SendBeaconWorker
 import com.yandex.android.beacon.SendBeaconWorkerScheduler
 import com.yandex.div.core.DivKit
-import com.yandex.div.core.util.KLog
+import com.yandex.div.internal.KLog
 import kotlinx.coroutines.suspendCancellableCoroutine
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.resume

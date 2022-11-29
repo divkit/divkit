@@ -1,6 +1,6 @@
 package com.yandex.div.core.view2
 
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase

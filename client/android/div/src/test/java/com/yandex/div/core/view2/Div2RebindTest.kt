@@ -7,11 +7,11 @@ import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.state.DivPathUtils.findStateLayout
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.divs.CONTAINER_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.viewEquals
+import com.yandex.div.internal.Assert
 import com.yandex.div2.DivData
 import junit.framework.Assert.assertNotNull
 import junit.framework.Assert.assertNull

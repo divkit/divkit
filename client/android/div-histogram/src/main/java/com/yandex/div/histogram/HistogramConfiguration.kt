@@ -1,9 +1,6 @@
 package com.yandex.div.histogram
 
 import com.yandex.div.core.annotations.PublicApi
-import com.yandex.div.core.histogram.CpuUsageHistogramReporter
-import com.yandex.div.core.histogram.HistogramBridge
-import com.yandex.div.core.histogram.NoOpHistogramBridge
 import javax.inject.Provider
 
 @PublicApi

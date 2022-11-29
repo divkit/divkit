@@ -1,9 +1,6 @@
 package com.yandex.divkit.regression
 
 import android.app.Activity
-import android.graphics.Color
-import android.net.Uri
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -11,8 +8,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.json.expressions.Expression
-import com.yandex.div2.DivAction
 import com.yandex.divkit.regression.data.Priority
 import com.yandex.divkit.regression.data.Scenario
 

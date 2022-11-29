@@ -17,7 +17,7 @@ import com.yandex.div.data.*
 
 @Mockable
 class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<EntityWithStringArrayProperty> {
-    @JvmField final val array: Field<ExpressionsList<String>> // at least 1 elements
+    @JvmField final val array: Field<ExpressionList<String>> // at least 1 elements
 
     constructor (
         env: ParsingEnvironment,
@@ -26,7 +26,7 @@ class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<Ent
         json: JSONObject
     ) {
         val logger = env.logger
-        array = JsonTemplateParser.readExpressionsListField(json, "array", topLevel, parent?.array, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
+        array = JsonTemplateParser.readExpressionListField(json, "array", topLevel, parent?.array, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_STRING)
     }
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithStringArrayProperty {
@@ -37,7 +37,7 @@ class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<Ent
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.writeExpressionsListField(key = "array", field = array)
+        json.writeExpressionListField(key = "array", field = array)
         json.write(key = "type", value = TYPE)
         return json
     }
@@ -48,7 +48,7 @@ class EntityWithStringArrayPropertyTemplate : JSONSerializable, JsonTemplate<Ent
         private val ARRAY_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
         private val ARRAY_TEMPLATE_VALIDATOR = ListValidator<String> { it: List<*> -> it.size >= 1 }
 
-        val ARRAY_READER: Reader<ExpressionsList<String>> = { key, json, env -> JsonParser.readExpressionsList(json, key, ARRAY_VALIDATOR, env.logger, env, TYPE_HELPER_STRING) }
+        val ARRAY_READER: Reader<ExpressionList<String>> = { key, json, env -> JsonParser.readExpressionList(json, key, ARRAY_VALIDATOR, env.logger, env, TYPE_HELPER_STRING) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithStringArrayPropertyTemplate(env, json = it) }

@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.json.map
+import com.yandex.div.internal.util.map
 import com.yandex.div2.DivData
 import org.json.JSONArray
 import org.json.JSONObject

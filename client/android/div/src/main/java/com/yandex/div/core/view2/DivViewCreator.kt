@@ -7,7 +7,6 @@ import android.widget.Space
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
-import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
@@ -24,6 +23,7 @@ import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.internal.viewpool.ViewPool
+import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer

@@ -11,7 +11,7 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import com.yandex.div.R
-import com.yandex.div.core.util.KLog
+import com.yandex.div.internal.KLog
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min

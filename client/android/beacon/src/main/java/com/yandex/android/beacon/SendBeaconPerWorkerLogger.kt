@@ -1,6 +1,6 @@
 package com.yandex.android.beacon
 
-import com.yandex.div.core.util.KLog
+import com.yandex.div.internal.KLog
 
 /**
  * Send beacon logging facility.

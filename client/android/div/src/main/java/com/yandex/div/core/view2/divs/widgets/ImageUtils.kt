@@ -9,8 +9,8 @@ import android.renderscript.ScriptIntrinsicBlur
 import android.view.View
 import androidx.core.view.doOnPreDraw
 import com.yandex.div.core.dagger.Div2Component
+import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.util.dpToPx
 import com.yandex.div2.DivBlur
 import com.yandex.div2.DivFilter
 import kotlin.math.max

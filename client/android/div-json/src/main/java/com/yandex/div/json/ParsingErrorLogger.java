@@ -1,8 +1,8 @@
 package com.yandex.div.json;
 
 import androidx.annotation.NonNull;
-import com.yandex.div.core.util.Assert;
-import com.yandex.div.core.util.Log;
+import com.yandex.div.internal.Assert;
+import com.yandex.div.internal.Log;
 
 public interface ParsingErrorLogger {
 

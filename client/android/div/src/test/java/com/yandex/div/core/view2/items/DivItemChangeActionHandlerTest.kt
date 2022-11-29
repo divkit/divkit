@@ -4,7 +4,8 @@ import android.net.Uri
 import android.view.View
 import com.yandex.div.core.DivViewFacade
 import org.junit.After
-import org.junit.Assert
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -13,12 +14,10 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import org.robolectric.annotation.Implementation
-import org.robolectric.annotation.Implements
+
+private typealias DivKitAssert = com.yandex.div.internal.Assert
 
 @RunWith(RobolectricTestRunner::class)
-@Config(shadows = [DivItemChangeActionHandlerTest.ShadowAssert::class])
 class DivItemChangeActionHandlerTest {
 
     private val targetView = mock<View> {
@@ -34,24 +33,26 @@ class DivItemChangeActionHandlerTest {
 
     @Before
     fun `setup mock`() {
+        DivKitAssert.setEnabled(false)
         DivViewWithItems.viewForTests = divItemsView
     }
 
     @After
     fun `cleanup mock`() {
         DivViewWithItems.viewForTests = null
+        DivKitAssert.setEnabled(true)
     }
 
     @Test
     fun `can handle`() {
-        Assert.assertTrue(DivItemChangeActionHandler.canHandle("set_current_item"))
-        Assert.assertTrue(DivItemChangeActionHandler.canHandle("set_next_item"))
-        Assert.assertTrue(DivItemChangeActionHandler.canHandle("set_previous_item"))
+        assertTrue(DivItemChangeActionHandler.canHandle("set_current_item"))
+        assertTrue(DivItemChangeActionHandler.canHandle("set_next_item"))
+        assertTrue(DivItemChangeActionHandler.canHandle("set_previous_item"))
     }
 
     @Test
     fun `cannot handle`() {
-        Assert.assertFalse(DivItemChangeActionHandler.canHandle("set_item"))
+        assertFalse(DivItemChangeActionHandler.canHandle("set_item"))
     }
 
     @Test
@@ -61,7 +62,7 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertTrue(result)
+        assertTrue(result)
         verify(divItemsView).currentItem = 3
     }
 
@@ -72,7 +73,7 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertTrue(result)
+        assertTrue(result)
         verify(divItemsView).currentItem = CURRENT_ITEM + 1
     }
 
@@ -83,7 +84,7 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertTrue(result)
+        assertTrue(result)
         verify(divItemsView).currentItem = CURRENT_ITEM - 1
     }
 
@@ -94,7 +95,7 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertFalse(result)
+        assertFalse(result)
     }
 
     @Test
@@ -106,7 +107,7 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertFalse(result)
+        assertFalse(result)
     }
 
     @Test
@@ -118,7 +119,7 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertFalse(result)
+        assertFalse(result)
     }
 
     @Test
@@ -128,7 +129,7 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertFalse(result)
+        assertFalse(result)
     }
 
     @Test
@@ -138,7 +139,7 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertFalse(result)
+        assertFalse(result)
     }
 
     @Test
@@ -149,7 +150,7 @@ class DivItemChangeActionHandlerTest {
             Uri.parse("div-action://set_next_item?id=$ID&overflow=ring"), view
         )
 
-        Assert.assertTrue(result)
+        assertTrue(result)
         verify(divItemsView).currentItem = 0
     }
 
@@ -162,15 +163,8 @@ class DivItemChangeActionHandlerTest {
             view
         )
 
-        Assert.assertTrue(result)
+        assertTrue(result)
         verify(divItemsView).currentItem = ITEM_COUNT - 1
-    }
-
-    @Implements(com.yandex.div.core.util.Assert::class)
-    object ShadowAssert {
-        @JvmStatic
-        @Implementation
-        fun fail(message: String) = Unit
     }
 
     private companion object {

@@ -11,6 +11,5 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':logging')
     implementation "androidx.core:core:$versions.androidx.core"
 }

@@ -19,6 +19,7 @@ dependencies {
     implementation project(path: ':div-data')
     implementation project(path: ':div-json')
     implementation project(path: ':fonts')
+    implementation project(path: ':logging')
     implementation project(path: ':utils')
 
 

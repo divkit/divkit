@@ -1,10 +1,10 @@
 package com.yandex.div.state
 
 import androidx.annotation.AnyThread
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.CompletedFuture
+import com.yandex.div.internal.util.SingleThreadExecutor
 import com.yandex.div.state.db.DivStateEntity
-import com.yandex.div.util.CompletedFuture
-import com.yandex.div.util.SingleThreadExecutor
 import java.util.Collections
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.Executor

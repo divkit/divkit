@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.view2.disableDivkitAssert
+import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import org.junit.Assert
@@ -168,7 +168,7 @@ class GalleryItemsViewTest {
     }
 
     @Test
-    fun `set current item when item is not within itemCount`() = disableDivkitAssert {
+    fun `set current item when item is not within itemCount`() = disableAssertions {
         underTest.currentItem = 11
         underTest.currentItem = -1
 

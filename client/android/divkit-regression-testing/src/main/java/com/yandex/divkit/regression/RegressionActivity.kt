@@ -11,8 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.util.Assert
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.expression.Expression
 import com.yandex.div2.DivAction
 import com.yandex.divkit.regression.databinding.RegressionActivityBinding
 import com.yandex.divkit.regression.di.provideDiv2ViewCreator

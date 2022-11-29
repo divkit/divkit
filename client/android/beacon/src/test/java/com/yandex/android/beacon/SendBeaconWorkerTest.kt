@@ -3,7 +3,7 @@ package com.yandex.android.beacon
 import android.net.Uri
 import com.yandex.android.TestExecutor
 import com.yandex.android.beacon.BeaconItem.Persistent
-import com.yandex.div.util.Clock
+import com.yandex.div.internal.util.Clock
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

@@ -1,10 +1,10 @@
 package com.yandex.div.core.dagger
 
-import com.yandex.div.core.histogram.HistogramRecorder
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.DivParsingHistogramReporterImpl
 import com.yandex.div.histogram.HistogramColdTypeChecker
 import com.yandex.div.histogram.HistogramConfiguration
+import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.reporter.HistogramReporter
 import dagger.Module
 import dagger.Provides

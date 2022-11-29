@@ -3,11 +3,11 @@ package com.yandex.div.steps
 import androidx.test.espresso.Espresso
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.uiautomator.UiDevice
-import com.yandex.div.core.util.KLog
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.KLog
+import com.yandex.div.internal.util.forEach
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.json.forEach
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.screenshot.ReferenceFileWriter
@@ -15,9 +15,9 @@ import com.yandex.test.screenshot.ScreenshotCaptor
 import com.yandex.test.screenshot.TestCaseReferencesFileWriter
 import com.yandex.test.util.Report.step
 import com.yandex.test.util.StepsDsl
-import java.io.File
 import org.json.JSONArray
 import org.json.JSONObject
+import java.io.File
 
 private const val TAG = "InteractiveTestStepsPerformer"
 

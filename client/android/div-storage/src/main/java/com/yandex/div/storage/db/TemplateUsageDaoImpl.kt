@@ -1,7 +1,7 @@
 package com.yandex.div.storage.db
 
 import android.database.sqlite.SQLiteDatabase
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 import com.yandex.div.storage.db.TemplateUsageQueries.DELETE_ALL_TEMPLATE_USAGES_QUERY
 import com.yandex.div.storage.db.TemplateUsageQueries.DELETE_TEMPLATE_USAGE_BY_CARD_ID_QUERY_TEMPLATE
 import com.yandex.div.storage.db.TemplateUsageQueries.INSERT_TEMPLATE_USAGE_QUERY_TEMPLATE

@@ -9,7 +9,6 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.core.view2.divs.DivContainerBinder
 import com.yandex.div.core.view2.divs.DivCustomBinder
 import com.yandex.div.core.view2.divs.DivGifImageBinder
@@ -35,6 +34,7 @@ import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase

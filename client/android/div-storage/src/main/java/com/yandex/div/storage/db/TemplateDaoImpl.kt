@@ -2,7 +2,7 @@ package com.yandex.div.storage.db
 
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 import com.yandex.div.storage.db.TemplateQueries.DELETE_ALL_TEMPLATES_QUERY
 import com.yandex.div.storage.db.TemplateQueries.DELETE_UNUSED_TEMPLATES_QUERY_TEMPLATE
 import com.yandex.div.storage.db.TemplateQueries.GET_ALL_TEMPLATES_QUERY

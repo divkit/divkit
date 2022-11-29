@@ -2,12 +2,12 @@ package com.yandex.div.data
 
 import android.net.Uri
 import androidx.annotation.MainThread
+import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.base.ObserverList
-import com.yandex.div.core.util.Assert
 import com.yandex.div.evaluable.types.Color
-import com.yandex.div.json.STRING_TO_COLOR_INT
-import com.yandex.div.json.toBoolean
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.parser.STRING_TO_COLOR_INT
+import com.yandex.div.internal.parser.toBoolean
 
 @Mockable
 sealed class Variable {

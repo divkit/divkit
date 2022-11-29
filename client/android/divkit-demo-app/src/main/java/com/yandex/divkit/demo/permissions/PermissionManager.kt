@@ -6,8 +6,8 @@ import android.content.DialogInterface
 import android.util.SparseArray
 import androidx.annotation.StringRes
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.util.KAssert
-import com.yandex.div.core.utils.PermissionUtils
+import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.util.PermissionUtils
 import com.yandex.divkit.demo.R
 
 typealias PermissionRequestCallback = (PermissionRequestResult) -> Unit

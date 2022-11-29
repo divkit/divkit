@@ -25,11 +25,11 @@ import com.yandex.div.core.DivDataChangeListener
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.state.DivStateChangeListener
 import com.yandex.div.core.state.DivStateTransition
-import com.yandex.div.core.util.Log
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.internal.Log
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler

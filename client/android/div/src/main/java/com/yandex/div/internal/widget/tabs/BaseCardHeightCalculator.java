@@ -10,8 +10,7 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.yandex.div.R;
-import com.yandex.div.core.util.Log;
-import com.yandex.div.util.Safe;
+import com.yandex.div.internal.Log;
 
 @MainThread
 public abstract class BaseCardHeightCalculator implements ViewPagerFixedSizeLayout.HeightCalculator {
@@ -66,7 +65,8 @@ public abstract class BaseCardHeightCalculator implements ViewPagerFixedSizeLayo
     public void restoreInstanceState(@NonNull SparseArray<Parcelable> container) {
         mTabsHeightCache.clear();
         mPendingState = (Bundle) container.get(R.id.tab_height_cache);
-        if (!Safe.equal(getFontScale(), mPendingState == null ? null : mPendingState.getFloat(KEY_FONT_SCALE))) {
+        Float fontScale = mPendingState == null ? null : mPendingState.getFloat(KEY_FONT_SCALE);
+        if (fontScale != null && fontScale != getFontScale()) {
             mPendingState = null;
         }
     }

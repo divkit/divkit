@@ -24,7 +24,6 @@ import androidx.core.view.marginBottom
 import androidx.core.view.marginLeft
 import androidx.core.view.marginRight
 import androidx.core.view.marginTop
-import com.yandex.div.core.utils.ifIs
 import com.yandex.divkit.demo.utils.coroutineScope
 import com.yandex.divkit.demo.utils.noGetter
 import kotlinx.coroutines.launch
@@ -260,7 +259,9 @@ val View.activity: Activity
             is ContextWrapper -> {
                 var contextWrapper = context
                 while (contextWrapper is ContextWrapper) {
-                    contextWrapper.ifIs<Activity> { return it }
+                    if (contextWrapper is Activity) {
+                        return contextWrapper
+                    }
                     contextWrapper = contextWrapper.baseContext
                 }
                 error("Unknown view context $contextWrapper")

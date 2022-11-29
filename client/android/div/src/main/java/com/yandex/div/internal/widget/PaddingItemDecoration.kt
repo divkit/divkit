@@ -6,7 +6,7 @@ import androidx.annotation.Px
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.yandex.div.core.util.KAssert
+import com.yandex.div.internal.KAssert
 
 internal class PaddingItemDecoration @JvmOverloads constructor(
     @param:Px @field:Px private val paddingLeft: Int = 0,

@@ -25,7 +25,6 @@ import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.tooltip.DivTooltipController
-import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivAccessibilityBinder
@@ -34,12 +33,13 @@ import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.applyFilters
+import com.yandex.div.core.view2.divs.widgets.visitViewTree
+import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
-import com.yandex.div.core.view2.divs.widgets.visitViewTree
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.expression.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal

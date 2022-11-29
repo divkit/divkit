@@ -15,8 +15,8 @@ import android.widget.PopupWindow
 import androidx.annotation.RequiresApi
 import com.yandex.div.core.animation.SpringInterpolator
 import com.yandex.div.core.util.androidInterpolator
+import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.util.dpToPx
 import com.yandex.div2.DivAnimation
 import com.yandex.div2.DivTooltip
 

@@ -6,7 +6,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.TAP_BEACONS_ENABLED
 import com.yandex.div.core.experiments.Experiment.VISIBILITY_BEACONS_ENABLED
-import com.yandex.div.core.util.KAssert
+import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivVisibilityAction

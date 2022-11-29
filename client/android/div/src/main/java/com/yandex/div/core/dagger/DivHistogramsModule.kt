@@ -1,9 +1,9 @@
 package com.yandex.div.core.dagger
 
-import com.yandex.div.core.histogram.HistogramRecorder
 import com.yandex.div.histogram.HistogramCallTypeProvider
 import com.yandex.div.histogram.HistogramColdTypeChecker
 import com.yandex.div.histogram.HistogramConfiguration
+import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.histogram.reporter.HistogramReporterDelegateImpl

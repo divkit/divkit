@@ -92,4 +92,3 @@ class DivContainerBinderTest : DivBinderTest() {
 
     private fun rootPath() = DivStatePath.parse("0")
 }
-

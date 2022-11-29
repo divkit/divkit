@@ -1,8 +1,8 @@
 package com.yandex.div.video.custom
 
 import android.content.Context
-import com.yandex.div.core.util.KAssert
-import com.yandex.div.core.util.KLog
+import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.KLog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async

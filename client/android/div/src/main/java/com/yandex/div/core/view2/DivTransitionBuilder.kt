@@ -12,7 +12,6 @@ import androidx.transition.Visibility
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivViewScope
 import com.yandex.div.core.dagger.Names
-import com.yandex.div.core.util.KLog
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.Fade
@@ -20,6 +19,7 @@ import com.yandex.div.core.view2.animations.Scale
 import com.yandex.div.core.view2.animations.Slide
 import com.yandex.div.core.view2.animations.plusAssign
 import com.yandex.div.core.view2.divs.toPx
+import com.yandex.div.internal.KLog
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAppearanceTransition

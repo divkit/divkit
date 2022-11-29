@@ -3,9 +3,9 @@ package com.yandex.div.core.dagger
 import android.content.Context
 import com.yandex.android.beacon.SendBeaconManager
 import com.yandex.div.core.DivKitConfiguration
-import com.yandex.div.core.histogram.HistogramRecorder
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.HistogramRecordConfiguration
+import com.yandex.div.histogram.HistogramRecorder
 import dagger.BindsInstance
 import dagger.Component
 import java.util.concurrent.ExecutorService

@@ -21,7 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.PopupMenu;
 import com.yandex.div.R;
-import com.yandex.div.core.util.Assert;
+import com.yandex.div.internal.Assert;
 import com.yandex.div.internal.util.Views;
 
 /**

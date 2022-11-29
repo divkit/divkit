@@ -5,11 +5,11 @@ import com.airbnb.lottie.LottieComposition
 import com.airbnb.lottie.LottieDrawable
 import com.airbnb.lottie.LottieResult
 import com.yandex.div.core.extension.DivExtensionHandler
-import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.widget.LoadableImageView
+import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.util.mapNotNull
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.json.mapNotNull
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivGifImage
 import kotlinx.coroutines.Dispatchers

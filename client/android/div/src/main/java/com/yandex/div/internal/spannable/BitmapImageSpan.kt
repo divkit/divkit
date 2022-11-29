@@ -11,7 +11,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.text.style.ReplacementSpan
 import androidx.annotation.ColorInt
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min

@@ -1,6 +1,6 @@
 package com.yandex.div.lottie
 
-class LottieRepeat(
+internal class LottieRepeat(
     val repeatCount: Int,
     val repeatMode: Int,
     val minFrame: Int,

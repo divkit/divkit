@@ -15,7 +15,7 @@ dependencies {
     api "ru.tinkoff.allure:allure-model:$versions.tinkoffAllure"
     api "ru.tinkoff.allure:allure-android:$versions.tinkoffAllure@aar"
 
-    implementation project(path: ':utils')
+    implementation project(path: ':div-core')
     implementation "androidx.test.uiautomator:uiautomator:$versions.androidx.uiautomator"
     implementation "org.easytesting:fest-reflect:$versions.festReflect"
     implementation "com.google.code.gson:gson:$versions.gson"  // used by allure

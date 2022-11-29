@@ -3,7 +3,7 @@ package com.yandex.div.core.view2.items
 import android.net.Uri
 import android.view.View
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.core.util.KAssert
+import com.yandex.div.internal.KAssert
 
 private const val AUTHORITY_SET_CURRENT_ITEM = "set_current_item"
 private const val AUTHORITY_NEXT_ITEM = "set_next_item"

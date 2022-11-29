@@ -3,7 +3,7 @@ package com.yandex.div.internal.widget.tabs;
 import android.view.ViewGroup;
 import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
-import com.yandex.div.core.util.Assert;
+import com.yandex.div.internal.Assert;
 
 @MainThread
 public class MaxCardHeightCalculator extends BaseCardHeightCalculator {

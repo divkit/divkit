@@ -1,8 +1,8 @@
 package com.yandex.div.data
 
+import com.yandex.div.internal.expression.Expression
+import com.yandex.div.internal.parser.TYPE_HELPER_STRING
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.json.TYPE_HELPER_STRING
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.invalidValue
 import org.junit.Assert

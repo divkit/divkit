@@ -17,12 +17,12 @@ import com.yandex.div.data.*
 
 @Mockable
 class EntityWithArrayWithTransform(
-    @JvmField final val array: ExpressionsList<Int>, // at least 1 elements
+    @JvmField final val array: ExpressionList<Int>, // at least 1 elements
 ) : JSONSerializable {
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.writeExpressionsList(key = "array", value = array, converter = COLOR_INT_TO_STRING)
+        json.writeExpressionList(key = "array", value = array, converter = COLOR_INT_TO_STRING)
         json.write(key = "type", value = TYPE)
         return json
     }
@@ -35,7 +35,7 @@ class EntityWithArrayWithTransform(
         operator fun invoke(env: ParsingEnvironment, json: JSONObject): EntityWithArrayWithTransform {
             val logger = env.logger
             return EntityWithArrayWithTransform(
-                array = JsonParser.readExpressionsList(json, "array", STRING_TO_COLOR_INT, ARRAY_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
+                array = JsonParser.readExpressionList(json, "array", STRING_TO_COLOR_INT, ARRAY_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
             )
         }
 

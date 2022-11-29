@@ -6,12 +6,12 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivVisibilityChangeListener
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.util.KLog
 import com.yandex.div.core.view2.divs.DivActionBeaconSender
-import com.yandex.div.util.arrayMap
+import com.yandex.div.internal.KLog
+import com.yandex.div.internal.util.arrayMap
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibilityAction
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 @DivScope

@@ -20,7 +20,7 @@ import androidx.annotation.Px;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import com.yandex.div.core.util.Assert;
+import com.yandex.div.internal.Assert;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

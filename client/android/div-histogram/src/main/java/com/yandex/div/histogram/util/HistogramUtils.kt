@@ -1,8 +1,8 @@
 package com.yandex.div.histogram.util
 
-import com.yandex.div.core.util.KAssert
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramRecordConfiguration
+import com.yandex.div.internal.KAssert
 import org.json.JSONObject
 
 object HistogramUtils {

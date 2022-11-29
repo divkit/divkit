@@ -7,8 +7,8 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
+import com.yandex.div.internal.util.allIsNullOrEmpty
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.util.allIsNullOrEmpty
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBorder
 import javax.inject.Inject

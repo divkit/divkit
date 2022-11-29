@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
-import com.yandex.div.core.util.KLog
-import com.yandex.div.core.interfaces.UriHandler
+import com.yandex.div.core.uri.UriHandler
+import com.yandex.div.internal.KLog
 import com.yandex.div.video.custom.VideoCustomUriHandler
 import com.yandex.divkit.demo.Container
 import com.yandex.divkit.demo.uri.CustomTabColors

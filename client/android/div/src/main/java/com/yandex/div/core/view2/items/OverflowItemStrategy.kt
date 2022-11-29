@@ -1,6 +1,6 @@
 package com.yandex.div.core.view2.items
 
-import com.yandex.div.core.util.KAssert
+import com.yandex.div.internal.KAssert
 import kotlin.math.max
 import kotlin.math.min
 

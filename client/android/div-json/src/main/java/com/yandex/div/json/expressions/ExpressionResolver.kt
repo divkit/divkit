@@ -2,11 +2,11 @@ package com.yandex.div.json.expressions
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.evaluable.Evaluable
-import com.yandex.div.json.Converter
+import com.yandex.div.internal.parser.Converter
+import com.yandex.div.internal.parser.TypeHelper
+import com.yandex.div.internal.parser.ValueValidator
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
-import com.yandex.div.json.TypeHelper
-import com.yandex.div.json.ValueValidator
 
 interface ExpressionResolver {
 

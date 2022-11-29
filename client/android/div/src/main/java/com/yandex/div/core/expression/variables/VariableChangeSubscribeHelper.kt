@@ -1,9 +1,9 @@
 package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.Assert
 import com.yandex.div.json.missingVariable
 
 internal fun <T> subscribeToVariable(

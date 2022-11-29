@@ -3,7 +3,7 @@ package com.yandex.divkit.demo.beacon
 import com.yandex.android.beacon.SendBeaconRequest
 import com.yandex.android.beacon.SendBeaconRequestExecutor
 import com.yandex.android.beacon.SendBeaconResponse
-import com.yandex.div.core.util.KLog
+import com.yandex.div.internal.KLog
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request

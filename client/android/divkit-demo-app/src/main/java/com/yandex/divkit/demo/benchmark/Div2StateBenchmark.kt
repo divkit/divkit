@@ -5,11 +5,11 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.DivParsingEnvironment
+import com.yandex.div.internal.util.isEmpty
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.json.isEmpty
+import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
-import com.yandex.div.json.templates.MainTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div.json.withLogger
 import com.yandex.div2.DivData
@@ -34,7 +34,7 @@ internal class Div2StateBenchmark(
     private val viewController: Div2BenchmarkViewController
 ) {
 
-    private val mainTemplateProvider = MainTemplateProvider<DivTemplate>(
+    private val mainTemplateProvider = CachingTemplateProvider<DivTemplate>(
         InMemoryTemplateProvider(),
         TemplateProvider.empty(),
     )

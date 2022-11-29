@@ -3,7 +3,7 @@ package com.yandex.div.core.expression.variables
 import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.data.Variable
-import com.yandex.div.json.JsonParser
+import com.yandex.div.internal.parser.JsonParser
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div2.DivVariable
@@ -62,4 +62,3 @@ internal fun DivVariable.toVariable(): Variable {
         }
     }
 }
-

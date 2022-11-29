@@ -2,7 +2,7 @@ package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.data.Variable
-import com.yandex.div.util.SynchronizedList
+import com.yandex.div.internal.util.SynchronizedList
 
 @Mockable
 internal class VariableSource(

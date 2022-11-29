@@ -12,7 +12,7 @@ import com.google.android.exoplayer2.ExoPlaybackException
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.Player.DISCONTINUITY_REASON_AUTO_TRANSITION
 import com.google.android.exoplayer2.ui.PlayerView
-import com.yandex.div.core.util.KAssert
+import com.yandex.div.internal.KAssert
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job

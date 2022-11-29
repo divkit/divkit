@@ -1,9 +1,9 @@
 package com.yandex.div.histogram.reporter
 
-import com.yandex.div.core.histogram.HistogramRecorder
 import com.yandex.div.histogram.HistogramCallTypeProvider
 import com.yandex.div.histogram.HistogramColdTypeChecker
 import com.yandex.div.histogram.HistogramRecordConfiguration
+import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.TaskExecutor
 import org.junit.Test
 import org.mockito.kotlin.clearInvocations

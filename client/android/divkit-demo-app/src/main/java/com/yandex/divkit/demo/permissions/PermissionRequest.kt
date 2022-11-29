@@ -4,7 +4,6 @@ import android.Manifest
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
-import com.yandex.div.core.system.Android12Compat
 
 /**
  * Unified representation of permission
@@ -77,8 +76,6 @@ enum class Permission(val permissionString: String) {
     READ_EXTERNAL_STORAGE(Manifest.permission.READ_EXTERNAL_STORAGE),
     WRITE_EXTERNAL_STORAGE(Manifest.permission.WRITE_EXTERNAL_STORAGE),
     CAMERA(Manifest.permission.CAMERA),
-    @RequiresApi(Android12Compat.VERSION_CODE)
-    BLUETOOTH_CONNECT(Android12Compat.BLUETOOTH_CONNECT_PERMISSION),
     READ_PHONE_STATE(Manifest.permission.READ_PHONE_STATE),
     ;
 

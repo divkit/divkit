@@ -3,8 +3,8 @@ package com.yandex.div.core.view2.divs
 import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.util.KLog
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 import com.yandex.div2.DivPager
 

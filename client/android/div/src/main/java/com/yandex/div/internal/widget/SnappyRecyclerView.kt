@@ -6,8 +6,8 @@ import android.view.View
 import androidx.core.view.doOnNextLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.core.util.Assert
-import com.yandex.div.util.dpToPx
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.dpToPx
 
 // From: http://stackoverflow.com/a/37816976
 private const val ITEM_SPACING_DEFAULT_VALUE = 8

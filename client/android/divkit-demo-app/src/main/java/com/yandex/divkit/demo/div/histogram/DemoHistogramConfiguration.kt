@@ -1,11 +1,11 @@
 package com.yandex.divkit.demo.div.histogram
 
 import androidx.annotation.VisibleForTesting
-import com.yandex.div.core.histogram.HistogramBridge
-import com.yandex.div.core.util.KLog
+import com.yandex.div.histogram.HistogramBridge
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.RenderConfiguration
+import com.yandex.div.internal.KLog
 import com.yandex.divkit.demo.perf.PerfMetricReporter
 import org.json.JSONObject
 import java.util.concurrent.TimeUnit

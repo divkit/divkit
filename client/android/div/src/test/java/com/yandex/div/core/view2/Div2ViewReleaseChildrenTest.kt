@@ -10,10 +10,10 @@ import com.yandex.div.core.TestViewComponentBuilder
 import com.yandex.div.core.childrenToFlatList
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.state.DivStatePath
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.animations.DIV_STATE_DIR
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
+import com.yandex.div.internal.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.any

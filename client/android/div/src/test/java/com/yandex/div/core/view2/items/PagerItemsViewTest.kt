@@ -3,9 +3,9 @@ package com.yandex.div.core.view2.items
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ApplicationProvider
 import androidx.viewpager2.widget.ViewPager2
-import com.yandex.div.core.util.Assert
-import com.yandex.div.core.view2.disableDivkitAssert
+import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
+import com.yandex.div.internal.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.*
@@ -52,7 +52,7 @@ class PagerItemsViewTest {
     }
 
     @Test
-    fun `set current item out of range`() = disableDivkitAssert {
+    fun `set current item out of range`() = disableAssertions {
         underTest.currentItem = -5
         underTest.currentItem = ITEM_COUNT
 

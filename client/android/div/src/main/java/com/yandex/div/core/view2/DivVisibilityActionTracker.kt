@@ -7,10 +7,10 @@ import androidx.annotation.AnyThread
 import androidx.core.os.postDelayed
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.util.Assert
-import com.yandex.div.core.util.KLog
 import com.yandex.div.core.util.doOnHierarchyLayout
 import com.yandex.div.core.view2.divs.allVisibilityActions
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.KLog
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibilityAction
 import java.util.Collections

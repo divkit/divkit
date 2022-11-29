@@ -1,15 +1,18 @@
 package com.yandex.div.json
 
+import com.yandex.div.internal.parser.JsonTopologicalSorting
+import com.yandex.div.internal.parser.ParsingEnvironmentImpl
+import com.yandex.div.internal.parser.TemplateParsingErrorLogger
+import com.yandex.div.internal.util.arrayMap
+import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
-import com.yandex.div.json.templates.MainTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
-import com.yandex.div.util.arrayMap
 import org.json.JSONException
 import org.json.JSONObject
 
 abstract class TemplateParsingEnvironment<T: JsonTemplate<*>> @JvmOverloads constructor(
     override val logger: ParsingErrorLogger,
-    private val mainTemplateProvider: MainTemplateProvider<T> = MainTemplateProvider(
+    private val mainTemplateProvider: CachingTemplateProvider<T> = CachingTemplateProvider(
         InMemoryTemplateProvider(),
         TemplateProvider.empty(),
     ),
@@ -36,7 +39,7 @@ abstract class TemplateParsingEnvironment<T: JsonTemplate<*>> @JvmOverloads cons
      * Parses json with templates memoizing dependencies between them along the way.
      * @return object consisting of two maps with parsed templates and their dependencies.
      */
-    fun parseTemplatesWithResultAndDependencies(json: JSONObject): TemplateParsingResult {
+    fun parseTemplatesWithResultAndDependencies(json: JSONObject): TemplateParsingResult<T> {
         val parsedTemplates = arrayMap<String, T>()
         val templateDependencies = arrayMap<String, Set<String>>()
         try {
@@ -63,13 +66,13 @@ abstract class TemplateParsingEnvironment<T: JsonTemplate<*>> @JvmOverloads cons
         return TemplateParsingResult(parsedTemplates, templateDependencies)
     }
 
-    interface TemplateFactory<T> {
+    fun interface TemplateFactory<T> {
 
         @Throws(JSONException::class)
         fun create(env: ParsingEnvironment, topLevel: Boolean, json: JSONObject): T
     }
 
-    inner class TemplateParsingResult(
+    class TemplateParsingResult<T>(
         val parsedTemplates: Map<String, T>,
         val templateDependencies: Map<String, Set<String>>
     )

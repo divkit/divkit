@@ -3,9 +3,9 @@ package com.yandex.div.internal.viewpool
 import android.view.View
 import androidx.annotation.AnyThread
 import androidx.annotation.WorkerThread
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.getOrThrow
 import com.yandex.div.internal.util.removeOrThrow
-import com.yandex.div.util.getOrThrow
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.BlockingQueue
 import java.util.concurrent.TimeUnit

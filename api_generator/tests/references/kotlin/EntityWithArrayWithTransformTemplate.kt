@@ -17,7 +17,7 @@ import com.yandex.div.data.*
 
 @Mockable
 class EntityWithArrayWithTransformTemplate : JSONSerializable, JsonTemplate<EntityWithArrayWithTransform> {
-    @JvmField final val array: Field<ExpressionsList<Int>> // at least 1 elements
+    @JvmField final val array: Field<ExpressionList<Int>> // at least 1 elements
 
     constructor (
         env: ParsingEnvironment,
@@ -26,7 +26,7 @@ class EntityWithArrayWithTransformTemplate : JSONSerializable, JsonTemplate<Enti
         json: JSONObject
     ) {
         val logger = env.logger
-        array = JsonTemplateParser.readExpressionsListField(json, "array", topLevel, parent?.array, STRING_TO_COLOR_INT, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
+        array = JsonTemplateParser.readExpressionListField(json, "array", topLevel, parent?.array, STRING_TO_COLOR_INT, ARRAY_TEMPLATE_VALIDATOR, logger, env, TYPE_HELPER_COLOR)
     }
 
     override fun resolve(env: ParsingEnvironment, data: JSONObject): EntityWithArrayWithTransform {
@@ -37,7 +37,7 @@ class EntityWithArrayWithTransformTemplate : JSONSerializable, JsonTemplate<Enti
 
     override fun writeToJSON(): JSONObject {
         val json = JSONObject()
-        json.writeExpressionsListField(key = "array", field = array, converter = COLOR_INT_TO_STRING)
+        json.writeExpressionListField(key = "array", field = array, converter = COLOR_INT_TO_STRING)
         json.write(key = "type", value = TYPE)
         return json
     }
@@ -48,7 +48,7 @@ class EntityWithArrayWithTransformTemplate : JSONSerializable, JsonTemplate<Enti
         private val ARRAY_VALIDATOR = ListValidator<Int> { it: List<*> -> it.size >= 1 }
         private val ARRAY_TEMPLATE_VALIDATOR = ListValidator<Int> { it: List<*> -> it.size >= 1 }
 
-        val ARRAY_READER: Reader<ExpressionsList<Int>> = { key, json, env -> JsonParser.readExpressionsList(json, key, STRING_TO_COLOR_INT, ARRAY_VALIDATOR, env.logger, env, TYPE_HELPER_COLOR) }
+        val ARRAY_READER: Reader<ExpressionList<Int>> = { key, json, env -> JsonParser.readExpressionList(json, key, STRING_TO_COLOR_INT, ARRAY_VALIDATOR, env.logger, env, TYPE_HELPER_COLOR) }
         val TYPE_READER: Reader<String> = { key, json, env -> JsonParser.read(json, key, env.logger, env) }
 
         val CREATOR = { env: ParsingEnvironment, it: JSONObject -> EntityWithArrayWithTransformTemplate(env, json = it) }

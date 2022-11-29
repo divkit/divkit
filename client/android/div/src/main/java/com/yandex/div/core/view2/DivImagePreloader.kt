@@ -64,9 +64,9 @@ class DivImagePreloader @Inject constructor(
     }
 
     private inner class PreloadVisitor(
-            private val callback: DivPreloader.DownloadCallback,
-            private val resolver: ExpressionResolver,
-            private val visitContainers: Boolean = true,
+        private val callback: DivPreloader.DownloadCallback,
+        private val resolver: ExpressionResolver,
+        private val visitContainers: Boolean = true,
     ) : DivVisitor<Unit>() {
         private val references = ArrayList<LoadReference>()
         private val ticket = TicketImpl()

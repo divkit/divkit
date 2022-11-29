@@ -15,7 +15,7 @@ import com.yandex.android.beacon.SendBeaconDb.Factory
 import com.yandex.android.util.deserializeMap
 import com.yandex.android.util.serialize
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 import org.json.JSONException
 import org.json.JSONObject
 

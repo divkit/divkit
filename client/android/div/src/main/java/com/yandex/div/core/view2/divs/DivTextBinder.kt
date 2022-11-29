@@ -35,15 +35,15 @@ import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
+import com.yandex.div.internal.expression.Expression
 import com.yandex.div.internal.spannable.BitmapImageSpan
 import com.yandex.div.internal.spannable.ImagePlaceholderSpan
 import com.yandex.div.internal.spannable.LetterSpacingSpan
 import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.util.checkHyphenationSupported
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.util.checkHyphenationSupported
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical

@@ -14,8 +14,8 @@ import android.widget.Toast
 import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.util.Assert
-import com.yandex.div.util.dpToPx
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.util.dpToPx
 
 internal class ErrorView(
     private val root: FrameLayout,

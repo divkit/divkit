@@ -1,7 +1,7 @@
 package com.yandex.div.video.custom
 
 import com.google.android.exoplayer2.upstream.DataSpec
-import com.yandex.div.json.getStringOrNull
+import com.yandex.div.internal.util.getStringOrNull
 import com.yandex.div2.DivCustom
 
 private const val VIDEO_URL_KEY = "url"

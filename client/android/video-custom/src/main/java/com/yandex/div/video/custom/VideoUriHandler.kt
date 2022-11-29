@@ -1,7 +1,7 @@
 package com.yandex.div.video.custom
 
 import android.net.Uri
-import com.yandex.div.core.interfaces.UriHandler
+import com.yandex.div.core.uri.UriHandler
 
 private const val SCHEME_VIDEO_CUSTOM = "custom_video"
 

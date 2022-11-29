@@ -1,6 +1,6 @@
 package com.yandex.div.core.downloader
 
-import com.yandex.div.util.arrayMap
+import com.yandex.div.internal.util.arrayMap
 import com.yandex.div2.Div
 import com.yandex.div2.DivPatch
 

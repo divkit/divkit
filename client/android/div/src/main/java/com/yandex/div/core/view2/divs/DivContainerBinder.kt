@@ -10,10 +10,10 @@ import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.expressionSubscriber
 import com.yandex.div.core.util.isBranch
 import com.yandex.div.core.util.type
-import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder

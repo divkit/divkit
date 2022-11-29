@@ -2,8 +2,8 @@ package com.yandex.generator
 
 import android.graphics.Color
 import android.net.Uri
-import com.yandex.div.json.expressions.ConstantExpressionsList
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.expression.ConstantExpressionList
+import com.yandex.div.internal.expression.Expression
 import com.yandex.testing.Entity
 import com.yandex.testing.EntityWithArray
 import com.yandex.testing.EntityWithArrayOfNestedItems
@@ -71,7 +71,7 @@ internal val ENTITY_WITH_NESTED_ARRAY = Entity.WithArray(
 )
 
 internal val ENTITY_WITH_ARRAY_WITH_TRANSFORM = Entity.WithArrayWithTransform(
-    EntityWithArrayWithTransform(ConstantExpressionsList(listOf(
+    EntityWithArrayWithTransform(ConstantExpressionList(listOf(
         Color.parseColor("#FF00FF00"),
         Color.parseColor("#AAFF0000")
     )))

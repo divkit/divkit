@@ -12,7 +12,7 @@ import androidx.annotation.ColorRes
 import androidx.annotation.DimenRes
 import androidx.annotation.IntDef
 import androidx.core.content.ContextCompat
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 
 internal open class SeparatorView @JvmOverloads constructor(
     context: Context,

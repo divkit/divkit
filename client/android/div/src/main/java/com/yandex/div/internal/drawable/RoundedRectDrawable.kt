@@ -8,7 +8,7 @@ import android.graphics.RectF
 import android.graphics.drawable.Drawable
 import androidx.annotation.Px
 import androidx.core.graphics.toRect
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 
 class RoundedRectDrawable(private val params: Params) : Drawable() {
 

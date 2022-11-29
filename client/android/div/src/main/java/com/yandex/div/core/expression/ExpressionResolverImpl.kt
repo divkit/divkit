@@ -6,12 +6,12 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.MissingVariableException
-import com.yandex.div.json.Converter
+import com.yandex.div.internal.parser.Converter
+import com.yandex.div.internal.parser.TypeHelper
+import com.yandex.div.internal.parser.ValueValidator
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
 import com.yandex.div.json.ParsingExceptionReason
-import com.yandex.div.json.TypeHelper
-import com.yandex.div.json.ValueValidator
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.invalidValue
 import com.yandex.div.json.missingVariable

@@ -6,6 +6,7 @@ import com.yandex.div.json.templateNotFound
 import org.json.JSONObject
 
 interface TemplateProvider<out T : JsonTemplate<*>> {
+
     operator fun get(templateId: String): T?
 
     @Throws(ParsingException::class)

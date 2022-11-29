@@ -3,7 +3,7 @@
 package com.yandex.android.util
 
 import androidx.collection.ArrayMap
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 
 private const val MAP_KEY_VALUE_DELIMITER = '\t'
 private const val MAP_KEY_VALUE_PAIR_DELIMITER = '\u0000'

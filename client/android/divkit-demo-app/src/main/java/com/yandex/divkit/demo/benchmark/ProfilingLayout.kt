@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.core.view.GravityCompat
-import com.yandex.div.core.util.KLog
-import com.yandex.div.core.base.ObserverList
+import com.yandex.div.core.ObserverList
+import com.yandex.div.internal.KLog
 import kotlin.math.max
 
 class ProfilingLayout @JvmOverloads constructor(

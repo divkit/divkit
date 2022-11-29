@@ -28,7 +28,7 @@ from ... import utils
 from ...schema.modeling.text import Text, EMPTY
 
 EXPRESSION_TYPE_NAME = 'Expression'
-EXPRESSION_LIST_TYPE_NAME = 'ExpressionsList'
+EXPRESSION_LIST_TYPE_NAME = 'ExpressionList'
 PARSING_ERRORS_PROP_NAME = "parsingErrors"
 ENTITY_STATIC_CREATOR = 'CREATOR'
 

@@ -1,7 +1,7 @@
 package com.yandex.div.core
 
 import android.app.Application
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 
 class TestApplication : Application() {
 

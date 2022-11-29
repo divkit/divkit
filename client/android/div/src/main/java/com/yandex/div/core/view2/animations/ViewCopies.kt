@@ -12,8 +12,8 @@ import androidx.core.view.drawToBitmap
 import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.R
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.divs.widgets.DivImageView
+import com.yandex.div.internal.Assert
 
 @MainThread
 internal fun createOrGetVisualCopy(

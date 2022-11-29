@@ -49,7 +49,7 @@ class Div2ViewTest {
     private val tag = DivDataTag("tag")
 
     @Test
-    fun `test switch different root states`() = disableDivkitAssert {
+    fun `test switch different root states`() = disableAssertions {
         val divData = UnitTestData(DIV_STATE_DIR, "state_list.json").data
         div2View.setData(divData, tag)
 
@@ -62,7 +62,7 @@ class Div2ViewTest {
     }
 
     @Test
-    fun `test switch zero states`() = disableDivkitAssert {
+    fun `test switch zero states`() = disableAssertions {
         val divData = UnitTestData(DIV_STATE_DIR, "state_list.json").data
         div2View.setData(divData, tag)
 

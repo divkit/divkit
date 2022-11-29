@@ -8,8 +8,8 @@ import com.yandex.div.core.state.TemporaryDivStateCache
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.state.InMemoryDivStateCache
 import com.yandex.div2.Div
 import com.yandex.div2.DivState

@@ -14,7 +14,7 @@ import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.getSystemService
 import androidx.lifecycle.LifecycleOwner
-import com.yandex.div.core.util.KLog
+import com.yandex.div.internal.KLog
 import com.yandex.divkit.regression.R
 import com.yandex.divkit.regression.di.ActivityScope
 import com.yandex.divkit.regression.utils.shortMessage

@@ -8,11 +8,11 @@ import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.toVariable
-import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
+import com.yandex.div.internal.KAssert
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import java.util.Collections

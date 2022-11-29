@@ -2,6 +2,7 @@ package com.yandex.div.internal.widget.tabs;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.TimeInterpolator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -30,14 +31,14 @@ import androidx.annotation.StringRes;
 import androidx.core.util.Pools;
 import androidx.core.view.GravityCompat;
 import androidx.core.view.ViewCompat;
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 import com.yandex.div.R;
 import com.yandex.div.core.font.DivTypefaceProvider;
-import com.yandex.div.core.util.Log;
-import com.yandex.div.util.AnimationUtils;
-import com.yandex.div.util.NestedHorizontalScrollCompanion;
-import com.yandex.div.util.SizeKt;
+import com.yandex.div.internal.Log;
+import com.yandex.div.internal.util.NestedHorizontalScrollCompanion;
+import com.yandex.div.internal.util.SizeKt;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -105,6 +106,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
     private static final int TAB_MIN_WIDTH_MARGIN = 56; //dps
 
     private static final int ANIMATION_DURATION = 300;
+    private static final TimeInterpolator FAST_OUT_SLOW_IN_INTERPOLATOR = new FastOutSlowInInterpolator();
 
     private static final Pools.Pool<Tab> sTabPool = new Pools.SynchronizedPool<>(16);
 
@@ -983,7 +985,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
         if (startScrollX != targetScrollX) {
             if (mScrollAnimator == null) {
                 mScrollAnimator = ValueAnimator.ofInt();
-                mScrollAnimator.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
+                mScrollAnimator.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
                 mScrollAnimator.setDuration(mAnimationDuration);
                 mScrollAnimator.addUpdateListener(animator -> scrollTo((Integer) animator.getAnimatedValue(), 0));
             }
@@ -1603,7 +1605,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
                                                             int targetLeft, int targetRight) {
             if (startLeft != targetLeft || startRight != targetRight) {
                 ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-                animator.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
+                animator.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
                 animator.setDuration(duration);
                 animator.addUpdateListener(animator1 -> {
                     final float fraction = animator1.getAnimatedFraction();
@@ -1638,7 +1640,7 @@ public class BaseIndicatorTabLayout extends HorizontalScrollView {
         protected void startSelectedIndicatorFadeAnimation(int position, int duration) {
             if (position != mSelectedPosition) {
                 ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
-                animator.setInterpolator(AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
+                animator.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
                 animator.setDuration(duration);
                 animator.addUpdateListener(animator1 -> {
                     final float fraction = animator1.getAnimatedFraction();

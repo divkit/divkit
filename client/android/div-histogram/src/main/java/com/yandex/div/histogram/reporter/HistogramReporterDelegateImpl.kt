@@ -1,9 +1,9 @@
 package com.yandex.div.histogram.reporter
 
-import com.yandex.div.core.histogram.HistogramRecorder
 import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramCallTypeProvider
 import com.yandex.div.histogram.HistogramRecordConfiguration
+import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.TaskExecutor
 import com.yandex.div.histogram.util.HistogramUtils
 import com.yandex.div.histogram.util.MIN_DURATION_HISTOGRAM_VALUE

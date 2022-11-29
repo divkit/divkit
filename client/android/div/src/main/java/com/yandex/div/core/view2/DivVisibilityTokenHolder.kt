@@ -2,7 +2,7 @@ package com.yandex.div.core.view2
 
 import android.os.Handler
 import androidx.annotation.AnyThread
-import com.yandex.div.util.SynchronizedList
+import com.yandex.div.internal.util.SynchronizedList
 import com.yandex.div2.DivVisibilityAction
 
 /**

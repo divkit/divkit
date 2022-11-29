@@ -2,9 +2,9 @@ package com.yandex.div
 
 import android.view.ViewGroup
 import androidx.test.rule.ActivityTestRule
+import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.rule.uiTestRule
 import com.yandex.div.steps.superLineHeightTextView
-import com.yandex.div.util.dpToPx
 import com.yandex.divkit.demo.DummyActivity
 import org.junit.Rule
 import org.junit.Test

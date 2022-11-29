@@ -1,5 +1,6 @@
 package com.yandex.div.core.util
 
+import com.yandex.div.internal.Assert
 import org.junit.rules.TestRule
 import org.junit.runner.Description
 import org.junit.runners.model.Statement

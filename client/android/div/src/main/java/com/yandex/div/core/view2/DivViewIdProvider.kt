@@ -3,7 +3,7 @@ package com.yandex.div.core.view2
 import android.view.View
 import androidx.core.view.ViewCompat
 import com.yandex.div.core.dagger.DivViewScope
-import com.yandex.div.util.arrayMap
+import com.yandex.div.internal.util.arrayMap
 import javax.inject.Inject
 
 @DivViewScope

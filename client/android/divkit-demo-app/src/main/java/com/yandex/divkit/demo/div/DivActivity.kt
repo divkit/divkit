@@ -15,11 +15,11 @@ import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.state.DefaultDivStateChangeListener
-import com.yandex.div.core.util.Log
-import com.yandex.div.core.utils.IOUtils
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.internal.Log
+import com.yandex.div.internal.util.IOUtils
 import com.yandex.div.lottie.DivLottieExtensionHandler
 import com.yandex.div.lottie.DivLottieLogger
 import com.yandex.div.zoom.DivPinchToZoomConfiguration

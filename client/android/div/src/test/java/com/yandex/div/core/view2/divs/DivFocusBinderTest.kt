@@ -5,7 +5,7 @@ import android.graphics.Color
 import android.view.View
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.expression.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivBorder

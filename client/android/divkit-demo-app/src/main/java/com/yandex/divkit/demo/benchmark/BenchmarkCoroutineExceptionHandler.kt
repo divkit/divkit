@@ -1,6 +1,6 @@
 package com.yandex.divkit.demo.benchmark
 
-import com.yandex.div.core.util.KLog
+import com.yandex.div.internal.KLog
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlin.coroutines.AbstractCoroutineContextElement

@@ -1,10 +1,10 @@
 package com.yandex.div.core
 
 import com.yandex.android.beacon.SendBeaconConfiguration
-import com.yandex.div.core.histogram.CpuUsageHistogramReporter
-import com.yandex.div.core.histogram.HistogramRecorder
+import com.yandex.div.histogram.CpuUsageHistogramReporter
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.HistogramRecordConfiguration
+import com.yandex.div.histogram.HistogramRecorder
 import dagger.Module
 import dagger.Provides
 import java.util.concurrent.ExecutorService

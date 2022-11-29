@@ -2,7 +2,7 @@ package com.yandex.div.zoom
 
 import android.view.MotionEvent
 import android.view.View
-import com.yandex.div.core.util.KLog
+import com.yandex.div.internal.KLog
 
 internal class ZoomTouchListener(
     private val touchController: ZoomTouchController

@@ -5,9 +5,9 @@ import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.images.DivImageLoader
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.divs.UnitTestData
 import com.yandex.div.core.viewEquals
+import com.yandex.div.internal.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock

@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import com.yandex.div.core.experiments.Experiment
 import com.yandex.div.core.view2.Div2View
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.expression.Expression
 import com.yandex.div2.DivAction
 import com.yandex.divkit.demo.BuildConfig
 import com.yandex.divkit.demo.Container

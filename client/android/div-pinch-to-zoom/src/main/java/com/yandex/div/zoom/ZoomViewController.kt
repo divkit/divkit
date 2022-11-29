@@ -10,8 +10,8 @@ import android.view.animation.Interpolator
 import android.widget.ImageView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.animation.doOnEnd
-import com.yandex.div.core.util.KAssert
-import com.yandex.div.util.ArgbEvaluatorCompat
+import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.util.ArgbEvaluatorCompat
 
 internal class ZoomViewController(
     private val configuration: DivPinchToZoomConfiguration

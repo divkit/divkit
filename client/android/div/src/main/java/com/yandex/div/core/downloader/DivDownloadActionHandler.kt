@@ -2,12 +2,12 @@ package com.yandex.div.core.downloader
 
 import android.net.Uri
 import com.yandex.div.core.DivViewFacade
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.Assert
 import com.yandex.div2.DivAction
+import com.yandex.div2.DivDownloadCallbacks
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivVisibilityAction
-import com.yandex.div2.DivDownloadCallbacks
 
 private const val PARAM_URL = "url"
 private const val AUTHORITY_DOWNLOAD = "download"

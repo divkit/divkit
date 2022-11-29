@@ -1,7 +1,7 @@
 package com.yandex.div.internal.viewpool
 
 import android.view.View
-import com.yandex.div.util.getOrThrow
+import com.yandex.div.internal.util.getOrThrow
 import java.util.concurrent.ConcurrentHashMap
 
 internal class PseudoViewPool : ViewPool {

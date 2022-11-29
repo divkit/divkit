@@ -6,7 +6,7 @@ import android.view.Gravity
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.yandex.div.util.dp
+import com.yandex.div.internal.util.dp
 import com.yandex.divkit.demo.utils.padding
 import com.yandex.divkit.demo.utils.textColor
 

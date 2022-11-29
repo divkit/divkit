@@ -1,18 +1,18 @@
 package com.yandex.div.core.expression
 
-import com.yandex.div.json.NUMBER_TO_DOUBLE
-import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.json.ParsingException
-import com.yandex.div.json.TYPE_HELPER_BOOLEAN
-import com.yandex.div.json.TYPE_HELPER_DOUBLE
-import com.yandex.div.json.TYPE_HELPER_INT
-import com.yandex.div.json.TYPE_HELPER_STRING
-import com.yandex.div.json.TypeHelper
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.util.EnableAssertsRule
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.FunctionProvider
+import com.yandex.div.internal.expression.Expression
+import com.yandex.div.internal.parser.NUMBER_TO_DOUBLE
+import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
+import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE
+import com.yandex.div.internal.parser.TYPE_HELPER_INT
+import com.yandex.div.internal.parser.TYPE_HELPER_STRING
+import com.yandex.div.internal.parser.TypeHelper
+import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.ParsingException
 import org.junit.Assert
 import org.junit.Rule
 import org.junit.Test

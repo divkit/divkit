@@ -3,8 +3,8 @@ package com.yandex.div.core.state
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
+import com.yandex.div.internal.Assert
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer
 import com.yandex.div2.DivCustom

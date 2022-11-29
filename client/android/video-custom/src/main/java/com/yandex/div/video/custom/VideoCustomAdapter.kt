@@ -2,9 +2,9 @@ package com.yandex.div.video.custom
 
 import android.view.View
 import com.yandex.div.core.DivCustomViewAdapter
-import com.yandex.div.core.util.KAssert
-import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.DivPreloader
+import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.KAssert
 import com.yandex.div2.DivCustom
 
 private const val CUSTOM_VIDEO_TYPE = "custom_video"

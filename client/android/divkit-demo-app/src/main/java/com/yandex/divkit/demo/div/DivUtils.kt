@@ -8,15 +8,15 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivConfiguration
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
-import com.yandex.div.core.util.KLog
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
+import com.yandex.div.internal.KLog
 import com.yandex.div.internal.viewpool.ViewPoolProfiler
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
-import com.yandex.div.json.templates.MainTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
@@ -126,7 +126,7 @@ fun JSONObject.isDiv2DataList() = optJSONArray("cards") != null
 fun JSONObject.asDiv2Data(errorLogger: ParsingErrorLogger? = null, componentName: String? = null): DivData {
     val environment = DivParsingEnvironment(
         errorLogger ?: ParsingErrorLogger.LOG,
-        MainTemplateProvider(
+        CachingTemplateProvider(
             InMemoryTemplateProvider(),
             TemplateProvider.empty(),
         ),

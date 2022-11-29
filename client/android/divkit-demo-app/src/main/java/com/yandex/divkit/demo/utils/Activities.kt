@@ -4,7 +4,7 @@ package com.yandex.divkit.demo.utils
 import android.app.Activity
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.yandex.div.core.util.KAssert
+import com.yandex.div.internal.KAssert
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.EmptyCoroutineContext

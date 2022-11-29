@@ -11,7 +11,7 @@ import androidx.annotation.RequiresApi
 import androidx.annotation.VisibleForTesting
 import androidx.appcompat.widget.AppCompatTextView
 import com.yandex.div.R
-import com.yandex.div.util.isHyphenationEnabled
+import com.yandex.div.internal.util.isHyphenationEnabled
 
 open class EllipsizedTextView @JvmOverloads constructor(
     context: Context,

@@ -1,8 +1,8 @@
 package com.yandex.generator
 
+import com.yandex.div.internal.util.summary
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
-import com.yandex.div.json.summary
 import com.yandex.testing.EntityWithOptionalProperty
 import com.yandex.testing.EntityWithRequiredProperty
 import com.yandex.testing.EntityWithOptionalComplexProperty

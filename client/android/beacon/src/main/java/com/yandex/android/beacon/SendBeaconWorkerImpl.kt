@@ -6,10 +6,10 @@ import androidx.annotation.VisibleForTesting
 import androidx.annotation.WorkerThread
 import com.yandex.android.beacon.BeaconItem.NonPersistent
 import com.yandex.android.net.CookieStorage
-import com.yandex.div.core.util.Assert
-import com.yandex.div.core.util.Log
-import com.yandex.div.util.Clock
-import com.yandex.div.util.SingleThreadExecutor
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.Log
+import com.yandex.div.internal.util.Clock
+import com.yandex.div.internal.util.SingleThreadExecutor
 import org.json.JSONObject
 import java.io.IOException
 import java.util.ArrayDeque

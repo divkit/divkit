@@ -4,7 +4,7 @@ import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteStatement
 import androidx.core.database.getStringOrNull
-import com.yandex.div.core.util.Assert
+import com.yandex.div.internal.Assert
 import com.yandex.div.state.db.StateSchema.SQL_UPSERT_QUERY_TEMPLATE
 
 internal class DivStateDaoImpl(

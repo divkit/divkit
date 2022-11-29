@@ -2,8 +2,8 @@ package com.yandex.divkit.demo.div
 
 import android.view.View
 import com.yandex.div.core.Div2Logger
-import com.yandex.div.core.util.KLog
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.KLog
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivGallery
 import com.yandex.div2.DivPager

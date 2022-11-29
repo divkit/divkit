@@ -1,5 +1,6 @@
 package com.yandex.div
 
+import com.yandex.div.rule.ActivityParamsTestRule
 import com.yandex.div.rule.screenshotRule
 import com.yandex.div.steps.divFocus
 import com.yandex.div.steps.divInput
@@ -13,7 +14,7 @@ private const val CASE_PATH = "ui_test_data/input/div_input_highlight.json"
 
 class Div2InputHighlightScreenshotTest {
 
-    private val activityRule = com.yandex.div.rule.ActivityParamsTestRule(
+    private val activityRule = ActivityParamsTestRule(
             DivScreenshotActivity::class.java,
             DivScreenshotActivity.EXTRA_DIV_ASSET_NAME to CASE_PATH
     )

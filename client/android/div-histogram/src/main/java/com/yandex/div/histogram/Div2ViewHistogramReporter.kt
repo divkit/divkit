@@ -1,11 +1,10 @@
 package com.yandex.div.histogram
 
 import android.os.SystemClock
-import android.view.View
 import androidx.annotation.MainThread
-import com.yandex.div.core.util.KAssert
 import com.yandex.div.histogram.metrics.RenderMetrics
 import com.yandex.div.histogram.reporter.HistogramReporter
+import com.yandex.div.internal.KAssert
 
 @MainThread
 class Div2ViewHistogramReporter(

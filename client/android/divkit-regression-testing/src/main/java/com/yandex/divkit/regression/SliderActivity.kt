@@ -9,8 +9,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable.Params
+import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.widget.slider.SliderView
-import com.yandex.div.util.dpToPx
 
 class SliderActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

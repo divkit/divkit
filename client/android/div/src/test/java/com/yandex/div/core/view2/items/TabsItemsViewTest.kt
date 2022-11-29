@@ -1,8 +1,8 @@
 package com.yandex.div.core.view2.items
 
 import androidx.viewpager.widget.PagerAdapter
-import com.yandex.div.core.util.Assert
-import com.yandex.div.core.view2.disableDivkitAssert
+import com.yandex.div.core.view2.disableAssertions
+import com.yandex.div.internal.Assert
 import com.yandex.div.internal.widget.tabs.ScrollableViewPager
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import org.junit.Test
@@ -46,7 +46,7 @@ class TabsItemsViewTest {
     }
 
     @Test
-    fun `set current item out of range`() = disableDivkitAssert {
+    fun `set current item out of range`() = disableAssertions {
         underTest.currentItem = ITEM_COUNT
         underTest.currentItem = -1
 

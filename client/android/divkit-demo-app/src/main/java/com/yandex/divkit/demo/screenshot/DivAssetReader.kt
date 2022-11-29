@@ -2,7 +2,7 @@ package com.yandex.divkit.demo.screenshot
 
 import android.content.Context
 import android.os.Build
-import com.yandex.div.core.utils.IOUtils
+import com.yandex.div.internal.util.IOUtils
 import org.json.JSONObject
 import java.io.IOException
 

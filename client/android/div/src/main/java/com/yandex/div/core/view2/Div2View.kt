@@ -35,8 +35,6 @@ import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
 import com.yandex.div.core.tooltip.DivTooltipController
-import com.yandex.div.core.util.Assert
-import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
 import com.yandex.div.core.util.walk
 import com.yandex.div.core.view2.animations.DivComparator
@@ -51,12 +49,14 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.data.VariableMutationException
 import com.yandex.div.histogram.Div2ViewHistogramReporter
 import com.yandex.div.histogram.HistogramCallType
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.hasScrollableChildUnder
+import com.yandex.div.internal.util.immutableCopy
 import com.yandex.div.internal.widget.menu.OverflowMenuSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div.util.DivDataUtils.INVALID_STATE_ID
-import com.yandex.div.util.DivDataUtils.getInitialStateId
-import com.yandex.div.util.immutableCopy
+import com.yandex.div.util.INVALID_STATE_ID
+import com.yandex.div.util.getInitialStateId
 import com.yandex.div2.Div
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivAction
@@ -115,7 +115,7 @@ class Div2View private constructor(
     private var reportBindingFinishedRunnable: SingleTimeOnAttachCallback? = null
 
     @VisibleForTesting
-    internal var stateId = INVALID_STATE_ID
+    internal var stateId = DivData.INVALID_STATE_ID
     private var config = DivViewConfig.DEFAULT
 
     private val renderConfig = {
@@ -407,7 +407,7 @@ class Div2View private constructor(
     }
 
     override fun switchToState(stateId: Int, temporary: Boolean) = synchronized(monitor) {
-        if (stateId != INVALID_STATE_ID) {
+        if (stateId != DivData.INVALID_STATE_ID) {
             bindOnAttachRunnable?.cancel()
             forceSwitchToState(stateId, temporary)
         }
@@ -428,7 +428,7 @@ class Div2View private constructor(
             bindOnAttachRunnable?.cancel()
             val state = divData?.states?.firstOrNull { it.stateId == path.topLevelStateId }
             bulkActionsHandler.switchState(state, path, temporary)
-        } else if (path.topLevelStateId != INVALID_STATE_ID) {
+        } else if (path.topLevelStateId != DivData.INVALID_STATE_ID) {
             div2Component.stateManager.updateStates(dataTag.id, path, temporary)
             switchToState(path.topLevelStateId, temporary)
         }

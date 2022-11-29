@@ -2,7 +2,7 @@ package com.yandex.div.core
 
 import android.net.Uri
 import com.yandex.div.core.state.DivStatePath
-import org.junit.After
+import com.yandex.div.core.view2.disableAssertions
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -16,11 +16,6 @@ class DivActionHandlerTest {
 
     private val divView = mock<DivViewFacade>()
     private val underTest = DivActionHandler()
-
-    @After
-    fun tearDown() {
-        com.yandex.div.core.util.Assert.setEnabled(true)
-    }
 
     @Test
     fun `uri with numeric state is handled`() {
@@ -56,9 +51,10 @@ class DivActionHandlerTest {
 
     @Test
     fun `uri with invalid path is not handled`() {
-        com.yandex.div.core.util.Assert.setEnabled(false)
-        Assert.assertFalse(underTest.handleUri("div-action://set_state?state_id=1.5/foo/bar/lol/kek".uri, divView))
-        Assert.assertFalse(underTest.handleUri("div-action://set_state?state_id=1/foo/bar/lol".uri, divView))
+        disableAssertions {
+            Assert.assertFalse(underTest.handleUri("div-action://set_state?state_id=1.5/foo/bar/lol/kek".uri, divView))
+            Assert.assertFalse(underTest.handleUri("div-action://set_state?state_id=1/foo/bar/lol".uri, divView))
+        }
     }
 
     private val String.uri: Uri get() = Uri.parse(this)

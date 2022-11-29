@@ -4,8 +4,8 @@ import com.yandex.div.core.Div2Context
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
+import com.yandex.div.json.templates.CachingTemplateProvider
 import com.yandex.div.json.templates.InMemoryTemplateProvider
-import com.yandex.div.json.templates.MainTemplateProvider
 import com.yandex.div.json.templates.TemplateProvider
 import com.yandex.div2.DivData
 import com.yandex.div2.DivTemplate
@@ -28,7 +28,7 @@ internal class Div2FeedBenchmark(
     private val viewController: Div2FeedBenchmarkViewController
 ) {
 
-    private val mainTemplateProvider = MainTemplateProvider<DivTemplate>(
+    private val mainTemplateProvider = CachingTemplateProvider<DivTemplate>(
             InMemoryTemplateProvider(),
             TemplateProvider.empty(),
     )

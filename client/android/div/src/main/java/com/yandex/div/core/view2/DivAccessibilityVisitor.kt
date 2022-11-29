@@ -2,7 +2,6 @@ package com.yandex.div.core.view2
 
 import android.view.View
 import com.yandex.div.R
-import com.yandex.div.core.view2.divs.widgets.*
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
@@ -17,8 +16,10 @@ import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
+import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.json.expressions.ExpressionResolver
-import com.yandex.div2.*
+import com.yandex.div2.DivBase
+import com.yandex.div2.DivCustom
 
 internal class DivAccessibilityVisitor(
         private val divAccessibilityBinder: DivAccessibilityBinder,

@@ -4,13 +4,13 @@ import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.variables.VariableController
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.Evaluator
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.expression.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger

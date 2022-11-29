@@ -9,11 +9,11 @@ import com.yandex.div.R
 import com.yandex.div.core.DivCustomViewAdapter
 import com.yandex.div.core.DivCustomViewFactory
 import com.yandex.div.core.extension.DivExtensionController
-import com.yandex.div.core.util.KAssert
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
+import com.yandex.div.internal.KAssert
 import com.yandex.div2.DivCustom
 import javax.inject.Inject
 

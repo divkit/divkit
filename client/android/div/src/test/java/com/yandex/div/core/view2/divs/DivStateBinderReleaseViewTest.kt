@@ -8,12 +8,12 @@ import com.yandex.div.core.downloader.DivPatchManager
 import com.yandex.div.core.state.DivPathUtils.findStateLayout
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.TemporaryDivStateCache
-import com.yandex.div.core.util.Assert
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.Assert
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.state.InMemoryDivStateCache
 import com.yandex.div2.DivState
 import org.junit.Test

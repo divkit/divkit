@@ -2,14 +2,15 @@ package com.yandex.div.core
 
 import android.content.Context
 import androidx.annotation.AnyThread
-import com.yandex.div.core.annotations.PublicApi
 import com.yandex.android.beacon.SendBeaconManager
+import com.yandex.div.BuildConfig
+import com.yandex.div.core.annotations.PublicApi
 import com.yandex.div.core.dagger.DaggerDivKitComponent
 import com.yandex.div.core.dagger.DivKitComponent
-import com.yandex.div.core.util.Assert
-import com.yandex.div.histogram.DivParsingHistogramReporter
-import com.yandex.div.BuildConfig
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
+import com.yandex.div.histogram.DivParsingHistogramReporter
+import com.yandex.div.internal.Assert
+import com.yandex.div.internal.Log
 
 @PublicApi
 class DivKit private constructor(
@@ -76,6 +77,26 @@ class DivKit private constructor(
         fun warmUpStatics() {
             // Bootstraps all built in expression functions.
             BuiltinFunctionProvider
+        }
+
+        @JvmStatic
+        @AnyThread
+        fun isLoggingEnabled(): Boolean = Log.isEnabled()
+
+        @JvmStatic
+        @AnyThread
+        fun enableLogging(enabled: Boolean) {
+            Log.setEnabled(enabled)
+        }
+
+        @JvmStatic
+        @AnyThread
+        fun isAssertionsEnabled(): Boolean = Assert.isEnabled()
+
+        @JvmStatic
+        @AnyThread
+        fun enableAssertions(enabled: Boolean) {
+            Assert.setEnabled(enabled)
         }
     }
 

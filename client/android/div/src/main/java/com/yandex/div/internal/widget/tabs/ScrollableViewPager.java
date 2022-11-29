@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.customview.widget.ViewDragHelper;
 import androidx.viewpager.widget.ViewPager;
+import com.yandex.div.internal.util.NestedHorizontalScrollCompanion;
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener;
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost;
-import com.yandex.div.util.NestedHorizontalScrollCompanion;
 
 import java.util.Set;
 
