@@ -85,13 +85,13 @@ export function templatesCheck(json: any): ViewerError[] {
                     res.push({
                         message: `Template "${name}" -> property "${prop}": Transitive dependencies is not supported in DivKit for Android and iOS`,
                         stack: [],
-                        level: 'warn'
+                        level: 'error'
                     });
                 } else if (prop.startsWith('$') && deps.includes(prop.slice(1))) {
                     res.push({
                         message: `Template "${name}" -> property "${prop.slice(1)}": Transitive dependencies is not supported in DivKit for Android and iOS`,
                         stack: [],
-                        level: 'warn'
+                        level: 'error'
                     });
                 }
             }
