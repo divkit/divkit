@@ -1,3 +1,39 @@
+## 18.0.0
+
+# JSON Schema:
+* Added Min/max sizes in schema
+* Added type=list to accessiblity
+* Changed command format for timers
+
+# Android Client:
+* Added border support to div-customs
+* Added backgrounds for ranges of text
+* Added accessibility hint and mode subscriptions
+* Fixed state patches
+* Fixed exta actions bind
+* Fixed linear layout params
+* Removed module com.yandex.div:div-core-views. Classes moved to com.yandex.div:div
+* Removed Div2Context#div2Component. In order to update global variables use Div2Context#globalVariableController
+* Log and Assert is internal now. Use DivKit class methods in oder to toggle logging and assertions
+
+# iOS Client:
+* Added backgrounds for ranges of text
+* Optimize escaping in expression resolving
+* Fixed getting preview from url starts with data:image/png;base64
+
+# Web Client:
+Added:
+* `background` and `border` for the `text` ranges
+* `baseline` vertical alignment
+
+Fixed:
+* Background redraw on variables change (with additional conditions)
+* CSS names conflict on production build, now css classes are longer
+* Artifacts near conrers, if both radius and stroke are used
+* Updated `image` preview / placeholder logic
+* Fixed `tint_mode` = `multiply`to better match Android logic
+
+
 ## 17.0.0
 
 # JSON Schema:

@@ -1,3 +1,17 @@
+## 18.0.0 (November 30, 2022)
+
+Additions:
+* `background` and `border` for the `text` ranges
+* `baseline` vertical alignment
+
+Fixed:
+* Background redraw on variables change (with additional conditions)
+* CSS names conflict on production build, now css classes are longer
+* Artifacts near conrers, if both radius and stroke are used
+* Updated `image` preview / placeholder logic
+* Fixed `tint_mode` = `multiply`to better match Android logic
+
+
 ## 15.0.0 (November 14, 2022)
 
 * Added separators support in DivContainer
