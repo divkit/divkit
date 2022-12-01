@@ -35,7 +35,7 @@ import com.yandex.div.core.view2.spannable.LineHeightWithTopOffsetSpan
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable
-import com.yandex.div.internal.expression.Expression
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.spannable.BitmapImageSpan
 import com.yandex.div.internal.spannable.ImagePlaceholderSpan
 import com.yandex.div.internal.spannable.LetterSpacingSpan

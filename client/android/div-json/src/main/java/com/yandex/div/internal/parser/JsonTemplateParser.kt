@@ -1,7 +1,7 @@
 package com.yandex.div.internal.parser
 
-import com.yandex.div.internal.expression.Expression
-import com.yandex.div.internal.expression.ExpressionList
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div.internal.parser.JsonParser.doNotConvert
 import com.yandex.div.internal.template.Field
 import com.yandex.div.internal.template.clone

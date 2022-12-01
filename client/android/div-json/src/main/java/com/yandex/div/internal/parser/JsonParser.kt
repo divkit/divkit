@@ -2,10 +2,10 @@
 
 package com.yandex.div.internal.parser
 
-import com.yandex.div.internal.expression.ConstantExpressionList
-import com.yandex.div.internal.expression.Expression
-import com.yandex.div.internal.expression.ExpressionList
-import com.yandex.div.internal.expression.MutableExpressionList
+import com.yandex.div.json.expressions.ConstantExpressionList
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionList
+import com.yandex.div.json.expressions.MutableExpressionList
 import com.yandex.div.internal.util.whenNotEmpty
 import com.yandex.div.json.JSONSerializable
 import com.yandex.div.json.ParsingEnvironment

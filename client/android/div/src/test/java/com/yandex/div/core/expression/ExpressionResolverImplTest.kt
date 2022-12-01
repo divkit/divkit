@@ -4,7 +4,7 @@ import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.util.EnableAssertsRule
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.FunctionProvider
-import com.yandex.div.internal.expression.Expression
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.parser.NUMBER_TO_DOUBLE
 import com.yandex.div.internal.parser.TYPE_HELPER_BOOLEAN
 import com.yandex.div.internal.parser.TYPE_HELPER_DOUBLE

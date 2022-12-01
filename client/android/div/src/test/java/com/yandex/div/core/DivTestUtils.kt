@@ -14,7 +14,7 @@ import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.widgets.ReleaseViewVisitor
 import com.yandex.div.core.view2.state.DivStateSwitcher
 import com.yandex.div.internal.Assert
-import com.yandex.div.internal.expression.Expression
+import com.yandex.div.json.expressions.Expression
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.TimeoutException

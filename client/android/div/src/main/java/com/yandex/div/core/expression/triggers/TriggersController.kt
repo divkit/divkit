@@ -10,7 +10,7 @@ import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.Evaluator
 import com.yandex.div.internal.Assert
-import com.yandex.div.internal.expression.Expression
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivTrigger

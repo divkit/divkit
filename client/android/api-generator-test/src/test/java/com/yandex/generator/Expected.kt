@@ -2,8 +2,8 @@ package com.yandex.generator
 
 import android.graphics.Color
 import android.net.Uri
-import com.yandex.div.internal.expression.ConstantExpressionList
-import com.yandex.div.internal.expression.Expression
+import com.yandex.div.json.expressions.ConstantExpressionList
+import com.yandex.div.json.expressions.Expression
 import com.yandex.testing.Entity
 import com.yandex.testing.EntityWithArray
 import com.yandex.testing.EntityWithArrayOfNestedItems

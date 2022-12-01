@@ -1,4 +1,4 @@
-package com.yandex.div.internal.expression
+package com.yandex.div.json.expressions
 
 import com.yandex.div.core.CompositeDisposable
 import com.yandex.div.core.Disposable
@@ -10,7 +10,6 @@ import com.yandex.div.internal.parser.TypeHelper
 import com.yandex.div.internal.parser.ValueValidator
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.json.ParsingException
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div.json.resolveFailed
 import com.yandex.div.json.typeMismatch
 import java.util.concurrent.ConcurrentHashMap

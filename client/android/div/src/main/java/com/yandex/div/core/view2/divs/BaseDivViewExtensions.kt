@@ -32,7 +32,7 @@ import com.yandex.div.internal.Log
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
-import com.yandex.div.internal.expression.Expression
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.util.fontHeight
 import com.yandex.div.internal.util.spToPx

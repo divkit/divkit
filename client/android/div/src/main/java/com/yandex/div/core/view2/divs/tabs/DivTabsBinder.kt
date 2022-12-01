@@ -29,7 +29,7 @@ import com.yandex.div.core.view2.divs.applyPaddings
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
-import com.yandex.div.internal.expression.Expression
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi

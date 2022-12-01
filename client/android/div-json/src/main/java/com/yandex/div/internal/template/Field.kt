@@ -2,8 +2,8 @@
 
 package com.yandex.div.internal.template
 
-import com.yandex.div.internal.expression.Expression
-import com.yandex.div.internal.expression.ExpressionList
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionList
 import com.yandex.div.internal.parser.ListValidator
 import com.yandex.div.json.JSONSerializable
 import com.yandex.div.json.JsonTemplate
