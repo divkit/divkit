@@ -18,7 +18,7 @@ internal class DivGridLayoutManager(
     orientation
 ), DivGalleryItemHelper {
 
-    override val childrenToRelayout = ArrayList<View>()
+    override val childrenToRelayout = HashSet<View>()
 
     override val divItems
         get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.items

@@ -20,7 +20,7 @@ internal interface DivGalleryItemHelper {
     val div: DivGallery
     val divItems: List<Div>
 
-    val childrenToRelayout: ArrayList<View>
+    val childrenToRelayout: MutableSet<View>
 
     fun _layoutDecorated(child: View, left: Int, top: Int, right: Int, bottom: Int) {
         trackVisibilityAction(child)
@@ -28,12 +28,20 @@ internal interface DivGalleryItemHelper {
 
     fun _onLayoutCompleted(state: RecyclerView.State?) {
         for (child in childrenToRelayout) {
-            _layoutDecoratedWithMargins(child, child.left, child.top, child.right, child.bottom)
+            _layoutDecoratedWithMargins(child, child.left, child.top, child.right, child.bottom,
+                isRelayoutingChildren = true)
         }
         childrenToRelayout.clear()
     }
 
-    fun _layoutDecoratedWithMargins(child: View, left: Int, top: Int, right: Int, bottom: Int) {
+    fun _layoutDecoratedWithMargins(
+        child: View,
+        left: Int,
+        top: Int,
+        right: Int,
+        bottom: Int,
+        isRelayoutingChildren: Boolean = false
+    ) {
         val parentHeight = view.measuredHeight
         val div = try {
             divItems[child.getTag(R.id.div_gallery_item_index) as Int]
@@ -47,10 +55,15 @@ internal interface DivGalleryItemHelper {
         }
         if (newTop < 0) {
             superLayoutDecoratedWithMargins(child, left, top, right, bottom)
-            childrenToRelayout.add(child)
+            if (!isRelayoutingChildren) {
+                childrenToRelayout.add(child)
+            }
         } else {
             superLayoutDecoratedWithMargins(child, left, top + newTop, right, bottom + newTop)
             trackVisibilityAction(child)
+            if (!isRelayoutingChildren) {
+                childrenToRelayout.remove(child)
+            }
         }
     }
 

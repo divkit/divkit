@@ -13,7 +13,7 @@ internal class DivLinearLayoutManager(
     @RecyclerView.Orientation orientation: Int = RecyclerView.HORIZONTAL
 ) : LinearLayoutManager(view.context, orientation, false), DivGalleryItemHelper {
 
-    override val childrenToRelayout = ArrayList<View>()
+    override val childrenToRelayout = HashSet<View>()
 
     override val divItems
         get() = (view.adapter as? DivGalleryBinder.GalleryAdapter)?.items ?: div.items
