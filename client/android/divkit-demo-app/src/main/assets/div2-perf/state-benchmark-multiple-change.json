@@ -284,26 +284,29 @@
         }
       ]
     },
+    "title_text": {
+      "type": "base_text",
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#3498DB"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_horizontal": "center"
+    },
     "post": {
       "type": "page_element",
       "items": [
         {
-          "type": "base_text",
-          "paddings": {
-            "left": 16,
-            "top": 16,
-            "right": 16,
-            "bottom": 16
-          },
-          "background": [
-            {
-              "type": "solid",
-              "color": "#3498DB"
-            }
-          ],
-          "font_size": 16,
-          "font_weight": "medium",
-          "text_alignment_horizontal": "center",
+          "type": "title_text",
           "$text": "post_title"
         },
         {
@@ -368,6 +371,140 @@
           },
           "$text": "post_tags",
           "$ranges": "post_tag_spans"
+        }
+      ]
+    },
+    "base_input": {
+      "type": "input",
+      "margins": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "paddings": {
+        "left": 8,
+        "top": 8,
+        "right": 8,
+        "bottom": 8
+      },
+      "text_color": "#ECF0F1",
+      "hint_text": "Hint text",
+      "hint_color": "#F1C40F"
+    },
+    "form": {
+      "type": "page_element",
+      "items": [
+        {
+          "type": "title_text",
+          "$text": "form_title"
+        },
+        {
+          "type": "container",
+          "orientation": "horizontal",
+          "layout_mode": "wrap",
+          "separator": {
+            "show_at_start": true,
+            "style": {
+              "type": "shape_drawable",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": 8
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": 4
+                }
+              },
+              "color": "#3498DB"
+            }
+          },
+          "items": [
+            {
+              "type": "base_text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16,
+                "right": 16
+              },
+              "line_height": 16,
+              "$text": "top_input_title_1"
+            },
+            {
+              "type": "base_text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16,
+                "right": 16
+              },
+              "line_height": 16,
+              "$text": "top_input_title_2"
+            },
+            {
+              "type": "base_input",
+              "border": {
+                "corner_radius": 8,
+                "stroke": {
+                  "color": "#F1C40F"
+                }
+              },
+              "$text_variable": "top_input_variable"
+            },
+            {
+              "type": "base_text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16
+              },
+              "line_height": 16,
+              "$text": "middle_input_title"
+            },
+            {
+              "type": "base_input",
+              "native_interface": {
+                "color": "#F1C40F"
+              },
+              "$text_variable": "middle_input_variable"
+            },
+            {
+              "type": "base_text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "margins": {
+                "left": 16
+              },
+              "line_height": 16,
+              "$text": "bottom_input_title_1"
+            },
+            {
+              "type": "base_text",
+              "width": {
+                "type": "wrap_content"
+              },
+              "line_height": 16,
+              "$text": "bottom_input_title_2"
+            },
+            {
+              "type": "base_input",
+              "native_interface": {
+                "color": "#E67E22"
+              },
+              "$text_variable": "bottom_input_variable"
+            }
+          ]
         }
       ]
     },
@@ -655,6 +792,23 @@
   },
   "card": {
     "log_id": "state_benchmark",
+    "variables": [
+      {
+        "name": "top_input_var",
+        "type": "string",
+        "value": "top input variable value"
+      },
+      {
+        "name": "middle_input_var",
+        "type": "string",
+        "value": "middle input variable value"
+      },
+      {
+        "name": "bottom_input_var",
+        "type": "string",
+        "value": ""
+      }
+    ],
     "states": [
       {
         "state_id": 0,
@@ -797,95 +951,16 @@
                       ]
                     },
                     {
-                      "type": "list",
-                      "items": [
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#3498DB",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_1",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#1ABC9C",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_2",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#F1C40F",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_3",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#E67E22",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_4",
-                            "url": "action://none"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "post",
-                      "post_title": "POST TITLE",
-                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote_action": {
-                        "log_id": "benchmark/post_quote",
-                        "url": "action://none"
-                      },
-                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                      "post_tag_spans": [
-                        {
-                          "start": 0,
-                          "end": 6,
-                          "text_color": "#1ABC9C"
-                        },
-                        {
-                          "start": 7,
-                          "end": 13,
-                          "text_color": "#2ECC71"
-                        },
-                        {
-                          "start": 14,
-                          "end": 20,
-                          "text_color": "#F1C40F"
-                        },
-                        {
-                          "start": 21,
-                          "end": 25,
-                          "text_color": "#E67E22"
-                        },
-                        {
-                          "start": 26,
-                          "end": 31,
-                          "text_color": "#E74C3C"
-                        }
-                      ]
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     },
                     {
                       "type": "list",
@@ -979,6 +1054,18 @@
                       ]
                     },
                     {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
                       "type": "list",
                       "items": [
                         {
@@ -1068,6 +1155,121 @@
                           "text_color": "#E74C3C"
                         }
                       ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#3498DB",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_1",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#1ABC9C",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_2",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#F1C40F",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_3",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#E67E22",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_4",
+                            "url": "action://none"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "post",
+                      "post_title": "POST TITLE",
+                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote_action": {
+                        "log_id": "benchmark/post_quote",
+                        "url": "action://none"
+                      },
+                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                      "post_tag_spans": [
+                        {
+                          "start": 0,
+                          "end": 6,
+                          "text_color": "#1ABC9C"
+                        },
+                        {
+                          "start": 7,
+                          "end": 13,
+                          "text_color": "#2ECC71"
+                        },
+                        {
+                          "start": 14,
+                          "end": 20,
+                          "text_color": "#F1C40F"
+                        },
+                        {
+                          "start": 21,
+                          "end": 25,
+                          "text_color": "#E67E22"
+                        },
+                        {
+                          "start": 26,
+                          "end": 31,
+                          "text_color": "#E74C3C"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     }
                   ]
                 }
@@ -1173,95 +1375,16 @@
                       ]
                     },
                     {
-                      "type": "list",
-                      "items": [
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#3498DB",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_1",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#1ABC9C",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_2",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#F1C40F",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_3",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#E67E22",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_4",
-                            "url": "action://none"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "post",
-                      "post_title": "POST TITLE",
-                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote_action": {
-                        "log_id": "benchmark/post_quote",
-                        "url": "action://none"
-                      },
-                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                      "post_tag_spans": [
-                        {
-                          "start": 0,
-                          "end": 6,
-                          "text_color": "#1ABC9C"
-                        },
-                        {
-                          "start": 7,
-                          "end": 13,
-                          "text_color": "#2ECC71"
-                        },
-                        {
-                          "start": 14,
-                          "end": 20,
-                          "text_color": "#F1C40F"
-                        },
-                        {
-                          "start": 21,
-                          "end": 25,
-                          "text_color": "#E67E22"
-                        },
-                        {
-                          "start": 26,
-                          "end": 31,
-                          "text_color": "#E74C3C"
-                        }
-                      ]
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     },
                     {
                       "type": "list",
@@ -1355,6 +1478,18 @@
                       ]
                     },
                     {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
                       "type": "list",
                       "items": [
                         {
@@ -1444,6 +1579,121 @@
                           "text_color": "#E74C3C"
                         }
                       ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#3498DB",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_1",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#1ABC9C",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_2",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#F1C40F",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_3",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#E67E22",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_4",
+                            "url": "action://none"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "post",
+                      "post_title": "POST TITLE",
+                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote_action": {
+                        "log_id": "benchmark/post_quote",
+                        "url": "action://none"
+                      },
+                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                      "post_tag_spans": [
+                        {
+                          "start": 0,
+                          "end": 6,
+                          "text_color": "#1ABC9C"
+                        },
+                        {
+                          "start": 7,
+                          "end": 13,
+                          "text_color": "#2ECC71"
+                        },
+                        {
+                          "start": 14,
+                          "end": 20,
+                          "text_color": "#F1C40F"
+                        },
+                        {
+                          "start": 21,
+                          "end": 25,
+                          "text_color": "#E67E22"
+                        },
+                        {
+                          "start": 26,
+                          "end": 31,
+                          "text_color": "#E74C3C"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     }
                   ]
                 }
@@ -1549,95 +1799,16 @@
                       ]
                     },
                     {
-                      "type": "list",
-                      "items": [
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#3498DB",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_1",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#1ABC9C",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_2",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#F1C40F",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_3",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#E67E22",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_4",
-                            "url": "action://none"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "post",
-                      "post_title": "POST TITLE",
-                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote_action": {
-                        "log_id": "benchmark/post_quote",
-                        "url": "action://none"
-                      },
-                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                      "post_tag_spans": [
-                        {
-                          "start": 0,
-                          "end": 6,
-                          "text_color": "#1ABC9C"
-                        },
-                        {
-                          "start": 7,
-                          "end": 13,
-                          "text_color": "#2ECC71"
-                        },
-                        {
-                          "start": 14,
-                          "end": 20,
-                          "text_color": "#F1C40F"
-                        },
-                        {
-                          "start": 21,
-                          "end": 25,
-                          "text_color": "#E67E22"
-                        },
-                        {
-                          "start": 26,
-                          "end": 31,
-                          "text_color": "#E74C3C"
-                        }
-                      ]
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     },
                     {
                       "type": "list",
@@ -1731,6 +1902,18 @@
                       ]
                     },
                     {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
                       "type": "list",
                       "items": [
                         {
@@ -1820,6 +2003,121 @@
                           "text_color": "#E74C3C"
                         }
                       ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#3498DB",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_1",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#1ABC9C",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_2",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#F1C40F",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_3",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#E67E22",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_4",
+                            "url": "action://none"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "post",
+                      "post_title": "POST TITLE",
+                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote_action": {
+                        "log_id": "benchmark/post_quote",
+                        "url": "action://none"
+                      },
+                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                      "post_tag_spans": [
+                        {
+                          "start": 0,
+                          "end": 6,
+                          "text_color": "#1ABC9C"
+                        },
+                        {
+                          "start": 7,
+                          "end": 13,
+                          "text_color": "#2ECC71"
+                        },
+                        {
+                          "start": 14,
+                          "end": 20,
+                          "text_color": "#F1C40F"
+                        },
+                        {
+                          "start": 21,
+                          "end": 25,
+                          "text_color": "#E67E22"
+                        },
+                        {
+                          "start": 26,
+                          "end": 31,
+                          "text_color": "#E74C3C"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     }
                   ]
                 }
@@ -1925,95 +2223,16 @@
                       ]
                     },
                     {
-                      "type": "list",
-                      "items": [
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#3498DB",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_1",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#1ABC9C",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_2",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#F1C40F",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_3",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#E67E22",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_4",
-                            "url": "action://none"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "post",
-                      "post_title": "POST TITLE",
-                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote_action": {
-                        "log_id": "benchmark/post_quote",
-                        "url": "action://none"
-                      },
-                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                      "post_tag_spans": [
-                        {
-                          "start": 0,
-                          "end": 6,
-                          "text_color": "#1ABC9C"
-                        },
-                        {
-                          "start": 7,
-                          "end": 13,
-                          "text_color": "#2ECC71"
-                        },
-                        {
-                          "start": 14,
-                          "end": 20,
-                          "text_color": "#F1C40F"
-                        },
-                        {
-                          "start": 21,
-                          "end": 25,
-                          "text_color": "#E67E22"
-                        },
-                        {
-                          "start": 26,
-                          "end": 31,
-                          "text_color": "#E74C3C"
-                        }
-                      ]
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     },
                     {
                       "type": "list",
@@ -2107,6 +2326,18 @@
                       ]
                     },
                     {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
                       "type": "list",
                       "items": [
                         {
@@ -2196,6 +2427,121 @@
                           "text_color": "#E74C3C"
                         }
                       ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#3498DB",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_1",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#1ABC9C",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_2",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#F1C40F",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_3",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#E67E22",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_4",
+                            "url": "action://none"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "post",
+                      "post_title": "POST TITLE",
+                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote_action": {
+                        "log_id": "benchmark/post_quote",
+                        "url": "action://none"
+                      },
+                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                      "post_tag_spans": [
+                        {
+                          "start": 0,
+                          "end": 6,
+                          "text_color": "#1ABC9C"
+                        },
+                        {
+                          "start": 7,
+                          "end": 13,
+                          "text_color": "#2ECC71"
+                        },
+                        {
+                          "start": 14,
+                          "end": 20,
+                          "text_color": "#F1C40F"
+                        },
+                        {
+                          "start": 21,
+                          "end": 25,
+                          "text_color": "#E67E22"
+                        },
+                        {
+                          "start": 26,
+                          "end": 31,
+                          "text_color": "#E74C3C"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     }
                   ]
                 }
@@ -2301,95 +2647,16 @@
                       ]
                     },
                     {
-                      "type": "list",
-                      "items": [
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#3498DB",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_1",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#1ABC9C",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_2",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#F1C40F",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_3",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#E67E22",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_4",
-                            "url": "action://none"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "post",
-                      "post_title": "POST TITLE",
-                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote_action": {
-                        "log_id": "benchmark/post_quote",
-                        "url": "action://none"
-                      },
-                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                      "post_tag_spans": [
-                        {
-                          "start": 0,
-                          "end": 6,
-                          "text_color": "#1ABC9C"
-                        },
-                        {
-                          "start": 7,
-                          "end": 13,
-                          "text_color": "#2ECC71"
-                        },
-                        {
-                          "start": 14,
-                          "end": 20,
-                          "text_color": "#F1C40F"
-                        },
-                        {
-                          "start": 21,
-                          "end": 25,
-                          "text_color": "#E67E22"
-                        },
-                        {
-                          "start": 26,
-                          "end": 31,
-                          "text_color": "#E74C3C"
-                        }
-                      ]
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     },
                     {
                       "type": "list",
@@ -2483,6 +2750,18 @@
                       ]
                     },
                     {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
                       "type": "list",
                       "items": [
                         {
@@ -2572,6 +2851,121 @@
                           "text_color": "#E74C3C"
                         }
                       ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#3498DB",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_1",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#1ABC9C",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_2",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#F1C40F",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_3",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#E67E22",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_4",
+                            "url": "action://none"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "post",
+                      "post_title": "POST TITLE",
+                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote_action": {
+                        "log_id": "benchmark/post_quote",
+                        "url": "action://none"
+                      },
+                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                      "post_tag_spans": [
+                        {
+                          "start": 0,
+                          "end": 6,
+                          "text_color": "#1ABC9C"
+                        },
+                        {
+                          "start": 7,
+                          "end": 13,
+                          "text_color": "#2ECC71"
+                        },
+                        {
+                          "start": 14,
+                          "end": 20,
+                          "text_color": "#F1C40F"
+                        },
+                        {
+                          "start": 21,
+                          "end": 25,
+                          "text_color": "#E67E22"
+                        },
+                        {
+                          "start": 26,
+                          "end": 31,
+                          "text_color": "#E74C3C"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     }
                   ]
                 }
@@ -2677,95 +3071,16 @@
                       ]
                     },
                     {
-                      "type": "list",
-                      "items": [
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#3498DB",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_1",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#1ABC9C",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_2",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#F1C40F",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_3",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#E67E22",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_4",
-                            "url": "action://none"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "post",
-                      "post_title": "POST TITLE",
-                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote_action": {
-                        "log_id": "benchmark/post_quote",
-                        "url": "action://none"
-                      },
-                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                      "post_tag_spans": [
-                        {
-                          "start": 0,
-                          "end": 6,
-                          "text_color": "#1ABC9C"
-                        },
-                        {
-                          "start": 7,
-                          "end": 13,
-                          "text_color": "#2ECC71"
-                        },
-                        {
-                          "start": 14,
-                          "end": 20,
-                          "text_color": "#F1C40F"
-                        },
-                        {
-                          "start": 21,
-                          "end": 25,
-                          "text_color": "#E67E22"
-                        },
-                        {
-                          "start": 26,
-                          "end": 31,
-                          "text_color": "#E74C3C"
-                        }
-                      ]
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     },
                     {
                       "type": "list",
@@ -2859,6 +3174,18 @@
                       ]
                     },
                     {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
                       "type": "list",
                       "items": [
                         {
@@ -2948,6 +3275,121 @@
                           "text_color": "#E74C3C"
                         }
                       ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#3498DB",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_1",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#1ABC9C",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_2",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#F1C40F",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_3",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#E67E22",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_4",
+                            "url": "action://none"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "post",
+                      "post_title": "POST TITLE",
+                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote_action": {
+                        "log_id": "benchmark/post_quote",
+                        "url": "action://none"
+                      },
+                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                      "post_tag_spans": [
+                        {
+                          "start": 0,
+                          "end": 6,
+                          "text_color": "#1ABC9C"
+                        },
+                        {
+                          "start": 7,
+                          "end": 13,
+                          "text_color": "#2ECC71"
+                        },
+                        {
+                          "start": 14,
+                          "end": 20,
+                          "text_color": "#F1C40F"
+                        },
+                        {
+                          "start": 21,
+                          "end": 25,
+                          "text_color": "#E67E22"
+                        },
+                        {
+                          "start": 26,
+                          "end": 31,
+                          "text_color": "#E74C3C"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     }
                   ]
                 }
@@ -3053,95 +3495,16 @@
                       ]
                     },
                     {
-                      "type": "list",
-                      "items": [
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#3498DB",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_1",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#1ABC9C",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_2",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#F1C40F",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_3",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#E67E22",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_4",
-                            "url": "action://none"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "post",
-                      "post_title": "POST TITLE",
-                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote_action": {
-                        "log_id": "benchmark/post_quote",
-                        "url": "action://none"
-                      },
-                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                      "post_tag_spans": [
-                        {
-                          "start": 0,
-                          "end": 6,
-                          "text_color": "#1ABC9C"
-                        },
-                        {
-                          "start": 7,
-                          "end": 13,
-                          "text_color": "#2ECC71"
-                        },
-                        {
-                          "start": 14,
-                          "end": 20,
-                          "text_color": "#F1C40F"
-                        },
-                        {
-                          "start": 21,
-                          "end": 25,
-                          "text_color": "#E67E22"
-                        },
-                        {
-                          "start": 26,
-                          "end": 31,
-                          "text_color": "#E74C3C"
-                        }
-                      ]
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     },
                     {
                       "type": "list",
@@ -3235,6 +3598,18 @@
                       ]
                     },
                     {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
                       "type": "list",
                       "items": [
                         {
@@ -3324,6 +3699,121 @@
                           "text_color": "#E74C3C"
                         }
                       ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#3498DB",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_1",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#1ABC9C",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_2",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#F1C40F",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_3",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#E67E22",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_4",
+                            "url": "action://none"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "post",
+                      "post_title": "POST TITLE",
+                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote_action": {
+                        "log_id": "benchmark/post_quote",
+                        "url": "action://none"
+                      },
+                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                      "post_tag_spans": [
+                        {
+                          "start": 0,
+                          "end": 6,
+                          "text_color": "#1ABC9C"
+                        },
+                        {
+                          "start": 7,
+                          "end": 13,
+                          "text_color": "#2ECC71"
+                        },
+                        {
+                          "start": 14,
+                          "end": 20,
+                          "text_color": "#F1C40F"
+                        },
+                        {
+                          "start": 21,
+                          "end": 25,
+                          "text_color": "#E67E22"
+                        },
+                        {
+                          "start": 26,
+                          "end": 31,
+                          "text_color": "#E74C3C"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     }
                   ]
                 }
@@ -3429,95 +3919,16 @@
                       ]
                     },
                     {
-                      "type": "list",
-                      "items": [
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#3498DB",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_1",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#1ABC9C",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_2",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#F1C40F",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_3",
-                            "url": "action://none"
-                          }
-                        },
-                        {
-                          "type": "list_item",
-                          "indicator_color": "#E67E22",
-                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
-                          "title": "Item title",
-                          "subtitle": "Item subtitle",
-                          "counter": "1K",
-                          "action": {
-                            "log_id": "benchmark/list_item_4",
-                            "url": "action://none"
-                          }
-                        }
-                      ]
-                    },
-                    {
-                      "type": "post",
-                      "post_title": "POST TITLE",
-                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
-                      "post_quote_action": {
-                        "log_id": "benchmark/post_quote",
-                        "url": "action://none"
-                      },
-                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
-                      "post_tag_spans": [
-                        {
-                          "start": 0,
-                          "end": 6,
-                          "text_color": "#1ABC9C"
-                        },
-                        {
-                          "start": 7,
-                          "end": 13,
-                          "text_color": "#2ECC71"
-                        },
-                        {
-                          "start": 14,
-                          "end": 20,
-                          "text_color": "#F1C40F"
-                        },
-                        {
-                          "start": 21,
-                          "end": 25,
-                          "text_color": "#E67E22"
-                        },
-                        {
-                          "start": 26,
-                          "end": 31,
-                          "text_color": "#E74C3C"
-                        }
-                      ]
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     },
                     {
                       "type": "list",
@@ -3611,6 +4022,18 @@
                       ]
                     },
                     {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
                       "type": "list",
                       "items": [
                         {
@@ -3700,6 +4123,121 @@
                           "text_color": "#E74C3C"
                         }
                       ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
+                    },
+                    {
+                      "type": "list",
+                      "items": [
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#3498DB",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_1",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#1ABC9C",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_2",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#F1C40F",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_3",
+                            "url": "action://none"
+                          }
+                        },
+                        {
+                          "type": "list_item",
+                          "indicator_color": "#E67E22",
+                          "icon_url": "file:///android_asset/images/benchmark/list_item_icon.png",
+                          "title": "Item title",
+                          "subtitle": "Item subtitle",
+                          "counter": "1K",
+                          "action": {
+                            "log_id": "benchmark/list_item_4",
+                            "url": "action://none"
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "post",
+                      "post_title": "POST TITLE",
+                      "post_text": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote": "Lo\u00ADrem ip\u00ADsum do\u00ADlor sit amet, con\u00ADsec\u00ADte\u00ADtur adi\u00ADpiscing elit, sed do ei\u00ADus\u00ADmod tem\u00ADpor inci\u00ADdi\u00ADdunt ut la\u00ADbore et do\u00ADlore mag\u00ADna ali\u00ADqua.",
+                      "post_quote_action": {
+                        "log_id": "benchmark/post_quote",
+                        "url": "action://none"
+                      },
+                      "post_tags": "#lorem #ipsum #dolor #sit #amet",
+                      "post_tag_spans": [
+                        {
+                          "start": 0,
+                          "end": 6,
+                          "text_color": "#1ABC9C"
+                        },
+                        {
+                          "start": 7,
+                          "end": 13,
+                          "text_color": "#2ECC71"
+                        },
+                        {
+                          "start": 14,
+                          "end": 20,
+                          "text_color": "#F1C40F"
+                        },
+                        {
+                          "start": 21,
+                          "end": 25,
+                          "text_color": "#E67E22"
+                        },
+                        {
+                          "start": 26,
+                          "end": 31,
+                          "text_color": "#E74C3C"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "form",
+                      "form_title": "FORM TITLE",
+                      "top_input_title_1": "Long top input title 1",
+                      "top_input_title_2": "Long top input title 2",
+                      "top_input_variable": "top_input_var",
+                      "middle_input_title": "Middle input title",
+                      "middle_input_variable": "middle_input_var",
+                      "bottom_input_title_1": "Bottom",
+                      "bottom_input_title_2": "input_title",
+                      "bottom_input_variable": "bottom_input_var"
                     }
                   ]
                 }
