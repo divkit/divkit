@@ -241,7 +241,7 @@
 
 <svelte:window on:resize={throttledUpdated} />
 
-<div bind:this={node}>
+<div bind:this={node} class={css['container-separator']}>
     {#each separators as item}
         <div
             class={css['container-separator__item']}
