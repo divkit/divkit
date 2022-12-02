@@ -230,6 +230,12 @@ function onStat(details) {
 
 The default value is `auto`. Tweaks for mouse or touch events.
 
+#### mix
+
+String, optional.
+
+An additional class added to the root element.
+
 
 #### theme (EXPERIMENTAL)
 

@@ -53,6 +53,7 @@
     export let platform: Platform = 'auto';
     export let theme: Theme = 'system';
     export let globalVariablesController: GlobalVariablesController = new GlobalVariablesController();
+    export let mix = '';
     export let onError: ErrorCallback | undefined = undefined;
     export let onStat: StatCallback | undefined = undefined;
     export let onCustomAction: CustomActionCallback | undefined = undefined;
@@ -947,7 +948,7 @@
 
 {#if !hasError && rootStateDiv}
     <div
-        class="{css.root}{$isDesktop ? ` ${css.root_platform_desktop}` : ''}"
+        class="{css.root}{$isDesktop ? ` ${css.root_platform_desktop}` : ''}{mix ? ` ${mix}` : ''}"
         on:touchstart={emptyTouchstartHandler}
     >
         <RootSvgFilters {svgFiltersMap} />

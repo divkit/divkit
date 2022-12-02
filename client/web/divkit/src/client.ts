@@ -8,6 +8,7 @@ export function render(opts: {
     id: string;
     hydrate?: boolean;
     globalVariablesController?: GlobalVariablesController;
+    mix?: string;
     onStat?: unknown;
     onCustomAction?: unknown;
     onError?: unknown;
@@ -21,6 +22,7 @@ export function render(opts: {
             id: opts.id,
             json: opts.json,
             globalVariablesController: opts.globalVariablesController,
+            mix: opts.mix,
             onStat: opts.onStat,
             onCustomAction: opts.onCustomAction,
             onError: opts.onError,

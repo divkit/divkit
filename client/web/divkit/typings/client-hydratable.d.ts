@@ -15,6 +15,7 @@ export function render(opts: {
     id: string;
     hydrate?: boolean;
     globalVariablesController?: GlobalVariablesController;
+    mix?: string;
     onStat?: StatCallback;
     onCustomAction?: CustomActionCallback;
     onError?: ErrorCallback;

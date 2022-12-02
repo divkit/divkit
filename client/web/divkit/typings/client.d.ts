@@ -14,6 +14,7 @@ export function render(opts: {
     json: DivJson;
     id: string;
     globalVariablesController?: GlobalVariablesController;
+    mix?: string;
     onStat?: StatCallback;
     onCustomAction?: CustomActionCallback;
     onError?: ErrorCallback;
