@@ -1,0 +1,70 @@
+[tool.poetry]
+name = "divkit-marketplace-backend"
+version = "0.1.0"
+description = ""
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.86.0"
+sqlalchemy = {extras = ["asyncio"], version = "^1.4.44"}
+pydantic = "^1.10.2"
+uvicorn = "^0.19.0"
+python-dotenv = "^0.21.0"
+mypy = "^0.990"
+black = "^22.10.0"
+alembic = "^1.8.1"
+asyncpg = "^0.27.0"
+asyncio = "^3.4.3"
+sqlalchemy2-stubs = "^0.0.2a29"
+boto3 = "^1.26.14"
+python-multipart = "^0.0.5"
+miniopy-async = "^1.11"
+factory-boy = "^3.2.1"
+
+
+[tool.pylint."MESSAGES CONTROL"]
+disable = [
+  "C0114",  # missing-module-docstring
+  "C0116",  # missing-function-docstring
+  "R0903",  # too-few-public-methods (for sqlalchemy tables and pydantic classes)
+  "C0115",  # missing-class-docstring (for api routes)
+  "C0103",  # invalid-name (for pydatic settings)
+  "W0401",  # wildcard-import
+  "W0614",  # unused-wildcard-import
+]
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_incomplete_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+plugins = "sqlalchemy.ext.mypy.plugin"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+isort = "^5.10.1"
+pylint = "^2.15.5"
+httpx = "^0.23.0"
+sqlalchemy-utils = "^0.38.3"
+pytest-asyncio = "^0.20.2"
+psycopg2-binary = "^2.9.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pylint.master]
+extension-pkg-allow-list = ["pydantic"]
+
+[tool.pytest]
+python_files = "test_*.py"
+python_classes = ["*Test", "Test*"]
+python_functions = "test_*"
+testpaths = "tests/"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
