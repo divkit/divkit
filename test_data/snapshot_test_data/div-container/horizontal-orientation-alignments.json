@@ -83,8 +83,14 @@
     "horizontal_fixed_h150_container_black": {
       "type": "container",
       "orientation": "horizontal",
-      "width": { "type": "wrap_content" },
-      "height": { "type": "fixed", "value": 150 },
+      "width": {
+        "type": "fixed",
+        "value": 200
+      },
+      "height": {
+        "type": "fixed",
+        "value": 150
+      },
       "background": [
         {
           "color": "#000",
@@ -103,7 +109,10 @@
         {
           "type": "text_white_bg_50x50",
           "text": "*",
-          "alignment_vertical": "center"
+          "alignment_vertical": "center",
+          "width": {
+            "type": "match_parent"
+          }
         },
         {
           "type": "text_white_bg_50x50",

@@ -35,7 +35,14 @@
     },
     "vertical_fixed_w150_container_black": {
       "type": "container",
-      "width": { "type": "fixed", "value": 150 },
+      "width": {
+        "type": "fixed",
+        "value": 150
+      },
+      "height": {
+        "type": "fixed",
+        "value": 200
+      },
       "background": [
         {
           "color": "#000",
@@ -54,7 +61,10 @@
         {
           "type": "text_white_bg_50x50",
           "text": "*",
-          "alignment_horizontal": "center"
+          "alignment_horizontal": "center",
+          "height": {
+            "type": "match_parent"
+          }
         },
         {
           "type": "text_white_bg_50x50",
