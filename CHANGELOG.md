@@ -7,7 +7,6 @@
 
 # Android Client:
 * Added border support to div-customs
-* Added backgrounds for ranges of text
 * Added accessibility hint and mode subscriptions
 * Fixed state patches
 * Fixed exta actions bind
