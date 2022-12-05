@@ -103,12 +103,14 @@ extension AccessibilityElement {
   public static func button(
     strings: Strings,
     enabled: Bool = true,
+    selected: Bool = false,
     startsMediaSession: Bool = false
   ) -> AccessibilityElement {
     AccessibilityElement(
       traits: .button,
       strings: strings,
       enabled: enabled,
+      selected: selected,
       startsMediaSession: startsMediaSession
     )
   }

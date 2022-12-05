@@ -45,9 +45,15 @@ public final class Future<T> {
   }
 
   private func accept(_ result: T) {
-    guard case let .pending(callbacks) = state else { return }
-    state = .fulfilled(result)
-    callbacks.forEach { $0(result) }
+    switch state {
+    case let .pending(callbacks):
+      state = .fulfilled(result)
+      callbacks.forEach { $0(result) }
+    case let .fulfilled(currentResult):
+      assertionFailure(
+        "Future already has result: \(currentResult). Callstack: \(Thread.callStackSymbols.joined(separator: "\n"))"
+      )
+    }
   }
 }
 
@@ -115,6 +121,13 @@ extension Future {
     }
     resolved(forward)
     return future
+  }
+}
+
+extension Future {
+  public var isFulfilled: Bool {
+    guard let _ = unwrap() else { return false }
+    return true
   }
 }
 

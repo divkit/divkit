@@ -10,12 +10,12 @@ extension CGFloat {
     Foundation.round(self / step) * step
   }
 
-  public func ceiled(toStep step: CGFloat = 1) -> CGFloat {
-    ceil(self / step) * step
+  public func ceiled(toStep step: CGFloat = 1, equalityAccuracy: CGFloat = 1e-5) -> CGFloat {
+    ceil((self - equalityAccuracy) / step) * step
   }
 
-  public func floored(toStep step: CGFloat = 1) -> CGFloat {
-    Foundation.floor(self / step) * step
+  public func floored(toStep step: CGFloat = 1, equalityAccuracy: CGFloat = 1e-5) -> CGFloat {
+    Foundation.floor((self + equalityAccuracy) / step) * step
   }
 
   public var roundedToScreenScale: CGFloat {

@@ -194,6 +194,22 @@ extension Signal {
   }
 }
 
+extension Signal {
+  public static func fromAsync(_ asyncResultAction: @escaping AsyncResultAction<T>) -> Signal<T> {
+    Signal<T>.init { (observer: Observer<T>) -> Disposable in
+      var disposed = false
+      let disposable = Disposable {
+        disposed = true
+      }
+      asyncResultAction { result in
+        guard !disposed else { return }
+        observer.action(result)
+      }
+      return disposable
+    }
+  }
+}
+
 extension Signal where T: Equatable {
   @inlinable
   public func skipRepeats(initialValue: (() -> T?)? = nil) -> Signal {

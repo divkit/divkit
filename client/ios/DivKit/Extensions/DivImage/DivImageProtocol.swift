@@ -21,23 +21,11 @@ extension DivImageProtocol {
   func resolvePlaceholder(_ expressionResolver: ExpressionResolver) -> ImagePlaceholder {
     if
       let base64 = resolvePreview(expressionResolver),
-      let data = decode(base64: base64),
-      let image = Image(data: data) {
+      let image = makeImage(base64) {
       return .image(image)
     } else {
       return .color(resolvePlaceholderColor(expressionResolver))
     }
-  }
-  
-  fileprivate func decode(base64: String) -> Data? {
-    if let data = Data(base64Encoded: base64) {
-      return data
-    }
-    if let url = URL(string: base64),
-       let data = try? Data(contentsOf: url) {
-      return data
-    }
-    return nil
   }
 
   func checkLayoutTraits(context: DivBlockModelingContext) throws {
@@ -66,3 +54,26 @@ extension DivImageProtocol {
     return String(typeName)
   }
 }
+
+private let makeImage: (String) -> Image? = memoize(
+  sizeLimit: 10 * 1024 * 1024,
+  keyMapper: { $0 },
+  sizeByKey: { $0.count * 3 / 4 },
+  _makeImage
+)
+
+private func _makeImage(base64: String) -> Image? {
+  decode(base64: base64).flatMap(Image.init(data:))
+}
+
+fileprivate func decode(base64: String) -> Data? {
+  if let data = Data(base64Encoded: base64) {
+    return data
+  }
+  if let url = URL(string: base64),
+     let dataHoldingURL = try? Data(contentsOf: url) {
+    return dataHoldingURL
+  }
+  return nil
+}
+

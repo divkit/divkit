@@ -128,6 +128,13 @@ rm BaseUI/UIAlertControllerExtensions.swift
 rm BaseUI/UIViewControllerExtensions.swift
 
 rm CommonCore/*.*
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Cache/CacheRecord.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Cache/CacheStorage.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Cache/LinkedListOrderedDictionary.swift  CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Cache/LRUCacheStorage.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Cache/LRUMemoization.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Cache/OrderedDictionary.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Cache/SizedItem.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Completions/CompletionAccumulating.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/Completions/CompletionAccumulator.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ImageContaining.swift CommonCore
