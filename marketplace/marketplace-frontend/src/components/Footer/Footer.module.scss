@@ -1,0 +1,13 @@
+.footer {
+  flex-shrink: 0;
+  background-color: rgb(241, 241, 241);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.7rem 0;
+  gap: 1.2rem;
+  svg {
+    font-size: 3.4rem;
+    color: #b3b3b3;
+  }
+}

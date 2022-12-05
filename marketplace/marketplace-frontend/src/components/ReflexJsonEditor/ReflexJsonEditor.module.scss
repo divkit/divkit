@@ -1,0 +1,13 @@
+.panel {
+  padding: 2rem;
+}
+
+.splitter {
+  height: auto !important;
+  width: 3px !important;
+
+  @media only screen and (max-width: (600px)) {
+    height: 2px !important;
+    width: 100% !important;
+  }
+}

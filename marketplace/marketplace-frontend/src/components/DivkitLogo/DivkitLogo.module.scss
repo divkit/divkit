@@ -1,0 +1,21 @@
+@import 'src/style/abstracts/var.scss';
+
+.text {
+  font-size: 3.5rem;
+  letter-spacing: 0.2rem;
+  font-weight: 300;
+  color: $color-black;
+  text-decoration: none;
+  font-weight: 300;
+
+  @media only screen and (max-width: (600px)) {
+    font-size: 3rem;
+    letter-spacing: 0.1rem;
+    line-height: 4.5rem;
+  }
+}
+
+.logoBox {
+  display: flex;
+  gap: 1rem;
+}

@@ -1,0 +1,2 @@
+class NotExistingIdsError(Exception):
+    pass

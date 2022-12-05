@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    container_name: divkit_db
+    image: postgres:14.3
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+  app:
+    container_name: divkit_marketplace
+    image: divkit_marketplace
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - ./.env
+    ports:
+      - '${API_PORT}:${API_PORT}'
+    depends_on:
+      - db
+
+
+volumes:
+    postgres_data:
