@@ -7,6 +7,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.ExperimentFlag
 import com.yandex.div.core.experiments.Experiment.ACCESSIBILITY_ENABLED
+import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
@@ -56,10 +57,14 @@ internal class DivAccessibilityBinder @Inject constructor(
         }
         val originalDelegate = ViewCompat.getAccessibilityDelegate(view)
 
-        val accessibilityDelegate = AccessibilityDelegateWrapper(
-            originalDelegate,
-            initializeAccessibilityNodeInfo = { _, info -> info?.bindType(type) }
-        )
+        val accessibilityDelegate =
+            if (type == DivAccessibility.Type.LIST && view is BackHandlingRecyclerView) {
+                AccessibilityListDelegate(view)
+            } else {
+                AccessibilityDelegateWrapper(
+                    originalDelegate,
+                    initializeAccessibilityNodeInfo = { _, info -> info?.bindType(type) })
+            }
 
         ViewCompat.setAccessibilityDelegate(view, accessibilityDelegate)
     }

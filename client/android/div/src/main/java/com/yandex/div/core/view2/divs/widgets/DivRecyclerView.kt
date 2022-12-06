@@ -5,10 +5,10 @@ import android.graphics.Canvas
 import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
-import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.ExpressionSubscriber
+import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
@@ -24,7 +24,7 @@ internal class DivRecyclerView  @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : RecyclerView(context, attrs, defStyleAttr), DivBorderSupports,
+) : BackHandlingRecyclerView(context, attrs, defStyleAttr), DivBorderSupports,
         OnInterceptTouchEventListenerHost,
     TransientView,
     ExpressionSubscriber {
