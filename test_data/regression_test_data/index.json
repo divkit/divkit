@@ -1315,20 +1315,14 @@
       "file": "grid-with-weights.json"
     },
     {
-      "title": "Custom container",
+      "title": "Rive animations",
       "platforms": [
-        "android",
         "ios"
       ],
-      "file": "custom-container.json"
-    },
-    {
-      "title": "Custom card",
-      "platforms": [
-        "android",
-        "ios"
+      "expected_results": [
+        "Two-column grid with seven cards playing different rive animations"
       ],
-      "file": "custom-card.json"
+      "file": "rive_animation.json"
     },
     {
       "title": "Visibility transition trigger",

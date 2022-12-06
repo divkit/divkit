@@ -1,33 +1,9 @@
-import AVFoundation
 import UIKit
 
 import CommonCore
 import LayoutKit
 
-extension AnimationBlock {
-  static func makeBlockView() -> BlockView {
-    AnimationBlockView()
-  }
-
-  func canConfigureBlockView(_ view: BlockView) -> Bool {
-    view is AnimationBlockView
-  }
-
-  func configureBlockView(
-    _ view: BlockView,
-    observer _: ElementStateObserver?,
-    overscrollDelegate _: ScrollDelegate?,
-    renderingDelegate _: RenderingDelegate?
-  ) {
-    let lottieView = view as! AnimationBlockView
-    if lottieView.animationHolder !== animationHolder {
-      lottieView.animatableView = animatableView.value
-      lottieView.animationHolder = animationHolder
-    }
-  }
-}
-
-private final class AnimationBlockView: BlockView {
+final class AnimationBlockView: BlockView {
   var animatableView: AnimatableView? {
     didSet {
       if let animatablView = animatableView {
@@ -36,7 +12,7 @@ private final class AnimationBlockView: BlockView {
       }
     }
   }
-  
+
   private var animationRequest: Cancellable?
   var animationHolder: AnimationHolder? {
     didSet {
@@ -45,10 +21,11 @@ private final class AnimationBlockView: BlockView {
       let newValue = animationHolder
       animationRequest = animationHolder?.requestAnimationWithCompletion { [weak self] animationSource in
         guard let self = self,
-              newValue === self.animationHolder, let animationSource = animationSource else {
+              newValue === self.animationHolder,
+              let animationSource = animationSource else {
           return
         }
-        
+
         self.animatableView?.setSource(animationSource)
         self.animatableView?.play()
       }
@@ -58,7 +35,7 @@ private final class AnimationBlockView: BlockView {
   init() {
     super.init(frame: .zero)
   }
-  
+
   override func layoutSubviews() {
     super.layoutSubviews()
     animatableView?.frame = bounds

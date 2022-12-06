@@ -38,13 +38,14 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     case let .url(url):
       animationHolder = RemoteAnimationHolder(
         url: url,
+        animationType: .lottie,
         requester: requester,
         localDataProvider: localAnimationDataProvider
       )
     case let .json(json):
       animationHolder = JSONAnimationHolder(json: json)
     }
-    return AnimationBlock(
+    return LottieAnimationBlock(
       animatableView: Lazy(
         getter: {
           self.factory.createAnimatableView(
@@ -67,25 +68,30 @@ public final class LottieExtensionHandler: DivExtensionHandler {
 }
 
 private class JSONAnimationHolder: AnimationHolder {
-  let animation: AnimationSourceType?
+  let animation: (AnimationSourceType)?
 
   init(json: [String: Any]) {
-    self.animation = .json(json)
+    self.animation = LottieAnimationSourceType.json(json)
   }
   
   func requestAnimationWithCompletion(
-    _ completion: @escaping (AnimationSourceType?) -> Void
+    _ completion: @escaping ((AnimationSourceType)?) -> Void
   ) -> Cancellable? {
     completion(animation)
     return nil
   }
   
   func equals(_ other: AnimationHolder) -> Bool {
-    other is JSONAnimationHolder && animation == other.animation
+    if let animation = animation as? LottieAnimationSourceType,
+       let otherAnimation = other.animation as? LottieAnimationSourceType {
+      return other is JSONAnimationHolder && animation == otherAnimation
+    }
+    return false
   }
   
   var debugDescription: String {
-    guard case let .json(json) = animation else {
+    guard let animation = animation as? LottieAnimationSourceType,
+      case let .json(json) = animation else {
       assertionFailure("JSONAnimation holder can hold only json ")
       return ""
     }

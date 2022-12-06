@@ -23,12 +23,14 @@ extension LottieAnimationView: AnimatableView {
 
   public func setSource(_ source: AnimationSourceType) {
     var animation: LottieAnimation?
-    switch source {
-    case .data(let data):
-      animation = try? JSONDecoder().decode(LottieAnimation.self, from: data)
-    case .json(let json):
-      animation = try? LottieAnimation(dictionary: json)
+    if let source = source as? LottieAnimationSourceType {
+      switch source {
+      case .data(let data):
+        animation = try? JSONDecoder().decode(LottieAnimation.self, from: data)
+      case .json(let json):
+        animation = try? LottieAnimation(dictionary: json)
+      }
+      self.animation = animation
     }
-    self.animation = animation
   }
 }

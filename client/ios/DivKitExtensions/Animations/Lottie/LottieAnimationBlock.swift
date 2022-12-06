@@ -5,7 +5,7 @@ import Base
 import CommonCore
 import LayoutKit
 
-final class AnimationBlock: SizeForwardingBlock {
+final class LottieAnimationBlock: SizeForwardingBlock {
   let animatableView: Lazy<AnimatableView>
   let animationHolder: AnimationHolder
   let sizeProvider: Block
@@ -30,7 +30,7 @@ final class AnimationBlock: SizeForwardingBlock {
   func getImageHolders() -> [ImageHolder] { [] }
 
   func equals(_ other: Block) -> Bool {
-    guard let other = other as? AnimationBlock else {
+    guard let other = other as? LottieAnimationBlock else {
       return false
     }
 
@@ -38,5 +38,5 @@ final class AnimationBlock: SizeForwardingBlock {
   }
 }
 
-extension AnimationBlock: LayoutCachingDefaultImpl {}
-extension AnimationBlock: ElementStateUpdatingDefaultImpl {}
+extension LottieAnimationBlock: LayoutCachingDefaultImpl {}
+extension LottieAnimationBlock: ElementStateUpdatingDefaultImpl {}

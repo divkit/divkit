@@ -15,6 +15,7 @@
 		6178F77328E2097A00FE1648 /* UIViewRenderable+AccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */; };
 		6178F77428E2097A00FE1648 /* TabListSelectionDataSourceImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74428E2042200FE1648 /* TabListSelectionDataSourceImplTests.swift */; };
 		7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */; };
+		767AF3EA29364C3D0002B944 /* RiveAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */; };
 		76AD26822935F1B30088A360 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 76AD26812935F1B30088A360 /* RiveRuntime */; };
 		893D19642902AD8F005540DF /* TimeMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893D19632902AD8F005540DF /* TimeMeasure.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
@@ -187,7 +188,6 @@
 		8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */; };
 		8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */; };
 		8CDC72E928AA522F008F1925 /* template_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8CDC72E828AA522F008F1925 /* template_test_data */; };
-		8CE1B1CD28882F200003D64F /* DemoDivCustomBlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE1B1CC28882F200003D64F /* DemoDivCustomBlockFactory.swift */; };
 		8CF1296128B0018E00351F65 /* UrlInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296028B0018E00351F65 /* UrlInputView.swift */; };
 		8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296228B0021F00351F65 /* UserPreferences.swift */; };
 		8CF1296528B0036F00351F65 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296428B0036F00351F65 /* Themes.swift */; };
@@ -243,6 +243,7 @@
 		6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabInterimItemExtensionsTests.swift; sourceTree = "<group>"; };
 		6178F77028E2095100FE1648 /* LayoutKit_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoutKit_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivDeserializationErrorsTests.swift; sourceTree = "<group>"; };
+		767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveAnimationFactory.swift; sourceTree = "<group>"; };
 		893D19632902AD8F005540DF /* TimeMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMeasure.swift; sourceTree = "<group>"; };
 		89D02B1328C891890041EC18 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
 		89D02B1928C8EBC40041EC18 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
@@ -420,7 +421,6 @@
 		8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionSignaturesTests.swift; sourceTree = "<group>"; };
 		8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionResolverTests.swift; sourceTree = "<group>"; };
 		8CDC72E828AA522F008F1925 /* template_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = template_test_data; path = ../../../test_data/template_test_data; sourceTree = "<group>"; };
-		8CE1B1CC28882F200003D64F /* DemoDivCustomBlockFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoDivCustomBlockFactory.swift; sourceTree = "<group>"; };
 		8CF1296028B0018E00351F65 /* UrlInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlInputView.swift; sourceTree = "<group>"; };
 		8CF1296228B0021F00351F65 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		8CF1296428B0036F00351F65 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
@@ -815,7 +815,7 @@
 			isa = PBXGroup;
 			children = (
 				0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */,
-				8CE1B1CC28882F200003D64F /* DemoDivCustomBlockFactory.swift */,
+				767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */,
 				8C7B187E2864CA1F0036EF4C /* DemoPatchProvider.swift */,
 				8C7B187C2864CA1F0036EF4C /* DivBlockProvider.swift */,
 			);
@@ -1518,7 +1518,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8CE1B1CD28882F200003D64F /* DemoDivCustomBlockFactory.swift in Sources */,
 				8C1A377C28B4E3E700A047C8 /* UIStatePayloadFactory.swift in Sources */,
 				8C2BFA5828C10F5B00A16E9B /* TestData.swift in Sources */,
 				8C1A383028B61A0300A047C8 /* SimpleDivView.swift in Sources */,
@@ -1541,6 +1540,7 @@
 				8C1A378A28B5143200A047C8 /* DivViewController.swift in Sources */,
 				8C1A377928B4E3E700A047C8 /* WebPreviewView.swift in Sources */,
 				8C54D9CE28C0E46D0080826C /* RegressionView.swift in Sources */,
+				767AF3EA29364C3D0002B944 /* RiveAnimationFactory.swift in Sources */,
 				89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */,
 				8C1A378928B5143200A047C8 /* VisibilityTrackingScrollView.swift in Sources */,
 				8C4504DC28B3AA30005712FD /* SamplesView.swift in Sources */,

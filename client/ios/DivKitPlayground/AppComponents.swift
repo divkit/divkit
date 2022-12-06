@@ -13,7 +13,7 @@ enum AppComponents {
       requester: NetworkURLResourceRequester(performer: performer)
     )
     return DivKitComponents(
-      divCustomBlockFactory: DemoDivCustomBlockFactory(),
+      divCustomBlockFactory: RiveAnimationFactory(),
       extensionHandlers: [lottieExtensionHanlder],
       flagsInfo: DivFlagsInfo(isTextSelectingEnabled: true,
                               appendVariablesEnabled: true,
