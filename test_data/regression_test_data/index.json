@@ -1315,6 +1315,22 @@
       "file": "grid-with-weights.json"
     },
     {
+      "title": "Custom container",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "file": "custom-container.json"
+    },
+    {
+      "title": "Custom card",
+      "platforms": [
+        "android",
+        "ios",
+      ],
+      "file": "custom-card.json"
+    },
+    {
       "title": "Rive animations",
       "platforms": [
         "ios"

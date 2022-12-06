@@ -8,12 +8,13 @@ enum AppComponents {
     updateCardAction: DivActionURLHandler.UpdateCardAction? = nil
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
+    let requester = NetworkURLResourceRequester(performer: performer)
     let lottieExtensionHanlder = LottieExtensionHandler(
       factory: LottieAnimationFactory(),
-      requester: NetworkURLResourceRequester(performer: performer)
+      requester: requester
     )
     return DivKitComponents(
-      divCustomBlockFactory: RiveAnimationFactory(),
+      divCustomBlockFactory: PlaygroundDivCustomBlockFactory(requester: requester),
       extensionHandlers: [lottieExtensionHanlder],
       flagsInfo: DivFlagsInfo(isTextSelectingEnabled: true,
                               appendVariablesEnabled: true,

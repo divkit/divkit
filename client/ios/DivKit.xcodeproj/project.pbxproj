@@ -15,6 +15,7 @@
 		6178F77328E2097A00FE1648 /* UIViewRenderable+AccessibilityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */; };
 		6178F77428E2097A00FE1648 /* TabListSelectionDataSourceImplTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74428E2042200FE1648 /* TabListSelectionDataSourceImplTests.swift */; };
 		7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */; };
+		762661E7293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */; };
 		767AF3EA29364C3D0002B944 /* RiveAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */; };
 		76AD26822935F1B30088A360 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 76AD26812935F1B30088A360 /* RiveRuntime */; };
 		893D19642902AD8F005540DF /* TimeMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893D19632902AD8F005540DF /* TimeMeasure.swift */; };
@@ -243,6 +244,7 @@
 		6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabInterimItemExtensionsTests.swift; sourceTree = "<group>"; };
 		6178F77028E2095100FE1648 /* LayoutKit_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = LayoutKit_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivDeserializationErrorsTests.swift; sourceTree = "<group>"; };
+		762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundDivCustomBlockFactory.swift; sourceTree = "<group>"; };
 		767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveAnimationFactory.swift; sourceTree = "<group>"; };
 		893D19632902AD8F005540DF /* TimeMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMeasure.swift; sourceTree = "<group>"; };
 		89D02B1328C891890041EC18 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
@@ -816,6 +818,7 @@
 			children = (
 				0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */,
 				767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */,
+				762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */,
 				8C7B187E2864CA1F0036EF4C /* DemoPatchProvider.swift */,
 				8C7B187C2864CA1F0036EF4C /* DivBlockProvider.swift */,
 			);
@@ -1556,6 +1559,7 @@
 				8C440A042864C55400EF4175 /* DivKitPlaygroundApp.swift in Sources */,
 				8C1A374928B4187B00A047C8 /* DeviceInfo.swift in Sources */,
 				893D19642902AD8F005540DF /* TimeMeasure.swift in Sources */,
+				762661E7293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift in Sources */,
 				8C1A375228B4189E00A047C8 /* ScannerView.swift in Sources */,
 				8C1A375128B4189E00A047C8 /* ScannerViewController.swift in Sources */,
 			);

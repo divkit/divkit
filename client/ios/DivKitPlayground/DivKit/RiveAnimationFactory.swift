@@ -8,14 +8,19 @@ import Networking
 import RiveRuntime
 
 final class RiveAnimationFactory: DivCustomBlockFactory {
+  private let requester: URLResourceRequesting
+
+  init(requester: URLResourceRequesting) {
+    self.requester = requester
+  }
+
   func makeBlock(data: DivCustomData, context: DivBlockModelingContext) -> Block {
     do {
       let riveData = try data.toRiveDivCustomData()
-      let performer = URLRequestPerformer(urlTransform: nil)
       let animationHolder = RemoteAnimationHolder(
         url: riveData.url,
         animationType: .rive,
-        requester: NetworkURLResourceRequester(performer: performer),
+        requester: requester,
         localDataProvider: nil)
 
       return RiveAnimationBlock(
@@ -78,7 +83,7 @@ extension RiveContainerView: AnimatableView {
   }
 }
 
-private struct RiveDivCustomData {
+struct RiveDivCustomData {
   enum Error: String, Swift.Error {
     case wrongDivCustomType
     case noValidURL
