@@ -3,11 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Paint
-import android.text.Layout
-import android.text.Spannable
-import android.text.SpannableStringBuilder
-import android.text.TextPaint
-import android.text.TextUtils
+import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.AbsoluteSizeSpan
 import android.text.style.ClickableSpan
@@ -43,6 +39,7 @@ import com.yandex.div.internal.spannable.NoStrikethroughSpan
 import com.yandex.div.internal.spannable.NoUnderlineSpan
 import com.yandex.div.internal.spannable.TypefaceSpan
 import com.yandex.div.internal.util.checkHyphenationSupported
+import com.yandex.div.internal.widget.EllipsizedTextView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
@@ -86,7 +83,6 @@ internal class DivTextBinder @Inject constructor(
 
         val expressionResolver = divView.expressionResolver
         view.closeAllSubscription()
-        view.textRoundedBgHelper = DivTextRangesBackgroundHelper(view, expressionResolver)
 
         view.div = div
         if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
@@ -438,7 +434,7 @@ internal class DivTextBinder @Inject constructor(
         )
     }
 
-    private fun DivLineHeightTextView.applyText(
+    private fun TextView.applyText(
         divView: Div2View,
         resolver: ExpressionResolver,
         div: DivText
@@ -504,7 +500,7 @@ internal class DivTextBinder @Inject constructor(
         }
     }
 
-    private fun DivLineHeightTextView.applyEllipsis(
+    private fun EllipsizedTextView.applyEllipsis(
         divView: Div2View,
         resolver: ExpressionResolver,
         div: DivText
@@ -541,7 +537,7 @@ internal class DivTextBinder @Inject constructor(
 
     private inner class DivTextRanger(
         private val divView: Div2View,
-        private val textView: DivLineHeightTextView,
+        private val textView: TextView,
         private val resolver: ExpressionResolver,
         private val text: String,
         private val fontSize: Int,
@@ -568,6 +564,7 @@ internal class DivTextBinder @Inject constructor(
                 return
             }
 
+            if (textView is DivLineHeightTextView) textView.textRoundedBgHelper?.invalidateSpansCache()
             ranges?.forEach { item -> sb.addTextRange(item) }
             images.reversed().forEach {
                 sb.insert(it.start.evaluate(resolver), "#")
@@ -649,8 +646,9 @@ internal class DivTextBinder @Inject constructor(
             }
             if (range.border != null || range.background != null) {
                 val span = DivBackgroundSpan(range.border, range.background)
-                if (!textView.hasSuchSpan(span, start, end)) {
+                if (textView is DivLineHeightTextView && !textView.hasSuchSpan(this, span, start, end)) {
                     setSpan(span, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+                    textView.textRoundedBgHelper?.addBackgroundSpan(span)
                 }
             }
             if (range.lineHeight != null || range.topOffset != null) {
@@ -660,13 +658,12 @@ internal class DivTextBinder @Inject constructor(
             }
         }
 
-        private fun TextView.hasSuchSpan(backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
-            val spannable = text as? Spannable ?: return false
-            val spans = spannable.getSpans(0, text.length, DivBackgroundSpan::class.java)
-            return spans.any { span ->
-                    span.border == backgroundSpan.border && span.background == backgroundSpan.background
-                    && end == spannable.getSpanEnd(span) && start == spannable.getSpanStart(span)
+        private fun DivLineHeightTextView.hasSuchSpan(sb: SpannableStringBuilder, backgroundSpan: DivBackgroundSpan, start: Int, end: Int): Boolean {
+            if (textRoundedBgHelper == null) {
+                textRoundedBgHelper = DivTextRangesBackgroundHelper(this, resolver)
+                return false
             }
+            return textRoundedBgHelper!!.hasSameSpan(sb, backgroundSpan, start, end)
         }
 
         private fun SpannableStringBuilder.makeImageSpan(
@@ -731,16 +728,7 @@ internal class DivTextBinder @Inject constructor(
 
 internal class DivBackgroundSpan(val border: DivTextRangeBorder?,
                         val background: DivTextRangeBackground?) : UnderlineSpan() {
-    var cache: Cache? = null
-
     override fun updateDrawState(ds: TextPaint) {
         ds.isUnderlineText = false
     }
-
-    class Cache(
-        val startLine: Int,
-        val endLine: Int,
-        val startOffset: Int,
-        val endOffset: Int
-    )
 }

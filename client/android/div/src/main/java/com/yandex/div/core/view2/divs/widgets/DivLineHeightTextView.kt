@@ -94,14 +94,11 @@ internal class DivLineHeightTextView @JvmOverloads constructor(
 
     override fun requestLayout() {
         super.requestLayout()
-        (text as? Spannable)?.getSpans(0, text.length, DivBackgroundSpan::class.java)?.forEach {
-            it.cache = null
-        }
     }
 
     override fun onDraw(canvas: Canvas) {
         // need to draw bg first so that text can be on top during super.onDraw()
-        if (text is Spanned && layout != null) {
+        if (text is Spanned && layout != null && textRoundedBgHelper?.hasBackgroundSpan() == true ) {
             canvas.withTranslation(totalPaddingLeft.toFloat(), totalPaddingTop.toFloat()) {
                 textRoundedBgHelper?.draw(canvas, text as Spanned, layout)
             }
