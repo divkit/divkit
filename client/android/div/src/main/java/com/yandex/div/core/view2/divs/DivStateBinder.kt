@@ -27,6 +27,7 @@ import com.yandex.div.core.view2.DivTransitionBuilder
 import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.DivVisibilityActionTracker
 import com.yandex.div.core.view2.animations.DivComparator
+import com.yandex.div.core.view2.animations.DivTransitionHandler
 import com.yandex.div.core.view2.animations.Fade
 import com.yandex.div.core.view2.animations.Scale
 import com.yandex.div.core.view2.animations.VerticalTranslation
@@ -105,12 +106,21 @@ internal class DivStateBinder @Inject constructor(
             } else {
                 null
             }
-            replaceViewsAnimated(divView, layout, div, newState, oldState, incoming, outgoing)
-            if (incoming != null && newStateDiv != null) {
-                viewBinder.get().bind(incoming, newStateDiv, divView, currentPath)
+            val transition = replaceViewsAnimated(divView, div, newState, oldState, incoming, outgoing)
+
+            if (transition != null) {
+                TransitionManager.endTransitions(layout)
+                TransitionManager.beginDelayedTransition(layout, transition)
+            }
+            layout.releaseAndRemoveChildren(divView)
+            if (incoming != null) {
+                layout.addView(incoming)
+                if (newStateDiv != null) {
+                    viewBinder.get().bind(incoming, newStateDiv, divView, currentPath)
+                }
             }
             if (outgoing != null) {
-                divView.divTransitionHandler.runTransitions()
+                divView.divTransitionHandler.runTransitions(root = layout, endTransitions = false)
             }
         } else if (newStateDivValue != null) {
             val areDivsReplaceable = outgoing != null && DivComparator.areDivsReplaceable(oldDiv, newStateDiv, resolver)
@@ -204,29 +214,25 @@ internal class DivStateBinder @Inject constructor(
 
     private fun replaceViewsAnimated(
         divView: Div2View,
-        layout: DivStateLayout,
         divState: DivState,
         incomingState: DivState.State,
         outgoingState: DivState.State?,
         incoming: View?,
         outgoing: View?
-    ) {
+    ): Transition? {
         val outgoingDiv = outgoingState?.div
         val incomingDiv = incomingState.div
         val resolver = divView.expressionResolver
-        if (divState.allowsTransitionsOnStateChange(resolver)
+        val transition = if (divState.allowsTransitionsOnStateChange(resolver)
             && (outgoingDiv?.value()?.containsStateInnerTransitions() == true
                     || incomingDiv?.value()?.containsStateInnerTransitions() == true)) {
             val transitionBuilder = divView.viewComponent.transitionBuilder
             val transitionHolder = divView.viewComponent.stateTransitionHolder
-            setupTransitions(transitionBuilder, transitionHolder, layout, incomingState, outgoingState, resolver)
+            setupTransitions(transitionBuilder, transitionHolder, incomingState, outgoingState, resolver)
         } else {
-            setupAnimation(divView, layout, incomingState, outgoingState, incoming, outgoing)
+            setupAnimation(divView, incomingState, outgoingState, incoming, outgoing)
         }
-        layout.releaseAndRemoveChildren(divView)
-        if (incoming != null) {
-            layout.addView(incoming)
-        }
+        return transition
     }
 
     private fun View.createLayoutParams() {
@@ -239,13 +245,12 @@ internal class DivStateBinder @Inject constructor(
     private fun setupTransitions(
         transitionBuilder: DivTransitionBuilder,
         transitionHolder: DivStateTransitionHolder,
-        layout: DivStateLayout,
         incomingState: DivState.State,
         outgoingState: DivState.State?,
         resolver: ExpressionResolver,
-    ) {
+    ) : Transition? {
         if (incomingState == outgoingState) {
-            return
+            return null
         }
 
         val transition = transitionBuilder.buildTransitions(
@@ -263,19 +268,16 @@ internal class DivStateBinder @Inject constructor(
         )
 
         transitionHolder.append(transition)
-
-        TransitionManager.endTransitions(layout)
-        TransitionManager.beginDelayedTransition(layout, transition)
+        return transition
     }
 
     private fun setupAnimation(
         divView: Div2View,
-        layout: DivStateLayout,
         incomingState: DivState.State,
         outgoingState: DivState.State?,
         incoming: View?,
         outgoing: View?
-    ) {
+    ): Transition? {
         val resolver = divView.expressionResolver
         val animationIn = incomingState.animationIn
         val animationOut = outgoingState?.animationOut
@@ -320,9 +322,9 @@ internal class DivStateBinder @Inject constructor(
             }
 
             outgoing?.clearAnimation()
-            TransitionManager.endTransitions(layout)
-            TransitionManager.beginDelayedTransition(layout, transition)
+            return transition
         }
+        return null
     }
 }
 

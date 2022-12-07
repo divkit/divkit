@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.animations
 
 import android.view.View
+import android.view.ViewGroup
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
 import androidx.transition.TransitionSet
@@ -27,9 +28,13 @@ internal class DivTransitionHandler(
     }
 
     fun runTransitions() {
+        runTransitions(divView, true)
+    }
+
+    fun runTransitions(root: ViewGroup, endTransitions: Boolean) {
         posted = false
 
-        beginDelayedTransitions()
+        beginDelayedTransitions(root, endTransitions)
     }
 
     fun putTransition(transition: Transition, view: View, changeType: ChangeType.Visibility) {
@@ -57,8 +62,10 @@ internal class DivTransitionHandler(
         }
     }
 
-    private fun beginDelayedTransitions() {
-        TransitionManager.endTransitions(divView)
+    private fun beginDelayedTransitions(root: ViewGroup = divView, endTransitions: Boolean = true) {
+        if (endTransitions) {
+            TransitionManager.endTransitions(root)
+        }
 
         val transitionSet = TransitionSet()
 
@@ -70,7 +77,7 @@ internal class DivTransitionHandler(
             activeTransitions.clear()
         }
 
-        TransitionManager.beginDelayedTransition(divView, transitionSet)
+        TransitionManager.beginDelayedTransition(root, transitionSet)
 
         pendingTransitions.forEach { transitionData ->
             transitionData.changes.forEach { change ->

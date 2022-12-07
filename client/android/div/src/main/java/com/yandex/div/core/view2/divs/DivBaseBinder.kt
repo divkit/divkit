@@ -15,6 +15,7 @@ import androidx.annotation.UiThread
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.transition.Transition
+import androidx.transition.TransitionManager
 import androidx.transition.Visibility
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
@@ -558,9 +559,10 @@ internal class DivBaseBinder @Inject constructor(
         var visibility = visibility
 
         if (div.transitionTriggers?.allowsTransitionsOnVisibilityChange() != false) {
-            divTransitionHandler
+            val currentChange = divTransitionHandler
                 .getLastChange(this)
-                ?.let { visibility = it.new }
+
+            currentChange?.let { visibility = it.new }
 
             val transitionBuilder = divView.viewComponent.transitionBuilder
 
@@ -581,7 +583,10 @@ internal class DivBaseBinder @Inject constructor(
                         resolver
                     )
                 }
-                else -> null
+                else -> {
+                    if (currentChange != null) TransitionManager.endTransitions(divView)
+                    null
+                }
             }
 
             transition?.addTarget(this)
