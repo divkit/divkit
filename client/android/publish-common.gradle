@@ -7,10 +7,6 @@ group = 'com.yandex.div'
 
 ext {
     publicationType = PublicationType.fromString(rootProject.findProperty("publicationType"))
-    mavenCentralUsername = rootProject.findProperty("mavenCentralUsername")
-    mavenCentralPassword = rootProject.findProperty("mavenCentralPassword")
-    artifactoryUsername = rootProject.findProperty("artifactoryUsername")
-    artifactoryPassword = rootProject.findProperty("artifactoryPassword")
 
     signingKeyId = rootProject.findProperty("signingKeyId")
     signingPassword = rootProject.findProperty("signingPassword")
@@ -26,9 +22,6 @@ ext {
     }
 }
 
-def publishToArtifactory = artifactoryUsername != null && artifactoryPassword != null
-def publishToMavenCentral = mavenCentralUsername != null && mavenCentralPassword != null
-
 if (publishToMavenCentral) {
     rootProject.ext {
         signing {
@@ -36,8 +29,6 @@ if (publishToMavenCentral) {
             password = signingPassword
             secretKeyRingFile = signingSecretKeyRingFile
         }
-        ossrhUsername = mavenCentralUsername
-        ossrhPassword = mavenCentralPassword
     }
 }
 
@@ -82,8 +73,8 @@ afterEvaluate {
             }
         }
 
-        repositories {
-            if (publishToArtifactory) {
+        if (publishToArtifactory) {
+            repositories {
                 maven {
                     name 'artifactory'
                     credentials {
@@ -91,17 +82,6 @@ afterEvaluate {
                         password artifactoryPassword
                     }
                     url = publicationType.artifactoryUrl
-                }
-            }
-
-            if (publishToMavenCentral) {
-                maven {
-                    name 'mavenCentral'
-                    credentials {
-                        username mavenCentralUsername
-                        password mavenCentralPassword
-                    }
-                    url = publicationType.mavenCentralUrl
                 }
             }
         }
