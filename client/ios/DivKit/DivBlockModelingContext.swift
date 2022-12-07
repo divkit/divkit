@@ -110,11 +110,10 @@ public struct DivBlockModelingContext {
     }
     return extensions.compactMap {
       let id = $0.id
-      let handler = extensionHandlers[id]
-      if handler == nil {
-        addError(level: .warning, message: "No DivExtensionHandler for: \(id)")
+      if !extensionHandlers.keys.contains(id) && !stateInterceptors.keys.contains(id) {
+        addError(level: .warning, message: "No DivExtensionHandler/DivStateInterceptor for: \(id)")
       }
-      return handler
+      return extensionHandlers[id]
     }
   }
 

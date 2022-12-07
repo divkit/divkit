@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9A9A9F28CB1A9200D1D810 /* Lottie */; };
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
+		52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */; };
 		6178F76B28E2095100FE1648 /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6178F74E28E2095100FE1648 /* LayoutKit */; };
 		6178F77128E2097A00FE1648 /* TabInterimItemExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */; };
 		6178F77228E2097A00FE1648 /* Array+UIViewRenderableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74028E2042200FE1648 /* Array+UIViewRenderableTests.swift */; };
@@ -238,6 +239,7 @@
 
 /* Begin PBXFileReference section */
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
+		52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBlockModelingContextErrorsTests.swift; sourceTree = "<group>"; };
 		6178F74028E2042200FE1648 /* Array+UIViewRenderableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+UIViewRenderableTests.swift"; sourceTree = "<group>"; };
 		6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
 		6178F74428E2042200FE1648 /* TabListSelectionDataSourceImplTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabListSelectionDataSourceImplTests.swift; sourceTree = "<group>"; };
@@ -865,6 +867,7 @@
 				8C7B1BF02865C01C0036EF4C /* DivStateManagerTests.swift */,
 				8CB960E528883B8E00D16E47 /* Platform.swift */,
 				8C4DC3E72892946F000C0963 /* RuntimeTestCase.swift */,
+				52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */,
 			);
 			path = DivKitTests;
 			sourceTree = "<group>";
@@ -1592,6 +1595,7 @@
 				8C7B1CA62865C01D0036EF4C /* TemplatesTests.swift in Sources */,
 				8CB960E628883B8E00D16E47 /* Platform.swift in Sources */,
 				8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */,
+				52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */,
 				8C7B1CA92865C01E0036EF4C /* DivStateManagerTests.swift in Sources */,
 				8C7B1BFD2865C01C0036EF4C /* DivSeparatorExtensionsTests.swift in Sources */,
 				8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */,

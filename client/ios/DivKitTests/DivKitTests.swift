@@ -65,7 +65,7 @@ extension DivBlockModelingContext {
   }
 }
 
-private class FakeImageHolder: ImageHolder {
+final class FakeImageHolder: ImageHolder {
   var image: Image? {
     nil
   }
