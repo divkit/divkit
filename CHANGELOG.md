@@ -1,3 +1,23 @@
+## 19.0.0
+
+# Android Client:
+* Added backgrounds for ranges of text
+* Added cache for background spans
+* Added implementation of wrapping list control to single item for accessibility
+* Removed redundant layout steps in gallery
+
+# iOS Client:
+* Added custom for rive animations
+* Added memoization for image placeholders
+
+# Web Client:
+Added:
+* `mix` property for a custom class name
+
+Fixed:
+* Incorrect `container` spacing with `separators`
+
+
 ## 18.0.0
 
 # JSON Schema:

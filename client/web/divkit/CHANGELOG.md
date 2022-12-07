@@ -1,3 +1,12 @@
+## 19.0.0 (December 7, 2022)
+
+Additions:
+* `mix` property for a custom class name
+
+Fixed:
+* Incorrect `container` spacing with `separators`
+
+
 ## 18.0.0 (November 30, 2022)
 
 Additions:
