@@ -1,4 +1,8 @@
 {
+  "div_absolute_edge_insets": {
+    "en": "Sets the margins, without taking the properties of the screen.",
+    "ru": "Устанавливает отступы, без учета свойств экрана."
+  },
   "div_accessibility": {
     "en": "Accessibility for disabled people.",
     "ru": "Доступность для людей с ограниченными возможностями."
@@ -171,13 +175,9 @@
     "en": "`ratio = width / height`.",
     "ru": "`ratio = width / height`."
   },
-  "div_gradient_linear": {
-    "en": "Linear gradient.",
-    "ru": "Линейный градиент."
-  },
-  "div_gradient_radial": {
-    "en": "Radial gradient.",
-    "ru": "Радиальный градиент."
+  "div_background_gradient": {
+    "en": "Gradient.",
+    "ru": "Градиент."
   },
   "div_background_image": {
     "en": "Image.",
@@ -186,14 +186,6 @@
   "div_background_solid": {
     "en": "Solid color.",
     "ru": "Сплошной цвет."
-  },
-  "div_nine_patch_background": {
-    "en": "Image in nine patch format. https://developer.android.com/studio/write/draw9patch.",
-    "ru": "Изображение в формате nine patch. https://developer.android.com/studio/write/draw9patch."
-  },
-  "div_nine_patch_background_insets": {
-    "en": "Margins that break images into parts, according to the rule, are similar to border-image-slice. (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)",
-    "ru": "Отступы, разбивающие изображения на части, по правилу аналогично border-image-slice (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
   },
   "div_base_accessibility": {
     "en": "Accessibility for disabled people.",
@@ -355,6 +347,14 @@
     "en": "A set of animations.",
     "ru": "Набор анимаций."
   },
+  "div_circle_shape": {
+    "en": "A circle.",
+    "ru": "Круг."
+  },
+  "div_circle_shape_radius": {
+    "en": "Radius.",
+    "ru": "Радиус."
+  },
   "div_container": {
     "en": "Container. It contains other elements and is responsible for their location. It is used to arrange elements vertically, horizontally, and with an overlay in a certain order, simulating the third dimension.",
     "ru": "Контейнер. Содержит в себе другие элементы и отвечает за их расположение. Позволяет располагать элементы по вертикали, горизонтали и с наложением в определенном порядке, имитируя третье измерение."
@@ -371,21 +371,25 @@
     "en": "Nested elements.",
     "ru": "Вложенные элементы."
   },
-  "div_container_orientation": {
-    "en": "Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.",
-    "ru": "Расположение элементов. Значение `overlap` накладывает элементы друг на друга в порядке перечисления. Ниже всего — нулевой элемент массива."
-  },
   "div_container_layout_mode": {
     "en": "Method of placing elements. `wrap` value includes the transfer of elements to the next line if they did not fit in the previous one. If the value is set to `wrap`, then a separate line will be allocated for all elements with a size value of `match_parent` along the main axis. If the value is set to `wrap`, then elements with a size value of `match_parent` along the cross axis will be ignored.",
     "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей. Если установлено значения `wrap`, то для каждого элемента со значением размера `match_parent` вдоль главной оси будет выделена отдельная строка. Если установлено значение `wrap`, то элементы со значением `match_parent` вдоль побочной оси будут проигнорированы."
+  },
+  "div_container_line_separator": {
+    "en": "Separator between elements along the cross axis. Not used if the `layout_mode` parameter has the value `no_wrap'. In the web only newer browsers are supported (gap property is required in flex).",
+    "ru": "Разделитель между элементами вдоль поперечной оси. Не используется, если параметр `layout_mode` имеет значение `no_wrap`. В вебе поддерживаются только новые браузеры (требуется поддержка gap во flex)."
+  },
+  "div_container_orientation": {
+    "en": "Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.",
+    "ru": "Расположение элементов. Значение `overlap` накладывает элементы друг на друга в порядке перечисления. Ниже всего — нулевой элемент массива."
   },
   "div_container_separator": {
     "en": "Separator between elements along the main axis. Not used if the `orientation` parameter has the value `overlap'. In the web only newer browsers are supported (gap property is required in flex).",
     "ru": "Разделитель между элементами вдоль основной оси. Не используется, если параметр `orientation` имеет значение `overlap`. В вебе поддерживаются только новые браузеры (требуется поддержка gap во flex)."
   },
-  "div_container_line_separator": {
-    "en": "Separator between elements along the cross axis. Not used if the `layout_mode` parameter has the value `no_wrap'. In the web only newer browsers are supported (gap property is required in flex).",
-    "ru": "Разделитель между элементами вдоль поперечной оси. Не используется, если параметр `layout_mode` имеет значение `no_wrap`. В вебе поддерживаются только новые браузеры (требуется поддержка gap во flex)."
+  "div_container_separator_show_at_end": {
+    "en": "Enables showing of separator after the last item.",
+    "ru": "Включает отображение разделителя после последнего элемента."
   },
   "div_container_separator_show_at_start": {
     "en": "Enables showing of separator before the first item.",
@@ -394,10 +398,6 @@
   "div_container_separator_show_between": {
     "en": "Enables showing of separator between items.",
     "ru": "Включает отображение разделителя между элементами."
-  },
-  "div_container_separator_show_at_end": {
-    "en": "Enables showing of separator after the last item.",
-    "ru": "Включает отображение разделителя после последнего элемента."
   },
   "div_container_separator_style": {
     "en": "Style of the separator.",
@@ -475,6 +475,10 @@
     "en": "A set of visual element states. Each element can have a few states with a different layout. The states are displayed strictly one by one and switched using [action](div-action.md).",
     "ru": "Набор состояний визуальных элементов. Каждый элемент может иметь несколько состояний с разной версткой. Состояния отображаются строго по одному, а переключаются с помощью [action](div-action.md)."
   },
+  "div_data_timers": {
+    "en": "List of timers.",
+    "ru": "Список таймеров."
+  },
   "div_data_transition_animation_selector": {
     "en": "Events that trigger transition animations.",
     "ru": "События, при которых сработают анимации переходов. Вместо него используйте `transition_triggers`."
@@ -486,10 +490,6 @@
   "div_data_variables": {
     "en": "Declaration of variables that can be used in an element.",
     "ru": "Объявление переменных, которые могут быть использованы в элементе."
-  },
-  "div_data_timers": {
-    "en": "List of timers.",
-    "ru": "Список таймеров."
   },
   "div_dimension": {
     "en": "Element dimension value.",
@@ -510,10 +510,6 @@
   "div_download_callbacks_on_success_actions": {
     "en": "Actions in case of successful loading.",
     "ru": "Действия при успешной загрузке."
-  },
-  "div_absolute_edge_insets": {
-    "en": "Sets the margins, without taking the properties of the screen.",
-    "ru": "Устанавливает отступы, без учета свойств экрана."
   },
   "div_edge_insets": {
     "en": "It sets margins.",
@@ -631,6 +627,10 @@
     "en": "Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>",
     "ru": "Выравнивание элементов в направлении, перпендикулярном направлению скролла. В горизонтальных галереях:<li>`start` — выравнивание по верхнему краю карточки;</li><li>`center` — по центру;</li><li>`end` — по нижнему краю.</li></p><p>В вертикальных галереях:<li>`start` — выравнивание по левому краю карточки;</li><li>`center` — по центру;</li><li>`end` — по правому краю.</li>"
   },
+  "div_gallery_cross_spacing": {
+    "en": "Spacing between elements across the scroll axis. Default value is `item_spacing`",
+    "ru": "Расстояние между элементами поперек оси прокрутки. По умолчанию равно `item_spacing`"
+  },
   "div_gallery_default_item": {
     "en": "Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>",
     "ru": "Порядковый номер элемента галереи, к которому будет выполнен скролл по умолчанию. Для `scroll_mode`:<li>`default` — положение скролла устанавливается в начало элемента, без учета `item_spacing`;</li><li>`paging` — положение скролла устанавливается в центр элемента.</li>"
@@ -638,10 +638,6 @@
   "div_gallery_item_spacing": {
     "en": "Spacing between elements.",
     "ru": "Расстояние между элементами."
-  },
-  "div_gallery_cross_spacing": {
-    "en": "Spacing between elements across the scroll axis. Default value is `item_spacing`",
-    "ru": "Расстояние между элементами поперек оси прокрутки. По умолчанию равно `item_spacing`"
   },
   "div_gallery_items": {
     "en": "Gallery elements. Scrolling to elements can be implemented using:<li>`div-action://set_current_item?id=&item=` — scrolling to the element with an ordinal number `item` inside an element, with the specified `id`;</li><li>`div-action://set_next_item?id=[&overflow={clamp|ring}]` — scrolling to the next element inside an element, with the specified `id`;</li><li>`div-action://set_previous_item?id=[&overflow={clamp|ring}]` — scrolling to the previous element inside an element, with the specified `id`.</li></p><p>The optional `overflow` parameter is used to set navigation when the first or last element is reached:<li>`clamp` — transition will stop at the border element;</li><li>`ring` — go to the beginning or end, depending on the current element.</li></p><p>By default, `clamp`.",
@@ -675,49 +671,45 @@
     "en": "Gif image.",
     "ru": "Gif-изображение."
   },
+  "div_gradient_background": {
+    "en": "Gradient background.",
+    "ru": "Градиентный фон."
+  },
+  "div_gradient_background_angle": {
+    "en": "Angle of gradient direction.",
+    "ru": "Угол направления градиента."
+  },
+  "div_gradient_background_colors": {
+    "en": "Colors. Gradient points will be located at an equal distance from each other.",
+    "ru": "Цвета. Точки градиента будут расположены на равном расстоянии друг от друга."
+  },
   "div_gradient_colors": {
     "en": "Colors. Gradient points will be located at an equal distance from each other.",
     "ru": "Цвета. Точки градиента будут расположены на равном расстоянии друг от друга."
+  },
+  "div_gradient_linear": {
+    "en": "Linear gradient.",
+    "ru": "Линейный градиент."
   },
   "div_gradient_linear_angle": {
     "en": "Angle of gradient direction.",
     "ru": "Угол направления градиента."
   },
-  "div_gradient_radial_radius": {
-    "en": "Radius of the gradient transition.",
-    "ru": "Радиус градиентного перехода."
-  },
-  "div_radial_gradient_relative_radius": {
-    "en": "Relative radius of the gradient transition.",
-    "ru": "Относительный радиус градиентного перехода."
-  },
-  "div_radial_gradient_relative_radius_value": {
-    "en": "Type of relative radius of the gradient transition.",
-    "ru": "Тип относительного радиуса градиентного перехода."
-  },
-  "div_radial_gradient_fixed_center": {
-    "en": "Fixed central point of the gradient.",
-    "ru": "Фиксированная центральная точка градиента."
-  },
-  "div_radial_gradient_fixed_center_value": {
-    "en": "Shift value of the fixed central point of the gradient.",
-    "ru": "Значение сдвига фиксированной центральной точки градиента."
-  },
-  "div_radial_gradient_relative_center": {
-    "en": "Relative central point of the gradient.",
-    "ru": "Относительная центральная точка градиента."
-  },
-  "div_radial_gradient_relative_center_value": {
-    "en": "Shift value of the central relative point of the gradient in the range `0..1`.",
-    "ru": "Значение сдвига относительной центральной точки градиента в диапозоне `0..1`."
+  "div_gradient_radial": {
+    "en": "Radial gradient.",
+    "ru": "Радиальный градиент."
   },
   "div_gradient_radial_center_x": {
     "en": "Shift of the central point of the gradient relative to the left edge along the X axis.",
     "ru": "Сдвиг центральной точки градиента относительно левого края по оси X."
   },
-  "div_gradient_radial_center_y":{
+  "div_gradient_radial_center_y": {
     "en": "Shift of the central point of the gradient relative to the upper edge along the Y axis.",
     "ru": "Сдвиг центральной точки градиента относительно верхнего края по оси Y."
+  },
+  "div_gradient_radial_radius": {
+    "en": "Radius of the gradient transition.",
+    "ru": "Радиус градиентного перехода."
   },
   "div_grid": {
     "en": "A grid with an option to merge cells vertically and horizontally.",
@@ -815,13 +807,13 @@
     "en": "Image.",
     "ru": "Изображение."
   },
-  "div_image_tint_mode": {
-    "en": "The blend mode of color specified in tint_color.",
-    "ru": "Метод наложения цвета, указанного в tint_color."
-  },
   "div_image_tint_color": {
     "en": "New color of a contour image.",
     "ru": "Новый цвет контурного изображения."
+  },
+  "div_image_tint_mode": {
+    "en": "The blend mode of color specified in tint_color.",
+    "ru": "Метод наложения цвета, указанного в tint_color."
   },
   "div_indicator": {
     "en": "Progress indicator for [pager](div-pager.md).",
@@ -855,14 +847,14 @@
     "en": "Stretch indicator items placement mode. will be expanded to fill the whole width.",
     "ru": "Режим расятжения элементов индикатора при котором индикаторы займут всю предоставленную ширину"
   },
+  "div_indicator_max_visible_items": {
+    "en": "Maximum number of visible indicators.",
+    "ru": "Максимальное количество индикаторов, которые будут отображены."
+  },
   "div_indicator_minimum_item_size": {
     "en": "A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.",
     "ru": "Множитель размера для минимального индикатора. Используется, когда на экране не помещается нужное количество индикаторов."
   },
-  "div_indicator_max_visible_items": {
-      "en": "Maximum number of visible indicators.",
-      "ru": "Максимальное количество индикаторов, которые будут отображены."
-    },
   "div_indicator_pager_id": {
     "en": "ID of the pager that is a data source for an indicator.",
     "ru": "Идентификатор пейджера-источника данных для индикатора."
@@ -876,13 +868,13 @@
     "ru": "Индикатор прогресса для пейджера."
   },
   "div_indicator_space_between_centers": {
-    "en": "Spacing between indicator centers. It is deprecated for Android. Use items_placement instead",
-    "ru": "Расстояние между центрами индикаторов. Deprecated для Android. Используйте items_placement"
+    "en": "Spacing between indicator centers. It is deprecated for Android. Use `items_placement` instead.",
+    "ru": "Расстояние между центрами индикаторов. Deprecated для Android. Используйте `items_placement`."
   },
   "div_indicator_space_between_items": {
-      "en": "Spacing between indicator edges.",
-      "ru": "Расстояние между краями индикаторов."
-    },
+    "en": "Spacing between indicator edges.",
+    "ru": "Расстояние между краями индикаторов."
+  },
   "div_infinity_count": {
     "en": "Infinite number of repetitions.",
     "ru": "Бесконечное число повторов."
@@ -958,6 +950,14 @@
   "div_neighbour_page_size_neighbour_page_width": {
     "en": "Width of the visible part of a neighbouring page.",
     "ru": "Ширина видимой части соседней страницы."
+  },
+  "div_nine_patch_background": {
+    "en": "Image in nine patch format. https://developer.android.com/studio/write/draw9patch.",
+    "ru": "Изображение в формате nine patch. https://developer.android.com/studio/write/draw9patch."
+  },
+  "div_nine_patch_background_insets": {
+    "en": "Margins that break images into parts, according to the rule, are similar to border-image-slice. (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)",
+    "ru": "Отступы, разбивающие изображения на части, по правилу аналогично border-image-slice (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
   },
   "div_page_size": {
     "en": "Percentage value of the page width.",
@@ -1075,6 +1075,30 @@
     "en": "`Y` coordinate.",
     "ru": "Координата `Y`."
   },
+  "div_radial_gradient_fixed_center": {
+    "en": "Fixed central point of the gradient.",
+    "ru": "Фиксированная центральная точка градиента."
+  },
+  "div_radial_gradient_fixed_center_value": {
+    "en": "Shift value of the fixed central point of the gradient.",
+    "ru": "Значение сдвига фиксированной центральной точки градиента."
+  },
+  "div_radial_gradient_relative_center": {
+    "en": "Relative central point of the gradient.",
+    "ru": "Относительная центральная точка градиента."
+  },
+  "div_radial_gradient_relative_center_value": {
+    "en": "Shift value of the central relative point of the gradient in the range `0..1`.",
+    "ru": "Значение сдвига относительной центральной точки градиента в диапозоне `0..1`."
+  },
+  "div_radial_gradient_relative_radius": {
+    "en": "Relative radius of the gradient transition.",
+    "ru": "Относительный радиус градиентного перехода."
+  },
+  "div_radial_gradient_relative_radius_value": {
+    "en": "Type of relative radius of the gradient transition.",
+    "ru": "Тип относительного радиуса градиентного перехода."
+  },
   "div_rounded_rectangle_shape": {
     "en": "A rectangle with rounded corners.",
     "ru": "Прямоугольник со скругленными углами."
@@ -1090,14 +1114,6 @@
   "div_rounded_rectangle_shape_item_width": {
     "en": "Width.",
     "ru": "Ширина."
-  },
-  "div_circle_shape": {
-    "en": "A circle.",
-    "ru": "Круг"
-  },
-  "div_circle_shape_radius": {
-    "en": "Radius.",
-    "ru": "Радиус."
   },
   "div_scale_transition": {
     "en": "Scale animation.",
@@ -1564,10 +1580,6 @@
     "ru": "Фон для диапазона текста."
   },
   "div_text_range_border": {
-    "en": "Text range border.",
-    "ru": "Рамка для диапазона текста."
-  },
-  "div_border_corner_radius": {
     "en": "Text range border.",
     "ru": "Рамка для диапазона текста."
   },
