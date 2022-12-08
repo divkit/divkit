@@ -77,8 +77,7 @@ internal class DivBaseBinder @Inject constructor(
         val subscriber = view.expressionSubscriber
 
         div.id.applyIfNotEquals(oldDiv?.id) {
-            val viewId = divView.viewComponent.viewIdProvider.getViewId(div.id)
-            view.applyId(div.id, viewId)
+            bindId(view, divView, div.id)
         }
 
         bindLayoutParams(view, div, resolver)
@@ -113,6 +112,11 @@ internal class DivBaseBinder @Inject constructor(
         }
         view.observeVisibility(div, resolver, subscriber, divView)
         view.observeTransform(div, resolver, subscriber)
+    }
+
+    fun bindId(view: View, divView: Div2View, id: String?) {
+        val viewId = divView.viewComponent.viewIdProvider.getViewId(id)
+        view.applyId(id, viewId)
     }
 
     fun bindLayoutParams(view: View, div: DivBase, resolver: ExpressionResolver) {

@@ -37,6 +37,8 @@ internal class DivCustomBinder @Inject constructor(
         if (oldDiv != null) baseBinder.unbindExtensions(customView, oldDiv, divView)
 
         baseBinder.bindView(view, div, null, divView)
+        baseBinder.bindId(view, divView, null)
+
         if (divCustomViewAdapter?.isCustomTypeSupported(div.customType) == true) {
             divCustomViewAdapter.newBind(view, customView, div, divView)
         } else {
@@ -58,7 +60,7 @@ internal class DivCustomBinder @Inject constructor(
             }
         bindView(customView, div, divView)
         if (oldCustomView != customView) {
-            replaceInParent(previousViewGroup, customView, divView)
+            replaceInParent(previousViewGroup, customView, div, divView)
         }
         extensionController.bindView(divView, customView, div)
     }
@@ -72,7 +74,7 @@ internal class DivCustomBinder @Inject constructor(
     ) {
         divCustomViewFactory.create(div, divView) { newCustomView ->
             if (newCustomView != previousCustomView) {
-                replaceInParent(previousViewGroup, newCustomView, divView)
+                replaceInParent(previousViewGroup, newCustomView, div, divView)
                 extensionController.bindView(divView, newCustomView, div)
             }
         }
@@ -81,8 +83,10 @@ internal class DivCustomBinder @Inject constructor(
     private fun replaceInParent(
         parent: ViewGroup,
         newCustomView: View,
+        div: DivCustom,
         divView: Div2View
     ) {
+        baseBinder.bindId(newCustomView, divView, div.id)
         if (parent.isNotEmpty()) {
             divView.releaseViewVisitor.visitViewTree(parent[0])
             parent.removeViewAt(0)
