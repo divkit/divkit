@@ -25,13 +25,7 @@
     },
     "comment": {
       "type": "grid",
-      "visibility_actions": [
-        {
-          "log_id": "comment_grid",
-          "log_limit": 5,
-          "visibility_duration": 1000
-        }
-      ],
+      "$id": "comment_id",
       "background": [
         {
           "type": "solid",
@@ -46,13 +40,6 @@
         {
           "type": "separator",
           "id": "separator",
-          "visibility_actions": [
-            {
-              "log_id": "separator",
-              "log_limit": 5,
-              "visibility_duration": 1000
-            }
-          ],
           "width": {
             "type": "fixed",
             "value": 4
@@ -73,13 +60,6 @@
         },
         {
           "type": "text",
-          "visibility_actions": [
-            {
-              "log_id": "text",
-              "log_limit": 5,
-              "visibility_duration": 1000
-            }
-          ],
           "width": {
             "type": "match_parent",
             "weight": 1
@@ -101,13 +81,6 @@
         },
         {
           "type": "text",
-          "visibility_actions": [
-            {
-              "log_id": "text2",
-              "log_limit": 5,
-              "visibility_duration": 1000
-            }
-          ],
           "width": {
             "type": "wrap_content"
           },
@@ -126,13 +99,6 @@
         },
         {
           "type": "state",
-          "visibility_actions": [
-            {
-              "log_id": "comment_state",
-              "log_limit": 5,
-              "visibility_duration": 1000
-            }
-          ],
           "margins": {
             "left": 8,
             "right": 8,
@@ -143,17 +109,12 @@
           "states": [
             {
               "state_id": "collapsed",
-              "animation_in": {
-                "name": "fade",
-                "interpolator": "ease",
-                "duration": 200
-              },
-              "animation_out": {
-                "name": "fade",
-                "interpolator": "ease_in_out",
-                "duration": 200
-              },
               "div": {
+                "id": "comment",
+                "transition_change": {
+                  "type": "change_bounds",
+                  "duration": 250
+                },
                 "type": "comment_text",
                 "max_lines": 2,
                 "$text": "comment",
@@ -174,17 +135,12 @@
             },
             {
               "state_id": "expanded",
-              "animation_in": {
-                "name": "fade",
-                "interpolator": "ease",
-                "duration": 200
-              },
-              "animation_out": {
-                "name": "fade",
-                "interpolator": "ease_in_out",
-                "duration": 200
-              },
               "div": {
+                "id": "comment",
+                "transition_change": {
+                  "type": "change_bounds",
+                  "duration": 250
+                },
                 "type": "comment_text",
                 "$text": "comment",
                 "$actions": "expanded_actions"
@@ -192,7 +148,27 @@
             }
           ]
         }
-      ]
+      ],
+      "transition_in": {
+        "type": "slide",
+        "$edge": "transition_in_edge",
+        "duration": 250
+      },
+      "transition_out": {
+        "type": "set",
+        "items": [
+          {
+            "type": "fade",
+            "alpha": 0.33,
+            "duration": 250
+          },
+          {
+            "type": "slide",
+            "$edge": "transition_in_edge",
+            "duration": 250
+          }
+        ]
+      }
     },
     "button": {
       "type": "text",
@@ -323,6 +299,49 @@
                       },
                       {
                         "type": "state",
+                        "margins": {
+                          "bottom": 8
+                        },
+                        "div_id": "comments_button",
+                        "states": [
+                          {
+                            "state_id": "text_show_comments",
+                            "div": {
+                              "type": "borderless_button",
+                              "text": "SHOW COMMENTS",
+                              "actions": [
+                                {
+                                  "log_id": "show_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded"
+                                },
+                                {
+                                  "log_id": "button_text_hide_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_hide_comments"
+                                }
+                              ]
+                            }
+                          },
+                          {
+                            "state_id": "text_hide_comments",
+                            "div": {
+                              "type": "borderless_button",
+                              "text": "HIDE COMMENTS",
+                              "actions": [
+                                {
+                                  "log_id": "hide_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/collapsed"
+                                },
+                                {
+                                  "log_id": "button_text_show_comments",
+                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_show_comments"
+                                }
+                              ]
+                            }
+                          }
+                        ]
+                      },
+                      {
+                        "type": "state",
                         "div_id": "comments",
                         "states": [
                           {
@@ -438,49 +457,6 @@
                                     }
                                   ],
                                   "transition_in_edge": "right"
-                                }
-                              ]
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        "type": "state",
-                        "margins": {
-                          "bottom": 8
-                        },
-                        "div_id": "comments_button",
-                        "states": [
-                          {
-                            "state_id": "text_show_comments",
-                            "div": {
-                              "type": "borderless_button",
-                              "text": "SHOW COMMENTS",
-                              "actions": [
-                                {
-                                  "log_id": "show_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/expanded"
-                                },
-                                {
-                                  "log_id": "button_text_hide_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_hide_comments"
-                                }
-                              ]
-                            }
-                          },
-                          {
-                            "state_id": "text_hide_comments",
-                            "div": {
-                              "type": "borderless_button",
-                              "text": "HIDE COMMENTS",
-                              "actions": [
-                                {
-                                  "log_id": "hide_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments/collapsed"
-                                },
-                                {
-                                  "log_id": "button_text_show_comments",
-                                  "url": "div-action://set_state?state_id=0/content/expanded/comments_button/text_show_comments"
                                 }
                               ]
                             }
