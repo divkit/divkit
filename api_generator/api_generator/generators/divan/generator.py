@@ -65,41 +65,34 @@ class DivanGenerator(Generator):
         result_declaration += EMPTY
 
         if with_factory_methods:
-            def add_methods_declarations(for_entity: DivanEntity):
+            def add_methods_declarations(ent: DivanEntity):
                 nonlocal result_declaration
 
-                method_declaration = for_entity.params_comment_block
-                for annotation in self.top_level_annotations:
-                    method_declaration += annotation
-                method_declaration += for_entity.override_method_declaration
-                result_declaration += method_declaration
+                def add_declaration(comment_block: Text, declaration: Text):
+                    nonlocal result_declaration
+                    method_declaration = comment_block
+                    for annotation in self.top_level_annotations:
+                        method_declaration += annotation
+                    method_declaration += declaration
+                    result_declaration += method_declaration
+                    result_declaration += EMPTY
 
-                result_declaration += EMPTY
-
-                method_declaration = for_entity.params_comment_block
-                for annotation in self.top_level_annotations:
-                    method_declaration += annotation
-                method_declaration += for_entity.defer_method_declaration
-                result_declaration += method_declaration
-
-                result_declaration += EMPTY
-
-                method_declaration = entity.evaluatable_params_comment_block
-                for annotation in self.top_level_annotations:
-                    method_declaration += annotation
-                method_declaration += entity.evaluate_method_declaration
-                result_declaration += method_declaration
+                add_declaration(ent.params_comment_block, ent.override_method_declaration)
+                add_declaration(ent.params_comment_block, ent.override_component_method_declaration)
+                add_declaration(ent.params_comment_block, ent.defer_method_declaration)
+                add_declaration(ent.params_comment_block, ent.defer_component_method_declaration)
+                add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_method_declaration)
+                add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_component_method_declaration)
+                add_declaration(Text(), ent.operator_plus_component_declaration)
 
             def sort_predicate(d: Declarable):
                 return d.name
 
-            add_methods_declarations(for_entity=entity)
-            result_declaration += EMPTY
+            add_methods_declarations(ent=entity)
 
             inner_types = sorted(filter(lambda t: isinstance(t, Entity), entity.inner_types), key=sort_predicate)
             for ind, nested_entity in enumerate(inner_types):
-                add_methods_declarations(for_entity=cast(DivanEntity, nested_entity))
-                result_declaration += EMPTY
+                add_methods_declarations(ent=cast(DivanEntity, nested_entity))
 
         return result_declaration
 

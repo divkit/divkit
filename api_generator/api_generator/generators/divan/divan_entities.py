@@ -257,6 +257,15 @@ class DivanEntity(Entity):
         return declaration
 
     @property
+    def operator_plus_component_declaration(self) -> Text:
+        name = utils.capitalize_camel_case(self.name)
+        declaration = Text(f'operator fun Component<{name}>.plus(additive: Properties): Component<{name}> = Component(')
+        declaration += utils.indented('template = template,', level=1, indent_width=4)
+        declaration += utils.indented('properties = additive.mergeWith(properties)', level=1, indent_width=4)
+        declaration += ')'
+        return declaration
+
+    @property
     def override_method_declaration(self) -> Text:
         name = utils.capitalize_camel_case(self.name)
         current_parent = self.parent
@@ -273,11 +282,33 @@ class DivanEntity(Entity):
         for property in cast(List[DivanProperty], self.instance_properties):
             property_name = property.name_declaration
             declaration += utils.indented(
-                f'{property_name} = valueOfNull({property_name}) ?: properties.{property_name},',
+                f'{property_name} = valueOrNull({property_name}) ?: properties.{property_name},',
                 level=2,
                 indent_width=4
             )
         declaration += utils.indented(')', level=1, indent_width=4)
+        declaration += ')'
+        return declaration
+
+    @property
+    def override_component_method_declaration(self) -> Text:
+        name = utils.capitalize_camel_case(self.name)
+        current_parent = self.parent
+        while current_parent is not None:
+            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
+            current_parent = current_parent.parent
+        declaration = Text(f'fun Component<{name}>.override(')
+        declaration += self.literal_properties_signature(
+            force_named_arguments=True,
+            force_default_nulls=True,
+        ).indented(level=1, indent_width=4)
+        declaration += f'): Component<{name}> = Component('
+        declaration += utils.indented('template = template,', level=1, indent_width=4)
+        declaration += utils.indented(f'properties = {name}.Properties(', level=1, indent_width=4)
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_name = property.name_declaration
+            declaration += utils.indented(f'{property_name} = valueOrNull({property_name}),', level=2, indent_width=4)
+        declaration += utils.indented(').mergeWith(properties)', level=1, indent_width=4)
         declaration += ')'
         return declaration
 
@@ -304,6 +335,25 @@ class DivanEntity(Entity):
         return declaration
 
     @property
+    def defer_component_method_declaration(self) -> Text:
+        name = utils.capitalize_camel_case(self.name)
+        current_parent = self.parent
+        while current_parent is not None:
+            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
+            current_parent = current_parent.parent
+        declaration = Text(f'fun Component<{name}>.defer(')
+        declaration += self.reference_properties_signature().indented(level=1, indent_width=4)
+        declaration += f'): Component<{name}> = Component('
+        declaration += utils.indented('template = template,', level=1, indent_width=4)
+        declaration += utils.indented(f'properties = {name}.Properties(', level=1, indent_width=4)
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_name = property.name_declaration
+            declaration += utils.indented(f'{property_name} = {property_name},', level=2, indent_width=4)
+        declaration += utils.indented(').mergeWith(properties)', level=1, indent_width=4)
+        declaration += ')'
+        return declaration
+
+    @property
     def evaluate_method_declaration(self) -> Text:
         name = utils.capitalize_camel_case(self.name)
         current_parent = self.parent
@@ -320,6 +370,26 @@ class DivanEntity(Entity):
                 else f'properties.{property_name}'
             declaration += utils.indented(f'{property_name} = {value},', level=2, indent_width=4)
         declaration += utils.indented(')', level=1, indent_width=4)
+        declaration += ')'
+        return declaration
+
+    @property
+    def evaluate_component_method_declaration(self) -> Text:
+        name = utils.capitalize_camel_case(self.name)
+        current_parent = self.parent
+        while current_parent is not None:
+            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
+            current_parent = current_parent.parent
+        declaration = Text(f'fun Component<{name}>.evaluate(')
+        declaration += self.expression_properties_signature().indented(level=1, indent_width=4)
+        declaration += f'): Component<{name}> = Component('
+        declaration += utils.indented('template = template,', level=1, indent_width=4)
+        declaration += utils.indented(f'properties = {name}.Properties(', level=1, indent_width=4)
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_name = property.name_declaration
+            value = property_name if property.is_evaluatable_property else 'null'
+            declaration += utils.indented(f'{property_name} = {value},', level=2, indent_width=4)
+        declaration += utils.indented(').mergeWith(properties)', level=1, indent_width=4)
         declaration += ')'
         return declaration
 
