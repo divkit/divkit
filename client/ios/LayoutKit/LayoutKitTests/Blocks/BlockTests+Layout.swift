@@ -1,8 +1,9 @@
+@testable import LayoutKit
+
 import XCTest
 
 import BaseUI
 import CommonCore
-import LayoutKit
 
 extension ContainerBlockLayout {
   fileprivate init(

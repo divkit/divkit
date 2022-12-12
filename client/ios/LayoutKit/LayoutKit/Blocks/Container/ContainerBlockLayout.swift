@@ -3,7 +3,7 @@ import Foundation
 
 import CommonCore
 
-public struct ContainerBlockLayout {
+struct ContainerBlockLayout {
   private enum ContentFitting {
     case fits
     case doesNotFit(notFittingPartSize: CGFloat)
