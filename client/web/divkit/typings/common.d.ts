@@ -140,3 +140,8 @@ export interface DivkitInstance {
 export type Platform = 'desktop' | 'touch' | 'auto';
 
 export type Theme = 'system' | 'light' | 'dark';
+
+export interface Customization {
+    galleryLeftClass?: string;
+    galleryRightClass?: string;
+}

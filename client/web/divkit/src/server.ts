@@ -7,6 +7,7 @@ export function render(opts: {
     id: string;
     globalVariablesController?: GlobalVariablesController;
     mix?: string;
+    customization?: unknown;
     onError?: unknown;
     platform?: Platform;
 }) {
@@ -16,6 +17,7 @@ export function render(opts: {
         json: opts.json,
         globalVariablesController: opts.globalVariablesController,
         mix: opts.mix,
+        customization: opts.customization,
         onError: opts.onError,
         platform: opts.platform
     }).html;

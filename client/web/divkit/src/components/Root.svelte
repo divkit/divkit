@@ -16,7 +16,8 @@
         Platform,
         StatCallback,
         TemplateContext,
-        Theme
+        Theme,
+        Customization
     } from '../../typings/common';
     import type { AppearanceTransition, DivBaseData, TransitionChange } from '../types/base';
     import type { SwitchElements, Overflow } from '../types/switch-elements';
@@ -54,6 +55,7 @@
     export let theme: Theme = 'system';
     export let globalVariablesController: GlobalVariablesController = new GlobalVariablesController();
     export let mix = '';
+    export let customization: Customization = {};
     export let onError: ErrorCallback | undefined = undefined;
     export let onStat: StatCallback | undefined = undefined;
     export let onCustomAction: CustomActionCallback | undefined = undefined;
@@ -173,6 +175,10 @@
         }
 
         return variable;
+    }
+
+    function getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined {
+        return customization?.[prop];
     }
 
     function getDerivedFromVars<T>(jsonProp: T): Readable<MaybeMissing<T>> {
@@ -667,6 +673,7 @@
         getJsonWithVars,
         getStore,
         getVariable: getVariableInstance,
+        getCustomization,
         isDesktop,
         registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
         unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined

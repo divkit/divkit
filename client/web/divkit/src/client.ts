@@ -9,6 +9,7 @@ export function render(opts: {
     hydrate?: boolean;
     globalVariablesController?: GlobalVariablesController;
     mix?: string;
+    customization?: unknown;
     onStat?: unknown;
     onCustomAction?: unknown;
     onError?: unknown;
@@ -23,6 +24,7 @@ export function render(opts: {
             json: opts.json,
             globalVariablesController: opts.globalVariablesController,
             mix: opts.mix,
+            customization: opts.customization,
             onStat: opts.onStat,
             onCustomAction: opts.onCustomAction,
             onError: opts.onError,

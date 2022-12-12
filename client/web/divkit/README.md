@@ -203,8 +203,13 @@ Function, optional.
 
 Callback for errors and warnings for manual processing.
 
-```js
-function onError({error}) {
+```ts
+function onError(detauls: {
+    error: Error & {
+        level: 'error' | 'warn';
+        additional: Record<string, unknown>;
+    };
+}) {
     console.log(error.level, error.additional, error.message);
 }
 ```
@@ -217,10 +222,24 @@ Function, optional.
 
 Used for logging clicks (for elements with `action`) and visibility logging (for elements with `visibility_action`).
 
-```js
-function onStat(details) {
-    // details.type: 'click' | 'visible'
-    // details.action: action | visibility_action
+```ts
+function onStat(details: {
+    type: 'click' | 'visible';
+    action: Action | VisibilityAction;
+}) {
+}
+```
+
+#### onCustomAction
+
+`/client` and `/client-hydratable`
+
+Function, optional.
+
+Callback for a component with an action that contains non-standard protocols.
+
+```ts
+function onCustomAction(action: Action): void {
 }
 ```
 
@@ -235,6 +254,14 @@ The default value is `auto`. Tweaks for mouse or touch events.
 String, optional.
 
 An additional class added to the root element.
+
+#### customization
+
+Object, optional.
+
+Currently supported properties:
+* `galleryLeftClass` — left scroll button class on desktop
+* `galleryRightClass` — right scroll button class on desktop
 
 
 #### theme (EXPERIMENTAL)

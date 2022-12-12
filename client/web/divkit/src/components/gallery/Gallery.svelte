@@ -45,6 +45,9 @@
     let itemsGridElem: HTMLElement;
     let mounted = false;
 
+    const leftClass = rootCtx.getCustomization('galleryLeftClass');
+    const rightClass = rootCtx.getCustomization('galleryRightClass');
+
     let hasError = false;
     $: jsonItems = json.items;
     $: {
@@ -444,17 +447,21 @@
         </div>
         {#if orientation === 'horizontal'}
             {#if hasScrollLeft && shouldCheckArrows}
-                <div class="{css.gallery__arrow} {css.gallery__arrow_left}" on:click={() => scroll('left')}>
-                    <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <path class={css['gallery__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
-                    </svg>
+                <div class="{leftClass || `${css.gallery__arrow} ${css.gallery__arrow_left}`}" on:click={() => scroll('left')}>
+                    {#if !leftClass}
+                        <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <path class={css['gallery__arrow-icon-path']} d="m10 16 8.3 8 1.03-1-4-6-.7-1 .7-1 4-6-1.03-1z"/>
+                        </svg>
+                    {/if}
                 </div>
             {/if}
             {#if hasScrollRight && shouldCheckArrows}
-                <div class="{css.gallery__arrow} {css.gallery__arrow_right}" on:click={() => scroll('right')}>
-                    <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
-                        <path class={css['gallery__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>
-                    </svg>
+                <div class="{rightClass || `${css.gallery__arrow} ${css.gallery__arrow_right}`}" on:click={() => scroll('right')}>
+                    {#if !rightClass}
+                        <svg class={css['gallery__arrow-icon']} xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <path class={css['gallery__arrow-icon-path']} d="M22 16l-8.3 8-1.03-1 4-6 .7-1-.7-1-4-6 1.03-1 8.3 8z"/>
+                        </svg>
+                    {/if}
                 </div>
             {/if}
         {/if}

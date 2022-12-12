@@ -6,6 +6,7 @@ import type { DivBaseData } from '../types/base';
 import type { MaybeMissing } from '../expressions/json';
 import type { Variable, VariableType } from '../expressions/variable';
 import type { TintMode } from '../types/image';
+import { Customization } from '../../typings/common';
 
 export const ROOT_CTX = Symbol('root');
 
@@ -34,6 +35,7 @@ export interface RootCtxValue {
     getJsonWithVars<T>(jsonProp: T): MaybeMissing<T>;
     getStore<T>(id: string): Writable<T>;
     getVariable(varName: string, type: VariableType): Variable | undefined;
+    getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined;
     isDesktop: Readable<boolean>;
 
     // Devtool

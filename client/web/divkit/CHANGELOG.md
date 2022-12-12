@@ -2,6 +2,7 @@
 
 Additions:
 * `mix` property for a custom class name
+* `customization` render property for a desktop `gallery`
 
 Fixed:
 * Incorrect `container` spacing with `separators`

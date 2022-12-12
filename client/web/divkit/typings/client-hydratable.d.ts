@@ -5,7 +5,8 @@ import type {
     DivkitInstance,
     Platform,
     CustomActionCallback,
-    Theme
+    Theme,
+    Customization
 } from './common';
 import type { GlobalVariablesController } from './variables';
 
@@ -20,6 +21,7 @@ export function render(opts: {
     onCustomAction?: CustomActionCallback;
     onError?: ErrorCallback;
     platform?: Platform;
+    customization?: Customization;
     /** EXPERIMENTAL SUPPORT */
     theme?: Theme;
 }): DivkitInstance;
