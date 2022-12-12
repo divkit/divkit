@@ -7,6 +7,7 @@ import android.widget.Space
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
+import com.yandex.div.core.view2.divs.isWrapContainer
 import com.yandex.div.core.view2.divs.widgets.DivFrameLayout
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
@@ -89,10 +90,9 @@ internal class DivViewCreator @Inject constructor(
     override fun visit(data: DivSeparator, resolver: ExpressionResolver): View = DivSeparatorView(context)
 
     override fun visit(data: DivContainer, resolver: ExpressionResolver): View {
-        val mode = data.layoutMode.evaluate(resolver)
         val orientation = data.orientation.evaluate(resolver)
         val view: ViewGroup = when {
-            mode == DivContainer.LayoutMode.WRAP -> viewPool.obtain(TAG_WRAP_CONTAINER)
+            data.isWrapContainer(resolver) -> viewPool.obtain(TAG_WRAP_CONTAINER)
             orientation == Orientation.OVERLAP -> viewPool.obtain(TAG_OVERLAP_CONTAINER)
             else -> viewPool.obtain(TAG_LINEAR_CONTAINER)
         }

@@ -37,7 +37,7 @@ import com.yandex.div2.DivSize
 import javax.inject.Inject
 import javax.inject.Provider
 
-private const val INCORRECT_CHILD_SIZE = "Incorrect child size. Container with wrap_content size contains child with match_parent size."
+private const val INCORRECT_CHILD_SIZE = "Incorrect child size. Container with wrap_content size contains child%s with match_parent size."
 private const val MATCH_PARENT_ALONG_CROSS_AXIS_MESSAGE = "Incorrect child size. " +
     "Container with wrap layout mode contains child%s with match parent size along the cross axis."
 
@@ -95,8 +95,7 @@ internal class DivContainerBinder @Inject constructor(
             }
         }
 
-        var hasChildWithMatchParentHeight = false
-        var hasChildWithMatchParentWidth = false
+        var hasChildWithIncorrectSize = false
 
         var viewsPositionDiff = 0
         for (containerIndex in div.items.indices) {
@@ -104,17 +103,12 @@ internal class DivContainerBinder @Inject constructor(
             val childView = view.getChildAt(containerIndex + viewsPositionDiff)
             val childDivId = childDivValue.id
 
-            if (view is DivWrapLayout) {
-                if (div.hasMatchParentAlongCrossAxis(childDivValue, resolver)) {
-                    val withId = childDivValue.id?.let { " with id='$it'" } ?: ""
-                    errorCollector.logWarning(Throwable(
-                        MATCH_PARENT_ALONG_CROSS_AXIS_MESSAGE.format(withId)))
-                }
+            if (view is DivWrapLayout &&
+                div.hasMatchParentAlongCrossAxis(childDivValue, resolver)) {
+                addWarning(errorCollector, MATCH_PARENT_ALONG_CROSS_AXIS_MESSAGE, false, childDivValue.id)
             } else {
-                hasChildWithMatchParentHeight =
-                    if (childDivValue.height is DivSize.MatchParent) true else hasChildWithMatchParentHeight
-                hasChildWithMatchParentWidth =
-                    if (childDivValue.width is DivSize.MatchParent) true else hasChildWithMatchParentWidth
+                hasChildWithIncorrectSize =
+                    if (div.hasIncorrectSize(childDivValue, resolver)) true else hasChildWithIncorrectSize
             }
 
             // applying div patch
@@ -142,7 +136,7 @@ internal class DivContainerBinder @Inject constructor(
         }
 
         view.trackVisibilityActions(div.items, oldDiv?.items, divView)
-        div.checkIncorrectSize(errorCollector, hasChildWithMatchParentHeight, hasChildWithMatchParentWidth)
+        if (hasChildWithIncorrectSize) addWarning(errorCollector, INCORRECT_CHILD_SIZE)
     }
 
     private fun ViewGroup.replaceWithReuse(oldDiv: DivContainer, newDiv: DivContainer, divView: Div2View) {
@@ -374,16 +368,30 @@ internal class DivContainerBinder @Inject constructor(
         childDiv.width is DivSize.MatchParent
     }
 
-    private fun DivContainer.checkIncorrectSize(errorCollector: ErrorCollector,
-                                                hasChildWithMatchParentHeight: Boolean,
-                                                hasChildWithMatchParentWidth: Boolean) {
-        if ((height is DivSize.WrapContent && hasChildWithMatchParentHeight) ||
-            (width is DivSize.WrapContent && hasChildWithMatchParentWidth)) {
+    private fun DivContainer.hasIncorrectSize(
+        childDiv: DivBase,
+        resolver: ExpressionResolver
+    ) = if (layoutMode.evaluate(resolver) == DivContainer.LayoutMode.WRAP) {
+        (!height.canWrap(resolver) && this.isVertical(resolver) && childDiv.height is DivSize.MatchParent
+                || !width.canWrap(resolver) && this.isHorizontal(resolver) && childDiv.width is DivSize.MatchParent)
+    } else {
+        (height is DivSize.WrapContent && childDiv.height is DivSize.MatchParent
+                || width is DivSize.WrapContent && childDiv.width is DivSize.MatchParent)
+    }
+
+    private fun addWarning(
+        errorCollector: ErrorCollector,
+        warningMessage: String,
+        checkDuplicates: Boolean = true,
+        childId: String? = null) {
+        if (checkDuplicates) {
             errorCollector.getWarnings().forEach {
-                if (it.message == INCORRECT_CHILD_SIZE) return
+                if (it.message == warningMessage) return
             }
-            errorCollector.logWarning(Throwable(INCORRECT_CHILD_SIZE))
         }
+        val withId = childId?.let { " with id='$it'" } ?: ""
+        errorCollector.logWarning(Throwable(
+            warningMessage.format(withId)))
     }
 
     private fun View.applyWeight(size: DivMatchParentSize, resolver: ExpressionResolver) {
@@ -392,13 +400,4 @@ internal class DivContainerBinder @Inject constructor(
             params.weight = size.weight?.evaluate(resolver)?.toFloat() ?: 1.0f
         }
     }
-
-    private fun DivContainer.isHorizontal(resolver: ExpressionResolver) =
-        orientation.evaluate(resolver) == DivContainer.Orientation.HORIZONTAL
-
-    private fun DivContainer.isVertical(resolver: ExpressionResolver) =
-        orientation.evaluate(resolver) == DivContainer.Orientation.VERTICAL
-
-    private fun DivContainer.isWrapContainer(resolver: ExpressionResolver) =
-        layoutMode.evaluate(resolver) == DivContainer.LayoutMode.WRAP
 }

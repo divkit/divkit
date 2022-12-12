@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.animations
 
+import com.yandex.div.core.view2.divs.isWrapContainer
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -44,6 +45,10 @@ internal object DivComparator {
             return false
         }
         if (old is DivCustom && new is DivCustom && old.customType != new.customType) {
+            return false
+        }
+        if (old is DivContainer && new is DivContainer
+            && old.isWrapContainer(resolver) != new.isWrapContainer(resolver)) {
             return false
         }
 

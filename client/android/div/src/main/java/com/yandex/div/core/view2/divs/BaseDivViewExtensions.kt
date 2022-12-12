@@ -220,6 +220,22 @@ internal fun View.applyAlpha(alpha: Double) {
     this.alpha = alpha.toFloat()
 }
 
+internal fun DivContainer.isHorizontal(resolver: ExpressionResolver) =
+    orientation.evaluate(resolver) == DivContainer.Orientation.HORIZONTAL
+
+internal fun DivContainer.isVertical(resolver: ExpressionResolver) =
+    orientation.evaluate(resolver) == DivContainer.Orientation.VERTICAL
+
+internal fun DivContainer.isWrapContainer(resolver: ExpressionResolver) = when {
+    layoutMode.evaluate(resolver) != DivContainer.LayoutMode.WRAP -> false
+    isHorizontal(resolver) -> width.canWrap(resolver)
+    isVertical(resolver) -> height.canWrap(resolver)
+    else -> false
+}
+
+internal fun DivSize.canWrap(resolver: ExpressionResolver) =
+    this !is DivSize.WrapContent || value.constrained?.evaluate(resolver) == true
+
 internal fun View.applyAlignment(
         horizontal: DivAlignmentHorizontal?,
         vertical: DivAlignmentVertical?,
