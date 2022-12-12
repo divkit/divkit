@@ -19,6 +19,8 @@
 		762661E7293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */; };
 		767AF3EA29364C3D0002B944 /* RiveAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */; };
 		76AD26822935F1B30088A360 /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = 76AD26812935F1B30088A360 /* RiveRuntime */; };
+		76FD0506294208890002A1F9 /* RiveDivCustomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD0505294208890002A1F9 /* RiveDivCustomData.swift */; };
+		76FD0508294208F80002A1F9 /* RiveContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76FD0507294208F70002A1F9 /* RiveContainerView.swift */; };
 		893D19642902AD8F005540DF /* TimeMeasure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 893D19632902AD8F005540DF /* TimeMeasure.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
 		89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1928C8EBC40041EC18 /* Palette.swift */; };
@@ -248,6 +250,8 @@
 		7035529D28D4881300E237CF /* DivDeserializationErrorsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DivDeserializationErrorsTests.swift; sourceTree = "<group>"; };
 		762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaygroundDivCustomBlockFactory.swift; sourceTree = "<group>"; };
 		767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveAnimationFactory.swift; sourceTree = "<group>"; };
+		76FD0505294208890002A1F9 /* RiveDivCustomData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveDivCustomData.swift; sourceTree = "<group>"; };
+		76FD0507294208F70002A1F9 /* RiveContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RiveContainerView.swift; sourceTree = "<group>"; };
 		893D19632902AD8F005540DF /* TimeMeasure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeMeasure.swift; sourceTree = "<group>"; };
 		89D02B1328C891890041EC18 /* RadioButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonsView.swift; sourceTree = "<group>"; };
 		89D02B1928C8EBC40041EC18 /* Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Palette.swift; sourceTree = "<group>"; };
@@ -820,6 +824,8 @@
 			children = (
 				0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */,
 				767AF3E929364C3D0002B944 /* RiveAnimationFactory.swift */,
+				76FD0505294208890002A1F9 /* RiveDivCustomData.swift */,
+				76FD0507294208F70002A1F9 /* RiveContainerView.swift */,
 				762661E6293F502A00D93B8B /* PlaygroundDivCustomBlockFactory.swift */,
 				8C7B187E2864CA1F0036EF4C /* DemoPatchProvider.swift */,
 				8C7B187C2864CA1F0036EF4C /* DivBlockProvider.swift */,
@@ -1540,12 +1546,14 @@
 				8C2BFA5628C10F2200A16E9B /* RegressionTestView.swift in Sources */,
 				8C1A377A28B4E3E700A047C8 /* WebPreviewViewController.swift in Sources */,
 				8C1A377D28B4E3E700A047C8 /* JSONPayload.swift in Sources */,
+				76FD0508294208F80002A1F9 /* RiveContainerView.swift in Sources */,
 				8C1A375028B4189E00A047C8 /* MetadataCaptureSession.swift in Sources */,
 				8C1A378D28B5146C00A047C8 /* PlaygroundView.swift in Sources */,
 				8C7B18782864C9C70036EF4C /* MainView.swift in Sources */,
 				8C1A378A28B5143200A047C8 /* DivViewController.swift in Sources */,
 				8C1A377928B4E3E700A047C8 /* WebPreviewView.swift in Sources */,
 				8C54D9CE28C0E46D0080826C /* RegressionView.swift in Sources */,
+				76FD0506294208890002A1F9 /* RiveDivCustomData.swift in Sources */,
 				767AF3EA29364C3D0002B944 /* RiveAnimationFactory.swift in Sources */,
 				89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */,
 				8C1A378928B5143200A047C8 /* VisibilityTrackingScrollView.swift in Sources */,

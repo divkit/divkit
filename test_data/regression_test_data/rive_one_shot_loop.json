@@ -1,0 +1,87 @@
+{
+  "card": {
+    "log_id": "rive",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "fixed",
+            "value": 480
+          },
+          "orientation": "overlap",
+          "items": [
+            {
+              "type": "custom",
+              "custom_type": "rive_animation",
+              "width": {
+                "type": "fixed",
+                "value": 240
+              },
+              "height": {
+                "type": "fixed",
+                "value": 240
+              },
+              "alignment_horizontal": "center",
+              "alignment_vertical": "center",
+              "placeholder_color": "#2C3E50",
+              "custom_props": {
+                "url": "https://public.rive.app/community/runtime-files/3370-7083-cup-walk.riv",
+                "fit": "ScaleDown",
+                "alignment": "BottomRight",
+                "loop": "OneShot"
+              }
+            },
+            {
+              "type": "text",
+              "width": {
+                "type": "match_parent"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 16,
+                "top": 16,
+                "right": 16,
+                "bottom": 16
+              },
+              "margins": {
+                "top": 36,
+                "bottom": 36,
+                "left": 18,
+                "right": 18
+              },
+              "border": {
+                "corner_radius": 8
+              },
+              "background": [
+                {
+                  "type": "solid",
+                  "color": "#0E000000"
+                }
+              ],
+              "font_size": 16,
+              "font_weight": "medium",
+              "alignment_vertical": "bottom",
+              "alignment_horizontal": "center",
+              "text_alignment_vertical": "center",
+              "text_alignment_horizontal": "center",
+              "text_color": "#000000",
+              "alpha": 1.0,
+              "text": "Restart",
+              "actions": [
+                {
+                  "log_id": "perform_restart_of_animation",
+                  "url": "div-demo-action://set_data?path=animations/rive_oneShot.json"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

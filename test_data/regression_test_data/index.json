@@ -1341,6 +1341,30 @@
       "file": "rive_animation.json"
     },
     {
+      "title": "Rive animation (loop=pingPong)",
+      "platforms": [
+        "ios"
+      ],
+      "expected_results" : [
+        "Infinite animation with changing direction"
+      ],
+      "file": "rive_ping_pong_loop.json"
+    },
+    {
+      "title": "Rive animation (loop=oneShot)",
+      "platforms": [
+        "ios"
+      ],
+      "steps": [
+        "Animation plays once then stops",
+        "Press Restart"
+      ],
+      "expected_results": [
+        "Animation plays once then stops"
+      ],
+      "file": "rive_one_shot_loop.json"
+    },
+    {
       "title": "Visibility transition trigger",
       "platforms": [
         "android"
