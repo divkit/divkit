@@ -46,10 +46,6 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     }
   }
 
-  public var localizedDescription: String {
-    description
-  }
-
   public var userInfo: [String: String] {
     getUserInfo(path: "")
   }
