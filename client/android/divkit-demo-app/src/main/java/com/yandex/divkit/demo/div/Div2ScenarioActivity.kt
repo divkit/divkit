@@ -8,7 +8,6 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.annotation.WorkerThread
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.experiments.Experiment
+import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
@@ -205,7 +205,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
         val editText = EditText(this)
         editText.setText("asset:///div2/expressions/theme_palette_light.json")
         preferences.getString(DIV2_VARIABLES_KEY_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
-        val adb = AlertDialog.Builder(this)
+        val adb = SafeAlertDialogBuilder(this)
             .setView(editText)
             .setPositiveButton("Load variables") { _, _ ->
                 val url = editText.text.toString()
@@ -221,7 +221,7 @@ class Div2ScenarioActivity : AppCompatActivity(), Div2MetadataBottomSheet.Metada
     private fun showDownloadDialog() {
         val editText = layoutInflater.inflate(R.layout.apply_patch_edit_text, null) as EditText
         preferences.getString(DIV2_PATCH_KEY_URL, "")?.takeIf { it.isNotBlank() }?.let { editText.setText(it) }
-        val adb = AlertDialog.Builder(this)
+        val adb = SafeAlertDialogBuilder(this)
             .setView(editText)
             .setPositiveButton("Apply") { _, _ ->
                 val fieldValue = editText.text.toString()

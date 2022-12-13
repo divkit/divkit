@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.divkit.regression.data.Scenario
 import com.yandex.divkit.regression.databinding.MetadataBottomsheetBinding
 
@@ -48,7 +48,7 @@ class MetadataBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun clearLogging() {
-        AlertDialog.Builder(requireContext())
+        SafeAlertDialogBuilder(requireContext())
             .setTitle(R.string.clear)
             .setPositiveButton(R.string.clear) { _, _ ->
                 binding.logging.text = null

@@ -9,7 +9,6 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
 import androidx.annotation.VisibleForTesting
 import androidx.core.os.postDelayed
 import androidx.core.view.ViewCompat
@@ -21,6 +20,7 @@ import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.state.DivStatePath
+import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
@@ -33,7 +33,7 @@ import com.yandex.div2.DivTooltip
 import javax.inject.Inject
 import javax.inject.Provider
 
-internal typealias CreatePopupCall = (contentView: View, width: Int, height: Int) -> PopupWindow
+internal typealias CreatePopupCall = (contentView: View, width: Int, height: Int) -> SafePopupWindow
 
 @Mockable
 @DivScope
@@ -194,7 +194,7 @@ internal class DivTooltipController @VisibleForTesting constructor(
 }
 
 private class TooltipData(
-        val popupWindow: PopupWindow,
+        val popupWindow: SafePopupWindow,
         val div: Div,
         var ticket: DivPreloader.Ticket? = null,
         var dismissed: Boolean = false
@@ -220,7 +220,7 @@ private fun findChildWithTooltip(tooltipId: String, view: View): Pair<DivTooltip
 }
 
 @SuppressLint("ClickableViewAccessibility")
-private fun PopupWindow.setDismissOnTouchOutside() {
+private fun SafePopupWindow.setDismissOnTouchOutside() {
     isOutsideTouchable = true
     setTouchInterceptor { _, e ->
         if (e.action == MotionEvent.ACTION_OUTSIDE) {

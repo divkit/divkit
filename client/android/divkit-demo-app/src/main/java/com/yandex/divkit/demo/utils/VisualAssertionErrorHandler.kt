@@ -5,8 +5,9 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import android.widget.CheckBox
-import androidx.appcompat.app.AlertDialog
 import androidx.core.view.doOnAttach
+import com.yandex.div.core.util.SafeAlertDialog
+import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.internal.AssertionErrorHandler
 import com.yandex.div.internal.util.UiThreadHandler
 import java.lang.ref.WeakReference
@@ -86,8 +87,8 @@ class VisualAssertionErrorHandler(private val application: Application) : Assert
 
     private inner class AssertionsDialogInjector {
         private val assertionsToShow: Queue<AssertionError> = LinkedList()
-        private var seenActivities = WeakHashMap<Activity, MutableList<WeakReference<AlertDialog>>>()
-        private val scheduledDialogs = mutableMapOf<AssertionError, MutableList<WeakReference<AlertDialog>>>()
+        private var seenActivities = WeakHashMap<Activity, MutableList<WeakReference<SafeAlertDialog>>>()
+        private val scheduledDialogs = mutableMapOf<AssertionError, MutableList<WeakReference<SafeAlertDialog>>>()
 
         fun add(a: AssertionError) {
             assertionsToShow.add(a)
@@ -105,12 +106,12 @@ class VisualAssertionErrorHandler(private val application: Application) : Assert
             }
         }
 
-        private fun Activity.scheduleAlertDialogShowing(assertionError: AssertionError): AlertDialog? {
+        private fun Activity.scheduleAlertDialogShowing(assertionError: AssertionError): SafeAlertDialog? {
             if (!this.isAttachedToWindow) {
                 return null
             }
             val createSuppressCheckBox = createSuppressCheckBox(this, assertionError)
-            val dialog = AlertDialog.Builder(this)
+            val dialog = SafeAlertDialogBuilder(this)
                 .setTitle(ASSERT_DIALOG_TITLE)
                 .setMessage(assertionError.messageAndTrace())
                 .setView(createSuppressCheckBox)

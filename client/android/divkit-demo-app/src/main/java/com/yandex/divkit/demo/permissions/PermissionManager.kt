@@ -1,11 +1,12 @@
 package com.yandex.divkit.demo.permissions
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.DialogInterface
 import android.util.SparseArray
 import androidx.annotation.StringRes
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.core.util.SafeAlertDialog
+import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.util.PermissionUtils
 import com.yandex.divkit.demo.R
@@ -19,7 +20,7 @@ typealias PermissionRequestCallback = (PermissionRequestResult) -> Unit
 abstract class PermissionManager(private val activity: Activity) {
 
     private val listeners = SparseArray<PermissionRequestCallback>()
-    private var alertDialog: AlertDialog? = null
+    private var alertDialog: SafeAlertDialog? = null
 
     /**
      * Returns value indicating if the given permission is granted.
@@ -112,7 +113,7 @@ abstract class PermissionManager(private val activity: Activity) {
     ) {
         KAssert.assertTrue(explainMessageResId != 0 || explainMessage != null)
         KAssert.assertNull(alertDialog)  // There no sense to show multiple alert dialogs at once.
-        val adb = AlertDialog.Builder(activity)
+        val adb = SafeAlertDialogBuilder(activity)
         if (explainMessageResId != 0) {
             adb.setMessage(explainMessageResId)
         } else {
@@ -134,7 +135,7 @@ abstract class PermissionManager(private val activity: Activity) {
     }
 
     private fun onDialogDismissed(dialog: DialogInterface) {
-        if (alertDialog === dialog) {
+        if (alertDialog?.checkEqualReference(dialog) == true) {
             alertDialog = null
         }
     }

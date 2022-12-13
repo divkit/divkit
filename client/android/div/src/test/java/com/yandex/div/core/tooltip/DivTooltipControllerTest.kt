@@ -11,6 +11,7 @@ import com.yandex.div.R
 import com.yandex.div.core.DivPreloader
 import com.yandex.div.core.DivTooltipRestrictor
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.view2.Div2Builder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivVisibilityActionTracker
@@ -109,7 +110,7 @@ class DivTooltipControllerTest {
     }
 
     private val dismissListener = argumentCaptor<PopupWindow.OnDismissListener>()
-    private val popupWindow = mock<PopupWindow> {
+    private val popupWindow = mock<SafePopupWindow> {
         on { setOnDismissListener(dismissListener.capture()) } doAnswer { null }
 
         on { dismiss() } doAnswer {

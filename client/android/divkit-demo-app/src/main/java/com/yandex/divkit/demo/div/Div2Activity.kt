@@ -14,7 +14,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.animation.PathInterpolator
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.transition.TransitionManager
@@ -25,6 +24,7 @@ import com.yandex.div.core.DivDataChangeListener
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.state.DivStateChangeListener
 import com.yandex.div.core.state.DivStateTransition
+import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.data.Variable
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
@@ -259,7 +259,7 @@ class Div2Activity : AppCompatActivity() {
             checkPermissions(permissions) -> invoke()
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ->
                 requestPermissions(permissions, OPEN_FILE_ACTIVITY_REQUEST_CODE)
-            else -> AlertDialog.Builder(this@Div2Activity)
+            else -> SafeAlertDialogBuilder(this@Div2Activity)
                 .setTitle("Unable to add new template from storage: no permissions")
                 .setPositiveButton("Ok") { dialog, id ->
                     dialog.cancel()

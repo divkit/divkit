@@ -11,16 +11,16 @@ import android.transition.TransitionValues
 import android.transition.Visibility
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupWindow
 import androidx.annotation.RequiresApi
 import com.yandex.div.core.animation.SpringInterpolator
+import com.yandex.div.core.util.SafePopupWindow
 import com.yandex.div.core.util.androidInterpolator
 import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAnimation
 import com.yandex.div2.DivTooltip
 
-internal fun PopupWindow.setupAnimation(divTooltip: DivTooltip, resolver: ExpressionResolver) {
+internal fun SafePopupWindow.setupAnimation(divTooltip: DivTooltip, resolver: ExpressionResolver) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         val animationIn = divTooltip.animationIn
         enterTransition = if (animationIn != null) {
@@ -40,7 +40,7 @@ internal fun PopupWindow.setupAnimation(divTooltip: DivTooltip, resolver: Expres
     }
 }
 
-internal fun PopupWindow.clearAnimation() {
+internal fun SafePopupWindow.clearAnimation() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         removeTransition()
     } else {
@@ -49,7 +49,7 @@ internal fun PopupWindow.clearAnimation() {
 }
 
 @RequiresApi(Build.VERSION_CODES.M)
-private fun PopupWindow.removeTransition() {
+private fun SafePopupWindow.removeTransition() {
     enterTransition = null
     exitTransition = null
 }

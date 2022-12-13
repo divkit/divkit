@@ -17,9 +17,10 @@ import androidx.annotation.MainThread;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.Px;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import com.yandex.div.core.util.SafeAlertDialog;
 import com.yandex.div.internal.Assert;
 
 import java.lang.annotation.Retention;
@@ -204,7 +205,7 @@ public class Views {
      * @return styled dialog
      */
     @NonNull
-    public static AlertDialog styleAlertDialog(@NonNull AlertDialog dialog, @Nullable Typeface typeface) {
+    public static SafeAlertDialog styleAlertDialog(@NonNull SafeAlertDialog dialog, @Nullable Typeface typeface) {
         if (typeface == null) {
             return dialog;
         }

@@ -8,13 +8,13 @@ import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.state.DefaultDivStateChangeListener
+import com.yandex.div.core.util.SafeAlertDialogBuilder
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
@@ -174,7 +174,7 @@ open class DivActivity : AppCompatActivity() {
                     .reduce { acc, it -> acc && it}
 
     private fun noPermissions() {
-        AlertDialog.Builder(this)
+        SafeAlertDialogBuilder(this)
             .setTitle("Unable to add new template from storage: no permissions")
             .setPositiveButton("Ok") {
                     dialog, id ->  dialog.cancel()
