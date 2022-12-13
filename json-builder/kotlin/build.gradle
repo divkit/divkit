@@ -19,6 +19,10 @@ sourceSets {
     }
 }
 
+test {
+    useJUnitPlatform()
+}
+
 def versions = [
     jackson: "2.14.0",
     jsonAssert: "1.5.1",

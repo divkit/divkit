@@ -28,6 +28,7 @@ import org.skyscreamer.jsonassert.JSONAssert.assertEquals
 import org.skyscreamer.jsonassert.JSONCompareMode
 
 internal class CardWithTemplatesTest {
+
     @Test
     internal fun renderCard() {
         val titleRef = reference<String>("title")
