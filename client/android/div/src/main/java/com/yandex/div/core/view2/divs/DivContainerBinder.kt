@@ -95,7 +95,8 @@ internal class DivContainerBinder @Inject constructor(
             }
         }
 
-        var hasChildWithIncorrectSize = false
+        var childrenWithIncorrectWidth = 0
+        var childrenWithIncorrectHeight = 0
 
         var viewsPositionDiff = 0
         for (containerIndex in div.items.indices) {
@@ -107,8 +108,8 @@ internal class DivContainerBinder @Inject constructor(
                 div.hasMatchParentAlongCrossAxis(childDivValue, resolver)) {
                 addWarning(errorCollector, MATCH_PARENT_ALONG_CROSS_AXIS_MESSAGE, false, childDivValue.id)
             } else {
-                hasChildWithIncorrectSize =
-                    if (div.hasIncorrectSize(childDivValue, resolver)) true else hasChildWithIncorrectSize
+                if (div.hasIncorrectWidth(childDivValue)) childrenWithIncorrectWidth++
+                if (div.hasIncorrectHeight(childDivValue)) childrenWithIncorrectHeight++
             }
 
             // applying div patch
@@ -136,7 +137,21 @@ internal class DivContainerBinder @Inject constructor(
         }
 
         view.trackVisibilityActions(div.items, oldDiv?.items, divView)
-        if (hasChildWithIncorrectSize) addWarning(errorCollector, INCORRECT_CHILD_SIZE)
+
+        val widthAllChildrenAreIncorrect = childrenWithIncorrectWidth == div.items.size
+        val widthHasMatchParentChild = childrenWithIncorrectWidth > 0
+        val heightAllChildrenAreIncorrect = childrenWithIncorrectHeight == div.items.size
+        val heightHasMatchParentChild = childrenWithIncorrectHeight > 0
+
+        val hasIncorrectSize = !div.isWrapContainer(resolver) && when {
+            div.isVertical(resolver) -> widthAllChildrenAreIncorrect || heightHasMatchParentChild
+            div.isHorizontal(resolver) -> heightAllChildrenAreIncorrect || widthHasMatchParentChild
+            else -> widthAllChildrenAreIncorrect || heightAllChildrenAreIncorrect
+        }
+
+        if (hasIncorrectSize) {
+            addWarning(errorCollector, INCORRECT_CHILD_SIZE)
+        }
     }
 
     private fun ViewGroup.replaceWithReuse(oldDiv: DivContainer, newDiv: DivContainer, divView: Div2View) {
@@ -368,16 +383,9 @@ internal class DivContainerBinder @Inject constructor(
         childDiv.width is DivSize.MatchParent
     }
 
-    private fun DivContainer.hasIncorrectSize(
-        childDiv: DivBase,
-        resolver: ExpressionResolver
-    ) = if (layoutMode.evaluate(resolver) == DivContainer.LayoutMode.WRAP) {
-        (!height.canWrap(resolver) && this.isVertical(resolver) && childDiv.height is DivSize.MatchParent
-                || !width.canWrap(resolver) && this.isHorizontal(resolver) && childDiv.width is DivSize.MatchParent)
-    } else {
-        (height is DivSize.WrapContent && childDiv.height is DivSize.MatchParent
-                || width is DivSize.WrapContent && childDiv.width is DivSize.MatchParent)
-    }
+    private fun DivContainer.hasIncorrectWidth(childDiv: DivBase) = width is DivSize.WrapContent && childDiv.width is DivSize.MatchParent
+
+    private fun DivContainer.hasIncorrectHeight(childDiv: DivBase) = height is DivSize.WrapContent && childDiv.height is DivSize.MatchParent
 
     private fun addWarning(
         errorCollector: ErrorCollector,
