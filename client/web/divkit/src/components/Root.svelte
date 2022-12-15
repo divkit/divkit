@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Readable, Writable } from 'svelte/types/runtime/store';
-    import { setContext, tick } from 'svelte';
+    import { onDestroy, setContext, tick } from 'svelte';
     import { derived, writable } from 'svelte/store';
 
     import css from './Root.module.css';
@@ -48,6 +48,7 @@
         GlobalVariablesController
     } from '../expressions/globalVariablesController';
     import { getUrlSchema, isBuiltinSchema } from '../utils/url';
+    import { TimersController } from '../utils/timers';
 
     export let id: string;
     export let json: Partial<DivJson> = {};
@@ -139,6 +140,7 @@
     const variables = new Map<string, Variable>();
     // Stores for notify unset global variables
     const awaitingGlobalVariables = new Map<string, Writable<any>>();
+    let timersController: TimersController | null = null;
 
     /** @deprecated */
     export function setVariable(name: string, value: VariableValue): void {
@@ -479,6 +481,21 @@
                             }));
                         }
                         break;
+                    case 'timer':
+                        const action = params.get('action');
+                        const id = params.get('id');
+
+                        if (timersController) {
+                            timersController.execTimerAction(id, action);
+                        } else {
+                            logError(wrapError(new Error('Incorrect timer action'), {
+                                additional: {
+                                    id,
+                                    action
+                                }
+                            }));
+                        }
+                        break;
                     default:
                         logError(wrapError(new Error('Unknown type of action'), {
                             additional: {
@@ -768,6 +785,25 @@
         }
     });
 
+    function hasVariableWithType(name: string, type: VariableType): boolean {
+        const instance = variables.get(name);
+
+        return instance?.getType() === type;
+    }
+
+    function setVariableValue(name: string, value: unknown): void {
+        const variableInstance = variables.get(name);
+        if (variableInstance) {
+            variableInstance.setValue(value);
+        } else {
+            logError(wrapError(new Error('Cannot find variable'), {
+                additional: {
+                    name
+                }
+            }));
+        }
+    }
+
     const startVariables = json?.card?.variables;
     if (Array.isArray(startVariables)) {
         startVariables.forEach(variable => {
@@ -930,7 +966,19 @@
         });
     }
 
-    const states = json.card?.states;
+    const timers = json?.card?.timers;
+    if (timers) {
+        const controller = timersController = new TimersController({
+            logError,
+            applyVars: getJsonWithVars,
+            hasVariableWithType,
+            setVariableValue,
+            execAnyActions
+        });
+        timers.forEach(timer => controller.createTimer(timer));
+    }
+
+    const states = json?.card?.states;
     const rootStateDiv: DivStateData | undefined = (states && !hasError) ? {
         type: 'state',
         id: 'root',
@@ -951,6 +999,12 @@
      */
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     function emptyTouchstartHandler() {}
+
+    onDestroy(() => {
+        if (timersController) {
+            timersController.destroy();
+        }
+    });
 </script>
 
 {#if !hasError && rootStateDiv}

@@ -57,6 +57,15 @@ export interface VariableTrigger {
     actions: Action[];
 }
 
+export interface DivTimer {
+    id: string;
+    duration?: number;
+    tick_interval?: number;
+    value_variable?: string;
+    tick_actions?: Action[];
+    end_actions?: Action[];
+}
+
 export interface PaletteColor {
     name: string;
     color: string;
@@ -76,6 +85,7 @@ export interface DivJson {
         states: DivJsonState[];
         variables?: DivVariable[];
         variable_triggers?: VariableTrigger[];
+        timers?: DivTimer[];
     }
     /** EXPERIMENTAL SUPPORT */
     palette?: Palette;
