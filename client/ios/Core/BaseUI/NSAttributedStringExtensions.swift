@@ -204,9 +204,12 @@ extension NSAttributedString {
     var textHeight: CGFloat = 0
 
     while offset < length, lines.count < maxNumberOfLines {
-      let lineLength = breakWords ?
-        typesetter.lineLength(from: offset, constrainedTo: size.width) :
-        typesetter.lineLengthByWordBoundary(for: string, from: offset, constrainedTo: size.width)
+
+      let lineLength = lineLength(breakWords: breakWords,
+                                  typesetter: typesetter,
+                                  string: string,
+                                  offset: offset,
+                                  size: size)
 
       guard lineLength > 0 else {
         break
@@ -261,7 +264,33 @@ extension NSAttributedString {
       }
     }
 
+    if string.hasSuffix("\n") {
+      let lineLength = lineLength(breakWords: breakWords,
+                                  typesetter: typesetter,
+                                  string: string,
+                                  offset: offset,
+                                  size: size)
+      let suggestedRange = CFRange(location: offset, length: lineLength)
+      let layout = layoutLine(
+        typesetter: typesetter,
+        range: suggestedRange
+      )
+      lines.append(layout)
+    }
+
     return TextLayout(lines: lines, sourceLength: length)
+  }
+
+  private func lineLength(
+    breakWords: Bool,
+    typesetter: CTTypesetter,
+    string: String,
+    offset: Int,
+    size: CGSize
+  ) -> CFIndex {
+    breakWords ?
+      typesetter.lineLength(from: offset, constrainedTo: size.width) :
+      typesetter.lineLengthByWordBoundary(for: string, from: offset, constrainedTo: size.width)
   }
 
   private func layoutHyphenatedLine(
