@@ -5,15 +5,14 @@ import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.MainThread
-import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.doOnDetach
+import androidx.core.view.doOnLayout
 import androidx.core.view.drawToBitmap
 import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.R
 import com.yandex.div.core.view2.divs.widgets.DivImageView
-import com.yandex.div.internal.Assert
 
 @MainThread
 internal fun createOrGetVisualCopy(
@@ -28,11 +27,7 @@ internal fun createOrGetVisualCopy(
 
     val copy = ImageView(view.context).apply {
         scaleType = ImageView.ScaleType.CENTER_CROP
-        if (ViewCompat.isLaidOut(view)) {
-            setImageBitmap(view.drawToBitmap())
-        } else {
-            Assert.fail("Cannot make full copy, origin not yet laid out!")
-        }
+        setScreenshotFromView(view)
     }
 
     val widthSpec = MeasureSpec.makeMeasureSpec(view.width, MeasureSpec.EXACTLY)
@@ -48,13 +43,16 @@ internal fun createOrGetVisualCopy(
     view.replace(copy, transition, sceneRoot)
 
     view.setHierarchyImageChangeCallback {
-        copy.setImageBitmap(view.drawToBitmap())
+        copy.setScreenshotFromView(view)
     }
 
     copy.doOnDetach { view.setHierarchyImageChangeCallback(null) }
 
     return copy
 }
+
+private fun ImageView.setScreenshotFromView(view: View) =
+    view.doOnLayout { setImageBitmap(view.drawToBitmap()) }
 
 private fun View.invalidatePosition(sceneRoot: ViewGroup, endPosition: IntArray) {
     val position = IntArray(2)
