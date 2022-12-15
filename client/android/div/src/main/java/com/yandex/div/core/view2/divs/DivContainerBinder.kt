@@ -406,6 +406,7 @@ internal class DivContainerBinder @Inject constructor(
         val params = layoutParams
         if (params is LinearLayoutCompat.LayoutParams) {
             params.weight = size.weight?.evaluate(resolver)?.toFloat() ?: 1.0f
+            requestLayout()
         }
     }
 }
