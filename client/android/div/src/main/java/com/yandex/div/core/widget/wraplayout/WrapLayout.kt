@@ -262,10 +262,12 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
     private fun showSeparatorAtEnd(@WrapShowSeparatorsMode mode: Int) =
         (mode and WrapShowSeparatorsMode.SHOW_AT_END) != 0
 
-    private val View.isHidden get() = when {
-        visibility == View.GONE -> true
-        isRowDirection -> layoutParams.height == MATCH_PARENT
-        else -> layoutParams.width == MATCH_PARENT
+    private val View.isHidden get() = visibility == View.GONE || hasIncorrectSize
+
+    private val View.hasIncorrectSize get() = if (isRowDirection) {
+        layoutParams?.height == MATCH_PARENT
+    } else {
+        layoutParams?.width == MATCH_PARENT
     }
 
     private val LayoutParams.isBaselineAligned get() = alignSelf == WrapAlignment.BASELINE
@@ -394,6 +396,9 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
                 if (child == null || child.isHidden) {
+                    if (child.hasIncorrectSize) {
+                        child.layout(0, 0, 0, 0)
+                    }
                     continue
                 }
                 val lp = child.layoutParams as LayoutParams
@@ -451,6 +456,9 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
                 val index = line.firstIndex + j
                 val child = getChildAt(index)
                 if (child == null || child.isHidden) {
+                    if (child.hasIncorrectSize) {
+                        child.layout(0, 0, 0, 0)
+                    }
                     continue
                 }
                 val lp = child.layoutParams as LayoutParams
