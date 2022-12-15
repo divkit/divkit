@@ -77,6 +77,9 @@ class DivanGenerator(Generator):
                     result_declaration += method_declaration
                     result_declaration += EMPTY
 
+                add_declaration(ent.params_comment_block, ent.factory_method_declaration)
+                add_declaration(ent.params_comment_block, ent.properties_factory_method_declaration)
+                add_declaration(ent.params_comment_block, ent.references_factory_method_declaration)
                 add_declaration(ent.params_comment_block, ent.override_method_declaration)
                 add_declaration(ent.params_comment_block, ent.override_component_method_declaration)
                 add_declaration(ent.params_comment_block, ent.defer_method_declaration)

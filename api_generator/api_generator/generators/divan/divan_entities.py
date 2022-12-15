@@ -24,14 +24,14 @@ from ... import utils
 from ...schema.modeling.text import Text
 
 GUARD_INSTANCE_PARAM = '`use named arguments`: Guard = Guard.instance,'
-TEXT_CLASS_NAME = "Text"
-IMAGE_CLASS_NAME = "Image"
-CONTAINER_CLASS_NAME = "Container"
-SIZE_UNIT_CLASS_NAME = "SizeUnit"
-FIXED_SIZE_CLASS_NAME = "FixedSize"
-EDGE_INSETS_NAME = "EdgeInsets"
-SOLID_BACKGROUND_CLASS_NAME = "SolidBackground"
-DATA_STATE_CLASS_NAME = "DataState"
+TEXT_CLASS_NAME = "DivText"
+IMAGE_CLASS_NAME = "DivImage"
+CONTAINER_CLASS_NAME = "DivContainer"
+SIZE_UNIT_CLASS_NAME = "DivSizeUnit"
+FIXED_SIZE_CLASS_NAME = "DivFixedSize"
+EDGE_INSETS_NAME = "DivEdgeInsets"
+SOLID_BACKGROUND_CLASS_NAME = "DivSolidBackground"
+DATA_STATE_CLASS_NAME = "DivDataState"
 
 forced_property_orders = {
     TEXT_CLASS_NAME: ["text"],
@@ -238,6 +238,73 @@ class DivanEntity(Entity):
         merge_with_declaration += '}'
         declaration += merge_with_declaration.indented(indent_width=4)
         declaration += '}'
+        return declaration
+
+    @property
+    def factory_method_declaration(self) -> Text:
+        type_name = utils.capitalize_camel_case(self.name)
+        method_name = type_name
+        current_parent = self.parent
+        while current_parent is not None:
+            type_name = f'{utils.capitalize_camel_case(current_parent.name)}.{type_name}'
+            method_name = utils.capitalize_camel_case(current_parent.name) + method_name
+            current_parent = current_parent.parent
+        method_name = utils.lower_camel_case(method_name)
+        declaration = Text(f'fun DivScope.{method_name}(')
+        declaration += self.literal_properties_signature(
+            force_named_arguments=False,
+            force_default_nulls=False,
+        ).indented(level=1, indent_width=4)
+        declaration += f'): {type_name} = {type_name}('
+        declaration += utils.indented(f'{type_name}.Properties(', level=1, indent_width=4)
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_name = property.name_declaration
+            declaration += utils.indented(f'{property_name} = valueOrNull({property_name}),', level=2, indent_width=4)
+        declaration += utils.indented(')', level=1, indent_width=4)
+        declaration += ')'
+        return declaration
+
+    @property
+    def properties_factory_method_declaration(self) -> Text:
+        capitalize_camel_case = utils.capitalize_camel_case(self.name)
+        type_name = f'{capitalize_camel_case}.Properties'
+        method_name = f'{capitalize_camel_case}Props'
+        current_parent = self.parent
+        while current_parent is not None:
+            type_name = f'{utils.capitalize_camel_case(current_parent.name)}.{type_name}'
+            method_name = utils.capitalize_camel_case(current_parent.name) + method_name
+            current_parent = current_parent.parent
+        method_name = utils.lower_camel_case(method_name)
+        declaration = Text(f'fun DivScope.{method_name}(')
+        declaration += self.literal_properties_signature(
+            force_named_arguments=True,
+            force_default_nulls=True,
+        ).indented(level=1, indent_width=4)
+        declaration += f') = {type_name}('
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_name = property.name_declaration
+            declaration += utils.indented(f'{property_name} = valueOrNull({property_name}),', level=1, indent_width=4)
+        declaration += ')'
+        return declaration
+
+    @property
+    def references_factory_method_declaration(self) -> Text:
+        capitalize_camel_case = utils.capitalize_camel_case(self.name)
+        type_name = f'{capitalize_camel_case}.Properties'
+        method_name = f'{capitalize_camel_case}Refs'
+        current_parent = self.parent
+        while current_parent is not None:
+            type_name = f'{utils.capitalize_camel_case(current_parent.name)}.{type_name}'
+            method_name = utils.capitalize_camel_case(current_parent.name) + method_name
+            current_parent = current_parent.parent
+        method_name = utils.lower_camel_case(method_name)
+        declaration = Text(f'fun TemplateScope.{method_name}(')
+        declaration += self.reference_properties_signature().indented(level=1, indent_width=4)
+        declaration += f') = {type_name}('
+        for property in cast(List[DivanProperty], self.instance_properties):
+            property_name = property.name_declaration
+            declaration += utils.indented(f'{property_name} = {property_name},', level=1, indent_width=4)
+        declaration += ')'
         return declaration
 
     @property
