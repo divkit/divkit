@@ -1,3 +1,14 @@
+## 20.0.0
+
+# Android Client:
+* Updated gradle wrapper to version `7.6`
+* Added tapjacking protection
+* Added separation of `wrap_content` and `wrap_content constrained` logic
+
+# Kotlin JSON Builder:
+* Updated gradle wrapper to version `7.6`
+
+
 ## 19.0.0
 
 # Android Client:
