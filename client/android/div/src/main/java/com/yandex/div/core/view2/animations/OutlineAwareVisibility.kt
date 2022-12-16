@@ -17,9 +17,8 @@ internal open class OutlineAwareVisibility : Visibility() {
     ): Animator? {
         val transientView = endValues?.view as? TransientView
         transientView?.isTransient = true
-        return super.onAppear(sceneRoot, startValues, startVisibility, endValues, endVisibility).also {
-            transientView?.isTransient = false
-        }
+        doOnEnd { transientView?.isTransient = false }
+        return super.onAppear(sceneRoot, startValues, startVisibility, endValues, endVisibility)
     }
 
     override fun onDisappear(
@@ -31,8 +30,7 @@ internal open class OutlineAwareVisibility : Visibility() {
     ): Animator? {
         val transientView = startValues?.view as? TransientView
         transientView?.isTransient = true
-        return super.onDisappear(sceneRoot, startValues, startVisibility, endValues, endVisibility).also {
-            transientView?.isTransient = false
-        }
+        doOnEnd { transientView?.isTransient = false }
+        return super.onDisappear(sceneRoot, startValues, startVisibility, endValues, endVisibility)
     }
 }
