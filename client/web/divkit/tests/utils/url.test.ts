@@ -18,9 +18,11 @@ describe('getUrlSchema', () => {
 
 describe('isBuiltinSchema', () => {
     test('simple', () => {
-        expect(isBuiltinSchema('http')).toBe(true);
-        expect(isBuiltinSchema('mailto')).toBe(true);
-        expect(isBuiltinSchema('div-smth')).toBe(false);
-        expect(isBuiltinSchema('custom-schema')).toBe(false);
+        const builtinSchemas = new Set(['http', 'https', 'tel', 'mailto', 'intent']);
+
+        expect(isBuiltinSchema('http', builtinSchemas)).toBe(true);
+        expect(isBuiltinSchema('mailto', builtinSchemas)).toBe(true);
+        expect(isBuiltinSchema('div-smth', builtinSchemas)).toBe(false);
+        expect(isBuiltinSchema('custom-schema', builtinSchemas)).toBe(false);
     });
 });

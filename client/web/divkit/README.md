@@ -263,6 +263,13 @@ Currently supported properties:
 * `galleryLeftClass` — left scroll button class on desktop
 * `galleryRightClass` — right scroll button class on desktop
 
+#### builtinProtocols
+
+String array, optional.
+Default value is `['http', 'https', 'tel', 'mailto', 'intent']`
+
+Components with an action containing a protocol from the list will be rendered as `<a>`, and clicking on them will be processed by the browser. Protocols outside the list will cause the element to be rendered as a button-like, and clicking on them causes an 'onCustomAction'.
+
 
 #### theme (EXPERIMENTAL)
 

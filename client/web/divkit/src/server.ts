@@ -8,6 +8,7 @@ export function render(opts: {
     globalVariablesController?: GlobalVariablesController;
     mix?: string;
     customization?: unknown;
+    builtinProtocols?: unknown;
     onError?: unknown;
     platform?: Platform;
 }) {
@@ -18,6 +19,7 @@ export function render(opts: {
         globalVariablesController: opts.globalVariablesController,
         mix: opts.mix,
         customization: opts.customization,
+        builtinProtocols: opts.builtinProtocols,
         onError: opts.onError,
         platform: opts.platform
     }).html;

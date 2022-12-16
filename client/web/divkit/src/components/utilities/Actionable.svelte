@@ -63,7 +63,7 @@
     }
 
     let hasJSAction = Boolean(customAction);
-    if (href && !isBuiltinSchema(getUrlSchema(href))) {
+    if (href && !isBuiltinSchema(getUrlSchema(href), rootCtx.getBuiltinProtocols())) {
         href = '';
         hasJSAction = true;
     }
@@ -90,7 +90,7 @@
 
                 const schema = getUrlSchema(url);
 
-                return schema && !isBuiltinSchema(schema);
+                return schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols());
             });
             if (hasCustomAction) {
                 event.preventDefault();

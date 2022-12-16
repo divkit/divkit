@@ -46,7 +46,7 @@ export function visibilityAction(node: HTMLElement, {
                             const actionUrl = status.action.url;
                             if (actionUrl) {
                                 const schema = getUrlSchema(actionUrl);
-                                if (schema && !isBuiltinSchema(schema)) {
+                                if (schema && !isBuiltinSchema(schema, rootCtx.getBuiltinProtocols())) {
                                     if (schema === 'div-action') {
                                         rootCtx.execAction(status.action);
                                     } else if (status.action.log_id) {

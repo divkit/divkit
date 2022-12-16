@@ -10,6 +10,7 @@ export function render(opts: {
     globalVariablesController?: GlobalVariablesController;
     mix?: string;
     customization?: unknown;
+    builtinProtocols?: unknown;
     onStat?: unknown;
     onCustomAction?: unknown;
     onError?: unknown;
@@ -25,6 +26,7 @@ export function render(opts: {
             globalVariablesController: opts.globalVariablesController,
             mix: opts.mix,
             customization: opts.customization,
+            builtinProtocols: opts.builtinProtocols,
             onStat: opts.onStat,
             onCustomAction: opts.onCustomAction,
             onError: opts.onError,

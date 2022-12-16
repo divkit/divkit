@@ -57,6 +57,7 @@
     export let globalVariablesController: GlobalVariablesController = new GlobalVariablesController();
     export let mix = '';
     export let customization: Customization = {};
+    export let builtinProtocols: string[] = ['http', 'https', 'tel', 'mailto', 'intent'];
     export let onError: ErrorCallback | undefined = undefined;
     export let onStat: StatCallback | undefined = undefined;
     export let onCustomAction: CustomActionCallback | undefined = undefined;
@@ -104,6 +105,8 @@
     export function setTheme(newTheme: Theme): void {
         theme = newTheme;
     }
+
+    const builtinSet = new Set(builtinProtocols);
 
     let hasError = false;
 
@@ -525,7 +528,7 @@
             if (actionUrl) {
                 const schema = getUrlSchema(actionUrl);
                 if (schema) {
-                    if (isBuiltinSchema(schema)) {
+                    if (isBuiltinSchema(schema, builtinSet)) {
                         if (processUrls) {
                             if (action.target === '_blank') {
                                 const win = window.open('', '_blank');
@@ -670,6 +673,10 @@
         });
     }
 
+    function getBuiltinProtocols(): Set<string> {
+        return builtinSet;
+    }
+
     setContext<RootCtxValue>(ROOT_CTX, {
         logError,
         logStat,
@@ -691,6 +698,7 @@
         getStore,
         getVariable: getVariableInstance,
         getCustomization,
+        getBuiltinProtocols,
         isDesktop,
         registerComponent: process.env.DEVTOOL ? registerComponentReal : undefined,
         unregisterComponent: process.env.DEVTOOL ? unregisterComponentReal : undefined

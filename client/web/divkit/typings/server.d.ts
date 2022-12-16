@@ -11,5 +11,6 @@ export function render(opts: {
     platform?: Platform;
     mix?: string;
     customization?: Customization;
+    builtinProtocols?: string[];
     onError?: ErrorCallback;
 }): string;

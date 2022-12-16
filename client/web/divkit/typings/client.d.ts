@@ -21,6 +21,7 @@ export function render(opts: {
     onError?: ErrorCallback;
     platform?: Platform;
     customization?: Customization;
+    builtinProtocols?: string[];
     /** EXPERIMENTAL SUPPORT */
     theme?: Theme;
 }): DivkitInstance;

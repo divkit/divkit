@@ -36,6 +36,7 @@ export interface RootCtxValue {
     getStore<T>(id: string): Writable<T>;
     getVariable(varName: string, type: VariableType): Variable | undefined;
     getCustomization<K extends keyof Customization>(prop: K): Customization[K] | undefined;
+    getBuiltinProtocols(): Set<string>;
     isDesktop: Readable<boolean>;
 
     // Devtool

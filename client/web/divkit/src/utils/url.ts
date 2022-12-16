@@ -4,8 +4,6 @@ export function getUrlSchema(url: string): string {
     return match && match[1] || '';
 }
 
-const BUILTIN_SCHEMAS = new Set(['http', 'https', 'tel', 'mailto', 'intent']);
-
-export function isBuiltinSchema(schema: string): boolean {
-    return BUILTIN_SCHEMAS.has(schema);
+export function isBuiltinSchema(schema: string, builtinSchemas: Set<string>): boolean {
+    return builtinSchemas.has(schema);
 }
