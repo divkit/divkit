@@ -38,6 +38,8 @@ private let exclusions = [
   "div-text/variables-rendering.json",
 
   "div-indicator/shapes.json",
+
+  "div-container/wrap/vertical-orientation-wrap-content-constrained.json",
 ]
 
 private let casesWithPlaceholerOnly = [
