@@ -30,31 +30,41 @@ public final class TabsBlock: BlockWithTraits {
   }
 
   public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
+    if case let .fixed(value) = widthTrait {
       return value
-    case .intrinsic, .weighted:
-      let layout = TabViewLayout(
-        model: model,
-        selectedPageIndex: state.selectedPageIndex,
-        height: .greatestFiniteMagnitude
-      )
-      return layout.size.width
     }
+
+    let layout = TabViewLayout(
+      model: model,
+      selectedPageIndex: state.selectedPageIndex,
+      height: .greatestFiniteMagnitude
+    )
+
+    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait {
+      let width = layout.size.width
+      return constrained ? width : clamp(width, min: minSize, max: maxSize)
+    }
+
+    return layout.size.width
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
-    switch heightTrait {
-    case let .fixed(value):
+    if case let .fixed(value) = heightTrait {
       return value
-    case .intrinsic, .weighted:
-      let layout = TabViewLayout(
-        model: model,
-        selectedPageIndex: state.selectedPageIndex,
-        width: width
-      )
-      return layout.size.height
     }
+
+    let layout = TabViewLayout(
+      model: model,
+      selectedPageIndex: state.selectedPageIndex,
+      width: width
+    )
+
+    if case let .intrinsic(constrained, minSize, maxSize) = heightTrait {
+      let height = layout.size.height
+      return constrained ? height : clamp(height, min: minSize, max: maxSize)
+    }
+
+    return layout.size.height
   }
 
   // Tabs block is allowed to have all-vertically-resizable tab contents

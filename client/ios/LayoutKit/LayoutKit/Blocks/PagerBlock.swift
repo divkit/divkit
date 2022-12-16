@@ -53,12 +53,13 @@ public final class PagerBlock: BlockWithTraits {
     switch widthTrait {
     case let .fixed(value):
       return value
-    case .intrinsic:
-      return gallery.intrinsicPagerSize(
+    case let .intrinsic(constrained, minSize, maxSize):
+      let width = gallery.intrinsicPagerSize(
         forWidth: CGFloat.greatestFiniteMagnitude,
         pageIndex: Int(round(state.currentPage)),
         layoutMode: layoutMode
       ).width
+      return constrained ? width : clamp(width, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }
@@ -68,12 +69,13 @@ public final class PagerBlock: BlockWithTraits {
     switch heightTrait {
     case let .fixed(value):
       return value
-    case .intrinsic:
-      return gallery.intrinsicPagerSize(
+    case let .intrinsic(constrained, minSize, maxSize):
+      let height = gallery.intrinsicPagerSize(
         forWidth: width,
         pageIndex: Int(round(state.currentPage)),
         layoutMode: layoutMode
       ).height
+      return constrained ? height : clamp(height, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }

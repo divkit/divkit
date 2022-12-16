@@ -18,8 +18,9 @@ extension ImageBaseBlock {
     switch widthTrait {
     case let .fixed(value):
       return value
-    case .intrinsic:
-      return imageHolder.placeholder!.size.width
+    case let .intrinsic(constrained, minSize, maxSize):
+      let width = imageHolder.placeholder!.size.width
+      return constrained ? width : clamp(width, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }
@@ -29,8 +30,9 @@ extension ImageBaseBlock {
     switch height {
     case let .trait(.fixed(value)):
       return value
-    case .trait(.intrinsic):
-      return imageHolder.placeholder!.size.height
+    case .trait(let .intrinsic(constrained, minSize, maxSize)):
+      let height = imageHolder.placeholder!.size.height
+      return constrained ? height : clamp(height, min: minSize, max: maxSize)
     case .trait(.weighted):
       return 0
     case let .ratio(ratio):

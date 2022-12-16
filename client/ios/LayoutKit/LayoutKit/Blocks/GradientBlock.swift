@@ -16,11 +16,25 @@ public final class GradientBlock: BlockWithTraits {
   }
 
   public var intrinsicContentWidth: CGFloat {
-    widthTrait.fixedValue ?? 0
+    switch widthTrait {
+    case let .fixed(value):
+      return value
+    case let .intrinsic(constrained, minSize, _):
+      return constrained ? 0 : minSize
+    case .weighted:
+      return 0
+    }
   }
 
   public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
-    heightTrait.fixedValue ?? 0
+    switch heightTrait {
+    case let .fixed(value):
+      return value
+    case let .intrinsic(constrained, minSize, _):
+      return constrained ? 0 : minSize
+    case .weighted:
+      return 0
+    }
   }
 
   public func equals(_ other: Block) -> Bool {

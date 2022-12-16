@@ -57,6 +57,9 @@ extension DivAccessibility.Kind {
       return .tabBar
     case .none:
       return .none
+    case .list:
+      DivKitLogger.warning("Unsupported accessibility type")
+      return .none
     }
   }
 }

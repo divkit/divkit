@@ -78,31 +78,47 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
   }
 
   public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(value):
+    if case let .fixed(value) = widthTrait {
       return value
-    case .intrinsic, .weighted:
-      let widths = contents.map(\.intrinsicContentWidth)
-      switch direction {
-      case .horizontal: return widths.reduce(0, +)
-      case .vertical: return widths.max()!
-      }
     }
+    
+    let widths = contents.map(\.intrinsicContentWidth)
+    var result: CGFloat
+    switch direction {
+    case .horizontal:
+      result = widths.reduce(0, +)
+    case .vertical:
+      result = widths.max()!
+    }
+
+    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
+      result = clamp(result, min: minSize, max: maxSize)
+    }
+
+    return result
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
-    switch heightTrait {
-    case let .fixed(value):
+    if case let .fixed(value) = widthTrait {
       return value
-    case .intrinsic, .weighted:
-      let heights = [leading, center, trailing].compactMap {
-        $0?.intrinsicContentHeight(forWidth: width)
-      }
-      switch direction {
-      case .horizontal: return heights.max()!
-      case .vertical: return heights.reduce(0, +)
-      }
     }
+    let heights = [leading, center, trailing].compactMap {
+      $0?.intrinsicContentHeight(forWidth: width)
+    }
+
+    var result: CGFloat
+    switch direction {
+    case .horizontal:
+      result = heights.max()!
+    case .vertical:
+      result = heights.reduce(0, +)
+    }
+
+    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
+      result = clamp(result, min: minSize, max: maxSize)
+    }
+
+    return result
   }
 
   func makeLayout(for size: CGSize) -> Layout {

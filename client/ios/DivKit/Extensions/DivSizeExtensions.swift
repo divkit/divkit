@@ -18,7 +18,13 @@ extension DivSize {
       return .weighted(weight)
     case let .divWrapContentSize(wrapContent):
       let constrained = wrapContent.resolveConstrained(expressionResolver) ?? false
-      return .intrinsic(constrained: constrained)
+      let minSize = wrapContent.minSize?.resolveValue(expressionResolver)
+      let maxSize = wrapContent.maxSize?.resolveValue(expressionResolver)
+      return .intrinsic(
+        constrained: constrained,
+        minSize: minSize.flatMap { CGFloat($0) } ?? 0,
+        maxSize: maxSize.flatMap { CGFloat($0) } ?? .infinity
+      )
     }
   }
 

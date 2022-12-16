@@ -15,6 +15,7 @@ public final class DivAccessibility {
     case editText = "edit_text"
     case header = "header"
     case tabBar = "tab_bar"
+    case list = "list"
   }
 
   @frozen

@@ -29,7 +29,9 @@ public final class RiveAnimationBlock: BlockWithTraits {
     switch widthTrait {
     case .fixed(let value):
       return value
-    case .intrinsic, .weighted:
+    case let .intrinsic(constrained, minSize, _):
+      return constrained ? 0 : minSize
+    case .weighted:
       return 0
     }
   }
@@ -38,7 +40,9 @@ public final class RiveAnimationBlock: BlockWithTraits {
     switch heightTrait {
     case .fixed(let value):
       return value
-    case .intrinsic, .weighted:
+    case let .intrinsic(constrained, minSize, _):
+      return constrained ? 0 : minSize
+    case .weighted:
       return 0
     }
   }

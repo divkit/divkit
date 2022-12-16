@@ -93,12 +93,13 @@ public final class TextBlock: BlockWithTraits {
 
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
-    case .intrinsic:
+    case let .intrinsic(constrained, minSize, maxSize):
       if let cached = cachedIntrinsicWidth {
         return cached
       }
 
-      let result = ceil(text.sizeForWidth(.infinity).width)
+      let width = ceil(text.sizeForWidth(.infinity).width)
+      let result = constrained ? width : clamp(width, min: minSize, max: maxSize)
       cachedIntrinsicWidth = result
       return result
     case let .fixed(value):
@@ -110,19 +111,20 @@ public final class TextBlock: BlockWithTraits {
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
     switch heightTrait {
-    case .intrinsic:
+    case let .intrinsic(constrained, minSize, maxSize):
       if let cached = cachedIntrinsicHeight,
          cached.width.isApproximatelyEqualTo(width) {
         return cached.height
       }
 
-      let result = ceil(
+      let height = ceil(
         text.heightForWidth(
           width,
           maxNumberOfLines: maxIntrinsicNumberOfLines,
           minNumberOfHiddenLines: minNumberOfHiddenLines
         )
       )
+      let result = constrained ? height : clamp(height, min: minSize, max: maxSize)
       cachedIntrinsicHeight = (width: width, height: result)
       return result
     case let .fixed(value):

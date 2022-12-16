@@ -236,65 +236,71 @@ public final class ContainerBlock: BlockWithLayout {
   public var isHorizontallyConstrained: Bool { widthTrait.isConstrained }
 
   public var intrinsicContentWidth: CGFloat {
-    switch widthTrait {
-    case let .fixed(width):
+    if case let .fixed(width) = widthTrait {
       return width
-    case .intrinsic, .weighted:
-      if let cached = cached.intrinsicWidth {
-        return cached
-      }
-
-      let result: CGFloat
-      switch layoutDirection {
-      case .horizontal:
-        result = (children.map { $0.content.intrinsicContentWidth } + gaps).reduce(0, +)
-      case .vertical:
-        result = children.map { $0.content.intrinsicContentWidth }.max()!
-      }
-
-      cached.intrinsicWidth = result
-      return result
     }
+
+    if let cached = cached.intrinsicWidth {
+      return cached
+    }
+
+    var result: CGFloat
+    switch layoutDirection {
+    case .horizontal:
+      result = (children.map { $0.content.intrinsicContentWidth } + gaps).reduce(0, +)
+    case .vertical:
+      result = children.map { $0.content.intrinsicContentWidth }.max()!
+    }
+
+    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
+      result = clamp(result, min: minSize, max: maxSize )
+    }
+
+    cached.intrinsicWidth = result
+    return result
   }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
-    switch heightTrait {
-    case let .fixed(height):
+    if case let .fixed(height) = heightTrait {
       return height
-    case .intrinsic, .weighted:
-      if let cached = cached.intrinsicHeight,
-         cached.width.isApproximatelyEqualTo(width) {
-        return cached.height
-      }
-
-      let result: CGFloat
-      switch layoutDirection {
-      case .horizontal:
-        let preparedChildren = children.map {
-          ContainerBlock.Child(
-            content: $0.content,
-            crossAlignment: $0.crossAlignmentForCalculatingHeight
-          )
-        }
-        let layout = ContainerBlockLayout(
-          children: preparedChildren,
-          separator: separator,
-          lineSeparator: lineSeparator,
-          gaps: gaps,
-          layoutDirection: layoutDirection,
-          layoutMode: layoutMode,
-          axialAlignment: axialAlignment,
-          size: CGSize(width: width, height: .zero)
-        )
-        result = layout.blockFrames.map { $0.maxY }.max() ?? 0
-      case .vertical:
-        let childrenHeights = children.map { $0.content }.intrinsicHeights(forWidth: width)
-        result = (childrenHeights + gaps).reduce(0, +)
-      }
-
-      cached.intrinsicHeight = (width: width, height: result)
-      return result
     }
+
+    if let cached = cached.intrinsicHeight,
+       cached.width.isApproximatelyEqualTo(width) {
+      return cached.height
+    }
+
+    var result: CGFloat
+    switch layoutDirection {
+    case .horizontal:
+      let preparedChildren = children.map {
+        ContainerBlock.Child(
+          content: $0.content,
+          crossAlignment: $0.crossAlignmentForCalculatingHeight
+        )
+      }
+      let layout = ContainerBlockLayout(
+        children: preparedChildren,
+        separator: separator,
+        lineSeparator: lineSeparator,
+        gaps: gaps,
+        layoutDirection: layoutDirection,
+        layoutMode: layoutMode,
+        axialAlignment: axialAlignment,
+        size: CGSize(width: width, height: .zero)
+      )
+      result = layout.blockFrames.map { $0.maxY }.max() ?? 0
+    case .vertical:
+      let childrenHeights = children.map { $0.content }.intrinsicHeights(forWidth: width)
+      result = (childrenHeights + gaps).reduce(0, +)
+    }
+
+    if case let .intrinsic(constrained, minSize, maxSize) = heightTrait, !constrained {
+      result = clamp(result, min: minSize, max: maxSize)
+    }
+
+    cached.intrinsicHeight = (width: width, height: result)
+    return result
   }
 
   public var widthOfHorizontallyNonResizableBlock: CGFloat {
