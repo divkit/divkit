@@ -4,6 +4,10 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 
+@Deprecated(
+    message = "for backward compat only",
+    replaceWith = ReplaceWith("com.yandex.div.core.widget.LinearContainerLayout")
+)
 open class LinearLayoutWithCenteredDividers @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,

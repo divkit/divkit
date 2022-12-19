@@ -12,7 +12,6 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.MarginLayoutParams
 import androidx.annotation.UiThread
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.content.ContextCompat
 import androidx.transition.Transition
 import androidx.transition.TransitionManager
@@ -35,6 +34,7 @@ import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.applyFilters
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
+import com.yandex.div.core.widget.LinearContainerLayout
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
@@ -182,7 +182,7 @@ internal class DivBaseBinder @Inject constructor(
             is DivSize.MatchParent -> Unit
             is DivSize.WrapContent -> {
                 if (width.value.constrained?.evaluate(resolver) == true) {
-                    (layoutParams as? LinearLayoutCompat.LayoutParams)?.weight = 1f
+                    (layoutParams as? LinearContainerLayout.LayoutParams)?.weight = 1f
                 }
             }
             else -> Unit
@@ -200,7 +200,7 @@ internal class DivBaseBinder @Inject constructor(
             is DivSize.MatchParent -> Unit
             is DivSize.WrapContent -> {
                 if (height.value.constrained?.evaluate(resolver) == true) {
-                    (layoutParams as? LinearLayoutCompat.LayoutParams)?.weight = 1f
+                    (layoutParams as? LinearContainerLayout.LayoutParams)?.weight = 1f
                 }
             }
             else -> Unit

@@ -4,7 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import androidx.appcompat.widget.LinearLayoutCompat
+import com.yandex.div.core.widget.LinearContainerLayout
 
 internal class ForceParentLayoutParams(
     private val wrappedParams: ViewGroup.LayoutParams
@@ -37,14 +37,8 @@ internal class ForceParentLayoutParams(
         }
     }
 
-    class Linear(source: LinearLayout.LayoutParams) : LinearLayoutCompat.LayoutParams(source) {
-
+    class Linear(source: LinearLayout.LayoutParams) : LinearContainerLayout.LayoutParams(source) {
         val parentParams = ForceParentLayoutParams(this)
-
-        init {
-            weight = source.weight
-            gravity = source.gravity
-        }
     }
 
     class Frame(source: FrameLayout.LayoutParams) : FrameLayout.LayoutParams(source) {

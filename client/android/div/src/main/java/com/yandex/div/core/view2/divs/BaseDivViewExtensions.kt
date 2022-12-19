@@ -13,7 +13,6 @@ import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.annotation.MainThread
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.core.graphics.withTranslation
 import androidx.core.view.ViewCompat
 import androidx.core.view.children
@@ -26,17 +25,18 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.GridContainer
+import com.yandex.div.core.widget.LinearContainerLayout
 import com.yandex.div.core.widget.wraplayout.WrapAlignment
 import com.yandex.div.core.widget.wraplayout.WrapLayout
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.util.fontHeight
 import com.yandex.div.internal.util.spToPx
 import com.yandex.div.internal.widget.AspectImageView
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivAction
@@ -278,7 +278,7 @@ internal fun DivAlignmentVertical?.toWrapAlignment(
 
 private fun View.applyGravity(newGravity: Int) {
     when(val lp = layoutParams) {
-        is LinearLayoutCompat.LayoutParams -> if (lp.gravity != newGravity) {
+        is LinearContainerLayout.LayoutParams -> if (lp.gravity != newGravity) {
             lp.gravity = newGravity
             requestLayout()
         }

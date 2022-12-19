@@ -25,6 +25,7 @@ import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.widget.LinearContainerLayout
 import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.core.widget.wraplayout.WrapShowSeparatorsMode
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -404,7 +405,7 @@ internal class DivContainerBinder @Inject constructor(
 
     private fun View.applyWeight(size: DivMatchParentSize, resolver: ExpressionResolver) {
         val params = layoutParams
-        if (params is LinearLayoutCompat.LayoutParams) {
+        if (params is LinearContainerLayout.LayoutParams) {
             params.weight = size.weight?.evaluate(resolver)?.toFloat() ?: 1.0f
             requestLayout()
         }
