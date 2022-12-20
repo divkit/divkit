@@ -69,6 +69,7 @@ import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
 import com.yandex.div2.DivVisibilityAction
+import com.yandex.div2.DivWrapContentSize
 import kotlin.math.roundToInt
 
 internal fun View.applyPaddings(insets: DivEdgeInsets?, resolver: ExpressionResolver) {
@@ -139,6 +140,14 @@ internal fun DivFixedSize.toPx(metrics: DisplayMetrics, resolver: ExpressionReso
     }
 }
 
+internal fun DivWrapContentSize.ConstraintSize.toPx(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
+    return when (unit.evaluate(resolver)) {
+        DivSizeUnit.DP -> value.evaluate(resolver).dpToPx(metrics)
+        DivSizeUnit.SP -> value.evaluate(resolver).spToPx(metrics)
+        DivSizeUnit.PX -> value.evaluate(resolver)
+    }
+}
+
 internal fun DivFixedSize.toPxF(
     metrics: DisplayMetrics,
     resolver: ExpressionResolver
@@ -176,6 +185,13 @@ internal fun View.applyHeight(div: DivBase, resolver: ExpressionResolver) {
     applyTransform(div, resolver)
 }
 
+internal fun View.applyMinHeight(minHeight: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
+    val heightValue = minHeight?.toPx(resources.displayMetrics, resolver) ?: 0
+    if (minimumHeight != heightValue) {
+        minimumHeight = heightValue
+    }
+}
+
 internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
     val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver)
     if (layoutParams.width != width) {
@@ -183,6 +199,13 @@ internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
         requestLayout()
     }
     applyTransform(div, resolver)
+}
+
+internal fun View.applyMinWidth(minWidth: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
+    val widthValue = minWidth?.toPx(resources.displayMetrics, resolver) ?: 0
+    if (minimumWidth != widthValue) {
+        minimumWidth = widthValue
+    }
 }
 
 internal fun View.applyTransform(

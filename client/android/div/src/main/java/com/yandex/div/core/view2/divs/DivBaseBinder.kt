@@ -183,6 +183,15 @@ internal class DivBaseBinder @Inject constructor(
             is DivSize.WrapContent -> {
                 if (width.value.constrained?.evaluate(resolver) == true) {
                     (layoutParams as? LinearContainerLayout.LayoutParams)?.weight = 1f
+                } else {
+                    applyMinWidth(width.value.minSize, resolver)
+
+                    subscriber.addSubscription(width.value.minSize?.value?.observe(resolver) {
+                        applyMinWidth(width.value.minSize, resolver)
+                    } ?: Disposable.NULL)
+                    subscriber.addSubscription(width.value.minSize?.unit?.observe(resolver) {
+                        applyMinWidth(width.value.minSize, resolver)
+                    } ?: Disposable.NULL)
                 }
             }
             else -> Unit
@@ -201,6 +210,15 @@ internal class DivBaseBinder @Inject constructor(
             is DivSize.WrapContent -> {
                 if (height.value.constrained?.evaluate(resolver) == true) {
                     (layoutParams as? LinearContainerLayout.LayoutParams)?.weight = 1f
+                } else {
+                    applyMinHeight(height.value.minSize, resolver)
+
+                    subscriber.addSubscription(height.value.minSize?.value?.observe(resolver) {
+                        applyMinHeight(height.value.minSize, resolver)
+                    } ?: Disposable.NULL)
+                    subscriber.addSubscription(height.value.minSize?.unit?.observe(resolver) {
+                        applyMinHeight(height.value.minSize, resolver)
+                    } ?: Disposable.NULL)
                 }
             }
             else -> Unit
