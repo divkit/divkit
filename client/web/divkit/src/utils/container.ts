@@ -2,6 +2,8 @@ import type { BooleanInt } from '../../typings/common';
 import type { DrawableStyle } from './correctDrawableStyles';
 import type { EdgeInsets } from '../types/edgeInserts';
 import type { ContainerOrientation } from '../types/container';
+import type { MaybeMissing } from '../expressions/json';
+import type { Size } from '../types/sizes';
 import { pxToEm } from './pxToEm';
 
 export interface SeparatorStyle {
@@ -66,4 +68,21 @@ export function calcItemsGap(
     }
 
     return vals.map(pxToEm).join(' ');
+}
+
+export interface ContainerChildInfo {
+    width: MaybeMissing<Size> | undefined;
+    height: MaybeMissing<Size> | undefined;
+}
+
+export function hasKnownWidthCheck(item: ContainerChildInfo) {
+    const type = item.width?.type;
+
+    return type === 'wrap_content' || type === 'fixed';
+}
+
+export function hasKnownHeightCheck(item: ContainerChildInfo) {
+    const type = item.height?.type;
+
+    return type !== 'match_parent';
 }

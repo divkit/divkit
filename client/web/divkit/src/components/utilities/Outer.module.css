@@ -110,6 +110,16 @@
     max-height: 100%;
 }
 
+/** preferred size -> 0 + inline attribute min-width */
+.outer_width-minimize {
+    width: 0;
+}
+
+/** preferred size -> 0 + inline attribute min-height */
+.outer_height-minimize {
+    height: 0;
+}
+
 .outer_parent-overlap {
     grid-area: 1 / 1 / 2 / 2;
 }

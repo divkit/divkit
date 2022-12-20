@@ -1,4 +1,4 @@
-import { FixedSize } from './sizes';
+import type { FixedSize } from './sizes';
 
 export interface RoundedRectangle {
     type: 'rounded_rectangle';

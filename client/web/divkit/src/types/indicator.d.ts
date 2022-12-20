@@ -1,6 +1,6 @@
-import { DivBaseData } from './base';
-import { FixedSize } from './sizes';
-import { Shape } from './shape';
+import type { DivBaseData } from './base';
+import type { FixedSize } from './sizes';
+import type { Shape } from './shape';
 
 // export type IndicatorAnimation = 'scale' | 'worm' | 'slider';
 

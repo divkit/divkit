@@ -13,6 +13,7 @@
     import type { MaybeMissing } from '../../expressions/json';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { CornersRadius } from '../../types/border';
+    import type { FixedSize, MatchParentSize, WrapContentSize } from '../../types/sizes';
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
@@ -164,6 +165,7 @@
     $: jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.alignment_horizontal);
     let widthMods: Mods = {};
     let width: string | undefined;
+    let widthMin: string | undefined;
     let widthNum = 0;
     let widthFlexGrow = 0;
     let widthFlexShrink = 0;
@@ -172,16 +174,22 @@
     $: {
         let widthType: 'parent' | 'content' | undefined = undefined;
         let newWidth: string | undefined = undefined;
+        let newWidthMin: string | undefined = undefined;
         let newWidthMods: Mods = {};
         let newFlexGrow = 0;
         let newFlexShrink = 0;
         let newWidthFill = false;
         let newWidthError = false;
 
-        const type = $jsonWidth?.type;
+        const type = $jsonWidth?.type || 'match_parent';
 
-        if (type === 'fixed') {
-            widthNum = correctNonNegativeNumber($jsonWidth?.value, widthNum);
+        if (type === 'match_parent' && layoutParams.parentContainerWrap && layoutParams.parentContainerOrientation === 'vertical') {
+            newWidthError = true;
+            rootCtx.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
+                level: 'error'
+            }));
+        } else if (type === 'fixed') {
+            widthNum = correctNonNegativeNumber(($jsonWidth as FixedSize)?.value, widthNum);
             newWidth = pxToEm(widthNum);
         } else if (
             type === 'wrap_content' ||
@@ -189,7 +197,7 @@
         ) {
             widthType = 'content';
             if (
-                type === 'wrap_content' && $jsonWidth?.constrained ||
+                type === 'wrap_content' && ($jsonWidth as WrapContentSize)?.constrained ||
                 type === 'match_parent' && layoutParams.parentHorizontalWrapContent
             ) {
                 newWidthMods['width-constrained'] = true;
@@ -203,11 +211,9 @@
             }
         } else {
             widthType = 'parent';
-            if (layoutParams.parentContainerOrientation === 'vertical' && layoutParams.parentContainerWrap) {
-                newWidthError = true;
-                rootCtx.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
-                    level: 'error'
-                }));
+            if (layoutParams.parentContainerOrientation === 'vertical') {
+                newWidthMods['width-minimize'] = true;
+                newWidthMin = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.left || 0) + ($jsonMargins?.right || 0))})`;
             }
             if (layoutParams.parentLayoutOrientation === 'vertical') {
                 newWidth = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.left || 0) + ($jsonMargins?.right || 0))})`;
@@ -242,6 +248,7 @@
         }
 
         width = newWidth;
+        widthMin = newWidthMin;
         widthFlexGrow = newFlexGrow;
         widthFlexShrink = newFlexShrink;
         widthMods = assignIfDifferent(newWidthMods, widthMods);
@@ -253,6 +260,7 @@
     $: jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.alignment_vertical);
     let heightMods: Mods = {};
     let height: string | undefined;
+    let heightMin: string | undefined;
     let heightNum = 0;
     let heightFlexGrow = 0;
     let heightFlexShrink = 0;
@@ -261,29 +269,33 @@
     $: {
         let heightType: 'parent' | 'content' | undefined = undefined;
         let newHeight: string | undefined = undefined;
+        let newHeightMin: string | undefined = undefined;
         let newHeightMods: Mods = {};
         let newFlexGrow = 0;
         let newFlexShrink = 0;
         let newHeightFill = false;
         let newHeightError = false;
 
-        const type = $jsonHeight?.type;
+        const type = $jsonHeight?.type || 'wrap_content';
 
-        if (type === 'fixed') {
-            heightNum = correctNonNegativeNumber($jsonHeight?.value, heightNum);
+        if (type === 'match_parent' && layoutParams.parentContainerWrap && layoutParams.parentContainerOrientation === 'horizontal') {
+            newHeightError = true;
+            rootCtx.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
+                level: 'error'
+            }));
+        } else if (type === 'fixed') {
+            heightNum = correctNonNegativeNumber(($jsonHeight as FixedSize)?.value, heightNum);
             newHeight = pxToEm(heightNum);
         } else if (type === 'match_parent' && (layoutParams.overlapParent || !layoutParams.parentVerticalWrapContent)) {
             heightType = 'parent';
-            if (layoutParams.parentContainerOrientation === 'horizontal' && layoutParams.parentContainerWrap) {
-                newHeightError = true;
-                rootCtx.logError(wrapError(new Error('Cannot place a match_parent items on the cross-axis of wrap'), {
-                    level: 'error'
-                }));
+            if (layoutParams.parentContainerOrientation === 'horizontal') {
+                newHeightMods['height-minimize'] = true;
+                newHeightMin = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.top || 0) + ($jsonMargins?.bottom || 0))})`;
             }
             if (layoutParams.parentLayoutOrientation === 'horizontal') {
                 newHeight = `calc(100% - ${pxToEmWithUnits(($jsonMargins?.top || 0) + ($jsonMargins?.bottom || 0))})`;
             } else if (layoutParams.parentContainerOrientation === 'vertical') {
-                newFlexGrow = $jsonHeight?.weight || 1;
+                newFlexGrow = ($jsonHeight as MatchParentSize)?.weight || 1;
                 if (layoutParams.parentContainerWrap) {
                     newHeightFill = true;
                 }
@@ -291,7 +303,7 @@
         } else {
             heightType = 'content';
             if (
-                type === 'wrap_content' && $jsonHeight?.constrained ||
+                type === 'wrap_content' && ($jsonHeight as WrapContentSize)?.constrained ||
                 type === 'match_parent' && layoutParams.parentVerticalWrapContent
             ) {
                 newHeightMods['height-constrained'] = true;
@@ -333,6 +345,7 @@
         }
 
         height = newHeight;
+        heightMin = newHeightMin;
         heightFlexGrow = newFlexGrow;
         heightFlexShrink = newFlexShrink;
         heightMods = assignIfDifferent(newHeightMods, heightMods);
@@ -610,7 +623,9 @@
         ...backgroundStyle,
         ...borderStyle,
         width,
+        'min-width': widthMin,
         height,
+        'min-height': heightMin,
         'grid-area': gridArea,
         padding,
         margin,

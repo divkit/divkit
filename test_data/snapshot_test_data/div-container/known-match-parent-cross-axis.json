@@ -1,0 +1,67 @@
+{
+  "templates": {
+
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width":{
+            "type": "wrap_content"
+          },
+          "items": [
+            {
+              "type": "text",
+              "text": "Text1_match",
+              "width":{
+                "type": "match_parent"
+              },
+              "paddings": {
+                "top": 8,
+                "bottom": 8,
+                "left": 8,
+                "right": 8
+              },
+              "alignment_vertical": "center",
+              "border": {
+                "stroke":{
+                  "color": "#000"
+                }
+              }
+            },
+            {
+              "type": "text",
+              "text": "Text1_wrap",
+              "width":{
+                "type": "wrap_content",
+                "value": 200
+              },
+              "paddings": {
+                "top": 8,
+                "bottom": 8,
+                "left": 8,
+                "right": 8
+              },
+              "alignment_vertical": "center",
+              "border": {
+                "stroke":{
+                  "color": "#000"
+                }
+              }
+            }
+          ],
+          "margins": {
+            "top": 8,
+            "bottom": 8,
+            "left": 8,
+            "right": 8
+          }
+        }
+      }
+    ]
+  }
+}
