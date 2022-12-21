@@ -218,6 +218,8 @@
 		8CF329692875D5D6003F799A /* TabInterimItemExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329612875D5D6003F799A /* TabInterimItemExtensionsTests.swift */; };
 		8CF329702875D64B003F799A /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF3296F2875D64B003F799A /* LayoutKit */; };
 		8CF32B7E2875E12F003F799A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF32B7D2875E12F003F799A /* Utils.swift */; };
+		E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */; };
+		E945FC46293E1CA80066C3EA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC45293E1CA80066C3EA /* Utils.swift */; };
 		E94B516328D0AC0300AFACEA /* interactive_snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */; };
 		E94B516528D0AC7900AFACEA /* DivInteractiveSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B516428D0AC7900AFACEA /* DivInteractiveSnapshotTests.swift */; };
 /* End PBXBuildFile section */
@@ -455,6 +457,8 @@
 		8CF3294A2875D5C8003F799A /* TextBlockTestModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextBlockTestModels.swift; sourceTree = "<group>"; };
 		8CF329612875D5D6003F799A /* TabInterimItemExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabInterimItemExtensionsTests.swift; sourceTree = "<group>"; };
 		8CF32B7D2875E12F003F799A /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = LayoutKit/LayoutKitTests/Utils.swift; sourceTree = SOURCE_ROOT; };
+		E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTimerControllerTests.swift; sourceTree = "<group>"; };
+		E945FC45293E1CA80066C3EA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interactive_snapshot_test_data; path = ../../../test_data/interactive_snapshot_test_data; sourceTree = "<group>"; };
 		E94B516428D0AC7900AFACEA /* DivInteractiveSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivInteractiveSnapshotTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -858,6 +862,7 @@
 		8C7B1B1B2865BFF10036EF4C /* DivKitTests */ = {
 			isa = PBXGroup;
 			children = (
+				E986A85A293DE77000D19572 /* Timers */,
 				8C01499D287329D700BA5402 /* expression_test_data */,
 				8C01499B287329D000BA5402 /* unit_test_data */,
 				8C7B1B212865C01C0036EF4C /* Expressions */,
@@ -1118,6 +1123,15 @@
 				8CF329612875D5D6003F799A /* TabInterimItemExtensionsTests.swift */,
 			);
 			path = TabbedPages;
+			sourceTree = "<group>";
+		};
+		E986A85A293DE77000D19572 /* Timers */ = {
+			isa = PBXGroup;
+			children = (
+				E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */,
+				E945FC45293E1CA80066C3EA /* Utils.swift */,
+			);
+			path = Timers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1600,6 +1614,7 @@
 				8C7B1BF72865C01C0036EF4C /* DivContainerExtensionsTests.swift in Sources */,
 				8C1CF626286B561F0016D0A1 /* Expected.swift in Sources */,
 				7035529E28D4881300E237CF /* DivDeserializationErrorsTests.swift in Sources */,
+				E945FC46293E1CA80066C3EA /* Utils.swift in Sources */,
 				8C7B1CA62865C01D0036EF4C /* TemplatesTests.swift in Sources */,
 				8CB960E628883B8E00D16E47 /* Platform.swift in Sources */,
 				8C7B1BF32865C01C0036EF4C /* DivTabsExtensionsTests.swift in Sources */,
@@ -1607,6 +1622,7 @@
 				8C7B1CA92865C01E0036EF4C /* DivStateManagerTests.swift in Sources */,
 				8C7B1BFD2865C01C0036EF4C /* DivSeparatorExtensionsTests.swift in Sources */,
 				8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */,
+				E945FC44293DF95F0066C3EA /* DivTimerControllerTests.swift in Sources */,
 				8C0DC7122865CA1100286F6B /* DivKitTests.swift in Sources */,
 				8C7B1BF62865C01C0036EF4C /* DivTextExtensionsTests.swift in Sources */,
 				8CB960E428883B8300D16E47 /* DivTriggerTests.swift in Sources */,

@@ -5,8 +5,15 @@ import CommonCore
 import LayoutKit
 
 public final class DivActionURLHandler {
-  public typealias UpdateCardAction = (DivCardID, DivPatch) -> Void
+  public typealias UpdateCardAction = (DivCardID, UpdateReason) -> Void
   public typealias ShowTooltipAction = (TooltipInfo) -> Void
+  public typealias PerformTimerAction = (_ cardId: DivCardID, _ timerId: String, _ action: DivTimerAction) -> Void
+
+  @frozen
+  public enum UpdateReason {
+    case patch(DivPatch)
+    case timer
+  }
 
   private let stateUpdater: DivStateUpdater
   private let blockStateStorage: DivBlockStateStorage
@@ -14,6 +21,7 @@ public final class DivActionURLHandler {
   private let variableUpdater: DivVariableUpdater
   private let updateCard: UpdateCardAction
   private let showTooltip: ShowTooltipAction
+  private let performTimerAction: PerformTimerAction
 
   public init(
     stateUpdater: DivStateUpdater,
@@ -21,7 +29,8 @@ public final class DivActionURLHandler {
     patchProvider: DivPatchProvider,
     variableUpdater: DivVariableUpdater,
     updateCard: @escaping UpdateCardAction,
-    showTooltip: @escaping ShowTooltipAction
+    showTooltip: @escaping ShowTooltipAction,
+    performTimerAction: @escaping PerformTimerAction = { _,_,_ in }
   ) {
     self.stateUpdater = stateUpdater
     self.blockStateStorage = blockStateStorage
@@ -29,6 +38,7 @@ public final class DivActionURLHandler {
     self.variableUpdater = variableUpdater
     self.updateCard = updateCard
     self.showTooltip = showTooltip
+    self.performTimerAction = performTimerAction
   }
 
   public func handleURL(
@@ -79,6 +89,11 @@ public final class DivActionURLHandler {
       setNextItem(id: id)
     case let .setPreviousItem(id):
       setPreviousItem(id: id)
+    case let .timer(timerId, action):
+      guard let cardId = cardId else {
+        return false
+      }
+      performTimerAction(cardId, timerId, action)
     }
 
     return true
@@ -91,7 +106,7 @@ public final class DivActionURLHandler {
   ) {
     switch result {
     case let .success(patch):
-      updateCard(cardId, patch)
+      updateCard(cardId, .patch(patch))
       completion(.success(()))
     case let .failure(error):
       completion(.failure(error))

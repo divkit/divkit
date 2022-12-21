@@ -10,8 +10,13 @@ final class DivViewProvider {
   
   init() {
     divKitComponents = AppComponents.makeDivKitComponents(
-      updateCardAction: { [weak self] _, patch in
-        self?.blockProvider.update(patch: patch)
+      updateCardAction: { [weak self] _, reason in
+        switch reason {
+        case let .patch(patch):
+          self?.blockProvider.update(patch: patch)
+        case .timer:
+          self?.blockProvider.update(patch: nil)
+        }
       }
     )
 

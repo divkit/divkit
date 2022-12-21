@@ -12,6 +12,7 @@ public enum DivActionIntent {
   case setCurrentItem(id: String, index: Int)
   case setNextItem(id: String)
   case setPreviousItem(id: String)
+  case timer(id: String, action: DivTimerAction)
 
   public static let scheme = "div-action"
 
@@ -61,6 +62,11 @@ public enum DivActionIntent {
         return nil
       }
       self = .setPreviousItem(id: id)
+    case "timer":
+      guard let id = url.id, let action = url.timerAction else {
+        return nil
+      }
+      self = .timer(id: id, action: action)
     default:
       return nil
     }
@@ -99,5 +105,28 @@ extension URL {
     guard let name = queryParamValue(forName: "name"),
           let value = queryParamValue(forName: "value") else { return nil }
     return (name: name, value: value)
+  }
+
+  fileprivate var timerAction: DivTimerAction? {
+    guard let action = queryParamValue(forName: "action") else {
+      return nil
+    }
+    switch action {
+    case "start":
+      return .start
+    case "stop":
+      return .stop
+    case "pause":
+      return .pause
+    case "resume":
+      return .resume
+    case "cancel":
+      return .cancel
+    case "reset":
+      return .reset
+    default:
+      DivKitLogger.failure("Unknown action '\(action)' for timer.")
+      return nil
+    }
   }
 }

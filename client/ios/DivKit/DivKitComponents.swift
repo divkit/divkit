@@ -20,6 +20,7 @@ public final class DivKitComponents {
   public let urlOpener: UrlOpener
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
+  private let timerStorage: DivTimerStorage
   
   public init(
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
@@ -51,6 +52,8 @@ public final class DivKitComponents {
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
 
+    weak var weakTimerStorage: DivTimerStorage? = nil
+
     actionHandler = DivActionHandler(
       stateUpdater: stateManagement,
       blockStateStorage: blockStateStorage,
@@ -61,7 +64,8 @@ public final class DivKitComponents {
       logger: DefaultDivActionLogger(
         requestPerformer: requestPerformer
       ),
-      trackVisibility: trackVisibility
+      trackVisibility: trackVisibility,
+      performTimerAction: { weakTimerStorage?.perform($0, $1, $2) }
     )
 
     triggersStorage = DivTriggersStorage(
@@ -69,6 +73,14 @@ public final class DivKitComponents {
       actionHandler: actionHandler,
       urlOpener: urlOpener
     )
+
+    timerStorage = DivTimerStorage(
+      variablesStorage: variablesStorage,
+      actionHandler: actionHandler,
+      urlOpener: urlOpener,
+      updateCard: { updateCardAction?($0, $1) }
+    )
+    weakTimerStorage = timerStorage
   }
 
   public func reset() {
@@ -78,6 +90,7 @@ public final class DivKitComponents {
     stateManagement.reset()
     variablesStorage.reset()
     visibilityCounter.reset()
+    timerStorage.reset()
   }
 
   public func parseDivData(
@@ -103,6 +116,7 @@ public final class DivKitComponents {
     )
     if let divData = result.value {
       setVariablesAndTriggers(divData: divData, cardId: cardId)
+      setTimers(divData: divData, cardId: cardId)
     }
     return result
   }
@@ -150,8 +164,8 @@ public final class DivKitComponents {
     actionHandler.handle(params: params, urlOpener: urlOpener)
   }
 
-  private func setVariablesAndTriggers(divData: DivData?, cardId: DivCardID) {
-    let divDataVariables = divData?.variables?.extractDivVariableValues() ?? [:]
+  public func setVariablesAndTriggers(divData: DivData, cardId: DivCardID) {
+    let divDataVariables = divData.variables?.extractDivVariableValues() ?? [:]
     variablesStorage.append(
       variables: divDataVariables,
       for: cardId,
@@ -160,8 +174,12 @@ public final class DivKitComponents {
 
     triggersStorage.set(
       cardId: cardId,
-      triggers: divData?.variableTriggers ?? []
+      triggers: divData.variableTriggers ?? []
     )
+  }
+
+  public func setTimers(divData: DivData, cardId: DivCardID) {
+    timerStorage.set(cardId: cardId, timers: divData.timers ?? [])
   }
 }
 

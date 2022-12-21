@@ -139,24 +139,11 @@ final class DivBlockProvider {
     divDataParsingTime.start()
     let result = templates.parseValue(type: DivDataTemplate.self, from: rawDivData.card)
     if let divData = result.value {
-      setVariablesAndTriggers(divData: divData, cardId: cardId)
+      divKitComponents.setVariablesAndTriggers(divData: divData, cardId: cardId)
+      divKitComponents.setTimers(divData: divData, cardId: cardId)
     }
     divDataParsingTime.stop()
     return result
-  }
-
-  private func setVariablesAndTriggers(divData: DivData?, cardId: DivCardID) {
-    let divDataVariables = divData?.variables?.extractDivVariableValues() ?? [:]
-    divKitComponents.variablesStorage.append(
-      variables: divDataVariables,
-      for: cardId,
-      replaceExisting: false
-    )
-
-    divKitComponents.triggersStorage.set(
-      cardId: cardId,
-      triggers: divData?.variableTriggers ?? []
-    )
   }
 }
 

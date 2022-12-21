@@ -33,7 +33,8 @@ public final class DivActionHandler {
     updateCard: @escaping DivActionURLHandler.UpdateCardAction,
     showTooltip: @escaping DivActionURLHandler.ShowTooltipAction,
     logger: DivActionLogger = EmptyDivActionLogger(),
-    trackVisibility: @escaping TrackVisibility = { _, _ in }
+    trackVisibility: @escaping TrackVisibility = { _, _ in },
+    performTimerAction: @escaping DivActionURLHandler.PerformTimerAction = { _,_,_ in }
   ) {
     self.init(
       divActionURLHandler: DivActionURLHandler(
@@ -42,7 +43,8 @@ public final class DivActionHandler {
         patchProvider: patchProvider,
         variableUpdater: variablesStorage,
         updateCard: updateCard,
-        showTooltip: showTooltip
+        showTooltip: showTooltip,
+        performTimerAction: performTimerAction
       ),
       logger: logger,
       trackVisibility: trackVisibility,
