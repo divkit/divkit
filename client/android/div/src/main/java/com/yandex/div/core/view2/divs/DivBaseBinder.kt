@@ -80,7 +80,7 @@ internal class DivBaseBinder @Inject constructor(
             bindId(view, divView, div.id)
         }
 
-        bindLayoutParams(view, div, resolver)
+        bindLayoutParams(view, div, oldDiv, resolver)
         view.observePadding(div.paddings, resolver, subscriber)
 
         view.observeAccessibility(divView, div, resolver, subscriber)
@@ -119,7 +119,7 @@ internal class DivBaseBinder @Inject constructor(
         view.applyId(id, viewId)
     }
 
-    fun bindLayoutParams(view: View, div: DivBase, resolver: ExpressionResolver) {
+    fun bindLayoutParams(view: View, div: DivBase, oldDiv: DivBase?, resolver: ExpressionResolver) {
         if (view.layoutParams == null) {
             KAssert.fail { "LayoutParams should be initialized before view binding" }
             view.layoutParams = MarginLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
@@ -129,7 +129,7 @@ internal class DivBaseBinder @Inject constructor(
 
         view.observeWidth(div, resolver, subscriber)
         view.observeHeight(div, resolver, subscriber)
-        view.observeAlignment(div.alignmentHorizontal, div.alignmentVertical, resolver, subscriber)
+        view.observeAlignment(div, oldDiv, resolver, subscriber)
 
         view.observeMargins(div.margins, resolver, subscriber)
     }
@@ -226,12 +226,18 @@ internal class DivBaseBinder @Inject constructor(
     }
 
     private fun View.observeAlignment(
-        horizontalAlignment: Expression<DivAlignmentHorizontal>?,
-        verticalAlignment: Expression<DivAlignmentVertical>?,
+        div: DivBase,
+        oldDiv: DivBase?,
         resolver: ExpressionResolver,
         subscriber: ExpressionSubscriber
     ) {
-        applyAlignment(horizontalAlignment?.evaluate(resolver), verticalAlignment?.evaluate(resolver))
+        val horizontalAlignment = div.alignmentHorizontal
+        val verticalAlignment = div.alignmentVertical
+
+        listOf(horizontalAlignment, verticalAlignment)
+            .applyIfNotEquals(listOf(oldDiv?.alignmentHorizontal, oldDiv?.alignmentVertical)) {
+                applyAlignment(horizontalAlignment?.evaluate(resolver), verticalAlignment?.evaluate(resolver))
+            }
 
         val callback = { _: Any ->
             applyAlignment(horizontalAlignment?.evaluate(resolver), verticalAlignment?.evaluate(resolver))

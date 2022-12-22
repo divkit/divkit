@@ -110,7 +110,7 @@ internal class DivGridBinder @Inject constructor(
     }
 
     private fun bindLayoutParams(childView: View, childDiv: DivBase, resolver: ExpressionResolver) {
-        baseBinder.bindLayoutParams(childView, childDiv, resolver)
+        baseBinder.bindLayoutParams(childView, childDiv, null, resolver)
 
         childView.applyGridLayoutParams(resolver, childDiv)
 
