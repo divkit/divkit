@@ -106,9 +106,9 @@ public final class TestTimeMeasuring: TimeMeasuring {
     paused += 1
   }
 
-  public func resume() { }
+  public func resume() {}
 
   public func passedInterval() -> TimeInterval {
-    return passedTime
+    passedTime
   }
 }

@@ -21,7 +21,7 @@ public final class DivKitComponents {
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
   private let timerStorage: DivTimerStorage
-  
+
   public init(
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
     extensionHandlers: [DivExtensionHandler] = [],
@@ -52,7 +52,7 @@ public final class DivKitComponents {
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
 
-    weak var weakTimerStorage: DivTimerStorage? = nil
+    weak var weakTimerStorage: DivTimerStorage?
 
     actionHandler = DivActionHandler(
       stateUpdater: stateManagement,

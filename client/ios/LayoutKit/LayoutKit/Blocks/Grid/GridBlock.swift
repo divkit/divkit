@@ -182,7 +182,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
     if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
       result = clamp(result, min: minSize, max: maxSize)
     }
-    
+
     cachedIntrinsicWidth = result
     return result
   }

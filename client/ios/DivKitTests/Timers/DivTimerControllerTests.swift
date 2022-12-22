@@ -11,7 +11,7 @@ final class DivTimerControllerTests: XCTestCase {
   private let duration = 3000
   private let tickActions = [DivAction(logId: "Tick action")]
   private let endActions = [DivAction(logId: "End action")]
-  private var variableValue: String? = nil
+  private var variableValue: String?
   private var tickActionsCount = 0
   private var endActionsCount = 0
 
@@ -50,7 +50,7 @@ final class DivTimerControllerTests: XCTestCase {
       updateCard: {}
     )
   }
-  
+
   func test_WhenTimerStart_StateIsStarted() throws {
     timer.start()
     XCTAssertEqual(timer.state, .started)
@@ -320,8 +320,8 @@ final class DivTimerControllerTests: XCTestCase {
   }
 }
 
-fileprivate extension Int {
-  var timeInterval: TimeInterval {
+extension Int {
+  fileprivate var timeInterval: TimeInterval {
     TimeInterval(self / 1000)
   }
 }

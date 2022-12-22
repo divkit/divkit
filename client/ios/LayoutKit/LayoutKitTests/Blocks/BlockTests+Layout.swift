@@ -47,27 +47,46 @@ final class BlockTests_Layout: XCTestCase {
   }
 
   func test_IntrinsicWidthOfNotConstrainedTextBlockWithMinSize_LessThanTextWidth_EqualsTextWidth() {
-    let block = TextBlock(widthTrait: .intrinsic(constrained: false, minSize: intrinsicTextSize.width / 2, maxSize: .infinity), text: text)
+    let block = TextBlock(
+      widthTrait: .intrinsic(
+        constrained: false,
+        minSize: intrinsicTextSize.width / 2,
+        maxSize: .infinity
+      ),
+      text: text
+    )
 
     XCTAssertEqual(block.intrinsicContentWidth, intrinsicTextSize.width)
   }
 
-  func test_IntrinsicWidthOfNotConstrainedTextBlockWithMinSize_MoreThanTextWidth_EqualsToAssociatedValue() {
+  func test_IntrinsicWidthOfNotConstrainedTextBlockWithMinSize_MoreThanTextWidth_EqualsToAssociatedValue(
+  ) {
     let minWidth = intrinsicTextSize.width * 2
-    let block = TextBlock(widthTrait: .intrinsic(constrained: false, minSize: minWidth, maxSize: .infinity), text: text)
+    let block = TextBlock(
+      widthTrait: .intrinsic(constrained: false, minSize: minWidth, maxSize: .infinity),
+      text: text
+    )
 
     XCTAssertEqual(block.intrinsicContentWidth, minWidth)
   }
 
-  func test_IntrinsicWidthOfNotConstrainedTextBlockWithMaxSize_LessThanTextWidth_EqualsToAssociatedValue() {
+  func test_IntrinsicWidthOfNotConstrainedTextBlockWithMaxSize_LessThanTextWidth_EqualsToAssociatedValue(
+  ) {
     let maxWidth = intrinsicTextSize.width / 2
-    let block = TextBlock(widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxWidth), text: text)
+    let block = TextBlock(
+      widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxWidth),
+      text: text
+    )
 
     XCTAssertEqual(block.intrinsicContentWidth, maxWidth)
   }
 
-  func test_IntrinsicWidthOfNotConstrainedTextBlockWithMaxSize_MoreThanTextWidth_EqualsToTextWidth() {
-    let block = TextBlock(widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: intrinsicTextSize.width * 2), text: text)
+  func test_IntrinsicWidthOfNotConstrainedTextBlockWithMaxSize_MoreThanTextWidth_EqualsToTextWidth(
+  ) {
+    let block = TextBlock(
+      widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: intrinsicTextSize.width * 2),
+      text: text
+    )
 
     XCTAssertEqual(block.intrinsicContentWidth, intrinsicTextSize.width)
   }
@@ -110,30 +129,48 @@ final class BlockTests_Layout: XCTestCase {
     XCTAssertEqual(block.intrinsicContentWidth, imageSize.width)
   }
 
-  func test_IntrinsicWidthOfNotConstrainedImageBlockWithMinSize_MoreThanPlaceholderImageWidth_EqualsToAssociatedValue() {
+  func test_IntrinsicWidthOfNotConstrainedImageBlockWithMinSize_MoreThanPlaceholderImageWidth_EqualsToAssociatedValue(
+  ) {
     let minWidth = imageSize.width * 2
-    let block = ImageBlock(imageHolder: image, widthTrait: .intrinsic(constrained: false, minSize: minWidth, maxSize: .infinity))
+    let block = ImageBlock(
+      imageHolder: image,
+      widthTrait: .intrinsic(constrained: false, minSize: minWidth, maxSize: .infinity)
+    )
 
     XCTAssertEqual(block.intrinsicContentWidth, minWidth)
   }
 
-  func test_IntrinsicWidthOfNotConstrainedImageBlockWithMaxSize_LessThanPlaceholderImageWidth_EqualsToAssociatedValue() {
+  func test_IntrinsicWidthOfNotConstrainedImageBlockWithMaxSize_LessThanPlaceholderImageWidth_EqualsToAssociatedValue(
+  ) {
     let maxWidth = imageSize.width / 2
-    let block = ImageBlock(imageHolder: image, widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxWidth))
+    let block = ImageBlock(
+      imageHolder: image,
+      widthTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxWidth)
+    )
 
     XCTAssertEqual(block.intrinsicContentWidth, maxWidth)
   }
 
-  func test_IntrinsicHeightOfNotConstrainedImageBlockWithMinSize_LessThanPlaceholderImageWidth_EqualsToPlaceholderImageWidth() {
+  func test_IntrinsicHeightOfNotConstrainedImageBlockWithMinSize_LessThanPlaceholderImageWidth_EqualsToPlaceholderImageWidth(
+  ) {
     let minHeight = imageSize.height / 2
-    let block = ImageBlock(imageHolder: image, widthTrait: .intrinsic, heightTrait: .intrinsic(constrained: false, minSize: minHeight, maxSize: .infinity))
+    let block = ImageBlock(
+      imageHolder: image,
+      widthTrait: .intrinsic,
+      heightTrait: .intrinsic(constrained: false, minSize: minHeight, maxSize: .infinity)
+    )
 
     XCTAssertEqual(block.intrinsicContentHeight(forWidth: imageSize.width), imageSize.height)
   }
 
-  func test_IntrinsicHeightOfNotConstrainedImageBlockWithMaxSize_MoreThanPlaceholderImageWidth_EqualsToPlaceholderImageWidth() {
+  func test_IntrinsicHeightOfNotConstrainedImageBlockWithMaxSize_MoreThanPlaceholderImageWidth_EqualsToPlaceholderImageWidth(
+  ) {
     let maxHeight = imageSize.height * 2
-    let block = ImageBlock(imageHolder: image, widthTrait: .intrinsic, heightTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxHeight))
+    let block = ImageBlock(
+      imageHolder: image,
+      widthTrait: .intrinsic,
+      heightTrait: .intrinsic(constrained: false, minSize: 0, maxSize: maxHeight)
+    )
 
     XCTAssertEqual(block.intrinsicContentHeight(forWidth: imageSize.width), imageSize.height)
   }
@@ -209,7 +246,8 @@ final class BlockTests_Layout: XCTestCase {
     XCTAssertEqual(block.widthOfHorizontallyNonResizableBlock, anyWidth)
   }
 
-  func test_IntrinsicWidthOfNotConstrainedVerticalContainerWithMinSize_MoreThanMaxChildWidth_EqualsToAssociatedValue() {
+  func test_IntrinsicWidthOfNotConstrainedVerticalContainerWithMinSize_MoreThanMaxChildWidth_EqualsToAssociatedValue(
+  ) {
     let minWidth = intrinsicTextSize.width * 2
     let block = try! ContainerBlock(
       layoutDirection: .vertical,
@@ -222,7 +260,8 @@ final class BlockTests_Layout: XCTestCase {
     XCTAssertEqual(block.intrinsicContentWidth, minWidth)
   }
 
-  func test_IntrinsicWidthOfNotConstrainedHorizontalContainerWithMaxSize_LessThanSumOfChildrenWidths_EqualsToAssociatedValue() {
+  func test_IntrinsicWidthOfNotConstrainedHorizontalContainerWithMaxSize_LessThanSumOfChildrenWidths_EqualsToAssociatedValue(
+  ) {
     let maxWidth = intrinsicTextSize.width / 2
     let block = try! ContainerBlock(
       layoutDirection: .horizontal,
@@ -235,7 +274,8 @@ final class BlockTests_Layout: XCTestCase {
     XCTAssertEqual(block.intrinsicContentWidth, maxWidth)
   }
 
-  func test_IntrinsicHeightOfNotConstrainedVerticalContainedWithMinSize_MoreThanSumOfChildrenHeights_EqualsToAssociatedValue() {
+  func test_IntrinsicHeightOfNotConstrainedVerticalContainedWithMinSize_MoreThanSumOfChildrenHeights_EqualsToAssociatedValue(
+  ) {
     let minHeight = imageSize.height * 2
     let block = try! ContainerBlock(
       layoutDirection: .vertical,
@@ -246,10 +286,14 @@ final class BlockTests_Layout: XCTestCase {
       children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
     )
 
-    XCTAssertEqual(block.intrinsicContentHeight(forWidth: imageSize.width + intrinsicTextSize.width), minHeight)
+    XCTAssertEqual(
+      block.intrinsicContentHeight(forWidth: imageSize.width + intrinsicTextSize.width),
+      minHeight
+    )
   }
 
-  func test_IntrinsicHeightOfNotConstrainedVerticalContainerWithMaxSize_LessThanSumOfChildrenHeights_EqualsToAssociatedValue() {
+  func test_IntrinsicHeightOfNotConstrainedVerticalContainerWithMaxSize_LessThanSumOfChildrenHeights_EqualsToAssociatedValue(
+  ) {
     let maxHeight = imageSize.height / 2
     let block = try! ContainerBlock(
       layoutDirection: .vertical,
@@ -260,7 +304,10 @@ final class BlockTests_Layout: XCTestCase {
       children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
     )
 
-    XCTAssertEqual(block.intrinsicContentHeight(forWidth: imageSize.width + intrinsicTextSize.width), maxHeight)
+    XCTAssertEqual(
+      block.intrinsicContentHeight(forWidth: imageSize.width + intrinsicTextSize.width),
+      maxHeight
+    )
   }
 
   func test_WidthOfHorizontalWrapContainerWithHorizontallyNonResizableBlocks_EqualsSumOfChildrenWidthsPlusGaps(
@@ -517,8 +564,14 @@ final class BlockTests_Layout: XCTestCase {
         layoutDirection: .horizontal,
         widthTrait: .intrinsic,
         children: [
-          ImageBlock(imageHolder: image, widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity)),
-          TextBlock(widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity), text: text),
+          ImageBlock(
+            imageHolder: image,
+            widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity)
+          ),
+          TextBlock(
+            widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
+            text: text
+          ),
         ]
       ),
       ContainerBlock.Error.moreThanOneConstrainedChild
@@ -532,7 +585,10 @@ final class BlockTests_Layout: XCTestCase {
         layoutDirection: .vertical,
         heightTrait: .intrinsic,
         children: [
-          ImageBlock(imageHolder: image, heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity)),
+          ImageBlock(
+            imageHolder: image,
+            heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity)
+          ),
           TextBlock(
             widthTrait: .intrinsic,
             heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
@@ -1525,7 +1581,10 @@ final class BlockTests_Layout: XCTestCase {
   }
 
   func test_CenteredConstrainedElementLayout() {
-    let block = TextBlock(widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity), text: text)
+    let block = TextBlock(
+      widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
+      text: text
+    )
     XCTAssertEqual(block.widthOfHorizontallyNonResizableBlock, intrinsicTextSize.width)
 
     let layout = ContainerBlockLayout(
@@ -1542,7 +1601,10 @@ final class BlockTests_Layout: XCTestCase {
   }
 
   func test_CenteredIntrinsicElementWithFixedBlockLayout() {
-    let block1 = TextBlock(widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity), text: text)
+    let block1 = TextBlock(
+      widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
+      text: text
+    )
     let block2 = TextBlock(widthTrait: .fixed(40), text: text)
 
     let layout = ContainerBlockLayout(
@@ -1561,7 +1623,10 @@ final class BlockTests_Layout: XCTestCase {
   }
 
   func test_TrailingConstrainedElementLayout() {
-    let block = TextBlock(widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity), text: text)
+    let block = TextBlock(
+      widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
+      text: text
+    )
 
     let layout = ContainerBlockLayout(
       blocks: [
@@ -1577,7 +1642,10 @@ final class BlockTests_Layout: XCTestCase {
   }
 
   func test_TrailingIntrinsicElementWithFixedBlockLayout() {
-    let block1 = TextBlock(widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity), text: text)
+    let block1 = TextBlock(
+      widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
+      text: text
+    )
     let block2 = TextBlock(widthTrait: .fixed(40), text: text)
 
     let layout = ContainerBlockLayout(

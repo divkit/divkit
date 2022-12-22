@@ -40,11 +40,11 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   private weak var parentScrollView: ScrollView?
   private var tapGestureRecognizer: UITapGestureRecognizer?
   private var scrollingWasDone = false
-  private var textValue: Binding<String>? = nil
+  private var textValue: Binding<String>?
   private var selectAllOnFocus = false
   private var onFocusActions: [UserInterfaceAction] = []
   private var onBlurActions: [UserInterfaceAction] = []
-  private var path: UIElementPath? = nil
+  private var path: UIElementPath?
   private weak var observer: ElementStateObserver?
   private var isRightToLeft = false
 
@@ -53,7 +53,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
   override init(frame: CGRect) {
     super.init(frame: frame)
 
-    isRightToLeft = UIView.userInterfaceLayoutDirection(for: singleLineInput.semanticContentAttribute) == .rightToLeft
+    isRightToLeft = UIView
+      .userInterfaceLayoutDirection(for: singleLineInput.semanticContentAttribute) == .rightToLeft
 
     multiLineInput.isEditable = true
     multiLineInput.isSelectable = true
@@ -97,8 +98,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     addGestureRecognizer(tapGesture)
   }
 
-  @objc func onTapGesture(sender: UITapGestureRecognizer) {
-    if (singleLineInput.isHidden) {
+  @objc func onTapGesture(sender _: UITapGestureRecognizer) {
+    if singleLineInput.isHidden {
       multiLineInput.becomeFirstResponder()
     } else {
       singleLineInput.becomeFirstResponder()
@@ -216,7 +217,8 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     guard !scrollingWasDone, multiLineInput.isFirstResponder,
           !multiLineInput.isHidden else { return }
     let frameInWindow = multiLineInput.convert(multiLineInput.frame, to: nil)
-    let cursorPoint = frameInWindow.origin.y + multiLineInput.contentSize.height - multiLineOffsetY + additionalOffset
+    let cursorPoint = frameInWindow.origin.y + multiLineInput.contentSize
+      .height - multiLineOffsetY + additionalOffset
     scrollToVisible(targetY: cursorPoint, keyboardHeight: keyboardHeight)
   }
 
@@ -238,7 +240,7 @@ private final class TextInputBlockView: BlockView, VisibleBoundsTrackingLeaf {
     let frameInWindow = scrollView.convert(scrollView.frame, to: nil)
     var visibleY = frameInWindow.maxY + scrollView.contentOffset.y
     let scrollViewBottomOffset = UIScreen.main.bounds.height - visibleY
-    var hiddenScrollViewHeight =  keyboardHeight - scrollViewBottomOffset
+    var hiddenScrollViewHeight = keyboardHeight - scrollViewBottomOffset
     if hiddenScrollViewHeight < 0 {
       hiddenScrollViewHeight = 0
     }
@@ -268,7 +270,7 @@ extension TextInputBlockView {
     textValue?.setValue(currentText, responder: view)
   }
 
-  func inputViewDidEndEditing(_ view: UIView) {
+  func inputViewDidEndEditing(_: UIView) {
     stopListeningTap()
     scrollingWasDone = false
     onBlur()
@@ -348,7 +350,7 @@ extension TextInputBlockView {
   }
 
   private func offsetX(_ view: UIView) -> CGFloat {
-    if (isRightToLeft) {
+    if isRightToLeft {
       let emptySpace = bounds.size.width - view.bounds.size.width
       guard emptySpace > 0 else { return 0 }
       return emptySpace - cusorOffset
@@ -363,7 +365,7 @@ extension TextInputBlockView {
   }
 
   private var cusorOffset: CGFloat {
-    if (singleLineInput.isHidden) {
+    if singleLineInput.isHidden {
       return multiLineCusorOffset
     } else {
       return singleLineCusorOffset

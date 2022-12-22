@@ -82,8 +82,8 @@ extension ContainerBlock {
   }
 }
 
-fileprivate extension Alignment {
-  var crossAlignment: ContainerBlock.CrossAlignment {
+extension Alignment {
+  fileprivate var crossAlignment: ContainerBlock.CrossAlignment {
     switch self {
     case .leading:
       return .leading

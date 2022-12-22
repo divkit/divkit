@@ -3,7 +3,7 @@ import SwiftUI
 struct PlaygroundView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
-  
+
   let url: URL
   let divViewProvider: DivViewProvider
 
@@ -17,14 +17,14 @@ struct PlaygroundView: View {
     }
     .overlay(reloadButton, alignment: .topTrailing)
   }
-  
+
   private var reloadButton: some View {
     Button(action: reload) {
       Image(systemName: "arrow.triangle.2.circlepath")
         .applyHeaderButtonStyle()
     }
   }
-  
+
   private func reload() {
     divViewProvider.jsonProvider.load(url: url)
   }

@@ -10,12 +10,12 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
   let result: ObservableProperty<String>
 
   var layer: CALayer { previewLayer }
-  
+
   private var isInitialized = false
 
   init(result: ObservableProperty<String>) {
     self.result = result
-    
+
     previewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
     previewLayer.videoGravity = .resizeAspectFill
 
@@ -33,7 +33,7 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
       DemoAppLogger.error("Can't create video input: \(error)")
       return
     }
-    
+
     if captureSession.canAddInput(videoInput) {
       captureSession.addInput(videoInput)
     } else {
@@ -50,7 +50,7 @@ final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDele
       DemoAppLogger.error("Capture session can't add metadata output")
       return
     }
-    
+
     isInitialized = true
   }
 

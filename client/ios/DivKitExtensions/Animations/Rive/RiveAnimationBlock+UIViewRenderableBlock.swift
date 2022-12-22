@@ -12,7 +12,12 @@ extension RiveAnimationBlock {
     view is AnimationBlockView
   }
 
-  public func configureBlockView(_ view: BlockView, observer: ElementStateObserver?, overscrollDelegate: ScrollDelegate?, renderingDelegate: RenderingDelegate?) {
+  public func configureBlockView(
+    _ view: BlockView,
+    observer _: ElementStateObserver?,
+    overscrollDelegate _: ScrollDelegate?,
+    renderingDelegate _: RenderingDelegate?
+  ) {
     if let animationView = view as? AnimationBlockView,
        animationView.animationHolder !== animationHolder {
       animationView.animatableView = animatableView.value

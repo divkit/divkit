@@ -20,7 +20,8 @@ final class OptionalOptionalComplexPropertyTests: XCTestCase {
   }
 
   func test_OptionalComplexProperty_WithInternalLinkOverrideInTemplate() throws {
-    let entity = try readEntity("test_optional_complex_property_with_internal_link_override_in_template")
+    let entity =
+      try readEntity("test_optional_complex_property_with_internal_link_override_in_template")
 
     XCTAssertEqual(entity, Expected.withOptionalComplexProperty)
   }

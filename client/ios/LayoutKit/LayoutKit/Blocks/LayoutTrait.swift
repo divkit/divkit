@@ -9,7 +9,8 @@ public enum LayoutTrait: Equatable {
   /// Corresponding dimension is determined by block content
   case intrinsic(constrained: Bool, minSize: CGFloat, maxSize: CGFloat)
 
-  /// Corresponding dimension of a parent block is filled by weighted blocks resized according to their weights
+  /// Corresponding dimension of a parent block is filled by weighted blocks resized according to
+  /// their weights
   case weighted(Weight)
 
   public struct Weight: RawRepresentable, ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral,
@@ -40,9 +41,14 @@ public enum LayoutTrait: Equatable {
     }
   }
 
-  /// Resizable block with default weight - custom case typically for the only resizable block in a parent block
+  /// Resizable block with default weight - custom case typically for the only resizable block in a
+  /// parent block
   public static let resizable = LayoutTrait.weighted(.default)
-  public static let intrinsic = LayoutTrait.intrinsic(constrained: false, minSize: 0, maxSize: .infinity)
+  public static let intrinsic = LayoutTrait.intrinsic(
+    constrained: false,
+    minSize: 0,
+    maxSize: .infinity
+  )
 }
 
 extension LayoutTrait {

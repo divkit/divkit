@@ -25,7 +25,7 @@ final class WebPreviewSocket: NSObject {
 
   override init() {
     super.init()
-    
+
     session = URLSession(
       configuration: .default,
       delegate: self,
@@ -43,7 +43,7 @@ final class WebPreviewSocket: NSObject {
       DemoAppLogger.error("Invalid web preview URL: \(httpUrl.absoluteString)")
       return
     }
-    
+
     var result = URLComponents()
     result.scheme = "wss"
     result.host = source.host
@@ -51,10 +51,10 @@ final class WebPreviewSocket: NSObject {
     guard let url = result.url else {
       return
     }
-    
+
     return connect(url: url, uuid: uuid)
   }
-  
+
   func connect(url: URL, uuid: String) {
     disconnect(.ended)
     state = .connecting

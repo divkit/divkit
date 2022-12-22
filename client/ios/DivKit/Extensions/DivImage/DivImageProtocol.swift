@@ -76,4 +76,3 @@ fileprivate func decode(base64: String) -> Data? {
   }
   return nil
 }
-

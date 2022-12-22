@@ -29,7 +29,7 @@ struct ContainerBlockLayout {
 
   public private(set) var childrenWithSeparators: [ContainerBlock.Child] = []
   public private(set) var blockFrames: [CGRect] = []
-  public private(set) var ascent: CGFloat? = nil
+  public private(set) var ascent: CGFloat?
   let gaps: [CGFloat]
   let layoutDirection: ContainerBlock.LayoutDirection
   let layoutMode: ContainerBlock.LayoutMode
@@ -82,7 +82,7 @@ struct ContainerBlockLayout {
     children: [ContainerBlock.Child]
   ) -> ([ContainerBlock.Child], [CGRect], CGFloat?) {
     var frames = [CGRect]()
-    var containerAscent: CGFloat? = nil
+    var containerAscent: CGFloat?
     let gapsSize = gaps.reduce(0, +)
     var shift = CGPoint(x: 0, y: 0)
     switch layoutDirection {
@@ -90,7 +90,7 @@ struct ContainerBlockLayout {
       let horizontallyResizableBlocks = children.map { $0.content }
         .filter { $0.isHorizontallyResizable }
       let widthOfHorizontallyNonResizableBlocks =
-      widthsOfHorizontallyNonResizableBlocksIn(children.map { $0.content }).reduce(0,+)
+        widthsOfHorizontallyNonResizableBlocksIn(children.map { $0.content }).reduce(0, +)
       let widthAvailableForResizableBlocks = (
         size.width - widthOfHorizontallyNonResizableBlocks - gapsSize
       )
@@ -135,7 +135,8 @@ struct ContainerBlockLayout {
       let verticallyResizableBlocks = children.map { $0.content }
         .filter { $0.isVerticallyResizable }
       let heightOfVerticallyNonResizableBlocks =
-      heightsOfVerticallyNonResizableBlocksIn(children.map { $0.content }, forWidth: size.width).reduce(0, +)
+        heightsOfVerticallyNonResizableBlocksIn(children.map { $0.content }, forWidth: size.width)
+          .reduce(0, +)
       let heightAvailableForResizableBlocks = (
         size.height - heightOfVerticallyNonResizableBlocks - gapsSize
       )
@@ -182,7 +183,10 @@ struct ContainerBlockLayout {
     lineSeparator: ContainerBlock.Separator?
   ) -> ([ContainerBlock.Child], [CGRect], CGFloat?) {
     #if INTERNAL_BUILD
-    assert(gaps.allSatisfy { $0.isApproximatelyEqualTo(0) }, "You cannot use gaps in wrap container.")
+    assert(
+      gaps.allSatisfy { $0.isApproximatelyEqualTo(0) },
+      "You cannot use gaps in wrap container."
+    )
     assert(
       !children
         .contains { $0.content.isHorizontallyResizable || $0.content.isVerticallyResizable
@@ -191,7 +195,7 @@ struct ContainerBlockLayout {
     )
     #endif
     var frames = [CGRect]()
-    var containerAscent: CGFloat? = nil
+    var containerAscent: CGFloat?
     let buildingDirectionKeyPath = layoutDirection.buildingDirectionKeyPath
     let transferDirectionKeyPath = layoutDirection.transferDirectionKeyPath
 
@@ -205,7 +209,7 @@ struct ContainerBlockLayout {
 
     var currentLineOffset = 0.0
     wrapLayoutGroups.groups.forEach {
-      var lineAscent: CGFloat? = nil
+      var lineAscent: CGFloat?
       if layoutDirection == .horizontal {
         $0.forEach {
           lineAscent = getMaxAscent(
@@ -221,10 +225,13 @@ struct ContainerBlockLayout {
       switch layoutDirection {
       case .horizontal:
         groupHeight = $0
-          .map { item in item.childSize.height + item.child.baselineOffset(ascent: lineAscent, width: item.childSize.width) }
+          .map { item in item.childSize.height + item.child.baselineOffset(
+            ascent: lineAscent,
+            width: item.childSize.width
+          ) }
           .max() ?? 0
       case .vertical:
-        groupHeight = $0.map{ item in item.childSize.width }.max() ?? 0
+        groupHeight = $0.map { item in item.childSize.width }.max() ?? 0
       }
 
       let contentLength = $0.map(\.childSize).map(to: buildingDirectionKeyPath).reduce(0, +)
@@ -240,7 +247,10 @@ struct ContainerBlockLayout {
 
         switch layoutDirection {
         case .horizontal:
-          let baselineOffset = $0.child.baselineOffset(ascent: lineAscent, width: $0.childSize.width)
+          let baselineOffset = $0.child.baselineOffset(
+            ascent: lineAscent,
+            width: $0.childSize.width
+          )
           frames
             .append(CGRect(origin: CGPoint(
               x: alignedElementOffset,
@@ -302,8 +312,12 @@ struct ContainerBlockLayout {
   }
 }
 
-private func heightsOfVerticallyNonResizableBlocksIn(_ blocks: [Block], forWidth width: CGFloat) -> [CGFloat] {
-  blocks.filter { !$0.isVerticallyResizable }.map { $0.heightOfVerticallyNonResizableBlock(forWidth: width) }
+private func heightsOfVerticallyNonResizableBlocksIn(
+  _ blocks: [Block],
+  forWidth width: CGFloat
+) -> [CGFloat] {
+  blocks.filter { !$0.isVerticallyResizable }
+    .map { $0.heightOfVerticallyNonResizableBlock(forWidth: width) }
 }
 
 func widthsOfHorizontallyNonResizableBlocksIn(_ blocks: [Block]) -> [CGFloat] {
@@ -314,14 +328,14 @@ extension Block {
   fileprivate var horizontalMeasure: ResizableBlockMeasure.Measure {
     isHorizontallyResizable ? .resizable(weightOfHorizontallyResizableBlock) : .nonResizable
   }
-  
+
   fileprivate var verticalMeasure: ResizableBlockMeasure.Measure {
     isVerticallyResizable ? .resizable(weightOfVerticallyResizableBlock) : .nonResizable
   }
 }
 
-fileprivate extension Array where Element == CGRect {
-  mutating func addBaselineOffset(
+extension Array where Element == CGRect {
+  fileprivate mutating func addBaselineOffset(
     children: [ContainerBlock.Child],
     ascent: CGFloat?
   ) {
@@ -338,15 +352,15 @@ fileprivate extension Array where Element == CGRect {
   }
 }
 
-fileprivate extension ContainerBlock.Child {
-  func contentAscent(forWidth width: CGFloat) -> CGFloat? {
+extension ContainerBlock.Child {
+  fileprivate func contentAscent(forWidth width: CGFloat) -> CGFloat? {
     guard crossAlignment == .baseline else {
       return nil
     }
     return content.ascent(forWidth: width)
   }
 
-  func baselineOffset(ascent: CGFloat?, width: CGFloat) -> CGFloat {
+  fileprivate func baselineOffset(ascent: CGFloat?, width: CGFloat) -> CGFloat {
     guard let ascent = ascent, ascent > 0,
           let childAscent = contentAscent(forWidth: width) else {
       return 0

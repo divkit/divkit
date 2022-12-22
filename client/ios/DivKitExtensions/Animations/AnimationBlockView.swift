@@ -19,16 +19,17 @@ final class AnimationBlockView: BlockView {
       animationRequest?.cancel()
 
       let newValue = animationHolder
-      animationRequest = animationHolder?.requestAnimationWithCompletion { [weak self] animationSource in
-        guard let self = self,
-              newValue === self.animationHolder,
-              let animationSource = animationSource else {
-          return
-        }
+      animationRequest = animationHolder?
+        .requestAnimationWithCompletion { [weak self] animationSource in
+          guard let self = self,
+                newValue === self.animationHolder,
+                let animationSource = animationSource else {
+            return
+          }
 
-        self.animatableView?.setSource(animationSource)
-        self.animatableView?.play()
-      }
+          self.animatableView?.setSource(animationSource)
+          self.animatableView?.play()
+        }
     }
   }
 
@@ -49,4 +50,4 @@ final class AnimationBlockView: BlockView {
   let effectiveBackgroundColor: UIColor? = nil
 }
 
-extension AnimationBlockView: VisibleBoundsTrackingLeaf { }
+extension AnimationBlockView: VisibleBoundsTrackingLeaf {}

@@ -606,7 +606,7 @@ struct ParsedCalcExpression: CustomStringConvertible {
     }
     return nil
   }
-  
+
   var variablesNames: [String] {
     symbols
       .filter {

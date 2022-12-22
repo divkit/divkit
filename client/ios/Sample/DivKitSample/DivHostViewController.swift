@@ -14,7 +14,7 @@ final class DivHostViewController: UIViewController {
       urlOpener: { UIApplication.shared.open($0) }
     )
     divHostView = DivHostView(components: components)
-    
+
     if let cards = try? DivJson.loadCards() {
       view.addSubview(divHostView)
       divHostView.setData(cards)
@@ -28,7 +28,7 @@ final class DivHostViewController: UIViewController {
 }
 
 extension DivHostViewController: UIActionEventPerforming {
-  func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
+  func perform(uiActionEvent event: UIActionEvent, from _: AnyObject) {
     switch event.payload {
     case let .divAction(params):
       components.handleActions(params: params)

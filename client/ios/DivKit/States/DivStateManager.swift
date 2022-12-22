@@ -22,7 +22,7 @@ public class DivStateManager {
   }
 
   private let rwLock = RWLock()
-  
+
   public private(set) var items: [DivStatePath: Item]
   public private(set) var blockIds: [DivStatePath: Set<String>] = [:]
   public private(set) var blockVisibility: [DivBlockPath: Bool] = [:]

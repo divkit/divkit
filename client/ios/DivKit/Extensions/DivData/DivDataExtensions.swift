@@ -51,7 +51,7 @@ extension DivData: DivBlockModeling {
     guard let item = stateManager.get(stateBlockPath: DivData.rootPath) else {
       return states.first
     }
-    
+
     let stateId = item.currentStateID.rawValue
     if let state = states.first(where: { String($0.stateId) == stateId }) {
       return state

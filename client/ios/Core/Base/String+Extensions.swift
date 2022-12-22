@@ -42,7 +42,7 @@ extension String {
     enumerateSubstrings(
       in: wholeStringRange,
       options: .byWords
-    ) { _, _wordRange, _enclosingRange, stop -> Void in
+    ) { _, _wordRange, _enclosingRange, stop in
       let caretAtTheBeginningOfWord = _wordRange.lowerBound == caretPos
       let caretInsideWord = _wordRange.contains(caretPos)
       let caretAtTheEndOfWord = _wordRange.upperBound == caretPos
@@ -62,7 +62,7 @@ extension String {
 
   public func allWordRanges() -> [Range<Index>] {
     var wordRanges: [Range<Index>] = []
-    enumerateSubstrings(in: wholeStringRange, options: .byWords) { _, range, _, _ -> Void in
+    enumerateSubstrings(in: wholeStringRange, options: .byWords) { _, range, _, _ in
       wordRanges.append(range)
     }
     return wordRanges

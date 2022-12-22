@@ -169,7 +169,8 @@ extension GalleryViewModel {
     let crossSpacing = metrics.crossSpacing
     let maxItemHeight: CGFloat
     if let size = size {
-      maxItemHeight = (size.height - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) / CGFloat(columnCount)
+      maxItemHeight = (size.height - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
+        CGFloat(columnCount)
     } else if let maxNonResizableHeight = blocks
       .maxHeightOfVerticallyNonResizableBlocks(for: widths) {
       maxItemHeight = maxNonResizableHeight
@@ -208,7 +209,8 @@ extension GalleryViewModel {
     let crossSpacing = metrics.crossSpacing
     let maxItemWidth: CGFloat
     if let size = size {
-      maxItemWidth = (size.width - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) / CGFloat(columnCount)
+      maxItemWidth = (size.width - crossInsets.sum - crossSpacing * CGFloat(columnCount - 1)) /
+        CGFloat(columnCount)
     } else {
       let blocks = items.map { $0.content }
       if let maxNonResizebleWidth = blocks.maxWidthOfHorizontallyNonResizableBlocks {

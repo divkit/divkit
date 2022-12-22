@@ -30,4 +30,3 @@ final class TimeMeasure {
     public var status: Status
   }
 }
-

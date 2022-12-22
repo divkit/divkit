@@ -238,7 +238,8 @@ private func calculateSizes<T: NonResizableItem>(
       /// If we went from left to right, we'd get here is:
       /// 1. Span = 1, all items handled, column widths are: `[SmallWidth, 0, SmallWidth]`;
       /// 2. Span = 2, first item handled, column widths are: `[BigWidth, 0, SmallWidth]`;
-      /// 3. Span = 2, second item handled, column widths are: `[BigWidth, BigWidth - SmallWidth, BigWidth]`.
+      /// 3. Span = 2, second item handled, column widths are: `[BigWidth, BigWidth - SmallWidth,
+      /// BigWidth]`.
       ///
       /// However, obviously, the optimal widths would be
       /// `[SmallWidth, BigWidth - SmallWidth, BigWidth]`,

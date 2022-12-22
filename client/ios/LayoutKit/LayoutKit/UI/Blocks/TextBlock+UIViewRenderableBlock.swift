@@ -34,9 +34,8 @@ extension TextBlock {
 }
 
 private final class TextBlockContainer: BlockView, VisibleBoundsTrackingLeaf {
-
   private let textBlockView = TextBlockView()
-  private var gradientView: UIView? = nil
+  private var gradientView: UIView?
 
   var textGradient: Gradient? {
     didSet {
@@ -468,8 +467,8 @@ extension Gradient {
   }
 }
 
-fileprivate extension TextBlockView.Model {
-  var isUserInteractionEnabled: Bool {
-    return canSelect || text.hasActions || truncationToken?.hasActions == true
+extension TextBlockView.Model {
+  fileprivate var isUserInteractionEnabled: Bool {
+    canSelect || text.hasActions || truncationToken?.hasActions == true
   }
 }

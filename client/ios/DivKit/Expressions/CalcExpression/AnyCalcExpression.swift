@@ -121,7 +121,8 @@ struct AnyCalcExpression: CustomStringConvertible {
   /// Private initializer implementation
   /// Allows for dynamic symbol lookup or generation without any performance overhead
   /// Note that standard library symbols are all enabled by default - to disable them
-  /// return `{ _ in throw AnyCalcExpression.Error.undefinedSymbol(symbol) }` from your lookup function
+  /// return `{ _ in throw AnyCalcExpression.Error.undefinedSymbol(symbol) }` from your lookup
+  /// function
   private init(
     _ expression: ParsedCalcExpression,
     options: Options,
@@ -696,8 +697,7 @@ extension AnyCalcExpression {
 
     private func cast(_ value: Double) throws -> CalcExpression.Value {
       if Double(CalcExpression.Value.minInteger) <= value,
-         value <= Double(CalcExpression.Value.maxInteger)
-      {
+         value <= Double(CalcExpression.Value.maxInteger) {
         return .integer(Int(value))
       } else {
         throw CalcExpression.Value.integerError(value)

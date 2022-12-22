@@ -54,7 +54,8 @@ extension DivBase {
     // and alpha should be applied to block with border and shadow.
     let visibilityActions = makeVisibilityActions(context: context)
 
-    let focusState: FocusViewState = context.blockStateStorage.getState(context.parentPath) ?? .default
+    let focusState: FocusViewState = context.blockStateStorage
+      .getState(context.parentPath) ?? .default
     let background = getBackground(focusState)
     let border = getBorder(focusState)
 

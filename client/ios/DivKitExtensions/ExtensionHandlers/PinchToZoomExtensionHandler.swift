@@ -22,7 +22,7 @@ public final class PinchToZoomExtensionHandler: DivExtensionHandler {
       )
       return EmptyBlock()
     }
-    
+
     return PinchToZoomBlock(child: block, overlayView: overlayView)
   }
 }

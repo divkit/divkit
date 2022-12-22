@@ -14,7 +14,7 @@ public enum SnapshotTestKit {
   public static func testSnapshot(
     _ snapshot: UIImage,
     referenceURL: URL,
-    diffDirPath: String,
+    diffDirPath _: String,
     mode: TestMode
   ) {
     let deviceModel = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"]
@@ -40,7 +40,7 @@ public enum SnapshotTestKit {
         if !fileManager.fileExists(atPath: snapshotsDir.path) {
           try fileManager.createDirectory(at: snapshotsDir, withIntermediateDirectories: true)
         }
-        
+
         try snapshot.makePNGData().write(to: referenceURL)
         throw SnapshotTestError.updateModeEnabled
       case .verify:

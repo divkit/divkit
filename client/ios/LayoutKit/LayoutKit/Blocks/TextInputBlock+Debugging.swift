@@ -6,7 +6,7 @@ extension TextInputBlock: CustomDebugStringConvertible {
     var result = """
     TextView \(widthTrait) x \(heightTrait) {
     """
-    
+
     result += "\n  Hint text: \(hint)"
 
     result += "\n  Variable text: \(textValue.wrappedValue)"

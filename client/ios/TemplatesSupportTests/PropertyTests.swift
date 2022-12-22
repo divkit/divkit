@@ -1,5 +1,5 @@
-import XCTest
 import Serialization
+import XCTest
 
 final class PropertyTests: XCTestCase {
   func test_RequiredProperty_WithLink() throws {
@@ -75,7 +75,7 @@ final class PropertyTests: XCTestCase {
 
   func test_RequiredComplexPropertyIsInvalid_ReturnsError() throws {
     let result = try readEntityWithResult(fileName: "property/test_property_not_templated_invalid")
-    
+
     switch result {
     case let .failure(errors):
       XCTAssertEqual(errors.count, 2)
@@ -86,7 +86,7 @@ final class PropertyTests: XCTestCase {
 
   func test_EntityTypeIsUnknown_ReturnsError() throws {
     let result = try readEntityWithResult(fileName: "property/test_property_unknown_type")
-    
+
     switch result {
     case let .failure(errors):
       XCTAssertEqual(errors.count, 1)

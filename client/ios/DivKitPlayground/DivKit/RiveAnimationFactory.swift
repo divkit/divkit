@@ -1,9 +1,9 @@
 import Foundation
 
 import Base
-import LayoutKit
 import DivKit
 import DivKitExtensions
+import LayoutKit
 import Networking
 import RiveRuntime
 
@@ -14,14 +14,15 @@ final class RiveAnimationFactory: DivCustomBlockFactory {
     self.requester = requester
   }
 
-  func makeBlock(data: DivCustomData, context: DivBlockModelingContext) -> Block {
+  func makeBlock(data: DivCustomData, context _: DivBlockModelingContext) -> Block {
     do {
       let riveData = try data.toRiveDivCustomData()
       let animationHolder = RemoteAnimationHolder(
         url: riveData.url,
         animationType: .rive,
         requester: requester,
-        localDataProvider: nil)
+        localDataProvider: nil
+      )
 
       return RiveAnimationBlock(
         animationHolder: animationHolder,
@@ -39,4 +40,3 @@ final class RiveAnimationFactory: DivCustomBlockFactory {
     }
   }
 }
-

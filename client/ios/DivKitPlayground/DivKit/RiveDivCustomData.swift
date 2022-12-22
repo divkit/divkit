@@ -1,5 +1,5 @@
-import Foundation
 import DivKit
+import Foundation
 
 struct RiveDivCustomData {
   enum Fit: String {
@@ -49,7 +49,8 @@ struct RiveDivCustomData {
     guard let urlStr = data[riveFileURLKey] as? String, let url = URL(string: urlStr) else {
       throw Error.noValidURL
     }
-    self.alignment = (data[riveAlignmentKey] as? String).flatMap(Alignment.init(rawValue:)) ?? .center
+    self.alignment = (data[riveAlignmentKey] as? String)
+      .flatMap(Alignment.init(rawValue:)) ?? .center
     self.fit = (data[riveFitKey] as? String).flatMap(Fit.init(rawValue:)) ?? .contain
     self.loop = (data[riveLoopKey] as? String).flatMap(Loop.init(rawValue:)) ?? .auto
     self.url = url

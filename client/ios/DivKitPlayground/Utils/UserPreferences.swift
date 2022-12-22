@@ -8,11 +8,11 @@ enum UserPreferences {
   static let showRenderingTimeKey = "showRenderingTime"
 
   static let isQrScannerEnabledDefault = {
-  #if targetEnvironment(simulator)
+    #if targetEnvironment(simulator)
     false
-  #else
+    #else
     true
-  #endif
+    #endif
   }()
 
   static let showRenderingTimeDefault = false
@@ -23,7 +23,8 @@ enum UserPreferences {
   static let playgroundThemeDefault = Theme.system
 
   static var playgroundTheme: Theme {
-    let value =  Theme(rawValue: defaults.value(forKey: playgroundThemeKey) as? String ?? "") ?? playgroundThemeDefault
+    let value = Theme(rawValue: defaults.value(forKey: playgroundThemeKey) as? String ?? "") ??
+      playgroundThemeDefault
     switch value {
     case .system:
       return UIViewController().traitCollection.userInterfaceStyle == .light ? .light : .dark

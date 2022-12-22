@@ -2,8 +2,8 @@ import Foundation
 
 import BaseUI
 import CommonCore
-import Networking
 import LayoutKit
+import Networking
 
 extension DivImage: DivBlockModeling, DivImageProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {
@@ -20,7 +20,6 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
   private func makeBaseBlock(context: DivBlockModelingContext) throws -> Block {
     try checkLayoutTraits(context: context)
 
-    
     let expressionResolver = context.expressionResolver
     let highPriority = resolveHighPriorityPreviewShow(expressionResolver)
     let imageHolderFactory: ImageHolderFactory
@@ -29,7 +28,7 @@ extension DivImage: DivBlockModeling, DivImageProtocol {
     } else {
       imageHolderFactory = context.imageHolderFactory
     }
-    
+
     let imageHolder = imageHolderFactory.make(
       resolveImageUrl(expressionResolver),
       resolvePlaceholder(expressionResolver)
@@ -69,6 +68,6 @@ extension DivBlendMode {
 
 extension DivImage {
   fileprivate func makeEffects(with resolver: ExpressionResolver) -> [ImageEffect] {
-    filters?.compactMap { $0.makeImageEffect(with: resolver)} ?? []
+    filters?.compactMap { $0.makeImageEffect(with: resolver) } ?? []
   }
 }

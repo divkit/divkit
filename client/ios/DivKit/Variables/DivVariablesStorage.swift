@@ -130,7 +130,7 @@ public final class DivVariablesStorage {
       ))
     }
   }
-  
+
   public func append(
     variables: DivVariables,
     triggerUpdate: Bool
@@ -143,7 +143,7 @@ public final class DivVariablesStorage {
       storage.makeVariables(for: cardId)
     }
   }
-  
+
   public func reset() {
     rwLock.write {
       storage = Variables()
@@ -178,7 +178,8 @@ extension DivVariablesStorage: DivVariableUpdater {
       var cardVariables = storage.local[cardId]
       if let localValue = cardVariables?[name] {
         let oldStorage = storage
-        let isUpdated = cardVariables?.update(name: name, oldValue: localValue, value: value) ?? false
+        let isUpdated = cardVariables?
+          .update(name: name, oldValue: localValue, value: value) ?? false
         storage.local[cardId] = cardVariables
         if isUpdated {
           update(with: ChangeEvent(

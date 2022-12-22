@@ -62,6 +62,6 @@ extension DivImageBackground: DivImageContentMode {}
 
 extension DivImageBackground {
   fileprivate func makeEffects(with resolver: ExpressionResolver) -> [ImageEffect] {
-    filters?.compactMap { $0.makeImageEffect(with: resolver)} ?? []
+    filters?.compactMap { $0.makeImageEffect(with: resolver) } ?? []
   }
 }

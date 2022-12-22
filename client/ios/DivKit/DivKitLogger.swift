@@ -4,7 +4,7 @@ private var externalLogger: (String) -> Void = { _ in }
 
 public enum DivKitLogger {
   public static var isEnabled: Bool = false
-  
+
   public static func error(_ message: String) {
     if isEnabled {
       print("[DivKit] [ERROR] \(message)")

@@ -183,7 +183,7 @@ final class DetachableAnimationBlockView: BlockView {
       item.perform()
     }
   }
-  
+
   func cancelAnimations() {
     queuedAnimation?.cancel()
     queuedAnimation = nil

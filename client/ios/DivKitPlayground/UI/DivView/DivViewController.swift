@@ -47,6 +47,7 @@ open class DivViewController: UIViewController {
     super.init(nibName: nil, bundle: nil)
   }
 
+  @available(*, unavailable)
   public required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -97,7 +98,7 @@ open class DivViewController: UIViewController {
 
     onVisibleBoundsChanged(to: .zero)
   }
-  
+
   open func onViewUpdated() {}
 
   private func updateBlockView(block: Block) {
@@ -115,7 +116,7 @@ open class DivViewController: UIViewController {
     }
 
     view.setNeedsLayout()
-    
+
     onViewUpdated()
   }
 

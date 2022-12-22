@@ -8,14 +8,15 @@ public final class RemoteAnimationHolder: AnimationHolder {
     case lottie
     case rive
   }
-  private typealias AsyncAnimationRequester = (@escaping ((AnimationSourceType)?) -> Void)
-  -> Cancellable?
-  
+
+  private typealias AsyncAnimationRequester = (@escaping (AnimationSourceType?) -> Void)
+    -> Cancellable?
+
   let url: URL
-  private(set) public var animation: (AnimationSourceType)?
+  public private(set) var animation: AnimationSourceType?
   private let animationType: AnimationType
   private let resourceRequester: AsyncAnimationRequester
-  
+
   public init(
     url: URL,
     animationType: AnimationType,
@@ -26,17 +27,19 @@ public final class RemoteAnimationHolder: AnimationHolder {
     self.url = url
     self.animationType = animationType
     if let provider = localDataProvider, let data = provider(url) {
-      self.animation = animationType == .lottie ? LottieAnimationSourceType.data(data) : RiveAnimationSourceType.data(data)
+      self.animation = animationType == .lottie ? LottieAnimationSourceType
+        .data(data) : RiveAnimationSourceType.data(data)
     }
     let requester = AsyncResourceRequester<AnimationSourceType> { completion in
-      requester.getDataWithSource(from: url,  completion: { result in
+      requester.getDataWithSource(from: url, completion: { result in
         Thread.assertIsMain()
         guard let self = weakSelf else { return }
         switch result {
         case let .success(value):
-          self.animation = animationType == .lottie ? LottieAnimationSourceType.data(value.data) : RiveAnimationSourceType.data(value.data)
+          self.animation = animationType == .lottie ? LottieAnimationSourceType
+            .data(value.data) : RiveAnimationSourceType.data(value.data)
           completion(self.animation)
-        case .failure(_):
+        case .failure:
           completion(nil)
         }
       })
@@ -44,16 +47,19 @@ public final class RemoteAnimationHolder: AnimationHolder {
     self.resourceRequester = requester.requestResource
     weakSelf = self
   }
-  
+
   @discardableResult
-  public func requestAnimationWithCompletion(_ completion: @escaping ((AnimationSourceType)?) -> Void) -> Cancellable? {
+  public func requestAnimationWithCompletion(
+    _ completion: @escaping (AnimationSourceType?)
+      -> Void
+  ) -> Cancellable? {
     if let animation = self.animation {
       completion(animation)
       return nil
     }
     return resourceRequester(completion)
   }
-  
+
   public func equals(_ other: AnimationHolder) -> Bool {
     guard let other = other as? RemoteAnimationHolder else {
       return false
@@ -67,4 +73,3 @@ extension RemoteAnimationHolder: CustomDebugStringConvertible {
     "URL = \(dbgStr(url)))"
   }
 }
-

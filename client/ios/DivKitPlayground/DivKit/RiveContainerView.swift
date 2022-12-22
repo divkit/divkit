@@ -1,6 +1,6 @@
+import DivKitExtensions
 import Foundation
 import RiveRuntime
-import DivKitExtensions
 
 final class RiveContainerView: UIView {
   private var riveViewModel: RiveViewModel?
@@ -17,7 +17,11 @@ final class RiveContainerView: UIView {
   private let alignment: RiveAlignment
   private let loop: RiveLoop
 
-  init(fit: RiveDivCustomData.Fit, alignment: RiveDivCustomData.Alignment, loop: RiveDivCustomData.Loop) {
+  init(
+    fit: RiveDivCustomData.Fit,
+    alignment: RiveDivCustomData.Alignment,
+    loop: RiveDivCustomData.Loop
+  ) {
     switch fit {
     case .cover: self.fit = .cover
     case .contain: self.fit = .contain
@@ -50,7 +54,7 @@ final class RiveContainerView: UIView {
   }
 
   @available(*, unavailable)
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -68,7 +72,7 @@ extension RiveContainerView: AnimatableView {
   func setSource(_ source: AnimationSourceType) {
     if let source = source as? RiveAnimationSourceType {
       switch source {
-      case .data(let data):
+      case let .data(data):
         if let riveFile = try? RiveFile(byteArray: [UInt8](data)) {
           let model = RiveModel(riveFile: riveFile)
           riveViewModel = RiveViewModel(model, fit: fit, alignment: alignment)
@@ -78,4 +82,3 @@ extension RiveContainerView: AnimatableView {
     }
   }
 }
-

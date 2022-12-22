@@ -88,7 +88,7 @@ extension BackgroundView {
     case .solidColor, .tiledImage:
       view = ColoredView()
 
-    case .image(let backgroundImage):
+    case let .image(backgroundImage):
       if backgroundImage.metalImageRenderingEnabled {
         view = RemoteImageViewContainer(contentView: MetalImageView())
       } else {
@@ -158,7 +158,10 @@ extension BackgroundView {
       imageViewContainer.contentView.clipsToBounds = true
       imageViewContainer.contentView.alpha = CGFloat(image.alpha)
       imageViewContainer.contentView.imageContentMode = image.contentMode
-      imageViewContainer.contentView.imageRedrawingStyle = ImageRedrawingStyle(tintColor: nil, effects: image.effects)
+      imageViewContainer.contentView.imageRedrawingStyle = ImageRedrawingStyle(
+        tintColor: nil,
+        effects: image.effects
+      )
       if imageViewContainer.imageHolder != image.imageHolder {
         imageViewContainer.imageHolder = image.imageHolder
       }
@@ -182,7 +185,12 @@ extension BackgroundView {
 
     case let .block(block):
       let blockView = innerView as! BlockView
-      block.configureBlockView(blockView, observer: observer, overscrollDelegate: overscrollDelegate, renderingDelegate: renderingDelegate)
+      block.configureBlockView(
+        blockView,
+        observer: observer,
+        overscrollDelegate: overscrollDelegate,
+        renderingDelegate: renderingDelegate
+      )
 
     case let .composite(background1, background2, blendingCoefficient):
       let compositeView = innerView as! CompositeView
@@ -267,8 +275,8 @@ extension BackgroundView {
          (.gradient, _),
          (.composite, _),
          (.withInsets, _),
-      (.block, _),
-      (.ninePatchImage, _):
+         (.block, _),
+         (.ninePatchImage, _):
       return false
     }
   }

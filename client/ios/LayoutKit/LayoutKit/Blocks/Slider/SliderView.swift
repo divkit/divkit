@@ -95,16 +95,25 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       renderingDelegate: renderingDelegate,
       superview: self
     )
-    
-    let clampedFirstThumbValue = Int(clampSliderValue(CGFloat(sliderModel.firstThumb.value),
-                                                      sliderModel: sliderModel))
-    let clampedSecondThumbValue = Int(clampSliderValue(CGFloat(sliderModel.secondThumb?.value ?? sliderModel.minValue),
-                                                       sliderModel: sliderModel))
-    
-    self.sliderModel.firstThumb.$value.setValue(clampedFirstThumbValue,
-                                                responder: nil)
-    self.sliderModel.secondThumb?.$value.setValue(clampedSecondThumbValue,
-                                                  responder: nil)
+
+    let clampedFirstThumbValue = Int(clampSliderValue(
+      CGFloat(sliderModel.firstThumb.value),
+      sliderModel: sliderModel
+    ))
+    let clampedSecondThumbValue =
+      Int(clampSliderValue(
+        CGFloat(sliderModel.secondThumb?.value ?? sliderModel.minValue),
+        sliderModel: sliderModel
+      ))
+
+    self.sliderModel.firstThumb.$value.setValue(
+      clampedFirstThumbValue,
+      responder: nil
+    )
+    self.sliderModel.secondThumb?.$value.setValue(
+      clampedSecondThumbValue,
+      responder: nil
+    )
 
     if recognizer.state != .began, recognizer.state != .changed {
       firstThumbProgress = CGFloat(clampedFirstThumbValue)
@@ -280,23 +289,27 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   override func layoutSubviews() {
     let firstThumbProgress = clampSliderValue(firstThumbProgress, sliderModel: sliderModel)
     let secondThumbProgress = clampSliderValue(secondThumbProgress, sliderModel: sliderModel)
-    
+
     defer {
-      configureMarks(firstThumbValue: Int(clampSliderValue(CGFloat(sliderModel.firstThumb.value),
-                                                           sliderModel: sliderModel)),
-                     secondThumbValue: sliderModel.secondThumb.flatMap {
-                       Int(clampSliderValue(CGFloat($0.value), sliderModel: sliderModel))
-                     },
-                     minValue: sliderModel.minValue,
-                     maxValue: sliderModel.maxValue)
+      configureMarks(
+        firstThumbValue: Int(clampSliderValue(
+          CGFloat(sliderModel.firstThumb.value),
+          sliderModel: sliderModel
+        )),
+        secondThumbValue: sliderModel.secondThumb.flatMap {
+          Int(clampSliderValue(CGFloat($0.value), sliderModel: sliderModel))
+        },
+        minValue: sliderModel.minValue,
+        maxValue: sliderModel.maxValue
+      )
     }
-    
+
     guard thumbAnimator?.state != .active else {
       return
     }
 
     super.layoutSubviews()
-    
+
     configureThumb(
       thumbView: firstThumb,
       progress: firstThumbProgress,
@@ -336,10 +349,12 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     )
   }
 
-  private func configureMarks(firstThumbValue: Int,
-                              secondThumbValue: Int?,
-                              minValue: Int,
-                              maxValue: Int) {
+  private func configureMarks(
+    firstThumbValue: Int,
+    secondThumbValue: Int?,
+    minValue: Int,
+    maxValue: Int
+  ) {
     if let secondThumbValue {
       let leftThumb = min(firstThumbValue, secondThumbValue)
       let rightThumb = max(firstThumbValue, secondThumbValue)
@@ -458,9 +473,9 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
     thumbView.frame.center.y = bounds.center
       .movingY(by: (sliderModel.sliderTopTextPadding - sliderModel.sliderBottomTextPadding) / 2).y
   }
-  
+
   private func clampSliderValue(_ value: CGFloat, sliderModel: SliderModel) -> CGFloat {
-    return clamp(value, min: CGFloat(sliderModel.minValue), max: CGFloat(sliderModel.maxValue))
+    clamp(value, min: CGFloat(sliderModel.minValue), max: CGFloat(sliderModel.maxValue))
   }
 }
 

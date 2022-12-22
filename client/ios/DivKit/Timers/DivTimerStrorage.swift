@@ -109,14 +109,14 @@ final class DivTimerStorage {
   }
 
   private func makeControllerKey(cardId: DivCardID, divTimer: DivTimer) -> String {
-    return "\(cardId)_\(divTimer.id)"
+    "\(cardId)_\(divTimer.id)"
   }
 
   private func makeTimer(
     cardId: DivCardID,
     divTimer: DivTimer
   ) -> DivTimerController {
-    return DivTimerController(
+    DivTimerController(
       divTimer: divTimer,
       timerScheduler: timerScheduler,
       timeMeasuring: TimeIntervalMeasuring(),

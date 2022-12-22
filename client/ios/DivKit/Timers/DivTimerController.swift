@@ -187,8 +187,8 @@ final class DivTimerController {
   }
 }
 
-fileprivate extension DivTimer {
-  func getDuration(_ expressionResolver: ExpressionResolver) -> TimeInterval? {
+extension DivTimer {
+  fileprivate func getDuration(_ expressionResolver: ExpressionResolver) -> TimeInterval? {
     let duration = self.resolveDuration(expressionResolver)
     guard duration > 0 else {
       return nil
@@ -196,14 +196,14 @@ fileprivate extension DivTimer {
     return TimeInterval(duration / 1000)
   }
 
-  func getTickInterval(_ expressionResolver: ExpressionResolver) -> TimeInterval? {
+  fileprivate func getTickInterval(_ expressionResolver: ExpressionResolver) -> TimeInterval? {
     guard let divTickInterval = self.resolveTickInterval(expressionResolver) else {
       return nil
     }
     return TimeInterval(divTickInterval / 1000)
   }
 
-  func parametersAreValid(_ expressionResolver: ExpressionResolver) -> Bool {
+  fileprivate func parametersAreValid(_ expressionResolver: ExpressionResolver) -> Bool {
     let duration = self.resolveDuration(expressionResolver)
     if duration > 0 {
       return true
@@ -213,7 +213,8 @@ fileprivate extension DivTimer {
       return false
     }
     if self.tickActions == nil && self.valueVariable == nil {
-      DivKitLogger.failure("Timer '\(self.id)' parameters is not valid: set tickActions or valueVariable")
+      DivKitLogger
+        .failure("Timer '\(self.id)' parameters is not valid: set tickActions or valueVariable")
       return false
     }
     return true

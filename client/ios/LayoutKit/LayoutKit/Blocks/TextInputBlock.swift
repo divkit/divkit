@@ -89,7 +89,10 @@ public final class TextInputBlock: BlockWithTraits {
         let textHeight = ceil(textForMeasuring.sizeForWidth(width).height)
         return constrained ? textHeight : clamp(textHeight, min: minSize, max: maxSize)
       }
-      let textHeight = ceil(textForMeasuring.heightForWidth(width, maxNumberOfLines: maxVisibleLines))
+      let textHeight = ceil(
+        textForMeasuring
+          .heightForWidth(width, maxNumberOfLines: maxVisibleLines)
+      )
       return constrained ? textHeight : clamp(textHeight, min: minSize, max: maxSize)
     case .weighted:
       return 0
@@ -102,7 +105,7 @@ public final class TextInputBlock: BlockWithTraits {
     }
     let text = textValue.wrappedValue
     if text.isEmpty {
-      if (hint.isEmpty) {
+      if hint.isEmpty {
         return defaultTextForMeasuring.with(typo: textTypo)
       }
       return hint

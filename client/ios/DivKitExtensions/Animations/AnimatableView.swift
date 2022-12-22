@@ -4,7 +4,8 @@ import Base
 import LayoutKit
 
 public protocol AnimatableViewFactory: AnyObject {
-  func createAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float) -> AnimatableView
+  func createAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float)
+    -> AnimatableView
 }
 
 public protocol AnimatableView: ViewType {

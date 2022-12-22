@@ -4,9 +4,9 @@ enum TestData {
   static let regressionPath = "regression_test_data"
   static let samplesPath = "samples"
   static let patchesPath = "regression_test_data/patches"
-  
+
   private static var cachedRegressionTests: [RegressionTestModel]?
-  
+
   static var samples: [URL] {
     getAllFiles(path: samplesPath)
       .map { url, _ in url }

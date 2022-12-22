@@ -33,14 +33,14 @@ extension DivAppearanceTransition {
       case .top, .bottom:
         kind = .translationY
       }
-      value1 = item.distance?.makeScaledValue(expressionResolver).map({
+      value1 = item.distance?.makeScaledValue(expressionResolver).map {
         switch edge {
         case .left, .top:
           return -$0
         case .right, .bottom:
           return $0
         }
-      }) ?? getDefaultSlideValue(edge)
+      } ?? getDefaultSlideValue(edge)
       value2 = 0
       transition = item
     }

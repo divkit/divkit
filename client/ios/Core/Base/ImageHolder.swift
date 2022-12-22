@@ -3,7 +3,7 @@
 import Foundation
 
 public protocol ImageHolder: AnyObject, CustomDebugStringConvertible {
-  typealias CompletionHandlerWithSource = (((Image, URLRequestResult.Source)?) -> Void)
+  typealias CompletionHandlerWithSource = ((Image, URLRequestResult.Source)?) -> Void
 
   var image: Image? { get }
   var placeholder: ImagePlaceholder? { get }

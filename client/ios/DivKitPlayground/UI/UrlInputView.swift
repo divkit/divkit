@@ -10,7 +10,7 @@ struct UrlInputView: View {
   private var isQrScannerEnabled = UserPreferences.isQrScannerEnabledDefault
 
   let divViewProvider: DivViewProvider
-  
+
   var body: some View {
     let url = URL(string: urlString)
     return ViewWithHeader(
@@ -24,7 +24,7 @@ struct UrlInputView: View {
         .padding(EdgeInsets(top: 6, leading: 16, bottom: 26, trailing: 16))
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(ThemeColor.divKit)
-      
+
       ZStack(alignment: .top) {
         ThemeColor.divKit
           .frame(height: ThemeSize.cornerRadius)
@@ -36,7 +36,7 @@ struct UrlInputView: View {
           .background(Color.white)
           .cornerRadius(ThemeSize.cornerRadius)
       }
-      
+
       if isQrScannerEnabled {
         ScannerView(result: $urlString)
           .cornerRadius(ThemeSize.cornerRadius)
@@ -61,7 +61,7 @@ private struct Link<Destination>: View where Destination: View {
   let title: String
   let url: URL?
   let destination: (URL) -> Destination
-  
+
   var body: some View {
     NavigationLink(title) {
       if let url = url {

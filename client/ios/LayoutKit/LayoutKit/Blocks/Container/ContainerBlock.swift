@@ -19,7 +19,7 @@ public final class ContainerBlock: BlockWithLayout {
     /// Child blocks are laid out vertically one after another
     case vertical
   }
-    
+
   public enum LayoutMode {
     case wrap
     case noWrap
@@ -179,7 +179,7 @@ public final class ContainerBlock: BlockWithLayout {
         }
       }
     }
-    
+
     if widthTrait == .intrinsic {
       switch layoutDirection {
       case .horizontal:
@@ -253,7 +253,7 @@ public final class ContainerBlock: BlockWithLayout {
     }
 
     if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
-      result = clamp(result, min: minSize, max: maxSize )
+      result = clamp(result, min: minSize, max: maxSize)
     }
 
     cached.intrinsicWidth = result
@@ -334,14 +334,18 @@ public final class ContainerBlock: BlockWithLayout {
   }
 
   public var heightOfVerticallyNonResizableBlock: CGFloat {
-    assert(layoutMode == .wrap && layoutDirection == .vertical,
-           "First height calculation should only be used for vertical container with wrap layout mode")
+    assert(
+      layoutMode == .wrap && layoutDirection == .vertical,
+      "First height calculation should only be used for vertical container with wrap layout mode"
+    )
     return heightOfVerticallyNonResizableBlock(forWidth: .zero)
   }
 
   public func widthOfHorizontallyNonResizableBlock(forHeight height: CGFloat) -> CGFloat {
-    assert(layoutMode == .wrap && layoutDirection == .vertical,
-           "First height calculation should only be used for vertical container with wrap layout mode")
+    assert(
+      layoutMode == .wrap && layoutDirection == .vertical,
+      "First height calculation should only be used for vertical container with wrap layout mode"
+    )
     if case let .fixed(value) = widthTrait {
       return value
     }
@@ -444,8 +448,8 @@ private func makeGapsWithSeparators(
         gap
       default:
         if separator.showBetween {
-          gap/2
-          gap/2
+          gap / 2
+          gap / 2
         } else {
           gap
         }
@@ -467,7 +471,7 @@ private func makeChildrenWithSeparators(
       separator.style
     }
     for (index, child) in children.enumerated() {
-      if separator.showBetween && index > 0 {
+      if separator.showBetween, index > 0 {
         separator.style
       }
       child
@@ -566,8 +570,8 @@ extension ContainerBlock.Error {
   }
 }
 
-fileprivate extension ContainerBlock.Child {
-  var crossAlignmentForCalculatingHeight: ContainerBlock.CrossAlignment {
+extension ContainerBlock.Child {
+  fileprivate var crossAlignmentForCalculatingHeight: ContainerBlock.CrossAlignment {
     guard self.crossAlignment != .center,
           self.crossAlignment != .trailing else {
       return .leading

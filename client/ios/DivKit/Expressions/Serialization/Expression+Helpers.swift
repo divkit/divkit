@@ -12,9 +12,9 @@ func expressionTransform<T, U>(
   do {
     if let rawValue = value as? String,
        let resolver = try ExpressionLink<T>(
-        rawValue: rawValue,
-        validator: validator,
-        errorTracker: { DivKitLogger.error($0.description) }
+         rawValue: rawValue,
+         validator: validator,
+         errorTracker: { DivKitLogger.error($0.description) }
        ) {
       return .link(resolver)
     }

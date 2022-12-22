@@ -1,12 +1,12 @@
-import SwiftUI
 import DivKit
+import SwiftUI
 
 struct WebPreviewView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
 
   let url: URL
-  
+
   private let model = WebPreviewModel()
 
   var body: some View {
@@ -64,7 +64,7 @@ private struct WebPreviewModel {
       errors: blockProvider.$errors
     )
   }
-  
+
   func connect(httpUrl: URL) {
     socket.connect(httpUrl: httpUrl)
   }
@@ -72,7 +72,7 @@ private struct WebPreviewModel {
   func endConnection() {
     socket.endConnection()
   }
-  
+
   func sendScreenshot(_ screenshotInfo: ScreenshotInfo) {
     socket.send(
       state: payloadFactory.makePayload(
@@ -88,6 +88,7 @@ extension TimeMeasure {
     .init(value: time?.value ?? 0, histogram_type: time?.status.histogramType ?? .cold)
   }
 }
+
 extension TimeMeasure.Status {
   fileprivate var histogramType: UIStatePayload.RenderingTime.HistogramType {
     switch self {

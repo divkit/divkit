@@ -1,5 +1,5 @@
-import XCTest
 import Serialization
+import XCTest
 
 final class SimplePropertiesTests: XCTestCase {
   func test_BooleanAsInt() throws {

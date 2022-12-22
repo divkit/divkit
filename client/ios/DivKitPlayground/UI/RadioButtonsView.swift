@@ -15,7 +15,10 @@ struct RadioButtonsView: View {
               .foregroundColor(Color(UIColor.label))
             Spacer()
             Circle()
-              .fill(selected == option ? Color.accentColor : Color(UIColor.secondarySystemBackground))
+              .fill(
+                selected == option ? Color
+                  .accentColor : Color(UIColor.secondarySystemBackground)
+              )
               .frame(width: 20, height: 20)
           }
         }

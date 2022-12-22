@@ -14,7 +14,7 @@ extension Block {
     guard debugParams.isDebugInfoEnabled else {
       return self
     }
-    
+
     let errorsCount = errors.count
     guard errorsCount > 0 else {
       return self
@@ -48,7 +48,7 @@ extension Block {
       .addingEdgeInsets(debugParams.errorCounterInsets)
       .addingEdgeGaps(2)
       .addingDecorations(action: action)
-    
+
     let debugInfoBlock = DebugInfoBlock(
       child: indicator,
       showDebugInfo: {

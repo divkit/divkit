@@ -10,7 +10,7 @@ final class ExpressionResolverTests: XCTestCase {
       "string_var": .string("string value"),
       "color_var": .color(Color.color(withHexString: "#AABBCC")!),
       "enum_var": .string("first"),
-      "url_var": .url(URL(string: "https://some.url")!)
+      "url_var": .url(URL(string: "https://some.url")!),
     ]
   )
 

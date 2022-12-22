@@ -16,7 +16,8 @@ public class DefaultDivStateManagement: DivStateManagement {
     lifetime _: DivStateLifetime
   ) {
     let stateManager = getStateManagerForCard(cardId: cardId)
-    let (parentPath, stateId) = path.split() ?? (DivData.rootPath, DivStateID(rawValue: path.rawValue.root))
+    let (parentPath, stateId) = path
+      .split() ?? (DivData.rootPath, DivStateID(rawValue: path.rawValue.root))
     stateManager.setStateWithHistory(path: parentPath, stateID: stateId)
     stateManagersForCards[cardId] = stateManager
   }
@@ -37,4 +38,3 @@ public class DefaultDivStateManagement: DivStateManagement {
     }
   }
 }
-

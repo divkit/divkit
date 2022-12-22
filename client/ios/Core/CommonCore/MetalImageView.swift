@@ -178,7 +178,7 @@ extension MetalImageView: MTKViewDelegate {
       .transformed(by: CGAffineTransform(scaleX: 1, y: -1))
       .transformed(by: CGAffineTransform(translationX: 0, y: image.extent.height))
     #endif
-    .transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
+      .transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
       .transformed(by: CGAffineTransform(
         translationX: layout.origin.x * screenFactorX,
         y: layout.origin.y * screenFactorY

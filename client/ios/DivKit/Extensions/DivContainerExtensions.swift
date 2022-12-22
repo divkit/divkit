@@ -25,7 +25,11 @@ extension DivContainer: DivBlockModeling {
     case .overlap:
       return try makeLayeredBlock(with: childContext, orientation: orientation)
     case .horizontal, .vertical:
-      return try makeContainerBlock(with: childContext, orientation: orientation, layoutMode: layoutMode)
+      return try makeContainerBlock(
+        with: childContext,
+        orientation: orientation,
+        layoutMode: layoutMode
+      )
     }
   }
 
@@ -148,7 +152,7 @@ extension DivContainer: DivBlockModeling {
 
     let fallbackWidth = getFallbackWidth(orientation: orientation, context: childContext)
     let fallbackHeight = getFallbackHeight(orientation: orientation, context: childContext)
-    
+
     let children = try items.makeBlocks(
       context: childContext,
       overridenWidth: fallbackWidth,

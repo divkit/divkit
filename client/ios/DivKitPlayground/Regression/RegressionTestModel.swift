@@ -3,14 +3,14 @@ import SwiftUI
 
 struct RegressionTestsModel: Decodable {
   let tests: [RegressionTestModel]
-  
+
   init(from decoder: Decoder) throws {
     tests = try decoder
       .container(keyedBy: CodingKeys.self)
       .decode([SafeDecodable<RegressionTestModel>].self, forKey: .tests)
       .compactMap { $0.value }
   }
-  
+
   private enum CodingKeys: String, CodingKey {
     case tests
   }
@@ -21,7 +21,7 @@ struct RegressionTestsModel: Decodable {
     init(from decoder: Decoder) throws {
       do {
         value = try T(from: decoder)
-      } catch let error {
+      } catch {
         DemoAppLogger.error(error.localizedDescription)
         value = nil
       }
@@ -70,10 +70,10 @@ struct RegressionTestModel: Decodable, Hashable {
       throw DecodingError("File not found: \(file)")
     }
 
-    platforms = (try? container.decodeIfPresent([Platform].self, forKey: .platforms)) ?? [ .ios ]
+    platforms = (try? container.decodeIfPresent([Platform].self, forKey: .platforms)) ?? [.ios]
     tags = (try? container.decodeIfPresent([String].self, forKey: .tags)) ?? []
   }
-  
+
   var description: String {
     var description = ""
     if !steps.isEmpty {
@@ -92,10 +92,10 @@ struct RegressionTestModel: Decodable, Hashable {
         description += "\n • \($0)"
       }
     }
-    
+
     return description
   }
-  
+
   private enum CodingKeys: String, CodingKey {
     case expectedResults = "expected_results"
     case file
@@ -104,7 +104,7 @@ struct RegressionTestModel: Decodable, Hashable {
     case tags
     case title
   }
-                           
+
   private struct DecodingError: LocalizedError {
     let description: String
 
@@ -117,9 +117,10 @@ struct RegressionTestModel: Decodable, Hashable {
     }
 
     init(key: CodingKeys, title: String, error: Error) {
-      description = "Failed to read \(key.rawValue) in test '\(title)': \(error.localizedDescription)"
+      description =
+        "Failed to read \(key.rawValue) in test '\(title)': \(error.localizedDescription)"
     }
-    
+
     var errorDescription: String? {
       NSLocalizedString(description, comment: "DecodingError")
     }

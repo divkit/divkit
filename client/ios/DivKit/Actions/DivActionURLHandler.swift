@@ -7,7 +7,11 @@ import LayoutKit
 public final class DivActionURLHandler {
   public typealias UpdateCardAction = (DivCardID, UpdateReason) -> Void
   public typealias ShowTooltipAction = (TooltipInfo) -> Void
-  public typealias PerformTimerAction = (_ cardId: DivCardID, _ timerId: String, _ action: DivTimerAction) -> Void
+  public typealias PerformTimerAction = (
+    _ cardId: DivCardID,
+    _ timerId: String,
+    _ action: DivTimerAction
+  ) -> Void
 
   @frozen
   public enum UpdateReason {
@@ -30,7 +34,7 @@ public final class DivActionURLHandler {
     variableUpdater: DivVariableUpdater,
     updateCard: @escaping UpdateCardAction,
     showTooltip: @escaping ShowTooltipAction,
-    performTimerAction: @escaping PerformTimerAction = { _,_,_ in }
+    performTimerAction: @escaping PerformTimerAction = { _, _, _ in }
   ) {
     self.stateUpdater = stateUpdater
     self.blockStateStorage = blockStateStorage

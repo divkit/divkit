@@ -77,7 +77,7 @@ public final class ExpressionResolver {
     var index = value.startIndex
     let escapingValues = ["@{", "'", "\\"]
 
-    while (index < value.endIndex) {
+    while index < value.endIndex {
       if value[index] == "\\" {
         let nextIndex = value.index(index, offsetBy: 1)
         let next = value[nextIndex...]
@@ -232,7 +232,7 @@ public final class ExpressionResolver {
     }
     return value
   }
-  
+
   private func resolveStringBasedValue<T>(
     expression: String,
     initializer: (String) -> T?

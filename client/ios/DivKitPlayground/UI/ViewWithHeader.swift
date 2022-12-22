@@ -5,7 +5,7 @@ struct ViewWithHeader<Content>: View where Content: View {
   private let background: Color
   private let presentationMode: Binding<PresentationMode>
   private let content: () -> Content
-  
+
   init(
     _ title: String,
     background: Color,
@@ -17,7 +17,7 @@ struct ViewWithHeader<Content>: View where Content: View {
     self.presentationMode = presentationMode
     self.content = content
   }
-  
+
   var body: some View {
     VStack(spacing: 0) {
       Text(title)
@@ -34,7 +34,7 @@ struct ViewWithHeader<Content>: View where Content: View {
     .modifier(StatusBarModifier(color: background))
     .navigationBarHidden(true)
   }
-  
+
   private var backButton: some View {
     Button(action: { presentationMode.wrappedValue.dismiss() }) {
       Image(systemName: "chevron.backward")

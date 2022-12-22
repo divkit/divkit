@@ -20,25 +20,26 @@ final class DivHostView: UICollectionView {
     delegate = self
   }
 
-  required init?(coder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
   func setData(_ items: [DivData]) {
     self.items = items.compactMap { makeItem(data: $0) }
   }
-  
+
   func reloadItem(cardId: String) {
     guard let index = items.firstIndex(where: { $0.data.logId == cardId }) else {
       return
     }
-    
+
     let item = items[index]
     items[index] = makeItem(
       data: item.data,
       cachedImageHolders: item.block.getImageHolders()
     )
-    
+
     reloadItems(at: [IndexPath(item: index, section: 0)])
   }
 
@@ -52,12 +53,12 @@ final class DivHostView: UICollectionView {
     )
     return Item(data: data, block: try! data.makeBlock(context: context))
   }
-  
+
   private struct Item {
     let data: DivData
     let block: Block
   }
-  
+
   private class Cell: UICollectionViewCell {
     static let reuseIdentifier = "cell"
 
@@ -81,7 +82,7 @@ final class DivHostView: UICollectionView {
 
     override func layoutSubviews() {
       super.layoutSubviews()
-      
+
       if let state = state {
         let blockSize = state.block.size(forResizableBlockSize: bounds.size)
         state.view.frame = CGRect(origin: .zero, size: blockSize)
@@ -92,17 +93,20 @@ final class DivHostView: UICollectionView {
 
 extension DivHostView: UICollectionViewDataSource {
   func collectionView(
-    _ collectionView: UICollectionView,
-    numberOfItemsInSection section: Int
+    _: UICollectionView,
+    numberOfItemsInSection _: Int
   ) -> Int {
-    return items.count
+    items.count
   }
 
   func collectionView(
     _ collectionView: UICollectionView,
     cellForItemAt indexPath: IndexPath
   ) -> UICollectionViewCell {
-    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Cell.reuseIdentifier, for: indexPath) as! Cell
+    let cell = collectionView.dequeueReusableCell(
+      withReuseIdentifier: Cell.reuseIdentifier,
+      for: indexPath
+    ) as! Cell
     let block = items[indexPath.row].block
     cell.setBlock(block)
     return cell
@@ -111,8 +115,8 @@ extension DivHostView: UICollectionViewDataSource {
 
 extension DivHostView: UICollectionViewDelegateFlowLayout {
   func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
     sizeForItemAt indexPath: IndexPath
   ) -> CGSize {
     let block = items[indexPath.row].block

@@ -39,7 +39,7 @@ struct RegressionView: View {
       }
     }
   }
-  
+
   private var tests: [RegressionTestModel] {
     if query.isEmpty {
       return TestData.regressionTests
@@ -61,14 +61,14 @@ private struct NavigationButton<Destination>: View where Destination: View {
     self.title = title
     self.destination = destination
   }
-  
+
   var body: some View {
     NavigationLink(destination: destination) {
       label
     }
     .buttonStyle(ScaleAnimationButtonStyle())
   }
-  
+
   private var label: some View {
     HStack {
       Text(title)

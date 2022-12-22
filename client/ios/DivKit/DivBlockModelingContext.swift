@@ -27,8 +27,8 @@ public struct DivBlockModelingContext {
   public var childrenA11yDescription: String?
   public weak var parentScrollView: ScrollView?
   public let errorsStorage: DivErrorsStorage
-  var overridenWidth: DivOverridenSize? = nil
-  var overridenHeight: DivOverridenSize? = nil
+  var overridenWidth: DivOverridenSize?
+  var overridenHeight: DivOverridenSize?
 
   public init(
     cardId: DivCardID,

@@ -44,11 +44,11 @@ public protocol Block: AnyObject,
 extension Block {
   public var calculateWidthFirst: Bool { true }
 
-  public func widthOfHorizontallyNonResizableBlock(forHeight: CGFloat) -> CGFloat {
+  public func widthOfHorizontallyNonResizableBlock(forHeight _: CGFloat) -> CGFloat {
     assertionFailure("Method should be overridden when calculateWidthFirst was set to false")
     return .zero
   }
-  
+
   public var heightOfVerticallyNonResizableBlock: CGFloat {
     assertionFailure("Method should be overridden when calculateWidthFirst was set to false")
     return .zero
@@ -58,7 +58,7 @@ extension Block {
     widthOfHorizontallyResizableBlock: CGFloat,
     heightOfVerticallyResizableBlock: CGFloat
   ) -> CGSize {
-    if (calculateWidthFirst) {
+    if calculateWidthFirst {
       let width = isHorizontallyResizable ? widthOfHorizontallyResizableBlock :
         widthOfHorizontallyNonResizableBlock
       let height = isVerticallyResizable ? heightOfVerticallyResizableBlock :
@@ -68,7 +68,7 @@ extension Block {
       let height = isVerticallyResizable ? heightOfVerticallyResizableBlock :
         heightOfVerticallyNonResizableBlock
       let width = isHorizontallyResizable ? widthOfHorizontallyResizableBlock :
-      widthOfHorizontallyNonResizableBlock(forHeight: height)
+        widthOfHorizontallyNonResizableBlock(forHeight: height)
       return CGSize(width: width, height: height)
     }
   }
@@ -99,8 +99,8 @@ extension Block {
       : .intrinsic
   }
 
-  public func ascent(forWidth width: CGFloat) -> CGFloat? {
-    return nil
+  public func ascent(forWidth _: CGFloat) -> CGFloat? {
+    nil
   }
 }
 

@@ -11,7 +11,7 @@ final class LottieAnimationBlock: SizeForwardingBlock {
   let sizeProvider: Block
 
   var debugDescription: String {
-    return "Animation Block playing animation with view: \(animatableView)"
+    "Animation Block playing animation with view: \(animatableView)"
   }
 
   init(

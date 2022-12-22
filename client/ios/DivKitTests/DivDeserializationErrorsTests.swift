@@ -103,7 +103,7 @@ private let dictWithTypeMismatch: [String: Any] = [
 ]
 
 private let missingRequiredFieldErrors: [DeserializationError] = [
-  DeserializationError.requiredFieldIsMissing(field: logIdKey)
+  DeserializationError.requiredFieldIsMissing(field: logIdKey),
 ]
 
 private let invalidFieldErrors: [DeserializationError] = [
@@ -155,7 +155,7 @@ private let typeMismatchErrors: [DeserializationError] = [
       expected: "String",
       representation: 0
     )
-  )
+  ),
 ]
 
 private let missingTypeErrors: [DeserializationError] = [
@@ -210,24 +210,27 @@ extension DeserializationError: Equatable {
       return lhsType == rhsType
     case let (.invalidFieldRepresentation(lhsField, _), .invalidFieldRepresentation(rhsField, _)):
       return lhsField == rhsField
-    case let (.nestedObjectError(lhsFieldName, lhsError), .nestedObjectError(rhsFieldName, rhsError)):
+    case let (
+      .nestedObjectError(lhsFieldName, lhsError),
+      .nestedObjectError(rhsFieldName, rhsError)
+    ):
       return lhsFieldName == rhsFieldName && lhsError == rhsError
     case let (.typeMismatch(lhsExpected, _), .typeMismatch(rhsExpected, _)):
       return lhsExpected == rhsExpected
     default:
       switch lhs {
       case .generic,
-          .nonUTF8String,
-          .invalidJSONData,
-          .missingType,
-          .unknownType,
-          .invalidFieldRepresentation,
-          .typeMismatch,
-          .invalidValue,
-          .requiredFieldIsMissing,
-          .nestedObjectError,
-          .noData,
-          .unexpectedError:
+           .nonUTF8String,
+           .invalidJSONData,
+           .missingType,
+           .unknownType,
+           .invalidFieldRepresentation,
+           .typeMismatch,
+           .invalidValue,
+           .requiredFieldIsMissing,
+           .nestedObjectError,
+           .noData,
+           .unexpectedError:
         return false
       }
     }

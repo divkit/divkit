@@ -25,7 +25,7 @@ struct ObservableJsonProvider {
 
 extension Data {
   func asJsonDictionary() throws -> [String: Any] {
-    return try JSONSerialization.jsonObject(with: self, options: []) as! [String: Any]
+    try JSONSerialization.jsonObject(with: self, options: []) as! [String: Any]
   }
 }
 
@@ -70,7 +70,7 @@ final class DivBlockProvider {
       divData = divData.applyPatch(patch)
       self.divData = divData
     }
-    
+
     do {
       divRenderTime.start()
       let newBlock = try divData.makeBlock(
@@ -98,19 +98,22 @@ final class DivBlockProvider {
     divData = nil
     block = noDataBlock
     errors = []
-    
+
     do {
       let json = try jsonProvider()
       if json.isEmpty {
         return
       }
-      
+
       let palette = Palette(json: try json.getOptionalField("palette") ?? [:])
       divKitComponents.variablesStorage
-        .set(variables: palette.makeVariables(theme: UserPreferences.playgroundTheme), triggerUpdate: false)
+        .set(
+          variables: palette.makeVariables(theme: UserPreferences.playgroundTheme),
+          triggerUpdate: false
+        )
 
       let result = try parseDivDataWithTemplates(json, cardId: cardId)
-      
+
       divData = result.value
       errors = result.errorsOrWarnings.map {
         $0.map {
@@ -165,9 +168,9 @@ extension Block {
     render: TimeMeasure.Time?
   ) -> Block {
     guard UserPreferences.showRenderingTime,
-      let render = render,
-      let dataParsing = dataParsing,
-      let templateParsing = templateParsing else {
+          let render = render,
+          let dataParsing = dataParsing,
+          let templateParsing = templateParsing else {
       return self
     }
 
@@ -207,10 +210,8 @@ extension DeserializationError {
     case let .nestedObjectError(fieldName, error):
       result.append("Error in nested object in field '\(fieldName)'")
       result.append(contentsOf: error.traceback)
-      break
     default:
       result.append(description)
-      break
     }
     return result
   }

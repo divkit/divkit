@@ -4,9 +4,10 @@ import Base
 import LayoutKit
 
 public protocol AnimationHolder: AnyObject, CustomDebugStringConvertible {
-  var animation: (AnimationSourceType)? { get }
+  var animation: AnimationSourceType? { get }
   @discardableResult
-  func requestAnimationWithCompletion(_ completion: @escaping ((AnimationSourceType)?) -> Void) -> Cancellable?
+  func requestAnimationWithCompletion(_ completion: @escaping (AnimationSourceType?) -> Void)
+    -> Cancellable?
   func equals(_ other: AnimationHolder) -> Bool
 }
 

@@ -6,15 +6,15 @@ enum Expected {
   static let withRequiredProperty = EntityWithRequiredProperty(
     property: .value("Some text")
   )
-  
+
   static let withOptionalProperty = EntityWithOptionalProperty(
     property: .value("Some text")
   )
-  
+
   static let withMissingOptionalProperty = EntityWithOptionalProperty(
     property: nil
   )
-  
+
   static let withDefaultValue = EntityWithPropertyWithDefaultValue(
     nested: EntityWithPropertyWithDefaultValue.Nested(
       nonOptional: .value("Some text")
@@ -26,13 +26,13 @@ enum Expected {
       value: .value(URL(string: "https://ya.ru")!)
     )
   )
-  
+
   static let withOptionalComplexProperty = EntityWithOptionalComplexProperty(
     property: EntityWithOptionalComplexProperty.Property(
       value: .value(URL(string: "https://ya.ru")!)
     )
   )
-  
+
   static let withMissingOptionalComplexProperty = EntityWithOptionalComplexProperty(
     property: nil
   )

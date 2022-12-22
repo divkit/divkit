@@ -94,7 +94,8 @@ extension Field {
       return .noValue
     }
     guard let resultValue = result.value, validator.isValid(resultValue) else {
-      var errors: NonEmptyArray<DeserializationError> = NonEmptyArray(.invalidValue(result: result.value, value: nil))
+      var errors: NonEmptyArray<DeserializationError> =
+        NonEmptyArray(.invalidValue(result: result.value, value: nil))
       if let resultErrors = result.errorsOrWarnings {
         errors.append(contentsOf: resultErrors)
       }
@@ -446,7 +447,8 @@ extension Field {
   ) -> DeserializationResult<T> where T == [U] {
     let result = resolveValue(context: context)
     guard let resultValue = result.value, validator.isValid(resultValue) else {
-      var errors: NonEmptyArray<DeserializationError> = NonEmptyArray(.invalidValue(result: result.value, value: nil))
+      var errors: NonEmptyArray<DeserializationError> =
+        NonEmptyArray(.invalidValue(result: result.value, value: nil))
       if let resultErrors = result.errorsOrWarnings {
         errors.append(contentsOf: resultErrors)
       }

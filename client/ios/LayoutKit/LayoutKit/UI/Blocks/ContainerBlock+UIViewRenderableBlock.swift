@@ -70,7 +70,8 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
   var visibleBoundsTrackingSubviews: [VisibleBoundsTrackingView] { blockViews }
   var effectiveBackgroundColor: UIColor? { blockViews.first?.effectiveBackgroundColor }
 
-  // layoutSubivews is called multiple times for same view size and model, so we optimize out redundant calls
+  // layoutSubivews is called multiple times for same view size and model, so we optimize out
+  // redundant calls
   private var modelAndLastLayoutSize: (model: Model?, lastLayoutSize: CGSize?)
   private var preventLayout = false
 

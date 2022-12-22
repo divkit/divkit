@@ -55,8 +55,8 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
 
     switch self {
     case .generic,
-        .noData,
-        .nonUTF8String:
+         .noData,
+         .nonUTF8String:
       break
     case let .invalidFieldRepresentation(field, representation):
       userInfo["field"] = field
@@ -83,7 +83,7 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
 
     return userInfo
   }
-  
+
   private var subkind: String {
     switch self {
     case .generic: return "generic"

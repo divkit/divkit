@@ -133,21 +133,21 @@ final class DivVariablesStorageTest: XCTestCase {
   }
 
   func test_update_UpdatesBoolVariable_BoolValue() {
-    storage.set(cardId: cardId, variables: [ "bool_var": .bool(false) ])
+    storage.set(cardId: cardId, variables: ["bool_var": .bool(false)])
     storage.update(cardId: cardId, name: "bool_var", value: "true")
 
     XCTAssertEqual(.bool(true), getVariable("bool_var"))
   }
 
   func test_update_UpdatesBoolVariable_MixedCase() {
-    storage.set(cardId: cardId, variables: [ "bool_var": .bool(false) ])
+    storage.set(cardId: cardId, variables: ["bool_var": .bool(false)])
     storage.update(cardId: cardId, name: "bool_var", value: "tRuE")
 
     XCTAssertEqual(.bool(true), getVariable("bool_var"))
   }
 
   func test_update_UpdatesBoolVariable_IntValue() {
-    storage.set(cardId: cardId, variables: [ "bool_var": .bool(false) ])
+    storage.set(cardId: cardId, variables: ["bool_var": .bool(false)])
     storage.update(cardId: cardId, name: "bool_var", value: "1")
 
     XCTAssertEqual(.bool(true), getVariable("bool_var"))
@@ -252,16 +252,16 @@ final class DivVariablesStorageTest: XCTestCase {
 
     XCTAssertNil(event)
   }
-  
+
   func test_appendGlobalVariables() {
     storage.set(variables: variables, triggerUpdate: false)
-    
+
     let newVariables: DivVariables = [
       "int_var": .integer(0),
-      "new_var": .string("arbitrary")
+      "new_var": .string("arbitrary"),
     ]
     storage.append(variables: newVariables, triggerUpdate: true)
-    
+
     let expectedVariables = variables + newVariables
     XCTAssertEqual(expectedVariables, makeVariables())
     XCTAssertEqual(.global(["int_var", "new_var"]), event?.kind)

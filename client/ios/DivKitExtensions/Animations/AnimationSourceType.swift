@@ -7,11 +7,11 @@ public enum LottieAnimationSourceType: AnimationSourceType, Equatable {
   case json([String: Any])
   case data(Data)
 
-  public static func == (lhs: LottieAnimationSourceType, rhs: LottieAnimationSourceType) -> Bool {
+  public static func ==(lhs: LottieAnimationSourceType, rhs: LottieAnimationSourceType) -> Bool {
     switch (lhs, rhs) {
-    case (.data(let lhs), .data(let rhs)):
+    case let (.data(lhs), .data(rhs)):
       return lhs == rhs
-    case (.json(let lhs), .json(let rhs)):
+    case let (.json(lhs), .json(rhs)):
       return NSDictionary(dictionary: lhs).isEqual(to: rhs)
     case (.data, _), (.json, _):
       return false
@@ -23,9 +23,9 @@ public enum LottieAnimationSourceType: AnimationSourceType, Equatable {
 public enum RiveAnimationSourceType: AnimationSourceType, Equatable {
   case data(Data)
 
-  public static func == (lhs: RiveAnimationSourceType, rhs: RiveAnimationSourceType) -> Bool {
+  public static func ==(lhs: RiveAnimationSourceType, rhs: RiveAnimationSourceType) -> Bool {
     switch (lhs, rhs) {
-    case (.data(let lhs), .data(let rhs)):
+    case let (.data(lhs), .data(rhs)):
       return lhs == rhs
     }
   }

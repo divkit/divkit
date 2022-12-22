@@ -28,7 +28,7 @@ extension BackgroundImage: Equatable {
     lhs.imageHolder == rhs.imageHolder &&
       lhs.contentMode == rhs.contentMode &&
       lhs.alpha == rhs.alpha &&
-    lhs.effects == rhs.effects
+      lhs.effects == rhs.effects
   }
 }
 

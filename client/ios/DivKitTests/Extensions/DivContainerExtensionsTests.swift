@@ -1,5 +1,5 @@
-@testable import LayoutKit
 @testable import DivKit
+@testable import LayoutKit
 
 import XCTest
 
@@ -49,7 +49,8 @@ final class DivContainerExtensionsTests: XCTestCase {
     let wrappedContainer = container?.children.first?.content as? WrapperBlock
     let gallery: GalleryBlock? = wrappedContainer?.child as? GalleryBlock
 
-    // We are using "container" const instead of DivContainer.type to emphasise its importance for analytics.
+    // We are using "container" const instead of DivContainer.type to emphasise its importance for
+    // analytics.
     // DivContainer.type changes can brake analytic reports.
     XCTAssertEqual(
       gallery?.model.path,

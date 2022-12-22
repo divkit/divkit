@@ -14,7 +14,7 @@ public struct ExpressionLink<T> {
   let rawValue: String
   let validator: ExpressionValueValidator<T>?
   let errorTracker: ExpressionErrorTracker?
-  
+
   init?(
     expression: String,
     validator: ExpressionValueValidator<T>?,

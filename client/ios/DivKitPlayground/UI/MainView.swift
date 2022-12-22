@@ -34,7 +34,7 @@ struct MainView: View {
       .navigationBarHidden(true)
     }
   }
-  
+
   private func makeDivViewProvider() -> DivViewProvider {
     DivViewProvider()
   }
@@ -45,7 +45,7 @@ private struct NavigationButton<Destination>: View where Destination: View {
     case circle
     case rounded
   }
-  
+
   private let title: String
   private let color: Color
   private let shape: Shape
@@ -62,7 +62,7 @@ private struct NavigationButton<Destination>: View where Destination: View {
     self.shape = shape
     self.destination = destination
   }
-  
+
   var body: some View {
     NavigationLink(destination: destination) {
       switch shape {
@@ -74,7 +74,7 @@ private struct NavigationButton<Destination>: View where Destination: View {
     }
     .buttonStyle(ScaleAnimationButtonStyle())
   }
-  
+
   private var label: some View {
     Text(title)
       .font(ThemeFont.button)

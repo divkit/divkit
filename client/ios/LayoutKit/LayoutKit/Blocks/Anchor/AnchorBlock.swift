@@ -81,7 +81,7 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
     if case let .fixed(value) = widthTrait {
       return value
     }
-    
+
     let widths = contents.map(\.intrinsicContentWidth)
     var result: CGFloat
     switch direction {

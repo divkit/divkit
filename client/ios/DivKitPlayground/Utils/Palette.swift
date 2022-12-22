@@ -2,7 +2,6 @@ import CommonCore
 import DivKit
 
 struct Palette {
-
   private let json: [String: Any]
 
   init(json: [String: Any]) {

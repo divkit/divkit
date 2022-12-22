@@ -1,17 +1,17 @@
 import Base
 import DivKit
-import LayoutKit
 import Foundation
+import LayoutKit
 import Network
 import Networking
 
 public final class LottieExtensionHandler: DivExtensionHandler {
   public let id = "lottie"
-  
+
   private let factory: AnimatableViewFactory
   private let requester: URLResourceRequesting
   private let localAnimationDataProvider: ((URL) -> Data?)?
-  
+
   public init(
     factory: AnimatableViewFactory,
     requester: URLResourceRequesting,
@@ -21,18 +21,18 @@ public final class LottieExtensionHandler: DivExtensionHandler {
     self.requester = requester
     self.localAnimationDataProvider = localAnimationDataProvider
   }
-  
+
   public func applyAfterBaseProperties(
     to block: Block,
     div: DivBase,
-    context: DivBlockModelingContext
+    context _: DivBlockModelingContext
   ) -> Block {
     let extensionData = div.extensions?.first { $0.id == id }
     guard let paramsDict = extensionData?.params,
           let params = LottieExtensionParams(params: paramsDict) else {
       return block
     }
-    
+
     let animationHolder: AnimationHolder
     switch params.source {
     case let .url(url):
@@ -68,19 +68,19 @@ public final class LottieExtensionHandler: DivExtensionHandler {
 }
 
 private class JSONAnimationHolder: AnimationHolder {
-  let animation: (AnimationSourceType)?
+  let animation: AnimationSourceType?
 
   init(json: [String: Any]) {
     self.animation = LottieAnimationSourceType.json(json)
   }
-  
+
   func requestAnimationWithCompletion(
-    _ completion: @escaping ((AnimationSourceType)?) -> Void
+    _ completion: @escaping (AnimationSourceType?) -> Void
   ) -> Cancellable? {
     completion(animation)
     return nil
   }
-  
+
   func equals(_ other: AnimationHolder) -> Bool {
     if let animation = animation as? LottieAnimationSourceType,
        let otherAnimation = other.animation as? LottieAnimationSourceType {
@@ -88,10 +88,10 @@ private class JSONAnimationHolder: AnimationHolder {
     }
     return false
   }
-  
+
   var debugDescription: String {
     guard let animation = animation as? LottieAnimationSourceType,
-      case let .json(json) = animation else {
+          case let .json(json) = animation else {
       assertionFailure("JSONAnimation holder can hold only json ")
       return ""
     }
@@ -104,11 +104,11 @@ private struct LottieExtensionParams {
     case json([String: Any])
     case url(URL)
   }
-  
+
   var source: Source
   var repeatCount: Float
   var repeatMode: AnimationRepeatMode
-  
+
   init?(params: [String: Any]) {
     if let json = params["lottie_json"] as? [String: Any] {
       source = .json(json)
@@ -119,7 +119,7 @@ private struct LottieExtensionParams {
       DivKitLogger.error("Not valid lottie_json or lottie_url")
       return nil
     }
-    
+
     if let repeatCount = params["repeat_count"] {
       if let repeatCountFloat = repeatCount as? Float {
         self.repeatCount = repeatCountFloat

@@ -1,5 +1,5 @@
-import Foundation
 import CoreGraphics
+import Foundation
 
 import Base
 import BaseUI
@@ -81,19 +81,19 @@ extension DivRadialGradient {
   }
 
   func resolveCenterX(_ resolver: ExpressionResolver) -> Gradient.Radial.CenterPoint {
-    switch (centerX) {
-    case let (.divRadialGradientRelativeCenter(x)):
+    switch centerX {
+    case let .divRadialGradientRelativeCenter(x):
       return .relative(x.resolveValue(resolver) ?? 0)
-    case let (.divRadialGradientFixedCenter(x)):
+    case let .divRadialGradientFixedCenter(x):
       return .absolute(x.resolveValue(resolver) ?? 0)
     }
   }
 
   func resolveCenterY(_ resolver: ExpressionResolver) -> Gradient.Radial.CenterPoint {
-    switch (centerY) {
-    case let (.divRadialGradientRelativeCenter(y)):
+    switch centerY {
+    case let .divRadialGradientRelativeCenter(y):
       return .relative(y.resolveValue(resolver) ?? 0)
-    case let (.divRadialGradientFixedCenter(y)):
+    case let .divRadialGradientFixedCenter(y):
       return .absolute(y.resolveValue(resolver) ?? 0)
     }
   }

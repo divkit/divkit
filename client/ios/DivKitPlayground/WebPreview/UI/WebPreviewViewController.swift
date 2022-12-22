@@ -42,6 +42,7 @@ private final class WebPreviewViewController: DivViewController {
     )
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -71,7 +72,7 @@ private final class WebPreviewViewController: DivViewController {
     guard isAppeared else {
       return
     }
-    
+
     screenshotCancellationToken?.cancel()
     screenshotCancellationToken = nil
 
@@ -82,7 +83,7 @@ private final class WebPreviewViewController: DivViewController {
       }
       return
     }
-    
+
     guard let screenshot = view.makeScreenshot(afterScreenUpdates: afterScreenUpdates) else {
       return
     }

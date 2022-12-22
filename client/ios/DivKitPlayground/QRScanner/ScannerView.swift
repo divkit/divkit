@@ -19,6 +19,6 @@ struct ScannerView: UIViewControllerRepresentable {
       .dispose(in: disposePool)
     return controller
   }
-  
+
   func updateUIViewController(_: UIViewController, context _: Context) {}
 }

@@ -9,13 +9,13 @@ import Networking
 let testCardId = "test_card_id"
 let testDivCardId = DivCardID(rawValue: testCardId)
 
-class DivKitSnapshotTestCase: XCTestCase {
+open class DivKitSnapshotTestCase: XCTestCase {
   #if UPDATE_SNAPSHOTS
   final var mode = TestMode.update
   #else
   final var mode = TestMode.verify
   #endif
-  
+
   final var subdirectory = ""
   final var rootDirectory = "json"
 
@@ -26,14 +26,21 @@ class DivKitSnapshotTestCase: XCTestCase {
     imageHolderFactory: ImageHolderFactory? = nil,
     blocksState: BlocksState = [:]
   ) {
-    guard let jsonData = jsonData(fileName: fileName, subdirectory: rootDirectory + "/" + subdirectory),
-          let dictionary = jsonDict(data: jsonData) else {
+    guard let jsonData = jsonData(
+      fileName: fileName,
+      subdirectory: rootDirectory + "/" + subdirectory
+    ),
+      let dictionary = jsonDict(data: jsonData) else {
       XCTFail("Invalid json: \(fileName)")
       return
     }
 
     let divKitComponents = DivKitComponents(
-      flagsInfo: .init(isTextSelectingEnabled: false, appendVariablesEnabled: true, metalImageRenderingEnabled: true),
+      flagsInfo: .init(
+        isTextSelectingEnabled: false,
+        appendVariablesEnabled: true,
+        metalImageRenderingEnabled: true
+      ),
       imageHolderFactory: imageHolderFactory ?? makeImageHolderFactory(),
       updateCardAction: nil,
       urlOpener: { _ in }
@@ -64,14 +71,17 @@ class DivKitSnapshotTestCase: XCTestCase {
   }
 
   private func loadSteps(dictionary: [String: Any]) throws -> [TestStep]? {
-    return try? dictionary
+    try? dictionary
       .getOptionalArray(
         "steps",
         transform: { try TestStep(dictionary: $0 as [String: Any]) }
       ).unwrap()
   }
 
-  private func loadDivData(dictionary: [String: Any], divKitComponents: DivKitComponents) -> (DivData?, [Error]) {
+  private func loadDivData(
+    dictionary: [String: Any],
+    divKitComponents: DivKitComponents
+  ) -> (DivData?, [Error]) {
     var errors = [Error]()
     do {
       let divData = try dictionary.getOptionalField("div_data") ?? dictionary
@@ -190,7 +200,8 @@ class DivKitSnapshotTestCase: XCTestCase {
     if let stepName = stepName {
       stepDescription = "_" + stepName
     }
-    let fileName = caseName + "_\(Int(device.size.width))" + device.scale.imageSuffix + "\(stepDescription).png"
+    let fileName = caseName + "_\(Int(device.size.width))" + device.scale
+      .imageSuffix + "\(stepDescription).png"
     return referencesURL.appendingPathComponent(fileName, isDirectory: false)
   }
 
@@ -335,8 +346,12 @@ private struct TestStep {
   public init(dictionary: [String: Any]) throws {
     let expectedScreenshot: String? = try dictionary.getOptionalField("expected_screenshot")
     name = expectedScreenshot?.replacingOccurrences(of: ".png", with: "")
-    divActions = try? dictionary.getOptionalArray("div_actions", transform: { (actionDictionary: [String: Any]) -> DivActionBase in
-      try DivTemplates.empty.parseValue(type: DivActionTemplate.self, from: actionDictionary).unwrap()
-    }).unwrap()
+    divActions = try? dictionary.getOptionalArray(
+      "div_actions",
+      transform: { (actionDictionary: [String: Any]) -> DivActionBase in
+        try DivTemplates.empty.parseValue(type: DivActionTemplate.self, from: actionDictionary)
+          .unwrap()
+      }
+    ).unwrap()
   }
 }

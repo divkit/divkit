@@ -1,9 +1,12 @@
-import Foundation
 import DivKitExtensions
+import Foundation
 import Lottie
 
 final class LottieAnimationFactory: AnimatableViewFactory {
-  public func createAnimatableView(withMode mode: AnimationRepeatMode, repeatCount count: Float) -> AnimatableView {
+  public func createAnimatableView(
+    withMode mode: AnimationRepeatMode,
+    repeatCount count: Float
+  ) -> AnimatableView {
     let animationView = LottieAnimationView()
     switch mode {
     case .restart:
@@ -25,9 +28,9 @@ extension LottieAnimationView: AnimatableView {
     var animation: LottieAnimation?
     if let source = source as? LottieAnimationSourceType {
       switch source {
-      case .data(let data):
+      case let .data(data):
         animation = try? JSONDecoder().decode(LottieAnimation.self, from: data)
-      case .json(let json):
+      case let .json(json):
         animation = try? LottieAnimation(dictionary: json)
       }
       self.animation = animation

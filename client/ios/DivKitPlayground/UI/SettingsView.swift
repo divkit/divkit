@@ -35,7 +35,7 @@ struct SettingsView: View {
             selected: $playgroundTheme
           )
         }
-        
+
         Spacer()
 
         Text("DivKit version \(DivKitInfo.version)")

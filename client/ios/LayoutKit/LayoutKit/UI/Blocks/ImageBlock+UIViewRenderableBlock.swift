@@ -13,7 +13,8 @@ extension ImageBlock {
     renderingDelegate _: RenderingDelegate?
   ) {
     let remoteImageViewContainer = view as! RemoteImageViewContainer
-    if metalImageRenderingEnabled && !remoteImageViewContainer.contentView.isKind(of: MetalImageView.self)  {
+    if metalImageRenderingEnabled && !remoteImageViewContainer.contentView
+      .isKind(of: MetalImageView.self) {
       remoteImageViewContainer.contentView = MetalImageView()
     }
     remoteImageViewContainer.contentView.appearanceAnimation = appearanceAnimation?.cast()
@@ -21,9 +22,11 @@ extension ImageBlock {
       remoteImageViewContainer.imageHolder = imageHolder
     }
     remoteImageViewContainer.contentView.imageContentMode = contentMode
-    remoteImageViewContainer.contentView.imageRedrawingStyle = ImageRedrawingStyle(tintColor: tintColor,
-                                                                                   tintMode: tintMode,
-                                                                                   effects: effects)
+    remoteImageViewContainer.contentView.imageRedrawingStyle = ImageRedrawingStyle(
+      tintColor: tintColor,
+      tintMode: tintMode,
+      effects: effects
+    )
     remoteImageViewContainer.contentView.isUserInteractionEnabled = false
     remoteImageViewContainer.isUserInteractionEnabled = false
     remoteImageViewContainer.applyAccessibility(accessibilityElement)

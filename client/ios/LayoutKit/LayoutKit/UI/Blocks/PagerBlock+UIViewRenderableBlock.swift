@@ -137,7 +137,7 @@ extension PagerView: ElementStateObserver {
       assertionFailure()
       return
     }
-    
+
     if !galleryState.isScrolling {
       setState(
         PagerViewState(

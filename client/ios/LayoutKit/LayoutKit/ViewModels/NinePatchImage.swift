@@ -16,7 +16,7 @@ public struct NinePatchImage {
 extension NinePatchImage: Equatable {
   public static func ==(lhs: NinePatchImage, rhs: NinePatchImage) -> Bool {
     lhs.imageHolder == rhs.imageHolder &&
-    lhs.insets == rhs.insets
+      lhs.insets == rhs.insets
   }
 }
 

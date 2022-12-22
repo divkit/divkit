@@ -19,7 +19,7 @@ struct SimpleDivView: UIViewRepresentable {
     )
   }
 
-  func updateUIView(_ uiView: UIView, context _: Context) {}
+  func updateUIView(_: UIView, context _: Context) {}
 }
 
 private final class SimpleDivUIView: UIView {
@@ -63,6 +63,7 @@ private final class SimpleDivUIView: UIView {
     update()
   }
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -72,7 +73,7 @@ private final class SimpleDivUIView: UIView {
 
     let blockSize = block.size(forResizableBlockSize: bounds.size)
     blockView.frame = CGRect(origin: .zero, size: blockSize)
-    
+
     if bounds.size != blockSize {
       invalidateIntrinsicContentSize()
     }

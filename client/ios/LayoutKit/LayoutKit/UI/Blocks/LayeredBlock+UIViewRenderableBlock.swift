@@ -43,7 +43,8 @@ private final class LayeredBlockView: BlockView, VisibleBoundsTrackingContainer 
 
   private weak var observer: ElementStateObserver?
 
-  // layoutSubivews is called multiple times for same view size and model, so we optimize out redundant calls
+  // layoutSubivews is called multiple times for same view size and model, so we optimize out
+  // redundant calls
   private var modelAndLastLayoutSize: (model: Model?, lastLayoutSize: CGSize?)
   private var preventLayout = false
 

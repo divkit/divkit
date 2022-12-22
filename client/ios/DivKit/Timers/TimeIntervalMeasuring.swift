@@ -8,7 +8,7 @@ protocol TimeMeasuring {
 }
 
 final class TimeIntervalMeasuring: TimeMeasuring {
-  private var startDate: Date? = nil
+  private var startDate: Date?
   private var passedTimeInterval: TimeInterval = 0
   private var paused = false
 
@@ -40,4 +40,3 @@ final class TimeIntervalMeasuring: TimeMeasuring {
     return 0
   }
 }
-

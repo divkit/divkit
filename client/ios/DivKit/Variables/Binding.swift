@@ -31,9 +31,10 @@ extension Binding where T == String {
       name: name,
       getValue: { context.expressionResolver.getVariableValue($0) ?? "" },
       userInterfaceActionFactory: { name, value in
-       URL(string: "div-action://set_variable?name=\(name)&value=\(value.percentEncodedURLString)").flatMap {
-         DivAction(logId: "binding", url: .value($0))
-       }?.uiAction(context: context.actionContext)
+        URL(string: "div-action://set_variable?name=\(name)&value=\(value.percentEncodedURLString)")
+          .flatMap {
+            DivAction(logId: "binding", url: .value($0))
+          }?.uiAction(context: context.actionContext)
       }
     )
   }

@@ -1,12 +1,12 @@
-import SwiftUI
 import DivKit
+import SwiftUI
 
 struct SamplesView: View {
   @Environment(\.presentationMode)
   var presentationMode: Binding<PresentationMode>
-  
+
   private let model = SamplesModel()
-  
+
   var body: some View {
     ViewWithHeader(
       "Samples",
@@ -24,7 +24,7 @@ struct SamplesView: View {
 
 struct SampleView: View {
   let model: SampleModel
-  
+
   var body: some View {
     SimpleDivView(
       cardId: model.cardId,
@@ -36,9 +36,9 @@ struct SampleView: View {
 
 final class SamplesModel {
   private let divKitComponents = AppComponents.makeDivKitComponents()
-  
+
   private(set) var items: [SampleModel]!
-  
+
   init() {
     items = TestData.samples
       .map {
@@ -51,7 +51,7 @@ final class SampleModel {
   let cardId: DivCardID
   let jsonData: Data?
   let divKitComponents: DivKitComponents
-  
+
   init(
     url: URL,
     divKitComponents: DivKitComponents

@@ -32,13 +32,17 @@ final class ArrayOfNestedItemsTests: XCTestCase {
   }
 
   func test_ArrayOfNestedItems_WithLinkForItems_WithoutRequiredItemProperty() throws {
-    let entity = try readEntity("test_array_of_nested_items_with_link_for_items_without_item_required_property")
+    let entity =
+      try readEntity(
+        "test_array_of_nested_items_with_link_for_items_without_item_required_property"
+      )
 
     XCTAssertNil(entity)
   }
 
   func test_ArrayOfNestedItems_WithTemplatedItem_WithoutRequiredItemProperty() throws {
-    let entity = try readEntity("test_array_of_nested_items_with_item_template_without_item_required_property")
+    let entity =
+      try readEntity("test_array_of_nested_items_with_item_template_without_item_required_property")
 
     XCTAssertNil(entity)
   }

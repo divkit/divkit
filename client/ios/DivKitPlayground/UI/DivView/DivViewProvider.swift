@@ -4,10 +4,10 @@ import DivKit
 
 final class DivViewProvider {
   public let jsonProvider = ObservableJsonProvider()
-  
+
   private var blockProvider: DivBlockProvider!
   private var divKitComponents: DivKitComponents!
-  
+
   init() {
     divKitComponents = AppComponents.makeDivKitComponents(
       updateCardAction: { [weak self] _, reason in

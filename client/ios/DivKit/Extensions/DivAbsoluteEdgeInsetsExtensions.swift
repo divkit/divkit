@@ -4,7 +4,7 @@ import CommonCore
 
 extension DivAbsoluteEdgeInsets {
   func makeEdgeInsets(with expressionResolver: ExpressionResolver) -> EdgeInsets {
-    return EdgeInsets(
+    EdgeInsets(
       top: CGFloat(resolveTop(expressionResolver)),
       left: CGFloat(resolveLeft(expressionResolver)),
       bottom: CGFloat(resolveBottom(expressionResolver)),

@@ -27,7 +27,7 @@ public final class RiveAnimationBlock: BlockWithTraits {
 
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
-    case .fixed(let value):
+    case let .fixed(value):
       return value
     case let .intrinsic(constrained, minSize, _):
       return constrained ? 0 : minSize
@@ -36,9 +36,9 @@ public final class RiveAnimationBlock: BlockWithTraits {
     }
   }
 
-  public func intrinsicContentHeight(forWidth: CGFloat) -> CGFloat {
+  public func intrinsicContentHeight(forWidth _: CGFloat) -> CGFloat {
     switch heightTrait {
-    case .fixed(let value):
+    case let .fixed(value):
       return value
     case let .intrinsic(constrained, minSize, _):
       return constrained ? 0 : minSize

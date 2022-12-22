@@ -16,15 +16,17 @@ enum AppComponents {
     return DivKitComponents(
       divCustomBlockFactory: PlaygroundDivCustomBlockFactory(requester: requester),
       extensionHandlers: [lottieExtensionHanlder],
-      flagsInfo: DivFlagsInfo(isTextSelectingEnabled: true,
-                              appendVariablesEnabled: true,
-                              metalImageRenderingEnabled: true),
+      flagsInfo: DivFlagsInfo(
+        isTextSelectingEnabled: true,
+        appendVariablesEnabled: true,
+        metalImageRenderingEnabled: true
+      ),
       patchProvider: DemoPatchProvider(),
       updateCardAction: updateCardAction,
       urlOpener: DemoUrlOpener.openUrl(_:)
     )
   }
-  
+
   static var debugParams: DebugParams {
     DebugParams(isDebugInfoEnabled: true)
   }

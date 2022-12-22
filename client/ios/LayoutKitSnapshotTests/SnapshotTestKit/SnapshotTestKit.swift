@@ -19,7 +19,8 @@ public enum SnapshotTestKit {
     mode: TestMode,
     size: CGSize
   ) {
-    guard let referenceURL = snapshotReferenceURL(testName: name, directory: directory, size: size) else {
+    guard let referenceURL = snapshotReferenceURL(testName: name, directory: directory, size: size)
+    else {
       XCTFail("Failed to create reference URL")
       return
     }
@@ -28,7 +29,7 @@ public enum SnapshotTestKit {
       XCTFail("Failed to make snapshot")
       return
     }
-    
+
     let referencesURL = URL(
       fileURLWithPath: ReferenceSet.path,
       isDirectory: true

@@ -64,7 +64,8 @@ public func deserialize<T: ValidSerializationValue, U>(
 
   let result = transform(typedValue)
   guard let resultValue = result.value, validator?.isValid(resultValue) != false else {
-    var errors: NonEmptyArray<DeserializationError> = NonEmptyArray(.invalidValue(result: result.value, value: value))
+    var errors: NonEmptyArray<DeserializationError> =
+      NonEmptyArray(.invalidValue(result: result.value, value: value))
     if let resultErrors = result.errorsOrWarnings {
       errors.append(contentsOf: resultErrors)
     }

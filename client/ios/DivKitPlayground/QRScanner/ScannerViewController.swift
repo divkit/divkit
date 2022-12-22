@@ -7,6 +7,7 @@ final class ScannerViewController: UIViewController {
 
   let result = ObservableProperty(initialValue: "")
 
+  @available(*, unavailable)
   required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
@@ -17,9 +18,9 @@ final class ScannerViewController: UIViewController {
         MetadataCaptureSession(result: result)
       }
     )
-    
+
     super.init(nibName: nil, bundle: nil)
-    
+
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(orientationDidChange),
