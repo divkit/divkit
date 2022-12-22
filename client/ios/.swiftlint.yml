@@ -1,0 +1,113 @@
+only_rules: # Can not be specified alongside disabled_rules or opt_in_rules.
+# Acts as a whitelist, only the rules specified in this list will be enabled.
+ - closing_brace
+ - colon
+ - comma
+ - legacy_cggeometry_functions
+ - legacy_constant
+ - legacy_constructor
+ - return_arrow_whitespace
+ - statement_position
+ - trailing_newline
+ - trailing_semicolon
+ - trailing_whitespace
+ - custom_rules
+
+excluded:
+  - "DivKit/generated_sources"
+  - "*/Package.swift"
+  - "*/*/Package.swift"
+  - "*/*/*/Package.swift"
+  - "*/*/*/*/Package.swift"
+
+custom_rules:
+  dictionary_colon:
+    name: "Colon should be stuck to key type"
+    regex: '\[[A-Za-z\d]+? : [a-zA-Z\d]+?]'
+    severity: error
+  no_direct_use_for_main_queue:
+    name: "Use MainQueue"
+    regex: 'OperationQueue\.main'
+    message: "Use MainQueue constant to access main queue"
+    severity: error
+  no_direct_use_of_operationqueue_init:
+    name: "Use specialized initializer"
+    regex: ' OperationQueue\(\)'
+    message: "Use OperationQueue(name:qos:) or OperationQueue.serialQueue(name:qos:) instead"
+    severity: error
+  no_using_decoder_parameter_name:
+    name: "Omit aDecoder parameter name"
+    regex: 'init\?\(coder (?!_:)'
+    message: "Use init?(coder _: NSCoder) instead"
+    severity: error
+  no_class_without_access_and_overridability:
+    name: "Add access or overridability keyword"
+    regex: '^class '
+    message: "If you want to make an overridable class, use explicit internal keyword."
+    severity: error
+  access_and_overridability_order:
+    name: "Access and overridability keywords order"
+    regex: '^final (public|internal|private|fileprivate) class'
+    message: "Access keyword should be first, final second"
+    severity: error
+  one_newline_after_import:
+    name: "New line after imports"
+    regex: "import [A-Za-z]+\n\n\n"
+    message: "There should be only one new line after import statements"
+  unsafe_cf_cast:
+    name: "Unsafe CF cast"
+    regex: '\sas(\?|!)\s((CF|CT)[A-Z][A-Za-z\d]*|CGColor)'
+    message: "Such a cast to CF* type is unsafe. Use Serialization.safeCFCast (or add one if missing)"
+  no_direct_use_of_repeating_count_initializer:
+    name: "Dangerous repeating initializer"
+    regex: '\(\s*repeating\s*:\s*\S.*,\s*count\s*:\s*\S.*\)'
+    message: "Use init(repeating:times:) instead"
+    severity: warning
+  no_direct_use_of_unique_keys_with_values_initializer:
+    name: "Dangerous dictionary initializer"
+    regex: '\(\s*uniqueKeysWithValues\s*:\s*\S.*\)'
+    message: "Use init(_:uniquingKeysWith:) instead"
+    severity: error
+  init_radix:
+    name: "Unsafe `init(_:radix:)`"
+    regex: ',\s*radix\s*:\s*\S.*(?:,\s*uppercase\s*:\s*\S.*)?\)'
+    message: "Use init(_:safeRadix:) instead"
+    severity: error
+  prohibited_imports:
+    name: "Importing prohibited module"
+    regex: 'import (BaseMacros)$'
+    message: "Importing module $1 is prohibited in Swift code"
+    severity: error
+
+# # configurable rules can be customized from this configuration file
+# # binary rules can set their severity level
+# force_cast: warning # implicitly
+# force_try:
+#   severity: warning # explicitly
+# # rules that have both warning and error levels, can set just the warning level
+# # implicitly
+# line_length: 110
+# # they can set both implicitly with an array
+# type_body_length:
+#   - 300 # warning
+#   - 400 # error
+# # or they can set both explicitly
+# file_length:
+#   warning: 500
+#   error: 1200
+# # naming rules can set warnings/errors for min_length and max_length
+# # additionally they can set excluded names
+# type_name:
+#   min_length: 4 # only warning
+#   max_length: # warning and error
+#     warning: 40
+#     error: 50
+#   excluded: iPhone # excluded via string
+# variable_name:
+#   min_length: # only min_length
+#     error: 4 # only error
+#   excluded: # excluded via string array
+#     - id
+#     - URL
+#     - GlobalAPIKey
+# reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit)
