@@ -1,14 +1,15 @@
 package com.yandex.div.core.view2.animations
 
+import android.graphics.Bitmap
 import android.view.View
 import android.view.View.MeasureSpec
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.annotation.MainThread
+import androidx.core.graphics.applyCanvas
 import androidx.core.view.children
 import androidx.core.view.doOnDetach
 import androidx.core.view.doOnLayout
-import androidx.core.view.drawToBitmap
 import androidx.transition.Transition
 import androidx.transition.TransitionListenerAdapter
 import com.yandex.div.R
@@ -51,8 +52,16 @@ internal fun createOrGetVisualCopy(
     return copy
 }
 
-private fun ImageView.setScreenshotFromView(view: View) =
-    view.doOnLayout { setImageBitmap(view.drawToBitmap()) }
+private fun ImageView.setScreenshotFromView(view: View) {
+    view.doOnLayout {
+        val bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+            .applyCanvas {
+                translate(-view.scrollX.toFloat(), -view.scrollY.toFloat())
+                view.draw(this)
+            }
+        setImageBitmap(bitmap)
+    }
+}
 
 private fun View.invalidatePosition(sceneRoot: ViewGroup, endPosition: IntArray) {
     val position = IntArray(2)
