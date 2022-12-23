@@ -71,11 +71,13 @@ internal open class FrameLayoutFix @JvmOverloads constructor(
                 }
                 maxWidth = when {
                     childCount == 1 -> childWidth
+                    widthMode == MeasureSpec.UNSPECIFIED -> max(maxWidth, childWidth)
                     lp.width == LayoutParams.MATCH_PARENT -> maxWidth  // ignore match_parent child width
                     else -> max(maxWidth, childWidth)
                 }
                 maxHeight = when {
                     childCount == 1 -> childHeight
+                    heightMode == MeasureSpec.UNSPECIFIED -> max(maxHeight, childHeight)
                     lp.height == LayoutParams.MATCH_PARENT -> maxHeight  // ignore match_parent child height
                     else -> max(maxHeight, childHeight)
                 }
