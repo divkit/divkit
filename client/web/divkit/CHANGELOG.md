@@ -1,3 +1,13 @@
+## 21.0.0 (December 26, 2022)
+
+Additions:
+* `timers` support
+* Customization of the link protocols that should be rendered as native link (`builtinProtocols`)
+
+Fixed:
+* Updated `match_parent` logic on the cross-axis of the `container` to better match natives
+
+
 ## 19.0.0 (December 7, 2022)
 
 Additions:

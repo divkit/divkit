@@ -1,3 +1,20 @@
+## 21.0.0
+
+# JSON Schema:
+* Added `timers` support
+
+# Android Client:
+* Removed warning about element's wrong size in case when it doesn't affect its parent size
+
+# iOS Client:
+* Added `timers` support
+
+# Web Client:
+* Added `timers` support
+* Added customization of the link protocols that should be rendered as native link (`builtinProtocols`)
+* Fixed `match_parent` logic on the cross-axis of the `container` to better match natives
+
+
 ## 20.0.0
 
 # Android Client:
