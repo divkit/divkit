@@ -71,10 +71,10 @@ extension CGFloat {
 
 extension RGBAColor: Equatable {
   public static func ==(lhs: RGBAColor, rhs: RGBAColor) -> Bool {
-    lhs.red.isApproximatelyEqualTo(rhs.red) &&
-      lhs.green.isApproximatelyEqualTo(rhs.green) &&
-      lhs.blue.isApproximatelyEqualTo(rhs.blue) &&
-      lhs.alpha.isApproximatelyEqualTo(rhs.alpha)
+    lhs.intRed == rhs.intRed
+      && lhs.intGreen == rhs.intGreen
+      && lhs.intBlue == rhs.intBlue
+      && lhs.intAlpha == rhs.intAlpha
   }
 }
 

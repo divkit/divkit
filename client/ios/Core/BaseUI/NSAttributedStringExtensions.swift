@@ -261,6 +261,14 @@ extension NSAttributedString {
       }
     }
 
+    if string.last?.isNewline == true {
+      let layout = layoutLine(
+        typesetter: typesetter,
+        range: CFRange(location: offset - 1, length: 1)
+      )
+      lines.append(layout)
+    }
+
     return TextLayout(lines: lines, sourceLength: length)
   }
 

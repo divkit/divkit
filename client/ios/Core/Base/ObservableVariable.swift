@@ -272,12 +272,10 @@ extension ObservableVariable {
       afterUpdatePipe.send($0)
     }
 
-    let getter: () -> T = {
-      withExtendedLifetime(subscription) { value }
-    }
-
-    let newValues = pipe.signal.retaining(object: subscription)
-    let modelVariable = ObservableVariable(getter: getter, newValues: newValues)
-    return (variable: modelVariable, afterUpdateSignal: afterUpdatePipe.signal)
+    let modelVariable = ObservableVariable(initialValue: value, newValues: pipe.signal)
+    return (
+      variable: modelVariable.retaining(subscription),
+      afterUpdateSignal: afterUpdatePipe.signal.retaining(object: subscription)
+    )
   }
 }
