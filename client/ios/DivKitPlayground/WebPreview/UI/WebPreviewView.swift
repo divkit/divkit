@@ -44,13 +44,14 @@ private struct WebPreviewModel {
   }
 
   init() {
+    weak var weakBlockProvider: DivBlockProvider?
     divKitComponents = AppComponents.makeDivKitComponents(
-      updateCardAction: { [weak blockProvider] _, reason in
+      updateCardAction: { _, reason in
         switch reason {
         case let .patch(patch):
-          blockProvider?.update(patch: patch)
+          weakBlockProvider?.update(patch: patch)
         case .timer:
-          blockProvider?.update(patch: nil)
+          weakBlockProvider?.update(patch: nil)
         }
       }
     )
@@ -59,6 +60,7 @@ private struct WebPreviewModel {
       divKitComponents: divKitComponents,
       shouldResetOnDataChange: false
     )
+    weakBlockProvider = blockProvider
     payloadFactory = UIStatePayloadFactory(
       deviceInfo: DeviceInfo(),
       errors: blockProvider.$errors
