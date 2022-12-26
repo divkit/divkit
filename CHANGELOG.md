@@ -12,7 +12,6 @@
 # Web Client:
 * Added `timers` support
 * Added customization of the link protocols that should be rendered as native link (`builtinProtocols`)
-* Fixed `match_parent` logic on the cross-axis of the `container` to better match natives
 
 
 ## 20.0.0
