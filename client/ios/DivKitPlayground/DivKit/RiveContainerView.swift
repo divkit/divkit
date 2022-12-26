@@ -7,6 +7,8 @@ final class RiveContainerView: UIView {
   private var riveView: RiveView? {
     didSet {
       if let riveView = riveView {
+        oldValue?.removeFromSuperview()
+
         addSubview(riveView)
         riveView.frame = bounds
       }
@@ -73,6 +75,11 @@ extension RiveContainerView: AnimatableView {
     if let source = source as? RiveAnimationSourceType {
       switch source {
       case let .data(data):
+        guard riveViewModel == nil else {
+          riveViewModel?.reset()
+          return
+        }
+
         if let riveFile = try? RiveFile(byteArray: [UInt8](data)) {
           let model = RiveModel(riveFile: riveFile)
           riveViewModel = RiveViewModel(model, fit: fit, alignment: alignment)
