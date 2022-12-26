@@ -97,7 +97,7 @@ extension URL {
 
   fileprivate var lifetime: DivStateLifetime {
     let isTemporary = queryParamValue(forName: "temporary").flatMap(Bool.init)
-      ?? false
+      ?? true
     return isTemporary ? .short : .long
   }
 

@@ -45,17 +45,27 @@ final class DivActionIntentTests: XCTestCase {
     switch makeIntent("div-action://set_state?state_id=0/state/second") {
     case let .setState(divStatePath, lifetime):
       XCTAssertEqual(DivStatePath.makeDivStatePath(from: "0/state/second"), divStatePath)
-      XCTAssertEqual(.long, lifetime)
+      XCTAssertEqual(.short, lifetime)
     default:
       XCTFail("Invalid intent")
     }
   }
 
-  func test_SetState_Temporary() {
+  func test_SetState_TemporaryIsTrue() {
     switch makeIntent("div-action://set_state?state_id=0/state/second&temporary=true") {
     case let .setState(divStatePath, lifetime):
       XCTAssertEqual(DivStatePath.makeDivStatePath(from: "0/state/second"), divStatePath)
       XCTAssertEqual(.short, lifetime)
+    default:
+      XCTFail("Invalid intent")
+    }
+  }
+
+  func test_SetState_TemporaryIsFalse() {
+    switch makeIntent("div-action://set_state?state_id=0/state/second&temporary=false") {
+    case let .setState(divStatePath, lifetime):
+      XCTAssertEqual(DivStatePath.makeDivStatePath(from: "0/state/second"), divStatePath)
+      XCTAssertEqual(.long, lifetime)
     default:
       XCTFail("Invalid intent")
     }
