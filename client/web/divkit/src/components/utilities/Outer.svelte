@@ -13,6 +13,7 @@
     import type { MaybeMissing } from '../../expressions/json';
     import type { EdgeInsets } from '../../types/edgeInserts';
     import type { CornersRadius } from '../../types/border';
+    import type { WrapContentSize } from '../../types/sizes';
     import { makeStyle } from '../../utils/makeStyle';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { getBackground } from '../../utils/background';
@@ -36,6 +37,7 @@
     import { sumEdgeInsets } from '../../utils/sumEdgeInsets';
     import { correctBorderRadiusObject } from '../../utils/correctBorderRadiusObject';
     import { borderRadius } from '../../utils/borderRadius';
+    import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import Actionable from './Actionable.svelte';
     import OuterBackground from './OuterBackground.svelte';
 
@@ -164,6 +166,8 @@
     $: jsonAlignmentHorizontal = rootCtx.getDerivedFromVars(json.alignment_horizontal);
     let widthMods: Mods = {};
     let width: string | undefined;
+    let widthMin: string | undefined;
+    let widthMax: string | undefined;
     let widthNum = 0;
     let widthFlexGrow = 0;
     let widthFlexShrink = 0;
@@ -172,6 +176,8 @@
     $: {
         let widthType: 'parent' | 'content' | undefined = undefined;
         let newWidth: string | undefined = undefined;
+        let newWidthMin: string | undefined = undefined;
+        let newWidthMax: string | undefined = undefined;
         let newWidthMods: Mods = {};
         let newFlexGrow = 0;
         let newFlexShrink = 0;
@@ -194,6 +200,16 @@
             ) {
                 newWidthMods['width-constrained'] = true;
                 newFlexShrink = 1;
+            }
+
+            if (type === 'wrap_content') {
+                const width = $jsonWidth as WrapContentSize;
+                if (width.min_size && isNonNegativeNumber(width.min_size.value)) {
+                    newWidthMin = pxToEm(width.min_size.value);
+                }
+                if (width.max_size && isNonNegativeNumber(width.max_size.value)) {
+                    newWidthMax = pxToEm(width.max_size.value);
+                }
             }
 
             if (type === 'match_parent') {
@@ -242,6 +258,8 @@
         }
 
         width = newWidth;
+        widthMin = newWidthMin;
+        widthMax = newWidthMax;
         widthFlexGrow = newFlexGrow;
         widthFlexShrink = newFlexShrink;
         widthMods = assignIfDifferent(newWidthMods, widthMods);
@@ -253,6 +271,8 @@
     $: jsonAlignmentVertical = rootCtx.getDerivedFromVars(json.alignment_vertical);
     let heightMods: Mods = {};
     let height: string | undefined;
+    let heightMin: string | undefined;
+    let heightMax: string | undefined;
     let heightNum = 0;
     let heightFlexGrow = 0;
     let heightFlexShrink = 0;
@@ -261,6 +281,8 @@
     $: {
         let heightType: 'parent' | 'content' | undefined = undefined;
         let newHeight: string | undefined = undefined;
+        let newHeightMin: string | undefined = undefined;
+        let newHeightMax: string | undefined = undefined;
         let newHeightMods: Mods = {};
         let newFlexGrow = 0;
         let newFlexShrink = 0;
@@ -298,6 +320,16 @@
                 newFlexShrink = 1;
             }
 
+            if (type === 'wrap_content') {
+                const height = $jsonHeight as WrapContentSize;
+                if (height?.min_size && isNonNegativeNumber(height.min_size.value)) {
+                    newHeightMin = pxToEm(height.min_size.value);
+                }
+                if (height?.max_size && isNonNegativeNumber(height.max_size.value)) {
+                    newHeightMax = pxToEm(height.max_size.value);
+                }
+            }
+
             if (type === 'match_parent') {
                 rootCtx.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
                     level: 'warn'
@@ -333,6 +365,8 @@
         }
 
         height = newHeight;
+        heightMin = newHeightMin;
+        heightMax = newHeightMax;
         heightFlexGrow = newFlexGrow;
         heightFlexShrink = newFlexShrink;
         heightMods = assignIfDifferent(newHeightMods, heightMods);
@@ -610,7 +644,12 @@
         ...backgroundStyle,
         ...borderStyle,
         width,
+        'min-width': widthMin,
+        'max-width': widthMax,
         height,
+        'min-height': heightMin,
+        // input max-height
+        'max-height': heightMax || style?.['max-height'],
         'grid-area': gridArea,
         padding,
         margin,

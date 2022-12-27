@@ -10,9 +10,16 @@ export interface MatchParentSize {
     weight?: number;
 }
 
+export interface ConstraintSize {
+    value: number;
+    // unit
+}
+
 export interface WrapContentSize {
     type: 'wrap_content';
     constrained?: BooleanInt;
+    min_size?: ConstraintSize;
+    max_size?: ConstraintSize;
 }
 
 export type Size = FixedSize | MatchParentSize | WrapContentSize;
