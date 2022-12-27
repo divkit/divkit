@@ -531,6 +531,150 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "padStart('0', 2, '0') => '00'",
+      "expression": "@{padStart('0', 2, '0')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padStart('00', 2, '0') => '00'",
+      "expression": "@{padStart('00', 2, '0')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padStart('000', 2, '0') => '000'",
+      "expression": "@{padStart('000', 2, '0')}",
+      "expected": {
+        "type": "string",
+        "value": "000"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padStart('0', 2, '00') => '00'",
+      "expression": "@{padStart('0', 2, '00')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padStart('0', 4, '12') => '1210'",
+      "expression": "@{padStart('0', 4, '12')}",
+      "expected": {
+        "type": "string",
+        "value": "1210"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padStart(0, 2, '0') => '00'",
+      "expression": "@{padStart(0, 2, '0')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padEnd('0', 2, ' ') => '0 '",
+      "expression": "@{padEnd('0', 2, ' ')}",
+      "expected": {
+        "type": "string",
+        "value": "0 "
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padEnd('00', 2, ' ') => '00'",
+      "expression": "@{padEnd('00', 2, ' ')}",
+      "expected": {
+        "type": "string",
+        "value": "00"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padEnd('000', 2, ' ') => '000'",
+      "expression": "@{padEnd('000', 2, ' ')}",
+      "expected": {
+        "type": "string",
+        "value": "000"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padEnd('0', 2, '12') => '01'",
+      "expression": "@{padEnd('0', 2, '12')}",
+      "expected": {
+        "type": "string",
+        "value": "01"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padEnd('0', 4, '12') => '0121'",
+      "expression": "@{padEnd('0', 4, '12')}",
+      "expected": {
+        "type": "string",
+        "value": "0121"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padEnd(0, 2, ' ') => '0 '",
+      "expression": "@{padEnd(0, 2, ' ')}",
+      "expected": {
+        "type": "string",
+        "value": "0 "
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }

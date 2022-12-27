@@ -1,0 +1,466 @@
+{
+  "cases": [
+    {
+      "name": "getIntervalSeconds(0) => 0",
+      "expression": "@{getIntervalSeconds(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalSeconds(-1) => error",
+      "expression": "@{getIntervalSeconds(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalSeconds(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalSeconds(1) => 0",
+      "expression": "@{getIntervalSeconds(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalSeconds(1000) => 1",
+      "expression": "@{getIntervalSeconds(1000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalSeconds(196330000) => 10",
+      "expression": "@{getIntervalSeconds(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 10
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalSeconds(0) => 0",
+      "expression": "@{getIntervalTotalSeconds(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalSeconds(-1) => error",
+      "expression": "@{getIntervalTotalSeconds(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalSeconds(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalSeconds(1) => 0",
+      "expression": "@{getIntervalTotalSeconds(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalSeconds(1000) => 1",
+      "expression": "@{getIntervalTotalSeconds(1000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalSeconds(196330000) => 196330",
+      "expression": "@{getIntervalTotalSeconds(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 196330
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalMinutes(0) => 0",
+      "expression": "@{getIntervalMinutes(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalMinutes(-1) => error",
+      "expression": "@{getIntervalMinutes(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalMinutes(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalMinutes(1) => 0",
+      "expression": "@{getIntervalMinutes(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalMinutes(60000) => 1",
+      "expression": "@{getIntervalMinutes(60000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalMinutes(196330000) => 32",
+      "expression": "@{getIntervalMinutes(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 32
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalMinutes(0) => 0",
+      "expression": "@{getIntervalTotalMinutes(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalMinutes(-1) => error",
+      "expression": "@{getIntervalTotalMinutes(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalMinutes(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalMinutes(1) => 0",
+      "expression": "@{getIntervalTotalMinutes(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalMinutes(60000) => 1",
+      "expression": "@{getIntervalTotalMinutes(60000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalMinutes(196330000) => 3272",
+      "expression": "@{getIntervalTotalMinutes(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 3272
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalHours(0) => 0",
+      "expression": "@{getIntervalHours(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalHours(-1) => error",
+      "expression": "@{getIntervalHours(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalHours(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalHours(1) => 0",
+      "expression": "@{getIntervalHours(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalHours(3600000) => 1",
+      "expression": "@{getIntervalHours(3600000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalHours(196330000) => 6",
+      "expression": "@{getIntervalHours(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 6
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalHours(0) => 0",
+      "expression": "@{getIntervalTotalHours(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalHours(-1) => error",
+      "expression": "@{getIntervalTotalHours(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalHours(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalHours(1) => 0",
+      "expression": "@{getIntervalTotalHours(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalHours(3600000) => 1",
+      "expression": "@{getIntervalTotalHours(3600000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalHours(196330000) => 54",
+      "expression": "@{getIntervalTotalHours(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 54
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalDays(0) => 0",
+      "expression": "@{getIntervalTotalDays(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalDays(-1) => error",
+      "expression": "@{getIntervalTotalDays(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalDays(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalDays(1) => 0",
+      "expression": "@{getIntervalTotalDays(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalDays(86400000) => 1",
+      "expression": "@{getIntervalTotalDays(86400000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalDays(196330000) => 2",
+      "expression": "@{getIntervalTotalDays(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalWeeks(0) => 0",
+      "expression": "@{getIntervalTotalWeeks(0)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalWeeks(-1) => error",
+      "expression": "@{getIntervalTotalWeeks(-1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [getIntervalTotalWeeks(-1)]. Expecting non-negative number of milliseconds."
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalWeeks(1) => 0",
+      "expression": "@{getIntervalTotalWeeks(1)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalWeeks(604800000) => 1",
+      "expression": "@{getIntervalTotalWeeks(604800000)}",
+      "expected": {
+        "type": "integer",
+        "value": 1
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalWeeks(196330000) => 0",
+      "expression": "@{getIntervalTotalWeeks(196330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalWeeks(1296330000) => 2",
+      "expression": "@{getIntervalTotalWeeks(1296330000)}",
+      "expected": {
+        "type": "integer",
+        "value": 2
+      },
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "@{getIntervalTotalHours(39010000)}:@{getIntervalMinutes(39010000)}:@{getIntervalSeconds(39010000)} => '10:50:10'",
+      "expression": "@{getIntervalTotalHours(39010000)}:@{getIntervalMinutes(39010000)}:@{getIntervalSeconds(39010000)}",
+      "expected": {
+        "type": "string",
+        "value": "10:50:10"
+      },
+      "platforms": [
+        "web"
+      ]
+    }
+  ]
+}

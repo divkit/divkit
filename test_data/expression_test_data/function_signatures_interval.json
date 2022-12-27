@@ -1,0 +1,124 @@
+{
+  "signatures": [
+    {
+      "name": "getIntervalSeconds(milliseconds: integer) integer",
+      "function_name": "getIntervalSeconds",
+      "doc": "Gets the seconds component of the duration. Expressed as a value between 0 and 59.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Milliseconds count"
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalSeconds(milliseconds: integer) integer",
+      "function_name": "getIntervalTotalSeconds",
+      "doc": "Gets the number of seconds in duration.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Milliseconds count"
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalMinutes(milliseconds: integer) integer",
+      "function_name": "getIntervalMinutes",
+      "doc": "Gets the minutes component of the duration. Expressed as a value between 0 and 59.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Milliseconds count"
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalMinutes(milliseconds: integer) integer",
+      "function_name": "getIntervalTotalMinutes",
+      "doc": "Gets the number of minutes in duration.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Milliseconds count"
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalHours(milliseconds: integer) integer",
+      "function_name": "getIntervalHours",
+      "doc": "Gets the hours component of the duration. Expressed as a value between 0 and 23.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Milliseconds count"
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalHours(milliseconds: integer) integer",
+      "function_name": "getIntervalTotalHours",
+      "doc": "Gets the number of hours in duration.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Milliseconds count"
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalDays(milliseconds: integer) integer",
+      "function_name": "getIntervalTotalDays",
+      "doc": "Gets the number of days in duration.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Milliseconds count"
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntervalTotalWeeks(milliseconds: integer) integer",
+      "function_name": "getIntervalTotalWeeks",
+      "doc": "Gets the number of weeks in duration.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Milliseconds count"
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "web"
+      ]
+    }
+  ]
+}

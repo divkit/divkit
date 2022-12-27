@@ -2,6 +2,7 @@ import type { EvalValue, IntegerValue, StringValue } from '../eval';
 import { registerFunc } from './funcs';
 import { BOOLEAN, INTEGER, STRING } from '../const';
 import { escapeRegExp } from '../../utils/escapeRegExp';
+import { valToString } from '../utils';
 
 function len(arg: StringValue): EvalValue {
     return {
@@ -100,6 +101,38 @@ function toLowerCase(str: StringValue): EvalValue {
     };
 }
 
+function calcPad(val: StringValue | IntegerValue, len: IntegerValue, pad: StringValue): string {
+    let part = '';
+    const str = val.type === STRING ? val.value : valToString(val);
+
+    while (part.length + str.length < len.value) {
+        part += pad.value;
+    }
+    if (part.length > 0 && part.length + str.length > len.value) {
+        part = part.substring(0, len.value - str.length);
+    }
+
+    return part;
+}
+
+function padStart(val: StringValue | IntegerValue, len: IntegerValue, pad: StringValue): EvalValue {
+    const prefix = calcPad(val, len, pad);
+
+    return {
+        type: STRING,
+        value: prefix + valToString(val)
+    };
+}
+
+function padEnd(val: StringValue | IntegerValue, len: IntegerValue, pad: StringValue): EvalValue {
+    const suffix = calcPad(val, len, pad);
+
+    return {
+        type: STRING,
+        value: valToString(val) + suffix
+    };
+}
+
 export function registerStrings(): void {
     registerFunc('len', [STRING], len);
     registerFunc('contains', [STRING, STRING], contains);
@@ -112,4 +145,8 @@ export function registerStrings(): void {
     registerFunc('trimRight', [STRING], trimRight);
     registerFunc('toUpperCase', [STRING], toUpperCase);
     registerFunc('toLowerCase', [STRING], toLowerCase);
+    registerFunc('padStart', [STRING, INTEGER, STRING], padStart);
+    registerFunc('padStart', [INTEGER, INTEGER, STRING], padStart);
+    registerFunc('padEnd', [STRING, INTEGER, STRING], padEnd);
+    registerFunc('padEnd', [INTEGER, INTEGER, STRING], padEnd);
 }

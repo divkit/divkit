@@ -248,6 +248,98 @@
         "web",
         "ios"
       ]
+    },
+    {
+      "name": "padStart(val: string, len: integer, pad_str: string) string",
+      "function_name": "padStart",
+      "doc": "Pads a string to a given string length, inserting at start",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to pad."
+        },
+        {
+          "type": "integer",
+          "doc": "String length"
+        },
+        {
+          "type": "string",
+          "doc": "String character to pad with"
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padStart(val: integer, len: integer, pad_str: string) string",
+      "function_name": "padStart",
+      "doc": "Converts given integer to a string and pads it to a given string length, inserting at start",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to pad."
+        },
+        {
+          "type": "integer",
+          "doc": "String length"
+        },
+        {
+          "type": "string",
+          "doc": "String character to pad with"
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padEnd(val: string, len: integer, pad_str: string) string",
+      "function_name": "padEnd",
+      "doc": "Pads a string to a given string length, inserting at end",
+      "arguments": [
+        {
+          "type": "string",
+          "doc": "String value to pad."
+        },
+        {
+          "type": "integer",
+          "doc": "String length"
+        },
+        {
+          "type": "string",
+          "doc": "String character to pad with"
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "padEnd(val: integer, len: integer, pad_str: string) string",
+      "function_name": "padEnd",
+      "doc": "Converts given integer to a string and pads it to a given string length, inserting at end",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Integer value to pad."
+        },
+        {
+          "type": "integer",
+          "doc": "String length"
+        },
+        {
+          "type": "string",
+          "doc": "String character to pad with"
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }
