@@ -3,6 +3,7 @@ package com.yandex.div.core.view2
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Button
@@ -10,6 +11,7 @@ import androidx.core.view.AccessibilityDelegateCompat
 import androidx.core.view.accessibility.AccessibilityNodeInfoCompat
 import androidx.core.view.children
 import androidx.core.view.forEach
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerViewAccessibilityDelegate
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
@@ -27,8 +29,13 @@ internal class AccessibilityListDelegate(
     private val recyclerView: BackHandlingRecyclerView,
 ) : RecyclerViewAccessibilityDelegate(recyclerView) {
     private val list = arrayListOf<ViewAccessibilityState>()
-    private var itemDelegate : AccessibilityDelegateCompat? = null
+    private val visibilityListener = ViewTreeObserver.OnGlobalLayoutListener {
+        if (isItemsFocusActive && !recyclerView.isVisible) {
+            clearItemsFocus()
+        }
+    }
 
+    private var itemDelegate : AccessibilityDelegateCompat? = null
     private var isItemsFocusActive = false
         set(value) {
             if (field == value) return
@@ -37,6 +44,19 @@ internal class AccessibilityListDelegate(
         }
 
     init {
+        if (recyclerView.isAttachedToWindow) {
+            recyclerView.viewTreeObserver.addOnGlobalLayoutListener(visibilityListener)
+        }
+        recyclerView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+            override fun onViewAttachedToWindow(view: View) {
+                recyclerView.viewTreeObserver.addOnGlobalLayoutListener(visibilityListener)
+            }
+
+            override fun onViewDetachedFromWindow(view: View) {
+                recyclerView.viewTreeObserver.removeOnGlobalLayoutListener(visibilityListener)
+                clearItemsFocus()
+            }
+        })
         recyclerView.forEach { it.updateItemAccessibility() }
         recyclerView.setOnBackClickListener(object :
             BackKeyPressedHelper.OnBackClickListener {
