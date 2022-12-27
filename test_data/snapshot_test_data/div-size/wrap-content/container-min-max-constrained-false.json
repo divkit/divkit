@@ -1,0 +1,94 @@
+{
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12
+    },
+    "wrapped_container": {
+      "type": "container",
+      "border": {
+        "stroke": {
+          "color": "#0000EE"
+        }
+      }
+    }
+  },
+  "card": {
+    "log_id": "div2_sample_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "items": [
+            {
+              "type": "wrapped_container",
+              "orientation": "horizontal",
+              "width": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "wrapped_text",
+                  "text": "very long text"
+                },
+                {
+                  "type": "wrapped_text",
+                  "text": "wrap"
+                }
+              ]
+            },
+            {
+              "type": "wrapped_container",
+              "width": {
+                "type": "wrap_content",
+                "max_size": {
+                  "value": 100
+                }
+              },
+              "height": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 100
+                },
+                "max_size": {
+                  "value": 150
+                }
+              },
+              "items": [
+                {
+                  "type": "wrapped_text",
+                  "text": "very very long text"
+                },
+                {
+                  "type": "wrapped_text",
+                  "text": "wrap"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

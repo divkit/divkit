@@ -1,0 +1,94 @@
+{
+  "templates": {
+    "wrapped_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      },
+      "border": {
+        "stroke": {
+          "color": "#FF0000"
+        }
+      },
+      "font_size": 12
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "width": {
+            "type": "wrap_content",
+            "max_size": {
+              "value": 200
+            }
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "orientation": "overlap",
+          "border": {
+            "stroke": {
+              "color": "#FF0000"
+            }
+          },
+          "margins": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "items": [
+            {
+              "type": "wrapped_text",
+              "text": "width wrap_content max_size = 100",
+              "width": {
+                "type": "wrap_content",
+                "max_size": {
+                  "value": 100
+                }
+              },
+              "alignment_vertical": "top"
+            },
+            {
+              "type": "wrapped_text",
+              "text": "width wrap_content",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "text_alignment_vertical": "center",
+              "alignment_vertical": "center"
+            },
+            {
+              "type": "wrapped_text",
+              "text": "width wrap_content min_size = 200, height wrap_content min_size = 120",
+              "width": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 200
+                },
+                "max_size": {
+                  "value": 200
+                }
+              },
+              "height": {
+                "type": "wrap_content",
+                "min_size": {
+                  "value": 120
+                }
+              },
+              "text_alignment_vertical": "bottom",
+              "alignment_vertical": "bottom"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
