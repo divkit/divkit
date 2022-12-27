@@ -26,6 +26,12 @@ internal class ErrorCollector {
 
     fun getWarnings(): Iterator<Throwable> = warnings.listIterator()
 
+    fun cleanRuntimeWarningsAndErrors() {
+        warnings.clear()
+        runtimeErrors.clear()
+        rebuildErrorsAndNotify()
+    }
+
     private fun rebuildErrorsAndNotify() {
         errors.clear()
         errors.addAll(parsingErrors)

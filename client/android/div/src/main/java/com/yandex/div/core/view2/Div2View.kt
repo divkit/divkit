@@ -797,6 +797,7 @@ class Div2View private constructor(
                 return
             }
             histogramReporter?.onRebindingStarted()
+            viewComponent.errorCollectors.getOrCreate(dataTag, divData).cleanRuntimeWarningsAndErrors()
             val state = newData.states.firstOrNull { it.stateId == stateId } ?: newData.states[0]
             val rootDivView = getChildAt(0).apply {
                 bindLayoutParams(state.div.value(), expressionResolver)

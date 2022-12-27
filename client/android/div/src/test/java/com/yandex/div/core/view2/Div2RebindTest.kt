@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2
 
 import android.app.Activity
+import com.google.common.collect.Iterators
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.Div2Context
 import com.yandex.div.core.DivConfiguration
@@ -121,5 +122,18 @@ class Div2RebindTest {
         div2ReferenceView.bindOnAttachRunnable?.onAttach()
 
         Assert.assertTrue(div2View.viewEquals(div2ReferenceView))
+    }
+
+    @Test
+    fun `clear warnings after rebind`() {
+        val oldData = UnitTestData(CONTAINER_DIR, "horizontal_wrap_container_match_parent_height_item.json").data
+        val newData = UnitTestData(CONTAINER_DIR, "horizontal_wrap_container_wrap_content_constrained_height_item.json").data
+        val errorCollectors = div2View.viewComponent.errorCollectors
+        
+        div2View.setData(oldData, tag)
+        assertEquals(1, Iterators.size(errorCollectors.getOrCreate(tag, oldData).getWarnings()))
+
+        div2View.setData(newData, oldData, tag)
+        assertEquals(0, Iterators.size(errorCollectors.getOrCreate(tag, newData).getWarnings()))
     }
 }
