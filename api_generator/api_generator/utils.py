@@ -79,8 +79,8 @@ def json_dict(string: str) -> Dict[str, Any]:
     return json.loads(string)
 
 
-def indented(string: str, level: int = 1, indent_width: int = 2) -> str:
-    indent = ' ' * level * indent_width
+def indented(string: str, level: int = 1, indent_width: int = 2, indent_char: str = ' ') -> str:
+    indent = indent_char * level * indent_width
     return indent + string.replace('\n', '\n' + indent)
 
 
