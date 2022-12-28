@@ -1326,7 +1326,7 @@
       "title": "Custom card",
       "platforms": [
         "android",
-        "ios",
+        "ios"
       ],
       "file": "custom-card.json"
     },
