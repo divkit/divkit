@@ -79,7 +79,12 @@ private func _parseUnixTime(_ value: Int) -> Date {
 }
 
 private func _nowLocal() -> Date {
-  Date()
+  let dateUTC = Date()
+  let timeZoneOffset = Double(TimeZone.current.secondsFromGMT(for: dateUTC))
+  guard let localDate = Calendar.current.date(byAdding: .second, value: Int(timeZoneOffset), to: dateUTC) else {
+    return dateUTC
+  }
+  return localDate
 }
 
 private func _addMillis(_ date: Date, _ offsetInMillis: Int) -> Date {
