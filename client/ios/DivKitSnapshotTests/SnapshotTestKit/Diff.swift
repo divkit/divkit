@@ -21,7 +21,7 @@ extension UIImage {
     return other
   }
 
-  func compare(with other: UIImage, tolerance: Double = 0.005) -> Bool {
+  func compare(with other: UIImage, tolerance: Double = 0.05) -> Bool {
     let size = self.size
     guard size == other.size else {
       return false
@@ -85,8 +85,8 @@ private func compareImages(
   let delta1 = bytesPerRow1 - effectiveBytesPerRow
   let delta2 = bytesPerRow2 - effectiveBytesPerRow
   var i = 0
-  var j = 0
   while i < intHeight {
+    var j = 0
     while j < effectiveBytesPerRow {
       let componentDiff = Double(data1[iterator1]) - Double(data2[iterator2])
       sum += componentDiff * componentDiff
