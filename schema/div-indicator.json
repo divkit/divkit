@@ -22,7 +22,8 @@
           "$ref": "div-indicator-item-placement.json",
           "$description": "translations.json#/div_indicator_item_placement",
           "platforms": [
-            "android"
+            "android",
+            "ios"
           ]
         },
         "space_between_centers": {

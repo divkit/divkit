@@ -10,10 +10,10 @@ final class ScrollPageIndicatorLayer: CALayer {
     normalColor: .clear,
     highlightingScale: 0,
     disappearingScale: 0,
-    spaceBetweenCenters: 0,
     pageSize: .zero,
     pageCornerRadius: 0,
-    animation: .scale
+    animation: .scale,
+    itemPlacement: .fixed(spaceBetweenCenters: 0)
   ) {
     didSet {
       _cachedParams = nil
@@ -25,7 +25,7 @@ final class ScrollPageIndicatorLayer: CALayer {
     if let value = _cachedParams { return value }
     let result = PageIndicatorLayerParams(
       numberOfPages: numberOfPages,
-      spaceBetweenCenters: configuration.spaceBetweenCenters,
+      itemPlacement: configuration.itemPlacement,
       position: currentIndexPosition,
       boundsSize: bounds.size
     )
@@ -58,7 +58,11 @@ final class ScrollPageIndicatorLayer: CALayer {
   override func draw(in ctx: CGContext) {
     ctx.clip(to: params.visibleRect)
 
-    let animator = IndicatorStateAnimator(configuration: configuration)
+    let animator = IndicatorStateAnimator(
+      configuration: configuration,
+      boundsWidth: bounds.size.width,
+      numberOfPages: numberOfPages
+    )
 
     for index in params.renderRange {
       let state = IndicatorState(
@@ -138,7 +142,13 @@ extension ScrollPageIndicatorLayer {
     let x = xPosition * params.itemWidth + params.offsetX
     let y = params.visibleRect.center.y
     let center = CGPoint(x: x, y: y)
-    return CGRect(center: center, size: configuration.pageSize)
+    let width: CGFloat
+    if case let .stretch(spacing, _) = configuration.itemPlacement {
+      width = params.itemWidth - spacing
+    } else {
+      width = configuration.pageSize.width
+    }
+    return CGRect(center: center, size: CGSize(width: width, height: configuration.pageSize.height))
   }
 
   fileprivate func indicatorScale(

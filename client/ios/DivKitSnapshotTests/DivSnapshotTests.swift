@@ -14,6 +14,8 @@ private let exclusions = [
   "div-indicator/fixed-width-max_items_rectangle.json",
   "div-indicator/fixed-width-max_items_rectangle_slider.json",
   "div-indicator/fixed-width-max_items_rectangle_worm.json",
+  "div-indicator/stretch_items.json",
+  "div-indicator/stretch_items_max_items_constraint.json",
 
   // TODO: remove after implementation:
   "div-gallery/vertical-grid-gallery-padding.json",

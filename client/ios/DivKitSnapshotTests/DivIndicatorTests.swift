@@ -63,6 +63,14 @@ final class DivIndicatorTests: DivKitSnapshotTestCase {
   func test_WrapContentWidthMaxItems() {
     testDivs("wrap_content-width-max_items.json")
   }
+
+  func test_StretchItems() {
+    testDivs("stretch_items.json")
+  }
+
+  func test_StretchItemsMaxItemsConstraint() {
+    testDivs("stretch_items_max_items_constraint.json")
+  }
 }
 
 extension DivIndicatorTests {

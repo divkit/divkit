@@ -15,13 +15,19 @@ struct PageIndicatorLayerParams {
 
   init(
     numberOfPages: Int,
-    spaceBetweenCenters: CGFloat,
+    itemPlacement: PageIndicatorConfiguration.ItemPlacement,
     position: CGFloat,
     boundsSize: CGSize
   ) {
-    itemWidth = spaceBetweenCenters
-    let itemsVisibleWidth = boundsSize.width / itemWidth
-    visiblePageCount = min(Int(itemsVisibleWidth), numberOfPages)
+    switch itemPlacement {
+    case let .fixed(spaceBetweenCenters):
+      itemWidth = spaceBetweenCenters
+      let itemsVisibleWidth = boundsSize.width / itemWidth
+      visiblePageCount = min(Int(itemsVisibleWidth), numberOfPages)
+    case let .stretch(_, maxVisibleItems):
+      visiblePageCount = min(maxVisibleItems, numberOfPages)
+      itemWidth = boundsSize.width / (CGFloat(visiblePageCount))
+    }
 
     let currentPage = Int(floor(position))
     let maxHead = numberOfPages - visiblePageCount

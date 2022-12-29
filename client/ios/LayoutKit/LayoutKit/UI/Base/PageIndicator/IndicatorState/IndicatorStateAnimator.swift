@@ -5,6 +5,8 @@ import CommonCore
 
 struct IndicatorStateAnimator {
   let configuration: PageIndicatorConfiguration
+  let boundsWidth: CGFloat
+  let numberOfPages: Int
 
   func indicatorColor(for state: IndicatorState) -> Color {
     let normalColor = configuration.normalColor
@@ -33,18 +35,28 @@ struct IndicatorStateAnimator {
       return nil
     case .slider:
       return ActiveIndicatorOffsets(
-        xOffset: progress * configuration.spaceBetweenCenters,
+        xOffset: progress * itemWidth,
         widthOffset: 0
       )
 
     case .worm:
       let additionalWidthScale = 1 - abs(2 * progress - 1)
-      let widthOffset = additionalWidthScale * configuration.spaceBetweenCenters
+      let widthOffset = additionalWidthScale * itemWidth
 
       return ActiveIndicatorOffsets(
-        xOffset: progress * configuration.spaceBetweenCenters - widthOffset / 2,
+        xOffset: progress * itemWidth - widthOffset / 2,
         widthOffset: widthOffset
       )
+    }
+  }
+
+  private var itemWidth: CGFloat {
+    switch configuration.itemPlacement {
+    case let .fixed(spaceBetweenCenters):
+      return spaceBetweenCenters
+    case let .stretch(_, maxVisibleItems):
+      let visiblePageCount = min(maxVisibleItems, numberOfPages)
+      return boundsWidth / (CGFloat(visiblePageCount))
     }
   }
 }

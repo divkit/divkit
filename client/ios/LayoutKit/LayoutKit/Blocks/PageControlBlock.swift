@@ -31,7 +31,14 @@ public final class PageControlBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case let .intrinsic(constrained, minSize, maxSize):
-      let width = configuration.spaceBetweenCenters * CGFloat(state.numberOfPages)
+      let width: CGFloat
+      switch configuration.itemPlacement {
+      case let .fixed(spaceBetweenCenters):
+        width = spaceBetweenCenters * CGFloat(state.numberOfPages)
+      case .stretch:
+        width = 0
+      }
+
       return constrained ? width : clamp(width, min: minSize, max: maxSize)
     case .weighted:
       return 0

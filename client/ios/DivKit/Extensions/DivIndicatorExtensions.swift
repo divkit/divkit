@@ -36,20 +36,19 @@ extension DivIndicator: DivBlockModeling {
         width: rectangle.itemWidth.resolveValue(expressionResolver) ?? 0,
         height: rectangle.itemHeight.resolveValue(expressionResolver) ?? 0
       )
+    let spaceBetweenCenters = CGFloat(spaceBetweenCenters.resolveValue(expressionResolver) ?? 0)
     let configuration =
       PageIndicatorConfiguration(
         highlightedColor: resolveActiveItemColor(expressionResolver),
         normalColor: resolveInactiveItemColor(expressionResolver),
         highlightingScale: CGFloat(resolveActiveItemSize(expressionResolver)),
         disappearingScale: CGFloat(resolveMinimumItemSize(expressionResolver)),
-        spaceBetweenCenters: CGFloat(
-          spaceBetweenCenters.resolveValue(expressionResolver) ?? 0
-        ),
         pageSize: pageSize,
         pageCornerRadius: CGFloat(
           rectangle.cornerRadius.resolveValue(expressionResolver) ?? 0
         ),
-        animation: resolveAnimation(expressionResolver).asBlockAnimation
+        animation: resolveAnimation(expressionResolver).asBlockAnimation,
+        itemPlacement: itemsPlacement?.makeItemPlacement(with: expressionResolver) ?? .fixed(spaceBetweenCenters: spaceBetweenCenters)
       )
 
     return
@@ -83,6 +82,22 @@ extension DivIndicator.Animation {
       return .worm
     case .slider:
       return .slider
+    }
+  }
+}
+
+extension DivIndicatorItemPlacement {
+  func makeItemPlacement(with expressionResolver: ExpressionResolver) -> PageIndicatorConfiguration.ItemPlacement {
+    switch self {
+    case let .divDefaultIndicatorItemPlacement(defaultPlacement):
+      return .fixed(spaceBetweenCenters: CGFloat(
+        defaultPlacement.spaceBetweenCenters.resolveValue(expressionResolver) ?? 0
+      ))
+    case let .divStretchIndicatorItemPlacement(stretchPlacement):
+      return .stretch(
+        spacing: CGFloat(stretchPlacement.itemSpacing.resolveValue(expressionResolver) ?? 0),
+        maxVisibleItems: stretchPlacement.resolveMaxVisibleItems(expressionResolver)
+      )
     }
   }
 }
