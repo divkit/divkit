@@ -179,7 +179,7 @@ internal fun DivDimension.toPx(metrics: DisplayMetrics, resolver: ExpressionReso
 internal fun View.applyHeight(div: DivBase, resolver: ExpressionResolver) {
     val height = div.height.toLayoutParamsSize(resources.displayMetrics, resolver)
     if (layoutParams.height != height) {
-        ForceParentLayoutParams.setSizeFromChild(this, h = height)
+        layoutParams.height = height
         requestLayout()
     }
     applyTransform(div, resolver)
@@ -195,7 +195,7 @@ internal fun View.applyMinHeight(minHeight: DivWrapContentSize.ConstraintSize?, 
 internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
     val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver)
     if (layoutParams.width != width) {
-        ForceParentLayoutParams.setSizeFromChild(this, w = width)
+        layoutParams.width = width
         requestLayout()
     }
     applyTransform(div, resolver)

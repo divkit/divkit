@@ -335,16 +335,24 @@ internal class DivContainerBinder @Inject constructor(
             childView.applyAlignment(alignmentHorizontal?.evaluate(resolver),
                 alignmentVertical?.evaluate(resolver), div.orientation.evaluate(resolver))
 
-            if (div.isVertical(resolver) && childDivValue.height is DivSize.MatchParent) {
-                if (!div.isWrapContainer(resolver)) {
-                    ForceParentLayoutParams.setSizeFromParent(childView, h = 0)
+            if (div.isVertical(resolver)) {
+                val divHeight = childDivValue.height
+                if (divHeight !is DivSize.WrapContent
+                    || divHeight.value.constrained?.evaluate(resolver) != true) {
+                    if (divHeight is DivSize.MatchParent && !div.isWrapContainer(resolver)) {
+                        childView.layoutParams.height = 0
+                    }
+                    childView.applyWeight(childDivValue.height, resolver)
                 }
-                childView.applyWeight(childDivValue.height.value() as DivMatchParentSize, resolver)
-            } else if (div.isHorizontal(resolver) && childDivValue.width is DivSize.MatchParent) {
-                if (!div.isWrapContainer(resolver)) {
-                    ForceParentLayoutParams.setSizeFromParent(childView, w = 0)
+            } else if (div.isHorizontal(resolver)) {
+                val divWidth = childDivValue.width
+                if (divWidth !is DivSize.WrapContent
+                    || divWidth.value.constrained?.evaluate(resolver) != true) {
+                    if (divWidth is DivSize.MatchParent && !div.isWrapContainer(resolver)) {
+                        childView.layoutParams.width = 0
+                    }
+                    childView.applyWeight(childDivValue.width, resolver)
                 }
-                childView.applyWeight(childDivValue.width.value() as DivMatchParentSize, resolver)
             }
         }
 
@@ -403,11 +411,17 @@ internal class DivContainerBinder @Inject constructor(
             warningMessage.format(withId)))
     }
 
-    private fun View.applyWeight(size: DivMatchParentSize, resolver: ExpressionResolver) {
+    private fun View.applyWeight(size: DivSize, resolver: ExpressionResolver) {
         val params = layoutParams
         if (params is LinearContainerLayout.LayoutParams) {
-            params.weight = size.weight?.evaluate(resolver)?.toFloat() ?: 1.0f
-            requestLayout()
+            var weight = 0f
+            if (size is DivSize.MatchParent) {
+                weight = size.value.weight?.evaluate(resolver)?.toFloat() ?: 1.0f
+            }
+            if (params.weight != weight) {
+                params.weight = weight
+                requestLayout()
+            }
         }
     }
 }
