@@ -12,22 +12,6 @@ final class DivIndicatorTests: DivKitSnapshotTestCase {
     subdirectory = "div-indicator"
   }
 
-  func test_ActiveSize() {
-    testDivs("active_size.json")
-  }
-
-  func test_CornersRadius() {
-    testDivs("corners_radius.json")
-  }
-
-  func test_FixedHeight() {
-    testDivs("fixed-height.json")
-  }
-
-  func test_FixedWidthMaxItemsCircle() {
-    testDivs("fixed-width-max_items_circle.json")
-  }
-
   func test_FixedWidthMaxItemsRectangle() {
     testDivsForDifferentStates("fixed-width-max_items_rectangle.json")
   }
@@ -40,47 +24,9 @@ final class DivIndicatorTests: DivKitSnapshotTestCase {
     testDivsForDifferentStates("fixed-width-max_items_rectangle_slider.json")
   }
 
-  func test_Margins() {
-    testDivs("margins.json")
-  }
-
-  func test_ParentWidthMaxItems() {
-    testDivs("match_parent-width-max_items.json")
-  }
-
-  func test_MinimumSize() {
-    testDivs("minimum_size.json")
-  }
-
-  func test_Paddings() {
-    testDivs("paddings.json")
-  }
-
-  func test_WrapContentHeight() {
-    testDivs("wrap_content-height.json")
-  }
-
-  func test_WrapContentWidthMaxItems() {
-    testDivs("wrap_content-width-max_items.json")
-  }
-
-  func test_StretchItems() {
-    testDivs("stretch_items.json")
-  }
-
-  func test_StretchItemsMaxItemsConstraint() {
-    testDivs("stretch_items_max_items_constraint.json")
-  }
 }
 
 extension DivIndicatorTests {
-  fileprivate func testDivs(
-    _ fileName: String,
-    functionName: String = #function
-  ) {
-    testDivs(fileName, testName: functionName, blocksState: defaultPagerViewState)
-  }
-
   fileprivate func testDivsForDifferentStates(
     _ fileName: String,
     functionName: String = #function
@@ -99,10 +45,6 @@ extension DivIndicatorTests {
 }
 
 private let pagerPath = UIElementPath(testCardId) + "pager_id"
-
-private let defaultPagerViewState = [
-  pagerPath: PagerViewState(numberOfPages: 11, currentPage: 1),
-]
 
 private let testPagerViewStates = [
   PagerViewState(numberOfPages: 11, floatCurrentPage: 0),

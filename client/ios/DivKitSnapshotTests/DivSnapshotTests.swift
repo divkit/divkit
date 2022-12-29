@@ -1,21 +1,10 @@
 import XCTest
+import LayoutKit
 
 private let exclusions = [
-  "div-indicator/active_size.json",
-  "div-indicator/fixed-width-max_items_circle.json",
-  "div-indicator/wrap_content-height.json",
-  "div-indicator/margins.json",
-  "div-indicator/fixed-height.json",
-  "div-indicator/wrap_content-width-max_items.json",
-  "div-indicator/match_parent-width-max_items.json",
-  "div-indicator/minimum_size.json",
-  "div-indicator/paddings.json",
-  "div-indicator/corners_radius.json",
   "div-indicator/fixed-width-max_items_rectangle.json",
   "div-indicator/fixed-width-max_items_rectangle_slider.json",
   "div-indicator/fixed-width-max_items_rectangle_worm.json",
-  "div-indicator/stretch_items.json",
-  "div-indicator/stretch_items_max_items_constraint.json",
 
   // TODO: remove after implementation:
   "div-gallery/vertical-grid-gallery-padding.json",
@@ -53,6 +42,14 @@ private let casesWithPlaceholerOnly = [
 
 private let testDirectory = "snapshot_test_data"
 
+private let indicatorSubdirectory = "div-indicator"
+
+private let pagerPath = UIElementPath(testCardId) + "pager_id"
+
+private let defaultPagerViewState = [
+  pagerPath: PagerViewState(numberOfPages: 11, currentPage: 1),
+]
+
 final class DivSnapshotTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
     let jsonFiles = loadJsonFiles(testDirectory, exclusions: exclusions)
@@ -67,6 +64,7 @@ private func doTest(_ file: JsonFile) {
   test.testDivs(
     file.name,
     customCaseName: file.name.removingFileExtension,
-    imageHolderFactory: casesWithPlaceholerOnly.contains(file.path) ? .placeholderOnly : nil
+    imageHolderFactory: casesWithPlaceholerOnly.contains(file.path) ? .placeholderOnly : nil,
+    blocksState: file.subdirectory == indicatorSubdirectory ? defaultPagerViewState : [:]
   )
 }
