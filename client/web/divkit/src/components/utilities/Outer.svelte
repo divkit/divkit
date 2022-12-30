@@ -50,8 +50,6 @@
     export let customDescription = false;
     export let customPaddings = false;
     export let customActions = '';
-    export let forceWidth = false;
-    export let forceHeight = false;
     export let additionalPaddings: EdgeInsets | null = null;
 
     const HORIZONTAL_ALIGN_TO_GENERAL = {
@@ -235,13 +233,6 @@
             }
         }
 
-        if (widthType === 'content' && forceWidth) {
-            widthType = 'parent';
-            rootCtx.logError(wrapError(new Error("Incorrect usage of width with value 'wrap_content'"), {
-                level: 'warn'
-            }));
-        }
-
         if (widthType === 'parent') {
             newWidthMods['halign-self'] = 'stretch';
         } else {
@@ -335,13 +326,6 @@
                     level: 'warn'
                 }));
             }
-        }
-
-        if (heightType === 'content' && forceHeight) {
-            heightType = 'parent';
-            rootCtx.logError(wrapError(new Error("Incorrect usage of height with value 'wrap_content'"), {
-                level: 'warn'
-            }));
         }
 
         if (heightType === 'parent') {

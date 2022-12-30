@@ -413,8 +413,6 @@
         {layoutParams}
         customPaddings={true}
         customActions={'gallery'}
-        forceHeight={orientation === 'vertical'}
-        forceWidth={orientation === 'horizontal'}
     >
         <div
             class="{css.gallery__scroller} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
