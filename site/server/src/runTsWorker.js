@@ -4,16 +4,39 @@ const {transform} = require('@babel/core');
 const {VM} = require('vm2');
 
 const tsBuilderSource = fs.readFileSync(
-    path.resolve(__dirname, '../node_modules/@divkit/jsonbuilder-internal-test/dist/jsonbuilder.js'),
+    path.resolve(__dirname, '../node_modules/@divkitframework/jsonbuilder/dist/jsonbuilder.js'),
     'utf-8'
 );
 
+function simpleHash(str) {
+    let res = 0;
+    for (let i = 0; i < str.length; ++i) {
+        res = (res + str.charCodeAt(i) % 1029) % 1336337;
+    }
+    return res;
+}
+
 const tsBuilder = (() => {
-    const exports = {};
+    const exports = Object.create(null);
     const vm = new VM({
         allowAsync: false,
         sandbox: {
-            require() {
+            require(name) {
+                if (name === 'crypto') {
+                    return {
+                        createHash() {
+                            return {
+                                update(val) {
+                                    return {
+                                        digest() {
+                                            return String(simpleHash(JSON.stringify(val)));
+                                        }
+                                    };
+                                }
+                            };
+                        }
+                    };
+                }
                 throw new Error('Module is not found');
             },
             exports
@@ -56,7 +79,7 @@ function runTask(task) {
                 }
                 throw new Error('Module is not found');
             },
-            exports: {}
+            exports: Object.create(null)
         }
     });
 

@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import * as monaco from 'monaco-editor';
-    import tsBuilderTypes from '../../node_modules/@divkit/jsonbuilder-internal-test/dist/jsonbuilder.d.ts?inline';
+    import tsBuilderTypes from '../../node_modules/@divkitframework/jsonbuilder/dist/jsonbuilder.d.ts?inline';
 
     const jsonModelUri = monaco.Uri.parse('a://b/divview.json');
     const tsModelUri = monaco.Uri.parse('file:///main.tsx');
