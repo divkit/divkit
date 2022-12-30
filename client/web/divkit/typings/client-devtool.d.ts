@@ -11,6 +11,10 @@ import type {
 } from './common';
 import type { GlobalVariablesController, Variable } from './variables';
 
+export interface DivkitDebugInstance extends DivkitInstance {
+    getDebugVariables(): Map<string, Variable>;
+}
+
 export function render(opts: {
     target: HTMLElement;
     json: DivJson;
@@ -27,7 +31,7 @@ export function render(opts: {
     builtinProtocols?: string[];
     /** EXPERIMENTAL SUPPORT */
     theme?: Theme;
-}): DivkitInstance;
+}): DivkitDebugInstance;
 
 export { createVariable, createGlobalVariablesController } from './variables';
 

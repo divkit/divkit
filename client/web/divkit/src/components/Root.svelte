@@ -106,6 +106,14 @@
         theme = newTheme;
     }
 
+    export function getDebugVariables() {
+        if (!process.env.DEVTOOL) {
+            return;
+        }
+
+        return variables;
+    }
+
     const builtinSet = new Set(builtinProtocols);
 
     let hasError = false;
