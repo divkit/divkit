@@ -204,6 +204,19 @@ export class TimersController {
         if (timer.definition.tick_interval) {
             timer.tick = this.applyVars(timer.definition.tick_interval);
         }
+        // duration < 0 is incorrect
+        // tick_interval <= is incorrect
+        if (
+            timer.duration !== undefined && timer.duration < 0 ||
+            timer.tick !== undefined && timer.tick <= 0
+        ) {
+            this.logError(wrapError(new Error('Incorrect timer properties'), {
+                additional: {
+                    id: timer.definition.id
+                }
+            }));
+            return;
+        }
 
         this.startOrResume(timer);
     }
