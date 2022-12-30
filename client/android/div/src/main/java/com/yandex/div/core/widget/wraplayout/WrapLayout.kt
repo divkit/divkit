@@ -628,7 +628,7 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
 
     private val firstVisibleLine get() = lines.find { it.itemCountNotGone > 0 }
 
-    override fun getBaseline() = firstVisibleLine?.maxBaseline ?: super.getBaseline()
+    override fun getBaseline() = firstVisibleLine?.maxBaseline?.plus(paddingTop) ?: super.getBaseline()
 
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
 

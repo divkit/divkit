@@ -266,7 +266,12 @@ internal fun View.applyAlignment(
 ) {
     (layoutParams as? WrapLayout.LayoutParams)?.let { lp ->
         lp.alignSelf = evaluateAlignSelf(horizontal, vertical, orientation)
-    } ?: applyGravity(evaluateGravity(horizontal, vertical))
+    } ?: run {
+        (layoutParams as? LinearContainerLayout.LayoutParams)?.let { lp ->
+            lp.isBaselineAligned = vertical == DivAlignmentVertical.BASELINE
+        }
+        applyGravity(evaluateGravity(horizontal, vertical))
+    }
 }
 
 @WrapAlignment

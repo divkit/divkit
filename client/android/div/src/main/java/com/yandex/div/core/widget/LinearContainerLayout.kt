@@ -20,12 +20,6 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import kotlin.math.max
 
-private const val VERTICAL_GRAVITY_COUNT = 4
-private const val INDEX_CENTER_VERTICAL = 0
-private const val INDEX_TOP = 1
-private const val INDEX_BOTTOM = 2
-private const val INDEX_FILL = 3
-
 /** Class name may be obfuscated by Proguard. Hardcode the string for accessibility usage.  */
 private const val ACCESSIBILITY_CLASS_NAME = "android.widget.LinearLayout"
 
@@ -37,33 +31,11 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
     /**
-     * Whether the children of this layout are baseline aligned.  Only applicable
-     * if [orientation] is horizontal.
+     * Maximally ascented child that is baseline-aligned.
+     * This is used because we don't know child's top pre-layout.
      */
-    var isBaselineAligned = true
-
-    /**
-     * If this layout is part of another layout that is baseline aligned,
-     * use the child at this index as the baseline.
-     *
-     * Note: this is orthogonal to [isBaselineAligned], which is concerned
-     * with whether the children of this layout are baseline aligned.
-     */
-    var baselineAlignedChildIndex = -1
-        set(value) {
-            if (value !in 0 until childCount) {
-                throw IllegalArgumentException("base aligned child index out "
-                        + "of range (0, " + childCount + ")")
-            }
-            field = value
-        }
-
-    /**
-     * The additional offset to the child's baseline.
-     * We'll calculate the baseline of this layout as we measure vertically; for
-     * horizontal linear layouts, the offset of 0 is appropriate.
-     */
-    private var baselineChildTop = 0
+    private var maxBaselinedAscent = -1
+    private var maxBaselinedDescent = -1
 
     @LinearLayoutCompat.OrientationMode
     var orientation = HORIZONTAL
@@ -111,9 +83,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
      * measured normally.
      */
     var isMeasureWithLargestChildEnabled = false
-
-    private var maxAscent: IntArray? = null
-    private var maxDescent: IntArray? = null
 
     private var dividerWidth = 0
     private var dividerHeight = 0
@@ -225,33 +194,14 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
 
     override fun getBaseline(): Int {
-        if (baselineAlignedChildIndex < 0) return super.getBaseline()
-
-        if (childCount <= baselineAlignedChildIndex) {
-            throw RuntimeException("mBaselineAlignedChildIndex of LinearLayout "
-                + "set to an index that is out of bounds.")
-        }
-
-        val child = getChildAt(baselineAlignedChildIndex)
-        val childBaseline = child.baseline
-        if (childBaseline == -1) {
-            if (baselineAlignedChildIndex == 0) {
-                // this is just the default case, safe to return -1
-                return -1
-            }
-            throw RuntimeException("mBaselineAlignedChildIndex of LinearLayout "
-                + "points to a View that doesn't know how to get its baseline.")
-        }
-
-        var childTop = baselineChildTop
         if (isVertical) {
-            when (gravity and Gravity.VERTICAL_GRAVITY_MASK) {
-                Gravity.BOTTOM -> childTop = bottom - top - paddingBottom - totalLength
-                Gravity.CENTER_VERTICAL -> childTop += (bottom - top - paddingTop - paddingBottom -
-                    totalLength) / 2
-            }
+            val child = getChildAt(0) ?: return super.getBaseline()
+            return child.baseline + child.lp.topMargin + paddingTop
         }
-        return childTop + child.lp.topMargin + childBaseline
+        if (maxBaselinedAscent != -1) {
+            return maxBaselinedAscent + paddingTop
+        }
+        return super.getBaseline()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -300,7 +250,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         var matchWidth = false
         var skippedMeasure = false
-        val baselineChildIndex = baselineAlignedChildIndex
         val useLargestChild = isMeasureWithLargestChildEnabled
         var largestChildHeight = 0
 
@@ -346,23 +295,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 if (useLargestChild) {
                     largestChildHeight = max(childHeight, largestChildHeight)
                 }
-            }
-            /**
-             * If applicable, compute the additional offset to the child's baseline
-             * we'll need later when asked [.getBaseline].
-             */
-            if (baselineChildIndex >= 0 && baselineChildIndex == i + 1) {
-                baselineChildTop = totalLength
-            }
-
-            // if we are trying to use a child index for our baseline, the above
-            // book keeping only works if there are no children above it with
-            // weight.  fail fast to aid the developer.
-            if (i < baselineChildIndex && lp.weight > 0) {
-                throw RuntimeException("A child of LinearLayout with index "
-                    + "less than mBaselineAlignedChildIndex has weight > 0, which "
-                    + "won't work.  Either remove the weight, or don't set "
-                    + "mBaselineAlignedChildIndex.")
             }
             var matchWidthLocally = false
             if (widthMode != MeasureSpec.EXACTLY &&
@@ -549,21 +481,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         var matchHeight = false
         var skippedMeasure = false
-        if (maxAscent == null || maxDescent == null) {
-            maxAscent = IntArray(VERTICAL_GRAVITY_COUNT)
-            maxDescent = IntArray(VERTICAL_GRAVITY_COUNT)
-        }
-        val maxAscent = maxAscent!!
-        val maxDescent = maxDescent!!
-        maxAscent[3] = -1
-        maxAscent[2] = maxAscent[3]
-        maxAscent[1] = maxAscent[2]
-        maxAscent[0] = maxAscent[1]
-        maxDescent[3] = -1
-        maxDescent[2] = maxDescent[3]
-        maxDescent[1] = maxDescent[2]
-        maxDescent[0] = maxDescent[1]
-        val baselineAligned = isBaselineAligned
+        maxBaselinedAscent = -1
+        maxBaselinedDescent = -1
         val useLargestChild = isMeasureWithLargestChildEnabled
         val isExactly = widthMode == MeasureSpec.EXACTLY
         var largestChildWidth = 0
@@ -593,7 +512,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 // defeats the optimization mentioned above. Allow the child to
                 // use as much space as it wants because we can shrink things
                 // later (and re-measure).
-                if (baselineAligned) {
+                if (lp.isBaselineAligned) {
                     val freeSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
                     child.measure(freeSpec, freeSpec)
                 } else {
@@ -643,17 +562,11 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             val margin = lp.topMargin + lp.bottomMargin
             val childHeight = child.measuredHeight + margin
             childState = combineMeasuredStates(childState, child.measuredState)
-            if (baselineAligned) {
+            if (lp.isBaselineAligned) {
                 val childBaseline = child.baseline
                 if (childBaseline != -1) {
-                    // Translates the child's vertical gravity into an index
-                    // in the range 0..VERTICAL_GRAVITY_COUNT
-                    val gravity = ((if (lp.gravity < 0) gravity else lp.gravity)
-                        and Gravity.VERTICAL_GRAVITY_MASK)
-                    val index = (((gravity shr Gravity.AXIS_Y_SHIFT)
-                        and Gravity.AXIS_SPECIFIED.inv())) shr 1
-                    maxAscent[index] = max(maxAscent[index], childBaseline)
-                    maxDescent[index] = max(maxDescent[index], childHeight - childBaseline)
+                    maxBaselinedAscent = max(maxBaselinedAscent, childBaseline + lp.topMargin)
+                    maxBaselinedDescent = max(maxBaselinedDescent, childHeight - childBaseline - lp.topMargin)
                 }
             }
             maxHeight = max(maxHeight, childHeight)
@@ -672,19 +585,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
         if (totalLength > 0 && hasDividerBeforeChildAt(childCount)) {
             totalLength += dividerWidth
-        }
-
-        // Check maxAscent[INDEX_TOP] first because it maps to Gravity.TOP,
-        // the most common case
-        if ((maxAscent[INDEX_TOP] != -1) || (
-                maxAscent[INDEX_CENTER_VERTICAL] != -1) || (
-                maxAscent[INDEX_BOTTOM] != -1) || (
-                maxAscent[INDEX_FILL] != -1)) {
-            val ascent = max(maxAscent[INDEX_FILL], max(maxAscent[INDEX_CENTER_VERTICAL],
-                max(maxAscent[INDEX_TOP], maxAscent[INDEX_BOTTOM])))
-            val descent = max(maxDescent[INDEX_FILL], max(maxDescent[INDEX_CENTER_VERTICAL],
-                max(maxDescent[INDEX_TOP], maxDescent[INDEX_BOTTOM])))
-            maxHeight = max(maxHeight, ascent + descent)
         }
         if (useLargestChild &&
             (widthMode == MeasureSpec.AT_MOST || widthMode == MeasureSpec.UNSPECIFIED)) {
@@ -720,14 +620,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         var delta = widthSize - totalLength
         if (skippedMeasure || (delta != 0 && totalWeight > 0.0f)) {
             var weightSum = if (weightSum > 0.0f) weightSum else totalWeight
-            maxAscent[3] = -1
-            maxAscent[2] = maxAscent[3]
-            maxAscent[1] = maxAscent[2]
-            maxAscent[0] = maxAscent[1]
-            maxDescent[3] = -1
-            maxDescent[2] = maxDescent[3]
-            maxDescent[1] = maxDescent[2]
-            maxDescent[0] = maxDescent[1]
+            maxBaselinedAscent = -1
+            maxBaselinedDescent = -1
             maxHeight = -1
             totalLength = 0
             for (i in 0 until childCount) {
@@ -782,35 +676,17 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 alternativeMaxHeight = max(alternativeMaxHeight,
                     if (matchHeightLocally) margin else childHeight)
                 allFillParent = allFillParent && lp.height == ViewGroup.LayoutParams.MATCH_PARENT
-                if (baselineAligned) {
+                if (lp.isBaselineAligned) {
                     val childBaseline = child.baseline
                     if (childBaseline != -1) {
-                        // Translates the child's vertical gravity into an index in the range 0..2
-                        val gravity = ((if (lp.gravity < 0) gravity else lp.gravity)
-                            and Gravity.VERTICAL_GRAVITY_MASK)
-                        val index = (((gravity shr Gravity.AXIS_Y_SHIFT)
-                            and Gravity.AXIS_SPECIFIED.inv())) shr 1
-                        maxAscent[index] = max(maxAscent[index], childBaseline)
-                        maxDescent[index] = max(maxDescent[index], childHeight - childBaseline)
+                        maxBaselinedAscent = max(maxBaselinedAscent, childBaseline + lp.topMargin)
+                        maxBaselinedDescent = max(maxBaselinedDescent, childHeight - childBaseline - lp.topMargin)
                     }
                 }
             }
 
             // Add in our padding
             totalLength += paddingLeft + paddingRight
-
-            // Check maxAscent[INDEX_TOP] first because it maps to Gravity.TOP,
-            // the most common case
-            if ((maxAscent[INDEX_TOP] != -1) || (
-                    maxAscent[INDEX_CENTER_VERTICAL] != -1) || (
-                    maxAscent[INDEX_BOTTOM] != -1) || (
-                    maxAscent[INDEX_FILL] != -1)) {
-                val ascent = max(maxAscent[INDEX_FILL], max(maxAscent[INDEX_CENTER_VERTICAL],
-                    max(maxAscent[INDEX_TOP], maxAscent[INDEX_BOTTOM])))
-                val descent = max(maxDescent[INDEX_FILL], max(maxDescent[INDEX_CENTER_VERTICAL],
-                    max(maxDescent[INDEX_TOP], maxDescent[INDEX_BOTTOM])))
-                maxHeight = max(maxHeight, ascent + descent)
-            }
         } else {
             alternativeMaxHeight = max(alternativeMaxHeight, weightedMaxHeight)
 
@@ -834,8 +710,10 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         if (!allFillParent && heightMode != MeasureSpec.EXACTLY) {
             maxHeight = alternativeMaxHeight
         }
+        if (maxBaselinedAscent != -1) {
+            maxHeight = max(maxHeight, maxBaselinedAscent + maxBaselinedDescent)
+        }
         maxHeight += paddingTop + paddingBottom
-
         // Check against our minimum height
         maxHeight = max(maxHeight, suggestedMinimumHeight)
         setMeasuredDimension(widthSizeAndState or (childState and MEASURED_STATE_MASK),
@@ -975,7 +853,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         val childSpace = height - paddingTop - paddingBottom
         val majorGravity = gravity and GravityCompat.RELATIVE_HORIZONTAL_GRAVITY_MASK
         val minorGravity = gravity and Gravity.VERTICAL_GRAVITY_MASK
-        val baselineAligned = isBaselineAligned
         val layoutDirection = ViewCompat.getLayoutDirection(this)
         var childLeft = when (GravityCompat.getAbsoluteGravity(majorGravity, layoutDirection)) {
             Gravity.RIGHT -> paddingLeft + right - left - totalLength
@@ -999,7 +876,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             val childHeight = child.measuredHeight
             var childBaseline = -1
             val lp = child.lp
-            if (baselineAligned && lp.height != ViewGroup.LayoutParams.MATCH_PARENT) {
+            if (lp.isBaselineAligned && lp.height != ViewGroup.LayoutParams.MATCH_PARENT) {
                 childBaseline = child.baseline
             }
             var gravity = lp.gravity
@@ -1010,7 +887,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 Gravity.TOP -> {
                     childTop = paddingTop + lp.topMargin
                     if (childBaseline != -1) {
-                        childTop += maxAscent!![INDEX_TOP] - childBaseline
+                        childTop += maxBaselinedAscent - childBaseline - lp.topMargin
                     }
                 }
                 Gravity.CENTER_VERTICAL ->
@@ -1029,10 +906,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                         lp.topMargin - lp.bottomMargin
                 Gravity.BOTTOM -> {
                     childTop = childBottom - childHeight - lp.bottomMargin
-                    if (childBaseline != -1) {
-                        val descent = child.measuredHeight - childBaseline
-                        childTop -= maxDescent!![INDEX_BOTTOM] - descent
-                    }
                 }
                 else -> childTop = paddingTop
             }
@@ -1102,6 +975,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     open class LayoutParams : LinearLayout.LayoutParams {
 
+        var isBaselineAligned = false
+
         constructor(c: Context?, attrs: AttributeSet?) : super(c, attrs)
 
         constructor(width: Int, height: Int) : super(width, height)
@@ -1123,5 +998,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         constructor(source: MarginLayoutParams?) : super(source)
 
         constructor(source: LinearLayout.LayoutParams) : super(source)
+
+        constructor(source: LayoutParams): super(source) {
+            this.isBaselineAligned = source.isBaselineAligned
+        }
     }
 }

@@ -38,10 +38,6 @@ internal class DivLinearLayout @JvmOverloads constructor(
 
     private var isDrawing = false
 
-    init {
-        isBaselineAligned = false
-    }
-
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
         borderDrawer = updateBorderDrawer(border, resolver)
     }
