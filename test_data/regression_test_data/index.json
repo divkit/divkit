@@ -1287,8 +1287,7 @@
     {
       "title": "Lottie cycled animations",
       "platforms": [
-        "android",
-        "ios"
+        "android"
       ],
       "tags": [
         "lottie"

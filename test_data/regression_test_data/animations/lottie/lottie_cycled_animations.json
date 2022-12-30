@@ -63,8 +63,17 @@
           "title": "Cycled",
           "lottie_params": {
             "lottie_url": "https://s3.mds.yandex.net/mobile-yandex-client-android/divkit/images/lottie_animations/DivGif23.json",
-            "repeat_count": -1,
-            "repeat_mode": "restart"
+            "repeats": [
+              {
+                "repeat_count": 0,
+                "repeat_mode": "reverse"
+              },
+              {
+                "repeat_count": -1,
+                "repeat_mode": "restart",
+                "min_frame": 110
+              }
+            ]
           }
         }
       }
