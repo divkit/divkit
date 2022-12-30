@@ -55,24 +55,8 @@ extension DivContainer: DivBlockModeling {
 
   private func getFallbackWidth(
     orientation: Orientation,
-    layoutMode: LayoutMode = .noWrap,
     context: DivBlockModelingContext
   ) -> DivOverridenSize? {
-    if layoutMode == .wrap {
-      switch orientation {
-      case .vertical:
-        if items.hasHorizontallyMatchParent {
-          context.addError(
-            level: .warning,
-            message: "Vertical DivContainer with wrap layout mode contains item with match_parent width"
-          )
-          return defaultFallbackSize
-        }
-      case .horizontal, .overlap:
-        break
-      }
-    }
-
     if width.isIntrinsic {
       switch orientation {
       case .horizontal:
@@ -99,24 +83,8 @@ extension DivContainer: DivBlockModeling {
 
   private func getFallbackHeight(
     orientation: Orientation,
-    layoutMode: LayoutMode = .noWrap,
     context: DivBlockModelingContext
   ) -> DivOverridenSize? {
-    if layoutMode == .wrap {
-      switch orientation {
-      case .horizontal:
-        if items.hasVerticallyMatchParent {
-          context.addError(
-            level: .warning,
-            message: "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
-          )
-          return defaultFallbackSize
-        }
-      case .vertical, .overlap:
-        break
-      }
-    }
-
     if height.isIntrinsic {
       switch orientation {
       case .horizontal, .overlap:
@@ -206,16 +174,38 @@ extension DivContainer: DivBlockModeling {
 
     let fallbackWidth = getFallbackWidth(
       orientation: orientation,
-      layoutMode: layoutMode,
       context: childContext
     )
     let fallbackHeight = getFallbackHeight(
       orientation: orientation,
-      layoutMode: layoutMode,
       context: childContext
     )
 
-    let children = try items.makeBlocks(
+    // Before block's making we need to filter items and remove
+    // what has "matchParent" for opposite directions
+    let filtredItems = items.filter {
+      guard layoutMode == .wrap else { return true }
+      if orientation == .vertical {
+        if items.hasHorizontallyMatchParent {
+          childContext.addError(
+            level: .warning,
+            message: "Vertical DivContainer with wrap layout mode contains item with match_parent width"
+          )
+        }
+      } else {
+        if items.hasVerticallyMatchParent {
+          childContext.addError(
+            level: .warning,
+            message: "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
+          )
+        }
+      }
+
+      return orientation == .horizontal ? !$0.isVerticallyMatchParent : !$0
+        .isHorizontallyMatchParent
+    }
+
+    let children = try filtredItems.makeBlocks(
       context: childContext,
       overridenWidth: fallbackWidth,
       overridenHeight: fallbackHeight,

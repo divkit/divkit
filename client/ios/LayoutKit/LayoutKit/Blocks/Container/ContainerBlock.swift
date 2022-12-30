@@ -18,6 +18,11 @@ public final class ContainerBlock: BlockWithLayout {
     case horizontal
     /// Child blocks are laid out vertically one after another
     case vertical
+
+    /// Returns opposite direction
+    var opposite: LayoutDirection {
+      self == .horizontal ? .vertical : .horizontal
+    }
   }
 
   public enum LayoutMode {

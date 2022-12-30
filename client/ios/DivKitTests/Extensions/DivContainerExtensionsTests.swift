@@ -58,20 +58,26 @@ final class DivContainerExtensionsTests: XCTestCase {
     )
   }
 
-  func test_HorizontalWrapContainer_HasVerticallyResizableItem_FallbackHeight(
+  func test_HorizontalWrapContainer_HasVerticallyResizableItem_withoutFallbackHeight(
   ) throws {
-    try assertBlocksAreEqual(
-      in: "horizontal_wrap_container_match_parent_height_item",
-      "horizontal_wrap_container_wrap_content_constrained_height_item"
-    )
+    do {
+      let _ = try makeBlock(
+        fromFile: "horizontal_wrap_container_match_parent_height_item"
+      ) as? WrapperBlock
+    } catch {
+      XCTAssertTrue(error is DivBlockModelingError)
+    }
   }
 
-  func test_VerticalWrapContainer_HasHorizontallyResizableItem_FallbackWidth(
+  func test_VerticalWrapContainer_HasHorizontallyResizableItem_withoutFallbackWidth(
   ) throws {
-    try assertBlocksAreEqual(
-      in: "vertical_wrap_container_match_parent_width_item",
-      "vertical_wrap_container_wrap_content_constrained_width_item"
-    )
+    do {
+      let _ = try makeBlock(
+        fromFile: "vertical_wrap_container_match_parent_width_item"
+      ) as? WrapperBlock
+    } catch {
+      XCTAssertTrue(error is DivBlockModelingError)
+    }
   }
 
   func test_HorizontalContainer_WithIntrinsicWidth_AndHasSingleHorizontallyResizableItem_FallbackWidth(
