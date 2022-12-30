@@ -39,6 +39,21 @@ class ScenariosRepositoryTest {
     }
 
     @Test
+    fun `load only android tests`() = testCoroutineDispatcher.runBlockingTest {
+        dataSource.addScenario(Scenario(title = "foo", platforms = listOf(Platforms.android)))
+        dataSource.addScenario(Scenario(title = "fuz", platforms = listOf(Platforms.ios)))
+        dataSource.addScenario(Scenario(title = "bar", platforms = listOf(Platforms.web)))
+
+        launch {
+            val scenarios = underTest.loadScenarios()
+            Assert.assertEquals(
+                listOf("foo"),
+                scenarios.map { it.title }
+            )
+        }
+    }
+
+    @Test
     fun `return item count`() = testCoroutineDispatcher.runBlockingTest {
         repeat(3) {
             dataSource.addScenario(Scenario())
