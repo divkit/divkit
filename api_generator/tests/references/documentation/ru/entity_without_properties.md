@@ -1,5 +1,5 @@
 # entity_without_properties
-Описания пока нет
+Описания пока нет.
 
 ## JSON
 ```json

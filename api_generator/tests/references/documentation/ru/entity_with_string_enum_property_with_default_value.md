@@ -1,5 +1,5 @@
 # entity_with_string_enum_property_with_default_value
-Описания пока нет
+Описания пока нет.
 
 ## JSON
 ```json

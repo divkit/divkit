@@ -1,5 +1,5 @@
 # entity
-It can be one of the following types:
+Can have one of the following types:
 * [entity_with_array](entity_with_array.md#entity_with_array)
 * [entity_with_array_of_enums](entity_with_array_of_enums.md#entity_with_array_of_enums)
 * [entity_with_array_of_expressions](entity_with_array_of_expressions.md#entity_with_array_of_expressions)

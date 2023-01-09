@@ -1,5 +1,5 @@
 # entity_without_properties
-There is no description yet.
+No description yet.
 
 ## JSON
 ```json

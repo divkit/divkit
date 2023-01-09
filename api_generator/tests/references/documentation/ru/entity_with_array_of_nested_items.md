@@ -1,5 +1,5 @@
 # entity_with_array_of_nested_items
-Описания пока нет
+Описания пока нет.
 
 ## JSON
 ```json

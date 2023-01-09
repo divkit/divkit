@@ -1,5 +1,5 @@
 # entity_with_optional_string_enum_property
-There is no description yet.
+No description yet.
 
 ## JSON
 ```json

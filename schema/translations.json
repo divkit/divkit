@@ -1,11 +1,11 @@
 {
   "div_absolute_edge_insets": {
-    "en": "Sets the margins, without taking the properties of the screen.",
+    "en": "Sets margins without regard to screen properties.",
     "ru": "Устанавливает отступы, без учета свойств экрана."
   },
   "div_accessibility": {
-    "en": "Accessibility for disabled people.",
-    "ru": "Доступность для людей с ограниченными возможностями."
+    "en": "Accessibility settings.",
+    "ru": "Настройки доступности для людей с ограниченными возможностями."
   },
   "div_accessibility_description": {
     "en": "Element description. It is used as the main description for screen reading applications.",
@@ -20,7 +20,7 @@
     "ru": "Способ организации дерева accessibility. В режиме `merge` accessibility-сервис воспринимает элемент вместе с поддеревом как одно целое. В режиме `exclude` элемент вместе с поддеревом недоступен для accessibility."
   },
   "div_accessibility_mute_after_action": {
-    "en": "Mutes the sound of the screen reader after interacting with the element.",
+    "en": "Mutes the screen reader sound after interacting with the element.",
     "ru": "Заглушает звук чтения экрана после взаимодействия с элементом."
   },
   "div_accessibility_state_description": {
@@ -28,8 +28,8 @@
     "ru": "Описание текущего состояния элемента. Например, в описании можно указать выбранную дату для элемента выбора даты, а для переключателя — состояние включен/выключен."
   },
   "div_accessibility_type": {
-    "en": "Element role. It is used for correct identification of an element by an accessibility service. The `list` element is used to group list items into a single element; works only on Android/iOS.",
-    "ru": "Роль элемента. Используется для правильной идентификации элемента accessibility-сервисом. Элемент `list` используется для группировки элементов списка в один элемент; работает только на Android/iOS."
+    "en": "Element role. It is used for correct identification of an element by an accessibility service. The `list` element is used to group list items into a single element.",
+    "ru": "Роль элемента. Используется для правильной идентификации элемента accessibility-сервисом. Элемент `list` используется для группировки элементов списка в один элемент."
   },
   "div_action": {
     "en": "It defines an action when clicking on an element.",
@@ -84,7 +84,7 @@
     "ru": "Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`."
   },
   "div_actionable_action_animation": {
-    "en": "Action animation. Web supports `fade`, `scale` and `set` only.",
+    "en": "Click animation. The web only supports the following values: `fade`, `scale`, and `set`.",
     "ru": "Анимация нажатия. В вебе поддерживаются только значения `fade`, `scale` и `set`."
   },
   "div_actionable_actions": {
@@ -97,7 +97,7 @@
   },
   "div_actionable_longtap_actions": {
     "en": "Action when long-clicking on an element. Doesn't work on the devices w/o touch gestures.",
-    "ru": "Действие при долгом нажатии на элемент. Не работает на устройствах без тачевых жестов."
+    "ru": "Действие при долгом нажатии на элемент. Не работает на устройствах без сенсорного экрана."
   },
   "div_animation": {
     "en": "Element animation parameters.",
@@ -188,8 +188,8 @@
     "ru": "Сплошной цвет."
   },
   "div_base_accessibility": {
-    "en": "Accessibility for disabled people.",
-    "ru": "Доступность для людей с ограниченными возможностями."
+    "en": "Accessibility settings.",
+    "ru": "Настройки доступности для людей с ограниченными возможностями."
   },
   "div_base_alignment_horizontal": {
     "en": "Horizontal alignment of an element inside the parent element.",
@@ -252,8 +252,8 @@
     "ru": "Привязанные к элементу всплывающие подсказки. Подсказка может быть показана по `div-action://show_tooltip?id=`, скрыта по `div-action://hide_tooltip?id=`, где `id` — id подсказки."
   },
   "div_base_transform": {
-    "en": "Transformation of the element. Applies the passed transform to the element. The content that does not fit into the original view will be cut off.",
-    "ru": "Преобразование элемента. Применяет к элементу переданный transform, тот контент, который не поместится в исходную вью, будет обрезан."
+    "en": "Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.",
+    "ru": "Применяет к элементу переданное преобразование. Тот контент, который не поместится в исходную область просмотра, будет обрезан."
   },
   "div_base_transition_change": {
     "en": "Change animation. It is played when the position or size of an element changes in the new layout.",
@@ -296,8 +296,8 @@
     "ru": "Размытие изображения по Гауссу."
   },
   "div_blur_radius": {
-    "en": "Defines how many pixels on the screen blend into each other. It is specified in `dp`.",
-    "ru": "Определяет то, как много пикселей будут смешиваться друг с другом. Единица измерения - `dp`."
+    "en": "Blur radius. Defines how many pixels blend into each other. Specified in: `dp`.",
+    "ru": "Радиус размытия. Определяет количество пикселей, которые будут смешиваться друг с другом. Единица измерения: `dp`."
   },
   "div_border": {
     "en": "Stroke around the element.",
@@ -348,7 +348,7 @@
     "ru": "Набор анимаций."
   },
   "div_circle_shape": {
-    "en": "A circle.",
+    "en": "Circle.",
     "ru": "Круг."
   },
   "div_circle_shape_radius": {
@@ -361,19 +361,19 @@
   },
   "div_container_content_alignment_horizontal": {
     "en": "Default alignment of elements. Not used if the `alignment_horizontal` parameter is set from the element field.",
-    "ru": "Выравнивание элементов по умолчанию. Не используется, если из поля элемента задан параметр `alignment_horizontal`."
+    "ru": "Горизонтальное выравнивание элементов. Для дочерних элементов может быть переопределено через свойство `alignment_horizontal`."
   },
   "div_container_content_alignment_vertical": {
     "en": "Default alignment of elements. `baseline` value aligns elements having their own baseline along this baseline. Other elements are aligned by top side in this case. Not used if the `alignment_vertical` parameter is set from the element field.",
-    "ru": "Выравнивание элементов по умолчанию. Значение `baseline` означает выравнивание по бейзлайну элементов, которые имеют собственный бейзлайн. Остальные элементы в этом случае будут выровнены по верхнему краю. Не используется, если из поля элемента задан параметр `alignment_vertical`."
+    "ru": "Вертикальное выравнивание элементов. Значение `baseline` означает выравнивание элементов по базовой линии (для текста и других элементов, у которых есть базовая линия). Остальные элементы в этом случае будут выровнены по верхнему краю. Для дочерних элементов может быть переопределено через свойство `alignment_vertical`."
   },
   "div_container_items": {
     "en": "Nested elements.",
     "ru": "Вложенные элементы."
   },
   "div_container_layout_mode": {
-    "en": "Method of placing elements. `wrap` value includes the transfer of elements to the next line if they did not fit in the previous one. If the value is set to `wrap`, then a separate line will be allocated for all elements with a size value of `match_parent` along the main axis. If the value is set to `wrap`, then elements with a size value of `match_parent` along the cross axis will be ignored.",
-    "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей. Если установлено значения `wrap`, то для каждого элемента со значением размера `match_parent` вдоль главной оси будет выделена отдельная строка. Если установлено значение `wrap`, то элементы со значением `match_parent` вдоль побочной оси будут проигнорированы."
+    "en": "Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>",
+    "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей. Если установлено значения `wrap`:<li>для каждого элемента со значением размера `match_parent` вдоль главной оси будет выделена отдельная строка;</li><li>элементы со значением `match_parent` вдоль побочной оси будут проигнорированы.</li>"
   },
   "div_container_line_separator": {
     "en": "Separator between elements along the cross axis. Not used if the `layout_mode` parameter has the value `no_wrap'. In the web only newer browsers are supported (gap property is required in flex).",
@@ -388,19 +388,19 @@
     "ru": "Разделитель между элементами вдоль основной оси. Не используется, если параметр `orientation` имеет значение `overlap`. В вебе поддерживаются только новые браузеры (требуется поддержка gap во flex)."
   },
   "div_container_separator_show_at_end": {
-    "en": "Enables showing of separator after the last item.",
+    "en": "Enables displaying the separator after the last item.",
     "ru": "Включает отображение разделителя после последнего элемента."
   },
   "div_container_separator_show_at_start": {
-    "en": "Enables showing of separator before the first item.",
-    "ru": "Включает отображение разделителя до первого элемента."
+    "en": "Enables displaying the separator before the first item.",
+    "ru": "Включает отображение разделителя перед первым элементом."
   },
   "div_container_separator_show_between": {
-    "en": "Enables showing of separator between items.",
+    "en": "Enables displaying the separator between items.",
     "ru": "Включает отображение разделителя между элементами."
   },
   "div_container_separator_style": {
-    "en": "Style of the separator.",
+    "en": "Separator style.",
     "ru": "Стиль разделителя."
   },
   "div_container_short": {
@@ -584,7 +584,7 @@
     "ru": "Фон элемента, когда он в фокусе. Может содержать несколько слоев."
   },
   "div_focus_border": {
-    "en": "Border of an element when it is in focus",
+    "en": "Border of an element when it's in focus.",
     "ru": "Рамка элемента, когда он в фокусе."
   },
   "div_focus_next_focus_ids": {
@@ -628,8 +628,8 @@
     "ru": "Выравнивание элементов в направлении, перпендикулярном направлению скролла. В горизонтальных галереях:<li>`start` — выравнивание по верхнему краю карточки;</li><li>`center` — по центру;</li><li>`end` — по нижнему краю.</li></p><p>В вертикальных галереях:<li>`start` — выравнивание по левому краю карточки;</li><li>`center` — по центру;</li><li>`end` — по правому краю.</li>"
   },
   "div_gallery_cross_spacing": {
-    "en": "Spacing between elements across the scroll axis. Default value is `item_spacing`",
-    "ru": "Расстояние между элементами поперек оси прокрутки. По умолчанию равно `item_spacing`"
+    "en": "Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.",
+    "ru": "Расстояние между элементами поперек оси прокрутки. По умолчанию равно значению `item_spacing`."
   },
   "div_gallery_default_item": {
     "en": "Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>",
@@ -684,7 +684,7 @@
     "ru": "Цвета. Точки градиента будут расположены на равном расстоянии друг от друга."
   },
   "div_gradient_colors": {
-    "en": "Colors. Gradient points will be located at an equal distance from each other.",
+    "en": "Colors. Gradient points are located at an equal distance from each other.",
     "ru": "Цвета. Точки градиента будут расположены на равном расстоянии друг от друга."
   },
   "div_gradient_linear": {
@@ -704,7 +704,7 @@
     "ru": "Сдвиг центральной точки градиента относительно левого края по оси X."
   },
   "div_gradient_radial_center_y": {
-    "en": "Shift of the central point of the gradient relative to the upper edge along the Y axis.",
+    "en": "Shift of the central point of the gradient relative to the top edge along the Y axis.",
     "ru": "Сдвиг центральной точки градиента относительно верхнего края по оси Y."
   },
   "div_gradient_radial_radius": {
@@ -812,8 +812,8 @@
     "ru": "Новый цвет контурного изображения."
   },
   "div_image_tint_mode": {
-    "en": "The blend mode of color specified in tint_color.",
-    "ru": "Метод наложения цвета, указанного в tint_color."
+    "en": "Blend mode of the color specified in `tint_color`.",
+    "ru": "Метод наложения цвета, указанного в `tint_color`."
   },
   "div_indicator": {
     "en": "Progress indicator for [pager](div-pager.md).",
@@ -836,16 +836,16 @@
     "ru": "Цвет индикатора."
   },
   "div_indicator_item_placement": {
-    "en": "Indicator items placement mode. There are 2 modes: default (indicators width is fixed and defined by the shape parameters) and stretch (indicators will be expanded to fill the whole width).",
-    "ru": "Режим расположения элементов индикатора. Можно задать режим по умолчанию (с фиксированной шириной элементов, которая определяется параметрами shape) либо режим растяжения, при котором индикаторы займут всю предоставленную ширину."
+    "en": "Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>",
+    "ru": "Режим расположения элементов индикатора:<li>по умолчанию — с фиксированной шириной элементов, которая определяется параметрами `shape`;</li><li>растяжение — индикаторы займут всю предоставленную ширину.</li>"
   },
   "div_indicator_item_placement_default": {
     "en": "Fixed width indicator items placement mode.",
     "ru": "Режим расположения элементов индикатора с фиксированной шириной элементов."
   },
   "div_indicator_item_placement_stretch": {
-    "en": "Stretch indicator items placement mode. will be expanded to fill the whole width.",
-    "ru": "Режим расятжения элементов индикатора при котором индикаторы займут всю предоставленную ширину"
+    "en": "Stretch indicator items placement mode: indicators are expanded to fill the entire width.",
+    "ru": "Режим растяжения элементов индикатора, при котором индикаторы займут всю предоставленную ширину."
   },
   "div_indicator_max_visible_items": {
     "en": "Maximum number of visible indicators.",
@@ -868,12 +868,12 @@
     "ru": "Индикатор прогресса для пейджера."
   },
   "div_indicator_space_between_centers": {
-    "en": "Spacing between indicator centers. It is deprecated for Android. Use `items_placement` instead.",
-    "ru": "Расстояние между центрами индикаторов. Deprecated для Android. Используйте `items_placement`."
+    "en": "Spacing between indicator centers. <br>The parameter is deprecated for Android, please use the `items_placement` parameter instead.",
+    "ru": "Расстояние между центрами индикаторов. <br>Для Android параметр устарел, вместо него используйте параметр `items_placement`."
   },
   "div_indicator_space_between_items": {
-    "en": "Spacing between indicator edges.",
-    "ru": "Расстояние между краями индикаторов."
+    "en": "Spacing between indicator borders.",
+    "ru": "Расстояние между границами индикаторов."
   },
   "div_infinity_count": {
     "en": "Infinite number of repetitions.",
@@ -905,11 +905,11 @@
   },
   "div_input_line_height": {
     "en": "Line spacing of the text range. The count is taken from the font baseline. Measured in units specified in `font_size_unit`.",
-    "ru": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта. Измеряется в единицах, заданных в `font_size_unit`."
+    "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
   "div_input_max_visible_lines": {
-    "en": "Maximum number of lines that will be visible in the input view.",
-    "ru": "Максимальное количество строк, которое будет видно в окне ввода."
+    "en": "Maximum number of lines to be displayed in the input field.",
+    "ru": "Максимальное количество строк, которое будет видно в поле ввода."
   },
   "div_input_native_interface": {
     "en": "Text input line used in the native interface.",
@@ -924,7 +924,7 @@
     "ru": "Выделение введенного текста при получении фокуса."
   },
   "div_input_short": {
-    "en": "Input field",
+    "en": "Text input field.",
     "ru": "Поле ввода текста."
   },
   "div_input_text_variable": {
@@ -952,12 +952,12 @@
     "ru": "Ширина видимой части соседней страницы."
   },
   "div_nine_patch_background": {
-    "en": "Image in nine patch format. https://developer.android.com/studio/write/draw9patch.",
-    "ru": "Изображение в формате nine patch. https://developer.android.com/studio/write/draw9patch."
+    "en": "Image in 9-patch format (https://developer.android.com/studio/write/draw9patch).",
+    "ru": "Изображение в формате nine patch (https://developer.android.com/studio/write/draw9patch)."
   },
   "div_nine_patch_background_insets": {
-    "en": "Margins that break images into parts, according to the rule, are similar to border-image-slice. (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)",
-    "ru": "Отступы, разбивающие изображения на части, по правилу аналогично border-image-slice (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
+    "en": "Margins that break the image into parts using the same rules as the CSS `border-image-slice` property (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice).",
+    "ru": "Отступы, разбивающие изображение на части по тем же правилам, как при использовании свойства CSS `border-image-slice` (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
   },
   "div_page_size": {
     "en": "Percentage value of the page width.",
@@ -1036,32 +1036,32 @@
     "ru": "Значение размера элемента."
   },
   "div_pivot_fixed": {
-    "en": "Fixed value of the central point of transformation. Absolute coordinate of the rotation point relative to the upper-left corner of the element.",
-    "ru": "Фиксированное значение центральной точки трансформации. Данное значение выражает абсолютную координату точки вращения относительно левого верхнего угла элемента."
+    "en": "Fixed value of the central point of transformation: the absolute coordinate of the rotation point relative to the element's top-left corner.",
+    "ru": "Фиксированное значение центральной точки трансформации — абсолютная координата точки вращения относительно левого верхнего угла элемента."
   },
   "div_pivot_fixed_short": {
-    "en": "Value of the offset of the coordinates of the axis of rotation.",
-    "ru": "Значение смещения координат оси вращения."
+    "en": "Fixed coordinates of the rotation axis.",
+    "ru": "Фиксированные координаты оси вращения."
   },
   "div_pivot_fixed_unit": {
-    "en": "Unit of size measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).",
+    "en": "Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).",
     "ru": "Единица измерения. Подробнее о единицах измерения размера в разделе [Верстка внутри карточки](../../layout.dita)."
   },
   "div_pivot_fixed_value": {
-    "en": "Offset.",
-    "ru": "Смещение."
+    "en": "Coordinate value.",
+    "ru": "Значение координаты."
   },
   "div_pivot_percentage": {
-    "en": "Position of the center point of the transformation as a percentage relative to the element. In this case, we assume that the point with coordinates (0%, 0%) corresponds to the upper left corner, and (100%, 100%) to the lower right corner.",
-    "ru": "Положение центральной точки трансформации в процентах относительно элемента. В данном случае считаем, что точка с координатами (0%, 0%) соответствует левому верхнему углу, а (100%, 100%) правому нижнему углу."
+    "en": "Position of the center point of transformation as a percentage relative to the element. The point with coordinates (0%, 0%) corresponds to the top-left corner, and (100%, 100%) corresponds to the bottom-right corner.",
+    "ru": "Положение центральной точки трансформации в процентах относительно элемента. Точка с координатами (0%, 0%) соответствует левому верхнему углу, а (100%, 100%) правому нижнему углу."
   },
   "div_pivot_percentage_short": {
-    "en": "Location of the coordinate of the axis of rotation as a percentage relative to the element.",
-    "ru": "Расположение координаты оси вращения в процентах относительно элемента."
+    "en": "Location of the coordinate of the rotation axis as a percentage relative to the element size.",
+    "ru": "Расположение координаты оси вращения в процентах относительно размеров элемента."
   },
   "div_pivot_percentage_value": {
-    "en": "Location of the element.",
-    "ru": "Расположение элемента."
+    "en": "Coordinate value as a percentage.",
+    "ru": "Значение координаты в процентах."
   },
   "div_point": {
     "en": "A point with fixed coordinates.",
@@ -1076,27 +1076,27 @@
     "ru": "Координата `Y`."
   },
   "div_radial_gradient_fixed_center": {
-    "en": "Fixed central point of the gradient.",
-    "ru": "Фиксированная центральная точка градиента."
+    "en": "Fixed coordinates of the central point of the gradient.",
+    "ru": "Фиксированные координаты центральной точки градиента."
   },
   "div_radial_gradient_fixed_center_value": {
-    "en": "Shift value of the fixed central point of the gradient.",
-    "ru": "Значение сдвига фиксированной центральной точки градиента."
+    "en": "Coordinate value.",
+    "ru": "Значение координаты."
   },
   "div_radial_gradient_relative_center": {
-    "en": "Relative central point of the gradient.",
-    "ru": "Относительная центральная точка градиента."
+    "en": "Location of the central point of the gradient relative to the element borders.",
+    "ru": "Расположение центральной точки градиента относительно границ элемента."
   },
   "div_radial_gradient_relative_center_value": {
-    "en": "Shift value of the central relative point of the gradient in the range `0..1`.",
-    "ru": "Значение сдвига относительной центральной точки градиента в диапозоне `0..1`."
+    "en": "Coordinate value in the range \"0...1\".",
+    "ru": "Значение координаты в диапазоне `0..1`."
   },
   "div_radial_gradient_relative_radius": {
     "en": "Relative radius of the gradient transition.",
     "ru": "Относительный радиус градиентного перехода."
   },
   "div_radial_gradient_relative_radius_value": {
-    "en": "Type of relative radius of the gradient transition.",
+    "en": "Type of the relative radius of the gradient transition.",
     "ru": "Тип относительного радиуса градиентного перехода."
   },
   "div_rounded_rectangle_shape": {
@@ -1181,7 +1181,7 @@
   },
   "div_shape_drawable_shape": {
     "en": "Shape.",
-    "ru": "Форма."
+    "ru": "Фигура."
   },
   "div_shape_drawable_stroke": {
     "en": "Stroke style.",
@@ -1196,11 +1196,11 @@
     "ru": "Размер, который подстраивается под ширину родительского элемента."
   },
   "div_size_max": {
-    "en": "Maximum element size.",
+    "en": "Maximum size of an element.",
     "ru": "Максимальный размер элемента."
   },
   "div_size_min": {
-    "en": "Minimum element size.",
+    "en": "Minimum size of an element.",
     "ru": "Минимальный размер элемента."
   },
   "div_size_unit": {
@@ -1236,8 +1236,8 @@
     "ru": "Минимальное значение."
   },
   "div_slider_secondary_value_accessibility": {
-    "en": "Accessibility for the secondary thumb.",
-    "ru": "Доступность для второго указателя."
+    "en": "Accessibility settings for the second pointer.",
+    "ru": "Настройки доступности для второго указателя."
   },
   "div_slider_short": {
     "en": "Slider.",
@@ -1256,7 +1256,7 @@
     "ru": "Стиль текста во втором указателе."
   },
   "div_slider_thumb_secondary_value_variable": {
-    "en": "Name of the variable to store the current value of the secondary thumb.",
+    "en": "Name of the variable to store the second pointer's current value.",
     "ru": "Название переменной для хранения текущего значения второго указателя."
   },
   "div_slider_thumb_style": {
@@ -1268,7 +1268,7 @@
     "ru": "Стиль текста в первом указателе."
   },
   "div_slider_thumb_value_variable": {
-    "en": "Name of the variable to store the current thumb value.",
+    "en": "Name of the variable to store the pointer's current value.",
     "ru": "Название переменной для хранения текущего значения указателя."
   },
   "div_slider_tick_mark_active_style": {
@@ -1472,8 +1472,8 @@
     "ru": "Интервал между символами заголовка."
   },
   "div_tabs_tab_title_style_line_height": {
-    "en": "Line spacing of the text range. The count is taken from the font baseline.",
-    "ru": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта."
+    "en": "Line spacing of the text.",
+    "ru": "Межстрочный интервал (интерлиньяж) текста."
   },
   "div_tabs_tab_title_style_paddings": {
     "en": "Indents around the tab title.",
@@ -1536,8 +1536,8 @@
     "ru": "Новый цвет контурного изображения."
   },
   "div_text_image_tint_mode": {
-    "en": "The blend mode of color specified in tint_color.",
-    "ru": "Метод наложения цвета, указанного в tint_color."
+    "en": "Blend mode of the color specified in `tint_color`.",
+    "ru": "Метод наложения цвета, указанного в `tint_color`."
   },
   "div_text_image_url": {
     "en": "Image URL.",
@@ -1557,7 +1557,7 @@
   },
   "div_text_line_height": {
     "en": "Line spacing of the text range. The count is taken from the font baseline.",
-    "ru": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта."
+    "ru": "Межстрочный интервал (интерлиньяж) текста."
   },
   "div_text_max_lines": {
     "en": "Maximum number of lines not to be cropped when breaking the limits.",
@@ -1576,12 +1576,12 @@
     "ru": "Действие при нажатии на текст."
   },
   "div_text_range_background": {
-    "en": "Text range background.",
-    "ru": "Фон для диапазона текста."
+    "en": "Character range background.",
+    "ru": "Фон для диапазона символов."
   },
   "div_text_range_border": {
-    "en": "Text range border.",
-    "ru": "Рамка для диапазона текста."
+    "en": "Character range border.",
+    "ru": "Рамка для диапазона символов."
   },
   "div_text_range_end": {
     "en": "Ordinal number of the last character to be included in the range.",
@@ -1593,7 +1593,7 @@
   },
   "div_text_range_line_height": {
     "en": "Line spacing of the text range. The count is taken from the font baseline. Measured in units specified in `font_size_unit`.",
-    "ru": "Межстрочный интервал (интерлиньяж) диапазона текста. Отсчет ведется от базовой линии шрифта. Измеряется в единицах, заданных в `font_size_unit`."
+    "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
   "div_text_range_start": {
     "en": "Ordinal number of a character which the range begins from. The first character has a number `0`.",
@@ -1604,8 +1604,8 @@
     "ru": "Зачеркивание."
   },
   "div_text_range_top_offset": {
-    "en": "The top margin of the text range. Measured in units specified in `font_size_unit`.",
-    "ru": "Верхний отступ диапазона текста. Измеряется в единицах, заданных в `font_size_unit`."
+    "en": "Top margin of the character range. Units specified in `font_size_unit`.",
+    "ru": "Верхний отступ диапазона символов. Измеряется в единицах, заданных в `font_size_unit`."
   },
   "div_text_range_underline": {
     "en": "Underline.",
@@ -1616,8 +1616,8 @@
     "ru": "Диапазон символов, в котором можно установить дополнительные параметры стиля. Определяется обязательными полями `start` и `end`."
   },
   "div_text_selectable": {
-    "en": "Selecting and copying text.",
-    "ru": "Выделение и копирование текста."
+    "en": "Ability to select and copy text.",
+    "ru": "Возможность выделения и копирования текста."
   },
   "div_text_short": {
     "en": "Text.",
@@ -1660,28 +1660,28 @@
     "ru": "Таймер."
   },
   "div_timer_duration": {
-    "en": "The duration of the timer in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).",
+    "en": "Timer duration in milliseconds. If the parameter is `0` or not specified, the timer runs indefinitely (until the timer stop event occurs).",
     "ru": "Длительность работы таймера в миллисекундах. Если параметр равен `0` или не указан, таймер работает бесконечно (до тех пор пока не придёт событие остановки таймера)."
   },
   "div_timer_end_actions": {
     "en": "Actions performed when the timer is ended: when the timer has counted to `duration` or the command `div-action://timer?action=stop&id=<id>` has received.",
-    "ru": "Действия, выполняемые при завершении работы таймера: когда таймер досчитал до `duration` или пришла команда `div-action://timer?action=stop&id=<id>`."
+    "ru": "Действия, выполняемые при завершении работы таймера: когда таймер досчитал до значения `duration` или пришла команда `div-action://timer?action=stop&id=<id>`."
   },
   "div_timer_id": {
-    "en": "Timer ID. Must be unique. It is used when calling actions for the selected timer, for example: start, stop.",
+    "en": "Timer ID. Must be unique. Used when calling actions for the selected timer, for example: start, stop.",
     "ru": "Идентификатор таймера. Должен быть уникальным. Используется при вызове действий для выбранного таймера, например: запуск, остановка."
   },
   "div_timer_tick_actions": {
-    "en": "Actions that are performed on each tick of the timer.",
-    "ru": "Действия, которые выполняются на каждый тик таймера."
+    "en": "Actions that are performed on each count of the timer.",
+    "ru": "Действия, которые выполняются на каждый отсчет таймера."
   },
   "div_timer_tick_interval": {
-    "en": "Duration of time intervals in milliseconds between ticks. If the parameter is not specified, the timer counts down from `0` to `duration` without calling `tick_actions`.",
-    "ru": "Длительность промежутков времени в миллисекундах между тиками. Если параметр не указан, то таймер отсчитывает от `0` до `duration` без вызова `tick_actions`."
+    "en": "Duration of time intervals in milliseconds between counts. If the parameter is not specified, the timer counts down from `0` to `duration` without calling `tick_actions`.",
+    "ru": "Длительность промежутков времени в миллисекундах между отсчетами. Если параметр не указан, то таймер отсчитывает от `0` до `duration` без вызова `tick_actions`."
   },
   "div_timer_value_variable": {
-    "en": "The name of the variable in which the current timer value is stored. It is updated on each tick or when commands for the timer are called (start, stop, etc.), with the exception of the cancel command.",
-    "ru": "Название переменной, в которую сохраняется текущее значение таймера. Обновляется по каждому тику или при вызове команд для таймера (запуск, остановка и т.д.), за исключением команды отмена."
+    "en": "Name of the variable where the current timer value is stored. Updated on each count or when the timer commands are called (start, stop, and so on), except the cancel command.",
+    "ru": "Название переменной, в которую сохраняется текущее значение таймера. Обновляется по каждому отсчету или при вызове команд для таймера (запуск, остановка и так далее), за исключением команды отмены."
   },
   "div_tooltip": {
     "en": "Tooltip.",
@@ -1720,16 +1720,16 @@
     "ru": "Преобразование элемента."
   },
   "div_transform_pivot_x": {
-    "en": "The X coordinate of the rotation axis.",
+    "en": "X coordinate of the rotation axis.",
     "ru": "Координата Х оси вращения."
   },
   "div_transform_pivot_y": {
-    "en": "The Y coordinate of the rotation axis.",
+    "en": "Y coordinate of the rotation axis.",
     "ru": "Координата Y оси вращения."
   },
   "div_transform_rotation": {
-    "en": "The number of degrees by which the element must be rotated. A positive value describes a clockwise rotation.",
-    "ru": "Количество градусов, на которое необходимо повернуть элемент. Положительное значение описывает поворот по часовой стрелке."
+    "en": "Degrees of the element rotation. Positive values used for clockwise rotation.",
+    "ru": "Угол в градусах, на который необходимо повернуть элемент. Положительное значение описывает поворот по часовой стрелке."
   },
   "div_transition_base_duration": {
     "en": "Animation duration in milliseconds.",

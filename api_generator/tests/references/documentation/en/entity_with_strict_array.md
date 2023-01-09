@@ -1,5 +1,5 @@
 # entity_with_strict_array
-There is no description yet.
+No description yet.
 
 ## JSON
 ```json

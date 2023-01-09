@@ -1,5 +1,5 @@
 # entity_with_complex_property
-Описания пока нет
+Описания пока нет.
 
 ## JSON
 ```json

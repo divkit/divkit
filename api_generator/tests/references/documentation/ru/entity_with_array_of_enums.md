@@ -1,5 +1,5 @@
 # entity_with_array_of_enums
-Описания пока нет
+Описания пока нет.
 
 ## JSON
 ```json

@@ -19,15 +19,15 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "ru": "Минимальное количество элементов — {}."
     },
     "div_generator_entity_enumeration": {
-        "en": "It can be one of the following types:",
-        "ru": "Может быть одним из следующих типов:"
+        "en": "Can have one of the following types:",
+        "ru": "Может иметь один из следующих типов:"
     },
     "div_generator_html_formatting": {
         "en": "Limited HTML formatting is allowed.",
         "ru": "Допускается ограниченное HTML-форматирование."
     },
     "div_generator_in_progress": {
-        "en": "The functionality is under development.",
+        "en": "Functionality is under development.",
         "ru": "Функциональность находится в разработке."
     },
     "div_generator_ios": {
@@ -39,8 +39,8 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "ru": "Минимальная длина {}."
     },
     "div_generator_no_description": {
-        "en": "There is no description yet.",
-        "ru": "Описания пока нет"
+        "en": "No description yet.",
+        "ru": "Описания пока нет."
     },
     "div_generator_non_empty_array": {
         "en": "An array must not be empty.",
@@ -51,7 +51,7 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "ru": "Строка должна быть непустой."
     },
     "div_generator_parameter_deprecated": {
-        "en": "Parameter is deprecated",
+        "en": "Parameter is deprecated.",
         "ru": "Параметр устарел."
     },
     "div_generator_parameters": {

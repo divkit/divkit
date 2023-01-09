@@ -1,5 +1,5 @@
 # entity_with_array_of_nested_items
-There is no description yet.
+No description yet.
 
 ## JSON
 ```json

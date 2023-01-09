@@ -1,5 +1,5 @@
 # entity_with_array_of_expressions
-Описания пока нет
+Описания пока нет.
 
 ## JSON
 ```json
