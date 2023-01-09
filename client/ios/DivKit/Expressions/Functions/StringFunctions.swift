@@ -44,6 +44,8 @@ enum StringFunctions: String, CaseIterable {
   case toLowerCase
   case encodeUri
   case decodeUri
+  case padStart
+  case padEnd
 
   var declaration: [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
     [.function(rawValue, arity: function.arity): function.symbolEvaluator]
@@ -77,6 +79,20 @@ enum StringFunctions: String, CaseIterable {
       return FunctionUnary(impl: _encodeUri)
     case .decodeUri:
       return FunctionUnary(impl: _decodeUri)
+    case .padStart:
+      return OverloadedFunction(
+        functions: [
+          FunctionTernary(impl: _padStart),
+          FunctionTernary(impl: _padStartInt),
+        ]
+      )
+    case .padEnd:
+      return OverloadedFunction(
+        functions: [
+          FunctionTernary(impl: _padEnd),
+          FunctionTernary(impl: _padEndInt),
+        ]
+      )
     }
   }
 }
@@ -166,6 +182,35 @@ private func _decodeUri(value: String) throws -> String {
     throw StringFunctions.Error.decodeEmpty.message
   }
   return decodedValue
+}
+
+private func _padStart(value: String, len: Int, pad: String) throws -> String {
+  let prefix = calcPad(value: value, len: len, pad: pad)
+  return prefix + value
+}
+
+private func _padStartInt(value: Int, len: Int, pad: String) throws -> String {
+  try _padStart(value: String(value), len: len, pad: pad)
+}
+
+private func _padEnd(value: String, len: Int, pad: String) throws -> String {
+  let suffix = calcPad(value: value, len: len, pad: pad)
+  return value + suffix
+}
+
+private func _padEndInt(value: Int, len: Int, pad: String) throws -> String {
+  try _padEnd(value: String(value), len: len, pad: pad)
+}
+
+private func calcPad(value: String, len: Int, pad: String) -> String {
+  var part = ""
+  while part.count + value.count < len {
+    part += pad
+  }
+  if part.count > 0 && part.count + value.count > len {
+    part = String(part.prefix(len - value.count))
+  }
+  return part
 }
 
 private func cast(_ value: Any) -> String? {
