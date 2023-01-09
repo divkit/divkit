@@ -41,3 +41,7 @@ final class GalleryBlockTests: XCTestCase {
     XCTAssertEqual(block.state, .default)
   }
 }
+
+extension GalleryBlockTestModels {
+  fileprivate static let tabs = make(blocks: [TabsBlockTestModels.base])
+}

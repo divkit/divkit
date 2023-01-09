@@ -7,7 +7,14 @@ final class GridBlockTests: XCTestCase {
   func test_WhenUpdatesState_SendsStatesToChildren() throws {
     let state = GalleryViewState(contentOffset: 1)
     let states = [GalleryBlockTestModels.path: state]
-    let block = gridBlock
+    let block = try! GridBlock(
+      widthTrait: .intrinsic,
+      heightTrait: .intrinsic,
+      contentAlignment: .default,
+      items: [.init(contents: GalleryBlockTestModels.base)],
+      columnCount: 1,
+      path: "/"
+    )
 
     let updatedBlock = try block.updated(withStates: states)
     let updatedGalleryBlock = updatedBlock.items.first?.contents as? GalleryBlock
@@ -26,12 +33,3 @@ final class GridBlockTests: XCTestCase {
     XCTAssertEqual(block.intrinsicContentHeight(forWidth: 100), 0)
   }
 }
-
-private let gridBlock = try! GridBlock(
-  widthTrait: .intrinsic,
-  heightTrait: .intrinsic,
-  contentAlignment: .default,
-  items: [.init(contents: GalleryBlockTestModels.base)],
-  columnCount: 1,
-  path: "/"
-)

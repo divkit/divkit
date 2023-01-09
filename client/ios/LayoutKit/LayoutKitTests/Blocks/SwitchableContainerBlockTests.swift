@@ -25,28 +25,3 @@ final class SwitchableContainerBlockTests: XCTestCase {
     XCTAssertEqual(updatedGalleryBlock?.state, state)
   }
 }
-
-private enum SwitchableContainerBlockTestModels {
-  static let path = UIElementPath("switchableContainerBlock")
-
-  static let base = SwitchableContainerBlock(
-    selectedItem: .left,
-    items: (
-      .init(
-        title: .init(text: "A", selectedTypo: Typo(), deselectedTypo: Typo()),
-        content: GalleryBlockTestModels.base
-      ),
-      .init(
-        title: .init(text: "A", selectedTypo: Typo(), deselectedTypo: Typo()),
-        content: GalleryBlockTestModels.base
-      )
-    ),
-    backgroundColor: .clear,
-    selectedBackgroundColor: .clear,
-    titleGaps: 0,
-    titleContentGap: 0,
-    selectorSideGaps: 0,
-    switchAction: nil,
-    path: path
-  )
-}

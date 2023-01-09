@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0A9A9AA028CB1A9200D1D810 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 0A9A9A9F28CB1A9200D1D810 /* Lottie */; };
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
+		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
+		431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C329620AA1007FA268 /* BlockTestsModels.swift */; };
 		52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */; };
 		6178F76B28E2095100FE1648 /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6178F74E28E2095100FE1648 /* LayoutKit */; };
 		6178F77128E2097A00FE1648 /* TabInterimItemExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */; };
@@ -206,15 +208,12 @@
 		8CF329532875D5C8003F799A /* TabsBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF3293F2875D5C8003F799A /* TabsBlockTests.swift */; };
 		8CF329542875D5C8003F799A /* GalleryBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329402875D5C8003F799A /* GalleryBlockTests.swift */; };
 		8CF329552875D5C8003F799A /* ContainerBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329412875D5C8003F799A /* ContainerBlockTests.swift */; };
-		8CF329562875D5C8003F799A /* GalleryBlockTestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329422875D5C8003F799A /* GalleryBlockTestModels.swift */; };
 		8CF329572875D5C8003F799A /* BlockTests+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329432875D5C8003F799A /* BlockTests+Layout.swift */; };
 		8CF329582875D5C8003F799A /* GridBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329442875D5C8003F799A /* GridBlockTests.swift */; };
 		8CF329592875D5C8003F799A /* PagerBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329452875D5C8003F799A /* PagerBlockTests.swift */; };
-		8CF3295A2875D5C8003F799A /* TabsBlockTestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329462875D5C8003F799A /* TabsBlockTestModels.swift */; };
 		8CF3295B2875D5C8003F799A /* WrapperBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329472875D5C8003F799A /* WrapperBlockTests.swift */; };
 		8CF3295C2875D5C8003F799A /* SwitchableContainerBlockTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329482875D5C8003F799A /* SwitchableContainerBlockTests.swift */; };
 		8CF3295D2875D5C8003F799A /* LayeredBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329492875D5C8003F799A /* LayeredBlockLayoutTests.swift */; };
-		8CF3295E2875D5C8003F799A /* TextBlockTestModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF3294A2875D5C8003F799A /* TextBlockTestModels.swift */; };
 		8CF329692875D5D6003F799A /* TabInterimItemExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF329612875D5D6003F799A /* TabInterimItemExtensionsTests.swift */; };
 		8CF329702875D64B003F799A /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8CF3296F2875D64B003F799A /* LayoutKit */; };
 		8CF32B7E2875E12F003F799A /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF32B7D2875E12F003F799A /* Utils.swift */; };
@@ -243,6 +242,8 @@
 
 /* Begin PBXFileReference section */
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
+		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
+		431DC9C329620AA1007FA268 /* BlockTestsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTestsModels.swift; sourceTree = "<group>"; };
 		52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBlockModelingContextErrorsTests.swift; sourceTree = "<group>"; };
 		6178F74028E2042200FE1648 /* Array+UIViewRenderableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+UIViewRenderableTests.swift"; sourceTree = "<group>"; };
 		6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
@@ -446,15 +447,12 @@
 		8CF3293F2875D5C8003F799A /* TabsBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsBlockTests.swift; sourceTree = "<group>"; };
 		8CF329402875D5C8003F799A /* GalleryBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryBlockTests.swift; sourceTree = "<group>"; };
 		8CF329412875D5C8003F799A /* ContainerBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerBlockTests.swift; sourceTree = "<group>"; };
-		8CF329422875D5C8003F799A /* GalleryBlockTestModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryBlockTestModels.swift; sourceTree = "<group>"; };
 		8CF329432875D5C8003F799A /* BlockTests+Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "BlockTests+Layout.swift"; sourceTree = "<group>"; };
 		8CF329442875D5C8003F799A /* GridBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GridBlockTests.swift; sourceTree = "<group>"; };
 		8CF329452875D5C8003F799A /* PagerBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagerBlockTests.swift; sourceTree = "<group>"; };
-		8CF329462875D5C8003F799A /* TabsBlockTestModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabsBlockTestModels.swift; sourceTree = "<group>"; };
 		8CF329472875D5C8003F799A /* WrapperBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WrapperBlockTests.swift; sourceTree = "<group>"; };
 		8CF329482875D5C8003F799A /* SwitchableContainerBlockTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwitchableContainerBlockTests.swift; sourceTree = "<group>"; };
 		8CF329492875D5C8003F799A /* LayeredBlockLayoutTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayeredBlockLayoutTests.swift; sourceTree = "<group>"; };
-		8CF3294A2875D5C8003F799A /* TextBlockTestModels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextBlockTestModels.swift; sourceTree = "<group>"; };
 		8CF329612875D5D6003F799A /* TabInterimItemExtensionsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabInterimItemExtensionsTests.swift; sourceTree = "<group>"; };
 		8CF32B7D2875E12F003F799A /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Utils.swift; path = LayoutKit/LayoutKitTests/Utils.swift; sourceTree = SOURCE_ROOT; };
 		E945FC43293DF95F0066C3EA /* DivTimerControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivTimerControllerTests.swift; sourceTree = "<group>"; };
@@ -1091,7 +1089,7 @@
 			children = (
 				8CF329432875D5C8003F799A /* BlockTests+Layout.swift */,
 				8CF329412875D5C8003F799A /* ContainerBlockTests.swift */,
-				8CF329422875D5C8003F799A /* GalleryBlockTestModels.swift */,
+				431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */,
 				8CF329402875D5C8003F799A /* GalleryBlockTests.swift */,
 				8CF329442875D5C8003F799A /* GridBlockTests.swift */,
 				8CF329492875D5C8003F799A /* LayeredBlockLayoutTests.swift */,
@@ -1099,10 +1097,9 @@
 				8CF329452875D5C8003F799A /* PagerBlockTests.swift */,
 				8CF3293E2875D5C8003F799A /* ResizableBlockMeasureTests.swift */,
 				8CF329482875D5C8003F799A /* SwitchableContainerBlockTests.swift */,
-				8CF329462875D5C8003F799A /* TabsBlockTestModels.swift */,
 				8CF3293F2875D5C8003F799A /* TabsBlockTests.swift */,
-				8CF3294A2875D5C8003F799A /* TextBlockTestModels.swift */,
 				8CF329472875D5C8003F799A /* WrapperBlockTests.swift */,
+				431DC9C329620AA1007FA268 /* BlockTestsModels.swift */,
 			);
 			name = Blocks;
 			path = LayoutKit/LayoutKitTests/Blocks;
@@ -1683,9 +1680,10 @@
 				8CF329542875D5C8003F799A /* GalleryBlockTests.swift in Sources */,
 				8CF3294E2875D5C8003F799A /* TabContentsViewModelTests.swift in Sources */,
 				8CF32B7E2875E12F003F799A /* Utils.swift in Sources */,
-				8CF329562875D5C8003F799A /* GalleryBlockTestModels.swift in Sources */,
 				8CF329582875D5C8003F799A /* GridBlockTests.swift in Sources */,
 				8CF329692875D5D6003F799A /* TabInterimItemExtensionsTests.swift in Sources */,
+				431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */,
+				431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */,
 				8CF329572875D5C8003F799A /* BlockTests+Layout.swift in Sources */,
 				8CF3294B2875D5C8003F799A /* GenericCollectionLayoutTests.swift in Sources */,
 				8CF3294F2875D5C8003F799A /* VisibilityActionPerformerTests.swift in Sources */,
@@ -1693,8 +1691,6 @@
 				8CF3295B2875D5C8003F799A /* WrapperBlockTests.swift in Sources */,
 				8CF329552875D5C8003F799A /* ContainerBlockTests.swift in Sources */,
 				8CF329512875D5C8003F799A /* LayeredBlockTests.swift in Sources */,
-				8CF3295E2875D5C8003F799A /* TextBlockTestModels.swift in Sources */,
-				8CF3295A2875D5C8003F799A /* TabsBlockTestModels.swift in Sources */,
 				8CF329532875D5C8003F799A /* TabsBlockTests.swift in Sources */,
 				8CF329592875D5C8003F799A /* PagerBlockTests.swift in Sources */,
 			);
