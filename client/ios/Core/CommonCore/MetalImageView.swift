@@ -173,11 +173,6 @@ extension MetalImageView: MTKViewDelegate {
     let scaleY = layout.height / image.extent.height * screenFactorY
 
     let scaledImage = image
-    #if targetEnvironment(simulator)
-      // Transform to unflip
-      .transformed(by: CGAffineTransform(scaleX: 1, y: -1))
-      .transformed(by: CGAffineTransform(translationX: 0, y: image.extent.height))
-    #endif
       .transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
       .transformed(by: CGAffineTransform(
         translationX: layout.origin.x * screenFactorX,
@@ -192,13 +187,27 @@ extension MetalImageView: MTKViewDelegate {
     ciContext = self.ciContext
     #endif
 
-    ciContext?.render(
-      scaledImage,
-      to: drawable.texture,
-      commandBuffer: buffer,
-      bounds: bounds,
-      colorSpace: colorSpace
-    )
+    if #available(iOS 11, *) {
+      let destination = CIRenderDestination(
+        width: Int(drawableSize.width),
+        height: Int(drawableSize.height),
+        pixelFormat: view.colorPixelFormat,
+        commandBuffer: buffer,
+        mtlTextureProvider: { () -> MTLTexture in
+          drawable.texture
+        }
+      )
+
+      _ = try? ciContext?.startTask(toRender: scaledImage, to: destination)
+    } else {
+      ciContext?.render(
+        scaledImage,
+        to: drawable.texture,
+        commandBuffer: buffer,
+        bounds: bounds,
+        colorSpace: colorSpace
+      )
+    }
 
     buffer?.present(drawable)
     buffer?.commit()
@@ -252,11 +261,11 @@ private func makeOrigin(
   }
   switch contentMode.verticalAlignment {
   case .top:
-    y = 0
+    y = diff.height
   case .center:
     y = diff.height / 2
   case .bottom:
-    y = diff.height
+    y = 0
   }
   return CGPoint(x: x, y: y)
 }
