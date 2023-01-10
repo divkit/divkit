@@ -50,13 +50,26 @@
             background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAAH0lEQVQY02NkYGAwZkAFZ5E5TAwEAOUKGLGIGdPZDQAWUwFC/UpibwAAAABJRU5ErkJggg==);
         }
 
+        html, body {
+            height: 100%;
+        }
+
         #root {
+            display: flex;
+            flex-direction: column;
             /* So it would take at least some place */
-            min-height: 1px;
+            min-height: 100%;
+            height: max-content;
+        }
+
+        #root > div {
+            width: 100%;
+            flex: 1 0 auto;
         }
 
         .log-item {
             font-family: monospace;
+            margin: 0;
         }
     </style>
     <title>DivKit</title>
@@ -142,7 +155,7 @@
                             return;
                         }
 
-                        const elem = document.createElement('div');
+                        const elem = document.createElement('p');
                         elem.className = 'log-item';
                         elem.textContent = String(err && err.error || '<unknown>');
                         root.appendChild(elem);
