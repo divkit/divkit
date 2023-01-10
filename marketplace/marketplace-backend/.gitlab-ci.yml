@@ -1,0 +1,86 @@
+stages:
+  - lint
+  - test
+  - build
+  - deploy
+
+lint:
+  stage: lint
+  image: snakepacker/python:all
+  before_script:
+    - python3 -m pip install poetry
+    - poetry install
+  script:
+    - poetry run pylint app tests
+    - poetry run python3 -m isort app tests
+    - poetry run python3 -m black app tests
+    - poetry run python3 -m mypy app tests
+
+test:
+  stage: test
+  image: snakepacker/python:all
+  services:
+    - name: postgres:14
+  variables:
+    POSTGRES_DB: divkit_db
+    POSTGRES_USER: user
+    POSTGRES_PASSWORD: password
+    POSTGRES_HOST: postgres
+    POSTGRES_PORT: 5432
+    DB_PATH: postgres
+    API_TITLE: divkit_marketplace
+    API_HOST: 0.0.0.0
+    API_PORT: 8080
+  before_script:
+    - python3.10 -m pip install poetry
+    - poetry install
+    - wait-for-port postgres:5432
+  script:
+    - poetry run pytest --verbosity=2 --showlocals --log-level=DEBUG
+
+
+docker-build:
+  stage: build
+  image: docker/compose:latest
+  services:
+    - name: docker:dind
+      command: ["--tls=false"]
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ''
+    POSTGRES_DB: $POSTGRES_DB
+    POSTGRES_USER: $POSTGRES_USER
+    POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    POSTGRES_HOST: $POSTGRES_HOST
+    POSTGRES_PORT: $POSTGRES_PORT
+    API_HOST : $API_HOST
+    API_PORT : $API_PORT
+    API_TITLE : $API_TITLE
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - echo $POSTGRES_PORT
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_IMAGE
+
+deploy:
+  image: ubuntu
+  stage: deploy
+  only:
+    - master
+  when: manual
+  before_script:
+    - echo "Setup Open VPN"
+    - 'which openvpn || ( apt-get update -y && apt-get install openvpn -y && apt-get install iputils-ping -y)'
+    - cat <<< $OVPN > /etc/openvpn/client.ovpn
+    - openvpn --config /etc/openvpn/client.ovpn --daemon
+    - echo "Setup SSH client"
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> /etc/openvpn/client.ovpn'
+  script:
+    - apt-get install sshpass
+    - sshpass -p $SSH_PASSPHRASE ssh -o StrictHostKeyChecking=no  student@$HOST_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+    - sshpass -p $SSH_PASSPHRASE ssh -o StrictHostKeyChecking=no  student@$HOST_IP "docker pull $CI_REGISTRY_IMAGE:latest"
+    - sshpass -p $SSH_PASSPHRASE ssh -o StrictHostKeyChecking=no student@$HOST_IP "docker stop divkit_marketplace && docker rm divkit_marketplace"
+    - sshpass -p $SSH_PASSPHRASE ssh -o StrictHostKeyChecking=no student@$HOST_IP "docker run -d -p 8080:8080 --name divkit_marketplace --env-file /home/.env $CI_REGISTRY_IMAGE:latest"

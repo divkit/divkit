@@ -1,0 +1,40 @@
+@import 'src/style/abstracts/var.scss';
+
+html {
+  font-family: 'Inter', sans-serif;
+  box-sizing: border-box;
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+input,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+input {
+  border: none;
+  &:focus {
+    outline: none;
+  }
+}
+
+body {
+  min-height: 100vh;
+  background-color: $color-bg-catalog;
+}
+
+#root {
+  min-height: 100vh;
+}

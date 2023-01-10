@@ -1,0 +1,78 @@
+{
+  "name": "marketplace",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@divkitframework/jsonbuilder": "^14.0.0",
+    "@divkitframework/react": "^1.0.0",
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@mui/icons-material": "^5.10.14",
+    "@mui/lab": "^5.0.0-alpha.108",
+    "@mui/material": "^5.10.14",
+    "@reduxjs/toolkit": "^1.9.0",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@types/jest": "^29.2.2",
+    "@types/node": "^18.11.9",
+    "@types/react": "^18.0.25",
+    "@types/react-dom": "^18.0.8",
+    "@types/react-redux": "^7.1.24",
+    "@types/sass": "^1.43.1",
+    "add": "^2.0.6",
+    "classnames": "^2.3.2",
+    "formik": "^2.2.9",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "react-json-editor-ajrm": "^2.5.13",
+    "react-loader-spinner": "^5.3.4",
+    "react-redux": "^8.0.5",
+    "react-reflex": "^4.0.9",
+    "react-router": "^6.4.3",
+    "react-router-dom": "^6.4.3",
+    "react-scripts": "5.0.1",
+    "sass": "^1.56.1",
+    "typescript": "^4.8.4",
+    "web-vitals": "^2.1.4",
+    "yup": "^0.32.11"
+  },
+  "moduleFileExtensions": [
+    "js",
+    "jsx"
+  ],
+  "scripts": {
+    "test:coverage": "react-scripts test --coverage --watchAll -- --config=jest.config.js",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "ts": "./node_modules/.bin/tsc",
+    "lint": "./node_modules/.bin/eslint"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@testing-library/dom": "^8.19.0",
+    "@testing-library/user-event": "^14.4.3",
+    "@types/react-json-editor-ajrm": "^2.5.3",
+    "msw": "^0.49.0"
+  }
+}

@@ -1,0 +1,75 @@
+image: node:16.16.0
+
+before_script:
+  - npm install
+stages:
+  - ts
+  - lint
+  - test
+  - docker_build
+  - deploy
+
+typescript:
+  stage: ts
+  only:
+    - master
+  script:
+    - npm run ts
+
+eslint:
+  stage: lint
+  only:
+    - master
+  script:
+    - npm run lint
+
+test:
+  stage: test
+  only:
+    - master
+  script:
+    - npm test
+
+docker-build:
+  only:
+    - master
+  image: docker:20-dind
+  stage: docker_build
+  services:
+    - name: docker:20-dind
+      command: ['--tls=false']
+  variables:
+    DOCKER_HOST: tcp://docker:2375
+    DOCKER_TLS_CERTDIR: ''
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_IMAGE
+
+deploy:
+  only:
+    - master
+  image: ubuntu
+  stage: deploy
+  before_script:
+    - echo "Setup Open VPN"
+    - 'which openvpn || ( apt-get update -y && apt-get install openvpn -y && apt-get install iputils-ping -y)'
+    - cat <<< $OVPN > /etc/openvpn/client.ovpn
+    - cat /etc/openvpn/client.ovpn
+    - openvpn --config /etc/openvpn/client.ovpn --daemon
+    - sleep 30s
+    - echo "Setup SSH client"
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" >> /etc/openvpn/client.ovpn'
+  script:
+    - apt-get install sshpass
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa student@$HOST_IP "docker ps"
+    - echo $CI_REGISTRY_PASSWORD | sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa student@$HOST_IP "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa student@$HOST_IP "docker pull $CI_REGISTRY_IMAGE:latest"
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa student@$HOST_IP "docker stop $CONTAINER && docker rm $CONTAINER"
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa student@$HOST_IP "docker run -p 81:80 -d --name $CONTAINER $CI_REGISTRY_IMAGE:latest"
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa student@$HOST_IP "sudo rm -rf /home/student/html"
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa student@$HOST_IP "sudo docker cp $CONTAINER:/usr/share/nginx/html /home/student/html"
+    - sshpass -p $PASSWORD ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa student@$HOST_IP "sudo systemctl reload nginx"

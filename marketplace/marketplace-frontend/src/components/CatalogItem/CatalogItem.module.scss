@@ -1,0 +1,55 @@
+@import 'src/style/abstracts/var.scss';
+
+.card {
+  background-color: $color-white;
+  border-radius: 2px;
+  overflow: hidden;
+  padding-bottom: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview {
+  border-bottom: $separator;
+  border-top: $separator;
+}
+
+.btn__expand {
+  transition: transform 0.3s;
+  transform: translateY(-50%);
+
+  &ed {
+    transform: rotate(180deg) translateY(50%);
+  }
+}
+
+.btn__icon {
+  border-radius: 100%;
+  border: $separator;
+  width: 2.2rem;
+  height: 2.2rem;
+  background-color: $color-white;
+  color: $font-gray;
+}
+
+.link {
+  display: block;
+  font-size: 1.8rem;
+  padding: 0.5rem 3rem;
+  border-radius: 100rem;
+  background-color: $color-blue;
+  text-transform: uppercase;
+  color: $font-white;
+  border: 3px solid $color-blue;
+  transition: all 0.3s;
+  width: min-content;
+  margin: 0 auto;
+  background-color: $color-white;
+  color: $color-blue;
+
+  &:hover {
+    background-color: $color-blue;
+    color: $font-white;
+  }
+}

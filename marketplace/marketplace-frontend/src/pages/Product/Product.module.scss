@@ -1,0 +1,16 @@
+@import 'src/style/abstracts/var.scss';
+
+.wrapper {
+  position: relative;
+  padding: 1rem;
+}
+
+.slider {
+  height: 300px;
+  flex-basis: 5px;
+}
+
+.codeField {
+  width: 100%;
+  height: 80vh;
+}

@@ -1,0 +1,35 @@
+@import 'src/style/abstracts/var.scss';
+
+.card {
+  background-color: $color-white;
+  border-radius: 2px;
+  overflow: hidden;
+  padding-bottom: 2rem;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  max-width: 40rem;
+}
+
+.preview {
+  border-bottom: $separator;
+  // border-top: $separator;
+}
+
+.btn__expand {
+  transition: transform 0.3s;
+  transform: translateY(-50%);
+
+  &ed {
+    transform: rotate(180deg) translateY(50%);
+  }
+}
+
+.btn__icon {
+  border-radius: 100%;
+  border: $separator;
+  width: 2.2rem;
+  height: 2.2rem;
+  background-color: $color-white;
+  color: $font-gray;
+}
