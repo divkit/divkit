@@ -8,7 +8,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -19,7 +20,8 @@
         "value": "Failed to evaluate [getIntervalSeconds(-1)]. Expecting non-negative number of milliseconds."
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -30,7 +32,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -41,7 +44,8 @@
         "value": 1
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -52,7 +56,8 @@
         "value": 10
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -63,7 +68,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -74,7 +80,8 @@
         "value": "Failed to evaluate [getIntervalTotalSeconds(-1)]. Expecting non-negative number of milliseconds."
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -85,7 +92,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -96,7 +104,8 @@
         "value": 1
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -107,7 +116,8 @@
         "value": 196330
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -118,7 +128,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -129,7 +140,8 @@
         "value": "Failed to evaluate [getIntervalMinutes(-1)]. Expecting non-negative number of milliseconds."
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -140,7 +152,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -151,7 +164,8 @@
         "value": 1
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -162,7 +176,8 @@
         "value": 32
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -173,7 +188,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -184,7 +200,8 @@
         "value": "Failed to evaluate [getIntervalTotalMinutes(-1)]. Expecting non-negative number of milliseconds."
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -195,7 +212,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -206,7 +224,8 @@
         "value": 1
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -217,7 +236,8 @@
         "value": 3272
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -228,7 +248,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -239,7 +260,8 @@
         "value": "Failed to evaluate [getIntervalHours(-1)]. Expecting non-negative number of milliseconds."
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -250,7 +272,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -261,7 +284,8 @@
         "value": 1
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -272,7 +296,8 @@
         "value": 6
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -283,7 +308,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -294,7 +320,8 @@
         "value": "Failed to evaluate [getIntervalTotalHours(-1)]. Expecting non-negative number of milliseconds."
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -305,7 +332,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -316,7 +344,8 @@
         "value": 1
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -327,7 +356,8 @@
         "value": 54
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -338,7 +368,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -349,7 +380,8 @@
         "value": "Failed to evaluate [getIntervalTotalDays(-1)]. Expecting non-negative number of milliseconds."
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -360,7 +392,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -371,7 +404,8 @@
         "value": 1
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -382,7 +416,8 @@
         "value": 2
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -393,7 +428,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -404,7 +440,8 @@
         "value": "Failed to evaluate [getIntervalTotalWeeks(-1)]. Expecting non-negative number of milliseconds."
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -415,7 +452,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -426,7 +464,8 @@
         "value": 1
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -437,7 +476,8 @@
         "value": 0
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -448,7 +488,8 @@
         "value": 2
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -459,7 +500,8 @@
         "value": "10:50:10"
       },
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     }
   ]

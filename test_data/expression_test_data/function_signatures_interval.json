@@ -12,7 +12,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -27,7 +28,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -42,7 +44,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -57,7 +60,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -72,7 +76,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -87,7 +92,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -102,7 +108,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -117,7 +124,8 @@
       ],
       "result_type": "integer",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     }
   ]

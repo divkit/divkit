@@ -73,6 +73,12 @@ final class ExpressionResolvingTests: XCTestCase {
     perform(on: testCases, type: type)
   }
 
+  func test_Functions_Interval() throws {
+    let testCases = try makeTestCases(for: "functions_interval")
+    let type: ExpressionType<String> = .stringBased(initializer: { $0 })
+    perform(on: testCases, type: type)
+  }
+
   func test_Functions_Color() throws {
     let testCases = try makeTestCases(for: "functions_color_argb")
     let type: ExpressionType<String> = .stringBased(initializer: { $0 })

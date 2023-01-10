@@ -79,7 +79,8 @@
       "clientMinItems": 1,
       "$description": "translations.json#/div_data_timers",
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     }
   },

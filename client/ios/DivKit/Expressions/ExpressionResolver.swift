@@ -259,6 +259,7 @@ private let supportedFunctions: [AnyCalcExpression.Symbol: AnyCalcExpression.Sym
     + ColorFunctions.allCases.map(\.declaration).flat()
     + DatetimeFunctions.allCases.map(\.declaration).flat()
     + MathFunctions.allCases.map(\.declaration).flat()
+    + IntervalFunctions.allCases.map(\.declaration).flat()
 
 extension Array where Element == [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {
   fileprivate func flat() -> [AnyCalcExpression.Symbol: AnyCalcExpression.SymbolEvaluator] {

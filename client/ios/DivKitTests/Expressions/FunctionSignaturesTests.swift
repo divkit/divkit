@@ -27,7 +27,8 @@ private func findFunction(name: String) -> Function? {
     ColorFunctions.allCases.first { $0.rawValue == name }?.function ??
     StringFunctions.allCases.first { $0.rawValue == name }?.function ??
     CastFunctions.allCases.first { $0.rawValue == name }?.function ??
-    MathFunctions.allCases.first { $0.rawValue == name }?.function
+    MathFunctions.allCases.first { $0.rawValue == name }?.function ??
+    IntervalFunctions.allCases.first { $0.rawValue == name }?.function
 }
 
 private var signatures: [SuiteDTO.TestDTO] {
