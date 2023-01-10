@@ -3,8 +3,13 @@ import CoreGraphics
 import CommonCore
 
 public final class SliderBlock: BlockWithTraits {
+  // MARK: - BlockWithTraits
+
   public let widthTrait: LayoutTrait
   public let heightTrait: LayoutTrait
+
+  // MARK: - SliderBlock
+
   let sliderModel: SliderModel
 
   public var intrinsicContentWidth: CGFloat {
@@ -24,7 +29,7 @@ public final class SliderBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case let .intrinsic(constrained, minSize, maxSize):
-      let height = sliderModel.sliderWithTextHeight
+      let height = sliderModel.sliderHeight
       return constrained ? height : clamp(height, min: minSize, max: maxSize)
     case .weighted:
       return 0

@@ -81,10 +81,6 @@ public struct SliderModel: Equatable {
     )
   }
 
-  public var sliderWithTextHeight: CGFloat {
-    sliderHeight + sliderTopTextPadding + sliderBottomTextPadding
-  }
-
   public var sliderIntrinsicWidth: CGFloat {
     let maxMarkWidth = max(
       activeMarkModel?.size.width ?? 0,

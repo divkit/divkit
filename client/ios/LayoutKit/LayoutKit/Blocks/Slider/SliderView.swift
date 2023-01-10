@@ -332,14 +332,17 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       height: sliderModel.sliderHeight
     )
     sliderBackgroundView.center = bounds.center
-      .movingY(by: (sliderModel.sliderTopTextPadding - sliderModel.sliderBottomTextPadding) / 2)
       .movingX(
         by:
         (
           abs(sliderModel.firstThumb.offsetX) > abs(sliderModel.secondThumb?.offsetX ?? 0)
         )
-          ? -sliderModel.firstThumb.offsetX / 2
-          : -(sliderModel.secondThumb?.offsetX ?? 0) / 2
+          ? sliderModel.firstThumb.offsetX > 0 ?
+          -(sliderModel.firstThumb.offsetX / 2)
+          : sliderModel.firstThumb.offsetX / 2
+          : sliderModel.firstThumb.offsetX > 0 ?
+          -(sliderModel.secondThumb?.offsetX ?? 0) / 2
+          : (sliderModel.secondThumb?.offsetX ?? 0) / 2
       )
 
     configureTracks(
@@ -459,19 +462,15 @@ final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
       return
     }
 
-    let textInsetX = min(0, sliderModel.firstThumb.offsetX, sliderModel.secondThumb?.offsetX ?? 0)
-
     thumbView.frame = CGRect(origin: CGPoint(
       x: (progress - CGFloat(sliderModel.minValue)) * pointWidth
-        + (sliderModel.horizontalInset - thumbModel.size.width) / 2
-        - textInsetX,
+        + (sliderModel.horizontalInset - thumbModel.size.width) / 2,
       y: 0
     ), size: CGSize(
       width: thumbModel.size.width,
       height: thumbModel.size.height
     ))
-    thumbView.frame.center.y = bounds.center
-      .movingY(by: (sliderModel.sliderTopTextPadding - sliderModel.sliderBottomTextPadding) / 2).y
+    thumbView.frame.center.y = bounds.center.y
   }
 
   private func clampSliderValue(_ value: CGFloat, sliderModel: SliderModel) -> CGFloat {
