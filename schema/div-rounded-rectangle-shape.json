@@ -1,6 +1,11 @@
 {
   "type": "object",
   "$description": "translations.json#/div_rounded_rectangle_shape",
+  "allOf": [
+    {
+      "$ref": "div-shape-base.json"
+    }
+  ],
   "properties": {
     "item_width": {
       "$ref": "div-fixed-size.json",

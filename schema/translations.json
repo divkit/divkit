@@ -827,6 +827,10 @@
     "en": "A size multiplier for an active indicator.",
     "ru": "Множитель размера для активного индикатора."
   },
+  "div_indicator_active_shape": {
+    "en": "Active indicator shape.",
+    "ru": "Форма активного индикатора."
+  },
   "div_indicator_animation": {
     "en": "Animation of switching between indicators.",
     "ru": "Анимация переключения между индикаторами."
@@ -834,6 +838,14 @@
   "div_indicator_inactive_item_color": {
     "en": "Indicator color.",
     "ru": "Цвет индикатора."
+  },
+  "div_indicator_inactive_minimum_shape": {
+    "en": "Inactive minimum indicator shape. Used when the required number of indicators doesn't fit on the screen.",
+    "ru": "Форма неактивного индикатора минимального размера. Используется, когда нужное количество индикаторов не помещается на экране."
+  },
+  "div_indicator_inactive_shape": {
+    "en": "Indicator shape.",
+    "ru": "Форма индикатора."
   },
   "div_indicator_item_placement": {
     "en": "Indicator items placement mode:<li>Default: Indicators' width is fixed and defined by the `shape` parameters.</li><li>Stretch: Indicators are expanded to fill the entire width.</li>",
@@ -1170,6 +1182,14 @@
   "div_shadow_offset": {
     "en": "Shadow offset.",
     "ru": "Смещение тени."
+  },
+  "div_shape_base_background_color": {
+    "en": "Fill color.",
+    "ru": "Цвет заливки."
+  },
+  "div_shape_base_stroke": {
+    "en": "Stroke style.",
+    "ru": "Стиль контура."
   },
   "div_shape_drawable": {
     "en": "Drawable of a simple geometric shape.",

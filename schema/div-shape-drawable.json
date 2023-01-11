@@ -8,11 +8,13 @@
     },
     "color": {
       "$ref": "common.json#/color",
-      "$description": "translations.json#/div_shape_drawable_color"
+      "$description": "translations.json#/div_shape_drawable_color",
+      "deprecated": true
     },
     "stroke": {
       "$ref": "div-stroke.json",
-      "$description": "translations.json#/div_shape_drawable_stroke"
+      "$description": "translations.json#/div_shape_drawable_stroke",
+      "deprecated": true
     },
     "type": {
       "type": "string",

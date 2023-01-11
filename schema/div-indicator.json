@@ -35,22 +35,26 @@
         "inactive_item_color": {
           "$ref": "common.json#/color",
           "default_value": "#33919cb5",
-          "$description": "translations.json#/div_indicator_inactive_item_color"
+          "$description": "translations.json#/div_indicator_inactive_item_color",
+          "deprecated": true
         },
         "active_item_color": {
           "$ref": "common.json#/color",
           "default_value": "#ffdc60",
-          "$description": "translations.json#/div_indicator_active_item_color"
+          "$description": "translations.json#/div_indicator_active_item_color",
+          "deprecated": true
         },
         "shape": {
           "$ref": "div-shape.json",
           "default_value": "{\"type\":\"rounded_rectangle\"}",
-          "$description": "translations.json#/div_indicator_shape"
+          "$description": "translations.json#/div_indicator_shape",
+          "deprecated": true
         },
         "active_item_size": {
           "$ref": "common.json#/positive_number",
           "default_value": "1.3",
-          "$description": "translations.json#/div_indicator_active_item_size"
+          "$description": "translations.json#/div_indicator_active_item_size",
+          "deprecated": true
         },
         "minimum_item_size": {
           "$ref": "common.json#/positive_number",
@@ -59,7 +63,23 @@
           "platforms": [
             "android",
             "ios"
-          ]
+          ],
+          "deprecated": true
+        },
+        "active_shape": {
+          "$ref": "div-rounded-rectangle-shape.json",
+          "$description": "translations.json#/div_indicator_active_shape",
+          "platforms": []
+        },
+        "inactive_shape": {
+          "$ref": "div-rounded-rectangle-shape.json",
+          "$description": "translations.json#/div_indicator_inactive_shape",
+          "platforms": []
+        },
+        "inactive_minimum_shape": {
+          "$ref": "div-rounded-rectangle-shape.json",
+          "$description": "translations.json#/div_indicator_inactive_minimum_shape",
+          "platforms": []
         },
         "animation": {
           "type": "string",
