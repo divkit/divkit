@@ -7,7 +7,6 @@ import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.yandex.div.DivDataTag
 import com.yandex.div.core.DivViewConfig
 import com.yandex.div.core.dagger.Div2Component
-import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivValidator
@@ -21,8 +20,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.spy
 
 internal fun context() = getApplicationContext<Context>()
-
-internal fun imageLoader() = mock<DivImageLoader>()
 
 internal fun divView(
     logId: String = "",
@@ -48,12 +45,6 @@ internal fun divView(
         on { this.config } doReturn DivViewConfig.DEFAULT
         on { handleUri(any()) }.thenCallRealMethod()
     }
-}
-
-internal fun baseBinder(
-    imageLoader: DivImageLoader = imageLoader()
-): DivBaseBinder {
-    return DivBaseBinder(imageLoader, mock(), mock(), mock(), mock())
 }
 
 internal fun viewCreator(): DivViewCreator {

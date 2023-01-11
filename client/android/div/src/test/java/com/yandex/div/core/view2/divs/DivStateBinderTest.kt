@@ -48,7 +48,7 @@ class DivStateBinderTest: DivBinderTest() {
     }
 
     private val stateBinder = DivStateBinder(
-        baseBinder = baseBinder(),
+        baseBinder = baseBinder,
         viewCreator = viewCreator,
         viewBinder = { viewBinder },
         divStateCache = stateCache,

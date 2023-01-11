@@ -31,7 +31,7 @@ class DivPagerBinderTest: DivBinderTest() {
     private val divBinder = mock<DivBinder>()
 
     private val underTest = DivPagerBinder(
-        baseBinder = baseBinder(),
+        baseBinder = baseBinder,
         viewCreator = viewCreator,
         divBinder = { divBinder },
         divPatchCache = mock(),

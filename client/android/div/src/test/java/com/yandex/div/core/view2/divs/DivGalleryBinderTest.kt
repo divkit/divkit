@@ -35,7 +35,7 @@ class DivGalleryBinderTest : DivBinderTest() {
     private val divBinder = mock<DivBinder>()
 
     private val underTest = DivGalleryBinder(
-        baseBinder = baseBinder(),
+        baseBinder = baseBinder,
         viewCreator = viewCreator,
         divBinder = { divBinder },
         divPatchCache = mock()

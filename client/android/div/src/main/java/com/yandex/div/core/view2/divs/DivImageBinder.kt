@@ -1,7 +1,7 @@
 package com.yandex.div.core.view2.divs
 
-import android.graphics.Bitmap
 import android.widget.ImageView
+import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionSubscriber
@@ -15,8 +15,8 @@ import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.divs.widgets.applyFilters
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.widget.AspectImageView
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -32,8 +32,6 @@ internal class DivImageBinder @Inject constructor(
     private val imageLoader: DivImageLoader,
     private val placeholderLoader: DivPlaceholderLoader
 ) : DivViewBinder<DivImage, DivImageView> {
-
-    private var loadedBitmap: Bitmap? = null
 
     override fun bindView(view: DivImageView, div: DivImage, divView: Div2View) {
         val oldDiv = view.div
@@ -117,9 +115,13 @@ internal class DivImageBinder @Inject constructor(
         divView: Div2View,
         resolver: ExpressionResolver,
     ) {
-        loadedBitmap?.applyFilters(this, filters, divView.div2Component, resolver) { setImage(it) }
+        (loadedBitmap ?: drawable.toBitmap()).applyFilters(this, filters, divView.div2Component, resolver) {
+            setImage(it)
+            if (it == loadedBitmap) {
+                loadedBitmap = null
+            }
+        }
     }
-
 
     private fun DivImageView.applyImage(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
         val newImageUrl = div.imageUrl.evaluate(resolver)

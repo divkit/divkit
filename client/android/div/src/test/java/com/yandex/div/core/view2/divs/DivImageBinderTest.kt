@@ -3,6 +3,7 @@ package com.yandex.div.core.view2.divs
 import android.graphics.Color
 import android.net.Uri
 import com.yandex.div.core.asExpression
+import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.divs.widgets.DivImageView
@@ -15,6 +16,7 @@ import org.junit.runner.RunWith
 import org.mockito.kotlin.any
 import org.mockito.kotlin.anyOrNull
 import org.mockito.kotlin.argumentCaptor
+import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
@@ -227,7 +229,10 @@ class DivImageBinderTest : DivBinderTest() {
         val imageDownloadCallbackCaptor = argumentCaptor<DivImageDownloadCallback>()
         verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any())
         verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
-        imageDownloadCallbackCaptor.firstValue.onSuccess(mock())
+        val cachedBitmap = mock<CachedBitmap> {
+            on { bitmap } doReturn mock()
+        }
+        imageDownloadCallbackCaptor.firstValue.onSuccess(cachedBitmap)
     }
 
     private fun whenPreviewLoaded() {
