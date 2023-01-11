@@ -72,21 +72,24 @@ final class DivBlockProvider {
     }
 
     do {
+      let context = divKitComponents.makeContext(
+        cardId: cardId,
+        cachedImageHolders: block.getImageHolders(),
+        debugParams: AppComponents.debugParams,
+        parentScrollView: parentScrollView
+      )
       divRenderTime.start()
       let newBlock = try divData.makeBlock(
-        context: divKitComponents.makeContext(
-          cardId: cardId,
-          cachedImageHolders: block.getImageHolders(),
-          debugParams: AppComponents.debugParams,
-          parentScrollView: parentScrollView
-        )
+        context: context
       )
       divRenderTime.stop()
-      block = newBlock.addingTime(
-        dataParsing: divDataParsingTime.time,
-        templateParsing: divTemplateParsingTime.time,
-        render: divRenderTime.time
-      )
+      block = newBlock
+        .addingTime(
+          dataParsing: divDataParsingTime.time,
+          templateParsing: divTemplateParsingTime.time,
+          render: divRenderTime.time
+        )
+        .addingErrorsInfo(context.errorsStorage.errors.map { $0.description})
     } catch {
       block = makeErrorBlock("\(error)")
       errors = [(message: error.localizedDescription, stack: nil)]
@@ -187,6 +190,29 @@ extension Block {
       widthTrait: .resizable,
       text: text.with(typo: Typo(size: 18, weight: .regular))
     ).addingEdgeGaps(20)
+
+    let block = try? ContainerBlock(
+      layoutDirection: .vertical,
+      children: [self, textBlock]
+    )
+
+    return block ?? self
+  }
+}
+
+extension Block {
+  func addingErrorsInfo(_ errorList: [String]) -> Block {
+    guard !errorList.isEmpty else {
+      return self
+    }
+
+    let text = "Errors (\(errorList.count)):\n\n" + errorList.joined(separator: "\n")
+    let textBlock = TextBlock(
+      widthTrait: .resizable,
+      text: text.with(typo: Typo(size: 18, weight: .regular))
+    )
+      .addingEdgeGaps(20)
+      .with(background: .solidColor(.red))
 
     let block = try? ContainerBlock(
       layoutDirection: .vertical,
