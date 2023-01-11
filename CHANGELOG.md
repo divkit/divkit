@@ -1,3 +1,34 @@
+## 21.1.0
+
+# JSON Schema:
+* updated translations
+
+# Android Client:
+* Fixed baseline alignment in linear container
+* Fixed minor layout issues
+* Fixed rare crash when animating not laid out view
+* Clear warnings after setting new data to `Div2View`
+
+# iOS Client:
+* Added functions for time intervals
+* Added `padStart`, `padEnd` functions
+* Added stretching `DivIndicator` support
+* Fixed temporary param in `set-state` action
+* Fixed `DivSlider` thumbs
+* Fixed `nowLocal` function
+
+# Web Client:
+Added:
+* `min_size` / `max_size` for the `wrap_content` size
+* Functions `padStart` / `padEnd`
+* Functions for time intervals
+
+Changed:
+* Allow `wrap_content` size for the `galleries` on the main axis
+* Fixed `timers` start with incorrect values
+
+
+
 ## 21.0.0
 
 # JSON Schema:

@@ -1,3 +1,15 @@
+## 21.1.0 (January 11, 2023)
+
+Additions:
+* `min_size` / `max_size` for the `wrap_content` size
+* Functions `padStart` / `padEnd`
+* Functions for time intervals
+
+Changes:
+* Allow `wrap_content` size for the `galleries` on the main axis
+* Fixed `timers` start with incorrect values
+
+
 ## 21.0.0 (December 26, 2022)
 
 Additions:
