@@ -13,7 +13,9 @@ extension ImageBlock: ImageRenderableBlock {
     case let .color(color)?:
       context.setFillColor(color.cgColor)
       context.fill(rect)
-    case .none:
+    case .none, .view?:
+      break
+    @unknown default:
       break
     }
   }

@@ -5,6 +5,11 @@ import UIKit
 import Base
 
 public final class RemoteImageViewContainer: UIView {
+  private var backgroundModel: ImageViewBackgroundModel? {
+    didSet {
+      backgroundModel.applyTo(self, oldValue: oldValue)
+    }
+  }
   public var contentView: RemoteImageViewContentProtocol {
     didSet {
       oldValue.removeFromSuperview()
@@ -17,12 +22,7 @@ public final class RemoteImageViewContainer: UIView {
     didSet {
       imageRequest?.cancel()
       contentView.setImage(nil, animated: false)
-      switch imageHolder?.placeholder {
-      case let .color(color)?:
-        backgroundColor = color.systemColor
-      case .none, .image?:
-        backgroundColor = nil
-      }
+      backgroundModel = imageHolder?.placeholder.flatMap(ImageViewBackgroundModel.init)
 
       let newValue = imageHolder
       imageRequest = imageHolder?.requestImageWithSource { [weak self] result in
@@ -32,7 +32,7 @@ public final class RemoteImageViewContainer: UIView {
         }
 
         self.contentView.setImage(result?.0, animated: result?.1.shouldAnimate)
-        self.backgroundColor = nil
+        self.backgroundModel = nil
       }
     }
   }

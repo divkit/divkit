@@ -29,16 +29,17 @@ extension AnimatableImageBlock {
 private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleBoundsTrackingLeaf {
   var imageRequest: Cancellable?
   var effectiveBackgroundColor: UIColor? { backgroundColor }
+  private var backgroundModel: ImageViewBackgroundModel? {
+    didSet {
+      backgroundModel.applyTo(self, oldValue: oldValue)
+    }
+  }
+
   public var imageHolder: ImageHolder? {
     didSet {
       imageRequest?.cancel()
       self.imageView.image = nil
-      switch imageHolder?.placeholder {
-      case let .color(color)?:
-        backgroundColor = color.systemColor
-      case .none, .image?:
-        backgroundColor = nil
-      }
+      backgroundModel = imageHolder?.placeholder.flatMap(ImageViewBackgroundModel.init)
 
       let newValue = imageHolder
       imageRequest = imageHolder?.requestImageWithCompletion { [weak self] image in
@@ -47,7 +48,7 @@ private class AnimatableImageContainer: UIStackView, BlockViewProtocol, VisibleB
           return
         }
         self.imageView.image = image
-        self.backgroundColor = nil
+        self.backgroundModel = nil
       }
     }
   }

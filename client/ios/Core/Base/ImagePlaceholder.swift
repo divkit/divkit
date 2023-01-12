@@ -2,10 +2,10 @@
 
 import BaseUI
 
-@frozen
 public enum ImagePlaceholder: Equatable, CustomDebugStringConvertible {
   case image(Image)
   case color(Color)
+  case view(ViewType)
 }
 
 extension ImagePlaceholder {
@@ -15,6 +15,8 @@ extension ImagePlaceholder {
       return "Image(\(image.size.width) x \(image.size.height))"
     case let .color(color):
       return "Color(" + color.debugDescription + ")"
+    case let .view(view):
+      return "View(" + view.debugDescription + ")"
     }
   }
 
@@ -24,7 +26,9 @@ extension ImagePlaceholder {
       return imagesDataAreEqual(lImage, rImage)
     case let (.color(lColor), .color(rColor)):
       return lColor == rColor
-    case (.image, _), (.color, _):
+    case let (.view(lView), .view(rView)):
+      return lView == rView
+    case (.image, _), (.color, _), (.view, _):
       return false
     }
   }
@@ -37,9 +41,11 @@ extension Optional where Wrapped == ImagePlaceholder {
       return lImage === rImage
     case let (.color(lColor)?, .color(rColor)?):
       return lColor == rColor
+    case let (.view(lView)?, .view(rView)?):
+      return lView === rView
     case (.none, .none):
       return true
-    case (.image?, _), (.color?, _), (.none, _):
+    case (.image?, _), (.color?, _), (.view?, _), (.none, _):
       return false
     }
   }

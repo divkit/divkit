@@ -31,7 +31,11 @@ public struct ImageHolderFactory {
           return image
         case let .color(color)?:
           return ColorHolder(color: color)
+        case let .view(view)?:
+          return ViewImageHolder(view: view)
         case .none:
+          return NilImageHolder()
+        @unknown default:
           return NilImageHolder()
         }
       }

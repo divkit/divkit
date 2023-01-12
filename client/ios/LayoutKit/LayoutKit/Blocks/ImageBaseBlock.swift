@@ -82,7 +82,9 @@ extension ImagePlaceholder {
     switch self {
     case let .image(image):
       return image.size
-    case .color:
+    case .color, .view:
+      fatalError()
+    @unknown default:
       fatalError()
     }
   }

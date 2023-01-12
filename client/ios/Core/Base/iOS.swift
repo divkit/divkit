@@ -3,6 +3,7 @@
 import CoreGraphics
 import UIKit
 
+public typealias ViewType = UIView
 public typealias ScrollView = UIView & ScrollViewType
 public typealias ScrollToDragView = UIView & ScrollToDrag
 

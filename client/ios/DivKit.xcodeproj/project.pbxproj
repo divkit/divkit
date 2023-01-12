@@ -11,6 +11,7 @@
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
 		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
 		431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C329620AA1007FA268 /* BlockTestsModels.swift */; };
+		52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 52184FD7296C68E400ECC0E9 /* DivKitExtensions */; };
 		52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */; };
 		6178F76B28E2095100FE1648 /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6178F74E28E2095100FE1648 /* LayoutKit */; };
 		6178F77128E2097A00FE1648 /* TabInterimItemExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6178F74728E2042200FE1648 /* TabInterimItemExtensionsTests.swift */; };
@@ -511,6 +512,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C0E7371288AE219009BEB3C /* DivKit in Frameworks */,
+				52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1263,6 +1265,7 @@
 			name = DivKitSnapshotTests;
 			packageProductDependencies = (
 				8C0E7370288AE219009BEB3C /* DivKit */,
+				52184FD7296C68E400ECC0E9 /* DivKitExtensions */,
 			);
 			productName = DivKitSnapshotTests;
 			productReference = 8C9284C5288ACCBA00BEA1FA /* DivKitSnapshotTests.xctest */;
@@ -2122,6 +2125,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 0A9A9A9E28CB1A9200D1D810 /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		52184FD7296C68E400ECC0E9 /* DivKitExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DivKitExtensions;
 		};
 		6178F74E28E2095100FE1648 /* LayoutKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -24,7 +24,8 @@ open class DivKitSnapshotTestCase: XCTestCase {
     testName: String = #function,
     customCaseName: String? = nil,
     imageHolderFactory: ImageHolderFactory? = nil,
-    blocksState: BlocksState = [:]
+    blocksState: BlocksState = [:],
+    extensions: [DivExtensionHandler] = []
   ) {
     guard let jsonData = jsonData(
       fileName: fileName,
@@ -36,6 +37,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
     }
 
     let divKitComponents = DivKitComponents(
+      extensionHandlers: extensions,
       flagsInfo: .init(
         isTextSelectingEnabled: false,
         appendVariablesEnabled: true,
@@ -304,7 +306,11 @@ extension ImageHolderFactory {
         return image
       case let .color(color)?:
         return ColorHolder(color: color)
+      case let .view(view)?:
+        return ViewImageHolder(view: view)
       case .none:
+        return NilImageHolder()
+      @unknown default:
         return NilImageHolder()
       }
     }

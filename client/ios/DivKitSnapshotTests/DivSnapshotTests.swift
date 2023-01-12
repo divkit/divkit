@@ -1,5 +1,9 @@
 import XCTest
+import UIKit
+
 import LayoutKit
+import DivKit
+import DivKitExtensions
 
 private let exclusions = [
   "div-indicator/fixed-width-max_items_rectangle.json",
@@ -36,8 +40,13 @@ private let exclusions = [
 private let casesWithPlaceholerOnly = [
   "div-image/placeholder-color.json",
   "div-image/preview.json",
+  "div-image/custom-preview.json",
   "div-gif-image/placeholder-color.json",
   "div-gif-image/preview.json",
+]
+
+private let divExtensions: [String: [DivExtensionHandler]] = [
+  "div-image/custom-preview.json": [labelImagePreviewExtension]
 ]
 
 private let testDirectory = "snapshot_test_data"
@@ -61,10 +70,22 @@ private func doTest(_ file: JsonFile) {
   let test = DivKitSnapshotTestCase()
   test.rootDirectory = testDirectory
   test.subdirectory = file.subdirectory
+
   test.testDivs(
     file.name,
     customCaseName: file.name.removingFileExtension,
     imageHolderFactory: casesWithPlaceholerOnly.contains(file.path) ? .placeholderOnly : nil,
-    blocksState: file.subdirectory == indicatorSubdirectory ? defaultPagerViewState : [:]
+    blocksState: file.subdirectory == indicatorSubdirectory ? defaultPagerViewState : [:],
+    extensions: divExtensions[file.path] ?? []
   )
 }
+
+private let labelImagePreviewExtension = CustomImagePreviewExtensionHandler(
+  id: "label_image_preview",
+  viewFactory: {
+    let label = UILabel()
+    label.text = "Preview"
+    label.backgroundColor = .yellow
+    return label
+  }
+)
