@@ -335,7 +335,7 @@ extension DivAlignmentVertical {
     case .bottom:
       return .trailing
     case .baseline:
-      assertionFailure("baseline alignment not supported")
+      DivKitLogger.warning("Baseline alignment not supported.")
       return .leading
     }
   }
