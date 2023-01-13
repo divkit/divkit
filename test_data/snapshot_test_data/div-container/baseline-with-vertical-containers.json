@@ -1,0 +1,185 @@
+{
+  "templates": {
+    "inner_container": {
+      "type": "container",
+      "border": {
+        "stroke": {
+          "color": "#0000EE"
+        }
+      },
+      "orientation": "vertical",
+      "width": {
+        "type": "wrap_content"
+      }
+    },
+    "inner_text": {
+      "type": "text",
+      "height": {
+        "type": "wrap_content"
+      },
+      "width": {
+        "type": "wrap_content"
+      },
+      "border": {
+        "stroke": {
+          "color": "#0000EE"
+        }
+      },
+      "paddings": {
+        "left": 5,
+        "top": 5,
+        "right": 5,
+        "bottom": 5
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "wrap_content"
+          },
+          "height": {
+            "type": "wrap_content"
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "layout_mode": "no_wrap",
+          "items": [
+            {
+              "type": "text",
+              "text": "Linear container with baseline alignment with inner vertical containers:",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "paddings": {
+                "left": 10,
+                "top": 10,
+                "bottom": 10
+              }
+            },
+            {
+              "type": "container",
+              "border": {
+                "stroke": {
+                  "color": "#FF0000"
+                }
+              },
+              "orientation": "horizontal",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "content_alignment_vertical": "baseline",
+              "layout_mode": "no_wrap",
+              "items": [
+                {
+                  "type": "text",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "border": {
+                    "stroke": {
+                      "color": "#FF0000"
+                    }
+                  },
+                  "text": "External item.",
+                  "font_size": 10,
+                  "paddings": {
+                    "left": 5,
+                    "top": 10,
+                    "right": 5,
+                    "bottom": 5
+                  },
+                  "margins": {
+                    "top": 10
+                  }
+                },
+                {
+                  "type": "inner_container",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "paddings": {
+                    "top": 10,
+                    "bottom": 5
+                  },
+                  "content_alignment_vertical": "top",
+                  "items": [
+                    {
+                      "type": "inner_text",
+                      "text": "Top aligned",
+                      "font_size": 10
+                    },
+                    {
+                      "type": "inner_text",
+                      "text": "container.",
+                      "font_size": 16
+                    }
+                  ]
+                },
+                {
+                  "type": "inner_container",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "paddings": {
+                    "top": 5
+                  },
+                  "content_alignment_vertical": "baseline",
+                  "items": [
+                    {
+                      "type": "inner_text",
+                      "text": "Baseline aligned",
+                      "font_size": 10
+                    },
+                    {
+                      "type": "inner_text",
+                      "text": "container.",
+                      "font_size": 16
+                    }
+                  ]
+                },
+                {
+                  "type": "inner_container",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "items": [
+                    {
+                      "type": "inner_text",
+                      "text": "Match_parent",
+                      "font_size": 10
+                    },
+                    {
+                      "type": "inner_text",
+                      "text": "height.",
+                      "font_size": 16
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
