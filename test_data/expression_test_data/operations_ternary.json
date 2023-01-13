@@ -110,19 +110,6 @@
         },
         {
             "name": "2 ? 1 : 0 => error",
-            "deprecated": "Error message is outdated, see case below",
-            "expression": "@{2 ? 1 : 0}",
-            "expected": {
-                "type": "error",
-                "value": "Failed to evaluate [@{2 ? 1 : 0}]. Ternary must be called with a Boolean value as a condition."
-            },
-            "variables": [],
-            "platforms": [
-                "android"
-            ]
-        },
-        {
-            "name": "2 ? 1 : 0 => error",
             "expression": "@{2 ? 1 : 0}",
             "expected": {
                 "type": "error",
@@ -130,6 +117,7 @@
             },
             "variables": [],
             "platforms": [
+                "android",
                 "web",
                 "ios"
             ]

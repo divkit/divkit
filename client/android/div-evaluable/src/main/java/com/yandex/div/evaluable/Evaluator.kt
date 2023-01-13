@@ -129,14 +129,20 @@ class Evaluator(
 
     internal fun evalTernary(ternary: Evaluable.Ternary): Any {
         if (ternary.token is Token.Operator.TernaryIfElse) {
-            val left: Any = eval(ternary.firstExpression)
-            if (left !is Boolean) {
-                throwExceptionOnEvaluationFailed(ternary.rawExpr, "Ternary must be called with a Boolean value as a condition.")
+            val condition: Any = eval(ternary.firstExpression)
+            val left: Any by lazy { eval(ternary.secondExpression) }
+            val right: Any by lazy { eval(ternary.thirdExpression) }
+
+            if (condition !is Boolean) {
+                throwExceptionOnEvaluationFailed(
+                    "${condition.toMessageFormat()} ? ${left.toMessageFormat()} : ${right.toMessageFormat()}",
+                    "Ternary must be called with a Boolean value as a condition."
+                )
             }
-            return if (left) {
-                eval(ternary.secondExpression)
+            return if (condition) {
+                left
             } else {
-                eval(ternary.thirdExpression)
+                right
             }
         } else {
             throwExceptionOnEvaluationFailed(ternary.rawExpr, "${ternary.token} was incorrectly parsed as a ternary operator.")
