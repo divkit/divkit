@@ -7,7 +7,7 @@ import android.renderscript.Allocation
 import android.renderscript.Element
 import android.renderscript.ScriptIntrinsicBlur
 import android.view.View
-import androidx.core.view.doOnPreDraw
+import androidx.core.view.doOnLayout
 import com.yandex.div.core.dagger.Div2Component
 import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -29,7 +29,7 @@ internal fun Bitmap.applyFilters(
         return
     }
 
-    target.doOnPreDraw {
+    target.doOnLayout {
         val scale = max(target.height / height.toFloat(), target.width / width.toFloat())
         val bitmap = Bitmap.createScaledBitmap(
             this,
