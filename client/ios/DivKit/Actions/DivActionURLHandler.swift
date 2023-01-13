@@ -44,6 +44,10 @@ public final class DivActionURLHandler {
     self.showTooltip = showTooltip
     self.performTimerAction = performTimerAction
   }
+    
+  public func canHandleURL(_ url: URL) -> Bool {
+      url.scheme == DivActionIntent.scheme
+  }
 
   public func handleURL(
     _ url: URL,
