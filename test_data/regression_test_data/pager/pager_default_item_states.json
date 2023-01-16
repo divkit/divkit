@@ -133,10 +133,6 @@
     },
     "pager_item_content": {
       "type": "container",
-      "width": {
-        "type": "fixed",
-        "value": 320
-      },
       "height": {
         "type": "wrap_content"
       },

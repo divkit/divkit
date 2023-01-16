@@ -124,12 +124,12 @@
     ],
     "variable_triggers": [
       {
-        "condition": "@{my_thumb_value >= 0}",
+        "condition": "@{my_thumb_value >= 0 && my_thumb_secondary_value >= 0}",
         "mode": "on_variable",
         "actions": [
           {
             "log_id": "ya_action",
-            "url": "div-action://set_state?state_id=0/counter/@{my_thumb_value}"
+            "url": "div-action://set_state?state_id=0/counter/@{min(my_thumb_value, my_thumb_secondary_value)}"
           }
         ]
       }

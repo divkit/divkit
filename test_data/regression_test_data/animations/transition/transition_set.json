@@ -31,8 +31,7 @@
           "$image_url": "album_cover_url",
           "action_animation": {
             "name": "no_animation"
-          },
-          "$actions": "album_cover_actions"
+          }
         },
         {
           "type": "state",
@@ -132,7 +131,7 @@
           },
           "row_span": 4,
           "album_cover_url": "https://avatars.yandex.net/get-music-content/49876/c5a39142.a.77947-1/400x400",
-          "album_cover_actions": [
+          "actions": [
             {
               "log_id": "album_cover_pressed",
               "url": "div-action://set_state?state_id=0/album_cover_01/liked"
