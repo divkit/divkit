@@ -337,19 +337,13 @@ internal class DivContainerBinder @Inject constructor(
                 val divHeight = childDivValue.height
                 if (divHeight !is DivSize.WrapContent
                     || divHeight.value.constrained?.evaluate(resolver) != true) {
-                    if (divHeight is DivSize.MatchParent && !div.isWrapContainer(resolver)) {
-                        childView.layoutParams.height = 0
-                    }
-                    childView.applyWeight(childDivValue.height, resolver)
+                    childView.applyWeight(divHeight, resolver)
                 }
             } else if (div.isHorizontal(resolver)) {
                 val divWidth = childDivValue.width
                 if (divWidth !is DivSize.WrapContent
                     || divWidth.value.constrained?.evaluate(resolver) != true) {
-                    if (divWidth is DivSize.MatchParent && !div.isWrapContainer(resolver)) {
-                        childView.layoutParams.width = 0
-                    }
-                    childView.applyWeight(childDivValue.width, resolver)
+                    childView.applyWeight(divWidth, resolver)
                 }
             }
         }
