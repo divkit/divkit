@@ -71,7 +71,6 @@ public final class ContainerBlock: BlockWithLayout {
     case noChildrenProvided
     case childAndGapCountMismatch
     case inconsistentChildLayoutTraits(details: String)
-    case moreThanOneConstrainedChild
   }
 
   private struct CachedSizes {
@@ -217,17 +216,6 @@ public final class ContainerBlock: BlockWithLayout {
         }
       }
     }
-
-    switch layoutDirection {
-    case .horizontal:
-      guard (children.filter { $0.content.isHorizontallyConstrained }.count <= 1) else {
-        throw Error.moreThanOneConstrainedChild
-      }
-    case .vertical:
-      guard (children.filter { $0.content.isVerticallyConstrained }.count <= 1) else {
-        throw Error.moreThanOneConstrainedChild
-      }
-    }
   }
 
   public var isVerticallyResizable: Bool { heightTrait.isResizable }
@@ -257,7 +245,7 @@ public final class ContainerBlock: BlockWithLayout {
       result = children.map { $0.content.intrinsicContentWidth }.max()!
     }
 
-    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
       result = clamp(result, min: minSize, max: maxSize)
     }
 
@@ -300,7 +288,7 @@ public final class ContainerBlock: BlockWithLayout {
       result = (childrenHeights + gaps).reduce(0, +)
     }
 
-    if case let .intrinsic(constrained, minSize, maxSize) = heightTrait, !constrained {
+    if case let .intrinsic(_, minSize, maxSize) = heightTrait {
       result = clamp(result, min: minSize, max: maxSize)
     }
 
@@ -560,7 +548,6 @@ extension ContainerBlock.Error {
     switch self {
     case .noChildrenProvided: return "noChildrenProvided"
     case .childAndGapCountMismatch: return "childAndGapCountMismatch"
-    case .moreThanOneConstrainedChild: return "moreThanOneConstrainedChild"
     case .inconsistentChildLayoutTraits: return "inconsistentChildLayoutTraits"
     }
   }
@@ -569,7 +556,7 @@ extension ContainerBlock.Error {
     switch self {
     case let .inconsistentChildLayoutTraits(details):
       return ["details": details]
-    case .noChildrenProvided, .childAndGapCountMismatch, .moreThanOneConstrainedChild:
+    case .noChildrenProvided, .childAndGapCountMismatch:
       return [:]
     }
   }

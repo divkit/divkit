@@ -40,9 +40,9 @@ public final class GalleryBlock: BlockWithTraits {
     switch widthTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       let width = contentSize.width
-      return constrained ? width : clamp(width, min: minSize, max: maxSize)
+      return clamp(width, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }
@@ -52,9 +52,9 @@ public final class GalleryBlock: BlockWithTraits {
     switch heightTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       let height = contentSize.height
-      return constrained ? height : clamp(height, min: minSize, max: maxSize)
+      return clamp(height, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }

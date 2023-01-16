@@ -73,8 +73,8 @@ public final class TextInputBlock: BlockWithTraits {
     switch widthTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, _):
-      return constrained ? 0 : minSize
+    case let .intrinsic(_, minSize, _):
+      return minSize
     case .weighted:
       return 0
     }
@@ -84,16 +84,16 @@ public final class TextInputBlock: BlockWithTraits {
     switch heightTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       guard let maxVisibleLines = maxVisibleLines else {
         let textHeight = ceil(textForMeasuring.sizeForWidth(width).height)
-        return constrained ? textHeight : clamp(textHeight, min: minSize, max: maxSize)
+        return clamp(textHeight, min: minSize, max: maxSize)
       }
       let textHeight = ceil(
         textForMeasuring
           .heightForWidth(width, maxNumberOfLines: maxVisibleLines)
       )
-      return constrained ? textHeight : clamp(textHeight, min: minSize, max: maxSize)
+      return clamp(textHeight, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }

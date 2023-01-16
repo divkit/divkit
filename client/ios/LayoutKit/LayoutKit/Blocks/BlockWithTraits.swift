@@ -26,6 +26,17 @@ extension BlockWithWidthTrait {
     guard case let .weighted(value) = widthTrait else { fatalError() }
     return value
   }
+
+  public var minWidth: CGFloat {
+    switch widthTrait {
+    case let .fixed(size):
+      return size
+    case .weighted:
+      return 0
+    case .intrinsic(constrained: _, minSize: let minSize, maxSize: _):
+      return minSize
+    }
+  }
 }
 
 extension BlockWithHeightTrait {
@@ -43,5 +54,16 @@ extension BlockWithHeightTrait {
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {
     guard case let .weighted(value) = heightTrait else { fatalError() }
     return value
+  }
+
+  public var minHeight: CGFloat {
+    switch heightTrait {
+    case let .fixed(size):
+      return size
+    case .weighted:
+      return 0
+    case .intrinsic(constrained: _, minSize: let minSize, maxSize: _):
+      return minSize
+    }
   }
 }

@@ -908,6 +908,225 @@ final class ContainerBlockLayoutTests: XCTestCase {
 
     XCTAssertEqual(layout.blockFrames[0], CGRect(x: 0, y: 0, width: 10, height: 10))
   }
+
+  // MARK: Constrained elements layout tests
+
+  func test_WhenTwoConstrainedElementsWithEqualMinSizesDecreasedToMinSizes() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 50),
+          ConstrainedBlockSize(
+            size: 100,
+            minSize: 50
+          ),
+        ],
+        lengthToDecrease: 10000
+      ))
+
+    XCTAssertEqual(blockSizes, [50, 50])
+  }
+
+  func test_WhenTwoConstrainedElementsWithEqualMinSizesDecreasedProportionally() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 50),
+          ConstrainedBlockSize(
+            size: 100,
+            minSize: 50
+          ),
+        ],
+        lengthToDecrease: 50
+      ))
+
+    XCTAssertEqual(blockSizes, [75, 75])
+  }
+
+  func test_WhenTwoConstrainedElementsWithDifferentMinSizesDecreasedToMinSizes() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 75),
+          ConstrainedBlockSize(
+            size: 100,
+            minSize: 50
+          ),
+        ],
+        lengthToDecrease: 10000
+      ))
+
+    XCTAssertEqual(blockSizes, [75, 50])
+  }
+
+  func test_WhenFirstConstrainedElementDecreasedToMinSize() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 75),
+          ConstrainedBlockSize(
+            size: 100,
+            minSize: 50
+          ),
+        ],
+        lengthToDecrease: 60
+      ))
+
+    XCTAssertEqual(blockSizes, [75, 65])
+  }
+
+  func test_WhenFirstConstrainedElementDecreasedToMinSizeAndOtherDecreasedProportionally() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 75),
+          ConstrainedBlockSize(
+            size: 100,
+            minSize: 50
+          ),
+          ConstrainedBlockSize(
+            size: 100,
+            minSize: 60
+          ),
+        ],
+        lengthToDecrease: 85
+      ))
+
+    XCTAssertEqual(blockSizes, [75, 70, 70])
+  }
+
+  func test_WhenElementsUnsortedByDecreaseSize() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 60),
+          ConstrainedBlockSize(
+            size: 100,
+            minSize: 50
+          ),
+          ConstrainedBlockSize(
+            size: 100,
+            minSize: 75
+          ),
+        ],
+        lengthToDecrease: 85
+      ))
+
+    XCTAssertEqual(blockSizes, [70, 70, 75])
+  }
+
+  func test_WhenConstrainedElementsHaveDifferentSizes() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 0),
+          ConstrainedBlockSize(size: 200, minSize: 0),
+        ],
+        lengthToDecrease: 60
+      ))
+
+    XCTAssertEqual(blockSizes, [80, 160])
+  }
+
+  func test_WhenConstrainedElementsHaveDifferentSizesAndFirstElementDecreasedToMinSize() {
+    let blockSizes =
+      Array(decreaseConstrainedBlockSizes(
+        blockSizes: [
+          ConstrainedBlockSize(size: 100, minSize: 99),
+          ConstrainedBlockSize(size: 200, minSize: 0),
+          ConstrainedBlockSize(size: 400, minSize: 0),
+        ],
+        lengthToDecrease: 7 + 30
+      ))
+    // at first iteration block sizes: [100 - 1, 198 - 2, 396 - 4]
+    XCTAssertEqual(blockSizes, [99, 188, 376])
+  }
+
+  func test_TwoHorizontallyConstrainedElementsInHorizontalLayout() {
+    let blockWidth: CGFloat = 100
+    let block = BlockWithFixedWrapContent(
+      width: blockWidth,
+      constrainedHorizontally: true
+    )
+
+    let layout = ContainerBlockLayout(
+      blocks: [
+        block,
+        block,
+      ],
+      gaps: [0, 0, 0],
+      layoutDirection: .horizontal,
+      size: CGSize(width: 150, height: 10)
+    )
+
+    XCTAssertEqual(layout.blockFrames.map(\.width), [75, 75])
+  }
+
+  func test_TwoHorizontallyConstrainedElementsInHorizontalLayoutDecreasedProportionally() {
+    let blockA = BlockWithFixedWrapContent(
+      width: 100,
+      constrainedHorizontally: true
+    )
+
+    let blockB = BlockWithFixedWrapContent(
+      width: 200,
+      constrainedHorizontally: true
+    )
+
+    let layout = ContainerBlockLayout(
+      blocks: [
+        blockA,
+        blockB,
+      ],
+      gaps: [0, 0, 0],
+      layoutDirection: .horizontal,
+      size: CGSize(width: 270, height: 0)
+    )
+    XCTAssertEqual(layout.blockFrames[0].width / layout.blockFrames[1].width, 0.5, accuracy: 1e-5)
+  }
+
+  func test_TwoVerticallyConstrainedElementsInVerticalLayout() {
+    let blockHeight: CGFloat = 100
+    let block = BlockWithFixedWrapContent(
+      height: blockHeight,
+      constrainedVertically: true
+    )
+
+    let layout = ContainerBlockLayout(
+      blocks: [
+        block,
+        block,
+      ],
+      gaps: [0, 0, 0],
+      layoutDirection: .vertical,
+      size: CGSize(width: 0, height: 150)
+    )
+
+    XCTAssertEqual(layout.blockFrames.map(\.height), [75, 75])
+  }
+
+  func test_TwoVerticallyConstrainedElementsInVerticalLayoutDecreasedProportionally() {
+    let blockA = BlockWithFixedWrapContent(
+      height: 100,
+      constrainedVertically: true
+    )
+
+    let blockB = BlockWithFixedWrapContent(
+      height: 200,
+      constrainedVertically: true
+    )
+
+    let layout = ContainerBlockLayout(
+      blocks: [
+        blockA,
+        blockB,
+      ],
+      gaps: [0, 0, 0],
+      layoutDirection: .vertical,
+      size: CGSize(width: 0, height: 270)
+    )
+    XCTAssertEqual(layout.blockFrames[0].height / layout.blockFrames[1].height, 0.5, accuracy: 1e-5)
+  }
 }
 
 private let containerBlock = try! ContainerBlock(

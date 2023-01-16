@@ -76,8 +76,8 @@ extension LayoutTrait {
     switch self {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, _):
-      return constrained ? 0 : minSize
+    case let .intrinsic(_, minSize, _):
+      return minSize
     case .weighted:
       return 0
     }

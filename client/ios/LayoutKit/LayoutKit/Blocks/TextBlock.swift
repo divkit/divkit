@@ -93,13 +93,13 @@ public final class TextBlock: BlockWithTraits {
 
   public var intrinsicContentWidth: CGFloat {
     switch widthTrait {
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       if let cached = cachedIntrinsicWidth {
         return cached
       }
 
       let width = ceil(text.sizeForWidth(.infinity).width)
-      let result = constrained ? width : clamp(width, min: minSize, max: maxSize)
+      let result = clamp(width, min: minSize, max: maxSize)
       cachedIntrinsicWidth = result
       return result
     case let .fixed(value):

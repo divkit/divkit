@@ -91,7 +91,7 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
       result = widths.max()!
     }
 
-    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
       result = clamp(result, min: minSize, max: maxSize)
     }
 
@@ -114,7 +114,7 @@ public final class AnchorBlock: BlockWithLayout, BlockWithTraits {
       result = heights.reduce(0, +)
     }
 
-    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
       result = clamp(result, min: minSize, max: maxSize)
     }
 

@@ -30,7 +30,7 @@ public final class PageControlBlock: BlockWithTraits {
     switch widthTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       let width: CGFloat
       switch configuration.itemPlacement {
       case let .fixed(spaceBetweenCenters):
@@ -39,7 +39,7 @@ public final class PageControlBlock: BlockWithTraits {
         width = 0
       }
 
-      return constrained ? width : clamp(width, min: minSize, max: maxSize)
+      return clamp(width, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }
@@ -49,9 +49,9 @@ public final class PageControlBlock: BlockWithTraits {
     switch heightTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       let height = configuration.pageSize.height * configuration.highlightingScale
-      return constrained ? height : clamp(height, min: minSize, max: maxSize)
+      return clamp(height, min: minSize, max: maxSize)
     case .weighted:
       return configuration.pageSize.height * configuration.highlightingScale
     }

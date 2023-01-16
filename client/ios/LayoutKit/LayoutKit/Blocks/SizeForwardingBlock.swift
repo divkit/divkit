@@ -46,4 +46,12 @@ extension SizeForwardingBlock {
   public var weightOfHorizontallyResizableBlock: LayoutTrait.Weight {
     sizeProvider.weightOfHorizontallyResizableBlock
   }
+
+  public var minWidth: CGFloat {
+    sizeProvider.minWidth
+  }
+
+  public var minHeight: CGFloat {
+    sizeProvider.minHeight
+  }
 }

@@ -105,6 +105,15 @@ struct ContainerBlockLayout {
         lengthAvailableForResizableBlocks: widthAvailableForResizableBlocks
       )
 
+      let horizontallyConstrainedBlocks = children.map { $0.content }
+        .filter { $0.isHorizontallyConstrained }
+      var constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
+        blockSizes: horizontallyConstrainedBlocks
+          .map { .init(size: $0.widthOfHorizontallyNonResizableBlock, minSize: $0.minWidth) },
+        lengthToDecrease: widthAvailableForResizableBlocks < 0 ? -widthAvailableForResizableBlocks :
+          0
+      )
+
       var x = gaps[0]
       zip(children, gaps.dropFirst()).forEach { child, gapAfterBlock in
         let block = child.content
@@ -116,10 +125,8 @@ struct ContainerBlockLayout {
         if block.isVerticallyConstrained, blockSize.height > size.height {
           blockSize.height = size.height
         }
-        if widthAvailableForResizableBlocks < 0, block.isHorizontallyConstrained {
-          blockSize.width = max(
-            blockSize.width + widthAvailableForResizableBlocks, 0
-          )
+        if block.isHorizontallyConstrained {
+          blockSize.width = constrainedBlockSizesIterator.next() ?? 0
         }
         containerAscent = getMaxAscent(
           current: containerAscent, child: child, childSize: blockSize
@@ -150,6 +157,22 @@ struct ContainerBlockLayout {
         lengthAvailablePerWeightUnit: heightAvailablePerWeightUnit,
         lengthAvailableForResizableBlocks: heightAvailableForResizableBlocks
       )
+
+      let verticallyConstrainedBlocks = children.map { $0.content }
+        .filter { $0.isVerticallyConstrained }
+      var constrainedBlockSizesIterator = decreaseConstrainedBlockSizes(
+        blockSizes: verticallyConstrainedBlocks
+          .map {
+            .init(
+              size: $0.heightOfVerticallyNonResizableBlock(forWidth: size.width),
+              minSize: $0.minHeight
+            )
+          },
+        lengthToDecrease: heightAvailableForResizableBlocks < 0 ?
+          -heightAvailableForResizableBlocks :
+          0
+      )
+
       zip(children, gaps.dropFirst()).forEach { child, gapAfterBlock in
         let block = child.content
         let width = (block.isHorizontallyResizable || block.isHorizontallyConstrained)
@@ -161,8 +184,8 @@ struct ContainerBlockLayout {
         var height = block.isVerticallyResizable
           ? heightIfResizable
           : block.heightOfVerticallyNonResizableBlock(forWidth: width)
-        if heightAvailableForResizableBlocks < 0, block.isVerticallyConstrained {
-          height = max(height + heightAvailableForResizableBlocks, 0)
+        if block.isVerticallyConstrained {
+          height = constrainedBlockSizesIterator.next() ?? 0
         }
         frames.append(CGRect(x: x, y: y, width: width, height: height))
         y += height + gapAfterBlock

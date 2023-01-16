@@ -16,9 +16,9 @@ public final class SliderBlock: BlockWithTraits {
     switch widthTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       let width = sliderModel.sliderIntrinsicWidth
-      return constrained ? width : clamp(width, min: minSize, max: maxSize)
+      return clamp(width, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }
@@ -28,9 +28,9 @@ public final class SliderBlock: BlockWithTraits {
     switch heightTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       let height = sliderModel.sliderHeight
-      return constrained ? height : clamp(height, min: minSize, max: maxSize)
+      return clamp(height, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }

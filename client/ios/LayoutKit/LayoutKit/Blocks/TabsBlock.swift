@@ -40,9 +40,9 @@ public final class TabsBlock: BlockWithTraits {
       height: .greatestFiniteMagnitude
     )
 
-    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait {
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
       let width = layout.size.width
-      return constrained ? width : clamp(width, min: minSize, max: maxSize)
+      return clamp(width, min: minSize, max: maxSize)
     }
 
     return layout.size.width
@@ -59,9 +59,9 @@ public final class TabsBlock: BlockWithTraits {
       width: width
     )
 
-    if case let .intrinsic(constrained, minSize, maxSize) = heightTrait {
+    if case let .intrinsic(_, minSize, maxSize) = heightTrait {
       let height = layout.size.height
-      return constrained ? height : clamp(height, min: minSize, max: maxSize)
+      return clamp(height, min: minSize, max: maxSize)
     }
 
     return layout.size.height

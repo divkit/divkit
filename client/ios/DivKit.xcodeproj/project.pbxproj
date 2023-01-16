@@ -11,6 +11,7 @@
 		0AB4193E28BCF61D00FDAAD5 /* LottieAnimationFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */; };
 		431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */; };
 		431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 431DC9C329620AA1007FA268 /* BlockTestsModels.swift */; };
+		435653DB29742C9300224B9D /* BlockWithFixedWrapContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 435653DA29742C9300224B9D /* BlockWithFixedWrapContent.swift */; };
 		52184FD8296C68E400ECC0E9 /* DivKitExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 52184FD7296C68E400ECC0E9 /* DivKitExtensions */; };
 		52EEC66E293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */; };
 		6178F76B28E2095100FE1648 /* LayoutKit in Frameworks */ = {isa = PBXBuildFile; productRef = 6178F74E28E2095100FE1648 /* LayoutKit */; };
@@ -245,6 +246,7 @@
 		0AB4193D28BCF61D00FDAAD5 /* LottieAnimationFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationFactory.swift; sourceTree = "<group>"; };
 		431DC9C12961EF84007FA268 /* ContainerBlockLayoutTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerBlockLayoutTests.swift; sourceTree = "<group>"; };
 		431DC9C329620AA1007FA268 /* BlockTestsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockTestsModels.swift; sourceTree = "<group>"; };
+		435653DA29742C9300224B9D /* BlockWithFixedWrapContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockWithFixedWrapContent.swift; sourceTree = "<group>"; };
 		52EEC66D293E64C90030FB11 /* DivBlockModelingContextErrorsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivBlockModelingContextErrorsTests.swift; sourceTree = "<group>"; };
 		6178F74028E2042200FE1648 /* Array+UIViewRenderableTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+UIViewRenderableTests.swift"; sourceTree = "<group>"; };
 		6178F74128E2042200FE1648 /* UIViewRenderable+AccessibilityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewRenderable+AccessibilityTests.swift"; sourceTree = "<group>"; };
@@ -1102,6 +1104,7 @@
 				8CF3293F2875D5C8003F799A /* TabsBlockTests.swift */,
 				8CF329472875D5C8003F799A /* WrapperBlockTests.swift */,
 				431DC9C329620AA1007FA268 /* BlockTestsModels.swift */,
+				435653DA29742C9300224B9D /* BlockWithFixedWrapContent.swift */,
 			);
 			name = Blocks;
 			path = LayoutKit/LayoutKitTests/Blocks;
@@ -1685,6 +1688,7 @@
 				8CF32B7E2875E12F003F799A /* Utils.swift in Sources */,
 				8CF329582875D5C8003F799A /* GridBlockTests.swift in Sources */,
 				8CF329692875D5D6003F799A /* TabInterimItemExtensionsTests.swift in Sources */,
+				435653DB29742C9300224B9D /* BlockWithFixedWrapContent.swift in Sources */,
 				431DC9C429620AA1007FA268 /* BlockTestsModels.swift in Sources */,
 				431DC9C22961EF84007FA268 /* ContainerBlockLayoutTests.swift in Sources */,
 				8CF329572875D5C8003F799A /* BlockTests+Layout.swift in Sources */,

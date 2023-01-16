@@ -191,8 +191,8 @@ public final class TextFieldBlock: Block {
     switch widthTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, _):
-      return constrained ? 0 : minSize
+    case let .intrinsic(_, minSize, _):
+      return minSize
     case .weighted:
       return 0
     }
@@ -220,11 +220,11 @@ public final class TextFieldBlock: Block {
     switch heightTrait {
     case let .fixed(value):
       return value
-    case let .intrinsic(constrained, minSize, maxSize):
+    case let .intrinsic(_, minSize, maxSize):
       let headerHeight = getHeaderHeight(forWidth: width)
       let textHeight = text.heightForWidth(width, maxNumberOfLines: maxIntrinsicNumberOfLines)
       let height = ceil(textHeight + headerHeight + gap)
-      return constrained ? height : clamp(height, min: minSize, max: maxSize)
+      return clamp(height, min: minSize, max: maxSize)
     case .weighted:
       return 0
     }

@@ -38,6 +38,9 @@ public protocol Block: AnyObject,
   var weightOfHorizontallyResizableBlock: LayoutTrait.Weight { get }
   var weightOfVerticallyResizableBlock: LayoutTrait.Weight { get }
 
+  var minWidth: CGFloat { get }
+  var minHeight: CGFloat { get }
+
   func equals(_ other: Block) -> Bool
 }
 
@@ -102,6 +105,9 @@ extension Block {
   public func ascent(forWidth _: CGFloat) -> CGFloat? {
     nil
   }
+
+  public var minWidth: CGFloat { 0 }
+  public var minHeight: CGFloat { 0 }
 }
 
 public func ==(lhs: Block, rhs: Block) -> Bool {

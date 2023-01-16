@@ -179,7 +179,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
 
     var result = Layout.calculateIntrinsicColumnWidths(items: items, grid: grid).reduce(0, +)
 
-    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
       result = clamp(result, min: minSize, max: maxSize)
     }
 
@@ -199,7 +199,7 @@ public final class GridBlock: BlockWithTraits, BlockWithLayout {
 
     var result = makeLayout(constrainedTo: CGSize(width: width, height: .infinity)).size.height
 
-    if case let .intrinsic(constrained, minSize, maxSize) = widthTrait, !constrained {
+    if case let .intrinsic(_, minSize, maxSize) = widthTrait {
       result = clamp(result, min: minSize, max: maxSize)
     }
 

@@ -3,8 +3,6 @@ import UIKit
 
 import CommonCore
 
-public typealias BlockView = UIView & BlockViewProtocol
-
 public protocol UIViewRenderable {
   static func makeBlockView() -> BlockView
   func configureBlockView(

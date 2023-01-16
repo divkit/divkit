@@ -195,7 +195,8 @@ final class BlockTests_Layout: XCTestCase {
       children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
     )
 
-    let expectedHeight = imageSize.height + intrinsicTextSize.height + ContainerBlockTestModels.threeGapsSize
+    let expectedHeight = imageSize.height + intrinsicTextSize.height + ContainerBlockTestModels
+      .threeGapsSize
     XCTAssertEqual(block.heightOfVerticallyNonResizableBlock, expectedHeight)
   }
 
@@ -299,7 +300,8 @@ final class BlockTests_Layout: XCTestCase {
       children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
     )
 
-    let expectedWidth = imageSize.width + intrinsicTextSize.width + ContainerBlockTestModels.threeGapsSize
+    let expectedWidth = imageSize.width + intrinsicTextSize.width + ContainerBlockTestModels
+      .threeGapsSize
     XCTAssertEqual(block.widthOfHorizontallyNonResizableBlock, expectedWidth)
   }
 
@@ -388,7 +390,8 @@ final class BlockTests_Layout: XCTestCase {
       children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
     )
 
-    let expectedWidth = imageSize.width + intrinsicTextSize.width + ContainerBlockTestModels.threeGapsSize
+    let expectedWidth = imageSize.width + intrinsicTextSize.width + ContainerBlockTestModels
+      .threeGapsSize
     XCTAssertEqual(block.widthOfHorizontallyNonResizableBlock, expectedWidth)
   }
 
@@ -536,49 +539,6 @@ final class BlockTests_Layout: XCTestCase {
     )
   }
 
-  func test_WhenMakingHorizontalContainerWithTwoConstrainedChildren_Throws(
-  ) {
-    XCTAssertThrowsError(
-      try ContainerBlock(
-        layoutDirection: .horizontal,
-        widthTrait: .intrinsic,
-        children: [
-          ImageBlock(
-            imageHolder: image,
-            widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity)
-          ),
-          TextBlock(
-            widthTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
-            text: text
-          ),
-        ]
-      ),
-      ContainerBlock.Error.moreThanOneConstrainedChild
-    )
-  }
-
-  func test_WhenMakingVerticalContainerWithTwoConstrainedChildren_Throws(
-  ) {
-    XCTAssertThrowsError(
-      try ContainerBlock(
-        layoutDirection: .vertical,
-        heightTrait: .intrinsic,
-        children: [
-          ImageBlock(
-            imageHolder: image,
-            heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity)
-          ),
-          TextBlock(
-            widthTrait: .intrinsic,
-            heightTrait: .intrinsic(constrained: true, minSize: 0, maxSize: .infinity),
-            text: text
-          ),
-        ]
-      ),
-      ContainerBlock.Error.moreThanOneConstrainedChild
-    )
-  }
-
   func test_HeightOfTextBlock_EqualsTextHeight() {
     let block = TextBlock(widthTrait: .intrinsic, text: text)
 
@@ -654,7 +614,8 @@ final class BlockTests_Layout: XCTestCase {
       children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .intrinsic, text: text)]
     )
 
-    let expectedHeight = imageSize.height + intrinsicTextSize.height + ContainerBlockTestModels.threeGapsSize
+    let expectedHeight = imageSize.height + intrinsicTextSize.height + ContainerBlockTestModels
+      .threeGapsSize
     XCTAssertEqual(
       block.heightOfVerticallyNonResizableBlock(forWidth: imageSize.width),
       expectedHeight
@@ -670,7 +631,8 @@ final class BlockTests_Layout: XCTestCase {
       children: [ImageBlock(imageHolder: image), TextBlock(widthTrait: .resizable, text: text)]
     )
 
-    let expectedHeight = imageSize.height + multilineTextSize.height + ContainerBlockTestModels.threeGapsSize
+    let expectedHeight = imageSize.height + multilineTextSize.height + ContainerBlockTestModels
+      .threeGapsSize
     XCTAssertEqual(block.intrinsicContentHeight(forWidth: imageSize.width), expectedHeight)
   }
 
@@ -710,7 +672,10 @@ final class BlockTests_Layout: XCTestCase {
       ]
     )
 
-    XCTAssertEqual(block.intrinsicContentHeight(forWidth: imageSize.width), ContainerBlockTestModels.threeGapsSize)
+    XCTAssertEqual(
+      block.intrinsicContentHeight(forWidth: imageSize.width),
+      ContainerBlockTestModels.threeGapsSize
+    )
   }
 
   func test_FixedHeightOfHorizontalContainer_IsEqualToAssociatedValue() {
