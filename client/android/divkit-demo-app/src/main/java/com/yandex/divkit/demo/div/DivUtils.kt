@@ -37,7 +37,7 @@ fun divConfiguration(
     return DivConfiguration.Builder(Container.imageLoader)
         .actionHandler(DemoDivActionHandler(Container.uriHandler.apply { handlingActivity = activity }))
         .divCustomViewFactory(DemoDivCustomViewFactory())
-        .divCustomViewAdapter(DemoDivCustomViewAdapter(Container.videoCustomViewController))
+        .divCustomViewAdapter(DemoDivCustomViewAdapter(activity, Container.videoCustomViewController))
         .div2Logger(DemoDiv2Logger(logDelegate))
         .enableVisibilityBeacons()
         .enableLongtapActionsPassingToChild()
