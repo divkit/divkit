@@ -350,11 +350,14 @@
     }
 
     function removeSvgFilter(color: string | undefined, mode: TintMode): void {
-        if (!color || !svgFilterUsages[color]) {
+        if (!color) {
             return;
         }
 
         const key = `${color}:${mode}`;
+        if (!svgFilterUsages[key]) {
+            return;
+        }
 
         if (--svgFilterUsages[key] === 0) {
             svgFiltersMap = Object.keys(svgFiltersMap).reduce((acc, item) => {

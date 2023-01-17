@@ -217,6 +217,8 @@
     onDestroy(() => {
         rootCtx.removeSvgFilter(tintColor, tintMode);
     });
+
+    // Recreate image on svg filter change for the Safari
 </script>
 
 {#if !hasError}
@@ -229,8 +231,22 @@
         style={containerStyle}
         customDescription={true}
     >
-        {#if mods.aspect}
-            <span class={css['image__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
+        {#key svgFilterId}
+            {#if mods.aspect}
+                <span class={css['image__aspect-wrapper']} style:padding-bottom="{aspectPaddingBottom}%">
+                    <img
+                        class={css.image__image}
+                        src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
+                        loading="lazy"
+                        decoding="async"
+                        style={makeStyle(style)}
+                        {alt}
+                        aria-hidden={alt ? null : 'true'}
+                        on:load={onLoad}
+                        on:error={onError}
+                    >
+                </span>
+            {:else}
                 <img
                     class={css.image__image}
                     src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
@@ -242,19 +258,7 @@
                     on:load={onLoad}
                     on:error={onError}
                 >
-            </span>
-        {:else}
-            <img
-                class={css.image__image}
-                src={state === STATE_ERROR ? FALLBACK_IMAGE : imageUrl}
-                loading="lazy"
-                decoding="async"
-                style={makeStyle(style)}
-                {alt}
-                aria-hidden={alt ? null : 'true'}
-                on:load={onLoad}
-                on:error={onError}
-            >
-        {/if}
+            {/if}
+        {/key}
     </Outer>
 {/if}
