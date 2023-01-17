@@ -493,6 +493,105 @@
         "web",
         "ios"
       ]
+    },
+    {
+      "name": "getYear(setYear(parseUnixTime(0), 2022)) => 2022",
+      "expression": "@{getYear(setYear(parseUnixTime(0), 2022))}",
+      "expected": {
+        "type": "integer",
+        "value": "2022"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getMonth(setMonth(parseUnixTime(0), 11)) => 11",
+      "expression": "@{getMonth(setMonth(parseUnixTime(0), 11))}",
+      "expected": {
+        "type": "integer",
+        "value": "11"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getDay(setDay(parseUnixTime(0), 13)) => 13",
+      "expression": "@{getDay(setDay(parseUnixTime(0), 13))}",
+      "expected": {
+        "type": "integer",
+        "value": "13"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getDayOfWeek(parseUnixTime(0)) => 4",
+      "expression": "@{getDayOfWeek(parseUnixTime(0))}",
+      "expected": {
+        "type": "integer",
+        "value": "4"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getDayOfWeek(parseUnixTime(259200)) => 7",
+      "expression": "@{getDayOfWeek(parseUnixTime(259200))}",
+      "expected": {
+        "type": "integer",
+        "value": "7"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getHours(setHours(parseUnixTime(0), 17)) => 17",
+      "expression": "@{getHours(setHours(parseUnixTime(0), 17))}",
+      "expected": {
+        "type": "integer",
+        "value": "17"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getMinutes(setMinutes(parseUnixTime(0), 23)) => 23",
+      "expression": "@{getMinutes(setMinutes(parseUnixTime(0), 23))}",
+      "expected": {
+        "type": "integer",
+        "value": "23"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getSeconds(setSeconds(parseUnixTime(0), 27)) => 27",
+      "expression": "@{getSeconds(setSeconds(parseUnixTime(0), 27))}",
+      "expected": {
+        "type": "integer",
+        "value": "27"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getMillis(setMillis(parseUnixTime(0), 31)) => 31",
+      "expression": "@{getMillis(setMillis(parseUnixTime(0), 31))}",
+      "expected": {
+        "type": "integer",
+        "value": "31"
+      },
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }

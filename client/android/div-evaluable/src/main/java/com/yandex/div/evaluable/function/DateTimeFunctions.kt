@@ -268,6 +268,168 @@ internal object SetMillis : Function() {
     }
 }
 
+internal object GetYear : Function() {
+
+    override val name = "getYear"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    @Throws(EvaluableException::class)
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+
+        val calendar = datetime.toCalendar()
+
+        return calendar.get(Calendar.YEAR)
+    }
+}
+
+internal object GetMonth : Function() {
+
+    override val name = "getMonth"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    @Throws(EvaluableException::class)
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+
+        val calendar = datetime.toCalendar()
+
+        return calendar.get(Calendar.MONTH) + 1
+    }
+}
+
+internal object GetDay : Function() {
+
+    override val name = "getDay"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    @Throws(EvaluableException::class)
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+
+        val calendar = datetime.toCalendar()
+
+        return calendar.get(Calendar.DAY_OF_MONTH)
+    }
+}
+
+internal object GetDayOfWeek : Function() {
+
+    override val name = "getDayOfWeek"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    @Throws(EvaluableException::class)
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+
+        val calendar = datetime.toCalendar()
+
+        val dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
+
+        return if (dayOfWeek == 0) 7 else dayOfWeek
+    }
+}
+
+internal object GetHours : Function() {
+
+    override val name = "getHours"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    @Throws(EvaluableException::class)
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+
+        val calendar = datetime.toCalendar()
+
+        return calendar.get(Calendar.HOUR_OF_DAY)
+    }
+}
+
+internal object GetMinutes : Function() {
+
+    override val name = "getMinutes"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    @Throws(EvaluableException::class)
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+
+        val calendar = datetime.toCalendar()
+
+        return calendar.get(Calendar.MINUTE)
+    }
+}
+
+internal object GetSeconds : Function() {
+
+    override val name = "getSeconds"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    @Throws(EvaluableException::class)
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+
+        val calendar = datetime.toCalendar()
+
+        return calendar.get(Calendar.SECOND)
+    }
+}
+
+internal object GetMillis : Function() {
+
+    override val name = "getMillis"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME)
+    )
+    override val resultType = EvaluableType.INTEGER
+    override val isPure = true
+
+    @Throws(EvaluableException::class)
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+
+        val calendar = datetime.toCalendar()
+
+        return calendar.get(Calendar.MILLISECOND)
+    }
+}
+
 private fun DateTime.toCalendar(): Calendar {
     val timezone = TimeZone.getDefault()
     timezone.rawOffset = timezoneMinutes / 60

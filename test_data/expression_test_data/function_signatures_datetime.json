@@ -196,6 +196,126 @@
         "web",
         "ios"
       ]
+    },
+    {
+      "name": "getYear(datetime) integer",
+      "function_name": "getYear",
+      "doc": "Returns year number of original date.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get year."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getMonth(datetime) integer",
+      "function_name": "getMonth",
+      "doc": "Returns month number of original date.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get month."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getDay(datetime) integer",
+      "function_name": "getDay",
+      "doc": "Returns day of month of original date.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get day of month."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getDayOfWeek(datetime) integer",
+      "function_name": "getDayOfWeek",
+      "doc": "Returns day of week of original date, where Sunday is 7.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get day of week."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getHours(datetime) integer",
+      "function_name": "getHours",
+      "doc": "Returns hours number of original date.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get hours."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getMinutes(datetime) integer",
+      "function_name": "getMinutes",
+      "doc": "Returns minutes number of original date.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get minutes."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getSeconds(datetime) integer",
+      "function_name": "getSeconds",
+      "doc": "Returns seconds number of original date.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get seconds."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "getMillis(datetime) integer",
+      "function_name": "getMillis",
+      "doc": "Returns milliseconds number of original date.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get milliseconds."
+        }
+      ],
+      "result_type": "integer",
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }

@@ -84,6 +84,14 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(SetMinutes)
         registry.register(SetSeconds)
         registry.register(SetMillis)
+        registry.register(GetYear)
+        registry.register(GetMonth)
+        registry.register(GetDay)
+        registry.register(GetDayOfWeek)
+        registry.register(GetHours)
+        registry.register(GetMinutes)
+        registry.register(GetSeconds)
+        registry.register(GetMillis)
 
         // String functions
         registry.register(StringLength)
