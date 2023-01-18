@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "div_data": {
     "card": {
       "log_id": "tests",

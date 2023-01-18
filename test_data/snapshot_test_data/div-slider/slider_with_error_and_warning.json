@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "card": {
     "log_id": "test",
     "variables": [

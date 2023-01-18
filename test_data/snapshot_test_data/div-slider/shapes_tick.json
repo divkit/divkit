@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "templates": {
     "slider_template": {
       "type": "slider",

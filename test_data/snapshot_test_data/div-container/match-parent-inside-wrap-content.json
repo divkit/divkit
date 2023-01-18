@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "description": "match_parent inside wrap_content should transform into the wrap_content with constrained",
   "templates": {
     "row": {

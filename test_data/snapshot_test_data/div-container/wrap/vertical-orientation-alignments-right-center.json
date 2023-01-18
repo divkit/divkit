@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "templates": {
     "wrapped_text": {
       "type": "text",

@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "description": "match_parent should take free space after margins calculation",
   "templates": {},
   "card": {

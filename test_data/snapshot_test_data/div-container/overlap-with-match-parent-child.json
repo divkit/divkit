@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "description": "match_parent inside container with orientation: overlap should not affect total size",
   "card": {
     "log_id": "div_welcome/default_browser",

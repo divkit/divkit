@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
   "templates": {
     "text_page_match_parent_height": {
       "type": "text",

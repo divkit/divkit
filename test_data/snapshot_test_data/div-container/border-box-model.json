@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
     "templates": {},
     "card": {
         "log_id": "test",

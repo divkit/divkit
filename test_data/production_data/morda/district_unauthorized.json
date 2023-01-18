@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
     "templates": {
         "title_text": {
             "type": "text",

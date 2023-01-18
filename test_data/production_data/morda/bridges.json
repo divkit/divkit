@@ -1,4 +1,9 @@
 {
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
     "templates": {
         "bridge_card": {
             "orientation": "vertical",

@@ -1,4 +1,8 @@
 {
+  "platforms": [
+    "android",
+    "web"
+  ],
   "card": {
     "log_id": "ui_test_card",
     "variables": [
