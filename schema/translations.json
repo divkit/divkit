@@ -168,12 +168,12 @@
     "ru": "Переход с анимацией перемещения."
   },
   "div_aspect": {
-    "en": "Size with a fixed aspect ratio. It counts height from width and ignores other specified height values.",
-    "ru": "Размер с фиксированным соотношением сторон. Считает высоту от ширины и игнорирует другие заданные значения высоты."
+    "en": "Size with a fixed aspect ratio. It counts height from width and ignores `height` value.",
+    "ru": "Размер с фиксированным соотношением сторон. Высота вычисляется исходя из ширины, значение параметра `height` игнорируется."
   },
   "div_aspect_ratio": {
-    "en": "`ratio = width / height`.",
-    "ru": "`ratio = width / height`."
+    "en": "`height = width / ratio`.",
+    "ru": "`height = width / ratio`."
   },
   "div_background_gradient": {
     "en": "Gradient.",

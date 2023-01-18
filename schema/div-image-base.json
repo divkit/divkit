@@ -33,7 +33,8 @@
       ]
     },
     "aspect": {
-      "$ref": "div-aspect.json"
+      "$ref": "div-aspect.json",
+      "$description": "translations.json#/div_aspect"
     }
   }
 }

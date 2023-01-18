@@ -91,6 +91,12 @@
           "minItems": 1,
           "clientMinItems": 1,
           "$description": "translations.json#/div_container_items"
+        },
+        "aspect": {
+          "$ref": "div-aspect.json",
+          "$description": "translations.json#/div_aspect",
+          "platforms": [
+          ]
         }
       }
     }
