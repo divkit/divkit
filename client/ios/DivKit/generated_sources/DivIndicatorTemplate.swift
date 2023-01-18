@@ -13,6 +13,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
   public let accessibility: Field<DivAccessibilityTemplate>?
   public let activeItemColor: Field<Expression<Color>>? // default value: #ffdc60
   public let activeItemSize: Field<Expression<Double>>? // constraint: number > 0; default value: 1.3
+  public let activeShape: Field<DivRoundedRectangleShapeTemplate>?
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
@@ -25,6 +26,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
   public let height: Field<DivSizeTemplate>? // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: Field<String>? // at least 1 char
   public let inactiveItemColor: Field<Expression<Color>>? // default value: #33919cb5
+  public let inactiveMinimumShape: Field<DivRoundedRectangleShapeTemplate>?
+  public let inactiveShape: Field<DivRoundedRectangleShapeTemplate>?
   public let itemsPlacement: Field<DivIndicatorItemPlacementTemplate>?
   public let margins: Field<DivEdgeInsetsTemplate>?
   public let minimumItemSize: Field<Expression<Double>>? // constraint: number > 0; default value: 0.5
@@ -54,6 +57,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       accessibility: try dictionary.getOptionalField("accessibility", templateToType: templateToType),
       activeItemColor: try dictionary.getOptionalExpressionField("active_item_color", transform: Color.color(withHexString:)),
       activeItemSize: try dictionary.getOptionalExpressionField("active_item_size"),
+      activeShape: try dictionary.getOptionalField("active_shape", templateToType: templateToType),
       alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
       alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
       alpha: try dictionary.getOptionalExpressionField("alpha"),
@@ -66,6 +70,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       height: try dictionary.getOptionalField("height", templateToType: templateToType),
       id: try dictionary.getOptionalField("id"),
       inactiveItemColor: try dictionary.getOptionalExpressionField("inactive_item_color", transform: Color.color(withHexString:)),
+      inactiveMinimumShape: try dictionary.getOptionalField("inactive_minimum_shape", templateToType: templateToType),
+      inactiveShape: try dictionary.getOptionalField("inactive_shape", templateToType: templateToType),
       itemsPlacement: try dictionary.getOptionalField("items_placement", templateToType: templateToType),
       margins: try dictionary.getOptionalField("margins", templateToType: templateToType),
       minimumItemSize: try dictionary.getOptionalExpressionField("minimum_item_size"),
@@ -93,6 +99,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     accessibility: Field<DivAccessibilityTemplate>? = nil,
     activeItemColor: Field<Expression<Color>>? = nil,
     activeItemSize: Field<Expression<Double>>? = nil,
+    activeShape: Field<DivRoundedRectangleShapeTemplate>? = nil,
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
@@ -105,6 +112,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     height: Field<DivSizeTemplate>? = nil,
     id: Field<String>? = nil,
     inactiveItemColor: Field<Expression<Color>>? = nil,
+    inactiveMinimumShape: Field<DivRoundedRectangleShapeTemplate>? = nil,
+    inactiveShape: Field<DivRoundedRectangleShapeTemplate>? = nil,
     itemsPlacement: Field<DivIndicatorItemPlacementTemplate>? = nil,
     margins: Field<DivEdgeInsetsTemplate>? = nil,
     minimumItemSize: Field<Expression<Double>>? = nil,
@@ -129,6 +138,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     self.accessibility = accessibility
     self.activeItemColor = activeItemColor
     self.activeItemSize = activeItemSize
+    self.activeShape = activeShape
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
@@ -141,6 +151,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     self.height = height
     self.id = id
     self.inactiveItemColor = inactiveItemColor
+    self.inactiveMinimumShape = inactiveMinimumShape
+    self.inactiveShape = inactiveShape
     self.itemsPlacement = itemsPlacement
     self.margins = margins
     self.minimumItemSize = minimumItemSize
@@ -166,6 +178,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     let accessibilityValue = parent?.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true) ?? .noValue
     let activeItemColorValue = parent?.activeItemColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.activeItemColorValidator) ?? .noValue
     let activeItemSizeValue = parent?.activeItemSize?.resolveOptionalValue(context: context, validator: ResolvedValue.activeItemSizeValidator) ?? .noValue
+    let activeShapeValue = parent?.activeShape?.resolveOptionalValue(context: context, validator: ResolvedValue.activeShapeValidator, useOnlyLinks: true) ?? .noValue
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
@@ -178,6 +191,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     let heightValue = parent?.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true) ?? .noValue
     let idValue = parent?.id?.resolveOptionalValue(context: context, validator: ResolvedValue.idValidator) ?? .noValue
     let inactiveItemColorValue = parent?.inactiveItemColor?.resolveOptionalValue(context: context, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveItemColorValidator) ?? .noValue
+    let inactiveMinimumShapeValue = parent?.inactiveMinimumShape?.resolveOptionalValue(context: context, validator: ResolvedValue.inactiveMinimumShapeValidator, useOnlyLinks: true) ?? .noValue
+    let inactiveShapeValue = parent?.inactiveShape?.resolveOptionalValue(context: context, validator: ResolvedValue.inactiveShapeValidator, useOnlyLinks: true) ?? .noValue
     let itemsPlacementValue = parent?.itemsPlacement?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsPlacementValidator, useOnlyLinks: true) ?? .noValue
     let marginsValue = parent?.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true) ?? .noValue
     let minimumItemSizeValue = parent?.minimumItemSize?.resolveOptionalValue(context: context, validator: ResolvedValue.minimumItemSizeValidator) ?? .noValue
@@ -201,6 +216,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       activeItemColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_item_color", error: $0) },
       activeItemSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_item_size", error: $0) },
+      activeShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_shape", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
@@ -213,6 +229,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       inactiveItemColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_item_color", error: $0) },
+      inactiveMinimumShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_minimum_shape", error: $0) },
+      inactiveShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_shape", error: $0) },
       itemsPlacementValue.errorsOrWarnings?.map { .nestedObjectError(field: "items_placement", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       minimumItemSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "minimum_item_size", error: $0) },
@@ -237,6 +255,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       accessibility: accessibilityValue.value,
       activeItemColor: activeItemColorValue.value,
       activeItemSize: activeItemSizeValue.value,
+      activeShape: activeShapeValue.value,
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
@@ -249,6 +268,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       height: heightValue.value,
       id: idValue.value,
       inactiveItemColor: inactiveItemColorValue.value,
+      inactiveMinimumShape: inactiveMinimumShapeValue.value,
+      inactiveShape: inactiveShapeValue.value,
       itemsPlacement: itemsPlacementValue.value,
       margins: marginsValue.value,
       minimumItemSize: minimumItemSizeValue.value,
@@ -279,6 +300,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     var accessibilityValue: DeserializationResult<DivAccessibility> = .noValue
     var activeItemColorValue: DeserializationResult<Expression<Color>> = parent?.activeItemColor?.value() ?? .noValue
     var activeItemSizeValue: DeserializationResult<Expression<Double>> = parent?.activeItemSize?.value() ?? .noValue
+    var activeShapeValue: DeserializationResult<DivRoundedRectangleShape> = .noValue
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
@@ -291,6 +313,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     var heightValue: DeserializationResult<DivSize> = .noValue
     var idValue: DeserializationResult<String> = parent?.id?.value(validatedBy: ResolvedValue.idValidator) ?? .noValue
     var inactiveItemColorValue: DeserializationResult<Expression<Color>> = parent?.inactiveItemColor?.value() ?? .noValue
+    var inactiveMinimumShapeValue: DeserializationResult<DivRoundedRectangleShape> = .noValue
+    var inactiveShapeValue: DeserializationResult<DivRoundedRectangleShape> = .noValue
     var itemsPlacementValue: DeserializationResult<DivIndicatorItemPlacement> = .noValue
     var marginsValue: DeserializationResult<DivEdgeInsets> = .noValue
     var minimumItemSizeValue: DeserializationResult<Expression<Double>> = parent?.minimumItemSize?.value() ?? .noValue
@@ -318,6 +342,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
         activeItemColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.activeItemColorValidator).merged(with: activeItemColorValue)
       case "active_item_size":
         activeItemSizeValue = deserialize(__dictValue, validator: ResolvedValue.activeItemSizeValidator).merged(with: activeItemSizeValue)
+      case "active_shape":
+        activeShapeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.activeShapeValidator, type: DivRoundedRectangleShapeTemplate.self).merged(with: activeShapeValue)
       case "alignment_horizontal":
         alignmentHorizontalValue = deserialize(__dictValue, validator: ResolvedValue.alignmentHorizontalValidator).merged(with: alignmentHorizontalValue)
       case "alignment_vertical":
@@ -342,6 +368,10 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
         idValue = deserialize(__dictValue, validator: ResolvedValue.idValidator).merged(with: idValue)
       case "inactive_item_color":
         inactiveItemColorValue = deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveItemColorValidator).merged(with: inactiveItemColorValue)
+      case "inactive_minimum_shape":
+        inactiveMinimumShapeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.inactiveMinimumShapeValidator, type: DivRoundedRectangleShapeTemplate.self).merged(with: inactiveMinimumShapeValue)
+      case "inactive_shape":
+        inactiveShapeValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.inactiveShapeValidator, type: DivRoundedRectangleShapeTemplate.self).merged(with: inactiveShapeValue)
       case "items_placement":
         itemsPlacementValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsPlacementValidator, type: DivIndicatorItemPlacementTemplate.self).merged(with: itemsPlacementValue)
       case "margins":
@@ -386,6 +416,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
         activeItemColorValue = activeItemColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.activeItemColorValidator))
       case parent?.activeItemSize?.link:
         activeItemSizeValue = activeItemSizeValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.activeItemSizeValidator))
+      case parent?.activeShape?.link:
+        activeShapeValue = activeShapeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.activeShapeValidator, type: DivRoundedRectangleShapeTemplate.self))
       case parent?.alignmentHorizontal?.link:
         alignmentHorizontalValue = alignmentHorizontalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alignmentHorizontalValidator))
       case parent?.alignmentVertical?.link:
@@ -410,6 +442,10 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
         idValue = idValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.idValidator))
       case parent?.inactiveItemColor?.link:
         inactiveItemColorValue = inactiveItemColorValue.merged(with: deserialize(__dictValue, transform: Color.color(withHexString:), validator: ResolvedValue.inactiveItemColorValidator))
+      case parent?.inactiveMinimumShape?.link:
+        inactiveMinimumShapeValue = inactiveMinimumShapeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.inactiveMinimumShapeValidator, type: DivRoundedRectangleShapeTemplate.self))
+      case parent?.inactiveShape?.link:
+        inactiveShapeValue = inactiveShapeValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.inactiveShapeValidator, type: DivRoundedRectangleShapeTemplate.self))
       case parent?.itemsPlacement?.link:
         itemsPlacementValue = itemsPlacementValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.itemsPlacementValidator, type: DivIndicatorItemPlacementTemplate.self))
       case parent?.margins?.link:
@@ -453,11 +489,14 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
     }
     if let parent = parent {
       accessibilityValue = accessibilityValue.merged(with: parent.accessibility?.resolveOptionalValue(context: context, validator: ResolvedValue.accessibilityValidator, useOnlyLinks: true))
+      activeShapeValue = activeShapeValue.merged(with: parent.activeShape?.resolveOptionalValue(context: context, validator: ResolvedValue.activeShapeValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
       extensionsValue = extensionsValue.merged(with: parent.extensions?.resolveOptionalValue(context: context, validator: ResolvedValue.extensionsValidator, useOnlyLinks: true))
       focusValue = focusValue.merged(with: parent.focus?.resolveOptionalValue(context: context, validator: ResolvedValue.focusValidator, useOnlyLinks: true))
       heightValue = heightValue.merged(with: parent.height?.resolveOptionalValue(context: context, validator: ResolvedValue.heightValidator, useOnlyLinks: true))
+      inactiveMinimumShapeValue = inactiveMinimumShapeValue.merged(with: parent.inactiveMinimumShape?.resolveOptionalValue(context: context, validator: ResolvedValue.inactiveMinimumShapeValidator, useOnlyLinks: true))
+      inactiveShapeValue = inactiveShapeValue.merged(with: parent.inactiveShape?.resolveOptionalValue(context: context, validator: ResolvedValue.inactiveShapeValidator, useOnlyLinks: true))
       itemsPlacementValue = itemsPlacementValue.merged(with: parent.itemsPlacement?.resolveOptionalValue(context: context, validator: ResolvedValue.itemsPlacementValidator, useOnlyLinks: true))
       marginsValue = marginsValue.merged(with: parent.margins?.resolveOptionalValue(context: context, validator: ResolvedValue.marginsValidator, useOnlyLinks: true))
       paddingsValue = paddingsValue.merged(with: parent.paddings?.resolveOptionalValue(context: context, validator: ResolvedValue.paddingsValidator, useOnlyLinks: true))
@@ -477,6 +516,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       accessibilityValue.errorsOrWarnings?.map { .nestedObjectError(field: "accessibility", error: $0) },
       activeItemColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_item_color", error: $0) },
       activeItemSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_item_size", error: $0) },
+      activeShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "active_shape", error: $0) },
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
@@ -489,6 +529,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       heightValue.errorsOrWarnings?.map { .nestedObjectError(field: "height", error: $0) },
       idValue.errorsOrWarnings?.map { .nestedObjectError(field: "id", error: $0) },
       inactiveItemColorValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_item_color", error: $0) },
+      inactiveMinimumShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_minimum_shape", error: $0) },
+      inactiveShapeValue.errorsOrWarnings?.map { .nestedObjectError(field: "inactive_shape", error: $0) },
       itemsPlacementValue.errorsOrWarnings?.map { .nestedObjectError(field: "items_placement", error: $0) },
       marginsValue.errorsOrWarnings?.map { .nestedObjectError(field: "margins", error: $0) },
       minimumItemSizeValue.errorsOrWarnings?.map { .nestedObjectError(field: "minimum_item_size", error: $0) },
@@ -513,6 +555,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       accessibility: accessibilityValue.value,
       activeItemColor: activeItemColorValue.value,
       activeItemSize: activeItemSizeValue.value,
+      activeShape: activeShapeValue.value,
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
@@ -525,6 +568,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       height: heightValue.value,
       id: idValue.value,
       inactiveItemColor: inactiveItemColorValue.value,
+      inactiveMinimumShape: inactiveMinimumShapeValue.value,
+      inactiveShape: inactiveShapeValue.value,
       itemsPlacement: itemsPlacementValue.value,
       margins: marginsValue.value,
       minimumItemSize: minimumItemSizeValue.value,
@@ -560,6 +605,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       accessibility: accessibility ?? mergedParent.accessibility,
       activeItemColor: activeItemColor ?? mergedParent.activeItemColor,
       activeItemSize: activeItemSize ?? mergedParent.activeItemSize,
+      activeShape: activeShape ?? mergedParent.activeShape,
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
@@ -572,6 +618,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       height: height ?? mergedParent.height,
       id: id ?? mergedParent.id,
       inactiveItemColor: inactiveItemColor ?? mergedParent.inactiveItemColor,
+      inactiveMinimumShape: inactiveMinimumShape ?? mergedParent.inactiveMinimumShape,
+      inactiveShape: inactiveShape ?? mergedParent.inactiveShape,
       itemsPlacement: itemsPlacement ?? mergedParent.itemsPlacement,
       margins: margins ?? mergedParent.margins,
       minimumItemSize: minimumItemSize ?? mergedParent.minimumItemSize,
@@ -602,6 +650,7 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       accessibility: merged.accessibility?.tryResolveParent(templates: templates),
       activeItemColor: merged.activeItemColor,
       activeItemSize: merged.activeItemSize,
+      activeShape: merged.activeShape?.tryResolveParent(templates: templates),
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
@@ -614,6 +663,8 @@ public final class DivIndicatorTemplate: TemplateValue, TemplateDeserializable {
       height: merged.height?.tryResolveParent(templates: templates),
       id: merged.id,
       inactiveItemColor: merged.inactiveItemColor,
+      inactiveMinimumShape: merged.inactiveMinimumShape?.tryResolveParent(templates: templates),
+      inactiveShape: merged.inactiveShape?.tryResolveParent(templates: templates),
       itemsPlacement: merged.itemsPlacement?.tryResolveParent(templates: templates),
       margins: merged.margins?.tryResolveParent(templates: templates),
       minimumItemSize: merged.minimumItemSize,

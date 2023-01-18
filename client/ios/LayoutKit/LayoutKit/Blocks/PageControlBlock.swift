@@ -50,10 +50,10 @@ public final class PageControlBlock: BlockWithTraits {
     case let .fixed(value):
       return value
     case let .intrinsic(_, minSize, maxSize):
-      let height = configuration.pageSize.height * configuration.highlightingScale
+      let height = configuration.pageSize.height * configuration.highlightedHeightScale
       return clamp(height, min: minSize, max: maxSize)
     case .weighted:
-      return configuration.pageSize.height * configuration.highlightingScale
+      return configuration.pageSize.height * configuration.highlightedHeightScale
     }
   }
 

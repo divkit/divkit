@@ -2,14 +2,20 @@ import UIKit
 
 import CommonCore
 
+typealias Scale = (x: CGFloat, y: CGFloat)
+
 final class ScrollPageIndicatorLayer: CALayer {
   @NSManaged var currentIndexPosition: CGFloat
   var numberOfPages = 0
   var configuration = PageIndicatorConfiguration(
     highlightedColor: .clear,
     normalColor: .clear,
-    highlightingScale: 0,
-    disappearingScale: 0,
+    highlightedBorder: BlockBorder(color: .clear, width: 0),
+    normalBorder: BlockBorder(color: .clear, width: 0),
+    highlightedHeightScale: 0,
+    highlightedWidthScale: 0,
+    disappearingHeightScale: 0,
+    disappearingWidthScale: 0,
     pageSize: .zero,
     pageCornerRadius: 0,
     animation: .scale,
@@ -109,13 +115,24 @@ extension ScrollPageIndicatorLayer {
     animator: IndicatorStateAnimator
   ) -> Indicator {
     let rect = indicatorRect(at: state.index)
-    let scale = indicatorScale(for: state, animator: animator)
-
-    return Indicator(
-      rect: rect.withScaledSize(scale),
-      cornerRadius: configuration.pageCornerRadius * scale,
-      color: animator.indicatorColor(for: state).cgColor
+    let border = animator.indicatorBorder(for: state)
+    let scale = indicatorScale(
+      for: state,
+      animator: animator,
+      borderScale: (
+        (rect.width - border.width) / rect.width,
+        (rect.height - border.width) / rect.height
+      )
     )
+    let indicator = Indicator(
+      rect: rect.withScaledSize(x: scale.x, y: scale.y),
+      cornerRadius: configuration.pageCornerRadius * scale.y,
+      color: animator.indicatorColor(for: state).cgColor,
+      borderColor: animator.indicatorBorder(for: state).color.cgColor,
+      borderWidth: animator.indicatorBorder(for: state).width
+    )
+
+    return indicator
   }
 
   fileprivate func makeActiveIndicator(animator: IndicatorStateAnimator) -> Indicator? {
@@ -129,12 +146,15 @@ extension ScrollPageIndicatorLayer {
     var rect = indicatorRect(at: Int(roundedIndex))
     rect.size.width += offsets.widthOffset
     rect.center.x += offsets.xOffset
-
-    return Indicator(
+    let indicator = Indicator(
       rect: rect,
       cornerRadius: configuration.pageCornerRadius,
-      color: configuration.highlightedColor.cgColor
+      color: configuration.highlightedColor.cgColor,
+      borderColor: configuration.highlightedBorder.color.cgColor,
+      borderWidth: configuration.highlightedBorder.width
     )
+
+    return indicator
   }
 
   fileprivate func indicatorRect(at index: Int) -> CGRect {
@@ -153,13 +173,22 @@ extension ScrollPageIndicatorLayer {
 
   fileprivate func indicatorScale(
     for state: IndicatorState,
-    animator: IndicatorStateAnimator
-  ) -> CGFloat {
+    animator: IndicatorStateAnimator,
+    borderScale: Scale
+  ) -> Scale {
     switch state.kind {
     case .normal:
-      return configuration.disappearingScale.interpolated(to: 1, progress: state.progress)
+      return (
+        configuration.disappearingWidthScale
+          .interpolated(to: 1, progress: state.progress) * borderScale.x,
+        configuration.disappearingHeightScale
+          .interpolated(to: 1, progress: state.progress) * borderScale.y
+      )
     case .highlighted:
-      return animator.highlightedIndicatorScale(for: state)
+      return animator.highlightedIndicatorScale(
+        for: state,
+        borderScale: (borderScale.x, borderScale.y)
+      )
     }
   }
 }
@@ -168,6 +197,8 @@ private struct Indicator {
   let rect: CGRect
   let cornerRadius: CGFloat
   let color: CGColor
+  let borderColor: CGColor
+  let borderWidth: CGFloat
 
   func render(in ctx: CGContext) {
     let path = CGPath(
@@ -177,7 +208,10 @@ private struct Indicator {
       transform: nil
     )
     ctx.addPath(path)
+    ctx.setLineWidth(borderWidth)
+    ctx.setStrokeColor(borderColor)
     ctx.setFillColor(color)
-    ctx.fillPath()
+    ctx.closePath()
+    ctx.drawPath(using: .fillStroke)
   }
 }

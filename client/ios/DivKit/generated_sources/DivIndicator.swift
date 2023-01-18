@@ -17,6 +17,7 @@ public final class DivIndicator: DivBase {
   public let accessibility: DivAccessibility
   public let activeItemColor: Expression<Color> // default value: #ffdc60
   public let activeItemSize: Expression<Double> // constraint: number > 0; default value: 1.3
+  public let activeShape: DivRoundedRectangleShape?
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
@@ -29,6 +30,8 @@ public final class DivIndicator: DivBase {
   public let height: DivSize // default value: .divWrapContentSize(DivWrapContentSize())
   public let id: String? // at least 1 char
   public let inactiveItemColor: Expression<Color> // default value: #33919cb5
+  public let inactiveMinimumShape: DivRoundedRectangleShape?
+  public let inactiveShape: DivRoundedRectangleShape?
   public let itemsPlacement: DivIndicatorItemPlacement?
   public let margins: DivEdgeInsets
   public let minimumItemSize: Expression<Double> // constraint: number > 0; default value: 0.5
@@ -102,6 +105,9 @@ public final class DivIndicator: DivBase {
   static let activeItemSizeValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 > 0 })
 
+  static let activeShapeValidator: AnyValueValidator<DivRoundedRectangleShape> =
+    makeNoOpValueValidator()
+
   static let alignmentHorizontalValidator: AnyValueValidator<DivAlignmentHorizontal> =
     makeNoOpValueValidator()
 
@@ -136,6 +142,12 @@ public final class DivIndicator: DivBase {
     makeStringValidator(minLength: 1)
 
   static let inactiveItemColorValidator: AnyValueValidator<Color> =
+    makeNoOpValueValidator()
+
+  static let inactiveMinimumShapeValidator: AnyValueValidator<DivRoundedRectangleShape> =
+    makeNoOpValueValidator()
+
+  static let inactiveShapeValidator: AnyValueValidator<DivRoundedRectangleShape> =
     makeNoOpValueValidator()
 
   static let itemsPlacementValidator: AnyValueValidator<DivIndicatorItemPlacement> =
@@ -199,6 +211,7 @@ public final class DivIndicator: DivBase {
     accessibility: DivAccessibility? = nil,
     activeItemColor: Expression<Color>? = nil,
     activeItemSize: Expression<Double>? = nil,
+    activeShape: DivRoundedRectangleShape? = nil,
     alignmentHorizontal: Expression<DivAlignmentHorizontal>? = nil,
     alignmentVertical: Expression<DivAlignmentVertical>? = nil,
     alpha: Expression<Double>? = nil,
@@ -211,6 +224,8 @@ public final class DivIndicator: DivBase {
     height: DivSize? = nil,
     id: String? = nil,
     inactiveItemColor: Expression<Color>? = nil,
+    inactiveMinimumShape: DivRoundedRectangleShape? = nil,
+    inactiveShape: DivRoundedRectangleShape? = nil,
     itemsPlacement: DivIndicatorItemPlacement? = nil,
     margins: DivEdgeInsets? = nil,
     minimumItemSize: Expression<Double>? = nil,
@@ -234,6 +249,7 @@ public final class DivIndicator: DivBase {
     self.accessibility = accessibility ?? DivAccessibility()
     self.activeItemColor = activeItemColor ?? .value(Color.colorWithARGBHexCode(0xFFFFDC60))
     self.activeItemSize = activeItemSize ?? .value(1.3)
+    self.activeShape = activeShape
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
@@ -246,6 +262,8 @@ public final class DivIndicator: DivBase {
     self.height = height ?? .divWrapContentSize(DivWrapContentSize())
     self.id = id
     self.inactiveItemColor = inactiveItemColor ?? .value(Color.colorWithARGBHexCode(0x33919CB5))
+    self.inactiveMinimumShape = inactiveMinimumShape
+    self.inactiveShape = inactiveShape
     self.itemsPlacement = itemsPlacement
     self.margins = margins ?? DivEdgeInsets()
     self.minimumItemSize = minimumItemSize ?? .value(0.5)
@@ -279,30 +297,37 @@ extension DivIndicator: Equatable {
       return false
     }
     guard
+      lhs.activeShape == rhs.activeShape,
       lhs.alignmentHorizontal == rhs.alignmentHorizontal,
-      lhs.alignmentVertical == rhs.alignmentVertical,
-      lhs.alpha == rhs.alpha
+      lhs.alignmentVertical == rhs.alignmentVertical
     else {
       return false
     }
     guard
+      lhs.alpha == rhs.alpha,
       lhs.animation == rhs.animation,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.height == rhs.height,
-      lhs.id == rhs.id,
-      lhs.inactiveItemColor == rhs.inactiveItemColor
+      lhs.id == rhs.id
+    else {
+      return false
+    }
+    guard
+      lhs.inactiveItemColor == rhs.inactiveItemColor,
+      lhs.inactiveMinimumShape == rhs.inactiveMinimumShape,
+      lhs.inactiveShape == rhs.inactiveShape
     else {
       return false
     }
@@ -365,6 +390,7 @@ extension DivIndicator: Serializable {
     result["accessibility"] = accessibility.toDictionary()
     result["active_item_color"] = activeItemColor.toValidSerializationValue()
     result["active_item_size"] = activeItemSize.toValidSerializationValue()
+    result["active_shape"] = activeShape?.toDictionary()
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
@@ -377,6 +403,8 @@ extension DivIndicator: Serializable {
     result["height"] = height.toDictionary()
     result["id"] = id
     result["inactive_item_color"] = inactiveItemColor.toValidSerializationValue()
+    result["inactive_minimum_shape"] = inactiveMinimumShape?.toDictionary()
+    result["inactive_shape"] = inactiveShape?.toDictionary()
     result["items_placement"] = itemsPlacement?.toDictionary()
     result["margins"] = margins.toDictionary()
     result["minimum_item_size"] = minimumItemSize.toValidSerializationValue()

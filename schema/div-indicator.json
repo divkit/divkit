@@ -69,17 +69,23 @@
         "active_shape": {
           "$ref": "div-rounded-rectangle-shape.json",
           "$description": "translations.json#/div_indicator_active_shape",
-          "platforms": []
+          "platforms": [
+            "ios"
+          ]
         },
         "inactive_shape": {
           "$ref": "div-rounded-rectangle-shape.json",
           "$description": "translations.json#/div_indicator_inactive_shape",
-          "platforms": []
+          "platforms": [
+            "ios"
+          ]
         },
         "inactive_minimum_shape": {
           "$ref": "div-rounded-rectangle-shape.json",
           "$description": "translations.json#/div_indicator_inactive_minimum_shape",
-          "platforms": []
+          "platforms": [
+            "ios"
+          ]
         },
         "animation": {
           "type": "string",

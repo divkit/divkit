@@ -20,12 +20,39 @@ struct IndicatorStateAnimator {
     }
   }
 
-  func highlightedIndicatorScale(for state: IndicatorState) -> CGFloat {
+  func indicatorBorder(for state: IndicatorState) -> BlockBorder {
+    let normalBorder = configuration.normalBorder
+    let highlightedBorder = configuration.highlightedBorder
+
+    switch state.kind {
+    case .highlighted where configuration.animation == .scale:
+      let border = BlockBorder(
+        color: normalBorder.color.interpolate(
+          to: highlightedBorder.color,
+          progress: state.progress
+        ),
+        width: normalBorder.width.interpolated(
+          to: highlightedBorder.width,
+          progress: state.progress
+        )
+      )
+      return border
+    case .highlighted, .normal:
+      return normalBorder
+    }
+  }
+
+  func highlightedIndicatorScale(for state: IndicatorState, borderScale: Scale) -> Scale {
     switch configuration.animation {
     case .scale:
-      return configuration.highlightingScale.interpolated(to: 1, progress: 1 - state.progress)
+      return (
+        configuration.highlightedWidthScale
+          .interpolated(to: 1, progress: 1 - state.progress) * borderScale.x,
+        configuration.highlightedHeightScale
+          .interpolated(to: 1, progress: 1 - state.progress) * borderScale.y
+      )
     case .worm, .slider:
-      return 1
+      return (1, 1)
     }
   }
 
@@ -56,7 +83,7 @@ struct IndicatorStateAnimator {
       return spaceBetweenCenters
     case let .stretch(_, maxVisibleItems):
       let visiblePageCount = min(maxVisibleItems, numberOfPages)
-      return boundsWidth / (CGFloat(visiblePageCount))
+      return boundsWidth / CGFloat(visiblePageCount)
     }
   }
 }
