@@ -1,3 +1,27 @@
+## 22.0.0
+
+# JSON Schema:
+* Added `aspect` in div-container
+* Added `background_color` and `stroke` in div-rounded-rectangle-shape
+
+# Android Client:
+* Added extension for Rive animations
+* Added function to get time component from datetime
+* Fixed layout of linear container children with match parent size
+* Fixed background blur radius updating by variable
+
+# iOS Client:
+* Added border in DivIndicator
+* Added minSize/maxSize for constrained elements
+* Added CustomImagePreviewExtensionHandler
+* Added errors view in DivKit Playground
+
+# Web Client:
+Fixes:
+* Fixed `tint_color` update for Safari
+
+
+
 ## 21.1.0
 
 # JSON Schema:

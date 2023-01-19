@@ -1,3 +1,9 @@
+## 22.0.0 (January 18, 2023)
+
+Fixes:
+* Fixed `tint_color` update for Safari
+
+
 ## 21.1.0 (January 11, 2023)
 
 Additions:
