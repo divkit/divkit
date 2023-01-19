@@ -11,7 +11,7 @@ import org.junit.runners.model.Statement
 class ScreenshotRule(
     private val relativePath: String,
     private val name: String,
-    private val casePath: String? = null
+    private val casePath: String
 ) : TestRule {
     private val instrumentation: Instrumentation
         get() = InstrumentationRegistry.getInstrumentation()
@@ -45,9 +45,8 @@ class ScreenshotRule(
 
                     val screenshotRelativePaths =
                         screenshotCapture.takeScreenshots(device, view, suiteDirs, screenshotName)
-                    casePath?.let { casePath ->
-                        testCaseReferenceFile.append(casePath, screenshotRelativePaths)
-                    }
+
+                    testCaseReferenceFile.append(casePath, screenshotRelativePaths)
                 }
             }
         }

@@ -16,12 +16,13 @@ import ru.tinkoff.allure.android.FailshotRule
 fun screenshotRule(
     relativePath: String = "",
     name: String = "",
-    casePath: String = "",
+    casePath: String,
     skipScreenshotCapture: Boolean = false,
     innerRule: () -> TestRule,
 ): TestRule {
-    return FailshotRule()
-        .chain(LogcatReportRule(reportOnSuccess = true))
+    return LogcatReportRule(reportOnSuccess = true)
+        .chain(CheckCaseRule(casePath))
+        .chain(FailshotRule())
         .chain(NoAnimationsRule())
         .chain(ClosePopupsRule())
         .chain(innerRule())

@@ -25,7 +25,7 @@ class Div2InteractiveScreenshotTest(private val case: String, escapedCase: Strin
 
     @Rule
     @JvmField
-    val rule = screenshotRule(skipScreenshotCapture = true) { activityRule }
+    val rule = screenshotRule(skipScreenshotCapture = true, casePath = case) { activityRule }
 
     @Screenshot(viewId = R.id.morda_screenshot_div)
     @Test
