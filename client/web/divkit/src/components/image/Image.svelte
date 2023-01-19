@@ -182,20 +182,18 @@
         'before-appearance': Boolean(animationInterpolator) && state === STATE_LOADING
     };
 
-    $: containerStyle = {
+    $: style = {
+        // Image preview shows, if loading of original image is failed
         'background-image': backgroundImage,
         'background-color': backgroundImage ? undefined : placeholderColor,
-        'background-size': scale
-    };
-
-    $: style = {
+        'background-size': scale,
+        'clip-path': filterClipPath || undefined,
         'object-fit': scale,
         'object-position': position,
         filter: [
             state === STATE_LOADED && svgFilterId ? `url(#${svgFilterId})` : '',
             filter
         ].filter(Boolean).join(' '),
-        'clip-path': filterClipPath || undefined,
         '--divkit-appearance-interpolator': animationInterpolator || undefined,
         '--divkit-appearance-fade-start': animationInterpolator ? animationFadeStart : undefined,
         '--divkit-appearance-delay': animationInterpolator ? `${animationDelay}ms` : undefined,
@@ -228,7 +226,6 @@
         {origJson}
         {templateContext}
         {layoutParams}
-        style={containerStyle}
         customDescription={true}
     >
         {#key svgFilterId}
