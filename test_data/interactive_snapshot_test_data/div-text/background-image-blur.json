@@ -1,0 +1,72 @@
+{
+  "div_data": {
+    "card": {
+      "log_id": "tests",
+      "variables": [
+        {
+          "name": "blur",
+          "type": "integer",
+          "value": 4
+        }
+      ],
+      "states": [
+        {
+          "state_id": 0,
+          "div": {
+            "type": "text",
+            "font_size": 14,
+            "paddings": {
+              "top": 16,
+              "bottom": 16
+            },
+            "text_alignment_horizontal": "center",
+            "text_color": "#0000ff",
+            "text": "Hello, world!",
+            "background": [
+              {
+                "type": "image",
+                "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+                "filters": [
+                  {
+                    "type": "blur",
+                    "radius": "@{blur}"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "steps": [
+    {
+      "expected_screenshot": "step0.png"
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=blur&value=0",
+          "log_id": "blur: 0"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=blur&value=30",
+          "log_id": "blur: 30"
+        }
+      ]
+    },
+    {
+      "div_actions": [
+        {
+          "url": "div-action://set_variable?name=blur&value=4",
+          "log_id": "blur: 4"
+        }
+      ],
+      "expected_screenshot": "step0.png"
+    }
+  ]
+}
