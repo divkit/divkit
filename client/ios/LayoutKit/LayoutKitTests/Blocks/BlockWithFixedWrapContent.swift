@@ -56,7 +56,11 @@ extension BlockWithFixedWrapContent {
   var debugDescription: String { "" }
 
   static func makeBlockView() -> BlockView {
-    TextBlock.makeBlockView()
+    #if os(iOS)
+    NSObject() as! BlockView
+    #else
+    NSObject() as BlockView
+    #endif
   }
 
   func canConfigureBlockView(_: BlockView) -> Bool {
