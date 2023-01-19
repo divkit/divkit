@@ -2,8 +2,6 @@
 
 import CoreGraphics
 
-import BaseTiny
-
 public enum RelativeTag {}
 public typealias RelativeValue = Tagged<RelativeTag, CGFloat>
 

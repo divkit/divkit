@@ -2,6 +2,7 @@
 
 import Foundation
 
+@dynamicMemberLookup
 public struct Signal<T> {
   public let addObserver: (Observer<T>) -> Disposable
 
@@ -12,6 +13,25 @@ public struct Signal<T> {
 
   public init(addObserver: @escaping (Observer<T>) -> Disposable) {
     self.addObserver = addObserver
+  }
+
+  @inlinable
+  public subscript<U>(dynamicMember path: KeyPath<T, U>) -> Signal<U> {
+    map { $0[keyPath: path] }
+  }
+
+  @inlinable
+  public subscript<ValueType, UnderlyingType>(
+    dynamicMember path: KeyPath<UnderlyingType, ValueType>
+  ) -> Signal<ValueType?> where T == UnderlyingType? {
+    map { $0?[keyPath: path] }
+  }
+
+  @inlinable
+  public subscript<ValueType, UnderlyingType>(
+    dynamicMember path: KeyPath<UnderlyingType, ValueType?>
+  ) -> Signal<ValueType?> where T == UnderlyingType? {
+    map { $0?[keyPath: path] }
   }
 }
 

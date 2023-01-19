@@ -1,4 +1,4 @@
-// Copyright 2019 Yandex LLC. All rights reserved.
+// Copyright 2023 Yandex LLC. All rights reserved.
 
 import Foundation
 

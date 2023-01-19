@@ -10,6 +10,7 @@ public final class RemoteImageViewContainer: UIView {
       backgroundModel.applyTo(self, oldValue: oldValue)
     }
   }
+
   public var contentView: RemoteImageViewContentProtocol {
     didSet {
       oldValue.removeFromSuperview()

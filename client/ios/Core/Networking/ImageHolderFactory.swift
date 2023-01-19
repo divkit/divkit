@@ -35,8 +35,6 @@ public struct ImageHolderFactory {
           return ViewImageHolder(view: view)
         case .none:
           return NilImageHolder()
-        @unknown default:
-          return NilImageHolder()
         }
       }
       if let localImage = localImageProvider?.localImage(for: url) {

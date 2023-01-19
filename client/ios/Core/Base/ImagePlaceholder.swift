@@ -16,7 +16,11 @@ extension ImagePlaceholder {
     case let .color(color):
       return "Color(" + color.debugDescription + ")"
     case let .view(view):
+      #if canImport(UIKit)
       return "View(" + view.debugDescription + ")"
+      #else
+      return "View()"
+      #endif
     }
   }
 
@@ -27,7 +31,11 @@ extension ImagePlaceholder {
     case let (.color(lColor), .color(rColor)):
       return lColor == rColor
     case let (.view(lView), .view(rView)):
+      #if canImport(UIKit)
       return lView == rView
+      #else
+      return lView === rView
+      #endif
     case (.image, _), (.color, _), (.view, _):
       return false
     }

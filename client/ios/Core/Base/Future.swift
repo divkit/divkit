@@ -3,8 +3,10 @@
 import Foundation
 
 public final class Future<T> {
+  public typealias Callback = (T) -> Void
+
   private enum State {
-    case pending([(T) -> Void])
+    case pending([Callback])
     case fulfilled(T)
 
     static var initial: State {
@@ -12,14 +14,14 @@ public final class Future<T> {
     }
   }
 
-  private var state: State
+  private let state: AllocatedUnfairLock<State>
 
   public init(payload: T) {
-    state = .fulfilled(payload)
+    state = AllocatedUnfairLock(initialState: .fulfilled(payload))
   }
 
   private init() {
-    state = .initial
+    state = AllocatedUnfairLock(initialState: .initial)
   }
 
   // swiftlint:disable:next use_make_instead_of_create
@@ -28,32 +30,56 @@ public final class Future<T> {
     return (future, future.accept)
   }
 
-  public func resolved(_ callback: @escaping (T) -> Void) {
-    switch state {
-    case let .pending(callbacks):
-      state = .pending(callbacks + [callback])
-    case let .fulfilled(result):
-      callback(result)
+  public func resolved(_ callback: @escaping Callback) {
+    let immediateResult = state.withLock { state -> T? in
+      switch state {
+      case let .pending(callbacks):
+        state = .pending(callbacks + [callback])
+        return nil
+      case let .fulfilled(result):
+        // DON'T pass control to the unknown code within the scope
+        // It may lead to a recursive lock, which is unsupported
+        return result
+      }
+    }
+    if let immediateResult {
+      callback(immediateResult)
     }
   }
 
   public func unwrap() -> T? {
-    switch state {
-    case .pending: return nil
-    case let .fulfilled(result): return result
+    state.withLock { state in
+      switch state {
+      case .pending: return nil
+      case let .fulfilled(result): return result
+      }
     }
   }
 
   private func accept(_ result: T) {
-    switch state {
-    case let .pending(callbacks):
-      state = .fulfilled(result)
-      callbacks.forEach { $0(result) }
-    case let .fulfilled(currentResult):
-      assertionFailure(
-        "Future already has result: \(currentResult). Callstack: \(Thread.callStackSymbols.joined(separator: "\n"))"
-      )
+    let callbacks = state.withLock { state -> [Callback] in
+      switch state {
+      case let .pending(callbacks):
+        state = .fulfilled(result)
+        // DON'T pass control to the unknown code within the scope
+        // It may lead to a recursive lock, which is unsupported
+        return callbacks
+      case let .fulfilled(currentResult):
+        assertionFailure(
+          "Future already has result: \(currentResult). Callstack: \(Thread.callStackSymbols.joined(separator: "\n"))"
+        )
+        return []
+      }
     }
+    for callback in callbacks {
+      callback(result)
+    }
+  }
+}
+
+extension Future: Cancellable where T: Cancellable {
+  public func cancel() {
+    self.resolved { $0.cancel() }
   }
 }
 

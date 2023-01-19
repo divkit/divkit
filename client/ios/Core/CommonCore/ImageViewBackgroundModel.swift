@@ -1,3 +1,5 @@
+// Copyright 2023 Yandex LLC. All rights reserved.
+
 import UIKit
 
 import Base
@@ -15,8 +17,6 @@ extension ImageViewBackgroundModel {
     case let .view(view):
       self = .view(view)
     case .image:
-      return nil
-    @unknown default:
       return nil
     }
   }

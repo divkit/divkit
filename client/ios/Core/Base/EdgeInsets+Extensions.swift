@@ -2,7 +2,6 @@
 
 import CoreGraphics
 
-import BaseTiny
 import BaseUI
 
 extension EdgeInsets: YCEdgeInsets {

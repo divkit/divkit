@@ -10,6 +10,7 @@ cp $1/src/base/ios/yandex/algorithms/Combine.swift Base
 cp $1/src/base/ios/yandex/algorithms/Functions.swift Base
 cp $1/src/base/ios/yandex/algorithms/WeakCollection.swift Base
 cp $1/src/base/ios/yandex/concurrency/GCD.swift Base
+cp $1/src/base/ios/yandex/concurrency/AllocatedUnfairLock.swift Base
 cp $1/src/base/ios/yandex/concurrency/operations/OperationQueue.swift Base
 cp $1/src/base/ios/yandex/extensions/ArrayExtensions.swift Base
 cp $1/src/base/ios/yandex/extensions/ComparableExtension.swift Base
@@ -70,6 +71,7 @@ cp $1/src/base/ios/yandex/thick_ui/types/gradient/RadialGradientView.swift Base
 cp $1/src/base/ios/yandex/thick_ui/types/image/ColorHolder.swift Base
 cp $1/src/base/ios/yandex/thick_ui/types/image/ImageHolder.swift Base
 cp $1/src/base/ios/yandex/thick_ui/types/image/ImagePlaceholder.swift Base
+cp $1/src/base/ios/yandex/thick_ui/types/image/ViewImageHolder.swift Base
 cp $1/src/base/ios/yandex/thick_ui/types/image/NilImageHolder.swift Base
 cp $1/src/base/ios/yandex/thick_ui/types/relative/RelativePoint.swift Base
 cp $1/src/base/ios/yandex/thick_ui/types/relative/RelativeRect.swift Base
@@ -142,6 +144,7 @@ cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ImageLayerLayout.swif
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ObjectsReusability.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/RemoteImageView.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/RemoteImageViewContainer.swift CommonCore
+cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ImageViewBackgroundModel.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/RemoteImageViewContentProtocol.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/MetalImageView.swift CommonCore
 cp $1/src/yandex/ios/search_app/CommonCore/CommonCore/Base/ImageViewProtocol.swift CommonCore

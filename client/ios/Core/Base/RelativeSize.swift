@@ -2,8 +2,6 @@
 
 import CoreGraphics
 
-import BaseTiny
-
 public enum RelativeSizeTag {}
 public typealias RelativeSize = Tagged<RelativeSizeTag, CGSize>
 

@@ -32,7 +32,6 @@ public final class MetalImageView: UIView, RemoteImageViewContentProtocol {
   public override func layoutSubviews() {
     super.layoutSubviews()
     metalView.frame = bounds
-    image = redrawingImage(uiImage, bounds: bounds, imageRedrawingStyle: imageRedrawingStyle)
   }
 
   public func setImage(_ image: UIImage?, animated: Bool?) {
@@ -50,18 +49,20 @@ public final class MetalImageView: UIView, RemoteImageViewContentProtocol {
     }
   }
 
-  private var image: CIImage? {
+  private var cachedCIImage: (CIImage, CIImageFactoryParams)?
+
+  private var uiImage: UIImage? {
     didSet {
-      metalView.setNeedsDisplay()
+      if oldValue !== uiImage {
+        metalView.setNeedsDisplay()
+      }
     }
   }
-
-  private var uiImage: UIImage?
 
   public var imageRedrawingStyle: ImageRedrawingStyle? {
     didSet {
       if oldValue != imageRedrawingStyle {
-        setNeedsLayout()
+        metalView.setNeedsDisplay()
       }
     }
   }
@@ -75,85 +76,29 @@ public final class MetalImageView: UIView, RemoteImageViewContentProtocol {
   }
 }
 
-fileprivate func redrawingImage(
-  _ image: UIImage?,
-  bounds: CGRect,
-  imageRedrawingStyle: ImageRedrawingStyle?
-) -> CIImage? {
-  guard let image,
-        let cgImage = image.cgImage else {
-    return nil
-  }
-  let ciImage = CIImage(cgImage: cgImage)
-  let extent = ciImage.extent
-
-  let identityFilter: ImageFilter = { $0 }
-
-  let tintModeFilter: ImageFilter
-
-  if let tintColor = imageRedrawingStyle?.tintColor,
-     let coloredImage = ImageGeneratorType.constantColor(color: tintColor.ciColor)
-     .imageGenerator() {
-    let mode = imageRedrawingStyle?.tintMode ?? .sourceAtop
-    tintModeFilter = { mode.composerType.imageComposer($0)(coloredImage) }
-  } else {
-    tintModeFilter = identityFilter
-  }
-
-  let filter = imageRedrawingStyle?.effects.compactMap {
-    switch $0 {
-    case let .blur(radius: radius):
-      let scaleX = bounds.width / extent.width
-      let scaleY = bounds.height / extent.height
-      let scale = max(scaleX, scaleY) * 2
-      return ImageBlurType.gaussian(radius: radius / scale).imageFilter
-    case let .tint(color: color, mode: mode):
-      guard let mode,
-            let coloredImage = ImageGeneratorType.constantColor(color: color.ciColor)
-            .imageGenerator()
-      else { return nil }
-      return { mode.composerType.imageComposer($0)(coloredImage) }
-    }
-  }.reduce(identityFilter, combine) ?? identityFilter
-
-  let contentRect = CIVector(
-    x: 0,
-    y: 0,
-    z: extent.width,
-    w: extent.height
-  )
-
-  return combine(tintModeFilter, filter, ImageCropType.crop(rect: contentRect).imageFilter)(ciImage)
-}
-
-extension TintMode {
-  fileprivate var composerType: ImageComposerType {
-    switch self {
-    case .sourceIn:
-      return .sourceIn
-    case .sourceAtop:
-      return .sourceAtop
-    case .darken:
-      return .darken
-    case .lighten:
-      return .lighten
-    case .multiply:
-      return .multiply
-    case .screen:
-      return .screen
-    }
-  }
-}
-
 extension MetalImageView: MTKViewDelegate {
   public func mtkView(_: MTKView, drawableSizeWillChange _: CGSize) {}
 
   public func draw(in view: MTKView) {
     guard let drawable = view.currentDrawable,
           let commandQueue = commandQueue,
-          let image = image else {
+          let uiImage = uiImage,
+          !view.bounds.isEmpty else {
       return
     }
+    let ciImageFactoryParams = CIImageFactoryParams(
+      image: uiImage,
+      bounds: view.bounds,
+      redrawingStyle: imageRedrawingStyle
+    )
+
+    if cachedCIImage?.0 == nil || ciImageFactoryParams != cachedCIImage?.1,
+       let ciImage = makeFilteredImage(params: ciImageFactoryParams) {
+      cachedCIImage = (ciImage, ciImageFactoryParams)
+    }
+
+    guard let (image, _) = cachedCIImage else { return }
+
     let buffer = commandQueue.makeCommandBuffer()
     let drawableSize = view.drawableSize
 
@@ -211,6 +156,85 @@ extension MetalImageView: MTKViewDelegate {
 
     buffer?.present(drawable)
     buffer?.commit()
+  }
+}
+
+private struct CIImageFactoryParams: Equatable {
+  let image: UIImage
+  let bounds: CGRect
+  let redrawingStyle: ImageRedrawingStyle?
+
+  static func ==(lhs: CIImageFactoryParams, rhs: CIImageFactoryParams) -> Bool {
+    lhs.image === rhs.image &&
+      lhs.bounds == rhs.bounds &&
+      lhs.redrawingStyle == rhs.redrawingStyle
+  }
+}
+
+private func makeFilteredImage(
+  params: CIImageFactoryParams
+) -> CIImage? {
+  guard let cgImage = params.image.cgImage else {
+    return nil
+  }
+  let ciImage = CIImage(cgImage: cgImage)
+  let extent = ciImage.extent
+
+  let identityFilter: ImageFilter = { $0 }
+
+  let tintModeFilter: ImageFilter
+
+  if let tintColor = params.redrawingStyle?.tintColor,
+     let coloredImage = ImageGeneratorType.constantColor(color: tintColor.ciColor)
+     .imageGenerator() {
+    let mode = params.redrawingStyle?.tintMode ?? .sourceAtop
+    tintModeFilter = { mode.composerType.imageComposer($0)(coloredImage) }
+  } else {
+    tintModeFilter = identityFilter
+  }
+
+  let filter = params.redrawingStyle?.effects.compactMap {
+    switch $0 {
+    case let .blur(radius: radius):
+      let scaleX = params.bounds.width / extent.width
+      let scaleY = params.bounds.height / extent.height
+      let scale = max(scaleX, scaleY) * 2
+      return ImageBlurType.gaussian(radius: radius / scale).imageFilter
+    case let .tint(color: color, mode: mode):
+      guard let mode,
+            let coloredImage = ImageGeneratorType.constantColor(color: color.ciColor)
+            .imageGenerator()
+      else { return nil }
+      return { mode.composerType.imageComposer($0)(coloredImage) }
+    }
+  }.reduce(identityFilter, combine) ?? identityFilter
+
+  let contentRect = CIVector(
+    x: 0,
+    y: 0,
+    z: extent.width,
+    w: extent.height
+  )
+
+  return combine(tintModeFilter, filter, ImageCropType.crop(rect: contentRect).imageFilter)(ciImage)
+}
+
+extension TintMode {
+  fileprivate var composerType: ImageComposerType {
+    switch self {
+    case .sourceIn:
+      return .sourceIn
+    case .sourceAtop:
+      return .sourceAtop
+    case .darken:
+      return .darken
+    case .lighten:
+      return .lighten
+    case .multiply:
+      return .multiply
+    case .screen:
+      return .screen
+    }
   }
 }
 
