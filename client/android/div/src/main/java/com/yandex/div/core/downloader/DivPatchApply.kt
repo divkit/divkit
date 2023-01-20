@@ -104,26 +104,30 @@ internal class DivPatchApply(private val patch: DivPatchMap) {
                     // just delete this state
                     appliedPatches += divId
                 } else {
-                    newStates.add(state)
+                    val newState = state.tryApplyPatchToDiv(resolver)
+                    newStates.add(newState)
                 }
             } else {
-                val newDivs = state.div?.applyPatch(resolver)
-                if (newDivs?.size == 1) {
-                    newStates.add(
-                        DivState.State(
-                            state.animationIn,
-                            state.animationOut,
-                            newDivs[0],
-                            state.stateId,
-                            state.swipeOutActions
-                        )
-                    )
-                } else {
-                    newStates.add(state)
-                }
+                val newState = state.tryApplyPatchToDiv(resolver)
+                newStates.add(newState)
             }
         }
         return newStates
+    }
+
+    private fun DivState.State.tryApplyPatchToDiv(
+        resolver: ExpressionResolver
+    ): DivState.State {
+        val newDivs = div?.applyPatch(resolver)
+        return if (newDivs?.size == 1) {
+            DivState.State(
+                animationIn,
+                animationOut,
+                newDivs[0],
+                stateId,
+                swipeOutActions
+            )
+        } else this
     }
 
     private fun applyPatch(div: DivTabs, resolver: ExpressionResolver): Div.Tabs {
