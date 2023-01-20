@@ -52,6 +52,7 @@ internal class DivImageBinder @Inject constructor(
             div.scale.observeAndGet(expressionResolver) { scale -> view.imageScale = scale.toImageScale() }
         )
         view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
+        view.observePreview(expressionResolver, div)
         view.addSubscription(
             div.imageUrl.observeAndGet(expressionResolver) { view.applyImage(divView, expressionResolver, div) }
         )
@@ -123,25 +124,49 @@ internal class DivImageBinder @Inject constructor(
         }
     }
 
-    private fun DivImageView.applyImage(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
+    private fun DivImageView.shouldReloadImage(resolver: ExpressionResolver, div: DivImage): Boolean {
         val newImageUrl = div.imageUrl.evaluate(resolver)
-        if (isImageLoaded && newImageUrl == imageUrl) {
-            observeTint(resolver, div.tintColor, div.tintMode)
-            return
+
+        return !isImageLoaded || newImageUrl != imageUrl
+    }
+
+    private fun DivImageView.observePreview(resolver: ExpressionResolver, div: DivImage) {
+        div.preview?.let {
+            val callback = { _: Any ->
+                if (!isImageLoaded) {
+                    applyPreview(resolver, div, synchronous = true)
+                }
+            }
+
+            addSubscription(it.observe(resolver, callback))
         }
-        // Ignore high priority preview if image was previously loaded.
-        val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
-        newImageUrl.applyIfNotEquals(imageUrl) { resetImageLoaded() }
-        // if bitmap was already loaded for the same imageUrl, we don't load placeholders.
+    }
+
+    private fun DivImageView.applyPreview(resolver: ExpressionResolver, div: DivImage, synchronous: Boolean) {
         placeholderLoader.applyPlaceholder(
             this,
             div.preview?.evaluate(resolver),
             div.placeholderColor.evaluate(resolver),
-            synchronous = isHighPriorityShowPreview
+            synchronous = synchronous
         ) {
             previewLoaded()
             applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
         }
+    }
+
+    private fun DivImageView.applyImage(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
+        if (!shouldReloadImage(resolver, div)) {
+            applyTint(resolver, div.tintColor, div.tintMode)
+            return
+        }
+
+        // Called before resetImageLoaded() to ignore high priority preview if image was previously loaded.
+        val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
+
+        val newImageUrl = div.imageUrl.evaluate(resolver)
+        newImageUrl.applyIfNotEquals(imageUrl) { resetImageLoaded() }
+
+        applyPreview(resolver, div, synchronous = isHighPriorityShowPreview)
 
         val reference = imageLoader.loadImage(
             newImageUrl.toString(),
