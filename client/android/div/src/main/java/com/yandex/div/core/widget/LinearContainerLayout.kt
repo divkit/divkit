@@ -8,13 +8,11 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
-import androidx.appcompat.widget.LinearLayoutCompat.SHOW_DIVIDER_BEGINNING
-import androidx.appcompat.widget.LinearLayoutCompat.SHOW_DIVIDER_END
-import androidx.appcompat.widget.LinearLayoutCompat.SHOW_DIVIDER_MIDDLE
 import androidx.appcompat.widget.LinearLayoutCompat.VERTICAL
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
@@ -92,7 +90,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             requestLayout()
         }
 
-    @LinearLayoutCompat.DividerMode
+    @ShowSeparatorsMode
     var showDividers: Int = 0
         set(value) {
             if (field == value) return
@@ -209,9 +207,9 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     private fun hasDividerBeforeChildAt(childIndex: Int): Boolean {
         return when {
-            childIndex == 0 -> showDividers and SHOW_DIVIDER_BEGINNING != 0
-            childIndex == childCount -> showDividers and SHOW_DIVIDER_END != 0
-            showDividers and SHOW_DIVIDER_MIDDLE != 0 -> {
+            childIndex == 0 -> showDividers and ShowSeparatorsMode.SHOW_AT_START != 0
+            childIndex == childCount -> showDividers and ShowSeparatorsMode.SHOW_AT_END != 0
+            showDividers and ShowSeparatorsMode.SHOW_BETWEEN != 0 -> {
                 for (i in childIndex - 1 downTo 0) {
                     if (getChildAt(i).visibility != GONE) {
                         return true
@@ -272,7 +270,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                     // Translate that to WRAP_CONTENT so that it does not end up
                     // with a height of 0
                     oldHeight = MATCH_PARENT
-                    lp.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                    lp.height = WRAP_CONTENT
                 }
 
                 // Determine how big this child would like to be. If this or
@@ -519,7 +517,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                     // wanted to stretch to fill available space. Translate that to
                     // WRAP_CONTENT so that it does not end up with a width of 0
                     oldWidth = MATCH_PARENT
-                    lp.width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    lp.width = WRAP_CONTENT
                 }
 
                 // Determine how big this child would like to be. If this or
@@ -926,31 +924,24 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         requestLayout()
     }
 
-    override fun generateLayoutParams(attrs: AttributeSet?) = LayoutParams(context, attrs)
+    override fun generateLayoutParams(attrs: AttributeSet?) = DivLayoutParams(context, attrs)
 
     /**
-     * Returns a set of layout parameters with a width of [MATCH_PARENT]
-     * and a height of [ViewGroup.LayoutParams.WRAP_CONTENT]
+     * Returns a set of layout parameters with a width of [MATCH_PARENT] and a height of [WRAP_CONTENT]
      * when the layout's orientation is [VERTICAL]. When the orientation is
-     * [HORIZONTAL], the width is set to [ViewGroup.LayoutParams.WRAP_CONTENT]
-     * and the height to [ViewGroup.LayoutParams.WRAP_CONTENT].
+     * [HORIZONTAL], the width is set to [WRAP_CONTENT] and the height to [WRAP_CONTENT].
      */
-    override fun generateDefaultLayoutParams() = if (isVertical) {
-        LayoutParams(MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-    } else {
-        LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+    override fun generateDefaultLayoutParams() =
+        if (isVertical) DivLayoutParams(MATCH_PARENT, WRAP_CONTENT) else DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
+
+    override fun generateLayoutParams(p: LayoutParams?) = when (p) {
+        is DivLayoutParams -> DivLayoutParams(p)
+        is MarginLayoutParams -> DivLayoutParams(p)
+        else -> DivLayoutParams(p)
     }
 
-    override fun generateLayoutParams(p: ViewGroup.LayoutParams?) =
-        when (p) {
-            is LayoutParams -> LayoutParams(p)
-            is DivLayoutParams -> LayoutParams(p)
-            is MarginLayoutParams -> LayoutParams(p)
-            else -> LayoutParams(p)
-        }
-
     // Override to allow type-checking of LayoutParams.
-    override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
+    override fun checkLayoutParams(p: LayoutParams?) = p is DivLayoutParams
 
     override fun onInitializeAccessibilityEvent(event: AccessibilityEvent) {
         super.onInitializeAccessibilityEvent(event)
@@ -967,31 +958,15 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     private fun isLayoutRtl() =
         ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
 
-    private val View.lp get() = layoutParams as LayoutParams
+    private val View.lp get() = layoutParams as DivLayoutParams
 
-    class LayoutParams : DivLayoutParams {
+    private val DivLayoutParams.fixedHorizontalWeight get() = getFixedWeight(horizontalWeight, width)
 
-        var isBaselineAligned = false
+    private val DivLayoutParams.fixedVerticalWeight get() = getFixedWeight(verticalWeight, height)
 
-        val fixedHorizontalWeight get() = getFixedWeight(horizontalWeight, width)
-
-        val fixedVerticalWeight get() = getFixedWeight(verticalWeight, height)
-
-        private fun getFixedWeight(weight: Float, size: Int) = when {
-            weight > 0 -> weight
-            size == MATCH_PARENT -> 1f
-            else -> 0f
-        }
-
-        constructor(c: Context?, attrs: AttributeSet?) : super(c, attrs)
-
-        constructor(width: Int, height: Int) : super(width, height)
-        constructor(p: ViewGroup.LayoutParams?) : super(p)
-        constructor(source: MarginLayoutParams?) : super(source)
-        constructor(source: DivLayoutParams): super(source)
-
-        constructor(source: LayoutParams): super(source) {
-            this.isBaselineAligned = source.isBaselineAligned
-        }
+    private fun getFixedWeight(weight: Float, size: Int) = when {
+        weight > 0 -> weight
+        size == MATCH_PARENT -> 1f
+        else -> 0f
     }
 }

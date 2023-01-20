@@ -25,9 +25,6 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.DivLayoutParams
-import com.yandex.div.core.widget.LinearContainerLayout
-import com.yandex.div.core.widget.wraplayout.WrapAlignment
-import com.yandex.div.core.widget.wraplayout.WrapLayout
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
@@ -281,48 +278,11 @@ internal fun DivSize.canWrap(resolver: ExpressionResolver) =
     this !is DivSize.WrapContent || value.constrained?.evaluate(resolver) == true
 
 internal fun View.applyAlignment(
-        horizontal: DivAlignmentHorizontal?,
-        vertical: DivAlignmentVertical?,
-        orientation: DivContainer.Orientation? = null
+    horizontal: DivAlignmentHorizontal?,
+    vertical: DivAlignmentVertical?
 ) {
-    (layoutParams as? WrapLayout.LayoutParams)?.let { lp ->
-        lp.alignSelf = evaluateAlignSelf(horizontal, vertical, orientation)
-    } ?: run {
-        (layoutParams as? LinearContainerLayout.LayoutParams)?.let { lp ->
-            lp.isBaselineAligned = vertical == DivAlignmentVertical.BASELINE
-        }
-        applyGravity(evaluateGravity(horizontal, vertical))
-    }
-}
-
-@WrapAlignment
-private fun evaluateAlignSelf(
-        horizontal: DivAlignmentHorizontal?,
-        vertical: DivAlignmentVertical?,
-        orientation: DivContainer.Orientation?
-) = if (orientation == DivContainer.Orientation.HORIZONTAL) {
-    vertical.toWrapAlignment()
-} else {
-    horizontal.toWrapAlignment()
-}
-
-internal fun DivAlignmentHorizontal?.toWrapAlignment(
-        @WrapAlignment default: Int = WrapAlignment.START
-) = when (this) {
-    DivAlignmentHorizontal.LEFT -> WrapAlignment.START
-    DivAlignmentHorizontal.CENTER -> WrapAlignment.CENTER
-    DivAlignmentHorizontal.RIGHT -> WrapAlignment.END
-    else -> default
-}
-
-internal fun DivAlignmentVertical?.toWrapAlignment(
-        @WrapAlignment default: Int = WrapAlignment.START
-) = when (this) {
-    DivAlignmentVertical.TOP -> WrapAlignment.START
-    DivAlignmentVertical.CENTER -> WrapAlignment.CENTER
-    DivAlignmentVertical.BOTTOM -> WrapAlignment.END
-    DivAlignmentVertical.BASELINE -> WrapAlignment.BASELINE
-    else -> default
+    applyGravity(evaluateGravity(horizontal, vertical))
+    applyBaselineAlignment(vertical == DivAlignmentVertical.BASELINE)
 }
 
 private fun View.applyGravity(newGravity: Int) {
@@ -355,6 +315,14 @@ internal fun evaluateGravity(horizontal: DivAlignmentHorizontal?, vertical: DivA
     }
 
     return horizontalGravity or verticalGravity
+}
+
+private fun View.applyBaselineAlignment(baselineAligned: Boolean) {
+    val lp = layoutParams as? DivLayoutParams ?: return
+    if (lp.isBaselineAligned != baselineAligned) {
+        lp.isBaselineAligned = baselineAligned
+        requestLayout()
+    }
 }
 
 fun Int?.dpToPx(metrics: DisplayMetrics): Int {

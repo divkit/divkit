@@ -25,8 +25,8 @@ import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.wraplayout.WrapDirection
-import com.yandex.div.core.widget.wraplayout.WrapShowSeparatorsMode
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
@@ -209,34 +209,30 @@ internal class DivContainerBinder @Inject constructor(
                 LinearLayoutCompat.VERTICAL
             }
         })
-        addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
-            gravity = evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver))
-        })
-        addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
-            gravity = evaluateGravity(div.contentAlignmentHorizontal.evaluate(resolver), it)
-        })
+        observeContentAlignment(div, resolver) { gravity = it }
         div.separator?.let { observeSeparator(it, resolver) }
 
         this.div = div
+    }
+
+    private fun ExpressionSubscriber.observeContentAlignment(
+        div: DivContainer,
+        resolver: ExpressionResolver,
+        applyGravity: (Int) -> Unit
+    ) {
+        addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
+            applyGravity(evaluateGravity(it, div.contentAlignmentVertical.evaluate(resolver)))
+        })
+        addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
+            applyGravity(evaluateGravity(div.contentAlignmentHorizontal.evaluate(resolver), it))
+        })
     }
 
     private fun DivLinearLayout.observeSeparator(
         separator: DivContainer.Separator,
         resolver: ExpressionResolver
     ) {
-        observeSeparatorShowMode(separator, resolver) {
-            var showSeparators = LinearLayoutCompat.SHOW_DIVIDER_NONE
-            if (separator.showAtStart.evaluate(resolver)) {
-                showSeparators = showSeparators or LinearLayoutCompat.SHOW_DIVIDER_BEGINNING
-            }
-            if (separator.showBetween.evaluate(resolver)) {
-                showSeparators = showSeparators or LinearLayoutCompat.SHOW_DIVIDER_MIDDLE
-            }
-            if (separator.showAtEnd.evaluate(resolver)) {
-                showSeparators = showSeparators or LinearLayoutCompat.SHOW_DIVIDER_END
-            }
-            showDividers = showSeparators
-        }
+        observeSeparatorShowMode(separator, resolver) { showDividers = it }
         observeSeparatorDrawable(this, separator, resolver) { dividerDrawable = it }
     }
 
@@ -245,23 +241,14 @@ internal class DivContainerBinder @Inject constructor(
             wrapDirection =
                 if (div.isHorizontal(resolver)) WrapDirection.ROW else WrapDirection.COLUMN
         })
-        addSubscription(div.contentAlignmentHorizontal.observeAndGet(resolver) {
-            alignmentHorizontal = it.toWrapAlignment()
-        })
-        addSubscription(div.contentAlignmentVertical.observeAndGet(resolver) {
-            alignmentVertical = it.toWrapAlignment()
-        })
+        observeContentAlignment(div, resolver) { gravity = it }
 
         div.separator?.let { separator ->
-            observeSeparatorShowMode(separator, resolver) {
-                showSeparators = getWrapShowSeparatorsMode(separator, resolver)
-            }
+            observeSeparatorShowMode(separator, resolver) { showSeparators = it }
             observeSeparatorDrawable(this, separator, resolver) { separatorDrawable = it }
         }
         div.lineSeparator?.let { separator ->
-            observeSeparatorShowMode(separator, resolver) {
-                showLineSeparators = getWrapShowSeparatorsMode(separator, resolver)
-            }
+            observeSeparatorShowMode(separator, resolver) { showLineSeparators = it }
             observeSeparatorDrawable(this, separator, resolver) { lineSeparatorDrawable = it }
         }
 
@@ -271,12 +258,25 @@ internal class DivContainerBinder @Inject constructor(
     private fun ExpressionSubscriber.observeSeparatorShowMode(
         separator: DivContainer.Separator,
         resolver: ExpressionResolver,
-        callback: (Boolean) -> Unit
+        applySeparatorShowMode: (Int) -> Unit
     ) {
-        callback(false)
+        val callback = { _: Any ->
+            var showSeparators = ShowSeparatorsMode.NONE
+            if (separator.showAtStart.evaluate(resolver)) {
+                showSeparators = showSeparators or ShowSeparatorsMode.SHOW_AT_START
+            }
+            if (separator.showBetween.evaluate(resolver)) {
+                showSeparators = showSeparators or ShowSeparatorsMode.SHOW_BETWEEN
+            }
+            if (separator.showAtEnd.evaluate(resolver)) {
+                showSeparators = showSeparators or ShowSeparatorsMode.SHOW_AT_END
+            }
+            applySeparatorShowMode(showSeparators)
+        }
         addSubscription(separator.showAtStart.observe(resolver, callback))
         addSubscription(separator.showBetween.observe(resolver, callback))
         addSubscription(separator.showAtEnd.observe(resolver, callback))
+        callback(Unit)
     }
 
     private fun ExpressionSubscriber.observeSeparatorDrawable(
@@ -286,24 +286,6 @@ internal class DivContainerBinder @Inject constructor(
         applyDrawable: (Drawable?) -> Unit
     ) = observeDrawable(resolver, separator.style) {
         applyDrawable(it.toDrawable(view.resources.displayMetrics, resolver))
-    }
-
-    @WrapShowSeparatorsMode
-    private fun getWrapShowSeparatorsMode(
-        separator: DivContainer.Separator,
-        resolver: ExpressionResolver
-    ): Int {
-        var showSeparators = WrapShowSeparatorsMode.NONE
-        if (separator.showAtStart.evaluate(resolver)) {
-            showSeparators = showSeparators or WrapShowSeparatorsMode.SHOW_AT_START
-        }
-        if (separator.showBetween.evaluate(resolver)) {
-            showSeparators = showSeparators or WrapShowSeparatorsMode.SHOW_BETWEEN
-        }
-        if (separator.showAtEnd.evaluate(resolver)) {
-            showSeparators = showSeparators or WrapShowSeparatorsMode.SHOW_AT_END
-        }
-        return showSeparators
     }
 
     private fun observeChildViewAlignment(
@@ -328,8 +310,7 @@ internal class DivContainerBinder @Inject constructor(
                 else -> div.contentAlignmentVertical
             }
 
-            childView.applyAlignment(alignmentHorizontal?.evaluate(resolver),
-                alignmentVertical?.evaluate(resolver), div.orientation.evaluate(resolver))
+            childView.applyAlignment(alignmentHorizontal?.evaluate(resolver), alignmentVertical?.evaluate(resolver))
         }
 
         expressionSubscriber.addSubscription(

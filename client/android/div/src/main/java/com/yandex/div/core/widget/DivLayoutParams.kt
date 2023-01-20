@@ -6,11 +6,14 @@ import android.view.Gravity
 import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
 
-internal open class DivLayoutParams: MarginLayoutParams {
+internal class DivLayoutParams: MarginLayoutParams {
 
     var gravity = DEFAULT_GRAVITY
+    var isBaselineAligned = false
+
     var verticalWeight = 0f
     var horizontalWeight = 0f
+
     var columnSpan = DEFAULT_SPAN
     var rowSpan = DEFAULT_SPAN
 
@@ -24,6 +27,7 @@ internal open class DivLayoutParams: MarginLayoutParams {
 
     constructor(source: DivLayoutParams) : super(source) {
         gravity = source.gravity
+        isBaselineAligned = source.isBaselineAligned
         verticalWeight = source.verticalWeight
         horizontalWeight = source.horizontalWeight
         columnSpan = source.columnSpan
@@ -43,6 +47,7 @@ internal open class DivLayoutParams: MarginLayoutParams {
                 topMargin == other.topMargin &&
                 bottomMargin == other.bottomMargin &&
                 gravity == other.gravity &&
+                isBaselineAligned == other.isBaselineAligned &&
                 columnSpan == other.columnSpan &&
                 rowSpan == other.rowSpan &&
                 verticalWeight == other.verticalWeight &&
@@ -52,6 +57,7 @@ internal open class DivLayoutParams: MarginLayoutParams {
     override fun hashCode(): Int {
         var result = super.hashCode()
         result = 31 * result + gravity
+        result = 31 * result + if (isBaselineAligned) 1 else 0
         result = 31 * result + columnSpan
         result = 31 * result + rowSpan
         result = 31 * result + verticalWeight.toBits()
