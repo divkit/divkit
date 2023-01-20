@@ -23,6 +23,7 @@ buildscript {
     }
 
     repositories {
+        gradlePluginPortal()
         google()
         mavenCentral()
     }
@@ -31,7 +32,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$versions.gradlePlugin"
         classpath "com.yandex.android:appmetrica-build-plugin:$versions.metricaCrashPlugin"
         classpath "com.yandex.test:screenshot-test-plugin:1.0.0"
-        classpath 'io.github.gradle-nexus:publish-plugin:1.1.0'
+        classpath "io.github.gradle-nexus:publish-plugin:1.1.0"
         classpath "org.jetbrains.dokka:dokka-gradle-plugin:$versions.kotlin"
         classpath "org.jetbrains.kotlin:kotlin-allopen:$versions.kotlin"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"

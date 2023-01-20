@@ -5,21 +5,13 @@ import java.util.Date
 
 private val VERSION_DATE_FORMAT = SimpleDateFormat("yyyyMMdd.HHmmss")
 
-private const val RELEASE_ARTIFACTORY_URL = "https://artifactory.yandex.net/artifactory/yandex_mobile_releases/"
-private const val SNAPSHOT_ARTIFACTORY_URL = "https://artifactory.yandex.net/artifactory/yandex_mobile_snapshots/"
+enum class PublicationType {
 
-enum class PublicationType(
-    val artifactoryUrl: String
-) {
-
-    dev(SNAPSHOT_ARTIFACTORY_URL) {
-        override fun getVersionSuffix(): String {
-            val now = Date()
-            return "-dev.${VERSION_DATE_FORMAT.format(now)}"
-        }
+    dev {
+        override fun getVersionSuffix() = "-dev.${VERSION_DATE_FORMAT.format(Date())}"
     },
 
-    release(RELEASE_ARTIFACTORY_URL) {
+    release {
         override fun getVersionSuffix() = ""
     };
 
@@ -32,9 +24,9 @@ enum class PublicationType(
             return try {
                 valueOf(string!!)
             } catch (ignored: IllegalArgumentException) {
-                return dev
+                return PublicationType.dev
             } catch (ignored: NullPointerException) {
-                return dev
+                return PublicationType.dev
             }
         }
     }
