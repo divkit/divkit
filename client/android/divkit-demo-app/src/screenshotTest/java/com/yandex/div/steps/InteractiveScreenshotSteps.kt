@@ -65,8 +65,8 @@ internal class InteractiveScreenshotSteps {
             steps: List<TestStep>
     ) {
         val artifactsCaptor = ScreenshotCaptor()
-        val referencesFile = ReferenceFileWriter(artifactsCaptor.screenshotRootDir)
-        val testCaseReferencesFile = TestCaseReferencesFileWriter(artifactsCaptor.screenshotRootDir)
+        val referencesFile = ReferenceFileWriter(ScreenshotCaptor.rootDir)
+        val testCaseReferencesFile = TestCaseReferencesFileWriter(ScreenshotCaptor.rootDir)
         steps.forEachIndexed { i, step ->
             instrumentation.runOnMainSync {
                 handleStepActions(activity.divView, step)
@@ -137,7 +137,7 @@ internal class InteractiveScreenshotSteps {
         categories.forEach { category ->
             val actualScreenshotRelativePath = "${category.name}/$artifactsRelativePath/$actualScreenshot"
 
-            val actualScreenshotFile = File(artifactsCaptor.screenshotRootDir, actualScreenshotRelativePath)
+            val actualScreenshotFile = File(ScreenshotCaptor.rootDir, actualScreenshotRelativePath)
             val screenshotDir = actualScreenshotFile.parentFile!!
 
             if (!screenshotDir.exists() && !screenshotDir.mkdirs()) {

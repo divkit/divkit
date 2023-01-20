@@ -26,10 +26,10 @@ class ScreenshotRule(
         val screenshot = description.getAnnotation(Screenshot::class.java) ?: return base
         val screenshotPath = screenshot.relativePath.ifEmpty { relativePath }
         val screenshotName = screenshot.name.ifEmpty { name.ifEmpty { description.methodName } }
-        val suiteDirs = SuiteDirs(description.className + "/" + screenshotPath)
+        val suiteName = description.className + "/" + screenshotPath
         val screenshotCapture = ScreenshotCaptor()
         val testCaseReferenceFile = TestCaseReferencesFileWriter(
-            fileDir = screenshotCapture.screenshotRootDir
+            fileDir = ScreenshotCaptor.rootDir
         )
 
         return object : Statement() {
@@ -44,7 +44,7 @@ class ScreenshotRule(
                     val device = UiDevice.getInstance(instrumentation)
 
                     val screenshotRelativePaths =
-                        screenshotCapture.takeScreenshots(device, view, suiteDirs, screenshotName)
+                        screenshotCapture.takeScreenshots(device, view, suiteName, screenshotName)
 
                     testCaseReferenceFile.append(casePath, screenshotRelativePaths)
                 }

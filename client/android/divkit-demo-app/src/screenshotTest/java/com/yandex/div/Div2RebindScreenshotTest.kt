@@ -10,7 +10,10 @@ import com.yandex.divkit.demo.screenshot.DivScreenshotActivity
 import com.yandex.test.idling.ActivityIdlingResource
 import com.yandex.test.idling.waitForIdlingResource
 import com.yandex.test.rules.ActivityParamsTestRule
+import com.yandex.test.screenshot.ReferenceFileWriter
 import com.yandex.test.screenshot.Screenshot
+import com.yandex.test.screenshot.ScreenshotCaptor
+import com.yandex.test.screenshot.ScreenshotType
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -45,6 +48,21 @@ class Div2RebindScreenshotTest(case: String, escapedCase: String) {
     @Test
     fun divScreenshot() {
         context.sendBroadcastAndWait<DivScreenshotActivity>(DivScreenshotActivity.REBIND_DIV_WITH_SAME_DATA_ACTION)
+        createReferenceOverride()
+    }
+
+    private fun createReferenceOverride() {
+        val referencesFile = ReferenceFileWriter(ScreenshotCaptor.rootDir)
+
+        ScreenshotType.values().forEach {
+            val targetSuiteName = "${Div2RebindScreenshotTest::class.qualifiedName}/$caseRelativePath"
+            val actualSuiteName = "${Div2ScreenshotTest::class.qualifiedName}/$caseRelativePath"
+
+            referencesFile.append(
+                it.relativeScreenshotPath(targetSuiteName, caseName),
+                it.relativeScreenshotPath(actualSuiteName, caseName)
+            )
+        }
     }
 
     companion object {

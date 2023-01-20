@@ -16,8 +16,6 @@ import java.util.Properties
 import java.util.concurrent.atomic.AtomicBoolean
 
 class ScreenshotCaptor {
-    val screenshotRootDir: File = rootDir
-
     /**
      * @return collection of relative screenshot paths
      */
@@ -25,23 +23,23 @@ class ScreenshotCaptor {
     fun takeScreenshots(
         device: UiDevice,
         view: View,
-        suitePaths: SuiteDirs,
+        suiteName: String,
         name: String
     ): Collection<String> {
         val alreadySaved = propertiesSaved.getAndSet(true)
         if (!alreadySaved) {
             saveDeviceProperties(view.context)
         }
-        val nameWithExt = "$name$PNG_EXTENSION"
 
-        suitePaths.prepareDirectories()
-        takeViewRender(view, outputFile = File(suitePaths.viewRenderDir, nameWithExt))
-        takeViewPixelCopy(view, outputFile = File(suitePaths.viewPixelCopyDir, nameWithExt))
-        takeDeviceScreenshot(device, outputFile = File(suitePaths.deviceScreenshotDir, nameWithExt))
+        prepareDirectories(suiteName)
+
+        takeViewRender(view, outputFile = ScreenshotType.ViewRender.asFile(suiteName, name))
+        takeViewPixelCopy(view, outputFile = ScreenshotType.ViewPixelCopy.asFile(suiteName, name))
+        takeDeviceScreenshot(device, outputFile = ScreenshotType.Device.asFile(suiteName, name))
 
         return listOf(
-            "${suitePaths.relativeViewRenderPath}/$nameWithExt",
-            "${suitePaths.relativeViewPixelCopyPath}/$nameWithExt"
+            ScreenshotType.ViewRender.relativeScreenshotPath(suiteName, name),
+            ScreenshotType.ViewPixelCopy.relativeScreenshotPath(suiteName, name)
         )
     }
 
@@ -103,13 +101,22 @@ class ScreenshotCaptor {
     companion object {
 
         private const val TAG = "ScreenshotCapture"
-        private const val PNG_EXTENSION = ".png"
         private const val IDLE_TIMEOUT = 2000L
 
-        internal val rootDir by lazy {
+        val rootDir by lazy {
             File("${Environment.getExternalStorageDirectory()}/${ScreenshotBuildSpecs.screenshotRootDir}").apply {
                 mkdirs()
             }
+        }
+
+        private fun ScreenshotType.asFile(suiteName: String, fileName: String): File {
+            return File(rootDir, relativeScreenshotPath(suiteName, fileName))
+        }
+
+        private fun prepareDirectories(suiteName: String) {
+            ScreenshotType.values()
+                .map { File(rootDir, it.relativeDirPath(suiteName)) }
+                .forEach { it.mkdirs() }
         }
 
         private val propertiesSaved = AtomicBoolean(false)
