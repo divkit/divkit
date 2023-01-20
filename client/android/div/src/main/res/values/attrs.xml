@@ -136,12 +136,4 @@
         <attr name="android:gravity"/>
     </declare-styleable>
 
-    <declare-styleable name="GridContainer_Layout">
-        <attr name="android:layout_gravity"/>
-        <attr name="android:layout_columnSpan"/>
-        <attr name="android:layout_rowSpan"/>
-        <attr name="android:layout_columnWeight"/>
-        <attr name="android:layout_rowWeight"/>
-    </declare-styleable>
-
 </resources>

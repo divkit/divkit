@@ -10,7 +10,6 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
-import android.widget.LinearLayout
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.appcompat.widget.LinearLayoutCompat.HORIZONTAL
 import androidx.appcompat.widget.LinearLayoutCompat.SHOW_DIVIDER_BEGINNING
@@ -72,11 +71,6 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
 
     private var totalLength = 0
-
-    private var weightSum = 0f
-        set(value) {
-            field = max(0.0f, value)
-        }
 
     /**
      * When true, all children with a weight will be considered having
@@ -263,8 +257,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 totalLength += dividerHeight
             }
             val lp = child.lp
-            totalWeight += lp.weight
-            if (heightMode == MeasureSpec.EXACTLY && lp.height == MATCH_PARENT && lp.weight > 0) {
+            totalWeight += lp.fixedVerticalWeight
+            if (heightMode == MeasureSpec.EXACTLY && lp.height == MATCH_PARENT) {
                 // Optimization: don't bother measuring children who are going to use
                 // leftover space. These views will get measured again down below if
                 // there is any leftover space.
@@ -272,7 +266,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 skippedMeasure = true
             } else {
                 var oldHeight = Int.MIN_VALUE
-                if (lp.height == MATCH_PARENT && lp.weight > 0) {
+                if (lp.height == MATCH_PARENT) {
                     // heightMode is either UNSPECIFIED or AT_MOST, and this
                     // child wanted to stretch to fill available space.
                     // Translate that to WRAP_CONTENT so that it does not end up
@@ -311,7 +305,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             maxWidth = max(maxWidth, measuredWidth)
             childState = combineMeasuredStates(childState, child.measuredState)
             allFillParent = allFillParent && lp.width == MATCH_PARENT
-            if (lp.weight > 0) {
+            if (lp.fixedVerticalWeight > 0) {
                 /*
                  * Widths of weighted Views are bogus if we end up
                  * remeasuring, so keep them separate.
@@ -354,14 +348,14 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         // measurement on any children, we need to measure them now.
         var delta = heightSize - totalLength
         if (skippedMeasure || delta != 0 && totalWeight > 0.0f) {
-            var weightSum = if (weightSum > 0.0f) weightSum else totalWeight
+            var weightSum = totalWeight
             totalLength = 0
             for (i in 0 until childCount) {
                 val child = getChildAt(i)
                 if (child == null || child.visibility == GONE) continue
 
                 val lp = child.lp
-                val childExtra = lp.weight
+                val childExtra = lp.fixedVerticalWeight
                 if (childExtra > 0) {
                     // Child said it could absorb extra space -- give them their share
                     val share = (childExtra * delta / weightSum).toInt()
@@ -415,7 +409,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                     if (child == null || child.visibility == GONE) {
                         continue
                     }
-                    val childExtra = child.lp.weight
+                    val childExtra = child.lp.fixedVerticalWeight
                     if (childExtra > 0) {
                         child.measure(
                             MeasureSpec.makeMeasureSpec(child.measuredWidth, MeasureSpec.EXACTLY),
@@ -495,8 +489,8 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 totalLength += dividerWidth
             }
             val lp = child.lp
-            totalWeight += lp.weight
-            if (widthMode == MeasureSpec.EXACTLY && lp.width == MATCH_PARENT && lp.weight > 0) {
+            totalWeight += lp.fixedHorizontalWeight
+            if (widthMode == MeasureSpec.EXACTLY && lp.width == MATCH_PARENT) {
                 // Optimization: don't bother measuring children who are going to use
                 // leftover space. These views will get measured again down below if
                 // there is any leftover space.
@@ -519,7 +513,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                 }
             } else {
                 var oldWidth = Int.MIN_VALUE
-                if (lp.width == MATCH_PARENT && lp.weight > 0) {
+                if (lp.width == MATCH_PARENT) {
                     // widthMode is either UNSPECIFIED or AT_MOST, and this
                     // child
                     // wanted to stretch to fill available space. Translate that to
@@ -569,7 +563,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
             }
             maxHeight = max(maxHeight, childHeight)
             allFillParent = allFillParent && lp.height == MATCH_PARENT
-            if (lp.weight > 0) {
+            if (lp.fixedHorizontalWeight > 0) {
                 /*
                  * Heights of weighted Views are bogus if we end up
                  * remeasuring, so keep them separate.
@@ -617,7 +611,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         // measurement on any children, we need to measure them now.
         var delta = widthSize - totalLength
         if (skippedMeasure || (delta != 0 && totalWeight > 0.0f)) {
-            var weightSum = if (weightSum > 0.0f) weightSum else totalWeight
+            var weightSum = totalWeight
             maxBaselinedAscent = -1
             maxBaselinedDescent = -1
             maxHeight = -1
@@ -628,7 +622,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                     continue
                 }
                 val lp = child.lp
-                val childExtra = lp.weight
+                val childExtra = lp.fixedHorizontalWeight
                 if (childExtra > 0) {
                     // Child said it could absorb extra space -- give them their share
                     val share = (childExtra * delta / weightSum).toInt()
@@ -695,7 +689,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
                     if (child == null || child.visibility == GONE) {
                         continue
                     }
-                    val childExtra = child.lp.weight
+                    val childExtra = child.lp.fixedHorizontalWeight
                     if (childExtra > 0) {
                         child.measure(
                             MeasureSpec.makeMeasureSpec(largestChildWidth, MeasureSpec.EXACTLY),
@@ -947,7 +941,13 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
-    override fun generateLayoutParams(p: ViewGroup.LayoutParams?) = LayoutParams(p)
+    override fun generateLayoutParams(p: ViewGroup.LayoutParams?) =
+        when (p) {
+            is LayoutParams -> LayoutParams(p)
+            is DivLayoutParams -> LayoutParams(p)
+            is MarginLayoutParams -> LayoutParams(p)
+            else -> LayoutParams(p)
+        }
 
     // Override to allow type-checking of LayoutParams.
     override fun checkLayoutParams(p: ViewGroup.LayoutParams?) = p is LayoutParams
@@ -969,31 +969,26 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
 
     private val View.lp get() = layoutParams as LayoutParams
 
-    open class LayoutParams : LinearLayout.LayoutParams {
+    class LayoutParams : DivLayoutParams {
 
         var isBaselineAligned = false
+
+        val fixedHorizontalWeight get() = getFixedWeight(horizontalWeight, width)
+
+        val fixedVerticalWeight get() = getFixedWeight(verticalWeight, height)
+
+        private fun getFixedWeight(weight: Float, size: Int) = when {
+            weight > 0 -> weight
+            size == MATCH_PARENT -> 1f
+            else -> 0f
+        }
 
         constructor(c: Context?, attrs: AttributeSet?) : super(c, attrs)
 
         constructor(width: Int, height: Int) : super(width, height)
-
-        /**
-         * Creates a new set of layout parameters with the specified width, height
-         * and weight.
-         *
-         * @param width the width, either [MATCH_PARENT],
-         * [ViewGroup.LayoutParams.WRAP_CONTENT] or a fixed size in pixels
-         * @param height the height, either [MATCH_PARENT],
-         * [ViewGroup.LayoutParams.WRAP_CONTENT] or a fixed size in pixels
-         * @param weight the weight
-         */
-        constructor(width: Int, height: Int, weight: Float) : super(width, height, weight)
-
         constructor(p: ViewGroup.LayoutParams?) : super(p)
-
         constructor(source: MarginLayoutParams?) : super(source)
-
-        constructor(source: LinearLayout.LayoutParams) : super(source)
+        constructor(source: DivLayoutParams): super(source)
 
         constructor(source: LayoutParams): super(source) {
             this.isBaselineAligned = source.isBaselineAligned

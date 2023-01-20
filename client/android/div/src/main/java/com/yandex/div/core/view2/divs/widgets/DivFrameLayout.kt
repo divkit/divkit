@@ -7,7 +7,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
-import com.yandex.div.core.widget.FrameLayoutFix
+import com.yandex.div.core.widget.FrameContainerLayout
 import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -18,7 +18,7 @@ internal class DivFrameLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : FrameLayoutFix(context, attrs, defStyleAttr), DivAnimator, DivBorderSupports, TransientView, ExpressionSubscriber {
+) : FrameContainerLayout(context, attrs, defStyleAttr), DivAnimator, DivBorderSupports, TransientView, ExpressionSubscriber {
 
     internal var div: DivContainer? = null
 

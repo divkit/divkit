@@ -24,7 +24,7 @@ import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
-import com.yandex.div.core.widget.GridContainer
+import com.yandex.div.core.widget.DivLayoutParams
 import com.yandex.div.core.widget.LinearContainerLayout
 import com.yandex.div.core.widget.wraplayout.WrapAlignment
 import com.yandex.div.core.widget.wraplayout.WrapLayout
@@ -192,6 +192,14 @@ internal fun View.applyMinHeight(minHeight: DivWrapContentSize.ConstraintSize?, 
     }
 }
 
+internal fun View.applyVerticalWeightValue(value: Float) {
+    val params = layoutParams as? DivLayoutParams ?: return
+    if (params.verticalWeight != value) {
+        params.verticalWeight = value
+        requestLayout()
+    }
+}
+
 internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
     val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver)
     if (layoutParams.width != width) {
@@ -206,6 +214,19 @@ internal fun View.applyMinWidth(minWidth: DivWrapContentSize.ConstraintSize?, re
     if (minimumWidth != widthValue) {
         minimumWidth = widthValue
     }
+}
+
+internal fun View.applyHorizontalWeightValue(value: Float) {
+    val params = layoutParams as? DivLayoutParams ?: return
+    if (params.horizontalWeight != value) {
+        params.horizontalWeight = value
+        requestLayout()
+    }
+}
+
+internal fun DivSize.getWeight(resolver: ExpressionResolver) = when (this) {
+    is DivSize.MatchParent -> value.weight?.evaluate(resolver)?.toFloat() ?: 0f
+    else -> 0f
 }
 
 internal fun View.applyTransform(
@@ -305,16 +326,12 @@ internal fun DivAlignmentVertical?.toWrapAlignment(
 }
 
 private fun View.applyGravity(newGravity: Int) {
-    when(val lp = layoutParams) {
-        is LinearContainerLayout.LayoutParams -> if (lp.gravity != newGravity) {
+    when (val lp = layoutParams) {
+        is DivLayoutParams -> if (lp.gravity != newGravity) {
             lp.gravity = newGravity
             requestLayout()
         }
         is FrameLayout.LayoutParams -> if (lp.gravity != newGravity) {
-            lp.gravity = newGravity
-            requestLayout()
-        }
-        is GridContainer.LayoutParams -> if (lp.gravity != newGravity) {
             lp.gravity = newGravity
             requestLayout()
         }

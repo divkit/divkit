@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.view.View
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
@@ -11,14 +12,13 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
-import com.yandex.div.core.widget.GridContainer
+import com.yandex.div.core.widget.DivLayoutParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivGrid
-import com.yandex.div2.DivSize
 import javax.inject.Inject
 import javax.inject.Provider
 
@@ -71,7 +71,7 @@ internal class DivGridBinder @Inject constructor(
                     for (patchIndex in patchViewsToAdd.indices) {
                         val patchDivValue = patchDivs[patchIndex].value()
                         val patchViews = patchViewsToAdd[patchIndex]
-                        val layoutParams = GridContainer.LayoutParams()
+                        val layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
                         view.addView(patchViews, gridIndex + viewsPositionDiff + patchIndex, layoutParams)
                         if (patchDivValue.hasVisibilityActions) {
                             divView.bindViewToDiv(patchViews, patchDivs[patchIndex])
@@ -82,7 +82,7 @@ internal class DivGridBinder @Inject constructor(
                     continue
                 }
             }
-            childView.layoutParams = GridContainer.LayoutParams()
+            childView.layoutParams = DivLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
             divBinder.get().bind(childView, div.items[gridIndex], divView, path)
             bindLayoutParams(childView, childDivValue, resolver)
             if (childDivValue.hasVisibilityActions) {
@@ -116,39 +116,17 @@ internal class DivGridBinder @Inject constructor(
 
         if (childView !is ExpressionSubscriber) return
         val callback = { _: Any -> childView.applyGridLayoutParams(resolver, childDiv) }
-        childView.addSubscription(childDiv.width.weight().observe(resolver, callback))
-        childView.addSubscription(childDiv.height.weight().observe(resolver, callback))
         childView.addSubscription(childDiv.columnSpan?.observe(resolver, callback) ?: Disposable.NULL)
         childView.addSubscription(childDiv.rowSpan?.observe(resolver, callback) ?: Disposable.NULL)
     }
 
     private fun View.applyGridLayoutParams(resolver: ExpressionResolver, div: DivBase) {
-        applyColumnWeight(resolver, div.width.weight())
-        applyRowWeight(resolver, div.height.weight())
         applyColumnSpan(resolver, div.columnSpan)
         applyRowSpan(resolver, div.rowSpan)
     }
 
-    private fun View.applyColumnWeight(resolver: ExpressionResolver, weightExpr: Expression<Double>) {
-        val params = layoutParams as? GridContainer.LayoutParams ?: return
-        val columnWeight = weightExpr.evaluate(resolver).toFloat()
-        if (params.columnWeight != columnWeight) {
-            params.columnWeight = columnWeight
-            requestLayout()
-        }
-    }
-
-    private fun View.applyRowWeight(resolver: ExpressionResolver, weightExpr: Expression<Double>) {
-        val params = layoutParams as? GridContainer.LayoutParams ?: return
-        val rowWeight = weightExpr.evaluate(resolver).toFloat()
-        if (params.rowWeight != rowWeight) {
-            params.rowWeight = rowWeight
-            requestLayout()
-        }
-    }
-
     private fun View.applyColumnSpan(resolver: ExpressionResolver, spanExpr: Expression<Int>?) {
-        val params = layoutParams as? GridContainer.LayoutParams ?: return
+        val params = layoutParams as? DivLayoutParams ?: return
         val columnSpan = spanExpr?.evaluate(resolver) ?: 1
         if (params.columnSpan != columnSpan) {
             params.columnSpan = columnSpan
@@ -157,23 +135,11 @@ internal class DivGridBinder @Inject constructor(
     }
 
     private fun View.applyRowSpan(resolver: ExpressionResolver, spanExpr: Expression<Int>?) {
-        val params = layoutParams as? GridContainer.LayoutParams ?: return
+        val params = layoutParams as? DivLayoutParams ?: return
         val rowSpan = spanExpr?.evaluate(resolver) ?: 1
         if (params.rowSpan != rowSpan) {
             params.rowSpan = rowSpan
             requestLayout()
         }
-    }
-
-    private fun DivSize.weight(): Expression<Double> {
-        return if (this is DivSize.MatchParent) {
-            value.weight ?: DEFAULT_WEIGHT_EXPR
-        } else {
-            DEFAULT_WEIGHT_EXPR
-        }
-    }
-
-    private companion object {
-        private val DEFAULT_WEIGHT_EXPR = Expression.constant(0.0)
     }
 }

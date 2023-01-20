@@ -5,7 +5,7 @@ import android.content.Context
 import android.view.Gravity
 import android.view.View
 import android.view.View.MeasureSpec
-import com.yandex.div.core.widget.GridContainer.LayoutParams
+import android.view.ViewGroup.LayoutParams
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -595,7 +595,7 @@ class GridContainerTest {
                 }
                 cells[0, 1] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
                 cells[0, 2] = view {
@@ -618,7 +618,7 @@ class GridContainerTest {
                 }
                 cells[1, 0] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
                 cells[2, 0] = view {
@@ -640,12 +640,12 @@ class GridContainerTest {
 
                 cells[0, 0] = view {
                     layoutParams(width = 80, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
                 cells[0, 1] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 2f
+                        horizontalWeight = 2f
                     }
                 }
             }
@@ -662,12 +662,12 @@ class GridContainerTest {
             gridContainer {
                 cells[0, 0] = view {
                     layoutParams(width = 80, height = 40) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
                 cells[1, 0] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 2f
+                        verticalWeight = 2f
                     }
                 }
             }
@@ -686,12 +686,12 @@ class GridContainerTest {
 
                 cells[0, 0] = view {
                     layoutParams(width = 80, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
                 cells[0, 1] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 2f
+                        horizontalWeight = 2f
                     }
                 }
             }
@@ -708,12 +708,12 @@ class GridContainerTest {
             gridContainer {
                 cells[0, 0] = view {
                     layoutParams(width = 80, height = 40) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
                 cells[1, 0] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 2f
+                        verticalWeight = 2f
                     }
                 }
             }
@@ -735,7 +735,7 @@ class GridContainerTest {
                 }
                 cells[0, 1] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
                 cells[0, 2] = view {
@@ -743,7 +743,7 @@ class GridContainerTest {
                 }
                 cells[0, 3] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
                 cells[1, 0] = view {
@@ -751,7 +751,7 @@ class GridContainerTest {
                 }
                 cells[1, 1] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
                 cells[1, 2] = view {
@@ -759,7 +759,7 @@ class GridContainerTest {
                 }
                 cells[1, 3] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 3f
+                        horizontalWeight = 3f
                     }
                 }
             }
@@ -787,12 +787,12 @@ class GridContainerTest {
                 }
                 cells[1, 0] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
                 cells[1, 1] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
                 cells[2, 0] = view {
@@ -803,12 +803,12 @@ class GridContainerTest {
                 }
                 cells[3, 0] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
                 cells[3, 1] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 3f
+                        verticalWeight = 3f
                     }
                 }
             }
@@ -920,17 +920,17 @@ class GridContainerTest {
 
                 cells[0, 0] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
                 cells[0, 1] = view {
                     layoutParams(width = 80, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
                 cells[0, 2] = view {
                     layoutParams(width = LayoutParams.MATCH_PARENT, height = 40) {
-                        columnWeight = 1f
+                        horizontalWeight = 1f
                     }
                 }
             }
@@ -949,17 +949,17 @@ class GridContainerTest {
             gridContainer {
                 cells[0, 0] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
                 cells[1, 0] = view {
                     layoutParams(width = 80, height = 40) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
                 cells[2, 0] = view {
                     layoutParams(width = 80, height = LayoutParams.MATCH_PARENT) {
-                        rowWeight = 1f
+                        verticalWeight = 1f
                     }
                 }
             }

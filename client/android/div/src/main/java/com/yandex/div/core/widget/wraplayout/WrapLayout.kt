@@ -10,6 +10,7 @@ import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.Px
 import androidx.core.view.children
+import com.yandex.div.core.widget.DivLayoutParams
 import kotlin.math.max
 
 internal open class WrapLayout(context: Context) : ViewGroup(context) {
@@ -641,7 +642,7 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
             else -> LayoutParams(lp)
         }
 
-    internal class LayoutParams : MarginLayoutParams {
+    internal class LayoutParams : DivLayoutParams {
         var alignSelf = WrapAlignment.START
 
         constructor(source: LayoutParams): super(source) {

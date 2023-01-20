@@ -28,13 +28,11 @@ internal inline fun ViewGroup.view(
 }
 
 internal inline fun View.layoutParams(
-    width: Int = GridContainer.LayoutParams.WRAP_CONTENT,
-    height: Int = GridContainer.LayoutParams.WRAP_CONTENT,
-    init: GridContainer.LayoutParams.() -> Unit = {}
-): GridContainer.LayoutParams {
-    val params = GridContainer.LayoutParams()
-    params.width = width
-    params.height = height
+    width: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
+    height: Int = ViewGroup.LayoutParams.WRAP_CONTENT,
+    init: DivLayoutParams.() -> Unit = {}
+): DivLayoutParams {
+    val params = DivLayoutParams(width, height)
     params.init()
     return params.also { layoutParams = it }
 }

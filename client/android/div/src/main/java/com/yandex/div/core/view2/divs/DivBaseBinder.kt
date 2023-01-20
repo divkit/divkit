@@ -20,7 +20,6 @@ import com.yandex.div.core.view2.animations.DivTransitionHandler.ChangeType
 import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
-import com.yandex.div.core.widget.LinearContainerLayout
 import com.yandex.div.internal.KAssert
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -144,17 +143,21 @@ internal class DivBaseBinder @Inject constructor(
 
     private fun View.observeWidth(div: DivBase, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
         applyWidth(div, resolver)
+        val width = div.width
+        applyHorizontalWeightValue(width.getWeight(resolver))
 
-        when (val width = div.width) {
+        when (width) {
             is DivSize.Fixed -> {
                 subscriber.addSubscription(width.value.value.observe(resolver) { applyWidth(div, resolver) })
                 subscriber.addSubscription(width.value.unit.observe(resolver) { applyWidth(div, resolver) })
             }
-            is DivSize.MatchParent -> Unit
+            is DivSize.MatchParent -> {
+                width.value.weight?.observe(resolver) {
+                    applyHorizontalWeightValue(it.toFloat())
+                }?.let { subscriber.addSubscription(it) }
+            }
             is DivSize.WrapContent -> {
-                if (width.value.constrained?.evaluate(resolver) == true) {
-                    (layoutParams as? LinearContainerLayout.LayoutParams)?.weight = 1f
-                } else {
+                if (width.value.constrained?.evaluate(resolver) != true) {
                     applyMinWidth(width.value.minSize, resolver)
 
                     subscriber.addSubscription(width.value.minSize?.value?.observe(resolver) {
@@ -171,17 +174,21 @@ internal class DivBaseBinder @Inject constructor(
 
     private fun View.observeHeight(div: DivBase, resolver: ExpressionResolver, subscriber: ExpressionSubscriber) {
         applyHeight(div, resolver)
+        val height = div.height
+        applyVerticalWeightValue(height.getWeight(resolver))
 
-        when (val height = div.height) {
+        when (height) {
             is DivSize.Fixed -> {
                 subscriber.addSubscription(height.value.value.observe(resolver) { applyHeight(div, resolver) })
                 subscriber.addSubscription(height.value.unit.observe(resolver) { applyHeight(div, resolver) })
             }
-            is DivSize.MatchParent -> Unit
+            is DivSize.MatchParent -> {
+                height.value.weight?.observe(resolver) {
+                    applyVerticalWeightValue(it.toFloat())
+                }?.let { subscriber.addSubscription(it) }
+            }
             is DivSize.WrapContent -> {
-                if (height.value.constrained?.evaluate(resolver) == true) {
-                    (layoutParams as? LinearContainerLayout.LayoutParams)?.weight = 1f
-                } else {
+                if (height.value.constrained?.evaluate(resolver) != true) {
                     applyMinHeight(height.value.minSize, resolver)
 
                     subscriber.addSubscription(height.value.minSize?.value?.observe(resolver) {

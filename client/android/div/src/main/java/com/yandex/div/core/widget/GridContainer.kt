@@ -4,13 +4,14 @@ package com.yandex.div.core.widget
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.TypedArray
 import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import com.yandex.div.R
+import com.yandex.div.core.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
+import com.yandex.div.core.widget.DivLayoutParams.Companion.DEFAULT_WEIGHT
 import com.yandex.div.internal.KLog
 import kotlin.math.ceil
 import kotlin.math.max
@@ -64,19 +65,15 @@ internal open class GridContainer @JvmOverloads constructor(
         initialized = true
     }
 
-    override fun generateDefaultLayoutParams(): LayoutParams {
-        return LayoutParams()
-    }
+    override fun generateDefaultLayoutParams() = DivLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
 
-    override fun generateLayoutParams(attrs: AttributeSet): LayoutParams {
-        return LayoutParams(context, attrs)
-    }
+    override fun generateLayoutParams(attrs: AttributeSet) = DivLayoutParams(context, attrs)
 
-    override fun generateLayoutParams(lp: ViewGroup.LayoutParams): LayoutParams {
+    override fun generateLayoutParams(lp: LayoutParams): DivLayoutParams {
         return when (lp) {
-            is LayoutParams -> LayoutParams(lp)
-            is MarginLayoutParams -> LayoutParams(lp)
-            else -> LayoutParams(lp)
+            is DivLayoutParams -> DivLayoutParams(lp)
+            is MarginLayoutParams -> DivLayoutParams(lp)
+            else -> DivLayoutParams(lp)
         }
     }
 
@@ -333,91 +330,6 @@ internal open class GridContainer @JvmOverloads constructor(
         private const val MAX_SIZE = 32768
         private const val DEFAULT_COLUMN_COUNT = 1
         private const val UNINITIALIZED_HASH = 0
-        private const val DEFAULT_GRAVITY = Gravity.LEFT or Gravity.TOP
-    }
-
-    class LayoutParams : MarginLayoutParams {
-
-        var gravity: Int = DEFAULT_GRAVITY
-        var columnSpan: Int = DEFAULT_SPAN
-        var rowSpan: Int = DEFAULT_SPAN
-        var columnWeight: Float = UNDEFINED_WEIGHT
-        var rowWeight: Float = UNDEFINED_WEIGHT
-
-        constructor() : this(DEFAULT_WIDTH, DEFAULT_HEIGHT)
-
-        constructor(width: Int, height: Int) : super(width, height)
-
-        constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-            val array = context.obtainStyledAttributes(attrs, R.styleable.GridContainer_Layout)
-            try {
-                gravity = array.getInt(R.styleable.GridContainer_Layout_android_layout_gravity, DEFAULT_GRAVITY)
-                columnSpan = array.getInt(R.styleable.GridContainer_Layout_android_layout_columnSpan, DEFAULT_SPAN)
-                rowSpan = array.getInt(R.styleable.GridContainer_Layout_android_layout_rowSpan, DEFAULT_SPAN)
-                columnWeight =
-                        array.getFloat(R.styleable.GridContainer_Layout_android_layout_columnWeight, UNDEFINED_WEIGHT)
-                rowWeight = array.getFloat(R.styleable.GridContainer_Layout_android_layout_rowWeight, UNDEFINED_WEIGHT)
-            } finally {
-                array.recycle()
-            }
-        }
-
-        constructor(source: ViewGroup.LayoutParams) : super(source)
-
-        constructor(source: MarginLayoutParams) : super(source)
-
-        constructor(source: LayoutParams) : super(source) {
-            gravity = source.gravity
-            columnSpan = source.columnSpan
-            rowSpan = source.rowSpan
-            columnWeight = source.columnWeight
-            rowWeight = source.rowWeight
-        }
-
-        override fun setBaseAttributes(attributes: TypedArray, widthAttr: Int, heightAttr: Int) {
-            width = attributes.getLayoutDimension(widthAttr, DEFAULT_WIDTH)
-            height = attributes.getLayoutDimension(heightAttr, DEFAULT_HEIGHT)
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) return true
-            if (other == null) return false
-            if (this::class != other::class) return false
-
-            other as LayoutParams
-            return width == other.width &&
-                    height == other.height &&
-                    leftMargin == other.leftMargin &&
-                    rightMargin == other.rightMargin &&
-                    topMargin == other.topMargin &&
-                    bottomMargin == other.bottomMargin &&
-                    gravity == other.gravity &&
-                    columnSpan == other.columnSpan &&
-                    rowSpan == other.rowSpan &&
-                    columnWeight == other.columnWeight &&
-                    rowWeight == other.rowWeight
-        }
-
-        override fun hashCode(): Int {
-            var result = super.hashCode()
-            result = 31 * result + gravity
-            result = 31 * result + columnSpan
-            result = 31 * result + rowSpan
-            result = 31 * result + columnWeight.toBits()
-            result = 31 * result + rowWeight.toBits()
-            return result
-        }
-
-        companion object {
-
-            const val MATCH_PARENT = ViewGroup.LayoutParams.MATCH_PARENT
-            const val WRAP_CONTENT = ViewGroup.LayoutParams.WRAP_CONTENT
-
-            private const val DEFAULT_WIDTH = WRAP_CONTENT
-            private const val DEFAULT_HEIGHT = WRAP_CONTENT
-            private const val DEFAULT_SPAN = 1
-            internal const val UNDEFINED_WEIGHT = 0.0f
-        }
     }
 
     private class Cell(
@@ -478,7 +390,7 @@ internal open class GridContainer @JvmOverloads constructor(
             private set
 
         val isFlexible: Boolean
-            get() = weight > LayoutParams.UNDEFINED_WEIGHT
+            get() = weight > DEFAULT_WEIGHT
 
         fun include(
             size: Int = 0,
@@ -819,11 +731,17 @@ private class Resettable<T>(private val initializer: () -> T) {
     }
 }
 
-private val View.gridLayoutParams: GridContainer.LayoutParams
-    inline get() = layoutParams as GridContainer.LayoutParams
+private val View.gridLayoutParams: DivLayoutParams
+    inline get() = layoutParams as DivLayoutParams
 
-private val GridContainer.LayoutParams.verticalMargins: Int
+private val DivLayoutParams.verticalMargins: Int
     inline get() = topMargin + bottomMargin
 
-private val GridContainer.LayoutParams.horizontalMargins: Int
+private val DivLayoutParams.horizontalMargins: Int
     inline get() = leftMargin + rightMargin
+
+private val DivLayoutParams.rowWeight: Float
+    get() = verticalWeight
+
+private val DivLayoutParams.columnWeight: Float
+    get() = horizontalWeight

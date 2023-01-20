@@ -25,14 +25,12 @@ import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
-import com.yandex.div.core.widget.LinearContainerLayout
 import com.yandex.div.core.widget.wraplayout.WrapDirection
 import com.yandex.div.core.widget.wraplayout.WrapShowSeparatorsMode
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
-import com.yandex.div2.DivMatchParentSize
 import com.yandex.div2.DivSize
 import javax.inject.Inject
 import javax.inject.Provider
@@ -332,20 +330,6 @@ internal class DivContainerBinder @Inject constructor(
 
             childView.applyAlignment(alignmentHorizontal?.evaluate(resolver),
                 alignmentVertical?.evaluate(resolver), div.orientation.evaluate(resolver))
-
-            if (div.isVertical(resolver)) {
-                val divHeight = childDivValue.height
-                if (divHeight !is DivSize.WrapContent
-                    || divHeight.value.constrained?.evaluate(resolver) != true) {
-                    childView.applyWeight(divHeight, resolver)
-                }
-            } else if (div.isHorizontal(resolver)) {
-                val divWidth = childDivValue.width
-                if (divWidth !is DivSize.WrapContent
-                    || divWidth.value.constrained?.evaluate(resolver) != true) {
-                    childView.applyWeight(divWidth, resolver)
-                }
-            }
         }
 
         expressionSubscriber.addSubscription(
@@ -357,20 +341,6 @@ internal class DivContainerBinder @Inject constructor(
         expressionSubscriber.addSubscription(
             div.orientation.observe(resolver, applyAlignments)
         )
-
-        if ((div.isVertical(resolver) && childDivValue.height is DivSize.MatchParent)) {
-            (childDivValue.height.value() as DivMatchParentSize).weight?.let {
-                expressionSubscriber.addSubscription(
-                    it.observe(resolver, applyAlignments)
-                )
-            }
-        } else if(div.isHorizontal(resolver) && childDivValue.width is DivSize.MatchParent) {
-            (childDivValue.width.value() as DivMatchParentSize).weight?.let {
-                expressionSubscriber.addSubscription(
-                    it.observe(resolver, applyAlignments)
-                )
-            }
-        }
 
         applyAlignments(childView)
     }
@@ -401,19 +371,5 @@ internal class DivContainerBinder @Inject constructor(
         val withId = childId?.let { " with id='$it'" } ?: ""
         errorCollector.logWarning(Throwable(
             warningMessage.format(withId)))
-    }
-
-    private fun View.applyWeight(size: DivSize, resolver: ExpressionResolver) {
-        val params = layoutParams
-        if (params is LinearContainerLayout.LayoutParams) {
-            var weight = 0f
-            if (size is DivSize.MatchParent) {
-                weight = size.value.weight?.evaluate(resolver)?.toFloat() ?: 1.0f
-            }
-            if (params.weight != weight) {
-                params.weight = weight
-                requestLayout()
-            }
-        }
     }
 }
