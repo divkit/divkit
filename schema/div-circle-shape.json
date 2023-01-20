@@ -1,6 +1,11 @@
 {
   "type": "object",
   "$description": "translations.json#/div_circle_shape",
+  "allOf": [
+    {
+      "$ref": "div-shape-base.json"
+    }
+  ],
   "properties": {
     "radius": {
       "$ref": "div-fixed-size.json",
