@@ -948,6 +948,68 @@
       "file": "action_visibility/article.json"
     },
     {
+      "title": "Variables in gallery",
+      "tags": [
+        "DivGallery"
+      ],
+      "steps": [
+        "Check different combinations of gallery properties"
+      ],
+      "expected_results": [
+        "'orientation=horizontal' - sets gallery orientation to horizontal",
+        "'orientation=vertical' - sets gallery orientation to vertical",
+        "'column_count=1' - sets amount of columns to 1",
+        "'column_count=2' - sets amount of columns to 2",
+        "'item_spacing=5' - sets spacing between items along main axis to 5",
+        "'item_spacing=25' - sets spacing between items along main axis to 25",
+        "'cross_spacing=5' - sets spacing between items along cross axis to 5 (if column_count > 1)",
+        "'cross_spacing=25' - sets spacing between items along cross axis to 25 (if column_count > 1)",
+        "'restrict_parent_scroll=false' - gallery scroll gestures don't get passed to parent element",
+        "'restrict_parent_scroll_true' - gallery scrolls gestures get passed to parent element",
+        "'item_color=#80ff0000' - sets color of items in gallery to pink",
+        "'item_color=#9614e000' - sets color of items in gallery to green",
+        "'paddings.left=10' - paddings of gallery: left - 10",
+        "'paddings.left=50' - paddings of gallery: left - 50",
+        "'paddings.right=10' - paddings of gallery: right - 10",
+        "'paddings.right=50' - paddings of gallery: right - 50",
+        "'paddings.top=10' - paddings of gallery: top - 10",
+        "'paddings.top=50' - paddings of gallery: top - 50",
+        "'paddings.bottom=10' - paddings of gallery: bottom - 10",
+        "'paddings.bottom=50' - paddings of gallery: bottom - 50",
+        "'item_text=Item text' - sets text in gallery items to 'Item text'",
+        "'item_text=ITEM TEXT' - sets text in gallery items to 'ITEM TEXT'"
+      ],
+      "file": "variables/div_gallery.json"
+    },
+    {
+      "title": "Variables in pager",
+      "tags": [
+        "DivPager"
+      ],
+      "steps": [
+        "Check different combinations of pager properties"
+      ],
+      "expected_results": [
+        "'orientation=horizontal' - sets pager orientation to horizontal",
+        "'orientation=vertical' - sets pager orientation to vertical",
+        "'fixed_width=50' - sets visible width of adjacent card to 50",
+        "'fixed_width=20' - sets visible width of adjacent card to 20",
+        "'percentage_width=75' - sets current card's width to 75% of pager's width",
+        "'percentage_width=95' - sets current card's width to 95% of pager's width",
+        "'paddings.left=10' - paddings of pager: left - 10",
+        "'paddings.left=50' - paddings of pager: left - 50",
+        "'paddings.right=10' - paddings of pager: right - 10",
+        "'paddings.right=50' - paddings of pager: right - 50",
+        "'paddings.top=0' - paddings of pager: top - 0",
+        "'paddings.top=20' - paddings of pager: top - 20",
+        "'paddings.bottom=0' - paddings of pager: bottom - 0",
+        "'paddings.bottom=20' - paddings of pager: bottom - 20",
+        "'item_text=Item' - sets text of text_blocks in format 'Item #'",
+        "'item_text=ITEM' - sets text of text_blocks in format 'ITEM #'"
+      ],
+      "file": "variables/div_pager.json"
+    },
+    {
       "title": "Variables in tabs",
       "tags": [
         "DivTabs"
@@ -1436,6 +1498,33 @@
         "Current item always stick to the text"
       ],
       "file": "gallery/gallery-items-posing.json"
+    },
+    {
+      "title": "Blur in DivImage",
+      "tags": [
+        "DivImage"
+      ],
+      "steps": [
+        "Click on images under the text"
+      ],
+      "expected_results": [
+        "Images are blurred according to blur radius",
+        "Starting blur radius is 4",
+        "Blur radius is changed to 0 or 8 when clicking on images"
+      ],
+      "file": "div_image_blur.json"
+    },
+    {
+      "title": "Blur in background image",
+      "steps": [
+        "Click on 'Disable/Enable blur' buttons"
+      ],
+      "expected_results": [
+        "Text background is blurred according to blur radius",
+        "Starting blur radius is 4",
+        "Blur radius is changed to 0 or 8 when clicking on buttons"
+      ],
+      "file": "div_background_blur.json"
     }
   ]
 }

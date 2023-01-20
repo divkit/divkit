@@ -1,0 +1,481 @@
+{
+  "templates": {
+    "presets_holder": {
+      "type": "grid",
+      "orientation": "vertical",
+      "column_count": 3,
+      "item_spacing": 4,
+      "background": [
+        {
+          "type": "solid",
+          "color": "#f5f5f5"
+        }
+      ],
+      "paddings": {
+        "top": 3,
+        "bottom": 3
+      }
+    },
+    "presets_header": {
+      "type": "text",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "font_size": 14,
+      "text_color": "#888888",
+      "text_alignment_vertical": "center",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      }
+    },
+    "presets_button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent",
+        "weight": 1
+      },
+      "font_size": 14,
+      "text_color": "#000",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
+      "alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_alignment_vertical": "center",
+      "border": {
+        "corner_radius": 6
+      },
+      "margins": {
+        "top": 4,
+        "bottom": 2
+      }
+    },
+    "text_block": {
+      "type": "text",
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0e000000"
+        }
+      ],
+      "height": {
+        "type": "fixed",
+        "value": 240,
+        "unit": "sp"
+      },
+      "border": {
+        "corner_radius": 16
+      },
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000"
+    },
+    "image_block": {
+      "type": "image",
+      "border": {
+        "corner_radius": 16
+      },
+      "image_url": "https://yastatic.net/s3/home/yandex-app/div_demo/containers.png",
+      "placeholder_color": "#C0C0B0",
+      "preload_required": 1,
+      "alpha": 0.8,
+      "height": {
+        "type": "fixed",
+        "value": 240
+      }
+    },
+    "pager_template": {
+      "id": "pager",
+      "type": "pager",
+      "orientation": "@{orientation}",
+      "item_spacing": {
+        "type": "fixed",
+        "value": "@{item_spacing}"
+      },
+      "items": [
+        {
+          "type": "text_block",
+          "text": "@{item_text} 0",
+          "visibility_actions": [
+            {
+              "log_id": "content_item_show:0",
+              "visibility_percentage": 80,
+              "visibility_duration": 0
+            }
+          ]
+        },
+        {
+          "type": "image_block",
+          "visibility_actions": [
+            {
+              "log_id": "content_item_show:1",
+              "visibility_percentage": 80,
+              "visibility_duration": 0
+            }
+          ]
+        },
+        {
+          "type": "text_block",
+          "text": "@{item_text} 2",
+          "visibility_actions": [
+            {
+              "log_id": "content_item_show:2",
+              "visibility_percentage": 80,
+              "visibility_duration": 0
+            }
+          ]
+        },
+        {
+          "type": "image_block",
+          "visibility_actions": [
+            {
+              "log_id": "content_item_show:3",
+              "visibility_percentage": 80,
+              "visibility_duration": 0
+            }
+          ]
+        },
+        {
+          "type": "text_block",
+          "text": "@{item_text} 4",
+          "visibility_actions": [
+            {
+              "log_id": "content_item_show:4",
+              "visibility_percentage": 80,
+              "visibility_duration": 0
+            }
+          ]
+        },
+        {
+          "type": "image_block",
+          "visibility_actions": [
+            {
+              "log_id": "content_item_show:5",
+              "visibility_percentage": 80,
+              "visibility_duration": 0
+            }
+          ]
+        }
+      ],
+      "margins": {
+        "top": 8
+      },
+      "paddings": {
+        "top": "@{paddings.top}",
+        "bottom": "@{paddings.bottom}",
+        "right": "@{paddings.right}",
+        "left": "@{paddings.left}"
+      },
+      "restrict_parent_scroll": 1
+    }
+  },
+  "card": {
+    "variables": [
+      {
+        "name": "percentage_width",
+        "type": "number",
+        "value": 75
+      },
+      {
+        "name": "fixed_width",
+        "type": "number",
+        "value": 20
+      },
+      {
+        "name": "item_spacing",
+        "type": "number",
+        "value": 5
+      },
+      {
+        "name": "paddings.top",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "paddings.bottom",
+        "type": "integer",
+        "value": 0
+      },
+      {
+        "name": "paddings.left",
+        "type": "integer",
+        "value": 10
+      },
+      {
+        "name": "paddings.right",
+        "type": "integer",
+        "value": 10
+      },
+      {
+        "name": "orientation",
+        "type": "string",
+        "value": "horizontal"
+      },
+      {
+        "name": "item_text",
+        "type": "string",
+        "value": "Item"
+      }
+    ],
+    "log_id": "gallery",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "background": [
+            {
+              "type": "solid",
+              "color": "#FFFFFF"
+            }
+          ],
+          "items": [
+            {
+              "type": "state",
+              "div_id": "pager_container",
+              "default_state_id": "fixed",
+              "states": [
+                {
+                  "state_id": "fixed",
+                  "div": {
+                    "type": "pager_template",
+                    "layout_mode": {
+                      "type": "fixed",
+                      "neighbour_page_width": {
+                        "type": "fixed",
+                        "value": "@{fixed_width}"
+                      }
+                    }
+                  }
+                },
+                {
+                  "state_id": "percentage",
+                  "div": {
+                    "type": "pager_template",
+                    "layout_mode": {
+                      "type": "percentage",
+                      "page_width": {
+                        "type": "percentage",
+                        "value": "@{percentage_width}"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "separator",
+              "paddings": {
+                "left": 16,
+                "right": 16
+              },
+              "height": {
+                "type": "fixed",
+                "value": 8
+              }
+            },
+            {
+              "type": "presets_holder",
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Orientation"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "horizontal",
+                  "action": {
+                    "url": "div-action://set_variable?name=orientation&value=horizontal",
+                    "log_id": "orientation=horizontal"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "vertical",
+                  "action": {
+                    "url": "div-action://set_variable?name=orientation&value=vertical",
+                    "log_id": "orientation=vertical"
+                  }
+                },
+                {
+                  "type": "presets_header",
+                  "text": "Neighbour fixed width"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "50 dp",
+                  "actions": [
+                    {
+                      "url": "div-action://set_state?state_id=0/pager_container/fixed",
+                      "log_id": "state=fixed"
+                    },
+                    {
+                      "url": "div-action://set_variable?name=fixed_width&value=50",
+                      "log_id": "fixed_width=50"
+                    }
+                  ]
+                },
+                {
+                  "type": "presets_button",
+                  "text": "20 dp",
+                  "actions": [
+                    {
+                      "url": "div-action://set_state?state_id=0/pager_container/fixed",
+                      "log_id": "state=fixed"
+                    },
+                    {
+                      "url": "div-action://set_variable?name=fixed_width&value=20",
+                      "log_id": "fixed_width=20"
+                    }
+                  ]
+                },
+                {
+                  "type": "presets_header",
+                  "text": "Percentage width"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "75",
+                  "actions": [
+                    {
+                      "url": "div-action://set_state?state_id=0/pager_container/percentage",
+                      "log_id": "state=percentage"
+                    },
+                    {
+                      "url": "div-action://set_variable?name=percentage_width&value=75",
+                      "log_id": "percentage_width=75"
+                    }
+                  ]
+                },
+                {
+                  "type": "presets_button",
+                  "text": "95",
+                  "actions": [
+                    {
+                      "url": "div-action://set_state?state_id=0/pager_container/percentage",
+                      "log_id": "state=percentage"
+                    },
+                    {
+                      "url": "div-action://set_variable?name=percentage_width&value=95",
+                      "log_id": "percentage_width=95"
+                    }
+                  ]
+                },
+                {
+                  "type": "presets_header",
+                  "text": "Paddings left"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "10 dp",
+                  "action": {
+                    "url": "div-action://set_variable?name=paddings.left&value=10",
+                    "log_id": "paddings.left=10"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "50 dp",
+                  "action": {
+                    "url": "div-action://set_variable?name=paddings.left&value=50",
+                    "log_id": "paddings.left=50"
+                  }
+                },
+                {
+                  "type": "presets_header",
+                  "text": "Paddings right"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "10 dp",
+                  "action": {
+                    "url": "div-action://set_variable?name=paddings.right&value=10",
+                    "log_id": "paddings.right=10"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "50 dp",
+                  "action": {
+                    "url": "div-action://set_variable?name=paddings.right&value=50",
+                    "log_id": "paddings.right=50"
+                  }
+                },
+                {
+                  "type": "presets_header",
+                  "text": "Paddings top"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "0 dp",
+                  "action": {
+                    "url": "div-action://set_variable?name=paddings.top&value=0",
+                    "log_id": "paddings.top=0"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "20 dp",
+                  "action": {
+                    "url": "div-action://set_variable?name=paddings.top&value=20",
+                    "log_id": "paddings.top=20"
+                  }
+                },
+                {
+                  "type": "presets_header",
+                  "text": "Paddings bottom"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "0 dp",
+                  "action": {
+                    "url": "div-action://set_variable?name=paddings.bottom&value=0",
+                    "log_id": "paddings.bottom=0"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "20 dp",
+                  "action": {
+                    "url": "div-action://set_variable?name=paddings.bottom&value=20",
+                    "log_id": "paddings.bottom=20"
+                  }
+                },
+                {
+                  "type": "presets_header",
+                  "text": "Item text style"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "Item",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_text&value=Item",
+                    "log_id": "item_text=Item"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "ITEM",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_text&value=ITEM",
+                    "log_id": "item_text=ITEM"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
