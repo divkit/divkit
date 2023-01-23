@@ -127,7 +127,7 @@ final class DivTimerStorage {
         self?.updateVariable(cardId: cardId, name: name, value: value)
       },
       updateCard: { [weak self] in
-        self?.updateCard(cardId, .timer)
+        self?.updateCard(.timer(cardId))
       }
     )
   }

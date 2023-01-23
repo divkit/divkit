@@ -5,7 +5,7 @@ import CommonCore
 import LayoutKit
 
 public final class DivActionURLHandler {
-  public typealias UpdateCardAction = (DivCardID, UpdateReason) -> Void
+  public typealias UpdateCardAction = (UpdateReason) -> Void
   public typealias ShowTooltipAction = (TooltipInfo) -> Void
   public typealias PerformTimerAction = (
     _ cardId: DivCardID,
@@ -15,8 +15,14 @@ public final class DivActionURLHandler {
 
   @frozen
   public enum UpdateReason {
-    case patch(DivPatch)
-    case timer
+    public enum AffectedCards: Equatable {
+      case all
+      case specific(Set<DivCardID>)
+    }
+    case patch(DivCardID, DivPatch)
+    case timer(DivCardID)
+    case state(DivCardID)
+    case variable(AffectedCards)
   }
 
   private let stateUpdater: DivStateUpdater
@@ -82,6 +88,7 @@ public final class DivActionURLHandler {
         cardId: cardId,
         lifetime: lifetime
       )
+      updateCard(.state(cardId))
     case let .setVariable(name, value):
       guard let cardId = cardId else {
         return false
@@ -114,7 +121,7 @@ public final class DivActionURLHandler {
   ) {
     switch result {
     case let .success(patch):
-      updateCard(cardId, .patch(patch))
+      updateCard(.patch(cardId, patch))
       completion(.success(()))
     case let .failure(error):
       completion(.failure(error))

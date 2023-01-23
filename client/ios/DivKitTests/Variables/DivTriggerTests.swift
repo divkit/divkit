@@ -9,7 +9,7 @@ final class DivTriggerTests: XCTestCase {
     stateUpdater: FakeDivStateUpdater(),
     patchProvider: FakeDivPatchDownloader(),
     variablesStorage: variablesStorage,
-    updateCard: { _, _ in },
+    updateCard: { _ in },
     showTooltip: { _ in }
   )
 

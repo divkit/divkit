@@ -5,7 +5,7 @@ import Networking
 
 enum AppComponents {
   static func makeDivKitComponents(
-    updateCardAction: DivActionURLHandler.UpdateCardAction? = nil
+    updateCardAction: DivKitComponents.UpdateCardAction? = nil
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
     let requester = NetworkURLResourceRequester(performer: performer)

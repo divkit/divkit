@@ -61,15 +61,15 @@ final class DivBlockProvider {
       .dispose(in: disposePool)
   }
 
-  func update(patch: DivPatch? = nil) {
+  func update(patches: [DivPatch]) {
     guard var divData = divData else {
       return
     }
 
-    if let patch = patch {
-      divData = divData.applyPatch(patch)
-      self.divData = divData
+    patches.forEach {
+      divData = divData.applyPatch($0)
     }
+    self.divData = divData
 
     do {
       let context = divKitComponents.makeContext(
@@ -131,7 +131,7 @@ final class DivBlockProvider {
       return
     }
 
-    update(patch: nil)
+    update(patches: [])
   }
 
   private func parseDivDataWithTemplates(

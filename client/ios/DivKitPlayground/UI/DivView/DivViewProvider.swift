@@ -10,13 +10,8 @@ final class DivViewProvider {
 
   init() {
     divKitComponents = AppComponents.makeDivKitComponents(
-      updateCardAction: { [weak self] _, reason in
-        switch reason {
-        case let .patch(patch):
-          self?.blockProvider.update(patch: patch)
-        case .timer:
-          self?.blockProvider.update(patch: nil)
-        }
+      updateCardAction: { [weak self] reason in
+        self?.blockProvider.update(patches: reason.compactMap(\.patch))
       }
     )
 
@@ -34,6 +29,17 @@ final class DivViewProvider {
     )
     .onAppear { [weak self] in
       self?.jsonProvider.load(url: url)
+    }
+  }
+}
+
+extension DivActionURLHandler.UpdateReason {
+  var patch: DivPatch? {
+    switch self {
+    case let .patch(_, patch):
+      return patch
+    case .timer, .variable, .state:
+      return nil
     }
   }
 }

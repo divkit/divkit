@@ -7,6 +7,8 @@ import Networking
 import Serialization
 
 public final class DivKitComponents {
+  public typealias UpdateCardAction = (NonEmptyArray<DivActionURLHandler.UpdateReason>) -> Void
+
   public let actionHandler: DivActionHandler
   public let blockStateStorage = DivBlockStateStorage()
   public let divCustomBlockFactory: DivCustomBlockFactory
@@ -21,6 +23,8 @@ public final class DivKitComponents {
   public let variablesStorage: DivVariablesStorage
   public let visibilityCounter = DivVisibilityCounter()
   private let timerStorage: DivTimerStorage
+  private let updateAggregator: RunLoopCardUpdateAggregator
+  private let disposePool = AutodisposePool()
 
   public init(
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
@@ -32,7 +36,7 @@ public final class DivKitComponents {
     requestPerformer: URLRequestPerforming? = nil,
     stateManagement: DivStateManagement = DefaultDivStateManagement(),
     trackVisibility: @escaping DivActionHandler.TrackVisibility = { _, _ in },
-    updateCardAction: DivActionURLHandler.UpdateCardAction?,
+    updateCardAction: UpdateCardAction?,
     urlOpener: @escaping UrlOpener,
     variablesStorage: DivVariablesStorage = DivVariablesStorage()
   ) {
@@ -52,6 +56,10 @@ public final class DivKitComponents {
     self.patchProvider = patchProvider
       ?? DivPatchDownloader(requestPerformer: requestPerformer)
 
+    let updateAggregator = RunLoopCardUpdateAggregator(updateCardAction: updateCardAction ?? { _ in })
+    self.updateAggregator = updateAggregator
+    let updateCard: DivActionURLHandler.UpdateCardAction = updateAggregator.aggregate(_:)
+
     weak var weakTimerStorage: DivTimerStorage?
 
     actionHandler = DivActionHandler(
@@ -59,7 +67,7 @@ public final class DivKitComponents {
       blockStateStorage: blockStateStorage,
       patchProvider: self.patchProvider,
       variablesStorage: variablesStorage,
-      updateCard: { updateCardAction?($0, $1) },
+      updateCard: updateCard,
       showTooltip: { _ in },
       logger: DefaultDivActionLogger(
         requestPerformer: requestPerformer
@@ -78,9 +86,17 @@ public final class DivKitComponents {
       variablesStorage: variablesStorage,
       actionHandler: actionHandler,
       urlOpener: urlOpener,
-      updateCard: { updateCardAction?($0, $1) }
+      updateCard: updateCard
     )
     weakTimerStorage = timerStorage
+    variablesStorage.changeEvents.addObserver { change in
+      switch change.kind {
+      case .global:
+        updateCard(.variable(.all))
+      case let .local(cardId, _):
+        updateCard(.variable(.specific([cardId])))
+      }
+    }.dispose(in: disposePool)
   }
 
   public func reset() {
@@ -165,17 +181,19 @@ public final class DivKitComponents {
   }
 
   public func setVariablesAndTriggers(divData: DivData, cardId: DivCardID) {
-    let divDataVariables = divData.variables?.extractDivVariableValues() ?? [:]
-    variablesStorage.append(
-      variables: divDataVariables,
-      for: cardId,
-      replaceExisting: false
-    )
+    updateAggregator.performWithNoUpdates {
+      let divDataVariables = divData.variables?.extractDivVariableValues() ?? [:]
+      variablesStorage.append(
+        variables: divDataVariables,
+        for: cardId,
+        replaceExisting: false
+      )
 
-    triggersStorage.set(
-      cardId: cardId,
-      triggers: divData.variableTriggers ?? []
-    )
+      triggersStorage.set(
+        cardId: cardId,
+        triggers: divData.variableTriggers ?? []
+      )
+    }
   }
 
   public func setTimers(divData: DivData, cardId: DivCardID) {

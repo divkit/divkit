@@ -130,18 +130,13 @@ open class DivViewController: UIViewController {
 extension DivViewController: ElementStateObserver {
   public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.elementStateChanged(state, forPath: path)
-    blockProvider.update(patch: nil)
+    blockProvider.update(patches: [])
   }
 }
 
 extension DivViewController: UIActionEventPerforming {
   public func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
-    perform(uiActionEvents: [event], from: sender)
-  }
-
-  public func perform(uiActionEvents events: [UIActionEvent], from _: AnyObject) {
-    events.map { $0.payload }.forEach { handle($0) }
-    blockProvider.update(patch: nil)
+    handle(event.payload)
   }
 
   private func handle(_ payload: UserInterfaceAction.Payload) {
