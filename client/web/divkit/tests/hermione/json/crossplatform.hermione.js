@@ -3,7 +3,8 @@ const fs = require('fs');
 
 function read(dir, createTestCase, skipTests = []) {
     function append(dir, prefix) {
-        const items = fs.readdirSync(path.join(__dirname, dir));
+        const fulldir = path.join(__dirname, dir);
+        const items = fs.readdirSync(fulldir);
 
         for (const item of items) {
             if (skipTests.some(test => item.includes(test))) {
@@ -17,6 +18,12 @@ function read(dir, createTestCase, skipTests = []) {
 
                 const testCase = item.replace('.json', '');
                 const testPath = '/' + path.relative(path.resolve(__dirname, '../../..'), path.resolve(__dirname, prefix + item));
+
+                const platforms = require(path.join(fulldir, item)).platforms;
+                if (platforms && !platforms.includes('web')) {
+                    console.trace('skip', path.join(fulldir, item));
+                    continue;
+                }
 
                 createTestCase(testCase, testPath);
             } else {
