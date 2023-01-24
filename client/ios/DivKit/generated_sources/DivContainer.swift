@@ -67,6 +67,7 @@ public final class DivContainer: DivBase {
   public let alignmentHorizontal: Expression<DivAlignmentHorizontal>?
   public let alignmentVertical: Expression<DivAlignmentVertical>?
   public let alpha: Expression<Double> // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let aspect: DivAspect?
   public let background: [DivBackground]? // at least 1 elements
   public let border: DivBorder
   public let columnSpan: Expression<Int>? // constraint: number >= 0
@@ -158,6 +159,9 @@ public final class DivContainer: DivBase {
 
   static let alphaValidator: AnyValueValidator<Double> =
     makeValueValidator(valueValidator: { $0 >= 0.0 && $0 <= 1.0 })
+
+  static let aspectValidator: AnyValueValidator<DivAspect> =
+    makeNoOpValueValidator()
 
   static let backgroundValidator: AnyArrayValueValidator<DivBackground> =
     makeArrayValidator(minItems: 1)
@@ -257,6 +261,7 @@ public final class DivContainer: DivBase {
     alignmentHorizontal: Expression<DivAlignmentHorizontal>?,
     alignmentVertical: Expression<DivAlignmentVertical>?,
     alpha: Expression<Double>?,
+    aspect: DivAspect?,
     background: [DivBackground]?,
     border: DivBorder?,
     columnSpan: Expression<Int>?,
@@ -295,6 +300,7 @@ public final class DivContainer: DivBase {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha ?? .value(1.0)
+    self.aspect = aspect
     self.background = background
     self.border = border ?? DivBorder()
     self.columnSpan = columnSpan
@@ -347,75 +353,76 @@ extension DivContainer: Equatable {
     }
     guard
       lhs.alpha == rhs.alpha,
-      lhs.background == rhs.background,
-      lhs.border == rhs.border
+      lhs.aspect == rhs.aspect,
+      lhs.background == rhs.background
     else {
       return false
     }
     guard
+      lhs.border == rhs.border,
       lhs.columnSpan == rhs.columnSpan,
-      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal,
-      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical
+      lhs.contentAlignmentHorizontal == rhs.contentAlignmentHorizontal
     else {
       return false
     }
     guard
+      lhs.contentAlignmentVertical == rhs.contentAlignmentVertical,
       lhs.doubletapActions == rhs.doubletapActions,
-      lhs.extensions == rhs.extensions,
-      lhs.focus == rhs.focus
+      lhs.extensions == rhs.extensions
     else {
       return false
     }
     guard
+      lhs.focus == rhs.focus,
       lhs.height == rhs.height,
-      lhs.id == rhs.id,
-      lhs.items == rhs.items
+      lhs.id == rhs.id
     else {
       return false
     }
     guard
+      lhs.items == rhs.items,
       lhs.layoutMode == rhs.layoutMode,
-      lhs.lineSeparator == rhs.lineSeparator,
-      lhs.longtapActions == rhs.longtapActions
+      lhs.lineSeparator == rhs.lineSeparator
     else {
       return false
     }
     guard
+      lhs.longtapActions == rhs.longtapActions,
       lhs.margins == rhs.margins,
-      lhs.orientation == rhs.orientation,
-      lhs.paddings == rhs.paddings
+      lhs.orientation == rhs.orientation
     else {
       return false
     }
     guard
+      lhs.paddings == rhs.paddings,
       lhs.rowSpan == rhs.rowSpan,
-      lhs.selectedActions == rhs.selectedActions,
-      lhs.separator == rhs.separator
+      lhs.selectedActions == rhs.selectedActions
     else {
       return false
     }
     guard
+      lhs.separator == rhs.separator,
       lhs.tooltips == rhs.tooltips,
-      lhs.transform == rhs.transform,
-      lhs.transitionChange == rhs.transitionChange
+      lhs.transform == rhs.transform
     else {
       return false
     }
     guard
+      lhs.transitionChange == rhs.transitionChange,
       lhs.transitionIn == rhs.transitionIn,
-      lhs.transitionOut == rhs.transitionOut,
-      lhs.transitionTriggers == rhs.transitionTriggers
+      lhs.transitionOut == rhs.transitionOut
     else {
       return false
     }
     guard
+      lhs.transitionTriggers == rhs.transitionTriggers,
       lhs.visibility == rhs.visibility,
-      lhs.visibilityAction == rhs.visibilityAction,
-      lhs.visibilityActions == rhs.visibilityActions
+      lhs.visibilityAction == rhs.visibilityAction
     else {
       return false
     }
     guard
+      lhs.visibilityActions == rhs.visibilityActions,
       lhs.width == rhs.width
     else {
       return false
@@ -436,6 +443,7 @@ extension DivContainer: Serializable {
     result["alignment_horizontal"] = alignmentHorizontal?.toValidSerializationValue()
     result["alignment_vertical"] = alignmentVertical?.toValidSerializationValue()
     result["alpha"] = alpha.toValidSerializationValue()
+    result["aspect"] = aspect?.toDictionary()
     result["background"] = background?.map { $0.toDictionary() }
     result["border"] = border.toDictionary()
     result["column_span"] = columnSpan?.toValidSerializationValue()

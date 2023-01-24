@@ -1,3 +1,5 @@
+import CoreGraphics
+
 import CommonCore
 import LayoutKit
 
@@ -20,15 +22,14 @@ extension DivContainer: DivBlockModeling {
       $0.parentPath = $0.parentPath + (id ?? DivContainer.type)
     }
     let orientation = resolveOrientation(context.expressionResolver)
-    let layoutMode = resolveLayoutMode(context.expressionResolver)
     switch orientation {
     case .overlap:
-      return try makeLayeredBlock(with: childContext, orientation: orientation)
+      return try makeOverlapBlock(context: childContext)
     case .horizontal, .vertical:
       return try makeContainerBlock(
-        with: childContext,
+        context: childContext,
         orientation: orientation,
-        layoutMode: layoutMode
+        layoutMode: resolveLayoutMode(context.expressionResolver)
       )
     }
   }
@@ -42,15 +43,6 @@ extension DivContainer: DivBlockModeling {
     }
     items.forEach(traverse)
     return result.isEmpty ? nil : result
-  }
-
-  private func checkConstraints(
-    for children: [Block],
-    path: UIElementPath
-  ) throws {
-    guard !children.isEmpty else {
-      throw DivBlockModelingError("DivContainer is empty", path: path)
-    }
   }
 
   private func getFallbackWidth(
@@ -108,21 +100,18 @@ extension DivContainer: DivBlockModeling {
     return nil
   }
 
-  private func makeLayeredBlock(
-    with childContext: DivBlockModelingContext,
-    orientation: Orientation
-  ) throws -> LayeredBlock {
+  private func makeOverlapBlock(context: DivBlockModelingContext) throws -> Block {
+    let expressionResolver = context.expressionResolver
     let defaultAlignment = BlockAlignment2D(
-      horizontal: resolveContentAlignmentHorizontal(childContext.expressionResolver)
-        .alignment,
-      vertical: resolveContentAlignmentVertical(childContext.expressionResolver).alignment
+      horizontal: resolveContentAlignmentHorizontal(expressionResolver).alignment,
+      vertical: resolveContentAlignmentVertical(expressionResolver).alignment
     )
 
-    let fallbackWidth = getFallbackWidth(orientation: orientation, context: childContext)
-    let fallbackHeight = getFallbackHeight(orientation: orientation, context: childContext)
+    let fallbackWidth = getFallbackWidth(orientation: .overlap, context: context)
+    let fallbackHeight = getFallbackHeight(orientation: .overlap, context: context)
 
     let children = try items.makeBlocks(
-      context: childContext,
+      context: context,
       overridenWidth: fallbackWidth,
       overridenHeight: fallbackHeight,
       mappedBy: { div, block in
@@ -130,55 +119,55 @@ extension DivContainer: DivBlockModeling {
           content: block,
           alignment: div.value.alignment2D(
             withDefault: defaultAlignment,
-            expressionResolver: childContext.expressionResolver
+            expressionResolver: expressionResolver
           )
         )
       }
     )
 
-    try checkConstraints(
-      for: children.map { $0.content },
-      path: childContext.parentPath
-    )
+    guard !children.isEmpty else {
+      throw DivBlockModelingError("DivContainer is empty", path: context.parentPath)
+    }
 
-    return LayeredBlock(
-      widthTrait: makeContentWidthTrait(with: childContext),
-      heightTrait: makeContentHeightTrait(with: childContext),
+    let aspectRatio = resolveAspectRatio(expressionResolver)
+    let layeredBlock = LayeredBlock(
+      widthTrait: makeContentWidthTrait(with: context),
+      heightTrait: makeHeightTrait(context: context, aspectRatio: aspectRatio),
       children: children
     )
+
+    if let aspectRatio = aspectRatio {
+      return AspectBlock(content: layeredBlock, aspectRatio: aspectRatio)
+    }
+    
+    return layeredBlock
   }
 
   private func makeContainerBlock(
-    with childContext: DivBlockModelingContext,
+    context: DivBlockModelingContext,
     orientation: Orientation,
     layoutMode: LayoutMode
-  ) throws -> ContainerBlock {
+  ) throws -> Block {
+    let expressionResolver = context.expressionResolver
     let layoutDirection = orientation.layoutDirection
     let axialAlignment: Alignment
     let defaultCrossAlignment: ContainerBlock.CrossAlignment
     switch layoutDirection {
     case .horizontal:
-      axialAlignment = resolveContentAlignmentHorizontal(childContext.expressionResolver)
-        .alignment
-      defaultCrossAlignment = resolveContentAlignmentVertical(
-        childContext.expressionResolver
-      ).crossAlignment
+      axialAlignment = resolveContentAlignmentHorizontal(expressionResolver).alignment
+      defaultCrossAlignment = resolveContentAlignmentVertical(expressionResolver).crossAlignment
     case .vertical:
-      axialAlignment = resolveContentAlignmentVertical(childContext.expressionResolver)
-        .alignment
-      defaultCrossAlignment = resolveContentAlignmentHorizontal(
-        childContext.expressionResolver
-      )
-      .crossAlignment
+      axialAlignment = resolveContentAlignmentVertical(expressionResolver).alignment
+      defaultCrossAlignment = resolveContentAlignmentHorizontal(expressionResolver).crossAlignment
     }
 
     let fallbackWidth = getFallbackWidth(
       orientation: orientation,
-      context: childContext
+      context: context
     )
     let fallbackHeight = getFallbackHeight(
       orientation: orientation,
-      context: childContext
+      context: context
     )
 
     // Before block's making we need to filter items and remove
@@ -187,14 +176,14 @@ extension DivContainer: DivBlockModeling {
       guard layoutMode == .wrap else { return true }
       if orientation == .vertical {
         if items.hasHorizontallyMatchParent {
-          childContext.addError(
+          context.addError(
             level: .warning,
             message: "Vertical DivContainer with wrap layout mode contains item with match_parent width"
           )
         }
       } else {
         if items.hasVerticallyMatchParent {
-          childContext.addError(
+          context.addError(
             level: .warning,
             message: "Horizontal DivContainer with wrap layout mode contains item with match_parent height"
           )
@@ -206,7 +195,7 @@ extension DivContainer: DivBlockModeling {
     }
 
     let children = try filtredItems.makeBlocks(
-      context: childContext,
+      context: context,
       overridenWidth: fallbackWidth,
       overridenHeight: fallbackHeight,
       mappedBy: { div, block in
@@ -214,27 +203,55 @@ extension DivContainer: DivBlockModeling {
           content: block,
           crossAlignment: div.value.crossAlignment(
             for: layoutDirection,
-            expressionResolver: childContext.expressionResolver
+            expressionResolver: expressionResolver
           ) ?? defaultCrossAlignment
         )
       }
     )
 
-    try checkConstraints(
-      for: children.map { $0.content },
-      path: childContext.parentPath
-    )
+    guard !children.isEmpty else {
+      throw DivBlockModelingError("DivContainer is empty", path: context.parentPath)
+    }
 
-    return try ContainerBlock(
+    let aspectRatio = resolveAspectRatio(expressionResolver)
+    let containerBlock = try ContainerBlock(
       layoutDirection: layoutDirection,
       layoutMode: layoutMode.system,
-      widthTrait: makeContentWidthTrait(with: childContext),
-      heightTrait: makeContentHeightTrait(with: childContext),
+      widthTrait: makeContentWidthTrait(with: context),
+      heightTrait: makeHeightTrait(context: context, aspectRatio: aspectRatio),
       axialAlignment: axialAlignment,
       children: children,
-      separator: makeSeparator(with: childContext),
-      lineSeparator: makeLineSeparator(with: childContext)
+      separator: makeSeparator(with: context),
+      lineSeparator: makeLineSeparator(with: context)
     )
+    
+    if let aspectRatio = aspectRatio {
+      if (orientation == .vertical && layoutMode == .wrap) {
+        context.addError(
+          level: .warning,
+          message: "Aspect height is not supported for vertical container with wrap layout mode"
+        )
+      } else {
+        return AspectBlock(content: containerBlock, aspectRatio: aspectRatio)
+      }
+    }
+    
+    return containerBlock
+  }
+
+  private func resolveAspectRatio(_ expressionResolver: ExpressionResolver) -> CGFloat? {
+    if let aspect = aspect, let ratio = aspect.resolveRatio(expressionResolver) {
+      // AspectBlock has inverted ratio
+      return 1 / ratio
+    }
+    return nil
+  }
+
+  private func makeHeightTrait(context: DivBlockModelingContext, aspectRatio: CGFloat?) -> LayoutTrait {
+    if aspectRatio != nil {
+      return .resizable
+    }
+    return makeContentHeightTrait(with: context)
   }
 
   private func makeSeparator(

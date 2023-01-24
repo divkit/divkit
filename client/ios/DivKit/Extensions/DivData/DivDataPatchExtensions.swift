@@ -88,6 +88,7 @@ extension DivContainer {
       alignmentHorizontal: alignmentHorizontal,
       alignmentVertical: alignmentVertical,
       alpha: alpha,
+      aspect: aspect,
       background: background,
       border: border,
       columnSpan: columnSpan,

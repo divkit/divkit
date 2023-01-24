@@ -1,0 +1,42 @@
+{
+  "description": "DivContainer with match_parent width and aspect height. Height must be equal width / 2.",
+  "platforms": [
+    "ios"
+  ],
+  "card": {
+    "log_id": "test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "aspect": {
+            "ratio": 2
+          },
+          "paddings": {
+            "left": 10,
+            "right": 10,
+            "top": 10,
+            "bottom": 10
+          },
+          "background": [
+            {
+              "type": "solid",
+              "color": "#A0FFA0"
+            }
+          ],
+          "items": [
+            {
+              "type": "text",
+              "text": "width = match_parent\naspect = 2",
+              "font_size": 16,
+              "width": {
+                "type": "wrap_content"
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1557,6 +1557,16 @@
         "Blur radius is changed to 0 or 8 when clicking on buttons"
       ],
       "file": "div_background_blur.json"
+    },
+    {
+      "title": "Container with aspect size",
+      "tags": [
+        "DivContainer"
+      ],
+      "expected_results": [
+        "Containers with correct height appear"
+      ],
+      "file": "container/aspect.json"
     }
   ]
 }

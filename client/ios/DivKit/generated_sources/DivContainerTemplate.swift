@@ -149,6 +149,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
   public let alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>?
   public let alignmentVertical: Field<Expression<DivAlignmentVertical>>?
   public let alpha: Field<Expression<Double>>? // constraint: number >= 0.0 && number <= 1.0; default value: 1.0
+  public let aspect: Field<DivAspectTemplate>?
   public let background: Field<[DivBackgroundTemplate]>? // at least 1 elements
   public let border: Field<DivBorderTemplate>?
   public let columnSpan: Field<Expression<Int>>? // constraint: number >= 0
@@ -194,6 +195,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         alignmentHorizontal: try dictionary.getOptionalExpressionField("alignment_horizontal"),
         alignmentVertical: try dictionary.getOptionalExpressionField("alignment_vertical"),
         alpha: try dictionary.getOptionalExpressionField("alpha"),
+        aspect: try dictionary.getOptionalField("aspect", templateToType: templateToType),
         background: try dictionary.getOptionalArray("background", templateToType: templateToType),
         border: try dictionary.getOptionalField("border", templateToType: templateToType),
         columnSpan: try dictionary.getOptionalExpressionField("column_span"),
@@ -239,6 +241,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     alignmentHorizontal: Field<Expression<DivAlignmentHorizontal>>? = nil,
     alignmentVertical: Field<Expression<DivAlignmentVertical>>? = nil,
     alpha: Field<Expression<Double>>? = nil,
+    aspect: Field<DivAspectTemplate>? = nil,
     background: Field<[DivBackgroundTemplate]>? = nil,
     border: Field<DivBorderTemplate>? = nil,
     columnSpan: Field<Expression<Int>>? = nil,
@@ -278,6 +281,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     self.alignmentHorizontal = alignmentHorizontal
     self.alignmentVertical = alignmentVertical
     self.alpha = alpha
+    self.aspect = aspect
     self.background = background
     self.border = border
     self.columnSpan = columnSpan
@@ -318,6 +322,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     let alignmentHorizontalValue = parent?.alignmentHorizontal?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentHorizontalValidator) ?? .noValue
     let alignmentVerticalValue = parent?.alignmentVertical?.resolveOptionalValue(context: context, validator: ResolvedValue.alignmentVerticalValidator) ?? .noValue
     let alphaValue = parent?.alpha?.resolveOptionalValue(context: context, validator: ResolvedValue.alphaValidator) ?? .noValue
+    let aspectValue = parent?.aspect?.resolveOptionalValue(context: context, validator: ResolvedValue.aspectValidator, useOnlyLinks: true) ?? .noValue
     let backgroundValue = parent?.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true) ?? .noValue
     let borderValue = parent?.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true) ?? .noValue
     let columnSpanValue = parent?.columnSpan?.resolveOptionalValue(context: context, validator: ResolvedValue.columnSpanValidator) ?? .noValue
@@ -356,6 +361,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
@@ -403,6 +409,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      aspect: aspectValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
@@ -448,6 +455,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
     var alignmentHorizontalValue: DeserializationResult<Expression<DivAlignmentHorizontal>> = parent?.alignmentHorizontal?.value() ?? .noValue
     var alignmentVerticalValue: DeserializationResult<Expression<DivAlignmentVertical>> = parent?.alignmentVertical?.value() ?? .noValue
     var alphaValue: DeserializationResult<Expression<Double>> = parent?.alpha?.value() ?? .noValue
+    var aspectValue: DeserializationResult<DivAspect> = .noValue
     var backgroundValue: DeserializationResult<[DivBackground]> = .noValue
     var borderValue: DeserializationResult<DivBorder> = .noValue
     var columnSpanValue: DeserializationResult<Expression<Int>> = parent?.columnSpan?.value() ?? .noValue
@@ -494,6 +502,8 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         alignmentVerticalValue = deserialize(__dictValue, validator: ResolvedValue.alignmentVerticalValidator).merged(with: alignmentVerticalValue)
       case "alpha":
         alphaValue = deserialize(__dictValue, validator: ResolvedValue.alphaValidator).merged(with: alphaValue)
+      case "aspect":
+        aspectValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.aspectValidator, type: DivAspectTemplate.self).merged(with: aspectValue)
       case "background":
         backgroundValue = deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.backgroundValidator, type: DivBackgroundTemplate.self).merged(with: backgroundValue)
       case "border":
@@ -568,6 +578,8 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
         alignmentVerticalValue = alignmentVerticalValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alignmentVerticalValidator))
       case parent?.alpha?.link:
         alphaValue = alphaValue.merged(with: deserialize(__dictValue, validator: ResolvedValue.alphaValidator))
+      case parent?.aspect?.link:
+        aspectValue = aspectValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.aspectValidator, type: DivAspectTemplate.self))
       case parent?.background?.link:
         backgroundValue = backgroundValue.merged(with: deserialize(__dictValue, templates: context.templates, templateToType: context.templateToType, validator: ResolvedValue.backgroundValidator, type: DivBackgroundTemplate.self))
       case parent?.border?.link:
@@ -636,6 +648,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       actionValue = actionValue.merged(with: parent.action?.resolveOptionalValue(context: context, validator: ResolvedValue.actionValidator, useOnlyLinks: true))
       actionAnimationValue = actionAnimationValue.merged(with: parent.actionAnimation?.resolveOptionalValue(context: context, validator: ResolvedValue.actionAnimationValidator, useOnlyLinks: true))
       actionsValue = actionsValue.merged(with: parent.actions?.resolveOptionalValue(context: context, validator: ResolvedValue.actionsValidator, useOnlyLinks: true))
+      aspectValue = aspectValue.merged(with: parent.aspect?.resolveOptionalValue(context: context, validator: ResolvedValue.aspectValidator, useOnlyLinks: true))
       backgroundValue = backgroundValue.merged(with: parent.background?.resolveOptionalValue(context: context, validator: ResolvedValue.backgroundValidator, useOnlyLinks: true))
       borderValue = borderValue.merged(with: parent.border?.resolveOptionalValue(context: context, validator: ResolvedValue.borderValidator, useOnlyLinks: true))
       doubletapActionsValue = doubletapActionsValue.merged(with: parent.doubletapActions?.resolveOptionalValue(context: context, validator: ResolvedValue.doubletapActionsValidator, useOnlyLinks: true))
@@ -666,6 +679,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       alignmentHorizontalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_horizontal", error: $0) },
       alignmentVerticalValue.errorsOrWarnings?.map { .nestedObjectError(field: "alignment_vertical", error: $0) },
       alphaValue.errorsOrWarnings?.map { .nestedObjectError(field: "alpha", error: $0) },
+      aspectValue.errorsOrWarnings?.map { .nestedObjectError(field: "aspect", error: $0) },
       backgroundValue.errorsOrWarnings?.map { .nestedObjectError(field: "background", error: $0) },
       borderValue.errorsOrWarnings?.map { .nestedObjectError(field: "border", error: $0) },
       columnSpanValue.errorsOrWarnings?.map { .nestedObjectError(field: "column_span", error: $0) },
@@ -713,6 +727,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       alignmentHorizontal: alignmentHorizontalValue.value,
       alignmentVertical: alignmentVerticalValue.value,
       alpha: alphaValue.value,
+      aspect: aspectValue.value,
       background: backgroundValue.value,
       border: borderValue.value,
       columnSpan: columnSpanValue.value,
@@ -763,6 +778,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       alignmentHorizontal: alignmentHorizontal ?? mergedParent.alignmentHorizontal,
       alignmentVertical: alignmentVertical ?? mergedParent.alignmentVertical,
       alpha: alpha ?? mergedParent.alpha,
+      aspect: aspect ?? mergedParent.aspect,
       background: background ?? mergedParent.background,
       border: border ?? mergedParent.border,
       columnSpan: columnSpan ?? mergedParent.columnSpan,
@@ -808,6 +824,7 @@ public final class DivContainerTemplate: TemplateValue, TemplateDeserializable {
       alignmentHorizontal: merged.alignmentHorizontal,
       alignmentVertical: merged.alignmentVertical,
       alpha: merged.alpha,
+      aspect: merged.aspect?.tryResolveParent(templates: templates),
       background: merged.background?.tryResolveParent(templates: templates),
       border: merged.border?.tryResolveParent(templates: templates),
       columnSpan: merged.columnSpan,

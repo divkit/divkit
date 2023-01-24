@@ -7,13 +7,11 @@ public final class AspectBlock<Content: Block>: WrapperBlock {
   public var child: Block { content }
 
   public init(content: Content, aspectRatio: CGFloat) {
-    assert(content.isHorizontallyResizable)
     assert(content.isVerticallyResizable)
     self.content = content
     self.aspectRatio = aspectRatio
   }
 
-  public var isHorizontallyResizable: Bool { true }
   public var isVerticallyResizable: Bool { false }
 
   public func intrinsicContentHeight(forWidth width: CGFloat) -> CGFloat {
