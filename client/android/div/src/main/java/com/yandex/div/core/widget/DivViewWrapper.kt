@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
+import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 
@@ -20,7 +21,12 @@ internal class DivViewWrapper @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ViewGroup(context, attrs, defStyleAttr), DivBorderSupports {
+) : ViewGroup(context, attrs, defStyleAttr), DivBorderSupports, TransientView {
+
+    override var isTransient = false
+        set(value) = invalidateAfter {
+            field = value
+        }
 
     val child: View?
         get() = if (childCount == 0) null else getChildAt(0)
