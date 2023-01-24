@@ -20,15 +20,17 @@ export function treeWalkDFS(tree: unknown, nodeAction: (x: unknown, path: string
     const stack: [unknown, string[]][] = [[tree, []]];
 
     while (stack.length) {
-        const [node, path] = stack.shift() as [unknown, string[]];
+        const [node, path] = stack.pop() as [unknown, string[]];
         nodeAction(node, path);
 
         if (typeof node === 'object' && node !== null) {
-            stack.unshift(
-                ...Object.entries(node as { [k: string]: unknown }).map(
-                    ([key, obj]) => [obj, [...path, key]] as [unknown, string[]],
-                ),
+            const list = Object.entries(node as { [k: string]: unknown }).map(
+                ([key, obj]) => [obj, [...path, key]] as [unknown, string[]],
             );
+
+            for (let i = list.length - 1; i >= 0; --i) {
+                stack.push(list[i]);
+            }
         }
     }
 }
