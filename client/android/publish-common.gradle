@@ -86,7 +86,7 @@ afterEvaluate {
                     }
                     def releaseUrl = "https://bucket.yandex-team.ru/v1/maven/yandex_mobile_releases/"
                     def snapshotUrl = "https://bucket.yandex-team.ru/v1/maven/yandex_mobile_snapshots/"
-                    url = publicationType == PublicationType.release ? releaseUrl : snapshotUrl
+                    url = (publicationType == PublicationType.@release) ? releaseUrl : snapshotUrl
                 }
             }
         }
