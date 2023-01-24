@@ -80,7 +80,8 @@
       "$description": "translations.json#/div_data_timers",
       "platforms": [
         "web",
-        "ios"
+        "ios",
+        "android"
       ]
     }
   },

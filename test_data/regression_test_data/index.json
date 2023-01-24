@@ -1500,6 +1500,38 @@
       "file": "gallery/gallery-items-posing.json"
     },
     {
+      "title": "Common timer",
+      "tags": [
+        "Timers"
+      ],
+      "expected_results": [
+        "The timer calls tick_actions and changes the variable with the set interval.",
+        "After the duration expires, the timer stops and calls end_actions."
+      ],
+      "file": "timers/common-timer.json"
+    },
+    {
+      "title": "Endless timer",
+      "tags": [
+        "Timers"
+      ],
+      "expected_results": [
+        "The timer calls tick_actions and changes the variable with the set interval.",
+        "The timer is endless and can be stopped only by an action."
+      ],
+      "file": "timers/endless-timer.json"
+    },
+    {
+      "title": "Countdown timer",
+      "tags": [
+        "Timers"
+      ],
+      "expected_results": [
+        "The timer changes the value of the variable only at the end of the work."
+      ],
+      "file": "timers/countdown-timer.json"
+    },
+    {
       "title": "Blur in DivImage",
       "tags": [
         "DivImage"

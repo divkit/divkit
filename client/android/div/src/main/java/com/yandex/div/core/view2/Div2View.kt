@@ -34,6 +34,7 @@ import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.state.DivViewState
+import com.yandex.div.core.timer.DivTimerEventDispatcher
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.SingleTimeOnAttachCallback
 import com.yandex.div.core.util.walk
@@ -64,8 +65,7 @@ import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
 import java.lang.ref.WeakReference
-import java.util.*
-import kotlin.collections.ArrayDeque
+import java.util.WeakHashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
@@ -106,6 +106,8 @@ class Div2View private constructor(
     private val variableController: VariableController?
         get() = _expressionsRuntime?.variableController
 
+    internal var divTimerEventDispatcher: DivTimerEventDispatcher? = null
+
     private val monitor = Any()
 
     private var setActiveBindingRunnable: SingleTimeOnAttachCallback? = null
@@ -141,6 +143,7 @@ class Div2View private constructor(
         internal set(value) {
             field = value
             updateExpressionsRuntime()
+            updateTimers()
             bindingProvider.update(dataTag, field)
         }
 
@@ -160,6 +163,21 @@ class Div2View private constructor(
         } else {
             newRuntime.onAttachedToWindow(this)
         }
+    }
+
+    private fun updateTimers() {
+        val data = divData ?: return
+
+        val newDivTimerEventDispatcher = div2Component.divTimersControllerProvider
+            .getOrCreate(dataTag, data, expressionResolver)
+
+        if (divTimerEventDispatcher != newDivTimerEventDispatcher) {
+            divTimerEventDispatcher?.onDetach()
+        }
+
+        divTimerEventDispatcher = newDivTimerEventDispatcher
+
+        newDivTimerEventDispatcher?.onAttach(this)
     }
 
     val logId: String
@@ -375,6 +393,7 @@ class Div2View private constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         tryLogVisibility()
+        divTimerEventDispatcher?.onDetach()
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
@@ -786,6 +805,10 @@ class Div2View private constructor(
             return error
         }
         return null
+    }
+
+    fun applyTimerCommand(id: String, command: String) {
+        divTimerEventDispatcher?.changeState(id, command)
     }
 
     internal fun unbindViewFromDiv(view: View): Div? = viewToDivBindings.remove(view)

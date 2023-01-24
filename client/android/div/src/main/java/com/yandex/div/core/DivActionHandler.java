@@ -27,9 +27,11 @@ public class DivActionHandler {
     private static final String AUTHORITY_SHOW_TOOLTIP = "show_tooltip";
     private static final String AUTHORITY_HIDE_TOOLTIP = "hide_tooltip";
     private static final String AUTHORITY_SET_VARIABLE = "set_variable";
+    private static final String AUTHORITY_TIMER = "timer";
 
     private static final String PARAM_STATE_ID = "state_id";
     private static final String PARAM_ID = "id";
+    private static final String PARAM_ACTION = "action";
     private static final String PARAM_TEMPORARY = "temporary";
     private static final String PARAM_VARIABLE_NAME = "name";
     private static final String PARAM_VARIABLE_VALUE = "value";
@@ -198,6 +200,28 @@ public class DivActionHandler {
                 Assert.fail("Variable '" + name + "' mutation failed: " + e.getMessage(), e);
                 return false;
             }
+            return true;
+        } else if (AUTHORITY_TIMER.equals(action)) {
+            String id = uri.getQueryParameter(PARAM_ID);
+            if (id == null) {
+                Assert.fail(PARAM_ID + " param is required");
+                return false;
+            }
+            String command = uri.getQueryParameter(PARAM_ACTION);
+            if (command == null) {
+                Assert.fail(PARAM_ACTION + " param is required");
+                return false;
+            }
+
+            Div2View div2View = (view instanceof Div2View) ? (Div2View) view : null;
+
+            if (div2View == null) {
+                Assert.fail("Timer '" + id + "' state changing failed! View("+
+                        view.getClass().getSimpleName()+") not supports timers!");
+                return false;
+            }
+
+            div2View.applyTimerCommand(id, command);
             return true;
         } else if (DivItemChangeActionHandler.canHandle(action)) {
             return DivItemChangeActionHandler.handleAction(uri, view);

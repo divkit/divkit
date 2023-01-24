@@ -14,6 +14,7 @@ import com.yandex.div.core.DivCustomViewAdapter;
 import com.yandex.div.core.DivCustomViewFactory;
 import com.yandex.div.core.DivDataChangeListener;
 import com.yandex.div.core.DivPreloader;
+import com.yandex.div.core.timer.DivTimerEventDispatcherProvider;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.downloader.DivPatchManager;
 import com.yandex.div.core.experiments.Experiment;
@@ -91,6 +92,9 @@ public interface Div2Component {
 
     @NonNull
     ExpressionsRuntimeProvider getExpressionsRuntimeProvider();
+
+    @NonNull
+    DivTimerEventDispatcherProvider getDivTimersControllerProvider();
 
     @NonNull
     DivStateManager getStateManager();

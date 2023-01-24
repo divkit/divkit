@@ -8,11 +8,11 @@ import com.yandex.div.core.expression.triggers.TriggersController
 import com.yandex.div.core.expression.variables.GlobalVariableController
 import com.yandex.div.core.expression.variables.VariableController
 import com.yandex.div.core.expression.variables.toVariable
+import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
-import com.yandex.div.internal.KAssert
 import com.yandex.div2.DivData
 import com.yandex.div2.DivVariable
 import java.util.Collections
@@ -32,11 +32,16 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
 
     internal fun getOrCreate(tag: DivDataTag, data: DivData): ExpressionsRuntime {
         val result = runtimes.getOrPut(tag.id) { createRuntimeFor(data, tag) }
-        ensureVariablesSynced(result.variableController, data)
+        val errorCollector = errorCollectors.getOrCreate(tag, data)
+        ensureVariablesSynced(result.variableController, data, errorCollector)
         return result
     }
 
-    private fun ensureVariablesSynced(v: VariableController, data: DivData) {
+    private fun ensureVariablesSynced(
+        v: VariableController,
+        data: DivData,
+        errorCollector: ErrorCollector
+    ) {
         data.variables?.forEach {
             val consistent = when (it) {
                 is DivVariable.Bool -> v.getMutableVariable(it.value.name) is Variable.BooleanVariable
@@ -47,14 +52,18 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
                 is DivVariable.Url -> v.getMutableVariable(it.value.name) is Variable.UrlVariable
             }.apply { /*exhaustive*/ }
 
-            KAssert.assertTrue(consistent) {
-                // This usually happens when you're using same DivDataTag for DivData
-                // with different set of variables!
-                """
-                   Variable inconsistency detected!
-                   at DivData: ${it.name} ($it)
-                   at VariableController: ${v.getMutableVariable(it.name)}
-                """.trimIndent()
+            // This usually happens when you're using same DivDataTag for DivData
+            // with different set of variables!
+            if (!consistent) {
+                errorCollector.logError(
+                    IllegalArgumentException(
+                        """
+                           Variable inconsistency detected!
+                           at DivData: ${it.name} ($it)
+                           at VariableController: ${v.getMutableVariable(it.name)}
+                        """.trimIndent()
+                    )
+                )
             }
         }
     }
