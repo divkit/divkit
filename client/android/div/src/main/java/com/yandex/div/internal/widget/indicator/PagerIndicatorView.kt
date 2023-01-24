@@ -45,7 +45,7 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val heightSize = MeasureSpec.getSize(heightMeasureSpec)
-        val selectedHeight = style?.shape?.height ?: 0f
+        val selectedHeight = style?.activeShape?.itemSize?.height ?: 0f
         val desiredHeight = (selectedHeight + paddingTop + paddingBottom).toInt()
         val measuredHeight = when (heightMode) {
             MeasureSpec.EXACTLY -> heightSize
@@ -56,7 +56,7 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
 
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val widthSize = MeasureSpec.getSize(widthMeasureSpec)
-        val selectedWidth = style?.shape?.width ?: 0f
+        val selectedWidth = style?.activeShape?.itemSize?.width ?: 0f
         val desiredWidth = when (val itemPlacement = style?.itemsPlacement) {
             is IndicatorParams.ItemPlacement.Default ->
                 (itemPlacement.spaceBetweenCenters * (pagerAdapter?.itemCount ?: 0) + selectedWidth).toInt() + paddingLeft + paddingRight

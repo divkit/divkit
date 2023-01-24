@@ -12,7 +12,7 @@ internal interface SingleIndicatorDrawer {
 
 }
 
-internal fun getIndicatorDrawer(style: IndicatorParams.Style): SingleIndicatorDrawer = when (style.shape) {
+internal fun getIndicatorDrawer(style: IndicatorParams.Style): SingleIndicatorDrawer = when (style.activeShape) {
     is IndicatorParams.Shape.RoundedRect -> RoundedRect(style)
     is IndicatorParams.Shape.Circle -> Circle(style)
 }

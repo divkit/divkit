@@ -37,17 +37,23 @@ internal class ScaleIndicatorAnimator(private val styleParams: IndicatorParams.S
     override fun getSelectedItemRect(xOffset: Float, yOffset: Float): RectF? = null
 
     override fun getItemSizeAt(position: Int): IndicatorParams.ItemSize {
-        return when (val shape = styleParams.shape) {
+        return when (val activeShape = styleParams.activeShape) {
             is IndicatorParams.Shape.Circle -> {
+                val inactiveShape = styleParams.inactiveShape as IndicatorParams.Shape.Circle
                 IndicatorParams.ItemSize.Circle(
-                    shape.normalRadius + (shape.selectedRadius - shape.normalRadius) * getScaleAt(position)
+                    inactiveShape.itemSize.radius + (activeShape.itemSize.radius
+                            - inactiveShape.itemSize.radius) * getScaleAt(position)
                 )
             }
             is IndicatorParams.Shape.RoundedRect -> {
+                val inactiveShape = styleParams.inactiveShape as IndicatorParams.Shape.RoundedRect
                 IndicatorParams.ItemSize.RoundedRect(
-                    shape.normalWidth + (shape.selectedWidth - shape.normalWidth) * getScaleAt(position),
-                    shape.normalHeight + (shape.selectedHeight - shape.normalHeight) * getScaleAt(position),
-                    shape.cornerRadius + (shape.selectedCornerRadius - shape.cornerRadius) * getScaleAt(position)
+                    inactiveShape.itemSize.itemWidth + (activeShape.itemSize.itemWidth
+                            - inactiveShape.itemSize.itemWidth) * getScaleAt(position),
+                    inactiveShape.itemSize.itemHeight + (activeShape.itemSize.itemHeight
+                            - inactiveShape.itemSize.itemHeight) * getScaleAt(position),
+                    inactiveShape.itemSize.cornerRadius + (activeShape.itemSize.cornerRadius
+                            - inactiveShape.itemSize.cornerRadius) * getScaleAt(position)
                 )
             }
         }
@@ -64,7 +70,7 @@ internal class ScaleIndicatorAnimator(private val styleParams: IndicatorParams.S
     private fun getScaleAt(position: Int): Float = itemsScale.get(position, 0f)
     @ColorInt
     private fun calculateColor(@FloatRange(from = 0.0, to = 1.0) scaleOffset: Float): Int {
-        return colorEvaluator.evaluate(scaleOffset, styleParams.color, styleParams.selectedColor) as Int
+        return colorEvaluator.evaluate(scaleOffset, styleParams.inactiveShape.color, styleParams.activeShape.color) as Int
     }
 
 }

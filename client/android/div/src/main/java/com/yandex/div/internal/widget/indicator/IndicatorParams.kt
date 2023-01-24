@@ -1,79 +1,32 @@
 package com.yandex.div.internal.widget.indicator
 
+import com.yandex.div2.DivStroke
+
 internal class IndicatorParams {
 
     data class Style(
-        val color: Int,
-        val selectedColor: Int,
         val animation: Animation,
-        val shape: Shape,
+        val activeShape: Shape,
+        val inactiveShape: Shape,
+        val minimumShape: Shape,
         val itemsPlacement: ItemPlacement
     )
 
     sealed class Shape {
 
+        abstract val color: Int
+        abstract val itemSize: ItemSize
+
         data class RoundedRect(
-            val normalWidth: Float,
-            val selectedWidth: Float,
-            val minimumWidth: Float,
-
-            val normalHeight: Float,
-            val selectedHeight: Float,
-            val minimumHeight: Float,
-
-            val cornerRadius: Float,
-            val selectedCornerRadius: Float,
-            val minimumCornerRadius: Float
-        ): Shape() {
-            val minimumItemSizeRect = ItemSize.RoundedRect(
-                itemWidth = this.minimumWidth,
-                itemHeight = this.minimumHeight,
-                cornerRadius = this.minimumCornerRadius,
-            )
-            val normalItemSizeRect = ItemSize.RoundedRect(
-                itemWidth = this.normalWidth,
-                itemHeight = this.normalHeight,
-                cornerRadius = this.cornerRadius,
-            )
-        }
+            override val color: Int,
+            override val itemSize: ItemSize.RoundedRect,
+            val stroke: DivStroke? = null
+        ): Shape()
 
         data class Circle(
-            val normalRadius: Float,
-            val selectedRadius: Float,
-            val minimumRadius: Float
-        ): Shape() {
-            val minimumItemSizeCircle = ItemSize.Circle(
-                radius = this.minimumRadius,
-            )
-            val normalItemSizeCircle = ItemSize.Circle(
-                radius = this.normalRadius,
-            )
-        }
-
-        val width get() = when (this) {
-            is RoundedRect -> selectedWidth
-            is Circle -> selectedRadius * 2
-        }
-
-        val minimumSize get() = when(this) {
-            is RoundedRect -> minimumWidth
-            is Circle -> minimumRadius * 2
-        }
-
-        val height get() = when (this) {
-            is RoundedRect -> selectedHeight
-            is Circle -> selectedRadius * 2
-        }
-
-        val minimumItemSize get() = when (this) {
-            is RoundedRect -> this.minimumItemSizeRect
-            is Circle -> this.minimumItemSizeCircle
-        }
-
-        val normalItemSize get() = when(this) {
-            is RoundedRect -> this.normalItemSizeRect
-            is Circle -> this.normalItemSizeCircle
-        }
+            override val color: Int,
+            override val itemSize: ItemSize.Circle
+        ): Shape()
     }
 
     sealed class ItemSize {
@@ -90,6 +43,11 @@ internal class IndicatorParams {
 
         val width get() = when (this) {
             is RoundedRect -> itemWidth
+            is Circle -> radius * 2
+        }
+
+        val height get() = when (this) {
+            is RoundedRect -> itemHeight
             is Circle -> radius * 2
         }
     }

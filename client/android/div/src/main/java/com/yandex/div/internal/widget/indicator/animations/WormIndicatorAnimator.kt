@@ -12,7 +12,7 @@ internal class WormIndicatorAnimator(private val styleParams: IndicatorParams.St
     private var spaceBetweenCenters: Float = 0f
     private var itemWidthOverride: Float = 0f
 
-    override fun getColorAt(position: Int): Int = styleParams.color
+    override fun getColorAt(position: Int): Int = styleParams.inactiveShape.color
 
     override fun onPageScrolled(position: Int, positionOffset: Float) {
         selectedPosition = position
@@ -36,13 +36,13 @@ internal class WormIndicatorAnimator(private val styleParams: IndicatorParams.St
     }
 
     override fun getSelectedItemRect(xOffset: Float, yOffset: Float): RectF {
-        val itemWidth = if (itemWidthOverride == 0f) styleParams.shape.width else itemWidthOverride
-        itemRect.top = yOffset - styleParams.shape.height / 2f
+        val itemWidth = if (itemWidthOverride == 0f) styleParams.activeShape.itemSize.width else itemWidthOverride
+        itemRect.top = yOffset - styleParams.activeShape.itemSize.height / 2f
         itemRect.right = xOffset + (spaceBetweenCenters * selectedPositionOffset * 2f).coerceAtMost(spaceBetweenCenters) + itemWidth / 2f
-        itemRect.bottom = yOffset + styleParams.shape.height / 2f
+        itemRect.bottom = yOffset + styleParams.activeShape.itemSize.height / 2f
         itemRect.left = xOffset + (spaceBetweenCenters * (selectedPositionOffset - 0.5f) * 2f).coerceAtLeast(0f) - itemWidth / 2f
         return itemRect
     }
 
-    override fun getItemSizeAt(position: Int): IndicatorParams.ItemSize = styleParams.shape.normalItemSize
+    override fun getItemSizeAt(position: Int): IndicatorParams.ItemSize = styleParams.inactiveShape.itemSize
 }

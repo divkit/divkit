@@ -8,8 +8,8 @@ import com.yandex.div.internal.widget.indicator.IndicatorParams
 internal class Circle(private val params: IndicatorParams.Style) : SingleIndicatorDrawer {
 
     private val paint = Paint()
-    private val shape = params.shape as IndicatorParams.Shape.Circle
-    private val rect = RectF(0f, 0f, shape.normalRadius * 2, shape.normalRadius * 2)
+    private val shape = params.inactiveShape as IndicatorParams.Shape.Circle
+    private val rect = RectF(0f, 0f,  shape.itemSize.radius * 2, shape.itemSize.radius * 2)
 
     override fun draw(canvas: Canvas, x: Float, y: Float, itemSize: IndicatorParams.ItemSize, color: Int) {
         val circleSize = itemSize as IndicatorParams.ItemSize.Circle
@@ -24,7 +24,7 @@ internal class Circle(private val params: IndicatorParams.Style) : SingleIndicat
     }
 
     override fun drawSelected(canvas: Canvas, rect: RectF) {
-        paint.color = params.selectedColor
+        paint.color = params.activeShape.color
 
         canvas.drawCircle(rect.centerX(), rect.centerY(), rect.width() / 2, paint)
     }

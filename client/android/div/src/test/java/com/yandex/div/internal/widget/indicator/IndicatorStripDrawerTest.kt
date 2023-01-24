@@ -1,5 +1,6 @@
 package com.yandex.div.internal.widget.indicator
 
+import com.yandex.div.core.view2.divs.createRoundedRectangle
 import com.yandex.div.internal.KAssert.assertEquals
 import com.yandex.div.internal.widget.indicator.animations.ScaleIndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.RoundedRect
@@ -13,18 +14,23 @@ class IndicatorStripDrawerTest {
     @Test
     fun `test max visible items don't change if width is enough`() {
         val style = IndicatorParams.Style(
-            color = 0,
-            selectedColor = 0,
-            shape = IndicatorParams.Shape.RoundedRect(
-                normalWidth = 10f,
-                selectedWidth = 10f,
-                minimumWidth = 10f,
-                normalHeight = 10f,
-                selectedHeight = 10f,
-                minimumHeight = 10f,
-                cornerRadius = 5f,
-                selectedCornerRadius = 5f,
-                minimumCornerRadius = 5f,
+            activeShape = createRoundedRectangle(
+                color = 0,
+                width = 10,
+                height = 10,
+                cornerRadius = 5
+            ),
+            inactiveShape = createRoundedRectangle(
+                color = 0,
+                width = 10,
+                height = 10,
+                cornerRadius = 5
+            ),
+            minimumShape = createRoundedRectangle(
+                color = 0,
+                width = 10,
+                height = 10,
+                cornerRadius = 5
             ),
             itemsPlacement = IndicatorParams.ItemPlacement.Default(
                 spaceBetweenCenters = 15f
@@ -42,18 +48,23 @@ class IndicatorStripDrawerTest {
     @Test
     fun `test max visible changed`() {
         val style = IndicatorParams.Style(
-            color = 0,
-            selectedColor = 0,
-            shape = IndicatorParams.Shape.RoundedRect(
-                normalWidth = 10f,
-                selectedWidth = 10f,
-                minimumWidth = 10f,
-                normalHeight = 10f,
-                selectedHeight = 10f,
-                minimumHeight = 10f,
-                cornerRadius = 10f,
-                selectedCornerRadius = 10f,
-                minimumCornerRadius = 10f,
+            activeShape = createRoundedRectangle(
+                color = 0,
+                width = 10,
+                height = 10,
+                cornerRadius = 10
+            ),
+            inactiveShape = createRoundedRectangle(
+                color = 0,
+                width = 10,
+                height = 10,
+                cornerRadius = 10
+            ),
+            minimumShape = createRoundedRectangle(
+                color = 0,
+                width = 10,
+                height = 10,
+                cornerRadius = 10
             ),
             itemsPlacement = IndicatorParams.ItemPlacement.Default(
                 spaceBetweenCenters = 15f

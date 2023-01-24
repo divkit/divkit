@@ -33,6 +33,7 @@ import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.util.fontHeight
 import com.yandex.div.internal.util.spToPx
 import com.yandex.div.internal.widget.AspectImageView
+import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
@@ -61,10 +62,12 @@ import com.yandex.div2.DivRadialGradientFixedCenter
 import com.yandex.div2.DivRadialGradientRadius
 import com.yandex.div2.DivRadialGradientRelativeCenter
 import com.yandex.div2.DivRadialGradientRelativeRadius
+import com.yandex.div2.DivRoundedRectangleShape
 import com.yandex.div2.DivShape
 import com.yandex.div2.DivShapeDrawable
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivSizeUnit
+import com.yandex.div2.DivStroke
 import com.yandex.div2.DivVisibilityAction
 import com.yandex.div2.DivWrapContentSize
 import kotlin.math.roundToInt
@@ -624,12 +627,8 @@ internal fun ExpressionSubscriber.observeDrawable(
         is DivDrawable.Shape -> {
             val shapeDrawable = drawable.value
             addSubscription(shapeDrawable.color.observe(resolver, callback))
-            shapeDrawable.stroke?.let {
-                addSubscription(it.color.observe(resolver, callback))
-                addSubscription(it.width.observe(resolver, callback))
-                addSubscription(it.unit.observe(resolver, callback))
-            }
-            observeShape(resolver, shapeDrawable.shape, callback)
+            observeStroke(resolver, shapeDrawable.stroke, callback)
+            observeShape(resolver, shapeDrawable.shape, callback, false)
         }
     }
 }
@@ -637,18 +636,12 @@ internal fun ExpressionSubscriber.observeDrawable(
 internal fun ExpressionSubscriber.observeShape(
     resolver: ExpressionResolver,
     shape: DivShape,
-    callback: (Any) -> Unit
+    callback: (Any) -> Unit,
+    observeDivBase: Boolean = true
 ) {
     when (shape) {
         is DivShape.RoundedRectangle -> {
-            shape.value.let {
-                addSubscription(it.itemWidth.value.observe(resolver, callback))
-                addSubscription(it.itemWidth.unit.observe(resolver, callback))
-                addSubscription(it.itemHeight.value.observe(resolver, callback))
-                addSubscription(it.itemHeight.unit.observe(resolver, callback))
-                addSubscription(it.cornerRadius.value.observe(resolver, callback))
-                addSubscription(it.cornerRadius.unit.observe(resolver, callback))
-            }
+            observeRoundedRectangleShape(resolver, shape.value, callback, observeDivBase)
         }
         is DivShape.Circle -> {
             shape.value.let {
@@ -656,6 +649,36 @@ internal fun ExpressionSubscriber.observeShape(
                 addSubscription(it.radius.unit.observe(resolver, callback))
             }
         }
+    }
+}
+
+internal fun ExpressionSubscriber.observeRoundedRectangleShape (
+    resolver: ExpressionResolver,
+    shape: DivRoundedRectangleShape,
+    callback: (Any) -> Unit,
+    observeDivBase: Boolean = true
+) {
+    addSubscription(shape.itemWidth.value.observe(resolver, callback))
+    addSubscription(shape.itemWidth.unit.observe(resolver, callback))
+    addSubscription(shape.itemHeight.value.observe(resolver, callback))
+    addSubscription(shape.itemHeight.unit.observe(resolver, callback))
+    addSubscription(shape.cornerRadius.value.observe(resolver, callback))
+    addSubscription(shape.cornerRadius.unit.observe(resolver, callback))
+    if (observeDivBase) {
+        shape.backgroundColor?.observe(resolver, callback)?.let { addSubscription(it) }
+        observeStroke(resolver, shape.stroke, callback)
+    }
+}
+
+private fun ExpressionSubscriber.observeStroke (
+    resolver: ExpressionResolver,
+    stroke: DivStroke?,
+    callback: (Any) -> Unit
+) {
+    stroke?.let {
+        addSubscription(it.color.observe(resolver, callback))
+        addSubscription(it.width.observe(resolver, callback))
+        addSubscription(it.unit.observe(resolver, callback))
     }
 }
 
@@ -673,17 +696,18 @@ internal fun DivShapeDrawable.toDrawable(
     resolver: ExpressionResolver
 ): Drawable? {
     return when (val shape = this.shape) {
-        is DivShape.RoundedRectangle ->
+        is DivShape.RoundedRectangle -> {
             RoundedRectDrawable(
                 RoundedRectDrawable.Params(
                     width = shape.value.itemWidth.toPxF(metrics, resolver),
                     height = shape.value.itemHeight.toPxF(metrics, resolver),
-                    color = color.evaluate(resolver),
+                    color = (shape.value.backgroundColor ?: color).evaluate(resolver),
                     radius = shape.value.cornerRadius.toPxF(metrics, resolver),
-                    strokeColor = stroke?.color?.evaluate(resolver),
-                    strokeWidth = stroke?.width?.evaluate(resolver)?.toFloat()
+                    strokeColor = (shape.value.stroke ?: stroke)?.color?.evaluate(resolver),
+                    strokeWidth = (shape.value.stroke ?: stroke)?.width?.evaluate(resolver)?.toFloat()
                 )
             )
+        }
         is DivShape.Circle ->
             CircleDrawable(
                 CircleDrawable.Params(
@@ -704,3 +728,31 @@ internal val DivIndicator.itemsPlacementCompat : DivIndicatorItemPlacement get()
         )
     )
 }
+
+internal fun createRoundedRectangle(
+    color: Int,
+    width: Int,
+    height: Int,
+    cornerRadius: Int,
+    multiplier: Float = 1f
+): IndicatorParams.Shape =
+    IndicatorParams.Shape.RoundedRect(
+        color = color,
+        itemSize = IndicatorParams.ItemSize.RoundedRect(
+            itemWidth = width * multiplier,
+            itemHeight = height * multiplier,
+            cornerRadius = cornerRadius * multiplier
+        )
+    )
+
+internal fun createCircle(
+    color: Int,
+    radius: Int,
+    multiplier: Float = 1f
+): IndicatorParams.Shape =
+    IndicatorParams.Shape.Circle(
+        color = color,
+        itemSize = IndicatorParams.ItemSize.Circle(
+            radius = radius * multiplier
+        )
+    )

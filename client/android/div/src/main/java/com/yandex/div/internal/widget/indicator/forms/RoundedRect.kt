@@ -8,8 +8,8 @@ import com.yandex.div.internal.widget.indicator.IndicatorParams
 internal class RoundedRect(private val params: IndicatorParams.Style) : SingleIndicatorDrawer {
 
     private val paint = Paint()
-    private val shape = params.shape as IndicatorParams.Shape.RoundedRect
-    private val rect = RectF(0f, 0f, shape.normalWidth, shape.normalHeight)
+    private val shape = params.inactiveShape as IndicatorParams.Shape.RoundedRect
+    private val rect = RectF(0f, 0f, shape.itemSize.width, shape.itemSize.height)
 
     override fun draw(canvas: Canvas, x: Float, y: Float, itemSize: IndicatorParams.ItemSize, color: Int) {
         val rectSize = itemSize as IndicatorParams.ItemSize.RoundedRect
@@ -24,8 +24,8 @@ internal class RoundedRect(private val params: IndicatorParams.Style) : SingleIn
     }
 
     override fun drawSelected(canvas: Canvas, rect: RectF) {
-        val rectSize = params.shape.normalItemSize as IndicatorParams.ItemSize.RoundedRect
-        paint.color = params.selectedColor
+        val rectSize = params.activeShape.itemSize as IndicatorParams.ItemSize.RoundedRect
+        paint.color = params.activeShape.color
 
         canvas.drawRoundRect(rect, rectSize.cornerRadius, rectSize.cornerRadius, paint)
     }
