@@ -23,7 +23,6 @@ final class DivIndicatorTests: DivKitSnapshotTestCase {
   func test_FixedWidthMaxItemsRectangleSlider() {
     testDivsForDifferentStates("fixed-width-max_items_rectangle_slider.json")
   }
-
 }
 
 extension DivIndicatorTests {

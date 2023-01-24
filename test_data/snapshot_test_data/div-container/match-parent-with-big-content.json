@@ -1,7 +1,6 @@
 {
   "platforms": [
     "android",
-    "ios",
     "web"
   ],
   "description": "match_parent should take free space, even if it's own size would be lesser than content size",

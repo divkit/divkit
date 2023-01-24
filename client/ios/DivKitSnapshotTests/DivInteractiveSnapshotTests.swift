@@ -1,19 +1,17 @@
 import XCTest
 
-private let exclusions: [String] = [
-  "div-gallery/select-elements.json",
-  "div-pager/select-elements.json",
-  "div-tabs/select-elements.json",
-
-  "div-indicator/shapes.json",
-]
-
 private let testDirectory = "interactive_snapshot_test_data"
 
 final class DivInteractiveSnapshotTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {
-    let jsonFiles = loadJsonFiles(testDirectory, exclusions: exclusions)
-    return makeSuite(input: jsonFiles.map { (name: $0.path, data: $0) }, test: doTest)
+    let jsonFiles = loadJsonFiles(testDirectory)
+      .filter {
+        DivKitSnapshotTestCase.isSupported(file: $0, rootDirectory: testDirectory)
+      }
+    return makeSuite(
+      input: jsonFiles.map { (name: $0.path, data: $0) },
+      test: doTest
+    )
   }
 }
 

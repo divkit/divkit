@@ -19,6 +19,24 @@ open class DivKitSnapshotTestCase: XCTestCase {
   final var subdirectory = ""
   final var rootDirectory = "json"
 
+  static func isSupported(
+    file: JsonFile,
+    rootDirectory: String
+  ) -> Bool {
+    guard
+      let jsonDict = jsonDict(fileName: file.name, subdirectory: rootDirectory + "/" + file.subdirectory)
+    else {
+      // json is invalid, test should be added into the test suite
+      return true
+    }
+    
+    guard let platforms = try? jsonDict.getArray("platforms") else {
+      return true
+    }
+    
+    return platforms.contains { $0 as? String == "ios" }
+  }
+
   final func testDivs(
     _ fileName: String,
     testName: String = #function,
@@ -27,11 +45,9 @@ open class DivKitSnapshotTestCase: XCTestCase {
     blocksState: BlocksState = [:],
     extensions: [DivExtensionHandler] = []
   ) {
-    guard let jsonData = jsonData(
-      fileName: fileName,
-      subdirectory: rootDirectory + "/" + subdirectory
-    ),
-      let dictionary = jsonDict(data: jsonData) else {
+    guard
+      let jsonDict = jsonDict(fileName: fileName, subdirectory: rootDirectory + "/" + subdirectory)
+    else {
       XCTFail("Invalid json: \(fileName)")
       return
     }
@@ -51,7 +67,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
       divKitComponents.blockStateStorage.setState(path: path, state: state)
     }
 
-    let dataWithErrors = loadDivData(dictionary: dictionary, divKitComponents: divKitComponents)
+    let dataWithErrors = loadDivData(dictionary: jsonDict, divKitComponents: divKitComponents)
     guard let data = dataWithErrors.0 else {
       XCTFail(
         "Data could not be created from json \(fileName), try to set breakpoint on the following errors: \(dataWithErrors.1.map { type(of: $0) })"
@@ -65,7 +81,7 @@ open class DivKitSnapshotTestCase: XCTestCase {
         divKitComponents: divKitComponents,
         caseName: customCaseName ??
           (fileName.removingFileExtension + "_" + testName.extractingDescription),
-        steps: loadSteps(dictionary: dictionary)
+        steps: loadSteps(dictionary: jsonDict)
       )
     } catch {
       XCTFail("Testing div failed with error: \(error.localizedDescription)")
@@ -225,16 +241,15 @@ open class DivKitSnapshotTestCase: XCTestCase {
   }
 }
 
-private func jsonData(fileName: String, subdirectory: String) -> Data? {
-  testBundle.url(
+private func jsonDict(fileName: String, subdirectory: String) -> [String: Any]? {
+  guard let data = testBundle.url(
     forResource: fileName,
     withExtension: nil,
     subdirectory: subdirectory
-  ).flatMap { try? Data(contentsOf: $0) }
-}
-
-private func jsonDict(data: Data) -> [String: Any]? {
-  (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
+  ).flatMap({ try? Data(contentsOf: $0) }) else {
+    return nil
+  }
+  return (try? JSONSerialization.jsonObject(with: data)) as? [String: Any]
 }
 
 private func makeEmptyView() -> UIView {

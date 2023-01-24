@@ -18,7 +18,7 @@ extension XCTestCase {
 
   static func loadJsonFiles(
     _ directoryName: String,
-    exclusions: [String]
+    exclusions: [String] = []
   ) -> [JsonFile] {
     let testBundle = Bundle(for: DivKitSnapshotTestCase.self)
     let snapshotsPath = testBundle.bundleURL.appendingPathComponent(directoryName).path
