@@ -3,7 +3,7 @@ package com.yandex.div.evaluable
 import com.yandex.div.evaluable.internal.Token
 
 internal const val REASON_DIVISION_BY_ZERO = "Division by zero is not supported."
-internal const val REASON_EMPTY_ARGUMENT_LIST = "Non empty argument list is required."
+internal const val REASON_EMPTY_ARGUMENT_LIST = "Non empty argument list is required for %s function."
 internal const val REASON_INTEGER_OVERFLOW = "Integer overflow."
 internal const val REASON_OUT_OF_BOUNDS = "Indexes are out of bounds."
 internal const val REASON_INDEXES_ORDER = "Indexes should be in ascending order."

@@ -9,7 +9,20 @@
       },
       "variables": [],
       "platforms": [
-        "web",
+        "web"
+      ],
+      "description": "Deprecated, make error message more informative",
+      "deprecated": true
+    },
+    {
+      "name": "undefinedFunc() => error",
+      "expression": "@{undefinedFunc()}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [undefinedFunc()]. Unknown function name: undefinedFunc."
+      },
+      "variables": [],
+      "platforms": [
         "android"
       ]
     }

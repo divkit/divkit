@@ -8,6 +8,10 @@ java {
     targetCompatibility = JavaVersion.VERSION_1_8
 }
 
+task "test${testVariant.capitalize()}UnitTest" {
+    dependsOn test
+}
+
 task replJar(type: Jar, dependsOn: "testClasses") {
     from "$buildDir/classes/kotlin/test"
     from "$buildDir/classes/kotlin/main"

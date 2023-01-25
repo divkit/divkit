@@ -26,26 +26,11 @@ ext.readLinesFromFile = { filepath, skipSymbol ->
 }
 
 if (!tasks.names.contains('jacocoTestReport')) {
-    task jacocoTestReport(type: JacocoReport, dependsOn: "test${testVariant.capitalize()}UnitTest") {
-        def excludes = readLinesFromFile("${project.projectDir}/jacoco.excludes", "#")
-
+    task jacocoTestReport(type: JacocoReport) {
         final classesDir = "$project.buildDir/intermediates/javac/${testVariant}"
 
-        group = "reporting"
-        description = "Generate Jacoco coverage reports after running tests."
-        reports {
-            xml.enabled = true // coveralls plugin depends on xml format report
-            html.enabled = true
-            csv.enabled = true
-        }
         classDirectories.from {
-            fileTree(dir: classesDir, excludes: excludes)
-        }
-        sourceDirectories.from {
-            files(coverageSourceDirs)
-        }
-        executionData.from {
-            files("build/jacoco/test${testVariant.capitalize()}UnitTest.exec")
+            fileTree(dir: classesDir)
         }
 
         doFirst {
@@ -55,5 +40,31 @@ if (!tasks.names.contains('jacocoTestReport')) {
                 }
             }
         }
+    }
+}
+
+jacocoTestReport {
+    dependsOn "test${testVariant.capitalize()}UnitTest"
+
+    def excludes = readLinesFromFile("${project.projectDir}/jacoco.excludes", "#")
+
+    classDirectories.setFrom(
+        files(classDirectories.files.collect {
+            fileTree(dir: it, excludes: excludes)
+        })
+    )
+
+    group = "reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+        csv.enabled = true
+    }
+    sourceDirectories.from {
+        files(coverageSourceDirs)
+    }
+    executionData.from {
+        files("build/jacoco/test${testVariant.capitalize()}UnitTest.exec")
     }
 }

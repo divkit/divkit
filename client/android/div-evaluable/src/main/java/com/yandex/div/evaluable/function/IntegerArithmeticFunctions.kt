@@ -157,7 +157,7 @@ internal object IntegerMax : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         if (args.isEmpty()) {
-            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST)
+            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
         }
         return args.fold(initial = Int.MIN_VALUE) { max, arg ->
            max(max, arg as Int)
@@ -178,7 +178,7 @@ internal object IntegerMin : Function() {
 
     override fun evaluate(args: List<Any>): Any {
         if (args.isEmpty()) {
-            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST)
+            throwExceptionOnFunctionEvaluationFailed(name, args, REASON_EMPTY_ARGUMENT_LIST.format(name))
         }
         return args.fold(initial = Int.MAX_VALUE) { min, arg ->
             min(min, arg as Int)

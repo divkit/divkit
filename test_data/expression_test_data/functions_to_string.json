@@ -65,8 +65,7 @@
       },
       "variables": [],
       "platforms": [
-        "web",
-        "android"
+        "web"
       ]
     },
     {
