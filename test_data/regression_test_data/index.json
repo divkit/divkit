@@ -1376,6 +1376,14 @@
       "file": "grid-with-weights.json"
     },
     {
+      "title": "Image Shimmer Preview",
+      "file": "image_shimmer_preview.json",
+      "platforms": ["ios"],
+      "expected_results": [
+        "Shimmer animation is running"
+      ]
+    },
+    {
       "title": "Custom container",
       "platforms": [
         "android",

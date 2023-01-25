@@ -15,7 +15,7 @@ enum AppComponents {
     )
     return DivKitComponents(
       divCustomBlockFactory: PlaygroundDivCustomBlockFactory(requester: requester),
-      extensionHandlers: [lottieExtensionHanlder],
+      extensionHandlers: [lottieExtensionHanlder, ShimmerImagePreviewExtension()],
       flagsInfo: DivFlagsInfo(
         isTextSelectingEnabled: true,
         appendVariablesEnabled: true,
