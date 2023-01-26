@@ -20,11 +20,7 @@
         },
         "items_placement" : {
           "$ref": "div-indicator-item-placement.json",
-          "$description": "translations.json#/div_indicator_item_placement",
-          "platforms": [
-            "android",
-            "ios"
-          ]
+          "$description": "translations.json#/div_indicator_item_placement"
         },
         "space_between_centers": {
           "$ref": "div-fixed-size.json",

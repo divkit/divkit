@@ -24,7 +24,6 @@
     width: var(--divkit-indicator-width);
     height: var(--divkit-indicator-height);
     border-radius: var(--divkit-indicator-border-radius);
-    margin: var(--divkit-indicator-margin);
     background-color: var(--divkit-indicator-inactive-color);
 }
 
@@ -33,10 +32,25 @@
     transform: scale(var(--divkit-indicator-active-scale));
 }
 
-.indicator__item:first-child {
+.indicator_placement_default .indicator__item {
+    margin: var(--divkit-indicator-default-margin);
+}
+
+.indicator_placement_default .indicator__item:first-child {
     margin-left: auto;
 }
 
-.indicator__item:last-child {
+.indicator_placement_default .indicator__item:last-child {
     margin-right: auto;
+}
+
+.indicator_placement_stretch .indicator__item {
+    /* needs both grow and shrink */
+    flex: 1 1 auto;
+    min-width: calc((100% - var(--divkit-indicator-stretch-max-spacer)) / var(--divkit-indicator-stretch-max-count));
+    margin-left: var(--divkit-indicator-stretch-margin);
+}
+
+.indicator_placement_stretch .indicator__item:first-child {
+    margin-left: 0;
 }

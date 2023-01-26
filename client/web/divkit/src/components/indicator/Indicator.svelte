@@ -17,6 +17,8 @@
     import { correctColor } from '../../utils/correctColor';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { ARROW_LEFT, ARROW_RIGHT, END, HOME } from '../../utils/keyboard/codes';
+    import { MaybeMissing } from '../../expressions/json';
+    import { DivIndicatorDefaultItemPlacement, DivIndicatorStretchItemPlacement } from '../../types/indicator';
 
     export let json: Partial<DivIndicatorData> = {};
     export let templateContext: TemplateContext;
@@ -66,8 +68,25 @@
     }
 
     $: jsonSpaceBetweenCenters = rootCtx.getDerivedFromVars(json.space_between_centers);
+    $: jsonItemsPlacement = rootCtx.getDerivedFromVars(json.items_placement);
+    let placement: 'default' | 'stretch' = 'default';
     let spaceBetweenCenters = 15;
-    $: {
+    let maxVisibleItems = 10;
+    let itemSpacing = 5;
+    $: if ($jsonItemsPlacement && ($jsonItemsPlacement.type === 'default' || $jsonItemsPlacement.type === 'stretch')) {
+        placement = $jsonItemsPlacement.type;
+        if (placement === 'default') {
+            spaceBetweenCenters = correctNonNegativeNumber(
+                ($jsonItemsPlacement as MaybeMissing<DivIndicatorDefaultItemPlacement>).space_between_centers?.value,
+                spaceBetweenCenters
+            );
+        } else if (placement === 'stretch') {
+            const placement = $jsonItemsPlacement as MaybeMissing<DivIndicatorStretchItemPlacement>;
+            maxVisibleItems = correctPositiveNumber(placement.max_visible_items, maxVisibleItems);
+            itemSpacing = correctNonNegativeNumber(placement.item_spacing?.value, itemSpacing);
+        }
+    } else {
+        placement = 'default';
         if ($jsonSpaceBetweenCenters) {
             spaceBetweenCenters = correctNonNegativeNumber($jsonSpaceBetweenCenters.value, spaceBetweenCenters);
         }
@@ -143,10 +162,14 @@
             activeItem.focus();
         }
     }
+
+    $: mods = {
+        placement
+    };
 </script>
 
 <Outer
-    cls={genClassName('indicator', css, {})}
+    cls={genClassName('indicator', css, mods)}
     {json}
     {origJson}
     {templateContext}
@@ -167,7 +190,10 @@
             style:--divkit-indicator-active-color={activeItemColor}
             style:--divkit-indicator-inactive-color={inactiveItemColor}
             style:--divkit-indicator-active-scale={activeItemSize}
-            style:--divkit-indicator-margin="0 {pxToEm((spaceBetweenCenters - shapeWidth) / 2)}"
+            style:--divkit-indicator-default-margin={placement === 'default' ? `0 ${pxToEm((spaceBetweenCenters - shapeWidth) / 2)}` : ''}
+            style:--divkit-indicator-stretch-margin={placement === 'stretch' ? pxToEm(itemSpacing) : ''}
+            style:--divkit-indicator-stretch-max-count={placement === 'stretch' ? maxVisibleItems : ''}
+            style:--divkit-indicator-stretch-max-spacer={placement === 'stretch' ? pxToEm((maxVisibleItems - 1) * itemSpacing) : ''}
         >
             {#if pagerData}
                 {#each Array(pagerData.size) as _, index}

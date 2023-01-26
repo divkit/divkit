@@ -880,8 +880,8 @@
     "ru": "Индикатор прогресса для пейджера."
   },
   "div_indicator_space_between_centers": {
-    "en": "Spacing between indicator centers. <br>The parameter is deprecated for Android, please use the `items_placement` parameter instead.",
-    "ru": "Расстояние между центрами индикаторов. <br>Для Android параметр устарел, вместо него используйте параметр `items_placement`."
+    "en": "Spacing between indicator centers.",
+    "ru": "Расстояние между центрами индикаторов."
   },
   "div_indicator_space_between_items": {
     "en": "Spacing between indicator borders.",
