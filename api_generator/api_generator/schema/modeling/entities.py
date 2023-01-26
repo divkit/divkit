@@ -108,6 +108,7 @@ class Declarable(ABC):
 
 def _super_entities(config: Config.GenerationConfig, dictionary: Dict[str, any]) -> Optional[str]:
     super_entities_dict = {
+        GeneratedLanguage.DART: 'dart_interfaces',
         GeneratedLanguage.DIVAN: 'kotlin_interfaces',
         GeneratedLanguage.DOCUMENTATION: 'swift_protocols',
         GeneratedLanguage.KOTLIN: 'kotlin_interfaces',
@@ -595,6 +596,8 @@ def default_value(lang: GeneratedLanguage,
         specific_prefix = 'typescript_'
     elif lang is GeneratedLanguage.PYTHON:
         specific_prefix = 'python_'
+    elif lang is GeneratedLanguage.DART:
+        specific_prefix = 'dart_'
     specific_key = specific_prefix + generic_key
     result: Optional[str] = dictionary.get(specific_key, dictionary.get(generic_key))
     if isinstance(result, str):

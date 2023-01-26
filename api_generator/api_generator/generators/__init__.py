@@ -1,3 +1,4 @@
+from .dart import DartGenerator
 from .divan import DivanGenerator
 from .documentation import DocumentationGenerator
 from .kotlin import KotlinGenerator
@@ -8,6 +9,7 @@ from .type_script import TypeScriptGenerator
 from .base import Generator
 
 __all__ = [
+    DartGenerator,
     DivanGenerator,
     DocumentationGenerator,
     KotlinGenerator,

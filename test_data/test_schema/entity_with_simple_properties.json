@@ -28,6 +28,7 @@
       "$description": "translations.json#/entity_with_simple_properties_integer"
     },
     "double": {
+      "alias_dart": "dNum",
       "type": "number",
       "$description": "translations.json#/entity_with_simple_properties_double"
     },

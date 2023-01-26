@@ -650,6 +650,50 @@
       }
     },
     {
+      "translations.json": {
+        "entity_with_property_with_default_value_nested": {
+          "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
+          "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
+        },
+        "entity_with_simple_properties": {
+          "en": "Entity with simple properties.",
+          "ru": "Объект с простыми свойствами."
+        },
+        "entity_with_simple_properties_id": {
+          "en": "ID. Can't contain expressions.",
+          "ru": "Идентификатор. Не может содержать выражение."
+        },
+        "entity_with_simple_properties_string": {
+          "en": "String.",
+          "ru": "Строка."
+        },
+        "entity_with_simple_properties_integer": {
+          "en": "Integer.",
+          "ru": "Целое число."
+        },
+        "entity_with_simple_properties_double": {
+          "en": "Floating point number.",
+          "ru": "Число с плавающей точкой."
+        },
+        "entity_with_simple_properties_boolean": {
+          "en": "Boolean property.",
+          "ru": "Логическое значение."
+        },
+        "entity_with_simple_properties_boolean_int": {
+          "en": "Boolean value in numeric format.",
+          "ru": "Логическое значение в числовом формате."
+        },
+        "entity_with_simple_properties_positive_integer": {
+          "en": "Positive integer.",
+          "ru": "Положительное целое число."
+        },
+        "entity_with_simple_properties_color": {
+          "en": "Color.",
+          "ru": "Цвет."
+        }
+      }
+    },
+    {
       "entity_with_property_with_default_value.json": {
         "type": "object",
         "definitions": {},
@@ -661,6 +705,7 @@
             ]
           },
           "int": {
+            "alias_dart": "iNum",
             "$resolved_refs": [
               "#/definitions/int_prop",
               "common.json#/non_negative_integer"
@@ -688,6 +733,7 @@
             "type": "object",
             "properties": {
               "int": {
+                "alias_dart": "iNum",
                 "$resolved_refs": [
                   "#/definitions/int_prop",
                   "common.json#/non_negative_integer"
@@ -773,6 +819,7 @@
             }
           },
           "double": {
+            "alias_dart": "dNum",
             "type": "number",
             "description_translations": {
               "en": "Floating point number.",
@@ -842,50 +889,6 @@
         "description_translations": {
           "en": "Entity with simple properties.",
           "ru": "Объект с простыми свойствами."
-        }
-      }
-    },
-    {
-      "translations.json": {
-        "entity_with_property_with_default_value_nested": {
-          "en": "non_optional is used to suppress auto-generation of default value for object with all-optional fields.",
-          "ru": "non_optional используется, чтобы запретить автогенерацию дефолтного значения для объекта, все свойства которого опциональны."
-        },
-        "entity_with_simple_properties": {
-          "en": "Entity with simple properties.",
-          "ru": "Объект с простыми свойствами."
-        },
-        "entity_with_simple_properties_id": {
-          "en": "ID. Can't contain expressions.",
-          "ru": "Идентификатор. Не может содержать выражение."
-        },
-        "entity_with_simple_properties_string": {
-          "en": "String.",
-          "ru": "Строка."
-        },
-        "entity_with_simple_properties_integer": {
-          "en": "Integer.",
-          "ru": "Целое число."
-        },
-        "entity_with_simple_properties_double": {
-          "en": "Floating point number.",
-          "ru": "Число с плавающей точкой."
-        },
-        "entity_with_simple_properties_boolean": {
-          "en": "Boolean property.",
-          "ru": "Логическое значение."
-        },
-        "entity_with_simple_properties_boolean_int": {
-          "en": "Boolean value in numeric format.",
-          "ru": "Логическое значение в числовом формате."
-        },
-        "entity_with_simple_properties_positive_integer": {
-          "en": "Positive integer.",
-          "ru": "Положительное целое число."
-        },
-        "entity_with_simple_properties_color": {
-          "en": "Color.",
-          "ru": "Цвет."
         }
       }
     }

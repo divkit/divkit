@@ -16,6 +16,7 @@
       "type": "object",
       "properties": {
         "int": {
+          "alias_dart": "iNum",
           "$ref": "#/definitions/int_prop"
         },
         "url": {
@@ -39,6 +40,7 @@
       ]
     },
     "int": {
+      "alias_dart": "iNum",
       "$ref": "#/definitions/int_prop"
     },
     "url": {

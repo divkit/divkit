@@ -1,8 +1,17 @@
 title:
 href:
 items:
+  -name: entity
+   href: concepts/divs/entity.md
+   hidden: true
   -name: entity_with_array
    href: concepts/divs/entity_with_array.md
+   hidden: true
+  -name: entity_with_array_of_enums
+   href: concepts/divs/entity_with_array_of_enums.md
+   hidden: true
+  -name: entity_with_array_of_expressions
+   href: concepts/divs/entity_with_array_of_expressions.md
    hidden: true
   -name: entity_with_array_of_nested_items
    href: concepts/divs/entity_with_array_of_nested_items.md
@@ -51,13 +60,4 @@ items:
    hidden: true
   -name: entity_with_simple_properties
    href: concepts/divs/entity_with_simple_properties.md
-   hidden: true
-  -name: entity
-   href: concepts/divs/entity.md
-   hidden: true
-  -name: entity_with_array_of_enums
-   href: concepts/divs/entity_with_array_of_enums.md
-   hidden: true
-  -name: entity_with_array_of_expressions
-   href: concepts/divs/entity_with_array_of_expressions.md
    hidden: true

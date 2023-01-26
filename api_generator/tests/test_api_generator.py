@@ -26,8 +26,8 @@ def test_schema_preprocessor():
         path = utils.path_generator_tests(os.path.join('references', filename))
         if SHOULD_UPDATE_REFERENCES:
             utils.update_json_reference(filename=path, json_content=root_directory.as_json)
-            assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'
         utils.assert_as_json_test(file_expected=path, content_actual=root_directory.as_json)
+
     test_config = Config(generator_path=API_GENERATOR_PATH,
                          config_path=utils.path_generator_tests(os.path.join('configs', 'swift_config.json')),
                          schema_path=TEST_SCHEMA_PATH,
@@ -44,6 +44,15 @@ def test_schema_preprocessor():
 
     root_directory.clean_unused_definitions()
     assert_json_preprocessor_test(filename='reference_clean_unused_definitions.json')
+
+    if SHOULD_UPDATE_REFERENCES:
+        assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'
+
+
+def test_dart_generator():
+    assert_test_generator(config_filename='dart_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='dart')
 
 
 def test_divan_generator():
