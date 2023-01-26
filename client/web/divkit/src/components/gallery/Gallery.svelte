@@ -384,7 +384,7 @@
         mounted = true;
 
         if (!hasError) {
-            updateArrowsVisibilityDebounced();
+            updateArrowsVisibility();
 
             if (defaultItem) {
                 const galleryElements = getItems();
