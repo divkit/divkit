@@ -8,63 +8,76 @@
     import type { DivIndicatorData } from '../../types/indicator';
     import type { LayoutParams } from '../../types/layoutParams';
     import type { PagerData } from '../../stores/pagers';
+    import type { MaybeMissing } from '../../expressions/json';
+    import type { DivIndicatorDefaultItemPlacement, DivIndicatorStretchItemPlacement } from '../../types/indicator';
 
     import Outer from '../utilities/Outer.svelte';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
     import { pxToEm } from '../../utils/pxToEm';
-    import { correctColor } from '../../utils/correctColor';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { ARROW_LEFT, ARROW_RIGHT, END, HOME } from '../../utils/keyboard/codes';
-    import { MaybeMissing } from '../../expressions/json';
-    import { DivIndicatorDefaultItemPlacement, DivIndicatorStretchItemPlacement } from '../../types/indicator';
+    import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
+    import { correctColor } from '../../utils/correctColor';
 
     export let json: Partial<DivIndicatorData> = {};
     export let templateContext: TemplateContext;
     export let origJson: DivBase | undefined = undefined;
     export let layoutParams: LayoutParams | undefined = undefined;
 
+    const AVAIL_SHAPES = ['rounded_rectangle', 'circle'];
+
     const rootCtx = getContext<RootCtxValue>(ROOT_CTX);
 
     $: jsonShape = rootCtx.getDerivedFromVars(json.shape);
-    let shapeRadius = 5;
-    let shapeWidth = 10;
-    let shapeHeight = 10;
-    let shapeCornerRadius = 5;
-    $: {
-        // TODO: think about what if $jsonShape was deleted
-        if ($jsonShape) {
-            if ($jsonShape.type === 'rounded_rectangle') {
-                if ($jsonShape.item_width) {
-                    shapeWidth = correctNonNegativeNumber($jsonShape.item_width.value, shapeWidth);
-                }
-
-                if ($jsonShape.item_height) {
-                    shapeHeight = correctNonNegativeNumber($jsonShape.item_height.value, shapeHeight);
-                }
-
-                if ($jsonShape.corner_radius) {
-                    shapeCornerRadius = correctNonNegativeNumber($jsonShape.corner_radius.value, shapeCornerRadius);
-                }
-            } else if ($jsonShape.type === 'circle') {
-                shapeRadius = correctNonNegativeNumber($jsonShape.radius?.value, shapeRadius);
-
-                shapeWidth = shapeHeight = shapeCornerRadius = shapeRadius * 2;
-            }
-        }
-    }
-
     $: jsonActiveItemColor = rootCtx.getDerivedFromVars(json.active_item_color);
-    let activeItemColor = '#ffdc60';
-    $: {
-        activeItemColor = correctColor($jsonActiveItemColor, 1, activeItemColor);
-    }
-
     $: jsonInactiveItemColor = rootCtx.getDerivedFromVars(json.inactive_item_color);
-    let inactiveItemColor = correctColor('#33919cb5');
+    $: jsonActiveItemSize = rootCtx.getDerivedFromVars(json.active_item_size);
+    $: jsonActiveShape = rootCtx.getDerivedFromVars(json.active_shape);
+    $: jsonInactiveShape = rootCtx.getDerivedFromVars(json.inactive_shape);
+    let activeStyle: DrawableStyle = {
+        width: 13,
+        height: 13,
+        borderRadius: 6.5,
+        background: '#ffdc60'
+    };
+    let inactiveStyle: DrawableStyle = {
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        background: '#33919cb5'
+    };
     $: {
-        inactiveItemColor = correctColor($jsonInactiveItemColor, 1, inactiveItemColor);
+        if ($jsonActiveShape) {
+            activeStyle = correctDrawableStyle<DrawableStyle>({
+                type: 'shape_drawable',
+                shape: $jsonActiveShape
+            }, AVAIL_SHAPES, activeStyle);
+        }
+        if ($jsonInactiveShape) {
+            inactiveStyle = correctDrawableStyle<DrawableStyle>({
+                type: 'shape_drawable',
+                shape: $jsonInactiveShape
+            }, AVAIL_SHAPES, inactiveStyle);
+        }
+        if (!$jsonActiveShape && !$jsonInactiveShape && $jsonShape) {
+            const activeSize = correctPositiveNumber($jsonActiveItemSize, 1.3);
+            inactiveStyle = correctDrawableStyle<DrawableStyle>({
+                type: 'shape_drawable',
+                shape: $jsonShape,
+                color: inactiveStyle.background
+            }, AVAIL_SHAPES, inactiveStyle);
+            inactiveStyle.background = correctColor($jsonInactiveItemColor, 1, inactiveStyle.background);
+            activeStyle = {
+                ...inactiveStyle,
+                width: inactiveStyle.width * activeSize,
+                height: inactiveStyle.height * activeSize,
+                borderRadius: inactiveStyle.borderRadius * activeSize,
+                background: activeStyle.background
+            };
+            activeStyle.background = correctColor($jsonActiveItemColor, 1, activeStyle.background);
+        }
     }
 
     $: jsonSpaceBetweenCenters = rootCtx.getDerivedFromVars(json.space_between_centers);
@@ -90,12 +103,6 @@
         if ($jsonSpaceBetweenCenters) {
             spaceBetweenCenters = correctNonNegativeNumber($jsonSpaceBetweenCenters.value, spaceBetweenCenters);
         }
-    }
-
-    $: jsonActiveItemSize = rootCtx.getDerivedFromVars(json.active_item_size);
-    let activeItemSize = 1.3;
-    $: {
-        activeItemSize = correctPositiveNumber($jsonActiveItemSize, activeItemSize);
     }
 
     let scroller: HTMLElement;
@@ -183,14 +190,19 @@
             class={css.indicator__items}
             role="tablist"
             bind:this={indicatorItemsWrapper}
-            style:margin="0 {pxToEm((activeItemSize - 1) * shapeWidth / 2)}"
-            style:--divkit-indicator-width={pxToEm(shapeWidth)}
-            style:--divkit-indicator-height={pxToEm(shapeHeight)}
-            style:--divkit-indicator-border-radius={pxToEm(shapeCornerRadius)}
-            style:--divkit-indicator-active-color={activeItemColor}
-            style:--divkit-indicator-inactive-color={inactiveItemColor}
-            style:--divkit-indicator-active-scale={activeItemSize}
-            style:--divkit-indicator-default-margin={placement === 'default' ? `0 ${pxToEm((spaceBetweenCenters - shapeWidth) / 2)}` : ''}
+            style:margin={placement === 'default' ? `0 ${pxToEm(Math.max(0, activeStyle.width - inactiveStyle.width) / 2)}` : ''}
+            style:--divkit-indicator-inactive-width={pxToEm(inactiveStyle.width)}
+            style:--divkit-indicator-inactive-height={pxToEm(inactiveStyle.height)}
+            style:--divkit-indicator-inactive-border-radius={pxToEm(inactiveStyle.borderRadius)}
+            style:--divkit-indicator-inactive-background={inactiveStyle.background || ''}
+            style:--divkit-indicator-inactive-box-shadow={inactiveStyle.boxShadow || ''}
+            style:--divkit-indicator-active-width={pxToEm(activeStyle.width)}
+            style:--divkit-indicator-active-height={pxToEm(activeStyle.height)}
+            style:--divkit-indicator-active-border-radius={pxToEm(activeStyle.borderRadius)}
+            style:--divkit-indicator-active-background={activeStyle.background || ''}
+            style:--divkit-indicator-active-box-shadow={activeStyle.boxShadow || ''}
+            style:--divkit-indicator-active-scale={activeStyle.width / inactiveStyle.width}
+            style:--divkit-indicator-default-margin={placement === 'default' ? `0 ${pxToEm((spaceBetweenCenters - inactiveStyle.width) / 2)}` : ''}
             style:--divkit-indicator-stretch-margin={placement === 'stretch' ? pxToEm(itemSpacing) : ''}
             style:--divkit-indicator-stretch-max-count={placement === 'stretch' ? maxVisibleItems : ''}
             style:--divkit-indicator-stretch-max-spacer={placement === 'stretch' ? pxToEm((maxVisibleItems - 1) * itemSpacing) : ''}

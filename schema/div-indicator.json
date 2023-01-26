@@ -64,19 +64,11 @@
         },
         "active_shape": {
           "$ref": "div-rounded-rectangle-shape.json",
-          "$description": "translations.json#/div_indicator_active_shape",
-          "platforms": [
-            "android",
-            "ios"
-          ]
+          "$description": "translations.json#/div_indicator_active_shape"
         },
         "inactive_shape": {
           "$ref": "div-rounded-rectangle-shape.json",
-          "$description": "translations.json#/div_indicator_inactive_shape",
-          "platforms": [
-            "android",
-            "ios"
-          ]
+          "$description": "translations.json#/div_indicator_inactive_shape"
         },
         "inactive_minimum_shape": {
           "$ref": "div-rounded-rectangle-shape.json",

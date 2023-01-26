@@ -20,10 +20,15 @@ export type DivIndicatorItemsPlacement = DivIndicatorDefaultItemPlacement | DivI
 export interface DivIndicatorData extends DivBaseData {
     type: 'indicator';
     pager_id?: string;
+    /** @deprecated */
     space_between_centers?: FixedSize;
     inactive_item_color?: string;
     active_item_color?: string;
+    /** @deprecated */
     shape?: Shape;
+    active_shape?: Shape;
+    inactive_shape?: Shape;
+    /** @deprecated */
     active_item_size?: number;
     // minimum_item_size?: number;
     // animation?: IndicatorAnimation;

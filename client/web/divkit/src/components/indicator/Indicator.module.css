@@ -21,19 +21,38 @@
 
 .indicator__item {
     flex-shrink: 0;
-    width: var(--divkit-indicator-width);
-    height: var(--divkit-indicator-height);
-    border-radius: var(--divkit-indicator-border-radius);
-    background-color: var(--divkit-indicator-inactive-color);
-}
-
-.indicator__item_active {
-    background-color: var(--divkit-indicator-active-color);
-    transform: scale(var(--divkit-indicator-active-scale));
+    width: var(--divkit-indicator-inactive-width);
+    height: var(--divkit-indicator-inactive-height);
+    border-radius: var(--divkit-indicator-inactive-border-radius);
 }
 
 .indicator_placement_default .indicator__item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: var(--divkit-indicator-default-margin);
+}
+
+.indicator_placement_default .indicator__item::before {
+    flex: 0 0 auto;
+    content: '';
+    width: var(--divkit-indicator-inactive-width);
+    height: var(--divkit-indicator-inactive-height);
+    border-radius: var(--divkit-indicator-inactive-border-radius);
+    background: var(--divkit-indicator-inactive-background);
+    box-shadow: var(--divkit-indicator-inactive-box-shadow);
+}
+
+.indicator_placement_default .indicator__item_active {
+    height: var(--divkit-indicator-active-height);
+}
+
+.indicator_placement_default .indicator__item_active::before {
+    width: var(--divkit-indicator-active-width);
+    height: var(--divkit-indicator-active-height);
+    border-radius: var(--divkit-indicator-active-border-radius);
+    background: var(--divkit-indicator-active-background);
+    box-shadow: var(--divkit-indicator-active-box-shadow);
 }
 
 .indicator_placement_default .indicator__item:first-child {
@@ -46,9 +65,23 @@
 
 .indicator_placement_stretch .indicator__item {
     /* needs both grow and shrink */
-    flex: 1 1 auto;
+    flex: 1 1 0;
     min-width: calc((100% - var(--divkit-indicator-stretch-max-spacer)) / var(--divkit-indicator-stretch-max-count));
     margin-left: var(--divkit-indicator-stretch-margin);
+    background: var(--divkit-indicator-inactive-background);
+    box-shadow: var(--divkit-indicator-inactive-box-shadow);
+}
+
+.indicator_placement_stretch .indicator__item_active {
+    width: var(--divkit-indicator-active-width);
+    height: var(--divkit-indicator-active-height);
+    border-radius: var(--divkit-indicator-active-border-radius);
+    background: var(--divkit-indicator-active-background);
+    box-shadow: var(--divkit-indicator-active-box-shadow);
+}
+
+.indicator_placement_stretch .indicator__item_active {
+    flex-grow: var(--divkit-indicator-active-scale);
 }
 
 .indicator_placement_stretch .indicator__item:first-child {
