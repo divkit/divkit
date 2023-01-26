@@ -197,7 +197,9 @@
                 type === 'match_parent' && layoutParams.parentHorizontalWrapContent
             ) {
                 newWidthMods['width-constrained'] = true;
-                newFlexShrink = 1;
+                if (layoutParams.parentContainerOrientation === 'horizontal') {
+                    newFlexShrink = 1;
+                }
             }
 
             if (type === 'wrap_content') {
@@ -308,7 +310,9 @@
                 type === 'match_parent' && layoutParams.parentVerticalWrapContent
             ) {
                 newHeightMods['height-constrained'] = true;
-                newFlexShrink = 1;
+                if (layoutParams.parentContainerOrientation === 'vertical') {
+                    newFlexShrink = 1;
+                }
             }
 
             if (type === 'wrap_content') {
