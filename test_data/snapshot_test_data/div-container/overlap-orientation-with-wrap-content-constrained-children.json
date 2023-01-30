@@ -1,0 +1,187 @@
+{
+  "description": "Overlap container with elements with wrap_content size",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "paddings": {
+        "left": 10,
+        "top": 10,
+        "right": 10,
+        "bottom": 10
+      }
+    },
+    "test_container": {
+      "type": "container",
+      "orientation": "overlap",
+      "border": {
+        "stroke": {
+          "color": "#A0FFA0"
+        }
+      }
+    },
+    "item": {
+      "type": "text",
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0A0FF"
+        }
+      ],
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      },
+      "font_size": 16
+    },
+    "width_item": {
+      "type": "item",
+      "height": {
+        "type": "wrap_content"
+      }
+    },
+    "height_item": {
+      "type": "item",
+      "width": {
+        "type": "fixed",
+        "value": 60
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "title",
+              "text": "Overlap container with elements with wrap_content width:"
+            },
+            {
+              "type": "test_container",
+              "width": {
+                "type": "fixed",
+                "value": 200
+              },
+              "height": {
+                "type": "wrap_content"
+              },
+              "items": [
+                {
+                  "type": "width_item",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "text": "not constrained"
+                },
+                {
+                  "type": "width_item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  },
+                  "text": "constrained",
+                  "margins": {
+                    "top": 60
+                  }
+                },
+                {
+                  "type": "width_item",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "text": "not constrained element with very very long text",
+                  "margins": {
+                    "top": 120
+                  }
+                },
+                {
+                  "type": "width_item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  },
+                  "text": "constrained element with very very long text",
+                  "margins": {
+                    "top": 180
+                  }
+                }
+              ]
+            },
+            {
+              "type": "title",
+              "text": "Overlap container with elements with wrap_content height:"
+            },
+            {
+              "type": "test_container",
+              "width": {
+                "type": "wrap_content"
+              },
+              "height": {
+                "type": "fixed",
+                "value": 120
+              },
+              "items": [
+                {
+                  "type": "height_item",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "text": "not constrained"
+                },
+                {
+                  "type": "height_item",
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  },
+                  "text": "constrained",
+                  "margins": {
+                    "left": 70
+                  }
+                },
+                {
+                  "type": "height_item",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "text": "not constrained element with very very long text",
+                  "margins": {
+                    "left": 140
+                  }
+                },
+                {
+                  "type": "height_item",
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  },
+                  "text": "constrained element with very very long text",
+                  "margins": {
+                    "left": 210
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
