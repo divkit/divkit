@@ -1,3 +1,29 @@
+## 23.0.0
+
+# JSON Schema:
+* Added `div-shape-base` to `div-circle-shape`
+
+# Android Client:
+* Added support of timers
+* Added `div-indicator` style based on `div-rounded-rectangle-shape`
+* Added subscription to image preview changes
+* Fixed border clipping in transition animations
+* Fixed patch application to child of container with id
+
+# iOS Client:
+* Added `ShimmerImagePreviewExtension`
+* Added `aspect` size support in `DivContainer`
+* Added batch actions handling, `DivActionURLHandler.UpdateCardAction` refactoring
+
+# Web Client:
+Fixed:
+* `image` preview size and filters support
+* `gallery` arrows on the desktop should now appear faster
+
+# TypeScript JSON Builder:
+* Speed up object walking in several operations
+
+
 ## 22.0.0
 
 # JSON Schema:

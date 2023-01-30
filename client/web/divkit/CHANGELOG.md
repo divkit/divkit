@@ -1,3 +1,10 @@
+## 23.0.0 (January 25, 2023)
+
+Fixed:
+* `image` preview size and filters support
+* `gallery` arrows on the desktop should now appear faster
+
+
 ## 22.0.0 (January 18, 2023)
 
 Fixes:
