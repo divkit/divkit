@@ -628,7 +628,7 @@ internal fun ExpressionSubscriber.observeDrawable(
             val shapeDrawable = drawable.value
             addSubscription(shapeDrawable.color.observe(resolver, callback))
             observeStroke(resolver, shapeDrawable.stroke, callback)
-            observeShape(resolver, shapeDrawable.shape, callback, false)
+            observeShape(resolver, shapeDrawable.shape, callback)
         }
     }
 }
@@ -636,17 +636,18 @@ internal fun ExpressionSubscriber.observeDrawable(
 internal fun ExpressionSubscriber.observeShape(
     resolver: ExpressionResolver,
     shape: DivShape,
-    callback: (Any) -> Unit,
-    observeDivBase: Boolean = true
+    callback: (Any) -> Unit
 ) {
     when (shape) {
         is DivShape.RoundedRectangle -> {
-            observeRoundedRectangleShape(resolver, shape.value, callback, observeDivBase)
+            observeRoundedRectangleShape(resolver, shape.value, callback)
         }
         is DivShape.Circle -> {
             shape.value.let {
                 addSubscription(it.radius.value.observe(resolver, callback))
                 addSubscription(it.radius.unit.observe(resolver, callback))
+                it.backgroundColor?.observe(resolver, callback)?.let { color -> addSubscription(color) }
+                observeStroke(resolver, it.stroke, callback)
             }
         }
     }
@@ -655,8 +656,7 @@ internal fun ExpressionSubscriber.observeShape(
 internal fun ExpressionSubscriber.observeRoundedRectangleShape (
     resolver: ExpressionResolver,
     shape: DivRoundedRectangleShape,
-    callback: (Any) -> Unit,
-    observeDivBase: Boolean = true
+    callback: (Any) -> Unit
 ) {
     addSubscription(shape.itemWidth.value.observe(resolver, callback))
     addSubscription(shape.itemWidth.unit.observe(resolver, callback))
@@ -664,10 +664,8 @@ internal fun ExpressionSubscriber.observeRoundedRectangleShape (
     addSubscription(shape.itemHeight.unit.observe(resolver, callback))
     addSubscription(shape.cornerRadius.value.observe(resolver, callback))
     addSubscription(shape.cornerRadius.unit.observe(resolver, callback))
-    if (observeDivBase) {
-        shape.backgroundColor?.observe(resolver, callback)?.let { addSubscription(it) }
-        observeStroke(resolver, shape.stroke, callback)
-    }
+    shape.backgroundColor?.observe(resolver, callback)?.let { addSubscription(it) }
+    observeStroke(resolver, shape.stroke, callback)
 }
 
 private fun ExpressionSubscriber.observeStroke (
@@ -712,9 +710,9 @@ internal fun DivShapeDrawable.toDrawable(
             CircleDrawable(
                 CircleDrawable.Params(
                     radius = shape.value.radius.toPxF(metrics, resolver),
-                    color = color.evaluate(resolver),
-                    strokeColor = stroke?.color?.evaluate(resolver),
-                    strokeWidth = stroke?.width?.evaluate(resolver)?.toFloat()
+                    color = (shape.value.backgroundColor ?: color).evaluate(resolver),
+                    strokeColor = (shape.value.stroke ?: stroke)?.color?.evaluate(resolver),
+                    strokeWidth = (shape.value.stroke ?: stroke)?.width?.evaluate(resolver)?.toFloat()
                 )
             )
         else -> null
