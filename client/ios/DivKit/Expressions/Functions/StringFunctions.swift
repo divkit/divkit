@@ -204,6 +204,10 @@ private func _padEndInt(value: Int, len: Int, pad: String) throws -> String {
 
 private func calcPad(value: String, len: Int, pad: String) -> String {
   var part = ""
+  guard pad.count > 0 else {
+    DivKitLogger.warning("String for padding is empty.")
+    return part
+  }
   while part.count + value.count < len {
     part += pad
   }

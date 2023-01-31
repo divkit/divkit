@@ -611,6 +611,30 @@
       ]
     },
     {
+      "name": "padStart(12, 3, '') => '12'",
+      "expression": "@{padStart(12, 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "padStart('12', 3, '') => '12'",
+      "expression": "@{padStart('12', 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "padEnd('0', 2, ' ') => '0 '",
       "expression": "@{padEnd('0', 2, ' ')}",
       "expected": {
@@ -685,6 +709,30 @@
       "variables": [],
       "platforms": [
         "web",
+        "ios"
+      ]
+    },
+    {
+      "name": "padEnd(12, 3, '') => '12'",
+      "expression": "@{padEnd(12, 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "padEnd('12', 3, '') => '12'",
+      "expression": "@{padEnd('12', 3, '')}",
+      "expected": {
+        "type": "string",
+        "value": "12"
+      },
+      "variables": [],
+      "platforms": [
         "ios"
       ]
     }
