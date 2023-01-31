@@ -189,12 +189,12 @@
             newWidth = pxToEm(widthNum);
         } else if (
             type === 'wrap_content' ||
-            !layoutParams.overlapParent && type === 'match_parent' && layoutParams.parentHorizontalWrapContent
+            !layoutParams.overlapParent && (type === 'match_parent' || !type) && layoutParams.parentHorizontalWrapContent
         ) {
             widthType = 'content';
             if (
                 type === 'wrap_content' && $jsonWidth?.constrained ||
-                type === 'match_parent' && layoutParams.parentHorizontalWrapContent
+                (type === 'match_parent' || !type) && layoutParams.parentHorizontalWrapContent
             ) {
                 newWidthMods['width-constrained'] = true;
                 if (layoutParams.parentContainerOrientation === 'horizontal') {
@@ -212,7 +212,7 @@
                 }
             }
 
-            if (type === 'match_parent') {
+            if (type === 'match_parent' || !type) {
                 rootCtx.logError(wrapError(new Error('Cannot place child with match_parent size inside wrap_content'), {
                     level: 'warn'
                 }));
