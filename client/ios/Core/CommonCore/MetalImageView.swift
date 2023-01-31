@@ -32,6 +32,7 @@ public final class MetalImageView: UIView, RemoteImageViewContentProtocol {
   public override func layoutSubviews() {
     super.layoutSubviews()
     metalView.frame = bounds
+    metalView.setNeedsDisplay()
   }
 
   public func setImage(_ image: UIImage?, animated: Bool?) {
@@ -80,12 +81,24 @@ extension MetalImageView: MTKViewDelegate {
   public func mtkView(_: MTKView, drawableSizeWillChange _: CGSize) {}
 
   public func draw(in view: MTKView) {
-    guard let drawable = view.currentDrawable,
+    guard !view.bounds.isEmpty,
+          let drawable = view.currentDrawable,
           let commandQueue = commandQueue,
-          let uiImage = uiImage,
-          !view.bounds.isEmpty else {
+          let currentRenderPassDescriptor = view.currentRenderPassDescriptor
+    else {
       return
     }
+    let buffer = commandQueue.makeCommandBuffer()
+    currentRenderPassDescriptor.colorAttachments[0].clearColor = MTLClearColor()
+    let renderEncoder = buffer?.makeRenderCommandEncoder(descriptor: currentRenderPassDescriptor)
+    renderEncoder?.endEncoding()
+
+    guard let uiImage = uiImage else {
+      buffer?.present(drawable)
+      buffer?.commit()
+      return
+    }
+
     let ciImageFactoryParams = CIImageFactoryParams(
       image: uiImage,
       bounds: view.bounds,
@@ -99,7 +112,6 @@ extension MetalImageView: MTKViewDelegate {
 
     guard let (image, _) = cachedCIImage else { return }
 
-    let buffer = commandQueue.makeCommandBuffer()
     let drawableSize = view.drawableSize
 
     let layout = layout(
