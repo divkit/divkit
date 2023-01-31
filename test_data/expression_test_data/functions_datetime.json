@@ -499,10 +499,11 @@
       "expression": "@{getYear(setYear(parseUnixTime(0), 2022))}",
       "expected": {
         "type": "integer",
-        "value": "2022"
+        "value": 2022
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -510,10 +511,11 @@
       "expression": "@{getMonth(setMonth(parseUnixTime(0), 11))}",
       "expected": {
         "type": "integer",
-        "value": "11"
+        "value": 11
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -521,10 +523,11 @@
       "expression": "@{getDay(setDay(parseUnixTime(0), 13))}",
       "expected": {
         "type": "integer",
-        "value": "13"
+        "value": 13
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -532,10 +535,11 @@
       "expression": "@{getDayOfWeek(parseUnixTime(0))}",
       "expected": {
         "type": "integer",
-        "value": "4"
+        "value": 4
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -543,10 +547,11 @@
       "expression": "@{getDayOfWeek(parseUnixTime(259200))}",
       "expected": {
         "type": "integer",
-        "value": "7"
+        "value": 7
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -554,10 +559,11 @@
       "expression": "@{getHours(setHours(parseUnixTime(0), 17))}",
       "expected": {
         "type": "integer",
-        "value": "17"
+        "value": 17
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -565,10 +571,11 @@
       "expression": "@{getMinutes(setMinutes(parseUnixTime(0), 23))}",
       "expected": {
         "type": "integer",
-        "value": "23"
+        "value": 23
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -576,10 +583,11 @@
       "expression": "@{getSeconds(setSeconds(parseUnixTime(0), 27))}",
       "expected": {
         "type": "integer",
-        "value": "27"
+        "value": 27
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     {
@@ -587,10 +595,23 @@
       "expression": "@{getMillis(setMillis(parseUnixTime(0), 31))}",
       "expected": {
         "type": "integer",
-        "value": "31"
+        "value": 31
       },
       "platforms": [
-        "android"
+        "android",
+        "ios"
+      ]
+    },
+    {
+      "name": "getMillis(setHours(setMillis(parseUnixTime(0), 31), 17)) => 31",
+      "expression": "@{getMillis(setHours(setMillis(parseUnixTime(0), 31), 17))}",
+      "expected": {
+        "type": "integer",
+        "value": 31
+      },
+      "platforms": [
+        "android",
+        "ios"
       ]
     }
   ]
