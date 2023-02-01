@@ -3,6 +3,7 @@ package com.yandex.test.screenshot
 open class ScreenshotTestPluginExtension {
 
     var enabled: Boolean = true
+    var enableComparison: Boolean = true
     var strictComparison: Boolean = false
     var testAnnotations = mutableListOf<String>()
     var deviceDir = "screenshots"

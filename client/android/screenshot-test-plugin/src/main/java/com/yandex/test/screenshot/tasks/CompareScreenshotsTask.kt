@@ -29,7 +29,6 @@ open class CompareScreenshotsTask : DefaultTask() {
 
     init {
         group = "verification"
-        this.dependsOn(PullScreenshotsTask.NAME)
     }
 
     @TaskAction

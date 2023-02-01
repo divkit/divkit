@@ -123,6 +123,7 @@ dependencies {
 
 screenshotTests {
     enabled = project.hasProperty("screenshot-tests")
+    enableComparison = project.hasProperty("screenshot-comparison")
     strictComparison = project.hasProperty("screenshot-strict-comparison")
     testAnnotations = ["com.yandex.test.screenshot.Screenshot"]
     deviceDir = "${android.defaultConfig.applicationId}/screenshots"
