@@ -1,7 +1,8 @@
 {
   "description": "DivIndicator with red border in active state and blue border in incative state",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "templates": {
     "slide": {

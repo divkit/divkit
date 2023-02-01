@@ -21,7 +21,7 @@ function read(dir, createTestCase, skipTests = []) {
 
                 const platforms = require(path.join(fulldir, item)).platforms;
                 if (platforms && !platforms.includes('web')) {
-                    console.trace('skip', path.join(fulldir, item));
+                    console.log('skip', path.join(fulldir, item));
                     continue;
                 }
 
