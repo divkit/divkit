@@ -22,8 +22,7 @@ import javax.inject.Inject
  * will only increase complexity and simple api like variable.set("new_value") will be
  * transformed into "globalOrLocalVariableScope.findScopeOf(variable).set("new_value")".
  */
-@DivScope
-class GlobalVariableController @Inject constructor() {
+class GlobalVariableController {
     private val mainHandler = Handler(Looper.getMainLooper())
     private val variables = ConcurrentHashMap<String, Variable>()
     private val declarationObservers = SynchronizedList<(Variable) -> Unit>()

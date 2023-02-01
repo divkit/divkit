@@ -7,6 +7,7 @@ import com.yandex.div.core.dagger.ExperimentFlag;
 import com.yandex.div.core.dagger.Names;
 import com.yandex.div.core.downloader.DivDownloader;
 import com.yandex.div.core.experiments.Experiment;
+import com.yandex.div.core.expression.variables.GlobalVariableController;
 import com.yandex.div.core.extension.DivExtensionHandler;
 import com.yandex.div.core.font.DivTypefaceProvider;
 import com.yandex.div.core.images.DivImageLoader;
@@ -62,6 +63,10 @@ public class DivConfiguration {
     @NonNull
     private final ViewPoolProfiler.Reporter mViewPoolReporter;
 
+    @NonNull
+    private final GlobalVariableController mGlobalVariableController;
+
+
     private final boolean mTapBeaconsEnabled;
     private final boolean mVisibilityBeaconsEnabled;
     private final boolean mLongtapActionsPassToChild;
@@ -92,6 +97,7 @@ public class DivConfiguration {
             @NonNull DivTypefaceProvider typefaceProvider,
             @NonNull DivTypefaceProvider displayTypefaceProvider,
             @NonNull ViewPoolProfiler.Reporter reporter,
+            @Nullable GlobalVariableController globalVariableController,
             boolean tapBeaconsEnabled,
             boolean visibilityBeaconsEnabled,
             boolean longtapActionsPassToChild,
@@ -133,6 +139,7 @@ public class DivConfiguration {
         mResourceCacheEnabled = resourceCacheEnabled;
         mMultipleStateChangeEnabled = multipleStateChangeEnabled;
         mBindOnAttachEnabled = bindOnAttachEnabled;
+        mGlobalVariableController = globalVariableController;
     }
 
     @Provides
@@ -307,6 +314,11 @@ public class DivConfiguration {
         return mBindOnAttachEnabled;
     }
 
+    @NonNull
+    public GlobalVariableController getGlobalVariableController() {
+        return mGlobalVariableController;
+    }
+
     public static class Builder {
 
         @NonNull
@@ -341,6 +353,8 @@ public class DivConfiguration {
         private DivTypefaceProvider mDisplayTypefaceProvider;
         @Nullable
         private ViewPoolProfiler.Reporter mViewPoolReporter;
+        @Nullable
+        private GlobalVariableController mGlobalVariableController;
 
         private boolean mTapBeaconsEnabled = Experiment.TAP_BEACONS_ENABLED.getDefaultValue();
         private boolean mVisibilityBeaconsEnabled = Experiment.VISIBILITY_BEACONS_ENABLED.getDefaultValue();
@@ -551,6 +565,12 @@ public class DivConfiguration {
         }
 
         @NonNull
+        public Builder globalVariableController(GlobalVariableController globalVariableController) {
+            mGlobalVariableController = globalVariableController;
+            return this;
+        }
+
+        @NonNull
         public DivConfiguration build() {
             DivTypefaceProvider nonNullTypefaceProvider =
                     mTypefaceProvider == null ? DivTypefaceProvider.DEFAULT : mTypefaceProvider;
@@ -572,6 +592,7 @@ public class DivConfiguration {
                     nonNullTypefaceProvider,
                     mDisplayTypefaceProvider == null ? nonNullTypefaceProvider : mDisplayTypefaceProvider,
                     mViewPoolReporter == null ? ViewPoolProfiler.Reporter.NO_OP : mViewPoolReporter,
+                    mGlobalVariableController == null ? new GlobalVariableController() : mGlobalVariableController,
                     mTapBeaconsEnabled,
                     mVisibilityBeaconsEnabled,
                     mLongtapActionsPassToChild,

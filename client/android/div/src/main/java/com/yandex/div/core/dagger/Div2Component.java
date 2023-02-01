@@ -155,6 +155,10 @@ public interface Div2Component {
         Builder divCreationTracker(@NonNull DivCreationTracker divCreationTracker);
 
         @NonNull
+        @BindsInstance
+        Builder globalVariableController(@NonNull GlobalVariableController globalVariableController);
+
+        @NonNull
         Div2Component build();
     }
 }

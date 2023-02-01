@@ -58,6 +58,7 @@ class Div2Context @MainThread private constructor(
             .configuration(configuration)
             .themeId(themeId)
             .divCreationTracker(DivCreationTracker(SystemClock.uptimeMillis()))
+            .globalVariableController(configuration.globalVariableController)
             .build()
     )
 
