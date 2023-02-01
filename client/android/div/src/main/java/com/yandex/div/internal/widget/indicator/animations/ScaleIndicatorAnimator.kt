@@ -1,6 +1,7 @@
 package com.yandex.div.internal.widget.indicator.animations
 
 import android.animation.ArgbEvaluator
+import android.graphics.Color
 import android.graphics.RectF
 import android.util.SparseArray
 import androidx.annotation.ColorInt
@@ -14,7 +15,11 @@ internal class ScaleIndicatorAnimator(private val styleParams: IndicatorParams.S
     private val itemsScale = SparseArray<Float>()
     private var itemsCount: Int = 0
 
-    override fun getColorAt(position: Int) = calculateColor(getScaleAt(position))
+    override fun getColorAt(position: Int) = calculateColor(
+        getScaleAt(position),
+        styleParams.inactiveShape.color,
+        styleParams.activeShape.color
+    )
 
     override fun onPageScrolled(position: Int, positionOffset: Float) {
         scaleIndicatorByOffset(position, 1f - positionOffset)
@@ -59,6 +64,27 @@ internal class ScaleIndicatorAnimator(private val styleParams: IndicatorParams.S
         }
     }
 
+    override fun getBorderColorAt(position: Int): Int {
+        return when (val activeShape = styleParams.activeShape) {
+            is IndicatorParams.Shape.RoundedRect -> {
+                val inactiveShape = styleParams.inactiveShape as IndicatorParams.Shape.RoundedRect
+                calculateColor(getScaleAt(position), inactiveShape.strokeColor, activeShape.strokeColor)
+            }
+            else -> Color.TRANSPARENT
+        }
+    }
+
+    override fun getBorderWidthAt(position: Int): Float {
+        return when (val activeShape = styleParams.activeShape) {
+            is IndicatorParams.Shape.RoundedRect -> {
+                val inactiveShape = styleParams.inactiveShape as IndicatorParams.Shape.RoundedRect
+                inactiveShape.strokeWidth + (activeShape.strokeWidth
+                        - inactiveShape.strokeWidth) * getScaleAt(position)
+            }
+            else -> 0f
+        }
+    }
+
     private fun scaleIndicatorByOffset(position: Int, offset: Float) {
         if (offset == 0f) {
             itemsScale.remove(position)
@@ -69,8 +95,8 @@ internal class ScaleIndicatorAnimator(private val styleParams: IndicatorParams.S
 
     private fun getScaleAt(position: Int): Float = itemsScale.get(position, 0f)
     @ColorInt
-    private fun calculateColor(@FloatRange(from = 0.0, to = 1.0) scaleOffset: Float): Int {
-        return colorEvaluator.evaluate(scaleOffset, styleParams.inactiveShape.color, styleParams.activeShape.color) as Int
+    private fun calculateColor(@FloatRange(from = 0.0, to = 1.0) scaleOffset: Float, from: Int, to: Int): Int {
+        return colorEvaluator.evaluate(scaleOffset, from, to) as Int
     }
 
 }

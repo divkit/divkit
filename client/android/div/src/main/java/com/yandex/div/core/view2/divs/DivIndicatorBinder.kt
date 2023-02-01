@@ -13,6 +13,7 @@ import com.yandex.div2.DivIndicator
 import com.yandex.div2.DivIndicatorItemPlacement
 import com.yandex.div2.DivRoundedRectangleShape
 import com.yandex.div2.DivShape
+import com.yandex.div2.DivSizeUnit
 import javax.inject.Inject
 
 internal class DivIndicatorBinder @Inject constructor(
@@ -46,17 +47,14 @@ internal class DivIndicatorBinder @Inject constructor(
 
         addSubscription(indicator.animation.observe(resolver, callback))
 
-        if (indicator.activeShape == null || indicator.inactiveShape == null || indicator.inactiveMinimumShape == null) {
-            addSubscription(indicator.activeItemColor.observe(resolver, callback))
-            addSubscription(indicator.activeItemSize.observe(resolver, callback))
-            addSubscription(indicator.inactiveItemColor.observe(resolver, callback))
-            addSubscription(indicator.minimumItemSize.observe(resolver, callback))
-            observeShape(resolver, indicator.shape, callback)
-        } else {
-            observeRoundedRectangleShape(resolver, indicator.activeShape!!, callback)
-            observeRoundedRectangleShape(resolver, indicator.inactiveShape!!, callback)
-            observeRoundedRectangleShape(resolver, indicator.inactiveMinimumShape!!, callback)
-        }
+        addSubscription(indicator.activeItemColor.observe(resolver, callback))
+        addSubscription(indicator.activeItemSize.observe(resolver, callback))
+        addSubscription(indicator.inactiveItemColor.observe(resolver, callback))
+        addSubscription(indicator.minimumItemSize.observe(resolver, callback))
+        observeShape(resolver, indicator.shape, callback)
+        indicator.activeShape?.let { observeRoundedRectangleShape(resolver, it, callback) }
+        indicator.inactiveShape?.let { observeRoundedRectangleShape(resolver, it, callback) }
+        indicator.inactiveMinimumShape?.let { observeRoundedRectangleShape(resolver, it, callback) }
 
         when(val itemsPlacement = indicator.itemsPlacementCompat) {
             is DivIndicatorItemPlacement.Default -> {
@@ -75,39 +73,22 @@ internal class DivIndicatorBinder @Inject constructor(
 
     private fun DivPagerIndicatorView.applyStyle(resolver: ExpressionResolver, indicator: DivIndicator) {
         val metrics = resources.displayMetrics
-        val activeShape: IndicatorParams.Shape
-        val inactiveShape: IndicatorParams.Shape
-        val minimumShape: IndicatorParams.Shape
-        if (indicator.activeShape != null && indicator.inactiveShape != null
-            && indicator.inactiveMinimumShape != null) {
-            activeShape = indicator.activeShape!!
-                .toIndicatorParamsShape(metrics, resolver, indicator.activeItemColor)
-            inactiveShape = indicator.inactiveShape!!
-                .toIndicatorParamsShape(metrics, resolver, indicator.inactiveItemColor)
-            minimumShape = indicator.inactiveMinimumShape!!
-                .toIndicatorParamsShape(metrics, resolver, indicator.inactiveItemColor)
-        } else {
-            val activeColor = indicator.activeItemColor.evaluate(resolver)
-            val inactiveColor = indicator.inactiveItemColor.evaluate(resolver)
-            val activeItemSize = indicator.activeItemSize.evaluate(resolver).toFloat()
-            val minimumItemSize = indicator.minimumItemSize.evaluate(resolver).toFloat()
-            when (val shape = indicator.shape) {
-                is DivShape.RoundedRectangle -> {
-                    val width = shape.value.itemWidth.toPx(metrics, resolver)
-                    val height = shape.value.itemHeight.toPx(metrics, resolver)
-                    val cornerRadius = shape.value.cornerRadius.toPx(metrics, resolver)
-                    activeShape = createRoundedRectangle(activeColor, width, height, cornerRadius, activeItemSize)
-                    inactiveShape = createRoundedRectangle(inactiveColor, width, height, cornerRadius)
-                    minimumShape = createRoundedRectangle(inactiveColor, width, height, cornerRadius, minimumItemSize)
-                }
-                is DivShape.Circle -> {
-                    val radius = shape.value.radius.toPx(metrics, resolver)
-                    activeShape = createCircle(activeColor, radius, activeItemSize)
-                    inactiveShape = createCircle(inactiveColor, radius)
-                    minimumShape = createCircle(inactiveColor, radius, minimumItemSize)
-                }
-            }
-        }
+        val activeIndicatorShape = indicator.activeShape
+        val inactiveIndicatorShape = indicator.inactiveShape
+        val minimumIndicatorShape = indicator.inactiveMinimumShape
+        val activeItemSize = indicator.activeItemSize.evaluate(resolver).toFloat()
+        val minimumItemSize = indicator.minimumItemSize.evaluate(resolver).toFloat()
+        val inactiveShape = inactiveIndicatorShape?.toIndicatorParamsShape(metrics,
+                resolver, indicator.inactiveItemColor)
+            ?: activeIndicatorShape?.toIndicatorParamsShape(metrics,
+                resolver, indicator.inactiveItemColor, 1/activeItemSize)
+            ?: minimumIndicatorShape?.toIndicatorParamsShape(metrics,
+                resolver, indicator.inactiveItemColor, minimumItemSize)
+            ?: indicator.shape.toIndicatorParamsShape(metrics, resolver, indicator.inactiveItemColor)
+        val activeShape = activeIndicatorShape?.toIndicatorParamsShape(metrics, resolver, indicator.activeItemColor)
+            ?: inactiveShape.multiply(activeItemSize, indicator.activeItemColor.evaluate(resolver))
+        val minimumShape = minimumIndicatorShape?.toIndicatorParamsShape(metrics, resolver, indicator.inactiveItemColor)
+            ?: inactiveShape.multiply(minimumItemSize)
 
         val style = IndicatorParams.Style(
             animation = indicator.animation.evaluate(resolver).convert(),
@@ -142,11 +123,59 @@ internal class DivIndicatorBinder @Inject constructor(
     private fun DivRoundedRectangleShape.toIndicatorParamsShape(
         metrics: DisplayMetrics,
         resolver: ExpressionResolver,
-        deprecatedColor: Expression<Int>
-    ) = createRoundedRectangle(
-        color = (backgroundColor ?: deprecatedColor).evaluate(resolver),
-        width = itemWidth.toPx(metrics, resolver),
-        height = itemHeight.toPx(metrics, resolver),
-        cornerRadius = cornerRadius.toPx(metrics, resolver)
-    )
+        deprecatedColor: Expression<Int>,
+        multiplier: Float = 1f
+    ): IndicatorParams.Shape {
+        val borderUnit = stroke?.unit?.evaluate(resolver) ?: DivSizeUnit.DP
+        val borderWidth = stroke?.width?.evaluate(resolver)?.unitToPx(metrics, borderUnit)
+        return createRoundedRectangle(
+            color = (backgroundColor ?: deprecatedColor).evaluate(resolver),
+            width = itemWidth.toPxF(metrics, resolver),
+            height = itemHeight.toPxF(metrics, resolver),
+            cornerRadius = cornerRadius.toPxF(metrics, resolver),
+            strokeWidth = borderWidth?.toFloat(),
+            strokeColor = stroke?.color?.evaluate(resolver),
+            multiplier = multiplier
+        )
+    }
+
+    private fun DivShape.toIndicatorParamsShape(
+        metrics: DisplayMetrics,
+        resolver: ExpressionResolver,
+        color: Expression<Int>,
+        multiplier: Float = 1f
+    ): IndicatorParams.Shape {
+        return when (val shape = this) {
+            is DivShape.RoundedRectangle -> {
+                shape.value.toIndicatorParamsShape(metrics, resolver, color, multiplier)
+            }
+            is DivShape.Circle -> {
+                val radius = shape.value.radius.toPxF(metrics, resolver)
+                createCircle(color.evaluate(resolver), radius, multiplier)
+            }
+        }
+    }
+
+    private fun IndicatorParams.Shape.multiply(multiplier: Float, color: Int? = null): IndicatorParams.Shape {
+        when (val shape = this) {
+            is IndicatorParams.Shape.RoundedRect -> {
+                return createRoundedRectangle(
+                    color = color ?: shape.color,
+                    width = shape.itemSize.itemWidth,
+                    height = shape.itemSize.itemHeight,
+                    cornerRadius = shape.itemSize.cornerRadius,
+                    multiplier = multiplier,
+                    strokeWidth = shape.strokeWidth,
+                    strokeColor = shape.strokeColor
+                )
+            }
+            is IndicatorParams.Shape.Circle -> {
+                return createCircle(
+                    color = color ?: shape.color,
+                    radius = shape.itemSize.radius,
+                    multiplier = multiplier
+                )
+            }
+        }
+    }
 }

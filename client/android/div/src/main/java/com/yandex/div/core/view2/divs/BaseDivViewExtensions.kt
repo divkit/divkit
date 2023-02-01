@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.Typeface
 import android.graphics.drawable.Drawable
@@ -729,10 +730,12 @@ internal val DivIndicator.itemsPlacementCompat : DivIndicatorItemPlacement get()
 
 internal fun createRoundedRectangle(
     color: Int,
-    width: Int,
-    height: Int,
-    cornerRadius: Int,
-    multiplier: Float = 1f
+    width: Float,
+    height: Float,
+    cornerRadius: Float,
+    multiplier: Float = 1f,
+    strokeWidth: Float? = null,
+    strokeColor: Int? = null
 ): IndicatorParams.Shape =
     IndicatorParams.Shape.RoundedRect(
         color = color,
@@ -740,12 +743,14 @@ internal fun createRoundedRectangle(
             itemWidth = width * multiplier,
             itemHeight = height * multiplier,
             cornerRadius = cornerRadius * multiplier
-        )
+        ),
+        strokeWidth = strokeWidth ?: 0f,
+        strokeColor = strokeColor ?: Color.TRANSPARENT
     )
 
 internal fun createCircle(
     color: Int,
-    radius: Int,
+    radius: Float,
     multiplier: Float = 1f
 ): IndicatorParams.Shape =
     IndicatorParams.Shape.Circle(

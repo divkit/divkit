@@ -92,7 +92,9 @@ internal class IndicatorsStripDrawer(
                 xOffset,
                 baseYOffset,
                 itemSize,
-                animator.getColorAt(index)
+                animator.getColorAt(index),
+                animator.getBorderWidthAt(index),
+                animator.getBorderColorAt(index)
             )
         }
         val xOffset = getItemOffsetAt(selectedItemPosition) - firstVisibleItemOffset

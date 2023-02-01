@@ -1,6 +1,7 @@
 package com.yandex.div.internal.widget.indicator
 
-import com.yandex.div2.DivStroke
+import android.graphics.Color
+
 
 internal class IndicatorParams {
 
@@ -20,13 +21,23 @@ internal class IndicatorParams {
         data class RoundedRect(
             override val color: Int,
             override val itemSize: ItemSize.RoundedRect,
-            val stroke: DivStroke? = null
+            val strokeWidth: Float,
+            val strokeColor: Int
         ): Shape()
 
         data class Circle(
             override val color: Int,
             override val itemSize: ItemSize.Circle
         ): Shape()
+
+        val borderWidth get() = when (this) {
+            is RoundedRect -> strokeWidth
+            else -> 0f
+        }
+        val borderColor get() = when (this) {
+            is RoundedRect -> strokeColor
+            else -> Color.TRANSPARENT
+        }
     }
 
     sealed class ItemSize {

@@ -1,6 +1,7 @@
 {
   "description": "DivIndicator with red border in active state and blue border in incative state",
   "platforms": [
+    "android",
     "ios",
     "web"
   ],

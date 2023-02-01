@@ -45,4 +45,8 @@ internal class WormIndicatorAnimator(private val styleParams: IndicatorParams.St
     }
 
     override fun getItemSizeAt(position: Int): IndicatorParams.ItemSize = styleParams.inactiveShape.itemSize
+
+    override fun getBorderColorAt(position: Int): Int = styleParams.inactiveShape.borderColor
+
+    override fun getBorderWidthAt(position: Int): Float = styleParams.inactiveShape.borderWidth
 }

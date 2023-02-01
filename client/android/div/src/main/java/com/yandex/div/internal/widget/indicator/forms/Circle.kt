@@ -8,10 +8,17 @@ import com.yandex.div.internal.widget.indicator.IndicatorParams
 internal class Circle(private val params: IndicatorParams.Style) : SingleIndicatorDrawer {
 
     private val paint = Paint()
-    private val shape = params.inactiveShape as IndicatorParams.Shape.Circle
-    private val rect = RectF(0f, 0f,  shape.itemSize.radius * 2, shape.itemSize.radius * 2)
+    private val rect = RectF()
 
-    override fun draw(canvas: Canvas, x: Float, y: Float, itemSize: IndicatorParams.ItemSize, color: Int) {
+    override fun draw(
+        canvas: Canvas,
+        x: Float,
+        y: Float,
+        itemSize: IndicatorParams.ItemSize,
+        color: Int,
+        strokeWidth: Float,
+        strokeColor: Int
+    ) {
         val circleSize = itemSize as IndicatorParams.ItemSize.Circle
         paint.color = color
         rect.apply {

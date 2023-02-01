@@ -16,21 +16,21 @@ class IndicatorStripDrawerTest {
         val style = IndicatorParams.Style(
             activeShape = createRoundedRectangle(
                 color = 0,
-                width = 10,
-                height = 10,
-                cornerRadius = 5
+                width = 10f,
+                height = 10f,
+                cornerRadius = 5f
             ),
             inactiveShape = createRoundedRectangle(
                 color = 0,
-                width = 10,
-                height = 10,
-                cornerRadius = 5
+                width = 10f,
+                height = 10f,
+                cornerRadius = 5f
             ),
             minimumShape = createRoundedRectangle(
                 color = 0,
-                width = 10,
-                height = 10,
-                cornerRadius = 5
+                width = 10f,
+                height = 10f,
+                cornerRadius = 5f
             ),
             itemsPlacement = IndicatorParams.ItemPlacement.Default(
                 spaceBetweenCenters = 15f
@@ -50,21 +50,21 @@ class IndicatorStripDrawerTest {
         val style = IndicatorParams.Style(
             activeShape = createRoundedRectangle(
                 color = 0,
-                width = 10,
-                height = 10,
-                cornerRadius = 10
+                width = 10f,
+                height = 10f,
+                cornerRadius = 10f
             ),
             inactiveShape = createRoundedRectangle(
                 color = 0,
-                width = 10,
-                height = 10,
-                cornerRadius = 10
+                width = 10f,
+                height = 10f,
+                cornerRadius = 10f
             ),
             minimumShape = createRoundedRectangle(
                 color = 0,
-                width = 10,
-                height = 10,
-                cornerRadius = 10
+                width = 10f,
+                height = 10f,
+                cornerRadius = 10f
             ),
             itemsPlacement = IndicatorParams.ItemPlacement.Default(
                 spaceBetweenCenters = 15f
