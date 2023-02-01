@@ -404,6 +404,7 @@ internal class DivPagerBinder @Inject constructor(
         private val visitor: ReleaseViewVisitor
     ) : DivPatchableAdapter<PagerViewHolder>(divs, div2View) {
 
+        override val subscriptions = mutableListOf<Disposable>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PagerViewHolder {
             val view = PageLayout(div2View.context)

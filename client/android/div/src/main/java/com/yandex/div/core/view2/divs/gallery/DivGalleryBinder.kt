@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.ScrollDirection
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
@@ -58,6 +59,8 @@ internal class DivGalleryBinder @Inject constructor(
         if (div == oldDiv) {
             val adapter = view.adapter as GalleryAdapter
             adapter.applyPatch(divPatchCache)
+            adapter.closeAllSubscription()
+            adapter.subscribeOnElements()
             bindStates(view, div.items, divView)
             return
         }
@@ -301,13 +304,17 @@ internal class DivGalleryBinder @Inject constructor(
         private val viewCreator: DivViewCreator,
         private val itemStateBinder: (itemView: View, div: Div) -> Unit,
         private val path: DivStatePath
-    ) : DivPatchableAdapter<GalleryViewHolder>(divs, div2View)  {
+    ) : DivPatchableAdapter<GalleryViewHolder>(divs, div2View) {
 
         private val ids = WeakHashMap<Div, Long>()
         private var lastItemId = 0L
 
+        override val subscriptions = mutableListOf<Disposable>()
+
         init {
             setHasStableIds(true)
+            updateActiveItems()
+            subscribeOnElements()
         }
 
         override fun onViewAttachedToWindow(holder: GalleryViewHolder) {
@@ -323,16 +330,15 @@ internal class DivGalleryBinder @Inject constructor(
         }
 
         override fun getItemId(position: Int): Long {
-            val item = items[position]
+            val item = activeItems[position]
             return ids[item] ?: (lastItemId++).also { ids[item] = it }
         }
 
-        override fun getItemCount() = items.size
+        override fun getItemCount() = activeItems.size
 
         override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
-            val div = items[position]
+            holder.bind(div2View, activeItems[position], path)
             holder.rootView.setTag(R.id.div_gallery_item_index, position)
-            holder.bind(div2View, div, path)
         }
 
         override fun onFailedToRecycleView(holder: GalleryViewHolder): Boolean {
@@ -342,7 +348,6 @@ internal class DivGalleryBinder @Inject constructor(
             }
             return shouldRecycle
         }
-
     }
 
     internal class GalleryViewHolder(

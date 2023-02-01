@@ -9,6 +9,7 @@ import android.view.MotionEvent
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.ExpressionSubscriber
+import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
@@ -93,5 +94,9 @@ internal class DivSnappyRecyclerView  @JvmOverloads constructor(
     override fun release() {
         super.release()
         borderDrawer?.release()
+        val currentAdapter = adapter
+        if (currentAdapter is Releasable) {
+            currentAdapter.release()
+        }
     }
 }

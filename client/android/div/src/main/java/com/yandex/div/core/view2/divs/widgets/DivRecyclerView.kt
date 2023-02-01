@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.ExpressionSubscriber
+import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
@@ -25,9 +26,7 @@ internal class DivRecyclerView  @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : BackHandlingRecyclerView(context, attrs, defStyleAttr), DivBorderSupports,
-        OnInterceptTouchEventListenerHost,
-    TransientView,
-    ExpressionSubscriber {
+    OnInterceptTouchEventListenerHost, TransientView, ExpressionSubscriber {
 
     private var borderDrawer: DivBorderDrawer? = null
     override val border: DivBorder?
@@ -86,5 +85,9 @@ internal class DivRecyclerView  @JvmOverloads constructor(
     override fun release() {
         super.release()
         borderDrawer?.release()
+        val currentAdapter = adapter
+        if (currentAdapter is Releasable) {
+            currentAdapter.release()
+        }
     }
 }
