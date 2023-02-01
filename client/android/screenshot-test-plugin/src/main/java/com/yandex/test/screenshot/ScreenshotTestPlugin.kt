@@ -3,6 +3,7 @@ package com.yandex.test.screenshot
 import com.yandex.test.screenshot.tasks.CompareScreenshotsTask
 import com.yandex.test.screenshot.tasks.GenerateScreenshotConfigTask
 import com.yandex.test.screenshot.tasks.PullScreenshotsTask
+import com.yandex.test.screenshot.tasks.ValidateTestResultsTask
 import com.yandex.test.util.android
 import com.yandex.test.util.androidComponents
 import com.yandex.test.util.variants
@@ -34,6 +35,7 @@ class ScreenshotTestPlugin : Plugin<Project> {
                 variant.registerJavaGeneratingTask(task, task.outputDir)
             }
         }
+        project.tasks.register(ValidateTestResultsTask.NAME, ValidateTestResultsTask::class.java)
         project.tasks.register(PullScreenshotsTask.NAME, PullScreenshotsTask::class.java)
         project.tasks.register(CompareScreenshotsTask.NAME, CompareScreenshotsTask::class.java)
 

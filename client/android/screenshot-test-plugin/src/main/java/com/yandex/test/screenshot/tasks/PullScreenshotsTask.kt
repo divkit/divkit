@@ -13,6 +13,7 @@ open class PullScreenshotsTask : DefaultTask() {
 
     init {
         group = "verification"
+        this.dependsOn(ValidateTestResultsTask.NAME)
     }
 
     @TaskAction
