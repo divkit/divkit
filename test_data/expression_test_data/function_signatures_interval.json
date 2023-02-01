@@ -12,6 +12,7 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -28,6 +29,7 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -44,6 +46,7 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -60,6 +63,7 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -76,6 +80,7 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -92,6 +97,7 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -108,6 +114,7 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -124,6 +131,7 @@
       ],
       "result_type": "integer",
       "platforms": [
+        "android",
         "web",
         "ios"
       ]

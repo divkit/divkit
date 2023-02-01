@@ -93,6 +93,16 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetSeconds)
         registry.register(GetMillis)
 
+        // Interval functions
+        registry.register(GetIntervalTotalWeeks)
+        registry.register(GetIntervalTotalDays)
+        registry.register(GetIntervalTotalHours)
+        registry.register(GetIntervalHours)
+        registry.register(GetIntervalTotalMinutes)
+        registry.register(GetIntervalMinutes)
+        registry.register(GetIntervalTotalSeconds)
+        registry.register(GetIntervalSeconds)
+
         // String functions
         registry.register(StringLength)
         registry.register(StringContains)
