@@ -102,6 +102,10 @@ function toLowerCase(str: StringValue): EvalValue {
 }
 
 function calcPad(val: StringValue | IntegerValue, len: IntegerValue, pad: StringValue): string {
+    if (!pad.value.length) {
+        return '';
+    }
+
     let part = '';
     const str = val.type === STRING ? val.value : valToString(val);
 
