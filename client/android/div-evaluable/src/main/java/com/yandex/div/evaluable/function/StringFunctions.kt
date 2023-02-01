@@ -240,3 +240,109 @@ internal object ToLowerCase : Function() {
         return str.toLowerCase()
     }
 }
+
+internal object PadStartString : Function() {
+
+    override val name = "padStart"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // string
+        FunctionArgument(type = EvaluableType.INTEGER), // length
+        FunctionArgument(type = EvaluableType.STRING) // pad_str
+    )
+    override val resultType = EvaluableType.STRING
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val string = args[0] as String
+        val length = args[1] as Int
+        val padStr = args[2] as String
+
+        val leftForRequired = length - string.length
+
+        return buildRepeatableString(leftForRequired, padStr) + string
+    }
+}
+
+internal object PadStartInteger : Function() {
+
+    override val name = "padStart"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.INTEGER), // integer
+        FunctionArgument(type = EvaluableType.INTEGER), // length
+        FunctionArgument(type = EvaluableType.STRING) // pad_str
+    )
+    override val resultType = EvaluableType.STRING
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val string = (args[0] as Int).toString()
+        val length = args[1] as Int
+        val padStr = args[2] as String
+
+        val leftForRequired = length - string.length
+
+        return buildRepeatableString(leftForRequired, padStr) + string
+    }
+}
+
+internal object PadEndString : Function() {
+
+    override val name = "padEnd"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.STRING), // string
+        FunctionArgument(type = EvaluableType.INTEGER), // length
+        FunctionArgument(type = EvaluableType.STRING) // pad_str
+    )
+    override val resultType = EvaluableType.STRING
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val string = args[0] as String
+        val length = args[1] as Int
+        val padStr = args[2] as String
+
+        val leftForRequired = length - string.length
+
+        return string + buildRepeatableString(leftForRequired, padStr)
+    }
+}
+
+internal object PadEndInteger : Function() {
+
+    override val name = "padEnd"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.INTEGER), // integer
+        FunctionArgument(type = EvaluableType.INTEGER), // length
+        FunctionArgument(type = EvaluableType.STRING) // pad_str
+    )
+    override val resultType = EvaluableType.STRING
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val string = (args[0] as Int).toString()
+        val length = args[1] as Int
+        val padStr = args[2] as String
+
+        val leftForRequired = length - string.length
+
+        return string + buildRepeatableString(leftForRequired, padStr)
+    }
+}
+
+private fun buildRepeatableString(length: Int, repeatable: String): String {
+    if (repeatable.isEmpty() || length <= 0) return ""
+
+    val stringBuilder = StringBuilder(length)
+
+    (0 until length).forEach { index ->
+        val char = repeatable[index % repeatable.length]
+
+        stringBuilder.append(char)
+    }
+
+    return stringBuilder.toString()
+}

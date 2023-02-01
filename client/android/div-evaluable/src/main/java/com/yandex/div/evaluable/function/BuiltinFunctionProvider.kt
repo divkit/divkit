@@ -117,6 +117,10 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(Trim)
         registry.register(TrimLeft)
         registry.register(TrimRight)
+        registry.register(PadStartString)
+        registry.register(PadStartInteger)
+        registry.register(PadEndString)
+        registry.register(PadEndInteger)
 
         // Type cast functions
         registry.register(NumberToInteger)

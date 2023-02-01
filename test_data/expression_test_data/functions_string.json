@@ -541,6 +541,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -554,6 +555,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -567,6 +569,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -580,6 +583,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -593,6 +597,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -606,6 +611,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -619,6 +625,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -632,6 +639,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -645,6 +653,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -658,6 +667,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -671,6 +681,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -684,6 +695,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -697,6 +709,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -710,6 +723,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "web",
         "ios"
       ]
@@ -723,6 +737,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
@@ -736,6 +751,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]
