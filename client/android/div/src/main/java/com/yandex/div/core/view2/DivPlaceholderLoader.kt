@@ -1,5 +1,7 @@
 package com.yandex.div.core.view2
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.annotation.MainThread
 import com.yandex.div.core.DecodeBase64ImageTask
 import com.yandex.div.core.Div2ImageStubProvider
@@ -7,6 +9,7 @@ import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
 import java.util.concurrent.ExecutorService
+import java.util.concurrent.Future
 import javax.inject.Inject
 
 @DivScope
@@ -22,31 +25,41 @@ internal class DivPlaceholderLoader @Inject constructor(
         currentPreview: String?,
         currentPlaceholderColor: Int,
         synchronous: Boolean,
-        onPreviewSet: () -> Unit = { }
+        onSetPlaceholder: (Drawable?) -> Unit,
+        onSetPreview: (Bitmap) -> Unit
     ) {
-        val previewLoaded = currentPreview != null
-        if (!previewLoaded) {
-            val imageStub = imageStubProvider.getImageStubDrawable(currentPlaceholderColor)
-            imageView.setPlaceholder(imageStub)
-        }
-        currentPreview.decodeBase64ToBitmap(imageView, synchronous, onPreviewSet)
+        currentPreview?.let {
+            enqueueDecoding(it, imageView, synchronous, onSetPreview)
+        } ?: onSetPlaceholder(imageStubProvider.getImageStubDrawable(currentPlaceholderColor))
     }
 
-    private fun String?.decodeBase64ToBitmap(
+    private fun enqueueDecoding(
+        preview: String,
         loadableImage: LoadableImage,
         synchronous: Boolean,
-        onPreviewSet: () -> Unit
+        onDecoded: (Bitmap) -> Unit
     ) {
-        val base64string = this ?: return
         loadableImage.getLoadingTask()?.cancel(true)
-        val decodeTask = DecodeBase64ImageTask(
-            base64string, loadableImage, synchronous, onPreviewSet)
-        if (synchronous) {
-            decodeTask.run()
+
+        val future = preview.decodeBase64ToBitmap(synchronous) {
+            onDecoded(it)
             loadableImage.cleanLoadingTask()
+        }
+
+        future?.let { loadableImage.saveLoadingTask(it) }
+    }
+
+    private fun String.decodeBase64ToBitmap(
+        synchronous: Boolean,
+        onDecoded: (Bitmap) -> Unit
+    ): Future<*>? {
+        val decodeTask = DecodeBase64ImageTask(this, synchronous, onDecoded)
+
+        return if (synchronous) {
+            decodeTask.run()
+            null
         } else {
-            val future = executorService.submit(decodeTask)
-            loadableImage.saveLoadingTask(future)
+            executorService.submit(decodeTask)
         }
     }
 }

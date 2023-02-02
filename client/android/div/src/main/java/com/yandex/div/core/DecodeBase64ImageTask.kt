@@ -4,15 +4,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Base64
 import androidx.annotation.WorkerThread
-import com.yandex.div.core.view2.divs.widgets.LoadableImage
 import com.yandex.div.internal.KLog
 import com.yandex.div.internal.util.UiThreadHandler
 
 internal class DecodeBase64ImageTask(
     private var base64string: String,
-    private val targetView: LoadableImage,
     private val synchronous: Boolean,
-    private val onPreviewSet: () -> Unit,
+    private val onDecoded: (Bitmap) -> Unit
 ) : Runnable {
 
     @WorkerThread
@@ -32,17 +30,13 @@ internal class DecodeBase64ImageTask(
             KLog.e("Div") { "Problem with decoding base-64 preview image occurred" }
             return
         }
-        val setImageRunnable = {
-            if (!targetView.isImageLoaded) {
-                targetView.setPreview(bitmap)
-                onPreviewSet()
-            }
-            targetView.cleanLoadingTask()
-        }
+
         if (synchronous) {
-            setImageRunnable()
+            onDecoded(bitmap)
         } else {
-            UiThreadHandler.postOnMainThread(setImageRunnable)
+            UiThreadHandler.postOnMainThread {
+                onDecoded(bitmap)
+            }
         }
     }
 

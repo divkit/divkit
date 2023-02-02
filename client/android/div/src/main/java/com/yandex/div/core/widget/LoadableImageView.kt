@@ -24,7 +24,7 @@ open class LoadableImageView(
     defStyleAttr: Int = 0
 ) : AspectImageView(context, attrs, defStyleAttr), LoadableImage, DivExtendableView {
 
-    internal var loadedBitmap: Bitmap? = null
+    internal var currentBitmapWithoutFilters: Bitmap? = null
 
     private var imageChangeCallback: (() -> Unit)? = null
 

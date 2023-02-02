@@ -1,7 +1,6 @@
 package com.yandex.div.core.view2.divs
 
 import android.widget.ImageView
-import androidx.core.graphics.drawable.toBitmap
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.ExpressionSubscriber
@@ -52,7 +51,7 @@ internal class DivImageBinder @Inject constructor(
             div.scale.observeAndGet(expressionResolver) { scale -> view.imageScale = scale.toImageScale() }
         )
         view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
-        view.observePreview(expressionResolver, div)
+        view.observePreview(divView, expressionResolver, div)
         view.addSubscription(
             div.imageUrl.observeAndGet(expressionResolver) { view.applyImage(divView, expressionResolver, div) }
         )
@@ -116,11 +115,8 @@ internal class DivImageBinder @Inject constructor(
         divView: Div2View,
         resolver: ExpressionResolver,
     ) {
-        (loadedBitmap ?: drawable.toBitmap()).applyFilters(this, filters, divView.div2Component, resolver) {
-            setImage(it)
-            if (it == loadedBitmap) {
-                loadedBitmap = null
-            }
+        currentBitmapWithoutFilters?.applyFilters(this, filters, divView.div2Component, resolver) {
+            setImageBitmap(it)
         }
     }
 
@@ -130,11 +126,11 @@ internal class DivImageBinder @Inject constructor(
         return !isImageLoaded || newImageUrl != imageUrl
     }
 
-    private fun DivImageView.observePreview(resolver: ExpressionResolver, div: DivImage) {
+    private fun DivImageView.observePreview(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
         div.preview?.let {
             val callback = { _: Any ->
                 if (!isImageLoaded) {
-                    applyPreview(resolver, div, synchronous = true)
+                    applyPreview(divView, resolver, div, synchronous = true)
                 }
             }
 
@@ -142,16 +138,26 @@ internal class DivImageBinder @Inject constructor(
         }
     }
 
-    private fun DivImageView.applyPreview(resolver: ExpressionResolver, div: DivImage, synchronous: Boolean) {
+    private fun DivImageView.applyPreview(divView: Div2View, resolver: ExpressionResolver, div: DivImage, synchronous: Boolean) {
         placeholderLoader.applyPlaceholder(
             this,
             div.preview?.evaluate(resolver),
             div.placeholderColor.evaluate(resolver),
-            synchronous = synchronous
-        ) {
-            previewLoaded()
-            applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
-        }
+            synchronous = synchronous,
+            onSetPlaceholder = { drawable ->
+                if (!isImageLoaded && !isImagePreview) {
+                    setPlaceholder(drawable)
+                }
+            },
+            onSetPreview = {
+                if (!isImageLoaded) {
+                    currentBitmapWithoutFilters = it
+                    applyFiltersAndSetBitmap(div.filters, divView, resolver)
+                    previewLoaded()
+                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                }
+            }
+        )
     }
 
     private fun DivImageView.applyImage(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
@@ -166,7 +172,7 @@ internal class DivImageBinder @Inject constructor(
         val newImageUrl = div.imageUrl.evaluate(resolver)
         newImageUrl.applyIfNotEquals(imageUrl) { resetImageLoaded() }
 
-        applyPreview(resolver, div, synchronous = isHighPriorityShowPreview)
+        applyPreview(divView, resolver, div, synchronous = isHighPriorityShowPreview)
 
         val reference = imageLoader.loadImage(
             newImageUrl.toString(),
@@ -174,7 +180,7 @@ internal class DivImageBinder @Inject constructor(
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
                     super.onSuccess(cachedBitmap)
                     imageUrl = newImageUrl
-                    loadedBitmap = cachedBitmap.bitmap
+                    currentBitmapWithoutFilters = cachedBitmap.bitmap
                     applyFiltersAndSetBitmap(div.filters, divView, resolver)
                     applyLoadingFade(div, resolver, cachedBitmap.from)
                     imageLoaded()

@@ -1,5 +1,6 @@
 package com.yandex.div.core.view2.divs
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
 import com.yandex.div.core.asExpression
@@ -64,7 +65,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         binder.bindView(view, divContainer, divView)
 
-        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any())
+        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(eq(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
     }
 
@@ -76,7 +77,7 @@ class DivImageBinderTest : DivBinderTest() {
         val (_, nextDivContainer) = createTestDiv("with_action.json")
         binder.bindView(view, nextDivContainer, divView)
 
-        verify(placeholderLoader, times(2)).applyPlaceholder(any(), anyOrNull(), any(), any(), any())
+        verify(placeholderLoader, times(2)).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader, times(2)).loadImage(eq(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
     }
 
@@ -105,7 +106,7 @@ class DivImageBinderTest : DivBinderTest() {
         val nextDivContainer = DivImage(imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression())
         binder.bindView(view, nextDivContainer, divView)
 
-        verify(placeholderLoader, times(2)).applyPlaceholder(any(), anyOrNull(), any(), any(), any())
+        verify(placeholderLoader, times(2)).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(eq(nextDivContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
     }
 
@@ -120,7 +121,7 @@ class DivImageBinderTest : DivBinderTest() {
         binder.bindView(view, divContainer, divView)
         verify(placeholderLoader).applyPlaceholder(
                 any(), anyOrNull(), any(),
-                synchronous = eq(true), any()
+                synchronous = eq(true), any(), any()
         )
 
         whenImageLoaded(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString())
@@ -133,7 +134,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         verify(placeholderLoader).applyPlaceholder(
                 any(), anyOrNull(), any(),
-                synchronous = eq(false), any()
+                synchronous = eq(false), any(), any()
         )
     }
 
@@ -227,7 +228,7 @@ class DivImageBinderTest : DivBinderTest() {
 
     private fun whenImageLoaded(imageUrl: String) {
         val imageDownloadCallbackCaptor = argumentCaptor<DivImageDownloadCallback>()
-        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any())
+        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
         val cachedBitmap = mock<CachedBitmap> {
             on { bitmap } doReturn mock()
@@ -236,9 +237,10 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     private fun whenPreviewLoaded() {
-        val previewSetCallbackCaptor = argumentCaptor<() -> Unit>()
-        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), previewSetCallbackCaptor.capture())
-        previewSetCallbackCaptor.firstValue.invoke()
+        val previewSetCallbackCaptor = argumentCaptor<(Bitmap) -> Unit>()
+        val bitmap = mock<Bitmap>()
+        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), previewSetCallbackCaptor.capture())
+        previewSetCallbackCaptor.firstValue.invoke(bitmap)
     }
 
     private fun createTestDiv(fileName: String): Pair<DivImageView, DivImage> {

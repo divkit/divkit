@@ -106,7 +106,18 @@ internal class DivGifImageBinder @Inject constructor(
             this,
             div.preview?.evaluate(resolver),
             div.placeholderColor.evaluate(resolver),
-            synchronous = false
+            synchronous = false,
+            onSetPlaceholder = {
+                if (!isImageLoaded && !isImagePreview) {
+                    setPlaceholder(it)
+                }
+            },
+            onSetPreview = {
+                if (!isImageLoaded) {
+                    setPreview(it)
+                    previewLoaded()
+                }
+            }
         )
 
         // we don't reuse this because not all clients has bytes cache
