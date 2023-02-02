@@ -29,6 +29,8 @@ def __generate_objects(file: SchemaFile, config: Config.GenerationConfig) -> Lis
         return [StringEnumeration(name=alias(config.lang, contents) or name,
                                   original_name=name,
                                   cases=cases,
+                                  description=contents.get('description', ''),
+                                  description_object=contents.get('description_translations', {}),
                                   include_documentation_toc=contents.get('include_in_documentation_toc', False))]
     elif contents.get('anyOf') is not None:
         entities: List[Dict[str, any]] = contents.get('anyOf')

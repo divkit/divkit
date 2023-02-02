@@ -535,10 +535,14 @@ class StringEnumeration(Declarable):
                  name: str,
                  original_name: str,
                  cases: Union[List[str], List[Tuple[str, str]]],
+                 description: str,
+                 description_object: Dict[str, str],
                  include_documentation_toc: bool) -> None:
         super().__init__()
         self._name: str = name
         self._original_name: str = original_name
+        self._description = description
+        self._description_object: Dict[str, str] = description_object
         if is_list_of_type(cases, str):
             self._cases: List[Tuple[str, str]] = list(map(lambda case: (case, case), cases))
         else:
@@ -560,6 +564,9 @@ class StringEnumeration(Declarable):
     @property
     def cases(self) -> List[Tuple[str, str]]:
         return self._cases
+
+    def description_doc(self, lang: DescriptionLanguage = DescriptionLanguage.EN) -> str:
+        return description_doc(self._description_object, lang, self._description)
 
     @property
     def include_in_documentation_toc(self) -> bool:

@@ -1,7 +1,7 @@
 import json
 import os
 import shutil
-from typing import Dict, Any
+from typing import Dict, Any, List
 from deepdiff import DeepDiff
 
 try:
@@ -67,8 +67,12 @@ def update_references(source_path: str, destination_path: str):
             update_references(src_file_path, dst_file_path)
 
 
-def compare_dirs(references_path: str, generated_path: str):
+def compare_dirs(references_path: str, generated_path: str, ignore: List[str] = None):
+    if ignore is None:
+        ignore = []
     for file in os.listdir(references_path):
+        if file in ignore:
+            continue
         if os.path.isfile(os.path.join(references_path, file)):
             ref_file_path, gen_file_path = __join_paths(references_path, generated_path, file)
             compare_files(file, ref_file_path, gen_file_path)

@@ -1,12 +1,25 @@
-@file:Suppress("unused")
+@file:Suppress(
+    "unused",
+    "UNUSED_PARAMETER",
+)
 
 package divan
 
-import com.fasterxml.jackson.annotation.JsonValue
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonIgnore
 import divan.annotation.Generated
+import divan.core.Guard
+import divan.core.Property
+import divan.core.ReferenceProperty
+import divan.core.tryPutProperty
+import divan.core.valueOrNull
 import divan.scope.DivScope
+import divan.scope.TemplateScope
+import kotlin.Any
 import kotlin.String
 import kotlin.Suppress
+import kotlin.collections.List
+import kotlin.collections.Map
 
 @Generated
 sealed class EnumValue(
@@ -16,21 +29,21 @@ sealed class EnumValue(
 
 @Generated
 object FirstEnumValue : EnumValue("first"),
-        Entity_with_optional_string_enum_property.StringEnumProperty,
-        Entity_with_string_enum_property.StringEnumProperty,
-        Entity_with_string_enum_property_with_default_value.Value,
-        Entity_with_array_of_enums.Items.Items
+    EntityWithArrayOfEnums.Item,
+    EntityWithOptionalStringEnumProperty.Property,
+    EntityWithStringEnumProperty.Property,
+    EntityWithStringEnumPropertyWithDefaultValue.Value
 
 @Generated
 object SecondEnumValue : EnumValue("second"),
-        Entity_with_optional_string_enum_property.StringEnumProperty,
-        Entity_with_string_enum_property.StringEnumProperty,
-        Entity_with_string_enum_property_with_default_value.Value,
-        Entity_with_array_of_enums.Items.Items
+    EntityWithArrayOfEnums.Item,
+    EntityWithOptionalStringEnumProperty.Property,
+    EntityWithStringEnumProperty.Property,
+    EntityWithStringEnumPropertyWithDefaultValue.Value
 
 @Generated
 object ThirdEnumValue : EnumValue("third"),
-        Entity_with_string_enum_property_with_default_value.Value
+    EntityWithStringEnumPropertyWithDefaultValue.Value
 
 @Generated
 val DivScope.first: FirstEnumValue

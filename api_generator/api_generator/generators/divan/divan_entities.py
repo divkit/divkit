@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, cast
+from typing import List, cast, Dict
 
 from ...schema.modeling.entities import (
     Entity,
@@ -21,6 +21,7 @@ from ...schema.modeling.entities import (
     Dictionary,
 )
 from ... import utils
+from . import utils as divan_utils
 from ...schema.modeling.text import Text
 
 GUARD_INSTANCE_PARAM = '`use named arguments`: Guard = Guard.instance,'
@@ -41,17 +42,14 @@ forced_property_orders = {
     SOLID_BACKGROUND_CLASS_NAME: ["color"]
 }
 
-default_params = {
-    DATA_STATE_CLASS_NAME: [("stateId", "0")]
-}
 
-
-def get_default_parameter_value(name: str, property: DivanProperty) -> str:
-    params = default_params.get(name) or []
-    for param, default in params:
-        if param == property.name:
-            return default
-    return 'null'
+def full_name(obj: Declarable) -> str:
+    name = divan_utils.capitalize_camel_case(obj.name)
+    current_parent = obj.parent
+    while current_parent is not None:
+        name = f'{divan_utils.capitalize_camel_case(current_parent.name)}.{name}'
+        current_parent = current_parent.parent
+    return name
 
 
 def update_base(obj: Declarable) -> Declarable:
@@ -72,10 +70,6 @@ def comment(*lines) -> Text:
         comment_block += f' * {line}'
     comment_block += ' */'
     return comment_block
-
-
-def default_value_comment(value) -> Text:
-    return comment(f'Значение по умолчанию: {value}')
 
 
 def update_property_type_base(property_type: PropertyType):
@@ -119,7 +113,7 @@ class DivanEntity(Entity):
     def supertype_declaration(self) -> str:
         supertypes = []
         for enumeration in self.enclosing_enumerations:
-            supertypes.append(f'{utils.capitalize_camel_case(enumeration.name)}()')
+            supertypes.append(f'{divan_utils.capitalize_camel_case(enumeration.name)}()')
         if self.root_entity:
             supertypes.append('Root')
         additional_supertypes = self.protocol_plus_super_entities(with_impl_protocol=False)
@@ -129,32 +123,37 @@ class DivanEntity(Entity):
             return ''
         return f' : {", ".join(supertypes)}'
 
-    @property
-    def header_comment_block(self) -> Text:
+    def header_comment_block(self, translations: Dict[str, str]) -> Text:
         required_prop_names = sorted([prop.name for prop in self.properties if not prop.optional], reverse=True)
-        factory_method_name = utils.snake_case(self.name)  # TODO(use parent naming)
-        lines = [
+        factory_method_name = self.factory_method_name_with_parent
+        lines = []
+        description = self.description_doc()
+        if description not in ['None', '']:
+            lines.append(description)
+            lines.append('')
+        lines.extend([
+            translations['div_generator_factory_method_name'].format(factory_method_name),
             '',
-            f'Можно создать при помощи метода [{factory_method_name}].'
-            '',
-            f'Обязательные поля: {", ".join(required_prop_names)}'
-        ]
+            translations['div_generator_required_properties'].format(', '.join(required_prop_names)),
+        ])
         return comment(*lines)
 
     @property
     def params_comment_block(self) -> Text:
-        return comment(*[
+        params = [
             f'@param {prop.name} {prop.description_doc()}'
             for prop in self.properties if prop.description_doc() is not None
-        ])
+        ]
+        return comment(*params) if params else Text()
 
     @property
     def evaluatable_params_comment_block(self) -> Text:
-        return comment(*[
+        params = [
             f'@param {prop.name} {prop.description_doc()}'
             for prop in self.properties
             if prop.description_doc() is not None and cast(DivanProperty, prop).is_evaluatable_property
-        ])
+        ]
+        return comment(*params) if params else Text()
 
     @property
     def serialization_declaration(self) -> Text:
@@ -189,7 +188,7 @@ class DivanEntity(Entity):
                     signature_declaration += GUARD_INSTANCE_PARAM
                     is_named_guard_added = True
             required = not force_default_nulls and not property.optional
-            default = 'null' if force_default_nulls else get_default_parameter_value(self.name, property)
+            default = 'null'
             property_type = cast(DivanPropertyType, property.property_type)
             type_name_declaration = property_type.declaration(prefixed=True)
             if not required:
@@ -210,24 +209,24 @@ class DivanEntity(Entity):
             signature_declaration += property_declaration
         return signature_declaration
 
-    def expression_properties_signature(self) -> Text:
+    def expression_properties_signature(self) -> (Text, bool):
         signature_declaration = Text(GUARD_INSTANCE_PARAM)
+        has_params_except_guard = False
         for property in cast(List[DivanProperty], self.instance_properties):
             if not property.is_evaluatable_property:
                 continue
+            has_params_except_guard = True
             property_type = cast(DivanPropertyType, property.property_type)
             type_name_declaration = property_type.declaration(prefixed=True)
             property_declaration = f'{property.name_declaration}: ExpressionProperty<{type_name_declaration}>? = null,'
             signature_declaration += property_declaration
-        return signature_declaration
+        return signature_declaration, has_params_except_guard
 
-    @property
-    def properties_class_declaration(self) -> Text:
+    def properties_class_declaration(self, translations: Dict[str, str]) -> Text:
         declaration = Text()
         declaration += 'class Properties internal constructor('
         for prop in cast(List[DivanProperty], self.instance_properties):
-            declaration += comment(prop.description_doc()).indented(indent_width=4)
-            declaration += f'{prop.constructor_parameter_declaration.indented(indent_width=4)},'
+            declaration += f'{prop.constructor_parameter_declaration(translations).indented(indent_width=4)},'
         declaration += ') {'
         merge_with_declaration = Text('internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {')
         merge_with_declaration += '    val result = mutableMapOf<String, Any>()'
@@ -242,14 +241,8 @@ class DivanEntity(Entity):
 
     @property
     def factory_method_declaration(self) -> Text:
-        type_name = utils.capitalize_camel_case(self.name)
-        method_name = type_name
-        current_parent = self.parent
-        while current_parent is not None:
-            type_name = f'{utils.capitalize_camel_case(current_parent.name)}.{type_name}'
-            method_name = utils.capitalize_camel_case(current_parent.name) + method_name
-            current_parent = current_parent.parent
-        method_name = utils.lower_camel_case(method_name)
+        type_name = full_name(self)
+        method_name = self.factory_method_name_with_parent
         declaration = Text(f'fun DivScope.{method_name}(')
         declaration += self.literal_properties_signature(
             force_named_arguments=False,
@@ -266,15 +259,8 @@ class DivanEntity(Entity):
 
     @property
     def properties_factory_method_declaration(self) -> Text:
-        capitalize_camel_case = utils.capitalize_camel_case(self.name)
-        type_name = f'{capitalize_camel_case}.Properties'
-        method_name = f'{capitalize_camel_case}Props'
-        current_parent = self.parent
-        while current_parent is not None:
-            type_name = f'{utils.capitalize_camel_case(current_parent.name)}.{type_name}'
-            method_name = utils.capitalize_camel_case(current_parent.name) + method_name
-            current_parent = current_parent.parent
-        method_name = utils.lower_camel_case(method_name)
+        type_name = full_name(self) + '.Properties'
+        method_name = self.factory_method_name_with_parent + 'Props'
         declaration = Text(f'fun DivScope.{method_name}(')
         declaration += self.literal_properties_signature(
             force_named_arguments=True,
@@ -289,15 +275,8 @@ class DivanEntity(Entity):
 
     @property
     def references_factory_method_declaration(self) -> Text:
-        capitalize_camel_case = utils.capitalize_camel_case(self.name)
-        type_name = f'{capitalize_camel_case}.Properties'
-        method_name = f'{capitalize_camel_case}Refs'
-        current_parent = self.parent
-        while current_parent is not None:
-            type_name = f'{utils.capitalize_camel_case(current_parent.name)}.{type_name}'
-            method_name = utils.capitalize_camel_case(current_parent.name) + method_name
-            current_parent = current_parent.parent
-        method_name = utils.lower_camel_case(method_name)
+        type_name = full_name(self) + '.Properties'
+        method_name = self.factory_method_name_with_parent + 'Refs'
         declaration = Text(f'fun TemplateScope.{method_name}(')
         declaration += self.reference_properties_signature().indented(level=1, indent_width=4)
         declaration += f') = {type_name}('
@@ -309,7 +288,7 @@ class DivanEntity(Entity):
 
     @property
     def operator_plus_declaration(self) -> Text:
-        name = utils.capitalize_camel_case(self.name)
+        name = divan_utils.capitalize_camel_case(self.name)
         declaration = Text(f'operator fun plus(additive: Properties): {name} = {name}(')
         declaration += utils.indented('Properties(', level=1, indent_width=4)
         for property in cast(List[DivanProperty], self.instance_properties):
@@ -325,7 +304,7 @@ class DivanEntity(Entity):
 
     @property
     def operator_plus_component_declaration(self) -> Text:
-        name = utils.capitalize_camel_case(self.name)
+        name = divan_utils.capitalize_camel_case(self.name)
         declaration = Text(f'operator fun Component<{name}>.plus(additive: Properties): Component<{name}> = Component(')
         declaration += utils.indented('template = template,', level=1, indent_width=4)
         declaration += utils.indented('properties = additive.mergeWith(properties)', level=1, indent_width=4)
@@ -333,12 +312,13 @@ class DivanEntity(Entity):
         return declaration
 
     @property
+    def as_list_method_declaration(self) -> Text:
+        name = full_name(self)
+        return Text(f'fun {name}.asList() = listOf(this)')
+
+    @property
     def override_method_declaration(self) -> Text:
-        name = utils.capitalize_camel_case(self.name)
-        current_parent = self.parent
-        while current_parent is not None:
-            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
-            current_parent = current_parent.parent
+        name = full_name(self)
         declaration = Text(f'fun {name}.override(')
         declaration += self.literal_properties_signature(
             force_named_arguments=True,
@@ -359,11 +339,7 @@ class DivanEntity(Entity):
 
     @property
     def override_component_method_declaration(self) -> Text:
-        name = utils.capitalize_camel_case(self.name)
-        current_parent = self.parent
-        while current_parent is not None:
-            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
-            current_parent = current_parent.parent
+        name = full_name(self)
         declaration = Text(f'fun Component<{name}>.override(')
         declaration += self.literal_properties_signature(
             force_named_arguments=True,
@@ -381,11 +357,7 @@ class DivanEntity(Entity):
 
     @property
     def defer_method_declaration(self) -> Text:
-        name = utils.capitalize_camel_case(self.name)
-        current_parent = self.parent
-        while current_parent is not None:
-            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
-            current_parent = current_parent.parent
+        name = full_name(self)
         declaration = Text(f'fun {name}.defer(')
         declaration += self.reference_properties_signature().indented(level=1, indent_width=4)
         declaration += f'): {name} = {name}('
@@ -403,11 +375,7 @@ class DivanEntity(Entity):
 
     @property
     def defer_component_method_declaration(self) -> Text:
-        name = utils.capitalize_camel_case(self.name)
-        current_parent = self.parent
-        while current_parent is not None:
-            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
-            current_parent = current_parent.parent
+        name = full_name(self)
         declaration = Text(f'fun Component<{name}>.defer(')
         declaration += self.reference_properties_signature().indented(level=1, indent_width=4)
         declaration += f'): Component<{name}> = Component('
@@ -422,13 +390,12 @@ class DivanEntity(Entity):
 
     @property
     def evaluate_method_declaration(self) -> Text:
-        name = utils.capitalize_camel_case(self.name)
-        current_parent = self.parent
-        while current_parent is not None:
-            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
-            current_parent = current_parent.parent
+        name = full_name(self)
         declaration = Text(f'fun {name}.evaluate(')
-        declaration += self.expression_properties_signature().indented(level=1, indent_width=4)
+        expression_properties_signature, has_params_except_guard = self.expression_properties_signature()
+        if not has_params_except_guard:
+            return Text()
+        declaration += expression_properties_signature.indented(level=1, indent_width=4)
         declaration += f'): {name} = {name}('
         declaration += utils.indented(f'{name}.Properties(', level=1, indent_width=4)
         for property in cast(List[DivanProperty], self.instance_properties):
@@ -442,13 +409,12 @@ class DivanEntity(Entity):
 
     @property
     def evaluate_component_method_declaration(self) -> Text:
-        name = utils.capitalize_camel_case(self.name)
-        current_parent = self.parent
-        while current_parent is not None:
-            name = f'{utils.capitalize_camel_case(current_parent.name)}.{name}'
-            current_parent = current_parent.parent
+        name = full_name(self)
         declaration = Text(f'fun Component<{name}>.evaluate(')
-        declaration += self.expression_properties_signature().indented(level=1, indent_width=4)
+        expression_properties_signature, has_params_except_guard = self.expression_properties_signature()
+        if not has_params_except_guard:
+            return Text()
+        declaration += expression_properties_signature.indented(level=1, indent_width=4)
         declaration += f'): Component<{name}> = Component('
         declaration += utils.indented('template = template,', level=1, indent_width=4)
         declaration += utils.indented(f'properties = {name}.Properties(', level=1, indent_width=4)
@@ -460,6 +426,15 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
+    @property
+    def factory_method_name_with_parent(self) -> str:
+        name = divan_utils.capitalize_camel_case(self.name)
+        current_parent = self.parent
+        while current_parent is not None:
+            name = f'{divan_utils.capitalize_camel_case(current_parent.name)}{name}'
+            current_parent = current_parent.parent
+        return name[0].lower() + name[1:]
+
 
 class DivanEntityEnumeration(EntityEnumeration):
     def update_base(self):
@@ -467,29 +442,46 @@ class DivanEntityEnumeration(EntityEnumeration):
 
 
 class DivanStringEnumeration(StringEnumeration):
-    pass
+
+    def header_comment_block(self, translations: Dict[str, str]) -> Text:
+        comment_lines = []
+        description_doc = self.description_doc()
+        if description_doc not in ['', 'None']:
+            comment_lines.append(description_doc)
+            comment_lines.append('')
+        possible_values = translations['div_generator_possible_values']\
+            .format(f"[{', '.join(map(lambda case: case[1], self.cases), )}]")
+        comment_lines.append(possible_values)
+        return comment(*comment_lines)
 
 
 class DivanProperty(Property):
     def update_base(self):
         update_property_type_base(self.property_type)
 
-    @property
-    def constructor_parameter_declaration(self) -> Text:
+    def constructor_parameter_declaration(self, translations: Dict[str, str]) -> Text:
         prop_type = cast(DivanPropertyType, self.property_type)
         type_declaration = f'Property<{cast(DivanPropertyType, prop_type.declaration(prefixed=False))}>'
         default_value = self.default_value
         declaration = Text()
+
+        comment_lines = []
+        description_doc = self.description_doc()
+        if description_doc is not None:
+            comment_lines.append(description_doc)
         if default_value is not None:
-            declaration += default_value_comment(default_value)
+            comment_lines.append(translations["div_generator_default_value"].format(default_value))
+        if comment_lines:
+            declaration += comment(*comment_lines)
+
         declaration += f'val {self.name_declaration}: {type_declaration}?'
         return declaration
 
     @property
     def name_declaration(self) -> str:
-        name = utils.lower_camel_case(self.name)
+        name = divan_utils.lower_camel_case(self.name)
         if isinstance(self.property_type, StaticString):
-            name = utils.constant_upper_case(self.name)
+            name = divan_utils.constant_upper_case(self.name)
         return utils.fixing_first_digit(name)
 
     @property
@@ -521,13 +513,13 @@ class DivanPropertyType(PropertyType):
         elif isinstance(self, Object):
             if self.name.startswith('$predefined_'):
                 return self.name.replace('$predefined_', '')
-            obj_name = utils.capitalize_camel_case(self.name)
+            obj_name = divan_utils.capitalize_camel_case(self.name)
             obj = self.object
             if obj is not None:
                 if prefixed:
-                    obj_name = obj.resolved_prefixed_declaration
+                    obj_name = full_name(obj)
                 else:
-                    obj_name = utils.capitalize_camel_case(obj.resolved_name)
+                    obj_name = divan_utils.capitalize_camel_case(obj.resolved_name)
             return obj_name
         else:
             raise NotImplementedError

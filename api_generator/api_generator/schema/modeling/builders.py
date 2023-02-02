@@ -54,6 +54,8 @@ def __resolve_string_field(name: str,
             enumeration = StringEnumeration(name=fixed_name,
                                             original_name=name,
                                             cases=enum_cases,
+                                            description=dictionary.get('description', ''),
+                                            description_object=dictionary.get('description_translations', {}),
                                             include_documentation_toc=dictionary.get('include_in_documentation_toc',
                                                                                      False))
             return Object(name=name, object=None, format=ObjectFormat.DEFAULT), [enumeration]

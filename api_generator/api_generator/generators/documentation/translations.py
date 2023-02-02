@@ -117,6 +117,14 @@ __full_translations: Dict[str, Dict[str, str]] = {
     "div_generator_web": {
         "en": "browser",
         "ru": "браузер"
+    },
+    "div_generator_factory_method_name": {
+        "en": "Can be created using the method [`{}`].",
+        "ru": "Можно создать при помощи метода [`{}`]."
+    },
+    "div_generator_required_properties": {
+        "en": "Required properties: `{}`.",
+        "ru": "Обязательные поля: `{}`."
     }
 }
 

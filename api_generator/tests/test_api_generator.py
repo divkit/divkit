@@ -1,3 +1,5 @@
+from typing import List
+
 import utils
 import os
 
@@ -55,13 +57,6 @@ def test_dart_generator():
                           references_folder_name='dart')
 
 
-def test_divan_generator():
-    # assert_test_generator(config_filename='divan_config.json',
-    #                       schema_path=TEST_SCHEMA_PATH,
-    #                       references_folder_name='divan')
-    pass
-
-
 def test_swift_generator():
     assert_test_generator(config_filename='swift_config.json',
                           schema_path=TEST_SCHEMA_PATH,
@@ -83,7 +78,8 @@ def test_kotlin_dsl_generator():
 def test_documentation_generator():
     assert_test_generator(config_filename='documentation_config.json',
                           schema_path=TEST_SCHEMA_PATH,
-                          references_folder_name='documentation')
+                          references_folder_name='documentation',
+                          ignore=['toc.yaml'])
 
 
 def test_type_script_generator():
@@ -98,7 +94,16 @@ def test_python_generator():
                           references_folder_name='python')
 
 
-def assert_test_generator(config_filename: str, schema_path: str, references_folder_name: str):
+def test_divan_generator():
+    assert_test_generator(config_filename='divan_config.json',
+                          schema_path=TEST_SCHEMA_PATH,
+                          references_folder_name='divan')
+
+
+def assert_test_generator(config_filename: str,
+                          schema_path: str,
+                          references_folder_name: str,
+                          ignore: List[str] = None):
     config = Config(generator_path=API_GENERATOR_PATH,
                     config_path=utils.path_generator_tests(os.path.join('configs', config_filename)),
                     schema_path=schema_path,
@@ -113,4 +118,4 @@ def assert_test_generator(config_filename: str, schema_path: str, references_fol
         utils.update_references(source_path=OUTPUT_PATH, destination_path=references_path)
         assert False, 'Updated references. Don\'t forget to restore SHOULD_UPDATE_REFERENCES flag.'
 
-    utils.compare_dirs(references_path, OUTPUT_PATH)
+    utils.compare_dirs(references_path, OUTPUT_PATH, ignore)
