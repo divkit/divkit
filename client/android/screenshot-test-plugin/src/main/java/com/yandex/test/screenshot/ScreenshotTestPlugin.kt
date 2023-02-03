@@ -37,7 +37,9 @@ class ScreenshotTestPlugin : Plugin<Project> {
         }
         project.tasks.register(ValidateTestResultsTask.NAME, ValidateTestResultsTask::class.java)
         project.tasks.register(PullScreenshotsTask.NAME, PullScreenshotsTask::class.java)
-        project.tasks.register(CompareScreenshotsTask.NAME, CompareScreenshotsTask::class.java)
+        project.tasks.register(CompareScreenshotsTask.NAME, CompareScreenshotsTask::class.java).configure {
+            it.mustRunAfter(PullScreenshotsTask.NAME)
+        }
 
         project.tasks.whenTaskAdded { task ->
             val isDependentTask = task.name.run {
@@ -50,13 +52,11 @@ class ScreenshotTestPlugin : Plugin<Project> {
             val isDependentTask = task.name.run {
                 startsWith("connected") && endsWith("AndroidTest")
             }
-            if (enabled && isDependentTask) task.finalizedBy(PullScreenshotsTask.NAME)
-        }
-
-        project.tasks.whenTaskAdded { task ->
-            val isDependentTask = task.name == PullScreenshotsTask.NAME
-            if (enabled && screenshotTests.enableComparison && isDependentTask) {
-                task.finalizedBy(CompareScreenshotsTask.NAME)
+            if (enabled && isDependentTask) {
+                task.finalizedBy(PullScreenshotsTask.NAME)
+                if (screenshotTests.enableComparison) {
+                    task.finalizedBy(CompareScreenshotsTask.NAME)
+                }
             }
         }
 

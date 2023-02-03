@@ -26,7 +26,7 @@ def run_snapshot_tests(max_reruns=1):
     """
 
     task_name = ":divkit-demo-app:connectedDebugAndroidTest"
-    run_command = f"./gradlew {task_name} -Pscreenshot-tests"
+    run_command = f"./gradlew {task_name} -Pscreenshot-tests -Pscreenshot-comparison"
     passed_test_cases = []
 
     def exclude_passed_test_cases():
