@@ -8,11 +8,11 @@ import android.os.SystemClock
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import com.yandex.div.R
 import com.yandex.div.core.widget.DivLayoutParams.Companion.DEFAULT_GRAVITY
 import com.yandex.div.core.widget.DivLayoutParams.Companion.DEFAULT_WEIGHT
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
@@ -22,7 +22,7 @@ internal open class GridContainer @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ViewGroup(context, attrs, defStyleAttr) {
+) : DivViewGroup(context, attrs, defStyleAttr) {
 
     var columnCount: Int
         get() = grid.columnCount
@@ -63,18 +63,6 @@ internal open class GridContainer @JvmOverloads constructor(
         }
 
         initialized = true
-    }
-
-    override fun generateDefaultLayoutParams() = DivLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-
-    override fun generateLayoutParams(attrs: AttributeSet) = DivLayoutParams(context, attrs)
-
-    override fun generateLayoutParams(lp: LayoutParams): DivLayoutParams {
-        return when (lp) {
-            is DivLayoutParams -> DivLayoutParams(lp)
-            is MarginLayoutParams -> DivLayoutParams(lp)
-            else -> DivLayoutParams(lp)
-        }
     }
 
     override fun onViewAdded(child: View) {
@@ -134,7 +122,7 @@ internal open class GridContainer @JvmOverloads constructor(
 
     private fun measureChildrenInitial(widthSpec: Int, heightSpec: Int) {
         forEach(significantOnly = true) { child ->
-            val params = child.gridLayoutParams
+            val params = child.lp
             // At initial measurement only intrinsic view sizes are of interest to us.
             val width = if (params.width == LayoutParams.MATCH_PARENT) 0 else params.width
             val height = if (params.height == LayoutParams.MATCH_PARENT) 0 else params.height
@@ -159,7 +147,7 @@ internal open class GridContainer @JvmOverloads constructor(
         val columns = grid.columns
 
         forEachIndexed(significantOnly = true) { child, index ->
-            val params = child.gridLayoutParams
+            val params = child.lp
             if (params.width != LayoutParams.MATCH_PARENT) {
                 return@forEachIndexed
             }
@@ -176,7 +164,7 @@ internal open class GridContainer @JvmOverloads constructor(
         val rows = grid.rows
 
         forEachIndexed(significantOnly = true) { child, index ->
-            val params = child.gridLayoutParams
+            val params = child.lp
             if (params.height != LayoutParams.MATCH_PARENT) {
                 return@forEachIndexed
             }
@@ -223,7 +211,7 @@ internal open class GridContainer @JvmOverloads constructor(
         val offsetTop = calculateGridVerticalPosition()
 
         forEachIndexed(significantOnly = true) { child, index ->
-            val params = child.gridLayoutParams
+            val params = child.lp
             val cell = cells[index]
 
             val cellLeft = cell.left(columns) + params.leftMargin
@@ -302,8 +290,7 @@ internal open class GridContainer @JvmOverloads constructor(
     private fun computeLayoutHashCode(): Int {
         var result = 223
         forEach(significantOnly = true) { child ->
-            val params = child.gridLayoutParams
-            result = 31 * result + params.hashCode()
+            result = 31 * result + child.lp.hashCode()
         }
         return result
     }
@@ -312,7 +299,7 @@ internal open class GridContainer @JvmOverloads constructor(
         val childCount = childCount
         for (i in 0 until childCount) {
             val child = getChildAt(i)
-            val params = child.gridLayoutParams
+            val params = child.lp
 
             if (params.columnSpan < 0 || params.rowSpan < 0) {
                 throw IllegalStateException("Negative spans are not supported.")
@@ -504,7 +491,7 @@ internal open class GridContainer @JvmOverloads constructor(
                 row += minHeight
                 cellHeights.update { max(0, it - minHeight) }
 
-                val params = child.gridLayoutParams
+                val params = child.lp
                 val columnSpan = min(params.columnSpan, columnCount - column)
                 val rowSpan = params.rowSpan
 
@@ -532,7 +519,7 @@ internal open class GridContainer @JvmOverloads constructor(
 
         private fun measureColumns(): List<Line> {
             return measureAxis(columnCount, widthConstraint) { cell, view ->
-                val params = view.gridLayoutParams
+                val params = view.lp
                 CellProjection(
                     index = cell.columnIndex,
                     contentSize = view.measuredWidth,
@@ -546,7 +533,7 @@ internal open class GridContainer @JvmOverloads constructor(
 
         private fun measureRows(): List<Line> {
             return measureAxis(rowCount, heightConstraint) { cell, view ->
-                val params = view.gridLayoutParams
+                val params = view.lp
                 CellProjection(
                     index = cell.rowIndex,
                     contentSize = view.measuredHeight,
@@ -730,9 +717,6 @@ private class Resettable<T>(private val initializer: () -> T) {
         value = null
     }
 }
-
-private val View.gridLayoutParams: DivLayoutParams
-    inline get() = layoutParams as DivLayoutParams
 
 private val DivLayoutParams.verticalMargins: Int
     inline get() = topMargin + bottomMargin

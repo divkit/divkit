@@ -48,7 +48,8 @@
           "type": "container",
           "orientation": "vertical",
           "width": {
-            "type": "wrap_content"
+            "type": "wrap_content",
+            "constrained": true
           },
           "height": {
             "type": "wrap_content"
@@ -65,7 +66,8 @@
               "type": "text",
               "text": "Linear container with baseline alignment with inner vertical containers:",
               "width": {
-                "type": "wrap_content"
+                "type": "wrap_content",
+                "constrained": true
               },
               "height": {
                 "type": "wrap_content"

@@ -3,18 +3,18 @@ package com.yandex.div.core.widget.wraplayout
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
-import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.Px
 import androidx.core.view.children
 import com.yandex.div.core.widget.DivLayoutParams
 import com.yandex.div.core.widget.ShowSeparatorsMode
+import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
+import kotlin.math.min
 
-internal open class WrapLayout(context: Context) : ViewGroup(context) {
+internal open class WrapLayout(context: Context) : DivViewGroup(context) {
 
     @WrapDirection
     var wrapDirection: Int = WrapDirection.ROW
@@ -135,7 +135,7 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
         childState = getState(widthMode, childState, widthSize, calculatedMaxWidth,
             MEASURED_STATE_TOO_SMALL)
         val widthSizeAndState = resolveSizeAndState(
-            getSize(widthMode, widthSize, calculatedMaxWidth),
+            getSize(widthMode, widthSize, calculatedMaxWidth, !isRowDirection),
             widthMeasureSpec,
             childState
         )
@@ -143,7 +143,7 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
         childState = getState(heightMode, childState, heightSize, calculatedMaxHeight,
             MEASURED_STATE_TOO_SMALL shr MEASURED_HEIGHT_STATE_SHIFT)
         val heightSizeAndState = resolveSizeAndState(
-            getSize(heightMode, heightSize, calculatedMaxHeight),
+            getSize(heightMode, heightSize, calculatedMaxHeight, isRowDirection),
             heightMeasureSpec,
             childState
         )
@@ -268,10 +268,13 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
     private val View.isHidden get() = visibility == View.GONE || hasIncorrectSize
 
     private val View.hasIncorrectSize get() = if (isRowDirection) {
-        layoutParams?.height == MATCH_PARENT
+        layoutParams?.height.isIncorrectForCrossAxis
     } else {
-        layoutParams?.width == MATCH_PARENT
+        layoutParams?.width.isIncorrectForCrossAxis
     }
+
+    private val Int?.isIncorrectForCrossAxis get() =
+        this == MATCH_PARENT || this == DivLayoutParams.WRAP_CONTENT_CONSTRAINED
 
     private fun addLineIfNeeded(childIndex: Int, line: WrapLine) {
         val isLastItem = childIndex == childCount - 1 && line.itemCountNotGone != 0
@@ -338,12 +341,19 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
         }
     }
 
-    private fun getSize(mode: Int, size: Int, maxSize: Int) = when (mode) {
+    private fun getSize(mode: Int, size: Int, maxSize: Int, isCrossAxis: Boolean) = when (mode) {
         MeasureSpec.EXACTLY -> size
-        MeasureSpec.AT_MOST -> if (size < maxSize) size else maxSize
         MeasureSpec.UNSPECIFIED -> maxSize
-        else -> throw IllegalStateException("Unknown width mode is set: $mode")
+        MeasureSpec.AT_MOST -> when {
+            isCrossAxis -> min(size, maxSize)
+            maxSize < size -> size
+            visibleLinesCount > 1 -> size
+            else -> maxSize
+        }
+        else -> throw IllegalStateException("Unknown size mode is set: $mode")
     }
+
+    private val visibleLinesCount get() = lines.count { it.itemCountNotGone > 0 }
 
     private fun getState(
         mode: Int,
@@ -360,7 +370,7 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
     private val largestMainSize get() = lines.maxOfOrNull { it.mainSize } ?: 0
 
     private val sumOfCrossSize get() = lines.sumOf { it.crossSize } + edgeLineSeparatorsLength +
-        middleLineSeparatorLength * (lines.count { it.itemCountNotGone > 0 } - 1)
+        middleLineSeparatorLength * (visibleLinesCount - 1)
 
     override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
         if (isRowDirection) {
@@ -627,18 +637,6 @@ internal open class WrapLayout(context: Context) : ViewGroup(context) {
     private val firstVisibleLine get() = lines.find { it.itemCountNotGone > 0 }
 
     override fun getBaseline() = firstVisibleLine?.maxBaseline?.plus(paddingTop) ?: super.getBaseline()
-
-    override fun checkLayoutParams(p: LayoutParams?) = p is DivLayoutParams
-
-    override fun generateLayoutParams(attrs: AttributeSet?) = DivLayoutParams(context, attrs)
-
-    override fun generateLayoutParams(lp: LayoutParams?) = when (lp) {
-        is DivLayoutParams -> DivLayoutParams(lp)
-        is MarginLayoutParams -> DivLayoutParams(lp)
-        else -> DivLayoutParams(lp)
-    }
-
-    private val View.lp get() = layoutParams as DivLayoutParams
 
     private data class WrapLine(
         val firstIndex: Int = 0,

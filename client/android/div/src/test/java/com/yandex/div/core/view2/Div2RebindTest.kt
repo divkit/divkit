@@ -126,8 +126,8 @@ class Div2RebindTest {
 
     @Test
     fun `clear warnings after rebind`() {
-        val oldData = UnitTestData(CONTAINER_DIR, "horizontal_wrap_container_match_parent_height_item.json").data
-        val newData = UnitTestData(CONTAINER_DIR, "horizontal_wrap_container_wrap_content_constrained_height_item.json").data
+        val oldData = UnitTestData(CONTAINER_DIR, "horizontal_wrap_content_width_match_parent_item.json").data
+        val newData = UnitTestData(CONTAINER_DIR, "horizontal_wrap_content_width_wrap_content_constrained_item.json").data
         val errorCollectors = div2View.viewComponent.errorCollectors
         
         div2View.setData(oldData, tag)

@@ -69,5 +69,6 @@ internal class DivLayoutParams: MarginLayoutParams {
         const val DEFAULT_GRAVITY = Gravity.LEFT or Gravity.TOP
         const val DEFAULT_WEIGHT = 0f
         const val DEFAULT_SPAN = 1
+        const val WRAP_CONTENT_CONSTRAINED = -3
     }
 }

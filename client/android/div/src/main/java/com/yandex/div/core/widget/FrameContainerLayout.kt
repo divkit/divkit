@@ -6,7 +6,7 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
+import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
 import kotlin.math.min
 
@@ -14,7 +14,7 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ViewGroup(context, attrs, defStyleAttr) {
+) : DivViewGroup(context, attrs, defStyleAttr) {
 
     private val foregroundPadding = Rect()
 
@@ -101,7 +101,7 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
         if (childCount > 1) {
             for (i in 0 until matchParentChildren.size) {
                 val child = matchParentChildren[i]
-                val lp = child.layoutParams as DivLayoutParams
+                val lp = child.lp
                 val childHorizontalPadding = horizontalPadding + lp.leftMargin + lp.rightMargin
                 val childVerticalPadding = verticalPadding + lp.topMargin + lp.bottomMargin
 
@@ -130,24 +130,17 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
         layoutChildren(left, top, right, bottom)
     }
 
-    private fun layoutChildren(
-        left: Int,
-        top: Int,
-        right: Int,
-        bottom: Int
-    ) {
+    private fun layoutChildren(left: Int, top: Int, right: Int, bottom: Int) {
         val parentLeft = paddingLeftWithForeground
         val parentRight = right - left - paddingRightWithForeground
         val parentTop = paddingTopWithForeground
         val parentBottom = bottom - top - paddingBottomWithForeground
         forEach(significantOnly = true) { child ->
-            val lp = child.layoutParams as DivLayoutParams
+            val lp = child.lp
             val width = child.measuredWidth
             val height = child.measuredHeight
-            val gravity: Int = lp.gravity
-            val layoutDirection = layoutDirection
-            val absoluteGravity = Gravity.getAbsoluteGravity(gravity, layoutDirection)
-            val verticalGravity = gravity and Gravity.VERTICAL_GRAVITY_MASK
+            val absoluteGravity = Gravity.getAbsoluteGravity(lp.gravity, layoutDirection)
+            val verticalGravity = lp.gravity and Gravity.VERTICAL_GRAVITY_MASK
             val childLeft = when (absoluteGravity and Gravity.HORIZONTAL_GRAVITY_MASK) {
                 Gravity.CENTER_HORIZONTAL -> parentLeft + (parentRight - parentLeft - width) / 2 +
                         lp.leftMargin - lp.rightMargin
@@ -165,17 +158,6 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
     }
 
     override fun shouldDelayChildPressedState(): Boolean = false
-
-    override fun checkLayoutParams(p: LayoutParams?): Boolean = p is DivLayoutParams
-
-    override fun generateLayoutParams(attrs: AttributeSet?) = DivLayoutParams(context, attrs)
-
-    override fun generateLayoutParams(lp: LayoutParams?) =
-        when (lp) {
-            is DivLayoutParams -> DivLayoutParams(lp)
-            is MarginLayoutParams -> DivLayoutParams(lp)
-            else -> DivLayoutParams(lp)
-        }
 
     override fun generateDefaultLayoutParams() = DivLayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT)
 }

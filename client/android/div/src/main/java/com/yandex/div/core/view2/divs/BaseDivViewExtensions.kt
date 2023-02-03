@@ -121,15 +121,20 @@ internal fun View.applyMargins(insets: DivEdgeInsets?, resolver: ExpressionResol
     }
 }
 
-internal fun DivSize?.toLayoutParamsSize(metrics: DisplayMetrics, resolver: ExpressionResolver): Int {
+internal fun DivSize?.toLayoutParamsSize(
+    metrics: DisplayMetrics,
+    resolver: ExpressionResolver,
+    lp: ViewGroup.LayoutParams? = null
+): Int {
     return when (this) {
         null -> ViewGroup.LayoutParams.WRAP_CONTENT
         is DivSize.MatchParent -> ViewGroup.LayoutParams.MATCH_PARENT
-        is DivSize.WrapContent -> {
-            if (this.value.constrained?.evaluate(resolver) == true) ViewGroup.LayoutParams.MATCH_PARENT
-            else ViewGroup.LayoutParams.WRAP_CONTENT
-        }
         is DivSize.Fixed -> value.toPx(metrics, resolver)
+        is DivSize.WrapContent -> when {
+            value.constrained?.evaluate(resolver) != true -> ViewGroup.LayoutParams.WRAP_CONTENT
+            lp is DivLayoutParams -> DivLayoutParams.WRAP_CONTENT_CONSTRAINED
+            else -> ViewGroup.LayoutParams.MATCH_PARENT
+        }
     }
 }
 
@@ -178,7 +183,7 @@ internal fun DivDimension.toPx(metrics: DisplayMetrics, resolver: ExpressionReso
 }
 
 internal fun View.applyHeight(div: DivBase, resolver: ExpressionResolver) {
-    val height = div.height.toLayoutParamsSize(resources.displayMetrics, resolver)
+    val height = div.height.toLayoutParamsSize(resources.displayMetrics, resolver, layoutParams)
     if (layoutParams.height != height) {
         layoutParams.height = height
         requestLayout()
@@ -202,7 +207,7 @@ internal fun View.applyVerticalWeightValue(value: Float) {
 }
 
 internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
-    val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver)
+    val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver, layoutParams)
     if (layoutParams.width != width) {
         layoutParams.width = width
         requestLayout()
