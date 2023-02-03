@@ -151,7 +151,9 @@ public final class DivVariablesStorage {
   }
 
   private func update(with event: ChangeEvent) {
-    changeEventsPipe.send(event)
+    onMainThread { [weak self] in
+      self?.changeEventsPipe.send(event)
+    }
   }
 }
 
