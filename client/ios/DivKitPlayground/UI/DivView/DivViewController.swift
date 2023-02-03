@@ -135,8 +135,9 @@ extension DivViewController: ElementStateObserver {
 }
 
 extension DivViewController: UIActionEventPerforming {
-  public func perform(uiActionEvent event: UIActionEvent, from sender: AnyObject) {
+  public func perform(uiActionEvent event: UIActionEvent, from _: AnyObject) {
     handle(event.payload)
+    blockProvider.update(patches: [])
   }
 
   private func handle(_ payload: UserInterfaceAction.Payload) {
