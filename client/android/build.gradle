@@ -1,3 +1,4 @@
+import com.yandex.div.gradle.FileExtensions
 import com.yandex.div.gradle.PublicationType
 
 apply from: "$projectDir/version.gradle"
@@ -17,9 +18,8 @@ ext {
 buildscript {
     apply from: "$projectDir/dependencies.gradle"
 
-    def internalBuildScriptConfiguration = file("$projectDir/buildscript-internal.gradle")
-    if (internalBuildScriptConfiguration.exists()) {
-        apply from: internalBuildScriptConfiguration, to: buildscript
+    FileExtensions.ifExists("${project.projectDir}/bootstrap.internal.gradle") {
+        apply from: it
     }
 
     repositories {
@@ -46,6 +46,16 @@ allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            eachDependency { details ->
+                if (details.requested.group == 'com.christophsturm' &&  details.requested.name == 'filepeek') {
+                    details.useVersion '0.1.3'
+                }
+            }
+        }
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -163,10 +173,6 @@ task finalVerification {
     dependsOn unitTests
 }
 
-ext.hasInternalConfiguration = false
-
-def internalConfiguration = file("$projectDir/build-internal.gradle")
-if (internalConfiguration.exists()) {
-    apply from: "$projectDir/build-internal.gradle"
-    ext.hasInternalConfiguration = true
+FileExtensions.ifExists("${project.projectDir}/build.internal.gradle") {
+    apply from: it
 }

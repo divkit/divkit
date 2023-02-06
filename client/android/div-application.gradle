@@ -1,7 +1,3 @@
 apply plugin: 'com.android.application'
 
-if (hasInternalConfiguration) {
-    apply plugin: 'yandex-signer-android'
-}
-
 apply from: "${buildscript.sourceFile.parent}/div-common.gradle"
