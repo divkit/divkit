@@ -38,7 +38,7 @@ internal abstract class DivPatchableAdapter<VH : RecyclerView.ViewHolder>(
                 div.value().visibility.observe(div2View.expressionResolver) { divVisibility ->
                     if (visibilityMap[div] == DivVisibility.GONE) {
                         var position = 0
-                        for (i in 0..index) {
+                        for (i in 0 until index) {
                             if (items[i] != div && visibilityMap[items[i]] == DivVisibility.GONE) {
                                 continue
                             }
