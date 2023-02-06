@@ -139,11 +139,14 @@ private final class TextBlockView: UIView {
     target: self,
     action: #selector(handleSelectionLongTap(_:))
   )
-
-  private lazy var panSelectionRecognizer = UIPanGestureRecognizer(
-    target: self,
-    action: #selector(handleSelectionPan(_:))
-  )
+  
+  private lazy var panSelectionRecognizer = {
+    let result = UIPanGestureRecognizer(
+      target: self,
+      action: #selector(handleSelectionPan(_:)))
+    result.delegate = self
+    return result
+  }()
 
   private var imageRequests: [Cancellable] = [] {
     didSet {
@@ -389,6 +392,17 @@ private final class TextBlockView: UIView {
       strongSelf.model.attachments[index].image = image
         .withTintColor(modelImage.tintColor)
       strongSelf.setNeedsDisplay()
+    }
+  }
+}
+
+extension TextBlockView: UIGestureRecognizerDelegate {
+  override func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+    if gestureRecognizer == panSelectionRecognizer,
+       selectedRange == nil {
+      return false
+    } else {
+      return super.gestureRecognizerShouldBegin(gestureRecognizer)
     }
   }
 }
