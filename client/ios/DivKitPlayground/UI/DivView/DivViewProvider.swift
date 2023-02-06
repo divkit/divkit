@@ -10,8 +10,8 @@ final class DivViewProvider {
 
   init() {
     divKitComponents = AppComponents.makeDivKitComponents(
-      updateCardAction: { [weak self] reason in
-        self?.blockProvider.update(patches: reason.compactMap(\.patch))
+      updateCardAction: { [weak self] reasons in
+        self?.blockProvider.update(reasons: reasons.asArray())
       }
     )
 

@@ -267,6 +267,41 @@ final class DivVariablesStorageTest: XCTestCase {
     XCTAssertEqual(.global(["int_var", "new_var"]), event?.kind)
   }
 
+  func test_getVariableValue_ReturnsLocalVariableValue() {
+    storage.set(cardId: cardId, variables: variables)
+
+    let expectedValue: String? = storage.getVariableValue(cardId: cardId, name: "string_var")
+    XCTAssertEqual("value", expectedValue)
+  }
+
+  func test_getVariableValue_ReturnsGlobalVariableValue() {
+    let globalVariables: DivVariables = [
+      "global_var": .string("global value"),
+    ]
+    storage.set(variables: globalVariables, triggerUpdate: false)
+
+    let expectedValue: String? = storage.getVariableValue(cardId: cardId, name: "global_var")
+    XCTAssertEqual("global value", expectedValue)
+  }
+
+  func test_getVariableValue_ReturnsLocalVariableValue_WhenHasGlobalVariable() {
+    storage.set(cardId: cardId, variables: variables)
+
+    let globalVariables: DivVariables = [
+      "string_var": .string("global value"),
+    ]
+    storage.set(variables: globalVariables, triggerUpdate: false)
+
+    let expectedValue: String? = storage.getVariableValue(cardId: cardId, name: "string_var")
+    XCTAssertEqual("value", expectedValue)
+  }
+
+  func test_getVariableValue_ReturnsNilForUnknownVariable() {
+    storage.set(cardId: cardId, variables: variables)
+
+    XCTAssertNil(storage.getVariableValue(cardId: cardId, name: "unknown_var"))
+  }
+
   private func makeVariables(cardId: DivCardID = cardId) -> DivVariables {
     storage.makeVariables(for: cardId)
   }

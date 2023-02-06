@@ -1575,6 +1575,34 @@
         "Containers with correct height appear"
       ],
       "file": "container/aspect.json"
+    },
+    {
+      "title": "SizeProvider extension",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "extensions",
+        "SizeProvider"
+      ],
+      "expected_results": [
+        "Blocks with correct size"
+      ],
+      "file": "size_provider.json"
+    },
+    {
+      "title": "SizeProvider extension (recursive)",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "extensions",
+        "SizeProvider"
+      ],
+      "expected_results": [
+        "No relayout"
+      ],
+      "file": "size_provider_recursive.json"
     }
   ]
 }

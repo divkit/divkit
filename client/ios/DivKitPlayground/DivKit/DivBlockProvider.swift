@@ -3,6 +3,7 @@ import UIKit
 import BaseUI
 import CommonCore
 import DivKit
+import DivKitExtensions
 import LayoutKit
 import Serialization
 
@@ -31,6 +32,7 @@ extension Data {
 
 final class DivBlockProvider {
   private let divKitComponents: DivKitComponents
+  private let sizeProviderExtensionHandler: SizeProviderExtensionHandler?
   private let disposePool = AutodisposePool()
 
   private var divData: DivData?
@@ -51,6 +53,10 @@ final class DivBlockProvider {
   ) {
     self.divKitComponents = divKitComponents
 
+    sizeProviderExtensionHandler = divKitComponents.extensionHandlers
+      .compactMap { $0 as? SizeProviderExtensionHandler }
+      .first
+
     json
       .addObserver { [weak self] in
         if shouldResetOnDataChange {
@@ -61,12 +67,14 @@ final class DivBlockProvider {
       .dispose(in: disposePool)
   }
 
-  func update(patches: [DivPatch]) {
+  func update(reasons: [DivActionURLHandler.UpdateReason]) {
     guard var divData = divData else {
       return
     }
 
-    patches.forEach {
+    sizeProviderExtensionHandler?.onCardUpdated(reasons: reasons)
+    
+    reasons.compactMap(\.patch).forEach {
       divData = divData.applyPatch($0)
     }
     self.divData = divData
@@ -131,7 +139,7 @@ final class DivBlockProvider {
       return
     }
 
-    update(patches: [])
+    update(reasons: [])
   }
 
   private func parseDivDataWithTemplates(

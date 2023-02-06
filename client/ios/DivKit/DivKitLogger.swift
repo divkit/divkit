@@ -19,7 +19,7 @@ public enum DivKitLogger {
     }
   }
 
-  static func warning(_ message: String) {
+  public static func warning(_ message: String) {
     if isEnabled {
       print("[DivKit] [WARNING] \(message)")
       externalLogger(message)

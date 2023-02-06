@@ -46,8 +46,8 @@ private struct WebPreviewModel {
   init() {
     weak var weakBlockProvider: DivBlockProvider?
     divKitComponents = AppComponents.makeDivKitComponents(
-      updateCardAction: { reason in
-        weakBlockProvider?.update(patches: reason.compactMap(\.patch))
+      updateCardAction: { reasons in
+        weakBlockProvider?.update(reasons: reasons.asArray())
       }
     )
     blockProvider = DivBlockProvider(

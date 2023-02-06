@@ -36,4 +36,12 @@ extension DivExtensionHandler {
   ) -> Block {
     block
   }
+  
+  public func getExtensionParams(_ div: DivBase) -> [String: Any] {
+    guard let extensionData = div.extensions?.first(where: { $0.id == id }) else {
+      DivKitLogger.error("Extension data not found: \(id)")
+      return [:]
+    }
+    return extensionData.params ?? [:]
+  }
 }

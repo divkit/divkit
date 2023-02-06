@@ -13,9 +13,17 @@ enum AppComponents {
       factory: LottieAnimationFactory(),
       requester: requester
     )
+    let variablesStorage = DivVariablesStorage()
+    let sizeProviderExtensionHandler = SizeProviderExtensionHandler(
+      variablesStorage: variablesStorage
+    )
     return DivKitComponents(
       divCustomBlockFactory: PlaygroundDivCustomBlockFactory(requester: requester),
-      extensionHandlers: [lottieExtensionHanlder, ShimmerImagePreviewExtension()],
+      extensionHandlers: [
+        lottieExtensionHanlder,
+        sizeProviderExtensionHandler,
+        ShimmerImagePreviewExtension()
+      ],
       flagsInfo: DivFlagsInfo(
         isTextSelectingEnabled: true,
         appendVariablesEnabled: true,
@@ -23,7 +31,8 @@ enum AppComponents {
       ),
       patchProvider: DemoPatchProvider(),
       updateCardAction: updateCardAction,
-      urlOpener: DemoUrlOpener.openUrl(_:)
+      urlOpener: DemoUrlOpener.openUrl(_:),
+      variablesStorage: variablesStorage
     )
   }
 
