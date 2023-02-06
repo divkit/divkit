@@ -11,11 +11,13 @@ internal class DivLayoutParams: MarginLayoutParams {
     var gravity = DEFAULT_GRAVITY
     var isBaselineAligned = false
 
-    var verticalWeight = 0f
-    var horizontalWeight = 0f
+    var verticalWeight = DEFAULT_WEIGHT
+    var horizontalWeight = DEFAULT_WEIGHT
 
     var columnSpan = DEFAULT_SPAN
     var rowSpan = DEFAULT_SPAN
+    var maxHeight = Integer.MAX_VALUE
+    var maxWidth = Integer.MAX_VALUE
 
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
 
@@ -32,6 +34,8 @@ internal class DivLayoutParams: MarginLayoutParams {
         horizontalWeight = source.horizontalWeight
         columnSpan = source.columnSpan
         rowSpan = source.rowSpan
+        maxHeight = source.maxHeight
+        maxWidth = source.maxWidth
     }
 
     override fun equals(other: Any?): Boolean {
@@ -51,7 +55,9 @@ internal class DivLayoutParams: MarginLayoutParams {
                 columnSpan == other.columnSpan &&
                 rowSpan == other.rowSpan &&
                 verticalWeight == other.verticalWeight &&
-                horizontalWeight == other.horizontalWeight
+                horizontalWeight == other.horizontalWeight &&
+                maxHeight == other.maxHeight &&
+                maxWidth == other.maxWidth
     }
 
     override fun hashCode(): Int {
@@ -62,6 +68,8 @@ internal class DivLayoutParams: MarginLayoutParams {
         result = 31 * result + rowSpan
         result = 31 * result + verticalWeight.toBits()
         result = 31 * result + horizontalWeight.toBits()
+        result = 31 * result + if (maxHeight != Int.MAX_VALUE) maxHeight else 0
+        result = 31 * result + if (maxWidth != Int.MAX_VALUE) maxWidth else 0
         return result
     }
 

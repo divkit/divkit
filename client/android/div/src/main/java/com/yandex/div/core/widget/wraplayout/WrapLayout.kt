@@ -188,9 +188,9 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context) {
             }
 
             val childWidthMeasureSpec =
-                getChildMeasureSpec(widthMeasureSpec, horizontalPaddings, item.width)
+                getChildMeasureSpec(widthMeasureSpec, horizontalPaddings, item.width, item.maxWidth)
             val childHeightMeasureSpec =
-                getChildMeasureSpec(heightMeasureSpec, verticalPaddings, item.height)
+                getChildMeasureSpec(heightMeasureSpec, verticalPaddings, item.height, item.maxHeight)
 
             child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
             childState = View.combineMeasuredStates(childState, child.measuredState)

@@ -32,6 +32,7 @@ import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivVisibility
+import com.yandex.div2.DivWrapContentSize
 import javax.inject.Inject
 
 @DivScope
@@ -146,6 +147,9 @@ internal class DivBaseBinder @Inject constructor(
         val width = div.width
         applyHorizontalWeightValue(width.getWeight(resolver))
 
+        applyMinWidth(width.minSize, resolver)
+        applyMaxWidth(width.maxSize, resolver)
+
         when (width) {
             is DivSize.Fixed -> {
                 subscriber.addSubscription(width.value.value.observe(resolver) { applyWidth(div, resolver) })
@@ -157,16 +161,19 @@ internal class DivBaseBinder @Inject constructor(
                 }?.let { subscriber.addSubscription(it) }
             }
             is DivSize.WrapContent -> {
-                if (width.value.constrained?.evaluate(resolver) != true) {
-                    applyMinWidth(width.value.minSize, resolver)
+                subscriber.addSubscription(width.minSize?.value?.observe(resolver) {
+                    applyMinWidth(width.minSize, resolver)
+                } ?: Disposable.NULL)
+                subscriber.addSubscription(width.minSize?.unit?.observe(resolver) {
+                    applyMinWidth(width.minSize, resolver)
+                } ?: Disposable.NULL)
 
-                    subscriber.addSubscription(width.value.minSize?.value?.observe(resolver) {
-                        applyMinWidth(width.value.minSize, resolver)
-                    } ?: Disposable.NULL)
-                    subscriber.addSubscription(width.value.minSize?.unit?.observe(resolver) {
-                        applyMinWidth(width.value.minSize, resolver)
-                    } ?: Disposable.NULL)
-                }
+                subscriber.addSubscription(width.maxSize?.value?.observe(resolver) {
+                    applyMaxWidth(width.maxSize, resolver)
+                } ?: Disposable.NULL)
+                subscriber.addSubscription(width.maxSize?.unit?.observe(resolver) {
+                    applyMaxWidth(width.maxSize, resolver)
+                } ?: Disposable.NULL)
             }
             else -> Unit
         }
@@ -176,6 +183,9 @@ internal class DivBaseBinder @Inject constructor(
         applyHeight(div, resolver)
         val height = div.height
         applyVerticalWeightValue(height.getWeight(resolver))
+
+        applyMinHeight(height.minSize, resolver)
+        applyMaxHeight(height?.maxSize, resolver)
 
         when (height) {
             is DivSize.Fixed -> {
@@ -188,16 +198,19 @@ internal class DivBaseBinder @Inject constructor(
                 }?.let { subscriber.addSubscription(it) }
             }
             is DivSize.WrapContent -> {
-                if (height.value.constrained?.evaluate(resolver) != true) {
-                    applyMinHeight(height.value.minSize, resolver)
+                subscriber.addSubscription(height.minSize?.value?.observe(resolver) {
+                    applyMinHeight(height.minSize, resolver)
+                } ?: Disposable.NULL)
+                subscriber.addSubscription(height.minSize?.unit?.observe(resolver) {
+                    applyMinHeight(height.minSize, resolver)
+                } ?: Disposable.NULL)
 
-                    subscriber.addSubscription(height.value.minSize?.value?.observe(resolver) {
-                        applyMinHeight(height.value.minSize, resolver)
-                    } ?: Disposable.NULL)
-                    subscriber.addSubscription(height.value.minSize?.unit?.observe(resolver) {
-                        applyMinHeight(height.value.minSize, resolver)
-                    } ?: Disposable.NULL)
-                }
+                subscriber.addSubscription(height.maxSize?.value?.observe(resolver) {
+                    applyMaxHeight(height.maxSize, resolver)
+                } ?: Disposable.NULL)
+                subscriber.addSubscription(height.maxSize?.unit?.observe(resolver) {
+                    applyMaxHeight(height.maxSize, resolver)
+                } ?: Disposable.NULL)
             }
             else -> Unit
         }
@@ -494,4 +507,8 @@ internal class DivBaseBinder @Inject constructor(
     private fun View.applyFocusableState(div: DivBase) {
         isFocusable = div.focus != null
     }
+
+    private val DivSize.minSize get() = (this as? DivSize.WrapContent)?.value?.minSize
+
+    private val DivSize.maxSize get() = (this as? DivSize.WrapContent)?.value?.maxSize
 }

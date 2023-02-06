@@ -137,8 +137,8 @@ internal open class GridContainer @JvmOverloads constructor(
         childWidth: Int,
         childHeight: Int
     ) {
-        val childWidthSpec = getChildMeasureSpec(parentWidthSpec, 0, childWidth)
-        val childHeightSpec = getChildMeasureSpec(parentHeightSpec, 0, childHeight)
+        val childWidthSpec = getChildMeasureSpec(parentWidthSpec, 0, childWidth, child.lp.maxWidth)
+        val childHeightSpec = getChildMeasureSpec(parentHeightSpec, 0, childHeight, child.lp.maxHeight)
         child.measure(childWidthSpec, childHeightSpec)
     }
 
@@ -188,12 +188,12 @@ internal open class GridContainer @JvmOverloads constructor(
         val childWidthSpec = if (childWidth == LayoutParams.MATCH_PARENT) {
             MeasureSpec.makeMeasureSpec(cellWidth, MeasureSpec.EXACTLY)
         } else {
-            getChildMeasureSpec(parentWidthSpec, 0, childWidth)
+            getChildMeasureSpec(parentWidthSpec, 0, childWidth, child.lp.maxWidth)
         }
         val childHeightSpec = if (childHeight == LayoutParams.MATCH_PARENT) {
             MeasureSpec.makeMeasureSpec(cellHeight, MeasureSpec.EXACTLY)
         } else {
-            getChildMeasureSpec(parentHeightSpec, 0, childHeight)
+            getChildMeasureSpec(parentHeightSpec, 0, childHeight, child.lp.maxHeight)
         }
         child.measure(childWidthSpec, childHeightSpec)
     }

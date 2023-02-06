@@ -55,7 +55,7 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
 
         forEach (!measureAllChildren) { child ->
             measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
-            val lp = child.layoutParams as DivLayoutParams
+            val lp = child.lp
             val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
             val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
             childState = combineMeasuredStates(childState, child.measuredState)
@@ -110,7 +110,7 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
                         .coerceAtLeast(min(child.measuredWidth, maxWidth))
                     MeasureSpec.makeMeasureSpec(width.coerceAtLeast(0), MeasureSpec.EXACTLY)
                 } else {
-                    getChildMeasureSpec(widthMeasureSpec, childHorizontalPadding, lp.width)
+                    getChildMeasureSpec(widthMeasureSpec, childHorizontalPadding, lp.width, lp.maxWidth)
                 }
 
                 val childHeightMeasureSpec = if (lp.height == LayoutParams.MATCH_PARENT) {
@@ -118,7 +118,7 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
                         .coerceAtLeast(min(child.measuredHeight, maxHeight))
                     MeasureSpec.makeMeasureSpec(height.coerceAtLeast(0), MeasureSpec.EXACTLY)
                 } else {
-                    getChildMeasureSpec(heightMeasureSpec, childVerticalPadding, lp.height)
+                    getChildMeasureSpec(heightMeasureSpec, childVerticalPadding, lp.height, lp.maxHeight)
                 }
 
                 child.measure(childWidthMeasureSpec, childHeightMeasureSpec)

@@ -39,12 +39,14 @@ abstract class DivViewGroup @JvmOverloads constructor(
         val childWidthMeasureSpec = getChildMeasureSpec(
             parentWidthMeasureSpec,
             paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin + widthUsed,
-            lp.width
+            lp.width,
+            lp.maxWidth
         )
         val childHeightMeasureSpec = getChildMeasureSpec(
             parentHeightMeasureSpec,
             paddingTop + paddingBottom + lp.topMargin + lp.bottomMargin + heightUsed,
-            lp.height
+            lp.height,
+            lp.maxHeight
         )
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
     }
@@ -66,7 +68,12 @@ abstract class DivViewGroup @JvmOverloads constructor(
 
         val View.lp inline get() = layoutParams as DivLayoutParams
 
-        internal fun getChildMeasureSpec(parentMeasureSpec: Int, padding: Int, childDimension: Int): Int {
+        internal fun getChildMeasureSpec(
+            parentMeasureSpec: Int,
+            padding: Int,
+            childDimension: Int,
+            maxSize: Int = Int.MAX_VALUE
+        ): Int {
             val parentSpecMode = MeasureSpec.getMode(parentMeasureSpec)
             val parentSpecSize = MeasureSpec.getSize(parentMeasureSpec)
             val size = max(0, parentSpecSize - padding)
@@ -87,8 +94,13 @@ abstract class DivViewGroup @JvmOverloads constructor(
                         }
 
                         childDimension == LayoutParams.WRAP_CONTENT -> {
-                            resultSize = size
-                            resultMode = MeasureSpec.UNSPECIFIED
+                            if (maxSize == Int.MAX_VALUE) {
+                                resultSize = size
+                                resultMode = MeasureSpec.UNSPECIFIED
+                            } else {
+                                resultSize = maxSize
+                                resultMode = MeasureSpec.AT_MOST
+                            }
                         }
 
                         childDimension == DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
@@ -111,8 +123,13 @@ abstract class DivViewGroup @JvmOverloads constructor(
                         }
 
                         childDimension == LayoutParams.WRAP_CONTENT -> {
-                            resultSize = size
-                            resultMode = MeasureSpec.UNSPECIFIED
+                            if (maxSize == Int.MAX_VALUE) {
+                                resultSize = size
+                                resultMode = MeasureSpec.UNSPECIFIED
+                            } else {
+                                resultSize = maxSize
+                                resultMode = MeasureSpec.AT_MOST
+                            }
                         }
 
                         childDimension == DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
@@ -135,8 +152,13 @@ abstract class DivViewGroup @JvmOverloads constructor(
                         }
 
                         childDimension == LayoutParams.WRAP_CONTENT -> {
-                            resultSize = size
-                            resultMode = MeasureSpec.UNSPECIFIED
+                            if (maxSize == Int.MAX_VALUE) {
+                                resultSize = size
+                                resultMode = MeasureSpec.UNSPECIFIED
+                            } else {
+                                resultSize = maxSize
+                                resultMode = MeasureSpec.AT_MOST
+                            }
                         }
 
                         childDimension == DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {

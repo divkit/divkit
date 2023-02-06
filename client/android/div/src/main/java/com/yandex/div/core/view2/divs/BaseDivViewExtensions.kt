@@ -195,6 +195,7 @@ internal fun View.applyMinHeight(minHeight: DivWrapContentSize.ConstraintSize?, 
     val heightValue = minHeight?.toPx(resources.displayMetrics, resolver) ?: 0
     if (minimumHeight != heightValue) {
         minimumHeight = heightValue
+        requestLayout()
     }
 }
 
@@ -205,6 +206,17 @@ internal fun View.applyVerticalWeightValue(value: Float) {
         requestLayout()
     }
 }
+
+internal fun View.applyMaxHeight(maxHeight: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
+    val params = layoutParams as? DivLayoutParams ?: return
+    val heightValue = maxHeight?.toPx(resources.displayMetrics, resolver) ?: Int.MAX_VALUE
+    if (params.maxHeight != heightValue) {
+        params.maxHeight = heightValue
+        requestLayout()
+    }
+}
+
+internal val View.maxHeight get() = (layoutParams as? DivLayoutParams)?.maxHeight ?: Int.MAX_VALUE
 
 internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
     val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver, layoutParams)
@@ -219,6 +231,7 @@ internal fun View.applyMinWidth(minWidth: DivWrapContentSize.ConstraintSize?, re
     val widthValue = minWidth?.toPx(resources.displayMetrics, resolver) ?: 0
     if (minimumWidth != widthValue) {
         minimumWidth = widthValue
+        requestLayout()
     }
 }
 
@@ -234,6 +247,17 @@ internal fun DivSize.getWeight(resolver: ExpressionResolver) = when (this) {
     is DivSize.MatchParent -> value.weight?.evaluate(resolver)?.toFloat() ?: 0f
     else -> 0f
 }
+
+internal fun View.applyMaxWidth(maxWidth: DivWrapContentSize.ConstraintSize?, resolver: ExpressionResolver) {
+    val params = layoutParams as? DivLayoutParams ?: return
+    val widthValue = maxWidth?.toPx(resources.displayMetrics, resolver) ?: Int.MAX_VALUE
+    if (params.maxWidth != widthValue) {
+        params.maxWidth = widthValue
+        requestLayout()
+    }
+}
+
+internal val View.maxWidth get() = (layoutParams as? DivLayoutParams)?.maxWidth ?: Int.MAX_VALUE
 
 internal fun View.applyTransform(
     div: DivBase,
