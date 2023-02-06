@@ -257,8 +257,9 @@ final class CalcExpression: CustomStringConvertible {
     root = try expression.root.optimized(
       withImpureSymbols: impureSymbols,
       pureSymbols: {
-        if let fn = try pureSymbols($0) ?? CalcExpression.mathSymbols[$0] ?? CalcExpression
-          .boolSymbols[$0] {
+        if let fn = try pureSymbols($0)
+            ?? CalcExpression.mathSymbols[$0]
+            ?? CalcExpression.boolSymbols[$0] {
           return fn
         }
         if case let .function(name, _) = $0 {
@@ -1321,6 +1322,8 @@ extension UnicodeScalarView {
                   )
                 }
               case .number:
+                break
+              case .string:
                 break
               case .datetime:
                 break

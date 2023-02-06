@@ -4,6 +4,7 @@ extension CalcExpression {
   enum Value {
     case integer(Int)
     case number(Double)
+    case string(String)
     case datetime(Date)
   }
 }
@@ -15,6 +16,8 @@ extension CalcExpression.Value {
       return Double(integer)
     case let .number(number):
       return number
+    case .string:
+      return .nan
     case let .datetime(date):
       return date.timeIntervalSince1970
     }
@@ -36,6 +39,8 @@ extension CalcExpression.Value {
       return .integer(lValue + rValue)
     case let (.number(lValue), .number(rValue)):
       return .number(lValue + rValue)
+    case let (.string(lValue), .string(rValue)):
+      return .string(lValue + rValue)
     case let (.datetime(lValue), .datetime(rValue)):
       throw CalcExpression.Error
         .message(
@@ -136,6 +141,8 @@ extension CalcExpression.Value {
       return .integer(-value)
     case let .number(value):
       return .number(-value)
+    case .string:
+      throw CalcExpression.Error.message("Unary minus operator is not supported for string values.")
     case let .datetime(value):
       throw CalcExpression.Error
         .message(
@@ -150,6 +157,8 @@ extension CalcExpression.Value {
       return .integer(value)
     case let .number(value):
       return .number(value)
+    case .string:
+      throw CalcExpression.Error.message("Unary plus operator is not supported for string values.")
     case let .datetime(value):
       throw CalcExpression.Error
         .message(

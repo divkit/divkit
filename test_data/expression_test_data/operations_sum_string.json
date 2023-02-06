@@ -9,8 +9,9 @@
       },
       "variables": [],
       "platforms": [
-        "web",
-        "android"
+        "android",
+        "ios",
+        "web"
       ]
     }
   ]

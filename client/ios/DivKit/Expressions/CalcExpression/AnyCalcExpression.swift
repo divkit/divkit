@@ -149,6 +149,8 @@ struct AnyCalcExpression: CustomStringConvertible {
             throw Error.typeMismatch(symbol, try args.map(box.load))
           }
           return .number(doubleValue)
+        case .string:
+          throw Error.message("Invalid argument type")
         case let .datetime(dateValue):
           guard symbol != .infix("&&") else {
             throw Error
@@ -686,6 +688,8 @@ extension AnyCalcExpression {
         return .number(Double(truncating: numberValue))
       case let datetimeValue as Date:
         return .datetime(datetimeValue)
+      case let stringValue as String:
+        return .string(stringValue)
       case _ where AnyCalcExpression.isNil(value):
         return .number(NanBox.nilValue)
       default:
@@ -725,6 +729,8 @@ extension AnyCalcExpression {
     // Retrieve a value if it exists, else return the argument
     func load(_ arg: CalcExpression.Value) throws -> Any {
       switch arg {
+      case let .string(value):
+        return value
       case let .number(value):
         return loadIfStored(value) ?? value
       case let .integer(value):
