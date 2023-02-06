@@ -7,10 +7,11 @@ import BaseUI
 
 public final class MetalImageView: UIView, RemoteImageViewContentProtocol {
   public var appearanceAnimation: ImageViewAnimation?
-  private(set) lazy var commandQueue: MTLCommandQueue? = metalView.device?.makeCommandQueue()
-  private lazy var ciContext: CIContext? = metalView.device.map { CIContext(mtlDevice: $0) }
+  private lazy var commandQueue = metalView.device?.makeCommandQueue()
+  private lazy var ciContext = metalView.device.map { CIContext(mtlDevice: $0) }
+  private lazy var textureLoader = metalView.device.map(MTKTextureLoader.init(device:))
   private lazy var device = MTLCreateSystemDefaultDevice()
-  private lazy var metalView: MTKView = {
+  private lazy var metalView = {
     let mtkView = MTKView(frame: frame, device: device)
     mtkView.enableSetNeedsDisplay = true
     mtkView.framebufferOnly = false
@@ -37,24 +38,61 @@ public final class MetalImageView: UIView, RemoteImageViewContentProtocol {
 
   public func setImage(_ image: UIImage?, animated: Bool?) {
     uiImage = image
-    setNeedsLayout()
-    if let appearanceAnimation = appearanceAnimation, animated == true {
-      self.alpha = appearanceAnimation.startAlpha
-      UIView.animate(
-        withDuration: appearanceAnimation.duration,
-        delay: appearanceAnimation.delay,
-        options: appearanceAnimation.options,
-        animations: { self.alpha = appearanceAnimation.endAlpha },
-        completion: nil
-      )
+
+    let tryAnimate = {
+      if animated == true {
+        self.animateAppearance()
+      }
+    }
+    if let ciImage = image?.ciImage {
+      self.ciImage = ciImage
+      tryAnimate()
+    } else {
+      guard let cgImage = image?.cgImage else {
+        ciImage = nil
+        return
+      }
+      loadTexture(from: cgImage, textureLoader: textureLoader) { texture in
+        let ciImage: CIImage?
+        if let texture = texture {
+          let reversedImage = CIImage(mtlTexture: texture)
+          ciImage = reversedImage?
+            .transformed(by: CGAffineTransform(scaleX: 1, y: -1))
+            .transformed(by: CGAffineTransform(
+              translationX: 0,
+              y: reversedImage?.extent.height ?? 0
+            ))
+        } else {
+          ciImage = CIImage(cgImage: cgImage)
+        }
+
+        let updateImage = {
+          guard image === self.uiImage else { return }
+          self.ciImage = ciImage
+          tryAnimate()
+        }
+        #if DEBUG
+        if isSnapshotTest {
+          updateImage()
+        } else {
+          DispatchQueue.main.async {
+            updateImage()
+          }
+        }
+        #else
+        DispatchQueue.main.async {
+          updateImage()
+        }
+        #endif
+      }
     }
   }
 
-  private var cachedCIImage: (CIImage, CIImageFactoryParams)?
+  private var uiImage: UIImage?
 
-  private var uiImage: UIImage? {
+  private var ciImage: CIImage? {
     didSet {
-      if oldValue !== uiImage {
+      if oldValue !== ciImage {
         metalView.setNeedsDisplay()
       }
     }
@@ -75,6 +113,19 @@ public final class MetalImageView: UIView, RemoteImageViewContentProtocol {
       }
     }
   }
+
+  private func animateAppearance() {
+    if let appearanceAnimation = self.appearanceAnimation {
+      self.alpha = appearanceAnimation.startAlpha
+      UIView.animate(
+        withDuration: appearanceAnimation.duration,
+        delay: appearanceAnimation.delay,
+        options: appearanceAnimation.options,
+        animations: { self.alpha = appearanceAnimation.endAlpha },
+        completion: nil
+      )
+    }
+  }
 }
 
 extension MetalImageView: MTKViewDelegate {
@@ -93,24 +144,19 @@ extension MetalImageView: MTKViewDelegate {
     let renderEncoder = buffer?.makeRenderCommandEncoder(descriptor: currentRenderPassDescriptor)
     renderEncoder?.endEncoding()
 
-    guard let uiImage = uiImage else {
+    guard let ciImage = ciImage else {
       buffer?.present(drawable)
       buffer?.commit()
       return
     }
 
     let ciImageFactoryParams = CIImageFactoryParams(
-      image: uiImage,
+      image: ciImage,
       bounds: view.bounds,
       redrawingStyle: imageRedrawingStyle
     )
 
-    if cachedCIImage?.0 == nil || ciImageFactoryParams != cachedCIImage?.1,
-       let ciImage = makeFilteredImage(params: ciImageFactoryParams) {
-      cachedCIImage = (ciImage, ciImageFactoryParams)
-    }
-
-    guard let (image, _) = cachedCIImage else { return }
+    guard let image = makeFilteredImage(params: ciImageFactoryParams) else { return }
 
     let drawableSize = view.drawableSize
 
@@ -119,8 +165,6 @@ extension MetalImageView: MTKViewDelegate {
       contentSize: image.extent.size,
       boundsSize: view.bounds.size
     )
-
-    let colorSpace = CGColorSpaceCreateDeviceRGB()
 
     let bounds = CGRect(origin: CGPoint.zero, size: drawableSize)
 
@@ -162,7 +206,7 @@ extension MetalImageView: MTKViewDelegate {
         to: drawable.texture,
         commandBuffer: buffer,
         bounds: bounds,
-        colorSpace: colorSpace
+        colorSpace: CGColorSpaceCreateDeviceRGB()
       )
     }
 
@@ -172,7 +216,7 @@ extension MetalImageView: MTKViewDelegate {
 }
 
 private struct CIImageFactoryParams: Equatable {
-  let image: UIImage
+  let image: CIImage
   let bounds: CGRect
   let redrawingStyle: ImageRedrawingStyle?
 
@@ -186,10 +230,7 @@ private struct CIImageFactoryParams: Equatable {
 private func makeFilteredImage(
   params: CIImageFactoryParams
 ) -> CIImage? {
-  guard let cgImage = params.image.cgImage else {
-    return nil
-  }
-  let ciImage = CIImage(cgImage: cgImage)
+  let ciImage = params.image
   let extent = ciImage.extent
 
   let identityFilter: ImageFilter = { $0 }
@@ -304,6 +345,28 @@ private func makeOrigin(
     y = 0
   }
   return CGPoint(x: x, y: y)
+}
+
+private func loadTexture(
+  from image: CGImage,
+  textureLoader: MTKTextureLoader?,
+  completion: @escaping ResultAction<MTLTexture?>
+) {
+  let asyncLoad = {
+    textureLoader?.newTexture(cgImage: image, options: [.SRGB: true]) { texture, _ in
+      completion(texture)
+    }
+  }
+  #if DEBUG
+  if isSnapshotTest {
+    let texture = try? textureLoader?.newTexture(cgImage: image, options: [.SRGB: true])
+    completion(texture)
+  } else {
+    asyncLoad()
+  }
+  #else
+  asyncLoad()
+  #endif
 }
 
 #if DEBUG
