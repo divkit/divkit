@@ -1,3 +1,25 @@
+## 23.1.0
+
+# Android Client:
+* Added time interval functions
+* Added support of shape properties to slider
+
+# iOS Client:
+* Added functions for DateTime
+* Fixed `padStart`/`padEnd` functions
+
+# Web Client:
+Added:
+* `indicator` can now be rendered in two ways, `placement` field is now supported
+* `indicator` can now have a border inside every point, shape objects have been updated to support `background_color` and `border` properties. Several fields in `indicator` are now deprecated, including `space_between_centers`, `inactive_item_color`, `active_item_color`, `shape` and `active_item_size`. Shape objects support in `slider` was also updated
+
+Fixed:
+* `padStart` / `padEnd` now will work properly with an empty `pad_str` argument
+* Default `width` `match_parent` should work more predictable in rare cases
+* `separator` and `line_separator`  in `container` now will not block clicks and other events on component and it's descendants
+* `constrained` size logic in rare cases
+
+
 ## 23.0.0
 
 # JSON Schema:
