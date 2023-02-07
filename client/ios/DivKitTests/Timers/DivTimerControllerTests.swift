@@ -6,9 +6,6 @@ import XCTest
 import CommonCore
 
 final class DivTimerControllerTests: XCTestCase {
-  private let variableName = "test_variable_name"
-  private let tickInterval = 1000
-  private let duration = 3000
   private let tickActions = [DivAction(logId: "Tick action")]
   private let endActions = [DivAction(logId: "End action")]
   private var variableValue: String?
@@ -18,37 +15,13 @@ final class DivTimerControllerTests: XCTestCase {
   private let timerScheduler = TestTimerScheduler()
   private let timeMeasuring = TestTimeMeasuring()
 
-  private var divTimer: DivTimer!
   private var timer: DivTimerController!
+  private var timerDuration: Int = 0
+  private var timerTickInterval: Int = 0
 
   override func setUp() {
     super.setUp()
-    divTimer = DivTimer(
-      duration: .value(duration),
-      endActions: endActions,
-      id: "test_timer",
-      tickActions: tickActions,
-      tickInterval: .value(tickInterval),
-      valueVariable: variableName
-    )
-    timer = DivTimerController(
-      divTimer: divTimer,
-      timerScheduler: timerScheduler,
-      timeMeasuring: timeMeasuring,
-      runActions: { [unowned self] actions in
-        if actions == tickActions {
-          tickActionsCount += 1
-        } else if actions == endActions {
-          endActionsCount += 1
-        }
-      },
-      updateVariable: { [unowned self] name, value in
-        if name.rawValue == variableName {
-          variableValue = value
-        }
-      },
-      updateCard: {}
-    )
+    timer = makeTimer()
   }
 
   func test_WhenTimerStart_StateIsStarted() throws {
@@ -293,22 +266,54 @@ final class DivTimerControllerTests: XCTestCase {
     XCTAssertEqual(variableValue, String(tickInterval / 2))
   }
 
+  func test_WhenTimerEnded_runTickActionWhenNeeded() throws {
+    timer.start()
+    makeTick()
+    makeTick()
+    endTimer()
+    XCTAssertEqual(tickActionsCount, tickCount)
+  }
+
+  func test_WhenTimerEnded_doNotRunTickActionWhenCountEnough() throws {
+    timer.start()
+    makeTick()
+    makeTick()
+    makeTick()
+    endTimer()
+    XCTAssertEqual(tickActionsCount, tickCount)
+  }
+
+  func test_WhenTimerEnded_doNotRunTickAction() throws {
+    timer = makeTimer(duration: 3000, tickInterval: 2000)
+    timer.start()
+    endTimer()
+    XCTAssertEqual(tickActionsCount, 0)
+  }
+
+  func test_timerWithSmallValues() throws {
+    timer = makeTimer(duration: 1, tickInterval: 1)
+    timer.start()
+    endTimer()
+    XCTAssertEqual(tickActionsCount, 1)
+    XCTAssertEqual(endActionsCount, 1)
+  }
+
   private func makeHalfTick() {
-    let halfTick = tickInterval.timeInterval / 2
+    let halfTick = timerTickInterval.toTimeInterval / 2
     timeMeasuring.passedTime = timeMeasuring.passedTime + halfTick
     fireTimer(with: halfTick)
   }
 
   private func makeTick() {
-    let tick = tickInterval.timeInterval
-    timeMeasuring.passedTime = timeMeasuring.passedTime + tick
-    fireTimer(with: tick)
+    let interval = timerTickInterval.toTimeInterval
+    timeMeasuring.passedTime = timeMeasuring.passedTime + interval
+    fireTimer(with: interval)
   }
 
   private func endTimer() {
-    let duration = duration.timeInterval
-    timeMeasuring.passedTime = duration
-    fireTimer(with: duration)
+    let interval = timerDuration.toTimeInterval
+    timeMeasuring.passedTime = interval
+    fireTimer(with: interval)
   }
 
   private func fireTimer(with interval: TimeInterval) {
@@ -318,6 +323,40 @@ final class DivTimerControllerTests: XCTestCase {
       }
     }
   }
+
+  private func makeTimer(
+    duration: Int = duration,
+    tickInterval: Int = tickInterval
+  ) -> DivTimerController {
+    let divTimer = DivTimer(
+      duration: .value(duration),
+      endActions: endActions,
+      id: "test_timer",
+      tickActions: tickActions,
+      tickInterval: .value(tickInterval),
+      valueVariable: variableName
+    )
+    timerDuration = duration
+    timerTickInterval = tickInterval
+    return DivTimerController(
+      divTimer: divTimer,
+      timerScheduler: timerScheduler,
+      timeMeasuring: timeMeasuring,
+      runActions: { [unowned self] actions in
+        if actions == tickActions {
+          tickActionsCount += 1
+        } else if actions == endActions {
+          endActionsCount += 1
+        }
+      },
+      updateVariable: { [unowned self] name, value in
+        if name.rawValue == variableName {
+          variableValue = value
+        }
+      },
+      updateCard: {}
+    )
+  }
 }
 
 extension Int {
@@ -325,3 +364,8 @@ extension Int {
     TimeInterval(self / 1000)
   }
 }
+
+private let variableName = "test_variable_name"
+private let tickCount = 3
+private let tickInterval = 1000
+private let duration = tickInterval * tickCount

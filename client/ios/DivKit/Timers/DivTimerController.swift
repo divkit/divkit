@@ -25,6 +25,9 @@ final class DivTimerController {
   private var savedInterval: TimeInterval?
   private var tickTimer: TimerType?
   private var endTimer: TimerType?
+  private var expectedTickCount: Int = 0
+  private var actualTickCount: Int = 0
+  private var tickBeforeEndIsNeeded = false
 
   init(
     divTimer: DivTimer,
@@ -53,8 +56,17 @@ final class DivTimerController {
       return
     }
     state = .started
-    savedDuration = divTimer.getDuration(expressionResolver)
-    savedInterval = divTimer.getTickInterval(expressionResolver)
+    if let duration = divTimer.getDuration(expressionResolver),
+       let tickInterval = divTimer.getTickInterval(expressionResolver) {
+      expectedTickCount = duration / tickInterval
+      tickBeforeEndIsNeeded = duration % tickInterval == 0
+    } else {
+      expectedTickCount = 0
+      tickBeforeEndIsNeeded = false
+    }
+    savedDuration = divTimer.getDuration(expressionResolver)?.toTimeInterval
+    savedInterval = divTimer.getTickInterval(expressionResolver)?.toTimeInterval
+    actualTickCount = 0
     setVariable(0)
     timeMeasuring.start()
     makeTickTimer()
@@ -110,8 +122,12 @@ final class DivTimerController {
     guard let duration = savedDuration else {
       return
     }
+    let delay = duration - timeMeasuring.passedInterval()
+    guard delay > 0 else {
+      return
+    }
     endTimer = timerScheduler.makeTimer(
-      delay: duration - timeMeasuring.passedInterval(),
+      delay: delay,
       handler: { [weak self] in
         self?.onEnd(duration: duration)
       }
@@ -119,7 +135,7 @@ final class DivTimerController {
   }
 
   private func makeRemainderTickTimer() {
-    guard let tickInterval = savedInterval else {
+    guard let tickInterval = savedInterval, tickInterval > 0 else {
       return
     }
     let remainder = timeMeasuring.passedInterval().truncatingRemainder(dividingBy: tickInterval)
@@ -137,7 +153,7 @@ final class DivTimerController {
   }
 
   private func makeTickTimer() {
-    guard let tickInterval = savedInterval else {
+    guard let tickInterval = savedInterval, tickInterval > 0 else {
       return
     }
     tickTimer = timerScheduler.makeRepeatingTimer(
@@ -156,6 +172,7 @@ final class DivTimerController {
     if let duration = savedDuration, passedInterval >= duration {
       return
     }
+    actualTickCount += 1
     setVariable(passedInterval)
     if let tickActions = divTimer.tickActions {
       runActions(tickActions)
@@ -168,6 +185,11 @@ final class DivTimerController {
       return
     }
     setVariable(duration)
+    if tickBeforeEndIsNeeded && actualTickCount < expectedTickCount {
+      if let tickActions = divTimer.tickActions {
+        runActions(tickActions)
+      }
+    }
     stop()
   }
 
@@ -188,19 +210,20 @@ final class DivTimerController {
 }
 
 extension DivTimer {
-  fileprivate func getDuration(_ expressionResolver: ExpressionResolver) -> TimeInterval? {
+  fileprivate func getDuration(_ expressionResolver: ExpressionResolver) -> Int? {
     let duration = self.resolveDuration(expressionResolver)
     guard duration > 0 else {
       return nil
     }
-    return TimeInterval(duration / 1000)
+    return duration
   }
 
-  fileprivate func getTickInterval(_ expressionResolver: ExpressionResolver) -> TimeInterval? {
-    guard let divTickInterval = self.resolveTickInterval(expressionResolver) else {
+  fileprivate func getTickInterval(_ expressionResolver: ExpressionResolver) -> Int? {
+    guard let divTickInterval = self.resolveTickInterval(expressionResolver),
+          divTickInterval > 0 else {
       return nil
     }
-    return TimeInterval(divTickInterval / 1000)
+    return divTickInterval
   }
 
   fileprivate func parametersAreValid(_ expressionResolver: ExpressionResolver) -> Bool {
@@ -218,6 +241,12 @@ extension DivTimer {
       return false
     }
     return true
+  }
+}
+
+extension Int {
+  var toTimeInterval: TimeInterval {
+    TimeInterval(Double(self) / 1000)
   }
 }
 

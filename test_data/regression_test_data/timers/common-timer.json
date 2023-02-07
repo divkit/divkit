@@ -205,9 +205,14 @@
         "value": "initial"
       },
       {
+        "name": "tick_count_value",
+        "type": "integer",
+        "value": 0
+      },
+      {
         "name": "timer_duration",
         "type": "integer",
-        "value": 60000
+        "value": 5000
       },
       {
         "name": "timer_interval",
@@ -225,6 +230,10 @@
           {
             "log_id": "tick",
             "url": "div-action://set_variable?name=timer_state&value=ticking"
+          },
+          {
+            "log_id": "tick",
+            "url": "div-action://set_variable?name=tick_count_value&value=@{tick_count_value+1}"
           }
         ],
         "end_actions": [
@@ -258,6 +267,11 @@
               "value": "@{timer_value}"
             },
             {
+              "type": "field",
+              "title": "Tick count: ",
+              "value": "@{tick_count_value}"
+            },
+            {
               "type": "grid",
               "orientation": "horizontal",
               "width": {
@@ -273,6 +287,10 @@
                     {
                       "log_id": "Start timer",
                       "url": "div-action://timer?id=ticker&action=start"
+                    },
+                    {
+                      "log_id": "tick",
+                      "url": "div-action://set_variable?name=tick_count_value&value=0"
                     }
                   ]
                 },
