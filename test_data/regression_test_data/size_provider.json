@@ -8,7 +8,7 @@
           "$text": "text",
           "font_size": 16,
           "width": {
-            "type": "wrap_content",
+            "type": "wrap_content"
           },
           "margins": {
             "left": 10,
