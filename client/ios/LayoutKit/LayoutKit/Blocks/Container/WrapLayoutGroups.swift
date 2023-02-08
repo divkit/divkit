@@ -58,6 +58,9 @@ struct WrapLayoutGroups {
         addChild(child: child, size: childSize)
       } else {
         let childSize = child.content.size(forResizableBlockSize: .zero)
+        if childSize.isEmpty {
+          return
+        }
         if offset + childSize[keyPath: keyPath] + separatorOffset > size[keyPath: keyPath] {
           startNewLine()
           addChild(child: child, size: childSize)
