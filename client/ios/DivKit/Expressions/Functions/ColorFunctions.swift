@@ -96,18 +96,18 @@ enum ColorFunctions: CaseIterable {
   }
 }
 
-private func _argb(alpha: Double, red: Double, green: Double, blue: Double) throws -> String {
+private func _argb(alpha: Double, red: Double, green: Double, blue: Double) throws -> Color {
   guard isNormalized(alpha), isNormalized(red), isNormalized(green), isNormalized(blue) else {
     throw ColorFunctions.Error.outOfRange("argb(\(alpha), \(red), \(green), \(blue))").message
   }
-  return Color(red: red, green: green, blue: blue, alpha: alpha).argbString
+  return Color(red: red, green: green, blue: blue, alpha: alpha)
 }
 
-private func _rgb(red: Double, green: Double, blue: Double) throws -> String {
+private func _rgb(red: Double, green: Double, blue: Double) throws -> Color {
   guard isNormalized(red), isNormalized(green), isNormalized(blue) else {
     throw ColorFunctions.Error.outOfRange("rgb(\(red), \(green), \(blue))").message
   }
-  return Color(red: red, green: green, blue: blue, alpha: 1).argbString
+  return Color(red: red, green: green, blue: blue, alpha: 1)
 }
 
 private func getChannel(_ channel: ColorFunctions.Channel, from color: String) throws -> Double {
@@ -125,7 +125,7 @@ private func setChannel(
   _ channel: ColorFunctions.Channel,
   to color: String,
   value: Double
-) throws -> String {
+) throws -> Color {
   guard let color = Color.color(withHexString: color) else {
     throw ColorFunctions.Error.set(channel, color, value).message
   }
@@ -135,7 +135,7 @@ private func setChannel(
       .outOfRange("setColor\(channel.description)('\(color.argbString)', \(value))").message
   }
 
-  return color.set(value, for: channel).argbString
+  return color.set(value, for: channel)
 }
 
 private func setChannelForColor(

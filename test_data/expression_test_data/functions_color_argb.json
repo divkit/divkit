@@ -3,19 +3,6 @@
     {
       "name": "argb(1.0, 0.5, 0.0, 1.0) => #FF8000FF",
       "expression": "@{argb(1.0, 0.5, 0.0, 1.0)}",
-      "deprecated": "Return type of argb() become color",
-      "expected": {
-        "type": "string",
-        "value": "#FF8000FF"
-      },
-      "variables": [],
-      "platforms": [
-        "ios"
-      ]
-    },
-    {
-      "name": "argb(1.0, 0.5, 0.0, 1.0) => #FF8000FF",
-      "expression": "@{argb(1.0, 0.5, 0.0, 1.0)}",
       "expected": {
         "type": "color",
         "value": "#FF8000FF"
@@ -23,20 +10,8 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
-      ]
-    },
-    {
-      "name": "argb(1.0, 1.0, 0.5, 1.0) => #FFFF80FF",
-      "expression": "@{argb(1.0, 1.0, 0.5, 1.0)}",
-      "deprecated": "Return type of argb() become color",
-      "expected": {
-        "type": "string",
-        "value": "#FFFF80FF"
-      },
-      "variables": [],
-      "platforms": [
-        "ios"
       ]
     },
     {
@@ -49,20 +24,8 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
-      ]
-    },
-    {
-      "name": "argb(0.5039, 0.5040, 0.9980, 0.9981) => #8081FEFF",
-      "expression": "@{argb(0.5039, 0.5040, 0.9980, 0.9981)}",
-      "deprecated": "Return type of argb() become color",
-      "expected": {
-        "type": "string",
-        "value": "#8081FEFF"
-      },
-      "variables": [],
-      "platforms": [
-        "ios"
       ]
     },
     {
@@ -75,20 +38,8 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
-      ]
-    },
-    {
-      "name": "rgb(0.5, 0.0, 1.0) => #FF8000FF",
-      "expression": "@{rgb(0.5, 0.0, 1.0)}",
-      "deprecated": "Return type of rgb() become color",
-      "expected": {
-        "type": "string",
-        "value": "#FF8000FF"
-      },
-      "variables": [],
-      "platforms": [
-        "ios"
       ]
     },
     {
@@ -101,20 +52,8 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
-      ]
-    },
-    {
-      "name": "rgb(1.0, 0.5, 1.0) => #FFFF80FF",
-      "expression": "@{rgb(1.0, 0.5, 1.0)}",
-      "deprecated": "Return type of rgb() become color",
-      "expected": {
-        "type": "string",
-        "value": "#FFFF80FF"
-      },
-      "variables": [],
-      "platforms": [
-        "ios"
       ]
     },
     {
@@ -127,6 +66,7 @@
       "variables": [],
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     },
