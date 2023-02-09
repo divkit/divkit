@@ -36,11 +36,7 @@ private struct WebPreviewModel {
   private(set) var blockProvider: DivBlockProvider!
   private(set) var payloadFactory: UIStatePayloadFactory!
   private var renderingTime: UIStatePayload.RenderingTime {
-    UIStatePayload.RenderingTime(
-      div_render_total: blockProvider.divRenderTime.webTime,
-      div_parsing_data: blockProvider.divDataParsingTime.webTime,
-      div_parsing_templates: blockProvider.divTemplateParsingTime.webTime
-    )
+    blockProvider.renderingTime
   }
 
   init() {
@@ -77,22 +73,5 @@ private struct WebPreviewModel {
         renderingTime: renderingTime
       )
     )
-  }
-}
-
-extension TimeMeasure {
-  fileprivate var webTime: UIStatePayload.RenderingTime.Time {
-    .init(value: time?.value ?? 0, histogram_type: time?.status.histogramType ?? .cold)
-  }
-}
-
-extension TimeMeasure.Status {
-  fileprivate var histogramType: UIStatePayload.RenderingTime.HistogramType {
-    switch self {
-    case .cold:
-      return .cold
-    case .warm:
-      return .warm
-    }
   }
 }

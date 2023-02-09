@@ -55,7 +55,7 @@ struct UIStatePayload: Encodable {
     let div_parsing_data: Time
     let div_parsing_templates: Time
 
-    enum HistogramType: Encodable {
+    enum HistogramType: String, Encodable {
       case cold
       case warm
     }
