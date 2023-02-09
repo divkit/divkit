@@ -39,7 +39,7 @@ private final class PagerView: BlockView {
   private var selectedActions: [[UserInterfaceAction]]!
   private var layout: PagerViewLayout!
   private var currentPageIndex: FractionalPageIndex = 0
-  private var lastState: PagerViewState?
+  private var lastState: (UIElementPath, PagerViewState)?
   private weak var observer: ElementStateObserver?
   private weak var overscrollDelegate: ScrollDelegate?
 
@@ -86,17 +86,16 @@ private final class PagerView: BlockView {
 
     onMainThreadAsync {
       if model != oldModel {
-        self.setState(state.synchronized(with: model), notifyingObservers: true)
+        self.setState(state.synchronized(with: model), path: model.path, notifyingObservers: true)
       }
     }
   }
 
-  private func setState(_ state: PagerViewState, notifyingObservers: Bool) {
+  private func setState(_ state: PagerViewState, path: UIElementPath, notifyingObservers: Bool) {
     let currentPage = state.currentPage
     currentPageIndex = FractionalPageIndex(rawValue: CGFloat(currentPage))
-    let lastStateCurrentPage = lastState?.currentPage
-    if lastState != state, lastStateCurrentPage != currentPage {
-      lastState = state
+    if lastState?.0 != path || lastState?.1 != state {
+      lastState = (model.path, state)
 
       if notifyingObservers {
         observer?.elementStateChanged(state, forPath: model.path)
@@ -143,7 +142,7 @@ extension PagerView: ElementStateObserver {
         PagerViewState(
           numberOfPages: model.items.count,
           currentPage: Int(pageIndex.rounded())
-        ),
+        ), path: model.path,
         notifyingObservers: true
       )
     }
