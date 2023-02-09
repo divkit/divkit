@@ -17,6 +17,7 @@ final class ScrollPageIndicatorLayer: CALayer {
     disappearingHeightScale: 0,
     disappearingWidthScale: 0,
     pageSize: .zero,
+    highlightedPageCornerRadius: 0,
     pageCornerRadius: 0,
     animation: .scale,
     itemPlacement: .fixed(spaceBetweenCenters: 0)
@@ -126,7 +127,8 @@ extension ScrollPageIndicatorLayer {
     )
     let indicator = Indicator(
       rect: rect.withScaledSize(x: scale.x, y: scale.y),
-      cornerRadius: configuration.pageCornerRadius * scale.y,
+      cornerRadius: configuration
+        .highlightedPageCornerRadius ?? (configuration.pageCornerRadius * scale.y),
       color: animator.indicatorColor(for: state).cgColor,
       borderColor: animator.indicatorBorder(for: state).color.cgColor,
       borderWidth: animator.indicatorBorder(for: state).width

@@ -84,6 +84,7 @@ extension DivIndicator: DivBlockModeling {
       disappearingHeightScale: disappearingScaleY,
       disappearingWidthScale: disappearingScaleX,
       pageSize: pageSize,
+      highlightedPageCornerRadius: activeRect?.cornerRadius,
       pageCornerRadius: inactiveRect?
         .cornerRadius ?? CGFloat(rectangle.cornerRadius.resolveValue(expressionResolver) ?? 0),
       animation: resolveAnimation(expressionResolver).asBlockAnimation,

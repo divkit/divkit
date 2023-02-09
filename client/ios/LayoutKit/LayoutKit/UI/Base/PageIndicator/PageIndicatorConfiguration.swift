@@ -25,6 +25,7 @@ public struct PageIndicatorConfiguration: Equatable {
   public let disappearingHeightScale: CGFloat
   public let disappearingWidthScale: CGFloat
   public let pageSize: CGSize
+  public let highlightedPageCornerRadius: CGFloat?
   public let pageCornerRadius: CGFloat
   public let animation: Animation
   public let itemPlacement: ItemPlacement
@@ -39,6 +40,7 @@ public struct PageIndicatorConfiguration: Equatable {
     disappearingHeightScale: CGFloat,
     disappearingWidthScale: CGFloat,
     pageSize: CGSize,
+    highlightedPageCornerRadius: CGFloat?,
     pageCornerRadius: CGFloat,
     animation: Animation,
     itemPlacement: ItemPlacement
@@ -52,6 +54,7 @@ public struct PageIndicatorConfiguration: Equatable {
     self.disappearingHeightScale = disappearingHeightScale
     self.disappearingWidthScale = disappearingWidthScale
     self.pageSize = pageSize
+    self.highlightedPageCornerRadius = highlightedPageCornerRadius
     self.pageCornerRadius = pageCornerRadius
     self.animation = animation
     self.itemPlacement = itemPlacement
