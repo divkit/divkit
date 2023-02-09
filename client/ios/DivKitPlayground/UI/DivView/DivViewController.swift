@@ -130,7 +130,7 @@ open class DivViewController: UIViewController {
 extension DivViewController: ElementStateObserver {
   public func elementStateChanged(_ state: ElementState, forPath path: UIElementPath) {
     divKitComponents.blockStateStorage.elementStateChanged(state, forPath: path)
-    blockProvider.update(reasons: [])
+    blockProvider.update(withStates: [path: state])
   }
 }
 

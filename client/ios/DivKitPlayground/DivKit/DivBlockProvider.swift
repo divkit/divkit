@@ -73,7 +73,7 @@ final class DivBlockProvider {
     }
 
     sizeProviderExtensionHandler?.onCardUpdated(reasons: reasons)
-    
+
     reasons.compactMap(\.patch).forEach {
       divData = divData.applyPatch($0)
     }
@@ -97,11 +97,21 @@ final class DivBlockProvider {
           templateParsing: divTemplateParsingTime.time,
           render: divRenderTime.time
         )
-        .addingErrorsInfo(context.errorsStorage.errors.map { $0.description})
+        .addingErrorsInfo(context.errorsStorage.errors.map { $0.description })
     } catch {
       block = makeErrorBlock("\(error)")
       errors = [(message: error.localizedDescription, stack: nil)]
       DemoAppLogger.error("Failed to build block: \(error)")
+    }
+  }
+
+  func update(withStates blockStates: BlocksState) {
+    do {
+      block = try block.updated(withStates: blockStates)
+    } catch {
+      block = makeErrorBlock("\(error)")
+      errors = [(message: error.localizedDescription, stack: nil)]
+      DemoAppLogger.error("Failed to update block: \(error)")
     }
   }
 
@@ -219,8 +229,8 @@ extension Block {
       widthTrait: .resizable,
       text: text.with(typo: Typo(size: 18, weight: .regular))
     )
-      .addingEdgeGaps(20)
-      .with(background: .solidColor(.red))
+    .addingEdgeGaps(20)
+    .with(background: .solidColor(.red))
 
     let block = try? ContainerBlock(
       layoutDirection: .vertical,
