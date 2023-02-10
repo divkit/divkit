@@ -1,3 +1,20 @@
+## 23.2.0
+
+# Android Client:
+* Added support of `max_size` property
+* Added support of `wrap_content` size with constraints
+* Added border to indicator
+* Added sharing non-local variables between contexts
+* Fixed filters not being applied to image preview
+* Fixed visibility change of gallery items
+
+# iOS Client:
+* Added SizeProviderExtensionHandler
+* Added plus operator support for strings
+* Fixed last tick action in DivTimer
+* Fixed text selection in DivInput
+* Fixed multithreading in DivVariableStorage
+
 ## 23.1.0
 
 # Android Client:
