@@ -5,7 +5,7 @@
   },
   "div_accessibility": {
     "en": "Accessibility settings.",
-    "ru": "Настройки доступности для людей с ограниченными возможностями."
+    "ru": "Настройки доступности."
   },
   "div_accessibility_description": {
     "en": "Element description. It is used as the main description for screen reading applications.",
@@ -28,8 +28,8 @@
     "ru": "Описание текущего состояния элемента. Например, в описании можно указать выбранную дату для элемента выбора даты, а для переключателя — состояние включен/выключен."
   },
   "div_accessibility_type": {
-    "en": "Element role. It is used for correct identification of an element by an accessibility service. The `list` element is used to group list items into a single element.",
-    "ru": "Роль элемента. Используется для правильной идентификации элемента accessibility-сервисом. Элемент `list` используется для группировки элементов списка в один элемент."
+    "en": "Element role. Used to correctly identify an element by the accessibility service. For example, the `list` element is used to group list elements into one element.",
+    "ru": "Роль элемента. Используется для правильной идентификации элемента accessibility-сервисом. Например, элемент `list` используется для группировки элементов списка в один элемент."
   },
   "div_action": {
     "en": "It defines an action when clicking on an element.",
@@ -96,7 +96,7 @@
     "ru": "Действие при двойном нажатии на элемент."
   },
   "div_actionable_longtap_actions": {
-    "en": "Action when long-clicking on an element. Doesn't work on the devices w/o touch gestures.",
+    "en": "Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.",
     "ru": "Действие при долгом нажатии на элемент. Не работает на устройствах без сенсорного экрана."
   },
   "div_animation": {
@@ -169,7 +169,7 @@
   },
   "div_aspect": {
     "en": "Size with a fixed aspect ratio. It counts height from width and ignores `height` value.",
-    "ru": "Размер с фиксированным соотношением сторон. Высота вычисляется исходя из ширины, значение параметра `height` игнорируется."
+    "ru": "Фиксированное соотношение размеров элемента. Высота элемента вычисляется исходя из ширины, значение параметра `height` игнорируется."
   },
   "div_aspect_ratio": {
     "en": "`height = width / ratio`.",
@@ -189,7 +189,7 @@
   },
   "div_base_accessibility": {
     "en": "Accessibility settings.",
-    "ru": "Настройки доступности для людей с ограниченными возможностями."
+    "ru": "Настройки доступности."
   },
   "div_base_alignment_horizontal": {
     "en": "Horizontal alignment of an element inside the parent element.",
@@ -360,11 +360,11 @@
     "ru": "Контейнер. Содержит в себе другие элементы и отвечает за их расположение. Позволяет располагать элементы по вертикали, горизонтали и с наложением в определенном порядке, имитируя третье измерение."
   },
   "div_container_content_alignment_horizontal": {
-    "en": "Default alignment of elements. Not used if the `alignment_horizontal` parameter is set from the element field.",
+    "en": "Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.",
     "ru": "Горизонтальное выравнивание элементов. Для дочерних элементов может быть переопределено через свойство `alignment_horizontal`."
   },
   "div_container_content_alignment_vertical": {
-    "en": "Default alignment of elements. `baseline` value aligns elements having their own baseline along this baseline. Other elements are aligned by top side in this case. Not used if the `alignment_vertical` parameter is set from the element field.",
+    "en": "Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.",
     "ru": "Вертикальное выравнивание элементов. Значение `baseline` означает выравнивание элементов по базовой линии (для текста и других элементов, у которых есть базовая линия). Остальные элементы в этом случае будут выровнены по верхнему краю. Для дочерних элементов может быть переопределено через свойство `alignment_vertical`."
   },
   "div_container_items": {
@@ -376,16 +376,16 @@
     "ru": "Способ размещения элементов. Значение `wrap` означает перенос элементов на следующую строку, если они не поместились на предыдущей. Если установлено значения `wrap`:<li>для каждого элемента со значением размера `match_parent` вдоль главной оси будет выделена отдельная строка;</li><li>элементы со значением `match_parent` вдоль побочной оси будут проигнорированы.</li>"
   },
   "div_container_line_separator": {
-    "en": "Separator between elements along the cross axis. Not used if the `layout_mode` parameter has the value `no_wrap'. In the web only newer browsers are supported (gap property is required in flex).",
-    "ru": "Разделитель между элементами вдоль поперечной оси. Не используется, если параметр `layout_mode` имеет значение `no_wrap`. В вебе поддерживаются только новые браузеры (требуется поддержка gap во flex)."
+    "en": "Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).",
+    "ru": "Разделитель между элементами вдоль поперечной оси. Не используется, если параметр `layout_mode` имеет значение `no_wrap`. В вебе поддерживаются только новые браузеры (требуется поддержка свойства `gap` для flex-блоков)."
   },
   "div_container_orientation": {
     "en": "Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.",
     "ru": "Расположение элементов. Значение `overlap` накладывает элементы друг на друга в порядке перечисления. Ниже всего — нулевой элемент массива."
   },
   "div_container_separator": {
-    "en": "Separator between elements along the main axis. Not used if the `orientation` parameter has the value `overlap'. In the web only newer browsers are supported (gap property is required in flex).",
-    "ru": "Разделитель между элементами вдоль основной оси. Не используется, если параметр `orientation` имеет значение `overlap`. В вебе поддерживаются только новые браузеры (требуется поддержка gap во flex)."
+    "en": "Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).",
+    "ru": "Разделитель между элементами вдоль основной оси. Не используется, если параметр `orientation` имеет значение `overlap`. В вебе поддерживаются только новые браузеры (требуется поддержка свойства `gap` для flex-блоков)."
   },
   "div_container_separator_show_at_end": {
     "en": "Enables displaying the separator after the last item.",
@@ -916,7 +916,7 @@
     "ru": "Интервал между символами."
   },
   "div_input_line_height": {
-    "en": "Line spacing of the text range. The count is taken from the font baseline. Measured in units specified in `font_size_unit`.",
+    "en": "Line spacing of the text. Units specified in `font_size_unit`.",
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
   "div_input_max_visible_lines": {
@@ -973,7 +973,7 @@
   },
   "div_page_size": {
     "en": "Percentage value of the page width.",
-    "ru": "Процентное значение ширины страницы."
+    "ru": "Ширина страницы в процентах."
   },
   "div_page_size_page_width": {
     "en": "Page width as a percentage of the parent element width.",
@@ -1041,7 +1041,7 @@
   },
   "div_percentage_size": {
     "en": "Percentage value of the element size.",
-    "ru": "Процентное значение размера элемента."
+    "ru": "Размер элемента в процентах."
   },
   "div_percentage_size_value": {
     "en": "Element size value.",
@@ -1576,7 +1576,7 @@
     "ru": "Интервал между символами."
   },
   "div_text_line_height": {
-    "en": "Line spacing of the text range. The count is taken from the font baseline.",
+    "en": "Line spacing of the text.",
     "ru": "Межстрочный интервал (интерлиньяж) текста."
   },
   "div_text_max_lines": {
@@ -1612,7 +1612,7 @@
     "ru": "Расстояние между символами."
   },
   "div_text_range_line_height": {
-    "en": "Line spacing of the text range. The count is taken from the font baseline. Measured in units specified in `font_size_unit`.",
+    "en": "Line spacing of the text. Units specified in `font_size_unit`.",
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
   "div_text_range_start": {
@@ -1684,7 +1684,7 @@
     "ru": "Длительность работы таймера в миллисекундах. Если параметр равен `0` или не указан, таймер работает бесконечно (до тех пор пока не придёт событие остановки таймера)."
   },
   "div_timer_end_actions": {
-    "en": "Actions performed when the timer is ended: when the timer has counted to `duration` or the command `div-action://timer?action=stop&id=<id>` has received.",
+    "en": "Actions performed when the timer ends: when the timer has counted to the `duration` value or the `div-action://timer?action=stop&id=<id>` command has been received.",
     "ru": "Действия, выполняемые при завершении работы таймера: когда таймер досчитал до значения `duration` или пришла команда `div-action://timer?action=stop&id=<id>`."
   },
   "div_timer_id": {
