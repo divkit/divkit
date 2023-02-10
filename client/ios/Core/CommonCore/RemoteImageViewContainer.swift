@@ -2,8 +2,6 @@
 
 import UIKit
 
-import Base
-
 public final class RemoteImageViewContainer: UIView {
   private var backgroundModel: ImageViewBackgroundModel? {
     didSet {

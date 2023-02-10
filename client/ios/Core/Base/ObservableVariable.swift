@@ -241,7 +241,7 @@ extension ObservableVariable {
     let subscription = currentAndNewValues.addObserver { state in
       guard let state = state else {
         if inner != nil {
-          outer = nil
+          _outer.wrappedValue = nil
           inner = nil
         }
         return
@@ -250,7 +250,7 @@ extension ObservableVariable {
         inner.value = state
       } else {
         let localInner = ObservableProperty(initialValue: state)
-        outer = localInner.asObservableVariable()
+        _outer.wrappedValue = localInner.asObservableVariable()
         inner = localInner
       }
     }

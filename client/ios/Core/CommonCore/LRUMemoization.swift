@@ -2,8 +2,6 @@
 
 import Foundation
 
-import Base
-
 public func memoize<A: Hashable, B: SizedItem>(
   sizeLimit: UInt,
   keyMapper: @escaping (A) -> String,

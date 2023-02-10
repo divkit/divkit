@@ -54,9 +54,13 @@ extension UIView {
     return nil
   }
 
-  public func recursiveSubviews() -> [UIView] {
+  public func recursiveSubviews(filter: ((UIView) -> Bool) = { _ in true }) -> [UIView] {
     var result = [UIView]()
-    forRecursiveSubviews { result.append($0) }
+    forRecursiveSubviews {
+      if filter($0) {
+        result.append($0)
+      }
+    }
     return result
   }
 

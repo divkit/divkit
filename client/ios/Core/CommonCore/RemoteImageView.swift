@@ -2,8 +2,6 @@
 
 import UIKit
 
-import Base
-
 public final class RemoteImageView: UIView, RemoteImageViewContentProtocol {
   private let contentsLayer = CALayer()
   private lazy var clipMask: CALayer = {

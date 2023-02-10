@@ -2,8 +2,6 @@
 
 import UIKit
 
-import Base
-
 public enum ImageViewBackgroundModel {
   case color(Color)
   case view(UIView)

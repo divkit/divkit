@@ -43,7 +43,11 @@ extension SettingProperty where T: RawRepresentable, T.RawValue: KeyValueDirectS
 
 extension SettingProperty where T: NSCoding {
   @inlinable
-  public static func encodedStorage(_ storage: KeyValueStorage, key: String) -> Property<T?> {
+  public static func encodedStorage(
+    _ storage: KeyValueStorage,
+    key: String,
+    of _: T.Type = T.self
+  ) -> Property<T?> {
     Property(getter: {
       guard let object = storage.object(forKey: key) else { return nil }
       guard let data = object as? Data else {

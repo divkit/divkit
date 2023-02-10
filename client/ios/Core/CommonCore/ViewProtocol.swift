@@ -2,8 +2,6 @@
 
 import UIKit
 
-import Base
-
 public protocol ViewProtocol: AnyObject {
   static func animate(
     duration: TimeInterval,
