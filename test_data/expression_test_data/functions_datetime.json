@@ -106,7 +106,8 @@
     },
     {
       "name": "setMonth(parseUnixTime(0), 17) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setMonth(parseUnixTime(0), 17)}",
       "expected": {
         "type": "error",
@@ -130,7 +131,8 @@
     },
     {
       "name": "setMonth(parseUnixTime(0), -5) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setMonth(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -167,7 +169,8 @@
     },
     {
       "name": "setDay(setMonth(parseUnixTime(0), 2), 29) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setDay(setMonth(parseUnixTime(0), 2), 29)}",
       "expected": {
         "type": "error",
@@ -191,7 +194,8 @@
     },
     {
       "name": "setDay(parseUnixTime(0), 0) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setDay(parseUnixTime(0), 0)}",
       "expected": {
         "type": "error",
@@ -215,7 +219,8 @@
     },
     {
       "name": "setDay(parseUnixTime(0), -5) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setDay(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -265,7 +270,8 @@
     },
     {
       "name": "setHours(parseUnixTime(0), 77) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setHours(parseUnixTime(0), 77)}",
       "expected": {
         "type": "error",
@@ -289,7 +295,8 @@
     },
     {
       "name": "setHours(parseUnixTime(0), -5) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setHours(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -326,7 +333,8 @@
     },
     {
       "name": "setMinutes(parseUnixTime(0), 77) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setMinutes(parseUnixTime(0), 77)}",
       "expected": {
         "type": "error",
@@ -350,7 +358,8 @@
     },
     {
       "name": "setMinutes(parseUnixTime(0), -5) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setMinutes(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
@@ -387,7 +396,8 @@
     },
     {
       "name": "setSeconds(parseUnixTime(0), 77) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setSeconds(parseUnixTime(0), 77)}",
       "expected": {
         "type": "error",
@@ -411,7 +421,8 @@
     },
     {
       "name": "setSeconds(parseUnixTime(0), -10) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setSeconds(parseUnixTime(0), -10)}",
       "expected": {
         "type": "error",
@@ -448,7 +459,8 @@
     },
     {
       "name": "setMillis(parseUnixTime(0), 80988) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setMillis(parseUnixTime(0), 80988)}",
       "expected": {
         "type": "error",
@@ -472,7 +484,8 @@
     },
     {
       "name": "setMillis(parseUnixTime(0), -5) => error",
-      "deprecated": "Error message is outdated, see case below",
+      "deprecated": true,
+      "description": "Error message is outdated, see case below",
       "expression": "@{setMillis(parseUnixTime(0), -5)}",
       "expected": {
         "type": "error",
