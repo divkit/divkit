@@ -24,6 +24,10 @@ import com.yandex.divkit.demo.utils.connectivityManager
 import com.yandex.divkit.regression.di.DaggerRegressionComponent
 import kotlinx.coroutines.MainScope
 import okhttp3.OkHttpClient
+import okhttp3.internal.http2.Header
+import okhttp3.internal.toHeaderList
+import okhttp3.internal.toHeaders
+import org.json.JSONObject
 import java.util.concurrent.TimeUnit
 
 @SuppressLint("StaticFieldLeak")
@@ -35,7 +39,29 @@ internal object Container {
         Preferences(context)
     }
 
-    val httpClient = OkHttpClient.Builder().addNetworkInterceptor(StethoInterceptor()).build()
+    private val httpHeaders by lazy {
+        JSONObject(BuildConfig.HTTP_HEADERS).asHostToHeadersMap()
+    }
+
+    val httpClient = OkHttpClient.Builder()
+        .sslSocketFactory(
+            NaiveSSLContext.getInstance("TLS").socketFactory,
+            NaiveSSLContext.NaiveTrustManager()
+        )
+        .addNetworkInterceptor {
+            val request = it.request()
+            val host = request.url.host
+
+            val headerList = request.headers.toHeaderList() + httpHeaders[host].orEmpty()
+
+            it.proceed(
+                request.newBuilder()
+                    .headers(headerList.toHeaders())
+                    .build()
+            )
+        }
+        .addNetworkInterceptor(StethoInterceptor())
+        .build()
 
     val applicationCoroutineScope = MainScope()
 
@@ -99,4 +125,16 @@ internal object Container {
     fun initialize(context: Context) {
         this.context = context
     }
+}
+
+private fun JSONObject.asHostToHeadersMap(): Map<String, List<Header>> {
+    return keys().asSequence()
+        .map { host -> host to getJSONObject(host).parseHeaders() }
+        .toMap()
+}
+
+private fun JSONObject.parseHeaders(): List<Header> {
+    return keys().asSequence()
+        .map { name -> Header(name, getString(name)) }
+        .toList()
 }

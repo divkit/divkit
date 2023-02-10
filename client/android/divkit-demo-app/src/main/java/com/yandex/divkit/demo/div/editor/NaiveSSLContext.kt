@@ -24,8 +24,8 @@ object NaiveSSLContext {
         return context
     }
 
-    private class NaiveTrustManager : X509TrustManager {
-        override fun getAcceptedIssuers(): Array<X509Certificate>? = null
+    internal class NaiveTrustManager : X509TrustManager {
+        override fun getAcceptedIssuers(): Array<X509Certificate> = emptyArray()
         override fun checkClientTrusted(certs: Array<X509Certificate>, authType: String) {}
         override fun checkServerTrusted(certs: Array<X509Certificate>, authType: String) {}
     }

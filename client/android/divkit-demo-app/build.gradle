@@ -1,4 +1,5 @@
 import com.yandex.div.gradle.FileExtensions
+import org.json.simple.JSONObject
 
 apply from: "${project.projectDir}/../div-application.gradle"
 apply from: "${project.projectDir}/../div-tests.gradle"
@@ -23,6 +24,7 @@ android {
         buildConfigField "String", "ADS_BLOCK_ID", "\"${property('mobileAds.blockId')}\""
         buildConfigField "String", "METRICA_API_KEY", "\"${project.findProperty("metricaApiKey") ?: ""}\""
         buildConfigField "boolean", "THROW_ASSERTS", project.hasProperty("screenshot-tests")? "false" : "true"
+        buildConfigField "String", "HTTP_HEADERS", "\"${JSONObject.escape(project.findProperty("httpHeaders") ?: "{}")}\""
 
         testInstrumentationRunner "com.yandex.test.runner.AllureAwareAndroidRunner"
         if (!project.hasProperty("include-regression-tests")) {
