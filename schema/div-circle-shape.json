@@ -1,24 +1,26 @@
 {
-  "type": "object",
   "$description": "translations.json#/div_circle_shape",
   "allOf": [
     {
       "$ref": "div-shape-base.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "radius": {
+          "$ref": "div-fixed-size.json",
+          "default_value": "{\"type\":\"fixed\",\"value\":10}",
+          "$description": "translations.json#/div_circle_shape_radius"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "circle"
+          ]
+        }
+      }
     }
   ],
-  "properties": {
-    "radius": {
-      "$ref": "div-fixed-size.json",
-      "default_value": "{\"type\":\"fixed\",\"value\":10}",
-      "$description": "translations.json#/div_circle_shape_radius"
-    },
-    "type": {
-      "type": "string",
-      "enum": [
-        "circle"
-      ]
-    }
-  },
   "required": [
     "type"
   ],
