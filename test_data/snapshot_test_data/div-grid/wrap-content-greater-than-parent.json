@@ -1,0 +1,98 @@
+{
+  "description": "Grid with items with wrap_content width that don't fit in parent",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ],
+      "border": {
+        "corner_radius": 5,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "paddings": {
+        "left": 5,
+        "right": 5
+      }
+    },
+    "text_cell": {
+      "type": "text_with_background",
+      "text_alignment_horizontal": "center",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    },
+    "cell_with_one_pixel_margin": {
+      "type": "text_cell",
+      "margins": {
+        "top": 1,
+        "left": 1,
+        "right": 1,
+        "bottom": 1
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 3,
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "border": {
+            "stroke": {
+              "color": "#A0A0FF"
+            }
+          },
+          "items": [
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "not constrained item not constrained item not constrained item",
+              "column_span": 3,
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "not constrained item with very very long text",
+              "width": {
+                "type": "wrap_content"
+              }
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "match_parent",
+              "width": {
+                "type": "match_parent",
+                "weight": 1
+              }
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "text": "50",
+              "width": {
+                "type": "fixed",
+                "value": 50
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
