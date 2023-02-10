@@ -125,9 +125,9 @@ public struct DivBlockModelingContext {
     let error: DivError
     switch level {
     case .warning:
-      error = DivBlockModelingError(message, path: parentPath)
-    case .error:
       error = DivBlockModelingWarning(message, path: parentPath)
+    case .error:
+      error = DivBlockModelingError(message, path: parentPath)
     }
     errorsStorage.add(error)
   }
