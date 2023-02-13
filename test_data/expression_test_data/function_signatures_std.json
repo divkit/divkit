@@ -141,7 +141,7 @@
           }
       ],
       "result_type": "string",
-      "platforms": ["web"]
+      "platforms": ["ios", "web"]
     },
     {
       "name": "toString(url) string",
@@ -154,7 +154,7 @@
           }
       ],
       "result_type": "string",
-      "platforms": ["web"]
+      "platforms": ["ios", "web"]
     }
   ]
 }

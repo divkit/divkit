@@ -30,6 +30,10 @@ extension CalcExpression.Value {
   static func integerError(_ value: Any) -> AnyCalcExpression.Error {
     .message("Value \(value) can't be converted to Integer type.")
   }
+
+  static func integerOverflow() -> AnyCalcExpression.Error {
+    .shortMessage("Integer overflow.")
+  }
 }
 
 extension CalcExpression.Value {

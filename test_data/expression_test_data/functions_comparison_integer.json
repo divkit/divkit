@@ -5,11 +5,12 @@
       "expression": "@{max()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [max()]. Non empty argument list is required for max function."
+        "value": "Failed to evaluate [max()]. Non empty argument list is required for function 'max'."
       },
       "variables": [],
       "platforms": [
         "web",
+        "ios",
         "android"
       ]
     },
@@ -102,11 +103,12 @@
       "expression": "@{min()}",
       "expected": {
         "type": "error",
-        "value": "Failed to evaluate [min()]. Non empty argument list is required for min function."
+        "value": "Failed to evaluate [min()]. Non empty argument list is required for function 'min'."
       },
       "variables": [],
       "platforms": [
         "web",
+        "ios",
         "android"
       ]
     },

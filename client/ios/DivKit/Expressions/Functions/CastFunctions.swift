@@ -1,5 +1,7 @@
 import Foundation
 
+import CommonCore
+
 enum CastFunctions: String, CaseIterable {
   case toBoolean
   case toString
@@ -28,6 +30,8 @@ enum CastFunctions: String, CaseIterable {
           FunctionUnary(impl: _boolToString),
           FunctionUnary(impl: _doubleToString),
           FunctionUnary(impl: _intToString),
+          FunctionUnary(impl: _colorToString),
+          FunctionUnary(impl: _urlToString),
         ],
         makeError: {
           AnyCalcExpression.Error.toString($0.first)
@@ -92,6 +96,14 @@ private func _doubleToString(value: Double) throws -> String {
 }
 
 private func _intToString(value: Int) throws -> String {
+  value.description
+}
+
+private func _colorToString(value: Color) throws -> String {
+  value.argbString
+}
+
+private func _urlToString(value: URL) throws -> String {
   value.description
 }
 

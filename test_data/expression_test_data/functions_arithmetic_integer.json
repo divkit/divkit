@@ -428,7 +428,9 @@
         "value": "Failed to evaluate [abs(-2147483648)]. Integer overflow."
       },
       "variables": [],
-      "platforms": []
+      "platforms": [
+        "ios"
+      ]
     },
     {
       "name": "signum(0) => 0",
@@ -579,6 +581,7 @@
       },
       "variables": [],
       "platforms": [
+        "ios",
         "web"
       ]
     },

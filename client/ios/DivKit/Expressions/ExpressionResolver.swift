@@ -133,11 +133,12 @@ public final class ExpressionResolver {
       ).evaluate()
       return validatedValue(value: result, validator: link.validator, rawValue: link.rawValue)
     } catch let error as CalcExpression.Error {
+      let expression = parsedExpression.description
       errorTracker(
         .calculating(
           expression: link.rawValue,
-          scriptInject: parsedExpression.description,
-          description: error.description
+          scriptInject: expression,
+          description: error.makeOutputMessage(for: expression)
         )
       )
       return nil
@@ -164,11 +165,12 @@ public final class ExpressionResolver {
           ).evaluate()
           stringValue += value
         } catch let error as CalcExpression.Error {
+          let expression = parsedExpression.description
           errorTracker(
             .calculating(
               expression: link.rawValue,
-              scriptInject: parsedExpression.description,
-              description: error.description
+              scriptInject: expression,
+              description: error.makeOutputMessage(for: expression)
             )
           )
           return nil

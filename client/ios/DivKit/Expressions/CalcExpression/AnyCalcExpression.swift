@@ -369,11 +369,17 @@ struct AnyCalcExpression: CustomStringConvertible {
       },
       pureSymbols: { symbol in
         guard let fn = try (_pureSymbols[symbol] ?? defaultEvaluator(for: symbol)) else {
-          if case let .function(name, _) = symbol {
+          if case let .function(name, actualArity) = symbol {
             // TODO: check for pure `.infix("()")` implementation?
             for i in 0...10 {
               let symbol = Symbol.function(name, arity: .exactly(i))
               if impureSymbols(symbol) ?? pureSymbols(symbol) != nil {
+                if actualArity == .exactly(0) {
+                  return { _ in throw
+                    Error
+                    .shortMessage("Non empty argument list is required for function '\(name)'.")
+                  }
+                }
                 return { _ in throw Error.arityMismatch(symbol) }
               }
             }
@@ -704,7 +710,7 @@ extension AnyCalcExpression {
          value <= Double(CalcExpression.Value.maxInteger) {
         return .integer(Int(value))
       } else {
-        throw CalcExpression.Value.integerError(value)
+        throw CalcExpression.Value.integerOverflow()
       }
     }
 

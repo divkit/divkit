@@ -95,7 +95,7 @@ function abs(arg: IntegerValue | NumberValue): EvalValue {
 
 function max<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
     if (!args.length) {
-        throw new Error('Non empty argument list is required for max function.');
+        throw new Error('Non empty argument list is required for function \'max\'.');
     }
 
     return {
@@ -106,7 +106,7 @@ function max<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
 
 function min<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
     if (!args.length) {
-        throw new Error('Non empty argument list is required for min function.');
+        throw new Error('Non empty argument list is required for function \'min\'.');
     }
 
     return {

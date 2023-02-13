@@ -159,6 +159,7 @@
       "result_type": "integer",
       "platforms": [
         "android",
+        "ios",
         "web"
       ]
     },

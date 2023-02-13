@@ -162,6 +162,9 @@ final class CalcExpression: CustomStringConvertible {
     /// An application-specific error
     case message(String)
 
+    /// An application-specific error without information about failed expression
+    case shortMessage(String)
+
     /// The parser encountered a sequence of characters it didn't recognize
     case unexpectedToken(String)
 
@@ -185,7 +188,8 @@ final class CalcExpression: CustomStringConvertible {
     /// The human-readable description of the error
     var description: String {
       switch self {
-      case let .message(message):
+      case let .message(message),
+           let .shortMessage(message):
         return message
       case .emptyExpression:
         return "Empty expression"
@@ -219,6 +223,15 @@ final class CalcExpression: CustomStringConvertible {
         return "Index \(CalcExpression.stringify(index)) out of bounds for \(symbol)"
       case .escaping:
         return "Incorrect string escape"
+      }
+    }
+
+    func makeOutputMessage(for expression: String) -> String {
+      switch self {
+      case let .shortMessage(message):
+        return "Failed to evaluate [\(expression)]. \(message)"
+      default:
+        return self.description
       }
     }
   }
@@ -258,8 +271,8 @@ final class CalcExpression: CustomStringConvertible {
       withImpureSymbols: impureSymbols,
       pureSymbols: {
         if let fn = try pureSymbols($0)
-            ?? CalcExpression.mathSymbols[$0]
-            ?? CalcExpression.boolSymbols[$0] {
+          ?? CalcExpression.mathSymbols[$0]
+          ?? CalcExpression.boolSymbols[$0] {
           return fn
         }
         if case let .function(name, _) = $0 {
