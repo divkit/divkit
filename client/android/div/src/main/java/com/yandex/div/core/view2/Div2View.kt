@@ -92,7 +92,7 @@ class Div2View private constructor(
     private val bindingProvider: ViewBindingProvider = viewComponent.bindingProvider
 
     private val divBuilder: Div2Builder = context.div2Component.div2Builder
-    private val loadReferences = mutableListOf<WeakReference<LoadReference>>()
+    private val loadReferences = mutableListOf<LoadReference>()
     private val overflowMenuListeners = mutableListOf<OverflowMenuSubscriber.Listener>()
     private val divDataChangedObservers = mutableListOf<DivDataChangedObserver>()
     private val viewToDivBindings = WeakHashMap<View, Div>()
@@ -398,7 +398,7 @@ class Div2View private constructor(
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
         synchronized(monitor) {
-            loadReferences.add(WeakReference(loadReference))
+            loadReferences.add(loadReference)
         }
     }
 
@@ -421,7 +421,7 @@ class Div2View private constructor(
     }
 
     private fun cancelImageLoads() {
-        loadReferences.forEach { it.get()?.cancel() }
+        loadReferences.forEach { it.cancel() }
         loadReferences.clear()
     }
 
