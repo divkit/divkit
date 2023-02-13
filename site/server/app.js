@@ -273,6 +273,13 @@ app.use((ctx, next) => {
             'report-uri https://csp.yandex.net/csp?project=divkit&from=playground'
         ].join(';'));
     }
+
+    if (ctx.request.header.origin === 'null') {
+        ctx.set('Access-Control-Allow-Origin', '*');
+        ctx.set('Access-Control-Allow-Headers', 'Origin, Content-Type');
+        ctx.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    }
+
     return next();
 });
 
