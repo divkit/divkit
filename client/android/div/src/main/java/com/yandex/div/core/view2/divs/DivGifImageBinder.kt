@@ -15,6 +15,8 @@ import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
+import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.KLog
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.widget.AspectImageView
@@ -35,12 +37,15 @@ private const val GIF_SUFFIX = ".gif"
 internal class DivGifImageBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val imageLoader: DivImageLoader,
-    private val placeholderLoader: DivPlaceholderLoader
+    private val placeholderLoader: DivPlaceholderLoader,
+    private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivGifImage, DivGifImageView> {
 
     override fun bindView(view: DivGifImageView, div: DivGifImage, divView: Div2View) {
         val oldDiv = view.div
         if (div == oldDiv) return
+
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         val expressionResolver = divView.expressionResolver
         view.closeAllSubscription()
@@ -57,7 +62,7 @@ internal class DivGifImageBinder @Inject constructor(
         )
         view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
         view.addSubscription(
-            div.gifUrl.observeAndGet(expressionResolver) { view.applyGifImage(divView, expressionResolver, div) }
+            div.gifUrl.observeAndGet(expressionResolver) { view.applyGifImage(divView, expressionResolver, div, errorCollector) }
         )
     }
 
@@ -94,7 +99,10 @@ internal class DivGifImageBinder @Inject constructor(
         gravity = evaluateGravity(horizontalAlignment.evaluate(resolver), verticalAlignment.evaluate(resolver))
     }
 
-    private fun DivGifImageView.applyGifImage(divView: Div2View, resolver: ExpressionResolver, div: DivGifImage) {
+    private fun DivGifImageView.applyGifImage(divView: Div2View,
+                                              resolver: ExpressionResolver,
+                                              div: DivGifImage,
+                                              errorCollector: ErrorCollector) {
         val newGifUrl = div.gifUrl.evaluate(resolver)
         if (isImageLoaded && newGifUrl == gifUrl) {
             return
@@ -104,6 +112,7 @@ internal class DivGifImageBinder @Inject constructor(
         // if bitmap was already loaded for the same imageUrl, we don't load placeholders.
         placeholderLoader.applyPlaceholder(
             this,
+            errorCollector,
             div.preview?.evaluate(resolver),
             div.placeholderColor.evaluate(resolver),
             synchronous = false,

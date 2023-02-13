@@ -14,6 +14,8 @@ import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.divs.widgets.applyFilters
+import com.yandex.div.core.view2.errors.ErrorCollector
+import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -29,12 +31,15 @@ import javax.inject.Inject
 internal class DivImageBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val imageLoader: DivImageLoader,
-    private val placeholderLoader: DivPlaceholderLoader
+    private val placeholderLoader: DivPlaceholderLoader,
+    private val errorCollectors: ErrorCollectors,
 ) : DivViewBinder<DivImage, DivImageView> {
 
     override fun bindView(view: DivImageView, div: DivImage, divView: Div2View) {
         val oldDiv = view.div
         if (div == oldDiv) return
+
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
 
         val expressionResolver = divView.expressionResolver
         val subscriber = view.expressionSubscriber
@@ -51,9 +56,9 @@ internal class DivImageBinder @Inject constructor(
             div.scale.observeAndGet(expressionResolver) { scale -> view.imageScale = scale.toImageScale() }
         )
         view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
-        view.observePreview(divView, expressionResolver, div)
+        view.observePreview(divView, expressionResolver, errorCollector, div)
         view.addSubscription(
-            div.imageUrl.observeAndGet(expressionResolver) { view.applyImage(divView, expressionResolver, div) }
+            div.imageUrl.observeAndGet(expressionResolver) { view.applyImage(divView, expressionResolver, errorCollector, div) }
         )
         view.observeTint(expressionResolver, div.tintColor, div.tintMode)
         view.observeFilters(div.filters, divView, subscriber, expressionResolver)
@@ -115,8 +120,13 @@ internal class DivImageBinder @Inject constructor(
         divView: Div2View,
         resolver: ExpressionResolver,
     ) {
-        currentBitmapWithoutFilters?.applyFilters(this, filters, divView.div2Component, resolver) {
-            setImageBitmap(it)
+        val bitmap = currentBitmapWithoutFilters
+        if (bitmap != null) {
+            bitmap.applyFilters(this, filters, divView.div2Component, resolver) {
+                setImageBitmap(it)
+            }
+        } else {
+            setImageBitmap(null)
         }
     }
 
@@ -126,11 +136,14 @@ internal class DivImageBinder @Inject constructor(
         return !isImageLoaded || newImageUrl != imageUrl
     }
 
-    private fun DivImageView.observePreview(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
+    private fun DivImageView.observePreview(divView: Div2View,
+                                            resolver: ExpressionResolver,
+                                            errorCollector: ErrorCollector,
+                                            div: DivImage) {
         div.preview?.let {
             val callback = { _: Any ->
                 if (!isImageLoaded) {
-                    applyPreview(divView, resolver, div, synchronous = true)
+                    applyPreview(divView, resolver, div, errorCollector, synchronous = true)
                 }
             }
 
@@ -138,9 +151,14 @@ internal class DivImageBinder @Inject constructor(
         }
     }
 
-    private fun DivImageView.applyPreview(divView: Div2View, resolver: ExpressionResolver, div: DivImage, synchronous: Boolean) {
+    private fun DivImageView.applyPreview(divView: Div2View,
+                                          resolver: ExpressionResolver,
+                                          div: DivImage,
+                                          errorCollector: ErrorCollector,
+                                          synchronous: Boolean) {
         placeholderLoader.applyPlaceholder(
             this,
+            errorCollector,
             div.preview?.evaluate(resolver),
             div.placeholderColor.evaluate(resolver),
             synchronous = synchronous,
@@ -160,7 +178,10 @@ internal class DivImageBinder @Inject constructor(
         )
     }
 
-    private fun DivImageView.applyImage(divView: Div2View, resolver: ExpressionResolver, div: DivImage) {
+    private fun DivImageView.applyImage(divView: Div2View,
+                                        resolver: ExpressionResolver,
+                                        errorCollector: ErrorCollector,
+                                        div: DivImage) {
         if (!shouldReloadImage(resolver, div)) {
             applyTint(resolver, div.tintColor, div.tintMode)
             return
@@ -172,7 +193,7 @@ internal class DivImageBinder @Inject constructor(
         val newImageUrl = div.imageUrl.evaluate(resolver)
         newImageUrl.applyIfNotEquals(imageUrl) { resetImageLoaded() }
 
-        applyPreview(divView, resolver, div, synchronous = isHighPriorityShowPreview)
+        applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShowPreview)
 
         val reference = imageLoader.loadImage(
             newImageUrl.toString(),

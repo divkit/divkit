@@ -8,6 +8,7 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.view2.DivPlaceholderLoader
 import com.yandex.div.core.view2.divs.widgets.DivImageView
+import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivImage
 import org.junit.Assert
@@ -32,8 +33,11 @@ import org.robolectric.RobolectricTestRunner
 class DivImageBinderTest : DivBinderTest() {
 
     private val placeholderLoader = mock<DivPlaceholderLoader>()
+    private val errorCollector = mock<ErrorCollectors> {
+        on { getOrCreate(anyOrNull(), anyOrNull()) } doReturn mock()
+    }
     private val binder = DivImageBinder(
-            baseBinder, imageLoader, placeholderLoader,
+            baseBinder, imageLoader, placeholderLoader, errorCollector
     )
 
     @Before
@@ -65,7 +69,7 @@ class DivImageBinderTest : DivBinderTest() {
 
         binder.bindView(view, divContainer, divView)
 
-        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), any())
+        verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(eq(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
     }
 
@@ -77,7 +81,7 @@ class DivImageBinderTest : DivBinderTest() {
         val (_, nextDivContainer) = createTestDiv("with_action.json")
         binder.bindView(view, nextDivContainer, divView)
 
-        verify(placeholderLoader, times(2)).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), any())
+        verify(placeholderLoader, times(2)).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader, times(2)).loadImage(eq(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
     }
 
@@ -106,7 +110,7 @@ class DivImageBinderTest : DivBinderTest() {
         val nextDivContainer = DivImage(imageUrl = Uri.parse("https://foo.bar/foo.png").asExpression())
         binder.bindView(view, nextDivContainer, divView)
 
-        verify(placeholderLoader, times(2)).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), any())
+        verify(placeholderLoader, times(2)).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(eq(nextDivContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
     }
 
@@ -120,7 +124,7 @@ class DivImageBinderTest : DivBinderTest() {
         )
         binder.bindView(view, divContainer, divView)
         verify(placeholderLoader).applyPlaceholder(
-                any(), anyOrNull(), any(),
+                any(), any(), anyOrNull(), any(),
                 synchronous = eq(true), any(), any()
         )
 
@@ -133,7 +137,7 @@ class DivImageBinderTest : DivBinderTest() {
         binder.bindView(view, nextDivContainer, divView)
 
         verify(placeholderLoader).applyPlaceholder(
-                any(), anyOrNull(), any(),
+                any(), any(), anyOrNull(), any(),
                 synchronous = eq(false), any(), any()
         )
     }
@@ -228,7 +232,7 @@ class DivImageBinderTest : DivBinderTest() {
 
     private fun whenImageLoaded(imageUrl: String) {
         val imageDownloadCallbackCaptor = argumentCaptor<DivImageDownloadCallback>()
-        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), any())
+        verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
         verify(imageLoader).loadImage(eq(imageUrl), imageDownloadCallbackCaptor.capture())
         val cachedBitmap = mock<CachedBitmap> {
             on { bitmap } doReturn mock()
@@ -237,9 +241,9 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     private fun whenPreviewLoaded() {
-        val previewSetCallbackCaptor = argumentCaptor<(Bitmap) -> Unit>()
+        val previewSetCallbackCaptor = argumentCaptor<(Bitmap?) -> Unit>()
         val bitmap = mock<Bitmap>()
-        verify(placeholderLoader).applyPlaceholder(any(), anyOrNull(), any(), any(), any(), previewSetCallbackCaptor.capture())
+        verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), previewSetCallbackCaptor.capture())
         previewSetCallbackCaptor.firstValue.invoke(bitmap)
     }
 

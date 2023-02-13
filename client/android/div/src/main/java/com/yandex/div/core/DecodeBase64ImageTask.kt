@@ -10,7 +10,7 @@ import com.yandex.div.internal.util.UiThreadHandler
 internal class DecodeBase64ImageTask(
     private var base64string: String,
     private val synchronous: Boolean,
-    private val onDecoded: (Bitmap) -> Unit
+    private val onDecoded: (Bitmap?) -> Unit
 ) : Runnable {
 
     @WorkerThread

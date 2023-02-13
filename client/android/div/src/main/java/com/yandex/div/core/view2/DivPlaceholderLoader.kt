@@ -8,9 +8,12 @@ import com.yandex.div.core.Div2ImageStubProvider
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.view2.divs.widgets.LoadableImage
+import com.yandex.div.core.view2.errors.ErrorCollector
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Future
 import javax.inject.Inject
+
+private const val PREVIEW_IS_NOT_BASE_64_IMAGE = "Preview doesn't contain base64 image"
 
 @DivScope
 @Mockable
@@ -22,14 +25,22 @@ internal class DivPlaceholderLoader @Inject constructor(
     @MainThread
     fun applyPlaceholder(
         imageView: LoadableImage,
+        errorCollector: ErrorCollector,
         currentPreview: String?,
         currentPlaceholderColor: Int,
         synchronous: Boolean,
         onSetPlaceholder: (Drawable?) -> Unit,
-        onSetPreview: (Bitmap) -> Unit
+        onSetPreview: (Bitmap?) -> Unit
     ) {
         currentPreview?.let {
-            enqueueDecoding(it, imageView, synchronous, onSetPreview)
+            enqueueDecoding(it, imageView, synchronous) { bitmap ->
+                if (bitmap == null) {
+                    errorCollector.logWarning(Throwable(PREVIEW_IS_NOT_BASE_64_IMAGE))
+                    onSetPlaceholder(imageStubProvider.getImageStubDrawable(currentPlaceholderColor))
+                } else {
+                    onSetPreview(bitmap)
+                }
+            }
         } ?: onSetPlaceholder(imageStubProvider.getImageStubDrawable(currentPlaceholderColor))
     }
 
@@ -37,7 +48,7 @@ internal class DivPlaceholderLoader @Inject constructor(
         preview: String,
         loadableImage: LoadableImage,
         synchronous: Boolean,
-        onDecoded: (Bitmap) -> Unit
+        onDecoded: (Bitmap?) -> Unit
     ) {
         loadableImage.getLoadingTask()?.cancel(true)
 
@@ -51,7 +62,7 @@ internal class DivPlaceholderLoader @Inject constructor(
 
     private fun String.decodeBase64ToBitmap(
         synchronous: Boolean,
-        onDecoded: (Bitmap) -> Unit
+        onDecoded: (Bitmap?) -> Unit
     ): Future<*>? {
         val decodeTask = DecodeBase64ImageTask(this, synchronous, onDecoded)
 
