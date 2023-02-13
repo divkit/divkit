@@ -2,7 +2,6 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
-import android.os.Build
 import android.util.AttributeSet
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.expression.ExpressionSubscriber
@@ -35,12 +34,6 @@ internal class DivPagerIndicatorView @JvmOverloads constructor(
     override val subscriptions = mutableListOf<Disposable>()
 
     private var isDrawing = false
-
-    init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            defaultFocusHighlightEnabled = false
-        }
-    }
 
     override fun setBorder(border: DivBorder?, resolver: ExpressionResolver) {
         borderDrawer = updateBorderDrawer(border, resolver)

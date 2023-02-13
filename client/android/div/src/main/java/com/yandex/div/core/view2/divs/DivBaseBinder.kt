@@ -1,6 +1,7 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.drawable.Drawable
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup.LayoutParams
 import android.view.ViewGroup.MarginLayoutParams
@@ -32,7 +33,6 @@ import com.yandex.div2.DivFixedSize
 import com.yandex.div2.DivFocus
 import com.yandex.div2.DivSize
 import com.yandex.div2.DivVisibility
-import com.yandex.div2.DivWrapContentSize
 import javax.inject.Inject
 
 @DivScope
@@ -46,6 +46,10 @@ internal class DivBaseBinder @Inject constructor(
     fun bindView(view: View, div: DivBase, oldDiv: DivBase?, divView: Div2View) {
         val resolver = divView.expressionResolver
         val subscriber = view.expressionSubscriber
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            view.defaultFocusHighlightEnabled = false
+        }
 
         div.id.applyIfNotEquals(oldDiv?.id) {
             bindId(view, divView, div.id)
@@ -185,7 +189,7 @@ internal class DivBaseBinder @Inject constructor(
         applyVerticalWeightValue(height.getWeight(resolver))
 
         applyMinHeight(height.minSize, resolver)
-        applyMaxHeight(height?.maxSize, resolver)
+        applyMaxHeight(height.maxSize, resolver)
 
         when (height) {
             is DivSize.Fixed -> {

@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs.widgets
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
-import android.os.Build
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.yandex.div.core.Disposable
@@ -48,12 +47,6 @@ internal class DivSnappyRecyclerView  @JvmOverloads constructor(
     override val subscriptions = mutableListOf<Disposable>()
 
     private var isDrawing = false
-
-    init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            defaultFocusHighlightEnabled = false
-        }
-    }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
         val intercepted = onInterceptTouchEventListener?.onInterceptTouchEvent(target = this, event = event) ?: false
