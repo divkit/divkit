@@ -121,7 +121,13 @@ private final class TextBlockView: UIView {
   }
 
   private var activePointer: ActivePointer?
-  private var selectionRect: CGRect?
+  private var selectionRect: CGRect? {
+    didSet {
+      guard let delayedSelectionTapGesture else { return }
+      handleSelectionTapEnded(delayedSelectionTapGesture)
+      self.delayedSelectionTapGesture = nil
+    }
+  }
 
   private var textLayout: AttributedStringLayout<ActionsAttribute>?
 
@@ -130,10 +136,19 @@ private final class TextBlockView: UIView {
     action: #selector(handleTap(_:))
   )
 
-  private lazy var selectionTapRecognizer = UITapGestureRecognizer(
+  private lazy var hideSelectionMenuTapRecognizer = UITapGestureRecognizer(
     target: self,
-    action: #selector(handleSelectionTap(_:))
+    action: #selector(handleHideSelectionMenuTap(_:))
   )
+  
+  private lazy var doubleTapSelectionRecognizer = {
+    let result = UITapGestureRecognizer(
+      target: self,
+      action: #selector(handleSelectionDoubleTap(_:))
+    )
+    result.numberOfTapsRequired = 2
+    return result
+  }()
 
   private lazy var longTapSelectionRecognizer = UILongPressGestureRecognizer(
     target: self,
@@ -147,6 +162,8 @@ private final class TextBlockView: UIView {
     result.delegate = self
     return result
   }()
+  
+  private var delayedSelectionTapGesture: UITapGestureRecognizer?
 
   private var imageRequests: [Cancellable] = [] {
     didSet {
@@ -168,13 +185,15 @@ private final class TextBlockView: UIView {
       isUserInteractionEnabled = model.isUserInteractionEnabled
 
       if model.canSelect {
+        addGestureRecognizer(doubleTapSelectionRecognizer)
         addGestureRecognizer(longTapSelectionRecognizer)
         addGestureRecognizer(panSelectionRecognizer)
-        addGestureRecognizer(selectionTapRecognizer)
+        addGestureRecognizer(hideSelectionMenuTapRecognizer)
       } else {
+        removeGestureRecognizer(doubleTapSelectionRecognizer)
         removeGestureRecognizer(longTapSelectionRecognizer)
         removeGestureRecognizer(panSelectionRecognizer)
-        removeGestureRecognizer(selectionTapRecognizer)
+        removeGestureRecognizer(hideSelectionMenuTapRecognizer)
       }
 
       if model.text.hasActions || model.truncationToken?.hasActions == true {
@@ -228,7 +247,7 @@ private final class TextBlockView: UIView {
       || textLayout.runsWithAction.contains { $0.rect.contains(point) }
   }
 
-  @objc private func handleSelectionTap(_: UITapGestureRecognizer) {
+  @objc private func handleHideSelectionMenuTap(_: UITapGestureRecognizer) {
     UIMenuController.shared.hideMenu(animated: true)
   }
 
@@ -245,39 +264,57 @@ private final class TextBlockView: UIView {
   }
 
   @objc private func handleSelectionLongTap(_ gesture: UILongPressGestureRecognizer) {
+    switch gesture.state {
+    case .began:
+      handleSelectionTapBegan(gesture)
+    case .ended:
+      handleSelectionTapEnded(gesture)
+    default:
+      return
+    }
+  }
+  
+  @objc private func handleSelectionDoubleTap(_ gesture: UITapGestureRecognizer) {
+    switch gesture.state {
+    case .ended:
+      delayedSelectionTapGesture = gesture
+      handleSelectionTapBegan(gesture)
+    default:
+      return
+    }
+  }
+  
+  func handleSelectionTapBegan(_ gesture: UIGestureRecognizer) {
     becomeFirstResponder()
     let elementIndex = textLayout?.getTapElementIndex(
       from: gesture.location(in: gesture.view)
         .applying(CGAffineTransform(translationX: 0, y: bounds.height).scaledBy(x: 1, y: -1))
     )
-    switch gesture.state {
-    case .began:
-      UIMenuController.shared.hideMenu(animated: true)
-      if let elementIndex = elementIndex {
-        let prefix = model.text.string.prefix(elementIndex)
-        let suffix = model.text.string.suffix(from: prefix.endIndex)
-        let trailing = elementIndex + suffix.distance(
-          from: suffix.startIndex,
-          to: suffix.firstIndex { $0.isWhitespace || $0.isNewline } ?? suffix.endIndex
-        )
-        let leading = prefix.lastIndex { $0.isWhitespace || $0.isNewline }
-          .flatMap { prefix.distance(from: prefix.startIndex, to: $0) + 1 } ?? 0
-        selectedRange = leading..<trailing
-      }
-    case .ended:
-      guard let selectionRect = selectionRect else {
-        return
-      }
-      UIMenuController.shared.presentMenu(from: self, in: selectionRect)
-      NotificationCenter.default.addObserver(
-        self,
-        selector: #selector(resetSelecting),
-        name: UIMenuController.willHideMenuNotification,
-        object: nil
+    UIMenuController.shared.hideMenu(animated: true)
+    if let elementIndex = elementIndex {
+      let prefix = model.text.string.prefix(elementIndex)
+      let suffix = model.text.string.suffix(from: prefix.endIndex)
+      let trailing = elementIndex + suffix.distance(
+        from: suffix.startIndex,
+        to: suffix.firstIndex { $0.isWhitespace || $0.isNewline } ?? suffix.endIndex
       )
-    default:
+      let leading = prefix.lastIndex { $0.isWhitespace || $0.isNewline }
+        .flatMap { prefix.distance(from: prefix.startIndex, to: $0) + 1 } ?? 0
+      selectedRange = leading..<trailing
+    }
+  }
+  
+  func handleSelectionTapEnded(_ gesture: UIGestureRecognizer) {
+    guard let selectionRect = selectionRect else {
       return
     }
+    UIMenuController.shared.presentMenu(from: self, in: selectionRect)
+    NotificationCenter.default.addObserver(
+      self,
+      selector: #selector(resetSelecting),
+      name: UIMenuController.willHideMenuNotification,
+      object: nil
+    )
   }
 
   @objc private func handleSelectionPan(_ gesture: UIPanGestureRecognizer) {
