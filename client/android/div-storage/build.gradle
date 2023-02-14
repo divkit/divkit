@@ -3,10 +3,18 @@ apply from: "${project.projectDir}/../div-tests.gradle"
 apply from: "${project.projectDir}/../publish-android.gradle"
 
 dependencies {
+    implementation project(path: ':div')
     implementation project(path: ':div-core')
+    implementation project(path: ':div-data')
+    implementation project(path: ':div-json')
+    implementation project(path: ':div-histogram')
+    implementation project(path: ':utils')
     implementation project(path: ':assertion')
+    implementation project(path: ':logging')
 
+    implementation "androidx.core:core-ktx:$versions.androidx.core_ktx"
     implementation "androidx.appcompat:appcompat:$versions.androidx.appcompat"
+    implementation "javax.inject:javax.inject:$versions.javax"
 
     testImplementation "androidx.test:core:$versions.androidx.test"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$versions.coroutines"

@@ -1,5 +1,6 @@
 package com.yandex.div.json
 
+import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.internal.util.JsonArray
 import com.yandex.div.internal.util.JsonNode
 import com.yandex.div.internal.util.JsonObject
@@ -9,6 +10,7 @@ import org.json.JSONObject
 
 private const val MAX_TO_STRING_LENGTH = 100
 
+@Mockable
 class ParsingException internal constructor(
     val reason: ParsingExceptionReason,
     message: String,

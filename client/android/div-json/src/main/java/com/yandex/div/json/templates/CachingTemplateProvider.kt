@@ -1,10 +1,12 @@
 package com.yandex.div.json.templates
 
+import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.json.JsonTemplate
 
 /**
  * Mixes in-memory and fallback (persistent in most cases) providers to provide best performance.
  */
+@Mockable
 open class CachingTemplateProvider<T: JsonTemplate<*>>(
     private val cacheProvider: InMemoryTemplateProvider<T>,
     private var fallbackProvider: TemplateProvider<T>,
