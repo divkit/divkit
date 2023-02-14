@@ -1,5 +1,3 @@
- // Copyright (c) 2018 Yandex LLC. All rights reserved.
- // Author: Vasiliy Polikarpov <polikarpov@yandex-team.ru>
 package com.yandex.div.core.view2.backbutton
 
 import android.content.Context
@@ -10,7 +8,7 @@ import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.view2.backbutton.BackKeyPressedHelper.OnBackClickListener
 
- /**
+/**
  * [RecyclerView] adapter to [BackKeyPressedHelper] that handles BACK key press.
  */
 internal open class BackHandlingRecyclerView : RecyclerView, BackHandlingView {
@@ -54,8 +52,7 @@ internal open class BackHandlingRecyclerView : RecyclerView, BackHandlingView {
     /**
      * @see BackKeyPressedHelper.setOnBackClickListener
      */
-    override  fun setOnBackClickListener(
-      listener: OnBackClickListener?){
+    override  fun setOnBackClickListener(listener: OnBackClickListener?) {
         mBackKeyPressedHelper.setOnBackClickListener(listener)
     }
 }

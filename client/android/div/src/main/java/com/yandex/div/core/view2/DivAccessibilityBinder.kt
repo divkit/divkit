@@ -11,6 +11,7 @@ import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
 import com.yandex.div2.DivAccessibility
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivContainer
+import com.yandex.div2.DivGallery
 import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivImage
 import com.yandex.div2.DivInput
@@ -84,6 +85,7 @@ internal class DivAccessibilityBinder @Inject constructor(
             is DivGifImage -> bindType(view, DivAccessibility.Type.IMAGE)
             is DivText -> bindType(view, DivAccessibility.Type.TEXT)
             is DivTabs -> bindType(view, DivAccessibility.Type.TAB_BAR)
+            is DivGallery -> bindType(view, DivAccessibility.Type.LIST)
             else -> bindType(view, DivAccessibility.Type.NONE)
         }
     }
