@@ -20,7 +20,7 @@ internal class DivIndicatorBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
 ) : DivViewBinder<DivIndicator, DivPagerIndicatorView> {
 
-    private val lateAttach = mutableListOf<(View) -> Unit>()
+    private val lateAttach = mutableListOf<(View) -> Boolean>()
 
     override fun bindView(view: DivPagerIndicatorView, div: DivIndicator, divView: Div2View) {
         val oldDiv = view.div
@@ -36,7 +36,11 @@ internal class DivIndicatorBinder @Inject constructor(
         view.observeStyle(expressionResolver, div)
         lateAttach.add { rootView ->
             val pagerId = div.pagerId
-            rootView.findViewWithTag<DivPagerView>(pagerId)?.let { view.attachPager(it.viewPager) }
+
+            return@add rootView.findViewWithTag<DivPagerView>(pagerId)?.let {
+                view.attachPager(it.viewPager)
+                true
+            } ?: false
         }
     }
 
@@ -110,8 +114,7 @@ internal class DivIndicatorBinder @Inject constructor(
     }
 
     fun attachAll(view: View) {
-        lateAttach.forEach{ it.invoke(view) }
-        lateAttach.clear()
+        lateAttach.removeAll { it.invoke(view) }
     }
 
     fun DivIndicator.Animation.convert(): IndicatorParams.Animation {
