@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.yandex.div.core.widget.DivLayoutParams
 import kotlin.math.max
+import kotlin.math.min
 
 abstract class DivViewGroup @JvmOverloads constructor(
     context: Context,
@@ -14,16 +15,20 @@ abstract class DivViewGroup @JvmOverloads constructor(
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
     override fun measureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int) {
-        val lp = child.layoutParams
+        val lp = child.lp
         val childWidthMeasureSpec = getChildMeasureSpec(
             parentWidthMeasureSpec,
             paddingLeft + paddingRight,
-            lp.width
+            lp.width,
+            child.minimumWidth,
+            lp.maxWidth
         )
         val childHeightMeasureSpec = getChildMeasureSpec(
             parentHeightMeasureSpec,
             paddingTop + paddingBottom,
-            lp.height
+            lp.height,
+            child.minimumHeight,
+            lp.maxHeight
         )
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
     }
@@ -40,12 +45,14 @@ abstract class DivViewGroup @JvmOverloads constructor(
             parentWidthMeasureSpec,
             paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin + widthUsed,
             lp.width,
+            child.minimumWidth,
             lp.maxWidth
         )
         val childHeightMeasureSpec = getChildMeasureSpec(
             parentHeightMeasureSpec,
             paddingTop + paddingBottom + lp.topMargin + lp.bottomMargin + heightUsed,
             lp.height,
+            child.minimumHeight,
             lp.maxHeight
         )
         child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
@@ -72,7 +79,8 @@ abstract class DivViewGroup @JvmOverloads constructor(
             parentMeasureSpec: Int,
             padding: Int,
             childDimension: Int,
-            maxSize: Int = Int.MAX_VALUE
+            minSize: Int,
+            maxSize: Int
         ): Int {
             val parentSpecMode = MeasureSpec.getMode(parentMeasureSpec)
             val parentSpecSize = MeasureSpec.getSize(parentMeasureSpec)
@@ -81,89 +89,78 @@ abstract class DivViewGroup @JvmOverloads constructor(
             var resultMode = 0
 
             when (parentSpecMode) {
-                MeasureSpec.EXACTLY -> {
-                    when {
-                        childDimension >= 0 -> {
-                            resultSize = childDimension
-                            resultMode = MeasureSpec.EXACTLY
-                        }
+                MeasureSpec.EXACTLY -> when (childDimension) {
+                    in 0 .. Int.MAX_VALUE -> {
+                        resultSize = childDimension
+                        resultMode = MeasureSpec.EXACTLY
+                    }
 
-                        childDimension == LayoutParams.MATCH_PARENT -> {
+                    LayoutParams.MATCH_PARENT -> {
+                        resultSize = size
+                        resultMode = MeasureSpec.EXACTLY
+                    }
+
+                    LayoutParams.WRAP_CONTENT -> {
+                        if (maxSize == Int.MAX_VALUE) {
                             resultSize = size
-                            resultMode = MeasureSpec.EXACTLY
-                        }
-
-                        childDimension == LayoutParams.WRAP_CONTENT -> {
-                            if (maxSize == Int.MAX_VALUE) {
-                                resultSize = size
-                                resultMode = MeasureSpec.UNSPECIFIED
-                            } else {
-                                resultSize = maxSize
-                                resultMode = MeasureSpec.AT_MOST
-                            }
-                        }
-
-                        childDimension == DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
-                            resultSize = size
+                            resultMode = MeasureSpec.UNSPECIFIED
+                        } else {
+                            resultSize = maxSize
                             resultMode = MeasureSpec.AT_MOST
                         }
                     }
-                }
 
-                MeasureSpec.AT_MOST -> {
-                    when {
-                        childDimension >= 0 -> {
-                            resultSize = childDimension
-                            resultMode = MeasureSpec.EXACTLY
-                        }
-
-                        childDimension == LayoutParams.MATCH_PARENT -> {
-                            resultSize = size
-                            resultMode = MeasureSpec.AT_MOST
-                        }
-
-                        childDimension == LayoutParams.WRAP_CONTENT -> {
-                            if (maxSize == Int.MAX_VALUE) {
-                                resultSize = size
-                                resultMode = MeasureSpec.UNSPECIFIED
-                            } else {
-                                resultSize = maxSize
-                                resultMode = MeasureSpec.AT_MOST
-                            }
-                        }
-
-                        childDimension == DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
-                            resultSize = size
-                            resultMode = MeasureSpec.AT_MOST
-                        }
+                    DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
+                        resultSize = min(max(size, minSize), maxSize)
+                        resultMode = MeasureSpec.AT_MOST
                     }
                 }
 
-                MeasureSpec.UNSPECIFIED -> {
-                    when {
-                        childDimension >= 0 -> {
-                            resultSize = childDimension
-                            resultMode = MeasureSpec.EXACTLY
-                        }
+                MeasureSpec.AT_MOST -> when (childDimension) {
+                    in 0 .. Int.MAX_VALUE -> {
+                        resultSize = childDimension
+                        resultMode = MeasureSpec.EXACTLY
+                    }
 
-                        childDimension == LayoutParams.MATCH_PARENT -> {
+                    LayoutParams.MATCH_PARENT -> {
+                        resultSize = size
+                        resultMode = MeasureSpec.AT_MOST
+                    }
+
+                    LayoutParams.WRAP_CONTENT -> {
+                        if (maxSize == Int.MAX_VALUE) {
                             resultSize = size
                             resultMode = MeasureSpec.UNSPECIFIED
+                        } else {
+                            resultSize = maxSize
+                            resultMode = MeasureSpec.AT_MOST
                         }
+                    }
 
-                        childDimension == LayoutParams.WRAP_CONTENT -> {
-                            if (maxSize == Int.MAX_VALUE) {
-                                resultSize = size
-                                resultMode = MeasureSpec.UNSPECIFIED
-                            } else {
-                                resultSize = maxSize
-                                resultMode = MeasureSpec.AT_MOST
-                            }
-                        }
+                    DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
+                        resultSize = min(max(size, minSize), maxSize)
+                        resultMode = MeasureSpec.AT_MOST
+                    }
+                }
 
-                        childDimension == DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
+                MeasureSpec.UNSPECIFIED -> when (childDimension) {
+                    in 0 .. Int.MAX_VALUE -> {
+                        resultSize = childDimension
+                        resultMode = MeasureSpec.EXACTLY
+                    }
+
+                    LayoutParams.MATCH_PARENT -> {
+                        resultSize = size
+                        resultMode = MeasureSpec.UNSPECIFIED
+                    }
+
+                    LayoutParams.WRAP_CONTENT, DivLayoutParams.WRAP_CONTENT_CONSTRAINED -> {
+                        if (maxSize == Int.MAX_VALUE) {
                             resultSize = size
                             resultMode = MeasureSpec.UNSPECIFIED
+                        } else {
+                            resultSize = maxSize
+                            resultMode = MeasureSpec.AT_MOST
                         }
                     }
                 }

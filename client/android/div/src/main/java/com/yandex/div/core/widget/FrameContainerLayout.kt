@@ -110,7 +110,8 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
                         .coerceAtLeast(min(child.measuredWidth, maxWidth))
                     MeasureSpec.makeMeasureSpec(width.coerceAtLeast(0), MeasureSpec.EXACTLY)
                 } else {
-                    getChildMeasureSpec(widthMeasureSpec, childHorizontalPadding, lp.width, lp.maxWidth)
+                    getChildMeasureSpec(widthMeasureSpec, childHorizontalPadding,
+                        lp.width, child.minimumWidth, lp.maxWidth)
                 }
 
                 val childHeightMeasureSpec = if (lp.height == LayoutParams.MATCH_PARENT) {
@@ -118,7 +119,8 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
                         .coerceAtLeast(min(child.measuredHeight, maxHeight))
                     MeasureSpec.makeMeasureSpec(height.coerceAtLeast(0), MeasureSpec.EXACTLY)
                 } else {
-                    getChildMeasureSpec(heightMeasureSpec, childVerticalPadding, lp.height, lp.maxHeight)
+                    getChildMeasureSpec(heightMeasureSpec, childVerticalPadding,
+                        lp.height, child.minimumHeight, lp.maxHeight)
                 }
 
                 child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
