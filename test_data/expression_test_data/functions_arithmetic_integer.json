@@ -429,6 +429,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios"
       ]
     },
@@ -581,6 +582,7 @@
       },
       "variables": [],
       "platforms": [
+        "android",
         "ios",
         "web"
       ]

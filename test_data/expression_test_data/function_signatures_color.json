@@ -24,7 +24,7 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["web", "ios"]
+      "platforms": ["android", "web", "ios"]
     },
     {
       "name": "getColorRed(string) number",
@@ -50,7 +50,7 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["web", "ios"]
+      "platforms": ["android", "web", "ios"]
     },
     {
       "name": "getColorGreen(string) number",
@@ -76,7 +76,7 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["web", "ios"]
+      "platforms": ["android", "web", "ios"]
     },
     {
       "name": "getColorBlue(string) number",
@@ -102,7 +102,7 @@
         }
       ],
       "result_type": "number",
-      "platforms": ["web", "ios"]
+      "platforms": ["android", "web", "ios"]
     },
     {
       "name": "setColorAlpha(string, number) color",

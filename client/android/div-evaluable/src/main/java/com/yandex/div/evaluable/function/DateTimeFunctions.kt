@@ -4,6 +4,7 @@ import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
+import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.types.DateTime
 import java.util.TimeZone
 import java.util.Calendar
@@ -107,7 +108,7 @@ internal object SetMonth : Function() {
         val value = args[1] as Int
 
         if (value > 12 || value < 1) {
-            throw EvaluableException("Expecting months in [1..12], instead got $value")
+            throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting month in [1..12], instead got $value.")
         }
         val calendar = datetime.toCalendar()
         calendar.set(Calendar.MONTH, value - 1)
@@ -140,7 +141,7 @@ internal object SetDay : Function() {
         when (value) {
             in 1..daysInMonth -> calendar.set(Calendar.DAY_OF_MONTH, value)
             -1 -> calendar.set(Calendar.DAY_OF_MONTH, 0)
-            else -> throw EvaluableException("Unable to set day $value for date $datetime")
+            else -> throwExceptionOnFunctionEvaluationFailed(name, args, "Unable to set day $value for date $datetime.")
         }
 
         return DateTime(
@@ -167,7 +168,7 @@ internal object SetHours : Function() {
         val value = args[1] as Int
 
         if (value > 23 || value < 0) {
-            throw EvaluableException("Expecting hour in [0..23], instead got $value")
+            throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting hours in [0..23], instead got $value.")
         }
         val calendar = datetime.toCalendar()
         calendar.timeInMillis = datetime.timestampMillis
@@ -197,7 +198,7 @@ internal object SetMinutes : Function() {
         val value = args[1] as Int
 
         if (value > 59 || value < 0) {
-            throw EvaluableException("Expecting minute in [0..59], instead got $value")
+            throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting minutes in [0..59], instead got $value.")
         }
         val calendar = datetime.toCalendar()
         calendar.set(Calendar.MINUTE, value)
@@ -226,7 +227,7 @@ internal object SetSeconds : Function() {
         val value = args[1] as Int
 
         if (value > 59 || value < 0) {
-            throw EvaluableException("Expecting second in [0..59], instead got $value")
+            throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting seconds in [0..59], instead got $value.")
         }
         val calendar = datetime.toCalendar()
         calendar.set(Calendar.SECOND, value)
@@ -255,7 +256,7 @@ internal object SetMillis : Function() {
         val value = args[1] as Int
 
         if (value > 999 || value < 0) {
-            throw EvaluableException("Expecting millis in [0..999], instead got $value")
+            throwExceptionOnFunctionEvaluationFailed(name, args, "Expecting millis in [0..999], instead got $value.")
         }
 
         val calendar = datetime.toCalendar()

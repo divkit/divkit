@@ -256,6 +256,7 @@
             ],
             "platforms": [
                 "ios",
+                "android",
                 "web"
             ]
         },
