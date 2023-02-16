@@ -421,6 +421,26 @@
       "file": "accessibility/mode/exclude.json"
     },
     {
+      "title": "Accessibility mode changes",
+      "platforms": [
+        "android",
+        "ios"
+      ],
+      "tags": [
+        "Accessibility"
+      ],
+      "steps": [
+        "Turn on TalkBack",
+        "Change accessibility mode for items",
+        "Try to focus"
+      ],
+      "expected_results": [
+        "Elements should be focusable if their accessibility mode is default or merge and they have no ancestors with merge accessibility mode",
+        "Elements shouldn't be focusable if their accessibility mode if exclude"
+      ],
+      "file": "accessibility/mode/mode_change.json"
+    },
+    {
       "title": "Actions on tap",
       "steps": [
         "Tap on top button",
@@ -1378,7 +1398,9 @@
     {
       "title": "Image Shimmer Preview",
       "file": "image_shimmer_preview.json",
-      "platforms": ["ios"],
+      "platforms": [
+        "ios"
+      ],
       "expected_results": [
         "Shimmer animation is running"
       ]
@@ -1414,7 +1436,7 @@
       "platforms": [
         "ios"
       ],
-      "expected_results" : [
+      "expected_results": [
         "Infinite animation with changing direction"
       ],
       "file": "rive_ping_pong_loop.json"

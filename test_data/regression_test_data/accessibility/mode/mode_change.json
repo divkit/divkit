@@ -1,0 +1,457 @@
+{
+  "templates": {
+    "button": {
+      "type": "text",
+      "width": {
+        "type": "match_parent"
+      },
+      "height": {
+        "type": "wrap_content"
+      },
+      "paddings": {
+        "left": 16,
+        "top": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "margins": {
+        "left": 16,
+        "right": 16,
+        "bottom": 16
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#0E000000"
+        }
+      ],
+      "font_size": 16,
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alpha": 1.0,
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    },
+    "controlButton": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
+      },
+      "margins": {
+        "left": 6,
+        "right": 6
+      },
+      "paddings": {
+        "top": 10,
+        "left": 6,
+        "right": 6,
+        "bottom": 10
+      },
+      "border": {
+        "corner_radius": 8
+      },
+      "background": [
+        {
+          "type": "solid",
+          "$color": "backgroundColor"
+        }
+      ],
+      "font_weight": "medium",
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
+      "alignment_horizontal": "center",
+      "alignment_vertical": "center"
+    }
+  },
+  "card": {
+    "log_id": "accessibility/mode/change",
+    "variables": [
+      {
+        "name": "element1",
+        "type": "string",
+        "value": "default"
+      },
+      {
+        "name": "element2",
+        "type": "string",
+        "value": "default"
+      },
+      {
+        "name": "element3",
+        "type": "string",
+        "value": "default"
+      },
+      {
+        "name": "element23",
+        "type": "string",
+        "value": "merge"
+      },
+      {
+        "name": "element4",
+        "type": "string",
+        "value": "exclude"
+      }
+    ],
+    "transition_animation_selector": "data_change",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "height": {
+            "type": "wrap_content"
+          },
+          "items" :[{
+            "type": "container",
+            "height": {
+              "type": "wrap_content"
+            },
+            "margins": {
+              "left": 16,
+              "top": 16,
+              "right": 16,
+              "bottom": 16
+            },
+            "orientation": "vertical",
+            "items": [
+              {
+                "type": "button",
+                "text": "Item 1",
+                "accessibility": {
+                  "description": "This is Item 1",
+                  "hint": "@{element1} mode",
+                  "mode": "@{element1}"
+                },
+                "border": {
+                  "corner_radius": 8
+                }
+              },
+              {
+                "type": "container",
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#0e000000"
+                  }
+                ],
+                "border": {
+                  "corner_radius": 8
+                },
+                "margins": {
+                  "bottom": 16
+                },
+                "accessibility": {
+                  "mode": "@{element23}",
+                  "hint": "@{element23} mode"
+                },
+                "items": [
+                  {
+                    "type": "button",
+                    "text": "Item 2",
+                    "margins": {
+                      "left": 16,
+                      "top": 16,
+                      "right": 16,
+                      "bottom": 16
+                    },
+                    "accessibility": {
+                      "hint": "@{element2} mode",
+                      "description": "This is Item 2",
+                      "mode": "@{element2}"
+                    }
+                  },
+                  {
+                    "type": "button",
+                    "text": "Item 3",
+                    "margins": {
+                      "left": 16,
+                      "right": 16,
+                      "bottom": 16
+                    },
+                    "accessibility": {
+                      "description": "This is Item 3",
+                      "hint": "@{element3} mode",
+                      "mode": "@{element3}"
+                    }
+                  }
+                ]
+              },
+              {
+                "type": "button",
+                "text_color": "#FFFFFF",
+                "text": "Item 4",
+                "accessibility": {
+                  "mode": "@{element4}",
+                  "hint": "@{element4} mode",
+                  "description": "This is Item 4"
+                },
+                "background": [
+                  {
+                    "type": "solid",
+                    "color": "#cc0605"
+                  }
+                ]
+              }
+            ]},
+            {
+              "type": "container",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "orientation": "horizontal",
+              "margins": {
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Item 1",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text_alignment_vertical": "center"
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Default",
+                  "backgroundColor": "@{element1 == 'default' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element1&value=default"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Merge",
+                  "backgroundColor": "@{element1 == 'merge' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element1&value=merge"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Exclude",
+                  "backgroundColor": "@{element1 == 'exclude' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element1&value=exclude"
+                  }]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "orientation": "horizontal",
+              "margins": {
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Item 2",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text_alignment_vertical": "center"
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Default",
+                  "backgroundColor": "@{element2 == 'default' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element2&value=default"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Merge",
+                  "backgroundColor": "@{element2 == 'merge' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element2&value=merge"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Exclude",
+                  "backgroundColor": "@{element2 == 'exclude' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element2&value=exclude"
+                  }]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "orientation": "horizontal",
+              "margins": {
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Item 3",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text_alignment_vertical": "center"
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Default",
+                  "backgroundColor": "@{element3 == 'default' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element3&value=default"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Merge",
+                  "backgroundColor": "@{element3 == 'merge' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element3&value=merge"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Exclude",
+                  "backgroundColor": "@{element3 == 'exclude' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element3&value=exclude"
+                  }]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "orientation": "horizontal",
+              "margins": {
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Items 2 + 3",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text_alignment_vertical": "center"
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Default",
+                  "backgroundColor": "@{element23 == 'default' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element23&value=default"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Merge",
+                  "backgroundColor": "@{element23 == 'merge' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element23&value=merge"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Exclude",
+                  "backgroundColor": "@{element23 == 'exclude' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element23&value=exclude"
+                  }]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "orientation": "horizontal",
+              "margins": {
+                "bottom": 16,
+                "left": 16,
+                "right": 16
+              },
+              "items": [
+                {
+                  "type": "text",
+                  "text": "Item 4",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text_alignment_vertical": "center"
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Default",
+                  "backgroundColor": "@{element4 == 'default' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element4&value=default"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Merge",
+                  "backgroundColor": "@{element4 == 'merge' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element4&value=merge"
+                  }]
+                },
+                {
+                  "type": "controlButton",
+                  "text": "Exclude",
+                  "backgroundColor": "@{element4 == 'exclude' ? '#59000000' : '#0E000000'}",
+                  "actions" : [{
+                    "log_id": "click",
+                    "url": "div-action://set_variable?name=element4&value=exclude"
+                  }]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
