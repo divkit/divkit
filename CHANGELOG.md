@@ -1,3 +1,15 @@
+## 23.3.0
+
+# Android Client:
+* Fixed algorithm of `indicator` attach to specified `pager`
+* Fixed accessibility type binding for `gallery`
+* Fixed NPE in `DecodeBase64ImageTask`
+
+# iOS Client:
+* Fixed corners in `DivIndicator`
+* Fixed wrapped `DivContainer` layout
+
+
 ## 23.2.0
 
 # Android Client:
