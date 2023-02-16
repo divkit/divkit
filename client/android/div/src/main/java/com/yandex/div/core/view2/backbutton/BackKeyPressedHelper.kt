@@ -9,7 +9,7 @@ import com.yandex.div.core.view2.backbutton.BackKeyPressedHelper.OnBackClickList
  * Set [OnBackClickListener] and call [.onKeyAction] to notify that listener
  * when a user taps BACK.
  */
-internal class BackKeyPressedHelper(private val mOwnerView: View) {
+internal class BackKeyPressedHelper(private val mOwnerView: View, private var mIsEnabled: Boolean) {
     private var mOnBackClickListener: OnBackClickListener? = null
 
     /**
@@ -22,6 +22,14 @@ internal class BackKeyPressedHelper(private val mOwnerView: View) {
          * @return True if the event is handled and should not be passed further.
          */
         fun onBackClick(): Boolean
+    }
+
+    /**
+     * Enables or disables BACK key event processing.
+     */
+    fun setEnabled(enabled: Boolean) {
+        mIsEnabled = enabled
+        setupFocus()
     }
 
     /**
@@ -73,14 +81,15 @@ internal class BackKeyPressedHelper(private val mOwnerView: View) {
     }
 
     private fun setupFocus() {
-        if (mOnBackClickListener == null || !mOwnerView.hasWindowFocus()) return
-
-        mOwnerView.apply {
-            isFocusable = true
-            isFocusableInTouchMode = true
-            when {
-                isShown -> requestFocus()
-                hasFocus() -> rootView?.requestFocus(View.FOCUS_UP)
+        if (mOwnerView.hasWindowFocus()) {
+            val enabled = mIsEnabled && mOwnerView.isShown && mOnBackClickListener != null
+            val hasFocus = mOwnerView.hasFocus()
+            mOwnerView.isFocusable = mIsEnabled
+            mOwnerView.isFocusableInTouchMode = mIsEnabled
+            if (enabled) {
+                mOwnerView.requestFocus()
+            } else if (hasFocus) {
+                mOwnerView.rootView?.requestFocus(View.FOCUS_UP)
             }
         }
     }

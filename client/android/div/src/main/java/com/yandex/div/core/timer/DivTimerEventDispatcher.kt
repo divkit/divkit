@@ -13,8 +13,6 @@ internal class DivTimerEventDispatcher(
 
     private var parentTimer: Timer? = null
 
-    private var div2View: Div2View? = null
-
     fun getTimerController(id: String): TimerController? {
         return if (activeTimerIds.contains(id)) {
             timerControllers[id]
@@ -52,20 +50,12 @@ internal class DivTimerEventDispatcher(
         val newParentTimer = Timer()
         parentTimer = newParentTimer
 
-        div2View = view
-
         activeTimerIds.forEach { id ->
             timerControllers[id]?.onAttach(view, newParentTimer)
         }
     }
 
-    fun onDetach(view: Div2View) {
-        /*
-        * Fix bug, when div2view in recycler view.
-        * In recycler during bind first called attach for new view, than detach for old one.
-        */
-        if (div2View != view) return
-
+    fun onDetach() {
         timerControllers.values.forEach { timerController ->
             timerController.onDetach()
         }

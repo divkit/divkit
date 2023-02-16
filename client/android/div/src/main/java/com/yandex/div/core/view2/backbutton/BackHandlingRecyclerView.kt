@@ -11,36 +11,48 @@ import com.yandex.div.core.view2.backbutton.BackKeyPressedHelper.OnBackClickList
 /**
  * [RecyclerView] adapter to [BackKeyPressedHelper] that handles BACK key press.
  */
-internal open class BackHandlingRecyclerView(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : RecyclerView(context, attrs, defStyleAttr), BackHandlingView {
+internal open class BackHandlingRecyclerView : RecyclerView, BackHandlingView {
+    private lateinit var mBackKeyPressedHelper: BackKeyPressedHelper
 
-    private val backKeyPressedHelper = BackKeyPressedHelper(this)
+    constructor(context: Context) : super(context) {
+        mBackKeyPressedHelper = BackKeyPressedHelper(this, true)
+    }
+
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
+        mBackKeyPressedHelper = BackKeyPressedHelper(this, true)
+    }
+
+    constructor(
+        context: Context, attrs: AttributeSet?,
+        defStyleAttr: Int
+    ) : super(context, attrs, defStyleAttr) {
+        mBackKeyPressedHelper = BackKeyPressedHelper(this, true)
+    }
 
     @CallSuper
     override fun onKeyPreIme(keyCode: Int, event: KeyEvent): Boolean {
-        return backKeyPressedHelper.onKeyAction(keyCode, event) ||
+        return mBackKeyPressedHelper.onKeyAction(keyCode, event) ||
                 super.onKeyPreIme(keyCode, event)
     }
 
     @CallSuper
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         super.onWindowFocusChanged(hasWindowFocus)
-        backKeyPressedHelper.onWindowFocusChanged(hasWindowFocus)
+        mBackKeyPressedHelper.onWindowFocusChanged(hasWindowFocus)
     }
 
     @CallSuper
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
-        backKeyPressedHelper.onVisibilityChanged()
+        // will be null when onVisibilityChanged called from super constructor
+        if (this::mBackKeyPressedHelper.isInitialized) {
+            mBackKeyPressedHelper.onVisibilityChanged()
+        }
     }
 
     /**
      * @see BackKeyPressedHelper.setOnBackClickListener
      */
     override  fun setOnBackClickListener(listener: OnBackClickListener?) {
-        descendantFocusability = if (listener != null) FOCUS_BEFORE_DESCENDANTS else FOCUS_AFTER_DESCENDANTS
-        backKeyPressedHelper.setOnBackClickListener(listener)
+        mBackKeyPressedHelper.setOnBackClickListener(listener)
     }
 }
