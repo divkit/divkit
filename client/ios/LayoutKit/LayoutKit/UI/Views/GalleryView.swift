@@ -104,7 +104,8 @@ public final class GalleryView: BlockView {
     setState(state.resetToModelIfInconsistent(model), notifyingObservers: false)
     updateLayoutIfNeeded(to: model)
 
-    if oldModel != model {
+    let isNewModel = oldModel != model
+    if isNewModel {
       let blocks = model.items.map { $0.content }
       dataSource.blocks = blocks
       collectionView.decelerationRate = model.scrollMode.decelerationRate
@@ -123,7 +124,7 @@ public final class GalleryView: BlockView {
            .pending where frame.size == .zero:
         deferredStateSetting = .pending(self.state)
       case .idle, .pending, .firstLayoutPerformed:
-        updateContentOffset(to: self.state.contentPosition, animated: true)
+        updateContentOffset(to: self.state.contentPosition, animated: !isNewModel)
       }
     }
   }
