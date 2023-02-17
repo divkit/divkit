@@ -17,8 +17,8 @@ extension TextBlock {
     let textBlockContainer = view as! TextBlockContainer
     textBlockContainer.textGradient = textGradient
     textBlockContainer.model = .init(
-      images: images,
-      attachments: attachments,
+      images: images + truncationImages,
+      attachments: attachments + truncationAttachments,
       text: text,
       verticalPosition: verticalAlignment.position,
       source: Variable { [weak self] in self },
@@ -140,7 +140,7 @@ private final class TextBlockView: UIView {
     target: self,
     action: #selector(handleHideSelectionMenuTap(_:))
   )
-  
+
   private lazy var doubleTapSelectionRecognizer = {
     let result = UITapGestureRecognizer(
       target: self,
@@ -154,15 +154,16 @@ private final class TextBlockView: UIView {
     target: self,
     action: #selector(handleSelectionLongTap(_:))
   )
-  
+
   private lazy var panSelectionRecognizer = {
     let result = UIPanGestureRecognizer(
       target: self,
-      action: #selector(handleSelectionPan(_:)))
+      action: #selector(handleSelectionPan(_:))
+    )
     result.delegate = self
     return result
   }()
-  
+
   private var delayedSelectionTapGesture: UITapGestureRecognizer?
 
   private var imageRequests: [Cancellable] = [] {
@@ -273,7 +274,7 @@ private final class TextBlockView: UIView {
       return
     }
   }
-  
+
   @objc private func handleSelectionDoubleTap(_ gesture: UITapGestureRecognizer) {
     switch gesture.state {
     case .ended:
@@ -283,7 +284,7 @@ private final class TextBlockView: UIView {
       return
     }
   }
-  
+
   func handleSelectionTapBegan(_ gesture: UIGestureRecognizer) {
     becomeFirstResponder()
     let elementIndex = textLayout?.getTapElementIndex(
@@ -303,8 +304,8 @@ private final class TextBlockView: UIView {
       selectedRange = leading..<trailing
     }
   }
-  
-  func handleSelectionTapEnded(_ gesture: UIGestureRecognizer) {
+
+  func handleSelectionTapEnded(_: UIGestureRecognizer) {
     guard let selectionRect = selectionRect else {
       return
     }

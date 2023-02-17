@@ -67,15 +67,11 @@ extension DivText: DivBlockModeling {
       context: context
     )
 
-    let images = (self.images ?? [])
-      .filter {
-        let start = $0.resolveStart(context.expressionResolver) ?? 0
-        return start <= CFAttributedStringGetLength(attributedString)
-      }
-      .map { $0.makeImage(
-        withFactory: context.imageHolderFactory,
-        expressionResolver: context.expressionResolver
-      ) }
+    let images = makeInlineImages(
+      context: context,
+      images: self.images,
+      text: attributedString
+    )
 
     let truncationToken = ellipsis.map {
       makeAttributedString(
@@ -86,6 +82,11 @@ extension DivText: DivBlockModeling {
         context: context
       )
     }
+    let truncationImages = makeInlineImages(
+      context: context,
+      images: ellipsis?.images,
+      text: truncationToken
+    )
 
     return TextBlock(
       widthTrait: makeContentWidthTrait(with: context),
@@ -98,6 +99,7 @@ extension DivText: DivBlockModeling {
       minNumberOfHiddenLines: resolveMinHiddenLines(context.expressionResolver) ?? 0,
       images: images,
       truncationToken: truncationToken,
+      truncationImages: truncationImages,
       canSelect: resolveSelectable(context.expressionResolver) && context.flagsInfo
         .isTextSelectingEnabled
     )
@@ -120,6 +122,25 @@ extension DivText: DivBlockModeling {
     attributedString.apply(actions, at: fullRange)
     CFAttributedStringEndEditing(attributedString)
     return attributedString
+  }
+
+  private func makeInlineImages(
+    context: DivBlockModelingContext,
+    images: [Image]?,
+    text: NSAttributedString?
+  ) -> [TextBlock.InlineImage] {
+    guard let text = text else {
+      return []
+    }
+    return (images ?? [])
+      .filter {
+        let start = $0.resolveStart(context.expressionResolver) ?? 0
+        return start <= CFAttributedStringGetLength(text)
+      }
+      .map { $0.makeImage(
+        withFactory: context.imageHolderFactory,
+        expressionResolver: context.expressionResolver
+      ) }
   }
 
   private func apply(

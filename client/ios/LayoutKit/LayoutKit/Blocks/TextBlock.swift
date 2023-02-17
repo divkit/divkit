@@ -34,6 +34,8 @@ public final class TextBlock: BlockWithTraits {
 
   let attachments: [TextAttachment]
   let truncationToken: NSAttributedString?
+  let truncationImages: [InlineImage]
+  let truncationAttachments: [TextAttachment]
 
   private var cachedIntrinsicWidth: CGFloat?
   private var cachedIntrinsicHeight: (width: CGFloat, height: CGFloat)?
@@ -49,6 +51,7 @@ public final class TextBlock: BlockWithTraits {
     images: [InlineImage] = [],
     accessibilityElement: AccessibilityElement?,
     truncationToken: NSAttributedString? = nil,
+    truncationImages: [TextBlock.InlineImage] = [],
     canSelect: Bool = false
   ) {
     self.widthTrait = widthTrait
@@ -60,8 +63,16 @@ public final class TextBlock: BlockWithTraits {
     self.minNumberOfHiddenLines = minNumberOfHiddenLines
     self.images = images
     self.accessibilityElement = accessibilityElement
-    self.truncationToken = truncationToken
     self.canSelect = canSelect
+    self.truncationImages = truncationImages
+    if let truncationToken = truncationToken {
+      (self.truncationToken, self.truncationAttachments) = setImagePlaceholders(
+        for: truncationImages, to: truncationToken
+      )
+    } else {
+      self.truncationToken = nil
+      self.truncationAttachments = []
+    }
   }
 
   public convenience init(
@@ -74,6 +85,7 @@ public final class TextBlock: BlockWithTraits {
     minNumberOfHiddenLines: Int = 0,
     images: [InlineImage] = [],
     truncationToken: NSAttributedString? = nil,
+    truncationImages: [TextBlock.InlineImage] = [],
     canSelect: Bool = false
   ) {
     self.init(
@@ -87,6 +99,7 @@ public final class TextBlock: BlockWithTraits {
       images: images,
       accessibilityElement: .staticText(label: text.string),
       truncationToken: truncationToken,
+      truncationImages: truncationImages,
       canSelect: canSelect
     )
   }
