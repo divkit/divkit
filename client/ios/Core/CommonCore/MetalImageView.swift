@@ -52,39 +52,8 @@ public final class MetalImageView: UIView, RemoteImageViewContentProtocol {
         ciImage = nil
         return
       }
-      loadTexture(from: cgImage, textureLoader: textureLoader) { texture in
-        let ciImage: CIImage?
-        if let texture = texture {
-          let reversedImage = CIImage(mtlTexture: texture)
-          ciImage = reversedImage?
-            .transformed(by: CGAffineTransform(scaleX: 1, y: -1))
-            .transformed(by: CGAffineTransform(
-              translationX: 0,
-              y: reversedImage?.extent.height ?? 0
-            ))
-        } else {
-          ciImage = CIImage(cgImage: cgImage)
-        }
-
-        let updateImage = {
-          guard image === self.uiImage else { return }
-          self.ciImage = ciImage
-          tryAnimate()
-        }
-        #if DEBUG
-        if isSnapshotTest {
-          updateImage()
-        } else {
-          DispatchQueue.main.async {
-            updateImage()
-          }
-        }
-        #else
-        DispatchQueue.main.async {
-          updateImage()
-        }
-        #endif
-      }
+      ciImage = CIImage(cgImage: cgImage)
+      tryAnimate()
     }
   }
 
@@ -345,28 +314,6 @@ private func makeOrigin(
     y = 0
   }
   return CGPoint(x: x, y: y)
-}
-
-private func loadTexture(
-  from image: CGImage,
-  textureLoader: MTKTextureLoader?,
-  completion: @escaping ResultAction<MTLTexture?>
-) {
-  let asyncLoad = {
-    textureLoader?.newTexture(cgImage: image, options: [.SRGB: true]) { texture, _ in
-      completion(texture)
-    }
-  }
-  #if DEBUG
-  if isSnapshotTest {
-    let texture = try? textureLoader?.newTexture(cgImage: image, options: [.SRGB: true])
-    completion(texture)
-  } else {
-    asyncLoad()
-  }
-  #else
-  asyncLoad()
-  #endif
 }
 
 #if DEBUG
