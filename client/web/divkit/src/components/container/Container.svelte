@@ -18,10 +18,11 @@
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { correctDrawableStyle, DrawableStyle } from '../../utils/correctDrawableStyles';
     import { calcAdditionalPaddings, calcItemsGap } from '../../utils/container';
+    import { hasGapSupport } from '../../utils/hasGapSupport';
+    import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import ContainerSeparators from './ContainerSeparators.svelte';
     import Unknown from '../utilities/Unknown.svelte';
     import Outer from '../utilities/Outer.svelte';
-    import { hasGapSupport } from '../../utils/hasGapSupport';
 
     export let json: Partial<DivContainerData> = {};
     export let templateContext: TemplateContext;
@@ -147,6 +148,17 @@
         calcAdditionalPaddings(orientation, separator, lineSeparator) :
         null;
 
+    $: jsonAspect = rootCtx.getDerivedFromVars(json.aspect);
+    let aspect: number | undefined = undefined;
+    $: {
+        const newRatio = $jsonAspect?.ratio;
+        if (newRatio && isPositiveNumber(newRatio)) {
+            aspect = newRatio;
+        } else {
+            aspect = undefined;
+        }
+    }
+
     $: jsonWidth = rootCtx.getDerivedFromVars(json.width);
     $: jsonHeight = rootCtx.getDerivedFromVars(json.height);
 
@@ -202,7 +214,8 @@
     $: style = {
         gap: (separator || lineSeparator) ?
             calcItemsGap(orientation, separator, lineSeparator) :
-            undefined
+            undefined,
+        'aspect-ratio': aspect
     };
 </script>
 

@@ -167,6 +167,10 @@
     "en": "Transition with slide animation.",
     "ru": "Переход с анимацией перемещения."
   },
+  "div_container_aspect": {
+    "en": "Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.",
+    "ru": "Фиксированное соотношение размеров элемента. Высота элемента вычисляется исходя из ширины, значение параметра `height` игнорируется. В вебе требуется поддержка свойства `aspect-ratio` в css для работы."
+  },
   "div_aspect": {
     "en": "Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.",
     "ru": "Фиксированное соотношение размеров элемента. Высота элемента вычисляется исходя из ширины, значение параметра `height` игнорируется."

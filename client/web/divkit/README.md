@@ -158,6 +158,8 @@ safari >= 11
 firefox >= 67
 ```
 
+However, some rare features require more modern browsers, for example, `aspect` for a `container` requires `aspect-ratio` support in css. Such requirements are described in the documentation.
+
 Node.js
 ```
 Node.js >= 8

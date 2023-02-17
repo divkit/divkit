@@ -3,6 +3,7 @@ import type { DivActionableData } from './actionable';
 import type { AlignmentHorizontal, AlignmentVertical } from './alignment';
 import type { BooleanInt } from '../../typings/common';
 import type { Drawable } from './drawable';
+import type { DivAspect } from './image';
 
 export type ContainerOrientation = 'vertical' | 'horizontal' | 'overlap';
 
@@ -25,4 +26,5 @@ export interface DivContainerData extends DivBaseData, DivActionableData {
     layout_mode?: ContainerLayoutMode;
     separator?: ContainerSeparator;
     line_separator?: ContainerSeparator;
+    aspect?: DivAspect;
 }

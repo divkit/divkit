@@ -1,7 +1,8 @@
 {
   "description": "DivContainer with horizontal wrap layout and aspect height. Height must be equal width / 2.",
   "platforms": [
-    "ios"
+    "ios",
+    "web"
   ],
   "card": {
     "log_id": "test_card",

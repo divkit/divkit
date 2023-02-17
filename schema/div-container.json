@@ -94,8 +94,10 @@
         },
         "aspect": {
           "$ref": "div-aspect.json",
-          "$description": "translations.json#/div_aspect",
+          "$description": "translations.json#/div_container_aspect",
           "platforms": [
+            "ios",
+            "web"
           ]
         }
       }
