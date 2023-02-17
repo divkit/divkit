@@ -101,6 +101,10 @@
           "$ref": "common.json#/boolean_int",
           "default_value": "false",
           "$description": "translations.json#/div_input_select_all_on_focus"
+        },
+        "mask": {
+          "$ref": "div-input-mask.json",
+          "$description": "translations.json#/div_input_mask"
         }
       }
     }

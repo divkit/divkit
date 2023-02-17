@@ -919,6 +919,38 @@
     "en": "Line spacing of the text. Units specified in `font_size_unit`.",
     "ru": "Межстрочный интервал (интерлиньяж) текста. Измеряется в единицах, заданных в `font_size_unit`."
   },
+  "div_input_mask": {
+    "en": "Text input mask.",
+    "ru": "Маска для текстового поля."
+  },
+  "div_input_mask_fixed_length": {
+    "en": "Text input mask with a fixed amount of characters.",
+    "ru": "Маска для текстового поля с фиксированным количеством символов."
+  },
+  "div_input_mask_fixed_length_always_visible": {
+    "en": "Option to show mask before completion.",
+    "ru": "Опция отображения маски до ее заполнения."
+  },
+  "div_input_mask_fixed_length_pattern": {
+    "en": "Text input mask's format.",
+    "ru": "Формат текстовой маски."
+  },
+  "div_input_mask_fixed_length_pattern_elements": {
+    "en": "Decoding of characters from pattern that are replaceable with user input.",
+    "ru": "Расшифровка символов в паттерне, заменяемых на пользовательский ввод."
+  },
+  "div_input_mask_fixed_length_pattern_elements_key": {
+    "en": "Special character replaceable with user input.",
+    "ru": "Специальный символ, заменяемый на пользовательский ввод."
+  },
+  "div_input_mask_fixed_length_pattern_elements_placeholder": {
+    "en": "Character that is shown in the place of the special character if mask should be always visible.",
+    "ru": "Символ, на который заменяется специальный символ в маске, если она должна всегда быть видимой."
+  },
+  "div_input_mask_fixed_length_pattern_elements_regex": {
+    "en": "Regular expression with which the character will be validated.",
+    "ru": "Регулярное выражение, валидирующее вводимый символ."
+  },
   "div_input_max_visible_lines": {
     "en": "Maximum number of lines to be displayed in the input field.",
     "ru": "Максимальное количество строк, которое будет видно в поле ввода."

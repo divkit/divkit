@@ -1,0 +1,8 @@
+{
+  "anyOf": [
+    {
+      "$ref": "div-fixed-length-input-mask.json",
+      "$description": "translations.json#/div_input_mask_fixed_length"
+    }
+  ]
+}
