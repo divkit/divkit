@@ -168,7 +168,7 @@
     "ru": "Переход с анимацией перемещения."
   },
   "div_aspect": {
-    "en": "Size with a fixed aspect ratio. It counts height from width and ignores `height` value.",
+    "en": "Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.",
     "ru": "Фиксированное соотношение размеров элемента. Высота элемента вычисляется исходя из ширины, значение параметра `height` игнорируется."
   },
   "div_aspect_ratio": {
@@ -840,7 +840,7 @@
     "ru": "Цвет индикатора."
   },
   "div_indicator_inactive_minimum_shape": {
-    "en": "Inactive minimum indicator shape. Used when the required number of indicators doesn't fit on the screen.",
+    "en": "Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.",
     "ru": "Форма неактивного индикатора минимального размера. Используется, когда нужное количество индикаторов не помещается на экране."
   },
   "div_indicator_inactive_shape": {
@@ -972,7 +972,7 @@
     "ru": "Отступы, разбивающие изображение на части по тем же правилам, как при использовании свойства CSS `border-image-slice` (https://developer.mozilla.org/en-US/docs/Web/CSS/border-image-slice)."
   },
   "div_page_size": {
-    "en": "Percentage value of the page width.",
+    "en": "Page width (%).",
     "ru": "Ширина страницы в процентах."
   },
   "div_page_size_page_width": {
@@ -1040,7 +1040,7 @@
     "ru": "Порядок применения изменений:<li>`transactional` — если во время применения хотя бы одного элемента произошла ошибка, то изменения не применяются.</li><li>`partial` — применяются все возможные изменения. Если есть ошибки, то о них сообщается.</li>"
   },
   "div_percentage_size": {
-    "en": "Percentage value of the element size.",
+    "en": "Element size (%).",
     "ru": "Размер элемента в процентах."
   },
   "div_percentage_size_value": {
