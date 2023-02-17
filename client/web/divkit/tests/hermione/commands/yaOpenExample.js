@@ -19,8 +19,10 @@ module.exports = async function(example, params = {}) {
         this.getMeta('static:port')
     ]);
 
+    const enableTunneller = await this.getMeta('enableTunneller');
+
     const urlObj = {
-        protocol: 'https:',
+        protocol: enableTunneller ? 'https:' : 'http:',
         hostname,
         port,
         pathname: example,
