@@ -595,7 +595,8 @@
             transitionChangeInProgress,
         visibility,
         'has-action-animation': Boolean(actionAnimationTransition),
-        'parent-flex': layoutParams.parentContainerOrientation || undefined
+        'parent-flex': layoutParams.parentContainerOrientation || undefined,
+        'parent-grid': Boolean(layoutParams.gridArea) || undefined
     };
 
     $: jsonTransform = rootCtx.getDerivedFromVars(json.transform);
