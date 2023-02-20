@@ -25,6 +25,8 @@ type FuncMatchError = {
     type: 'many';
     expected: number;
     found: number;
+} | {
+    type: 'missing';
 };
 
 // no args
@@ -142,7 +144,9 @@ function matchFuncArgs(func: Func, args: EvalValue[]): {
 export function findBestMatchedFunc(funcName: string, args: EvalValue[]): Func | FuncMatchError {
     const list = funcs.get(funcName);
     if (!list) {
-        throw new Error('Missing function');
+        return {
+            type: 'missing'
+        };
     }
 
     let firstError: FuncMatchError | null = null;

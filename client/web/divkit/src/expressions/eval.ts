@@ -351,9 +351,6 @@ function argsToStr(args: EvalValue[]): string {
 
 function evalCallExpression(vars: VariablesMap, expr: CallExpression): EvalValue {
     const funcName = expr.callee.name;
-    if (!funcs.has(funcName)) {
-        throw new Error(`Unknown function name: ${funcName}.`);
-    }
 
     let func: Func | undefined;
 
@@ -362,7 +359,7 @@ function evalCallExpression(vars: VariablesMap, expr: CallExpression): EvalValue
 
     if (!funcByArgs.has(funcKey)) {
         const findRes = findBestMatchedFunc(funcName, args);
-        if ('expected' in findRes) {
+        if ('expected' in findRes || 'type' in findRes && findRes.type === 'missing') {
             const argsType = args.map(arg => typeToString(arg.type)).join(', ');
             const prefix = `${funcName}(${argsToStr(args)})`;
 
@@ -370,8 +367,10 @@ function evalCallExpression(vars: VariablesMap, expr: CallExpression): EvalValue
                 evalError(prefix, `Non empty argument list is required for function '${funcName}'.`);
             } else if (findRes.type === 'many') {
                 evalError(prefix, `Function '${funcName}' has no matching override for given argument types: ${argsType}.`);
-            } else {
+            } else if (findRes.type === 'few' || findRes.type === 'mismatch') {
                 evalError(prefix, `Function '${funcName}' has no matching override for given argument types: ${argsType}.`);
+            } else {
+                evalError(prefix, `Unknown function name: ${funcName}.`);
             }
         }
         func = findRes;
