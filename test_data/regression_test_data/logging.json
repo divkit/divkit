@@ -41,7 +41,7 @@
   },
   "card": {
     "log_id": "simple_tap",
-    "states": [
+      "states": [
       {
         "state_id": 0,
         "div": {
@@ -51,26 +51,32 @@
           "text": "Test button",
           "actions": [
             {
-              "log_id": "first_tap"
+              "log_id": "first_tap",
+              "url": "empty://"
             },
             {
-              "log_id": "second_tap"
+              "log_id": "second_tap",
+              "url": "empty://"
             }
-          ],
+                ],
           "longtap_actions": [
             {
-              "log_id": "first_longtap"
+              "log_id": "first_longtap",
+              "url": "empty://"
             },
             {
-              "log_id": "second_longtap"
+              "log_id": "second_longtap",
+              "url": "empty://"
             }
-          ],
+               ],
           "doubletap_actions": [
             {
-              "log_id": "first_doubletap"
+              "log_id": "first_doubletap",
+              "url": "empty://"
             },
             {
-              "log_id": "second_doubletap"
+              "log_id": "second_doubletap",
+              "url": "empty://"
             }
           ]
         }
