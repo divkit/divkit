@@ -67,17 +67,17 @@
               "items": [
                 {
                   "type": "image_block",
-                  "image_url": "https://ya.ru"
+                  "image_url": "empty://"
                 },
                 {
                   "type": "image_block",
                   "placeholder_color": "#8533FF",
-                  "image_url": "https://ya.ru"
+                  "image_url": "empty://"
                 },
                 {
                   "type": "image_block",
                   "preview": "/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/wAALCAASACABAREA/8QAFwABAAMAAAAAAAAAAAAAAAAABQMEB//EACcQAAEDAwMBCQAAAAAAAAAAAAEAAgMEBiEREzFRBRIWIjJhcYGR/9oACAEBAAA/ANprbho426tc36Q1ZeEIicA8IuO8YWTZkb+pbxvSbIG43jqsAmvKskYQHnjqjZbnrCHd6RG1dx1L/RJke6qG5u0AMyO0UdKTnKirT5D8IyiJMztcq1OBsHA4X//Z",
-                  "image_url": "https://ya.ru"
+                  "image_url": "empty://"
                 }
               ]
             }
