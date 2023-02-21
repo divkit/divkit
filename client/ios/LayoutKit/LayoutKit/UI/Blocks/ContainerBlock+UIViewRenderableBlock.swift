@@ -147,7 +147,8 @@ private final class ContainerBlockView: UIView, BlockViewProtocol, VisibleBounds
       size: bounds.size
     )
 
-    if model.children != layout.childrenWithSeparators {
+    if model.children != layout.childrenWithSeparators ||
+      blockViews.count != layout.blockFrames.count {
       blockViews = blockViews.reused(
         with: layout.childrenWithSeparators.map(\.content),
         attachTo: self,
