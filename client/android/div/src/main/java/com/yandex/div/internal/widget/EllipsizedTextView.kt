@@ -21,10 +21,8 @@ open class EllipsizedTextView @JvmOverloads constructor(
 
     var ellipsis: CharSequence = DEFAULT_ELLIPSIS
         set(value) {
-            if (field != value) {
-                field = value
-                onEllipsisChanged(value)
-            }
+            onEllipsisChanged(value)
+            field = value
         }
 
     /**

@@ -1,7 +1,8 @@
 {
     "description": "Long text trimmed with an ellipsis and an image.",
     "platforms": [
-        "ios"
+        "ios",
+        "android"
     ],
     "templates": {},
     "card": {
