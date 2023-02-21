@@ -184,7 +184,7 @@ public final class ContainerBlock: BlockWithLayout {
       }
     }
 
-    if widthTrait == .intrinsic {
+    if case .intrinsic = widthTrait {
       switch layoutDirection {
       case .horizontal:
         guard (children.map { $0.content }.allHorizontallyNonResizable) else {
@@ -203,7 +203,7 @@ public final class ContainerBlock: BlockWithLayout {
       }
     }
 
-    if heightTrait == .intrinsic {
+    if case .intrinsic = heightTrait {
       switch layoutDirection {
       case .horizontal:
         break // this is currently a valid case, see `.max() ?? 0` on line 163
@@ -301,7 +301,7 @@ public final class ContainerBlock: BlockWithLayout {
       return value
     }
 
-    guard widthTrait == .intrinsic else {
+    guard case .intrinsic = widthTrait else {
       fatalError()
     }
 
@@ -343,7 +343,7 @@ public final class ContainerBlock: BlockWithLayout {
       return value
     }
 
-    guard widthTrait == .intrinsic else {
+    guard case .intrinsic = widthTrait else {
       fatalError()
     }
 
@@ -369,15 +369,14 @@ public final class ContainerBlock: BlockWithLayout {
   }
 
   public func heightOfVerticallyNonResizableBlock(forWidth width: CGFloat) -> CGFloat {
-    if case let .fixed(value) = heightTrait {
+    switch heightTrait {
+    case let .fixed(value):
       return value
-    }
-
-    guard heightTrait == .intrinsic else {
+    case .intrinsic:
+      return intrinsicContentHeight(forWidth: width)
+    case .weighted:
       fatalError()
     }
-
-    return intrinsicContentHeight(forWidth: width)
   }
 
   public var weightOfVerticallyResizableBlock: LayoutTrait.Weight {

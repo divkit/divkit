@@ -82,7 +82,7 @@ public final class TabsBlock: BlockWithTraits {
   private func checkConstraints() throws {
     let blocks = model.contentsModel.pages.map { $0.block }
 
-    if widthTrait == .intrinsic, !blocks.hasHorizontallyNonResizable {
+    if case .intrinsic = widthTrait, !blocks.hasHorizontallyNonResizable {
       throw Error.unsupportedWidthTrait
     }
   }
