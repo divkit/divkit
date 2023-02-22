@@ -13,6 +13,7 @@ import { evalError, roundInteger, typeToString, valToInternal, valToPreview, val
 import { BOOLEAN, DATETIME, INTEGER, NUMBER, STRING } from './const';
 import { register } from './funcs';
 import { Variable as VariableInstance, variableToValue } from './variable';
+import { walk } from './walk';
 
 export type VariablesMap = Map<string, VariableInstance>;
 
@@ -398,7 +399,7 @@ function evalVariable(vars: VariablesMap, expr: Variable): EvalValue {
         return variableToValue(variable);
     }
 
-    throw new Error(`Variable '${varName}' has value null`);
+    throw new Error(`Variable '${varName}' is missing.`);
 }
 
 const EVAL_MAP = {
@@ -422,8 +423,25 @@ export function evalAny(vars: VariablesMap, expr: Node): EvalValue {
     throw new Error('Unsupported expression');
 }
 
+function checkVariables(vars: VariablesMap, expr: Node): void {
+    let unknownVariableName = '';
+
+    walk(expr, {
+        Variable(node) {
+            if (!unknownVariableName && !vars.has(node.id.name)) {
+                unknownVariableName = node.id.name;
+            }
+        }
+    });
+
+    if (unknownVariableName) {
+        throw new Error(`Variable '${unknownVariableName}' is missing.`);
+    }
+}
+
 export function evalExpression(vars: VariablesMap, expr: Node): EvalResult {
     try {
+        checkVariables(vars, expr);
         return evalAny(vars, expr);
     } catch (err: any) {
         return {

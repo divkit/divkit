@@ -38,6 +38,18 @@
         "web",
         "android"
       ]
+    },
+    {
+      "name": "true || abc => error",
+      "expression": "@{true || abc}",
+      "expected": {
+        "type": "error",
+        "value": "Variable 'abc' is missing."
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
     }
   ]
 }
