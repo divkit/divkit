@@ -172,7 +172,7 @@ class Div2View private constructor(
             .getOrCreate(dataTag, data, expressionResolver)
 
         if (divTimerEventDispatcher != newDivTimerEventDispatcher) {
-            divTimerEventDispatcher?.onDetach()
+            divTimerEventDispatcher?.onDetach(this)
         }
 
         divTimerEventDispatcher = newDivTimerEventDispatcher
@@ -393,7 +393,7 @@ class Div2View private constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         tryLogVisibility()
-        divTimerEventDispatcher?.onDetach()
+        divTimerEventDispatcher?.onDetach(this)
     }
 
     override fun addLoadReference(loadReference: LoadReference, targetView: View) {
