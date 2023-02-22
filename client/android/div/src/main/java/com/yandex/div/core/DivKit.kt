@@ -9,6 +9,7 @@ import com.yandex.div.core.dagger.DaggerDivKitComponent
 import com.yandex.div.core.dagger.DivKitComponent
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.histogram.DivParsingHistogramReporter
+import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.internal.Assert
 import com.yandex.div.internal.Log
 
@@ -28,6 +29,9 @@ class DivKit private constructor(
 
     val parsingHistogramReporter: DivParsingHistogramReporter
         get() = component.parsingHistogramReporter
+
+    val histogramReporterDelegate: HistogramReporterDelegate
+        get() = component.histogramReporterDelegate
 
     companion object {
 

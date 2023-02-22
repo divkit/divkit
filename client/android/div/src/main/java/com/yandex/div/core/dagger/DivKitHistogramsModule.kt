@@ -6,12 +6,14 @@ import com.yandex.div.histogram.HistogramColdTypeChecker
 import com.yandex.div.histogram.HistogramConfiguration
 import com.yandex.div.histogram.HistogramRecorder
 import com.yandex.div.histogram.reporter.HistogramReporter
+import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import dagger.Module
 import dagger.Provides
 import dagger.internal.DoubleCheck
 import java.util.concurrent.Executor
 import java.util.concurrent.ExecutorService
 import javax.inject.Provider
+import javax.inject.Scope
 import javax.inject.Singleton
 
 @Module
@@ -21,8 +23,7 @@ internal object DivKitHistogramsModule {
     @Singleton
     fun provideDivParsingHistogramReporter(
         histogramConfiguration: HistogramConfiguration,
-        histogramRecorderProvider: Provider<HistogramRecorder>,
-        histogramColdTypeCheckerProvider: Provider<HistogramColdTypeChecker>,
+        histogramReporterDelegate: Provider<HistogramReporterDelegate>,
         executorService: Provider<ExecutorService>
     ): DivParsingHistogramReporter {
         return when {
@@ -30,9 +31,7 @@ internal object DivKitHistogramsModule {
                 val executorProvider =
                     provideCalculateSizeExecutor(histogramConfiguration, executorService)
                 val histogramReporterProvider = provideHistogramReporter(
-                    histogramConfiguration,
-                    histogramRecorderProvider,
-                    histogramColdTypeCheckerProvider
+                    histogramReporterDelegate.get()
                 )
                 DivParsingHistogramReporterImpl(
                     histogramReporter = histogramReporterProvider::get,
@@ -43,6 +42,25 @@ internal object DivKitHistogramsModule {
             else -> DivParsingHistogramReporter.DEFAULT
         }
     }
+
+    @Provides
+    fun provideHistogramReporterDelegate(
+        histogramConfiguration: HistogramConfiguration,
+        histogramRecorderProvider: Provider<HistogramRecorder>,
+        histogramColdTypeCheckerProvider: Provider<HistogramColdTypeChecker>
+    ): HistogramReporterDelegate {
+        return when {
+            histogramConfiguration.isReportingEnabled ->
+                createHistogramReporterDelegate(
+                    histogramConfiguration,
+                    histogramRecorderProvider,
+                    histogramColdTypeCheckerProvider
+                )
+            else -> HistogramReporterDelegate.NoOp
+        }
+    }
+
+
 
     @Suppress("UNCHECKED_CAST")
     private fun provideCalculateSizeExecutor(
@@ -58,15 +76,11 @@ internal object DivKitHistogramsModule {
     }
 
     private fun provideHistogramReporter(
-        histogramConfiguration: HistogramConfiguration,
-        histogramRecorderProvider: Provider<HistogramRecorder>,
-        histogramColdTypeCheckerProvider: Provider<HistogramColdTypeChecker>
+        histogramReporterDelegate: HistogramReporterDelegate,
     ): Provider<HistogramReporter> {
         return DoubleCheck.provider(Provider {
             createHistogramReporter(
-                histogramConfiguration,
-                histogramRecorderProvider,
-                histogramColdTypeCheckerProvider
+                histogramReporterDelegate
             )
         })
     }

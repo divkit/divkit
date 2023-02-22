@@ -17,24 +17,24 @@ internal object DivHistogramsModule {
     @Provides
     @DivScope
     fun provideHistogramReporter(
-        histogramConfiguration: HistogramConfiguration,
-        histogramRecorderProvider: Provider<HistogramRecorder>,
-        histogramColdTypeChecker: Provider<HistogramColdTypeChecker>
+        histogramReporterDelegate: HistogramReporterDelegate
     ): HistogramReporter {
-        return createHistogramReporter(
-            histogramConfiguration,
-            histogramRecorderProvider,
-            histogramColdTypeChecker
-        )
+        return createHistogramReporter(histogramReporterDelegate)
     }
 }
 
 internal fun createHistogramReporter(
+    histogramReporterDelegate: HistogramReporterDelegate
+): HistogramReporter {
+    return HistogramReporter(histogramReporterDelegate)
+}
+
+internal fun createHistogramReporterDelegate(
     histogramConfiguration: HistogramConfiguration,
     histogramRecorderProvider: Provider<HistogramRecorder>,
     histogramColdTypeChecker: Provider<HistogramColdTypeChecker>
-): HistogramReporter {
-    val delegate = if (!histogramConfiguration.isReportingEnabled) {
+): HistogramReporterDelegate {
+    return if (!histogramConfiguration.isReportingEnabled) {
         HistogramReporterDelegate.NoOp
     } else {
         val histogramCallTypeProvider = HistogramCallTypeProvider(histogramColdTypeChecker::get)
@@ -45,5 +45,4 @@ internal fun createHistogramReporter(
             histogramConfiguration.taskExecutorProvider
         )
     }
-    return HistogramReporter(delegate)
 }

@@ -6,6 +6,7 @@ import com.yandex.div.core.DivKitConfiguration
 import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.HistogramRecordConfiguration
 import com.yandex.div.histogram.HistogramRecorder
+import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import dagger.BindsInstance
 import dagger.Component
 import java.util.concurrent.ExecutorService
@@ -25,6 +26,8 @@ interface DivKitComponent {
     val histogramRecordConfiguration: HistogramRecordConfiguration
 
     val parsingHistogramReporter: DivParsingHistogramReporter
+
+    val histogramReporterDelegate: HistogramReporterDelegate
 
     fun div2Component(): Div2Component.Builder
 
