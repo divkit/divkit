@@ -20,6 +20,7 @@ class FocusActionsTest {
     @Test
     fun blurActionHandledWithoutFocusActions() {
         divFocus {
+            clickOnTopInput()
             clickOnMiddleInput()
             assert { blurOnTopHandled() }
         }

@@ -13,11 +13,6 @@
         "value": "initial_text"
       },
       {
-        "name": "bottom_input",
-        "type": "string",
-        "value": "initial_text_second"
-      },
-      {
         "name": "highlight_color",
         "type": "color",
         "value": "#CCCCFF"
@@ -33,12 +28,7 @@
             {
               "id": "top_input",
               "type": "test_input",
-              "text_variable": "top_input"
-            },
-            {
-              "id": "bottom_input",
-              "type": "test_input",
-              "text_variable": "bottom_input",
+              "text_variable": "top_input",
               "highlight_color": "@{highlight_color}",
               "select_all_on_focus": 1
             },

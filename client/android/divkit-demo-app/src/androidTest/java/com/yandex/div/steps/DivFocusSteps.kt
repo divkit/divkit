@@ -19,6 +19,10 @@ internal fun divFocus(f: DivFocusSteps.() -> Unit) = f(DivFocusSteps())
 @StepsDsl
 internal class DivFocusSteps {
 
+    fun clickOnTopInput(): Unit = step("Click on top input") {
+        clickOnView(topInputMatcher)
+    }
+
     fun clickOnMiddleInput(): Unit = step("Click on middle input") {
         clickOnView(middleInputMatcher)
     }

@@ -11,11 +11,6 @@
         "name": "top_input",
         "type": "string",
         "value": ""
-      },
-      {
-        "name": "bottom_input",
-        "type": "string",
-        "value": ""
       }
     ],
     "states": [
@@ -29,11 +24,6 @@
               "id": "top_input",
               "type": "test_input",
               "text_variable": "top_input"
-            },
-            {
-              "id": "bottom_input",
-              "type": "test_input",
-              "text_variable": "bottom_input"
             }
           ]
         }

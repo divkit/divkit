@@ -30,13 +30,13 @@ class Div2FocusScreenshotTest(case: String, escapedCase: String) {
     val rule = screenshotRule(name = caseName, casePath = case) { activityRule }
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = "top_focused")
+    @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = "not_focused")
     fun divScreenshotTopFocused() = Unit
 
     @Test
-    @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = "bottom_focused")
+    @Screenshot(viewId = R.id.morda_screenshot_div, relativePath = "focused")
     fun divScreenshotBottomFocused() {
-        divFocus { clickOnBottomInput() }
+        divFocus { clickOnTopInput() }
     }
 
     companion object {
