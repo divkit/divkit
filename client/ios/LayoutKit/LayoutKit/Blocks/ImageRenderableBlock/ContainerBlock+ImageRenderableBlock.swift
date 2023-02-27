@@ -13,6 +13,7 @@ extension ContainerBlock: ImageRenderableBlock {
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
+      crossAlignment: crossAlignment,
       size: rect.size
     )
 

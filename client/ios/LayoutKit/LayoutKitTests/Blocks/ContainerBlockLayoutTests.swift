@@ -21,6 +21,7 @@ extension ContainerBlockLayout {
       layoutDirection: layoutDirection,
       layoutMode: layoutMode,
       axialAlignment: axialAlignment,
+      crossAlignment: crossAlignment,
       size: size
     )
   }

@@ -79,6 +79,7 @@ extension ContainerBlock: CustomDebugStringConvertible {
     var description = """
     \(layoutDirection) Container \(widthTrait) x \(heightTrait) {
       Axial alignment: \(axialAlignment)
+      Cross alignment: \(crossAlignment)
     """
     if let animation = contentAnimation {
       description += "\n  Animation: \(animation)"

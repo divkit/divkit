@@ -139,7 +139,7 @@ extension DivContainer: DivBlockModeling {
     if let aspectRatio = aspectRatio {
       return AspectBlock(content: layeredBlock, aspectRatio: aspectRatio)
     }
-    
+
     return layeredBlock
   }
 
@@ -151,14 +151,14 @@ extension DivContainer: DivBlockModeling {
     let expressionResolver = context.expressionResolver
     let layoutDirection = orientation.layoutDirection
     let axialAlignment: Alignment
-    let defaultCrossAlignment: ContainerBlock.CrossAlignment
+    let crossAlignment: ContainerBlock.CrossAlignment
     switch layoutDirection {
     case .horizontal:
       axialAlignment = resolveContentAlignmentHorizontal(expressionResolver).alignment
-      defaultCrossAlignment = resolveContentAlignmentVertical(expressionResolver).crossAlignment
+      crossAlignment = resolveContentAlignmentVertical(expressionResolver).crossAlignment
     case .vertical:
       axialAlignment = resolveContentAlignmentVertical(expressionResolver).alignment
-      defaultCrossAlignment = resolveContentAlignmentHorizontal(expressionResolver).crossAlignment
+      crossAlignment = resolveContentAlignmentHorizontal(expressionResolver).crossAlignment
     }
 
     let fallbackWidth = getFallbackWidth(
@@ -194,6 +194,14 @@ extension DivContainer: DivBlockModeling {
         .isHorizontallyMatchParent
     }
 
+    let defaultCrossAlignment: ContainerBlock.CrossAlignment
+    switch layoutMode {
+    case .noWrap:
+      defaultCrossAlignment = crossAlignment
+    case .wrap:
+      defaultCrossAlignment = ContainerBlock.CrossAlignment.leading
+    }
+
     let children = try filtredItems.makeBlocks(
       context: context,
       overridenWidth: fallbackWidth,
@@ -220,13 +228,14 @@ extension DivContainer: DivBlockModeling {
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeHeightTrait(context: context, aspectRatio: aspectRatio),
       axialAlignment: axialAlignment,
+      crossAlignment: crossAlignment,
       children: children,
       separator: makeSeparator(with: context),
       lineSeparator: makeLineSeparator(with: context)
     )
-    
+
     if let aspectRatio = aspectRatio {
-      if (orientation == .vertical && layoutMode == .wrap) {
+      if orientation == .vertical && layoutMode == .wrap {
         context.addError(
           level: .warning,
           message: "Aspect height is not supported for vertical container with wrap layout mode"
@@ -235,7 +244,7 @@ extension DivContainer: DivBlockModeling {
         return AspectBlock(content: containerBlock, aspectRatio: aspectRatio)
       }
     }
-    
+
     return containerBlock
   }
 
@@ -247,7 +256,10 @@ extension DivContainer: DivBlockModeling {
     return nil
   }
 
-  private func makeHeightTrait(context: DivBlockModelingContext, aspectRatio: CGFloat?) -> LayoutTrait {
+  private func makeHeightTrait(
+    context: DivBlockModelingContext,
+    aspectRatio: CGFloat?
+  ) -> LayoutTrait {
     if aspectRatio != nil {
       return .resizable
     }

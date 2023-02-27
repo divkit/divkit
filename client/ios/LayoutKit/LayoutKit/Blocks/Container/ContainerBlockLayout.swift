@@ -34,6 +34,7 @@ struct ContainerBlockLayout {
   let layoutDirection: ContainerBlock.LayoutDirection
   let layoutMode: ContainerBlock.LayoutMode
   let axialAlignment: Alignment
+  let crossAlignment: ContainerBlock.CrossAlignment
   let size: CGSize
 
   public init(
@@ -44,6 +45,7 @@ struct ContainerBlockLayout {
     layoutDirection: ContainerBlock.LayoutDirection,
     layoutMode: ContainerBlock.LayoutMode,
     axialAlignment: Alignment,
+    crossAlignment: ContainerBlock.CrossAlignment,
     size: CGSize
   ) {
     precondition(gaps.count == children.count + 1)
@@ -51,6 +53,7 @@ struct ContainerBlockLayout {
     self.layoutDirection = layoutDirection
     self.layoutMode = layoutMode
     self.axialAlignment = axialAlignment
+    self.crossAlignment = crossAlignment
     self.size = size
     (self.childrenWithSeparators, self.blockFrames, self.ascent) = calculateBlockFrames(
       children: children,
@@ -230,32 +233,25 @@ struct ContainerBlockLayout {
       layoutDirection: layoutDirection
     )
 
-    var currentLineOffset = 0.0
+    let contentCrossSize = wrapLayoutGroups.groups.map {
+      getGroupHeight(group: $0, lineAscent: getLineAscent(group: $0))
+    }.reduce(0, +)
+
+    var currentLineOffset = crossAlignment.offset(
+      forAvailableSpace: size[keyPath: transferDirectionKeyPath],
+      contentSize: contentCrossSize
+    )
+    if currentLineOffset < 0 {
+      currentLineOffset = 0
+    }
+
     wrapLayoutGroups.groups.forEach {
-      var lineAscent: CGFloat?
-      if layoutDirection == .horizontal {
-        $0.forEach {
-          lineAscent = getMaxAscent(
-            current: lineAscent, child: $0.child, childSize: $0.childSize
-          )
-        }
-        if containerAscent == nil {
-          containerAscent = lineAscent
-        }
+      let lineAscent = getLineAscent(group: $0)
+      if containerAscent == nil {
+        containerAscent = lineAscent
       }
 
-      let groupHeight: CGFloat
-      switch layoutDirection {
-      case .horizontal:
-        groupHeight = $0
-          .map { item in item.childSize.height + item.child.baselineOffset(
-            ascent: lineAscent,
-            width: item.childSize.width
-          ) }
-          .max() ?? 0
-      case .vertical:
-        groupHeight = $0.map { item in item.childSize.width }.max() ?? 0
-      }
+      let groupHeight = getGroupHeight(group: $0, lineAscent: lineAscent)
 
       let contentLength = $0.map(\.childSize).map(to: buildingDirectionKeyPath).reduce(0, +)
 
@@ -291,6 +287,36 @@ struct ContainerBlockLayout {
       currentLineOffset += groupHeight
     }
     return (wrapLayoutGroups.childrenWithSeparators, frames, containerAscent)
+  }
+
+  private func getLineAscent(group: [WrapLayoutGroups.ChildParametes]) -> CGFloat? {
+    guard layoutDirection == .horizontal else {
+      return nil
+    }
+    var lineAscent: CGFloat?
+    group.forEach {
+      lineAscent = getMaxAscent(
+        current: lineAscent, child: $0.child, childSize: $0.childSize
+      )
+    }
+    return lineAscent
+  }
+
+  private func getGroupHeight(
+    group: [WrapLayoutGroups.ChildParametes],
+    lineAscent: CGFloat?
+  ) -> CGFloat {
+    switch layoutDirection {
+    case .horizontal:
+      return group
+        .map { item in item.childSize.height + item.child.baselineOffset(
+          ascent: lineAscent,
+          width: item.childSize.width
+        ) }
+        .max() ?? 0
+    case .vertical:
+      return group.map { item in item.childSize.width }.max() ?? 0
+    }
   }
 
   public var leftInset: CGFloat {
