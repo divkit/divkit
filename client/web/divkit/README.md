@@ -340,7 +340,7 @@ instance.setTheme('dark');
 #### Variables
 
 ```js
-import {createVariable, createGlobalVariablesController, render} from '@divkit/divkit';
+import {createVariable, createGlobalVariablesController, render} from '@divkitframework/divkit';
 
 // Custom variable outside of DivJson
 const variable = createVariable('name', 'string', 'val');
