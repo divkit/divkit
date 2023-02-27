@@ -16,8 +16,7 @@
           "second"
         ]
       },
-      "minItems": 1,
-      "clientMinItems": 1
+      "minItems": 1
     }
   },
   "required": [

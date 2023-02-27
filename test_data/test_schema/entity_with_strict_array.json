@@ -13,7 +13,6 @@
         "$ref": "entity.json"
       },
       "minItems": 1,
-      "clientMinItems": 1,
       "strictParsing": true
     }
   },

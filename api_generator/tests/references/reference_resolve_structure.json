@@ -111,8 +111,7 @@
             "items": {
               "$ref": "entity.json"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -140,8 +139,7 @@
                 "second"
               ]
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -165,8 +163,7 @@
             "items": {
               "$ref": "common.json#/non_empty_string"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -207,8 +204,7 @@
             "items": {
               "$ref": "#/definitions/item"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -232,8 +228,7 @@
             "items": {
               "$ref": "common.json#/color"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -443,7 +438,6 @@
               "$ref": "entity.json"
             },
             "minItems": 1,
-            "clientMinItems": 1,
             "strictParsing": true
           }
         },
@@ -468,8 +462,7 @@
             "items": {
               "type": "string"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [

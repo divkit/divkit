@@ -171,8 +171,7 @@
               ],
               "type": "$defined_entity"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -200,8 +199,7 @@
                 "second"
               ]
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -230,8 +228,7 @@
               "minLength": 1,
               "clientMinLength": 1
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -280,8 +277,7 @@
               ],
               "$typename": "item"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -309,8 +305,7 @@
               "type": "string",
               "format": "color"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [
@@ -544,7 +539,6 @@
               "type": "$defined_entity"
             },
             "minItems": 1,
-            "clientMinItems": 1,
             "strictParsing": true
           }
         },
@@ -569,8 +563,7 @@
             "items": {
               "type": "string"
             },
-            "minItems": 1,
-            "clientMinItems": 1
+            "minItems": 1
           }
         },
         "required": [

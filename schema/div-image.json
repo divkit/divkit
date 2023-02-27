@@ -58,7 +58,6 @@
             "$ref": "div-filter.json"
           },
           "minItems": 1,
-          "clientMinItems": 1,
           "$description": "translations.json#/div_filter",
           "platforms": [
             "android",

@@ -8,7 +8,6 @@
         "$ref": "common.json#/color"
       },
       "minItems": 2,
-      "clientMinItems": 2,
       "$description": "translations.json#/div_gradient_colors"
     },
     "radius": {

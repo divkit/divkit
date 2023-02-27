@@ -89,7 +89,6 @@
             "$ref": "div.json"
           },
           "minItems": 1,
-          "clientMinItems": 1,
           "$description": "translations.json#/div_container_items"
         },
         "aspect": {

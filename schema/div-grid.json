@@ -27,7 +27,6 @@
             "$ref": "div.json"
           },
           "minItems": 1,
-          "clientMinItems": 1,
           "strictParsing": true,
           "$description": "translations.json#/div_grid_items"
         },

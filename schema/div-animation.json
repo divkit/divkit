@@ -49,7 +49,6 @@
         "$ref": "div-animation.json"
       },
       "minItems": 1,
-      "clientMinItems": 1,
       "$description": "translations.json#/div_animation_items"
     }
   },

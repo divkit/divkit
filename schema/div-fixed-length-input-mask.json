@@ -40,7 +40,6 @@
         ]
       },
       "minItems": 1,
-      "clientMinItems": 1,
       "$description": "translations.json#/div_input_mask_fixed_length_pattern_elements"
     },
     "always_visible": {

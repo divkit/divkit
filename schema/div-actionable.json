@@ -10,7 +10,6 @@
         "$ref": "div-action.json"
       },
       "minItems": 1,
-      "clientMinItems": 1,
       "$description": "translations.json#/div_actionable_actions"
     },
     "longtap_actions": {
@@ -19,7 +18,6 @@
         "$ref": "div-action.json"
       },
       "minItems": 1,
-      "clientMinItems": 1,
       "$description": "translations.json#/div_actionable_longtap_actions"
     },
     "doubletap_actions": {
@@ -28,7 +26,6 @@
         "$ref": "div-action.json"
       },
       "minItems": 1,
-      "clientMinItems": 1,
       "$description": "translations.json#/div_actionable_doubletap_actions"
     },
     "action_animation": {

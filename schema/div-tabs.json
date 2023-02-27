@@ -198,7 +198,6 @@
             "$ref": "#/definitions/item"
           },
           "minItems": 1,
-          "clientMinItems": 1,
           "$description": "translations.json#/div_tabs_items"
         },
         "dynamic_height": {

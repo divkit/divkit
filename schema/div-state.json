@@ -40,7 +40,6 @@
             "$ref": "div-action.json"
           },
           "minItems": 1,
-          "clientMinItems": 1,
           "$description": "translations.json#/div_state_div_state_swipe_out_actions",
           "platforms": [
             "android"
@@ -71,7 +70,6 @@
             "$ref": "#/definitions/div_state"
           },
           "minItems": 1,
-          "clientMinItems": 1,
           "$description": "translations.json#/div_state_states"
         },
         "div_id": {

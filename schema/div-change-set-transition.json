@@ -14,7 +14,6 @@
         "$ref": "div-change-transition.json"
       },
       "minItems": 1,
-      "clientMinItems": 1,
       "$description": "translations.json#/div_change_set_transition_items"
     }
   },

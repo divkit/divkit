@@ -20,7 +20,6 @@
             "$ref": "div.json"
           },
           "minItems": 1,
-          "clientMinItems": 1,
           "$description": "translations.json#/div_patch_change_items"
         }
       },
@@ -44,7 +43,6 @@
         "$ref": "#/definitions/change"
       },
       "minItems": 1,
-      "clientMinItems": 1,
       "$description": "translations.json#/div_patch_changes"
     }
   },
