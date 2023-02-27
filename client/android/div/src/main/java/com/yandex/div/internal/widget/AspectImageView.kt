@@ -5,11 +5,12 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.util.AttributeSet
 import android.view.Gravity
-import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import com.yandex.div.R
+import com.yandex.div.core.widget.AspectView
+import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.core.widget.appearanceAffecting
 import com.yandex.div.core.widget.dimensionAffecting
 import kotlin.math.max
@@ -20,12 +21,12 @@ open class AspectImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatImageView(context, attrs, defStyleAttr) {
+) : AppCompatImageView(context, attrs, defStyleAttr), AspectView {
 
     var gravity by appearanceAffecting(Gravity.NO_GRAVITY)
 
-    var aspectRatio by dimensionAffecting(ASPECT_RATIO_OF_IMAGE) { value ->
-        value.coerceAtLeast(ASPECT_RATIO_OF_IMAGE)
+    final override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { value ->
+        value.coerceAtLeast(DEFAULT_ASPECT_RATIO)
     }
 
     var imageScale by dimensionAffecting(Scale.NO_SCALE)
@@ -41,7 +42,7 @@ open class AspectImageView @JvmOverloads constructor(
             val array = context.obtainStyledAttributes(attrs, R.styleable.AspectImageView, defStyleAttr, 0)
             try {
                 gravity = array.getInt(R.styleable.AspectImageView_android_gravity, Gravity.NO_GRAVITY)
-                aspectRatio = array.getFloat(R.styleable.AspectImageView_aspectRatio, ASPECT_RATIO_OF_IMAGE)
+                aspectRatio = array.getFloat(R.styleable.AspectImageView_aspectRatio, DEFAULT_ASPECT_RATIO)
                 imageScale = Scale.values()[array.getInteger(R.styleable.AspectImageView_imageScale, 0)]
             } finally {
                 array.recycle()
@@ -58,11 +59,11 @@ open class AspectImageView @JvmOverloads constructor(
 
     private fun applyAspectRatio(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val aspectRatio = aspectRatio
-        if (aspectRatio == ASPECT_RATIO_OF_IMAGE) {
+        if (aspectRatio == DEFAULT_ASPECT_RATIO) {
             return
         }
 
-        val widthMode = View.MeasureSpec.getMode(widthMeasureSpec)
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
         val heightMode = MeasureSpec.getMode(heightMeasureSpec)
         val resizeWidth = canResizeWidth(widthMeasureSpec)
         val resizeHeight = canResizeHeight(heightMeasureSpec)
@@ -156,9 +157,5 @@ open class AspectImageView @JvmOverloads constructor(
         NO_SCALE,
         FIT,
         FILL
-    }
-
-    companion object {
-        const val ASPECT_RATIO_OF_IMAGE = 0.0f
     }
 }

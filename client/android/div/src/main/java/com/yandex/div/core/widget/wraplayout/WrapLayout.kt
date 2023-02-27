@@ -8,13 +8,15 @@ import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.annotation.Px
 import androidx.core.view.children
+import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.DivLayoutParams
 import com.yandex.div.core.widget.ShowSeparatorsMode
+import com.yandex.div.core.widget.dimensionAffecting
 import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
 import kotlin.math.min
 
-internal open class WrapLayout(context: Context) : DivViewGroup(context) {
+internal open class WrapLayout(context: Context) : DivViewGroup(context), AspectView {
 
     @WrapDirection
     var wrapDirection: Int = WrapDirection.ROW
@@ -110,6 +112,10 @@ internal open class WrapLayout(context: Context) : DivViewGroup(context) {
     private var lineSeparatorLength = 0
 
     private var tempSumCrossSize = 0
+
+    override var aspectRatio by dimensionAffecting(AspectView.DEFAULT_ASPECT_RATIO) { value ->
+        value.coerceAtLeast(AspectView.DEFAULT_ASPECT_RATIO)
+    }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         lines.clear()

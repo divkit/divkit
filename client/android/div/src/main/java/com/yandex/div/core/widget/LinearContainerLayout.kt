@@ -27,7 +27,7 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : DivViewGroup(context, attrs, defStyleAttr) {
+) : DivViewGroup(context, attrs, defStyleAttr), AspectView {
 
     /**
      * Maximally ascented child that is baseline-aligned.
@@ -70,6 +70,10 @@ internal open class LinearContainerLayout @JvmOverloads constructor(
         }
 
     private var totalLength = 0
+
+    override var aspectRatio by dimensionAffecting(AspectView.DEFAULT_ASPECT_RATIO) { value ->
+        value.coerceAtLeast(AspectView.DEFAULT_ASPECT_RATIO)
+    }
 
     private var dividerWidth = 0
     private var dividerHeight = 0

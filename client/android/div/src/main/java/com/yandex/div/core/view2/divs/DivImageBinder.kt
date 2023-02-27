@@ -21,7 +21,6 @@ import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
-import com.yandex.div2.DivAspect
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivFilter
 import com.yandex.div2.DivImage
@@ -62,19 +61,6 @@ internal class DivImageBinder @Inject constructor(
         )
         view.observeTint(expressionResolver, div.tintColor, div.tintMode)
         view.observeFilters(div.filters, divView, subscriber, expressionResolver)
-    }
-
-    private fun DivImageView.observeAspectRatio(resolver: ExpressionResolver, aspect: DivAspect?) {
-        if (aspect?.ratio == null) {
-            aspectRatio = AspectImageView.ASPECT_RATIO_OF_IMAGE
-            return
-        }
-
-        addSubscription(
-            aspect.ratio.observeAndGet(resolver) { ratio ->
-                aspectRatio = ratio.toFloat()
-            }
-        )
     }
 
     private fun DivImageView.observeContentAlignment(

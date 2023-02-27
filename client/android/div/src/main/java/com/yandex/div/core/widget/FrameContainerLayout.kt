@@ -6,15 +6,17 @@ import android.os.Build
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.View
+import com.yandex.div.core.widget.AspectView.Companion.DEFAULT_ASPECT_RATIO
 import com.yandex.div.internal.widget.DivViewGroup
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 internal open class FrameContainerLayout @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : DivViewGroup(context, attrs, defStyleAttr) {
+) : DivViewGroup(context, attrs, defStyleAttr), AspectView {
 
     private val foregroundPadding = Rect()
 
@@ -32,6 +34,12 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
 
     var measureAllChildren = false
 
+    private val matchParentChildren = mutableListOf<View>()
+
+    override var aspectRatio by dimensionAffecting(DEFAULT_ASPECT_RATIO) { value ->
+        value.coerceAtLeast(DEFAULT_ASPECT_RATIO)
+    }
+
     override fun setForegroundGravity(gravity: Int) {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || foregroundGravity == gravity) return
         super.setForegroundGravity(gravity)
@@ -45,16 +53,23 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         val widthMode = MeasureSpec.getMode(widthMeasureSpec)
-        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        var heightSpec = when {
+            aspectRatio == DEFAULT_ASPECT_RATIO -> heightMeasureSpec
+            widthMode != MeasureSpec.EXACTLY -> heightMeasureSpec
+            else -> MeasureSpec.makeMeasureSpec(
+                (MeasureSpec.getSize(widthMeasureSpec) / aspectRatio).roundToInt(),
+                MeasureSpec.EXACTLY
+            )
+        }
+        val heightMode = MeasureSpec.getMode(heightSpec)
         val measureMatchParentChildren = widthMode != MeasureSpec.EXACTLY || heightMode != MeasureSpec.EXACTLY
-        val matchParentChildren = mutableListOf<View>()
 
         var maxWidth = 0
         var maxHeight = 0
         var childState = 0
 
         forEach (!measureAllChildren) { child ->
-            measureChildWithMargins(child, widthMeasureSpec, 0, heightMeasureSpec, 0)
+            measureChildWithMargins(child, widthMeasureSpec, 0, heightSpec, 0)
             val lp = child.lp
             val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
             val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
@@ -81,21 +96,33 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
         val horizontalPadding = paddingLeftWithForeground + paddingRightWithForeground
         val verticalPadding = paddingTopWithForeground + paddingBottomWithForeground
         maxWidth += horizontalPadding
-        maxHeight += verticalPadding
+        var heightSize = maxHeight + verticalPadding
 
         maxWidth = maxWidth.coerceAtLeast(suggestedMinimumWidth)
-        maxHeight = maxHeight.coerceAtLeast(suggestedMinimumHeight)
+        heightSize = heightSize.coerceAtLeast(suggestedMinimumHeight)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             foreground?.run {
                 maxWidth = maxWidth.coerceAtLeast(minimumWidth)
-                maxHeight = maxHeight.coerceAtLeast(minimumHeight)
+                heightSize = heightSize.coerceAtLeast(minimumHeight)
+            }
+        }
+        
+        val widthSizeAndState = resolveSizeAndState(maxWidth, widthMeasureSpec, childState)
+        if (aspectRatio != DEFAULT_ASPECT_RATIO && widthMode != MeasureSpec.EXACTLY) {
+            heightSize = ((widthSizeAndState and MEASURED_SIZE_MASK) / aspectRatio).roundToInt()
+            heightSpec = MeasureSpec.makeMeasureSpec(heightSize, MeasureSpec.EXACTLY)
+
+            forEach(!measureAllChildren) { child ->
+                if (child.lp.height == DivLayoutParams.WRAP_CONTENT_CONSTRAINED) {
+                    measureChildWithMargins(child, widthMeasureSpec, 0, heightSpec, 0)
+                }
             }
         }
 
         setMeasuredDimension(
-            resolveSizeAndState(maxWidth, widthMeasureSpec, childState),
-            resolveSizeAndState(maxHeight, heightMeasureSpec, childState shl MEASURED_HEIGHT_STATE_SHIFT)
+            widthSizeAndState,
+            resolveSizeAndState(heightSize, heightSpec, childState shl MEASURED_HEIGHT_STATE_SHIFT)
         )
 
         if (childCount > 1) {
@@ -119,13 +146,15 @@ internal open class FrameContainerLayout @JvmOverloads constructor(
                         .coerceAtLeast(min(child.measuredHeight, maxHeight))
                     MeasureSpec.makeMeasureSpec(height.coerceAtLeast(0), MeasureSpec.EXACTLY)
                 } else {
-                    getChildMeasureSpec(heightMeasureSpec, childVerticalPadding,
+                    getChildMeasureSpec(heightSpec, childVerticalPadding,
                         lp.height, child.minimumHeight, lp.maxHeight)
                 }
 
                 child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
             }
         }
+
+        matchParentChildren.clear()
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {

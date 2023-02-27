@@ -75,6 +75,8 @@ internal class DivContainerBinder @Inject constructor(
         expressionSubscriber.closeAllSubscription()
         baseBinder.bindView(view, div, oldDiv, divView)
 
+        view.observeAspectRatio(resolver, div.aspect)
+
         view.applyDivActions(divView, div.action, div.actions, div.longtapActions, div.doubletapActions, div.actionAnimation)
 
         val areDivsReplaceable = DivComparator.areDivsReplaceable(oldDiv, div, resolver)

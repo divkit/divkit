@@ -25,6 +25,7 @@ import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
+import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.DivLayoutParams
 import com.yandex.div.internal.Log
 import com.yandex.div.internal.drawable.CircleDrawable
@@ -42,6 +43,7 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivAnimation
+import com.yandex.div2.DivAspect
 import com.yandex.div2.DivBase
 import com.yandex.div2.DivBlendMode
 import com.yandex.div2.DivBorder
@@ -216,8 +218,6 @@ internal fun View.applyMaxHeight(maxHeight: DivWrapContentSize.ConstraintSize?, 
     }
 }
 
-internal val View.maxHeight get() = (layoutParams as? DivLayoutParams)?.maxHeight ?: Int.MAX_VALUE
-
 internal fun View.applyWidth(div: DivBase, resolver: ExpressionResolver) {
     val width = div.width.toLayoutParamsSize(resources.displayMetrics, resolver, layoutParams)
     if (layoutParams.width != width) {
@@ -256,8 +256,6 @@ internal fun View.applyMaxWidth(maxWidth: DivWrapContentSize.ConstraintSize?, re
         requestLayout()
     }
 }
-
-internal val View.maxWidth get() = (layoutParams as? DivLayoutParams)?.maxWidth ?: Int.MAX_VALUE
 
 internal fun View.applyTransform(
     div: DivBase,
@@ -788,3 +786,17 @@ internal fun createCircle(
             radius = radius * multiplier
         )
     )
+
+internal fun View.observeAspectRatio(resolver: ExpressionResolver, aspect: DivAspect?) {
+    if (this !is AspectView) return
+    if (aspect?.ratio == null) {
+        aspectRatio = AspectView.DEFAULT_ASPECT_RATIO
+        return
+    }
+
+    (this as? ExpressionSubscriber)?.addSubscription(
+        aspect.ratio.observeAndGet(resolver) { ratio ->
+            aspectRatio = ratio.toFloat()
+        }
+    )
+}

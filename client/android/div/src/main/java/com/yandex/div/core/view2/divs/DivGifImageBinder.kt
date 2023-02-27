@@ -17,9 +17,10 @@ import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGifImageView
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.core.widget.AspectView
 import com.yandex.div.internal.KLog
-import com.yandex.div.json.expressions.Expression
 import com.yandex.div.internal.widget.AspectImageView
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
@@ -63,19 +64,6 @@ internal class DivGifImageBinder @Inject constructor(
         view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
         view.addSubscription(
             div.gifUrl.observeAndGet(expressionResolver) { view.applyGifImage(divView, expressionResolver, div, errorCollector) }
-        )
-    }
-
-    private fun DivGifImageView.observeAspectRatio(resolver: ExpressionResolver, aspect: DivAspect?) {
-        if (aspect?.ratio == null) {
-            aspectRatio = AspectImageView.ASPECT_RATIO_OF_IMAGE
-            return
-        }
-
-        addSubscription(
-            aspect.ratio.observeAndGet(resolver) { ratio ->
-                aspectRatio = ratio.toFloat()
-            }
         )
     }
 
