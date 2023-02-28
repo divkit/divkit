@@ -340,14 +340,6 @@ internal class DivGalleryBinder @Inject constructor(
             holder.bind(div2View, activeItems[position], path)
             holder.rootView.setTag(R.id.div_gallery_item_index, position)
         }
-
-        override fun onFailedToRecycleView(holder: GalleryViewHolder): Boolean {
-            val shouldRecycle = super.onFailedToRecycleView(holder)
-            if (!shouldRecycle) {
-                holder.rootView.releaseAndRemoveChildren(div2View)
-            }
-            return shouldRecycle
-        }
     }
 
     internal class GalleryViewHolder(
@@ -360,7 +352,9 @@ internal class DivGalleryBinder @Inject constructor(
 
         fun bind(div2View: Div2View, div: Div, path: DivStatePath) {
             val resolver = div2View.expressionResolver
-            val divView = if (oldDiv != null && DivComparator.areDivsReplaceable(oldDiv, div, resolver)) {
+            val divView = if (oldDiv != null
+                    && rootView.child != null
+                    && DivComparator.areDivsReplaceable(oldDiv, div, resolver)) {
                 rootView.child!!
             } else {
                 val newDivView = viewCreator.create(div, resolver)

@@ -10,6 +10,7 @@ import androidx.core.view.children
 import androidx.core.view.doOnLayout
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.get
+import androidx.core.view.isNotEmpty
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.core.Disposable
@@ -422,13 +423,6 @@ internal class DivPagerBinder @Inject constructor(
             translationBinder.invoke(holder, position)
         }
 
-        override fun onFailedToRecycleView(holder: PagerViewHolder): Boolean {
-            val shouldRecycle = super.onFailedToRecycleView(holder)
-            if (!shouldRecycle) {
-                holder.frameLayout.releaseAndRemoveChildren(div2View)
-            }
-            return shouldRecycle
-        }
     }
 
     private class PageLayout(context: Context) : FrameLayout(context) {
@@ -454,7 +448,9 @@ internal class DivPagerBinder @Inject constructor(
 
         fun bind(div2View: Div2View, div: Div, path: DivStatePath) {
             val resolver = div2View.expressionResolver
-            val divView = if (oldDiv != null && DivComparator.areDivsReplaceable(oldDiv, div, resolver)) {
+            val divView = if (oldDiv != null
+                    && frameLayout.isNotEmpty()
+                    && DivComparator.areDivsReplaceable(oldDiv, div, resolver)) {
                 frameLayout[0]
             } else {
                 val newDivView = viewCreator.create(div, resolver)
