@@ -86,6 +86,7 @@ dependencies {
     implementation project(path: ':div-lottie')
     implementation project(path: ':div-pinch-to-zoom')
     implementation project(path: ':div-rive')
+    implementation project(path: ':div-shimmer')
     implementation project(path: ':divkit-regression-testing')
     implementation project(path: ':fonts')
     implementation project(path: ':logging')

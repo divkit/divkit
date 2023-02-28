@@ -31,6 +31,7 @@ import com.yandex.div.font.YandexSansDisplayDivTypefaceProvider
 import com.yandex.div.font.YandexSansDivTypefaceProvider
 import com.yandex.div.internal.Log
 import com.yandex.div.lottie.DivLottieExtensionHandler
+import com.yandex.div.shimmer.DivShimmerExtensionHandler
 import com.yandex.div.zoom.DivPinchToZoomConfiguration
 import com.yandex.div.zoom.DivPinchToZoomExtensionHandler
 import com.yandex.div2.DivAction
@@ -92,6 +93,7 @@ class Div2Activity : AppCompatActivity() {
                 )
             )
             .extension(DivLottieExtensionHandler())
+            .extension(DivShimmerExtensionHandler())
             .divStateChangeListener(transitionScheduler)
             .divDataChangeListener(transitionScheduler)
             .actionHandler(Div2ActionHandler(Container.uriHandler))
