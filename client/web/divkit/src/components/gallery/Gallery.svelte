@@ -244,6 +244,10 @@
     }
 
     function updateArrowsVisibility(): void {
+        if (!scroller) {
+            return;
+        }
+
         const scrollLeft = scroller.scrollLeft;
         const scrollWidth = scroller.scrollWidth;
         const containerWidth = scroller.offsetWidth;
