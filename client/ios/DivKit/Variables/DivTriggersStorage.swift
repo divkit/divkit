@@ -11,6 +11,7 @@ public final class DivTriggersStorage {
   private let actionHandler: DivActionHandler?
   private let urlOpener: UrlOpener
 
+  private let cardsTriggersLock = RWLock()
   private let autodisposePool = AutodisposePool()
 
   public init(
@@ -22,29 +23,41 @@ public final class DivTriggersStorage {
     self.actionHandler = actionHandler
     self.urlOpener = urlOpener
     variablesStorage.changeEvents.addObserver { [unowned self] event in
+      let cardIdTriggersPairs = makeCardIdTriggersPairsForEvent(event)
+      cardIdTriggersPairs.forEach { (cardId, triggers) in
+        tryRunTriggerActions(
+          triggers: triggers,
+          cardId: cardId,
+          changesVariablesNames: event.kind.names,
+          newVariables: event.variables.new.makeVariables(for: cardId),
+          oldVariables: event.variables.old.makeVariables(for: cardId)
+        )
+      }
+    }.dispose(in: autodisposePool)
+  }
+
+  private func makeCardIdTriggersPairsForEvent(
+    _ event: DivVariablesStorage.ChangeEvent
+  ) -> [(DivCardID, [DivTrigger])] {
+    cardsTriggersLock.read {
       let changedCardIds = makeChangedCardIds(
         for: event.kind,
         cardIds: Array(cardsTriggers.keys)
       )
-      for cardId in changedCardIds {
-        if let triggers = cardsTriggers[cardId] {
-          tryRunTriggerActions(
-            triggers: triggers,
-            cardId: cardId,
-            changesVariablesNames: event.kind.names,
-            newVariables: event.variables.new.makeVariables(for: cardId),
-            oldVariables: event.variables.old.makeVariables(for: cardId)
-          )
-        }
+      return changedCardIds.compactMap { cardId in
+        guard let triggers = cardsTriggers[cardId] else { return nil }
+        return (cardId, triggers)
       }
-    }.dispose(in: autodisposePool)
+    }
   }
 
   public func set(
     cardId: DivCardID,
     triggers: [DivTrigger]
   ) {
-    cardsTriggers[cardId] = triggers
+    cardsTriggersLock.write {
+      cardsTriggers[cardId] = triggers
+    }
     let variables = variablesStorage.makeVariables(for: cardId)
     tryRunTriggerActions(
       triggers: triggers,
