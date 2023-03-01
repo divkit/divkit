@@ -74,15 +74,15 @@ class DivImageBinderTest : DivBinderTest() {
     }
 
     @Test
-    fun `bind image when imageUrl did not change but bitmap was not loaded`() {
+    fun `do not rebind image when imageUrl did not change and bitmap was not loaded`() {
         val (view, divContainer) = createTestDiv("with_action.json")
         binder.bindView(view, divContainer, divView)
 
         val (_, nextDivContainer) = createTestDiv("with_action.json")
         binder.bindView(view, nextDivContainer, divView)
 
-        verify(placeholderLoader, times(2)).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
-        verify(imageLoader, times(2)).loadImage(eq(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
+        verify(placeholderLoader).applyPlaceholder(any(), any(), anyOrNull(), any(), any(), any(), any())
+        verify(imageLoader).loadImage(eq(divContainer.imageUrl.evaluate(ExpressionResolver.EMPTY).toString()), any<DivImageDownloadCallback>())
     }
 
     @Test

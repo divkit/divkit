@@ -116,12 +116,6 @@ internal class DivImageBinder @Inject constructor(
         }
     }
 
-    private fun DivImageView.shouldReloadImage(resolver: ExpressionResolver, div: DivImage): Boolean {
-        val newImageUrl = div.imageUrl.evaluate(resolver)
-
-        return !isImageLoaded || newImageUrl != imageUrl
-    }
-
     private fun DivImageView.observePreview(divView: Div2View,
                                             resolver: ExpressionResolver,
                                             errorCollector: ErrorCollector,
@@ -129,7 +123,7 @@ internal class DivImageBinder @Inject constructor(
         div.preview?.let {
             val callback = { _: Any ->
                 if (!isImageLoaded) {
-                    applyPreview(divView, resolver, div, errorCollector, synchronous = true)
+                    applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShow(resolver, this, div))
                 }
             }
 
@@ -158,7 +152,7 @@ internal class DivImageBinder @Inject constructor(
                     currentBitmapWithoutFilters = it
                     applyFiltersAndSetBitmap(div.filters, divView, resolver)
                     previewLoaded()
-                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    applyTint(resolver, div.tintColor, div.tintMode)
                 }
             }
         )
@@ -168,7 +162,9 @@ internal class DivImageBinder @Inject constructor(
                                         resolver: ExpressionResolver,
                                         errorCollector: ErrorCollector,
                                         div: DivImage) {
-        if (!shouldReloadImage(resolver, div)) {
+        val newImageUrl = div.imageUrl.evaluate(resolver)
+
+        if (newImageUrl == imageUrl) {
             applyTint(resolver, div.tintColor, div.tintMode)
             return
         }
@@ -176,22 +172,22 @@ internal class DivImageBinder @Inject constructor(
         // Called before resetImageLoaded() to ignore high priority preview if image was previously loaded.
         val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
 
-        val newImageUrl = div.imageUrl.evaluate(resolver)
-        newImageUrl.applyIfNotEquals(imageUrl) { resetImageLoaded() }
+        resetImageLoaded()
 
         applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShowPreview)
+
+        imageUrl = newImageUrl
 
         val reference = imageLoader.loadImage(
             newImageUrl.toString(),
             object : DivIdLoggingImageDownloadCallback(divView) {
                 override fun onSuccess(cachedBitmap: CachedBitmap) {
                     super.onSuccess(cachedBitmap)
-                    imageUrl = newImageUrl
                     currentBitmapWithoutFilters = cachedBitmap.bitmap
                     applyFiltersAndSetBitmap(div.filters, divView, resolver)
                     applyLoadingFade(div, resolver, cachedBitmap.from)
                     imageLoaded()
-                    applyTint(div.tintColor?.evaluate(resolver), div.tintMode.evaluate(resolver))
+                    applyTint(resolver, div.tintColor, div.tintMode)
                     invalidate()
                 }
             }
@@ -225,10 +221,7 @@ internal class DivImageBinder @Inject constructor(
     }
 
     private fun isHighPriorityShow(resolver: ExpressionResolver, view: DivImageView, div: DivImage) : Boolean {
-        if (!div.highPriorityPreviewShow.evaluate(resolver)) {
-            return false
-        }
-        return !view.isImageLoaded
+        return !view.isImageLoaded && div.highPriorityPreviewShow.evaluate(resolver)
     }
 
     private fun DivImageView.observeTint(
@@ -251,12 +244,10 @@ internal class DivImageBinder @Inject constructor(
         tintColor: Expression<Int>?,
         tintMode: Expression<DivBlendMode>
     ) {
-        applyTint(tintColor?.evaluate(resolver), tintMode.evaluate(resolver))
-    }
+        val color = tintColor?.evaluate(resolver)
 
-    private fun ImageView.applyTint(color: Int?, divMode: DivBlendMode) {
         if (color != null) {
-            setColorFilter(color, divMode.toPorterDuffMode())
+            setColorFilter(color, tintMode.evaluate(resolver).toPorterDuffMode())
         } else {
             clearTint()
         }
