@@ -64,7 +64,7 @@ struct RegressionTestModel: Decodable, Hashable {
     } catch {
       throw DecodingError(key: .file, title: title, error: error)
     }
-    if let url = makeFileUrl(file) {
+    if let url = RegressionFile.makeUrl(file) {
       self.url = url
     } else {
       throw DecodingError("File not found: \(file)")
@@ -131,18 +131,4 @@ enum Platform: String, Decodable {
   case android
   case ios
   case web
-}
-
-private func makeFileUrl(_ relativeFileName: String) -> URL? {
-  let path: String
-  let fileName: String
-  if let slashIndex = relativeFileName.lastIndex(of: "/") {
-    path = TestData.regressionPath + "/" + relativeFileName.prefix(upTo: slashIndex)
-    fileName = String(relativeFileName.suffix(from: relativeFileName.index(after: slashIndex)))
-  } else {
-    path = TestData.regressionPath
-    fileName = relativeFileName
-  }
-  return Bundle.main
-    .url(forResource: fileName, withExtension: "", subdirectory: path)
 }

@@ -9,10 +9,16 @@ final class DivViewProvider {
   private var divKitComponents: DivKitComponents!
 
   init() {
+    let urlOpener = DemoUrlOpener(
+      loadJsonUrl: { [weak self] url in
+        self?.jsonProvider.load(url: url)
+      }
+    )
     divKitComponents = AppComponents.makeDivKitComponents(
       updateCardAction: { [weak self] reasons in
         self?.blockProvider.update(reasons: reasons.asArray())
-      }
+      },
+      urlOpener: urlOpener.openUrl(_:)
     )
 
     blockProvider = DivBlockProvider(

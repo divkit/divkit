@@ -1,3 +1,5 @@
+import Foundation
+
 import CommonCore
 import DivKit
 import DivKitExtensions
@@ -5,7 +7,8 @@ import Networking
 
 enum AppComponents {
   static func makeDivKitComponents(
-    updateCardAction: DivKitComponents.UpdateCardAction? = nil
+    updateCardAction: DivKitComponents.UpdateCardAction? = nil,
+    urlOpener: @escaping UrlOpener = { _ in }
   ) -> DivKitComponents {
     let performer = URLRequestPerformer(urlTransform: nil)
     let requester = NetworkURLResourceRequester(performer: performer)
@@ -22,7 +25,7 @@ enum AppComponents {
       extensionHandlers: [
         lottieExtensionHanlder,
         sizeProviderExtensionHandler,
-        ShimmerImagePreviewExtension()
+        ShimmerImagePreviewExtension(),
       ],
       flagsInfo: DivFlagsInfo(
         isTextSelectingEnabled: true,
@@ -31,7 +34,7 @@ enum AppComponents {
       ),
       patchProvider: DemoPatchProvider(),
       updateCardAction: updateCardAction,
-      urlOpener: DemoUrlOpener.openUrl(_:),
+      urlOpener: urlOpener,
       variablesStorage: variablesStorage
     )
   }

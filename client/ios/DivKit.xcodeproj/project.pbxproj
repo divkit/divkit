@@ -225,6 +225,7 @@
 		E945FC46293E1CA80066C3EA /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E945FC45293E1CA80066C3EA /* Utils.swift */; };
 		E94B516328D0AC0300AFACEA /* interactive_snapshot_test_data in Resources */ = {isa = PBXBuildFile; fileRef = E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */; };
 		E94B516528D0AC7900AFACEA /* DivInteractiveSnapshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E94B516428D0AC7900AFACEA /* DivInteractiveSnapshotTests.swift */; };
+		E9E484C129AF434D00C803A8 /* RegressionFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9E484C029AF434D00C803A8 /* RegressionFile.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -466,6 +467,7 @@
 		E945FC45293E1CA80066C3EA /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E94B516228D0AC0300AFACEA /* interactive_snapshot_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = interactive_snapshot_test_data; path = ../../../test_data/interactive_snapshot_test_data; sourceTree = "<group>"; };
 		E94B516428D0AC7900AFACEA /* DivInteractiveSnapshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivInteractiveSnapshotTests.swift; sourceTree = "<group>"; };
+		E9E484C029AF434D00C803A8 /* RegressionFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegressionFile.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -855,6 +857,7 @@
 				8CF1296228B0021F00351F65 /* UserPreferences.swift */,
 				89D02B1928C8EBC40041EC18 /* Palette.swift */,
 				893D19632902AD8F005540DF /* TimeMeasure.swift */,
+				E9E484C029AF434D00C803A8 /* RegressionFile.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -1558,6 +1561,7 @@
 				8C1A383028B61A0300A047C8 /* SimpleDivView.swift in Sources */,
 				8C7B187F2864CA1F0036EF4C /* DivBlockProvider.swift in Sources */,
 				8C7B18812864CA1F0036EF4C /* DemoPatchProvider.swift in Sources */,
+				E9E484C129AF434D00C803A8 /* RegressionFile.swift in Sources */,
 				89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */,
 				8C7B18962864CA380036EF4C /* UrlOpener.swift in Sources */,
 				8C7915D028B177CE00A4642A /* ViewWithHeader.swift in Sources */,
