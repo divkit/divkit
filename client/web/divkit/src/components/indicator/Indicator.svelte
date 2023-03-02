@@ -120,13 +120,17 @@
 
             await tick();
 
-            const currentItemOffsetLeft =
-                (indicatorItemsWrapper.children[pagerData.currentItem] as HTMLElement).offsetLeft;
+            if (indicatorItemsWrapper) {
+                // if not destroyed yet
 
-            scroller.scroll({
-                left: currentItemOffsetLeft - scroller.clientWidth / 2,
-                behavior: 'smooth'
-            });
+                const currentItemOffsetLeft =
+                    (indicatorItemsWrapper.children[pagerData.currentItem] as HTMLElement).offsetLeft;
+
+                scroller.scroll({
+                    left: currentItemOffsetLeft - scroller.clientWidth / 2,
+                    behavior: 'smooth'
+                });
+            }
         }
     }
 

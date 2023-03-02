@@ -694,14 +694,17 @@
 
         const visibilityActions = layoutParams.fakeElement ?
             [] :
-            rootCtx.getJsonWithVars(
+            (
                 json.visibility_actions ||
                 json.visibility_action && [json.visibility_action]
             );
-        visibilityAction(node, {
-            visibilityActions,
-            rootCtx
-        });
+
+        if (Array.isArray(visibilityActions) && visibilityActions.length) {
+            visibilityAction(node, {
+                visibilityActions,
+                rootCtx
+            });
+        }
 
         const id = json.id;
         if (id) {

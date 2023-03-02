@@ -33,6 +33,7 @@
     const instId = rootCtx.genId('pager');
 
     let pagerItemsWrapper: HTMLElement;
+    let mounted = false;
 
     let hasItemsError = false;
     $: {
@@ -154,6 +155,11 @@
     }
 
     function onScroll(): void {
+        if (!mounted) {
+            // Already destroyed
+            return;
+        }
+
         const nextItem = calculateCurrentElementIndex();
         if (nextItem !== currentItem) {
             currentItem = nextItem;
@@ -234,6 +240,8 @@
     }
 
     onMount(() => {
+        mounted = true;
+
         const isIndicatorExist = Boolean(document.getElementById(`${instId}-tab-0`));
 
         if (isIndicatorExist) {
@@ -248,6 +256,8 @@
     });
 
     onDestroy(() => {
+        mounted = false;
+
         if (json.id && !layoutParams?.fakeElement) {
             rootCtx.unregisterInstance(json.id);
         }
