@@ -1,0 +1,37 @@
+{
+  "type": "object",
+  "$description": "translations.json#/div_selection_input",
+  "properties": {
+    "type": {
+      "type": "string",
+      "enum": [
+        "selection"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "$description": "translations.json#/div_selection_input_item",
+        "properties": {
+          "value": {
+            "$ref": "common.json#/non_empty_string",
+            "$description": "translations.json#/div_selection_input_item_value"
+          },
+          "text": {
+            "$ref": "common.json#/non_empty_string",
+            "$description": "translations.json#/div_selection_input_item_text"
+          }
+        },
+        "required": [
+          "text"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "type",
+    "items"
+  ]
+}

@@ -95,7 +95,13 @@
             "single_line_text", "multi_line_text", "phone", "number", "email", "uri"
           ],
           "default_value": "multi_line_text",
-          "$description": "translations.json#/div_input_keyboard_type"
+          "$description": "translations.json#/div_input_keyboard_type",
+          "deprecated": true
+        },
+        "input_method": {
+          "$ref": "div-input-method.json",
+          "$description": "translations.json#/div_input_method",
+          "platforms": []
         },
         "select_all_on_focus": {
           "$ref": "common.json#/boolean_int",

@@ -979,6 +979,14 @@
     "en": "Name of text storage variable.",
     "ru": "Название переменной для хранения текста."
   },
+  "div_input_method": {
+    "en": "Data entry method. If nothing is specified, the value will be taken from keyboard_type.",
+    "ru": "Способ ввода данных. Если ничего не указывать, то значение возьмется из keyboard_type."
+  },
+  "div_keyboard_input": {
+    "en": "Keyboard input method.",
+    "ru": "Способ ввода с клавиатуры."
+  },
   "div_line_style": {
     "en": "Line style.",
     "ru": "Стиль линий."
@@ -1178,6 +1186,22 @@
   "div_scale_transition_scale": {
     "en": "Value of the scale  from which the element starts appearing or at which it finishes disappearing.",
     "ru": "Значение масштаба, с которого начнется появление или на котором закончится исчезновение элемента."
+  },
+  "div_selection_input": {
+    "en": "The input method using the selection menu. The text in the input corresponds to the selected item from the menu. If the value has not yet been selected, then the value that matches the value of the text_variable variable will be taken.",
+    "ru": "Способ ввода с помощью меню выбора. Текст в div_input соотвествует выбранному пункту из меню. Если значение еще не выбрано, то возьмется значение, совпадающее со значением переменной text_variable."
+  },
+  "div_selection_input_item": {
+    "en": "Selection item from the menu.",
+    "ru": "Элемент выбора из списка."
+  },
+  "div_selection_input_item_value": {
+    "en": "Value of the item that is displayed in the selection menu.",
+    "ru": "Значение элемента, которое отображается в меню выбора."
+  },
+  "div_selection_input_item_text": {
+    "en": "The text that is displayed in the input. If the value is missing, the text from div_selection_input_item_value will appear in the input.",
+    "ru": "Текст, который отображается в div_input. Если значение отсутствует, то в div_input покажется текст из div_selection_input_item_value"
   },
   "div_separator": {
     "en": "A separating line between elements.",

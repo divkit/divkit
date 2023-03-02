@@ -1,0 +1,13 @@
+{
+  "$description": "translations.json#/div_input_method",
+  "anyOf": [
+    {
+      "$ref": "div-keyboard-input.json",
+      "$description": "translations.json#/div_keyboard_input"
+    },
+    {
+      "$ref": "div-selection-input.json",
+      "$description": "translations.json#/div_selection_input"
+    }
+  ]
+}
