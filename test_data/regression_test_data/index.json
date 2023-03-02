@@ -1266,6 +1266,23 @@
       "file": "single_line_input.json"
     },
     {
+      "title": "Text input (selection menu)",
+      "platforms": [
+        "ios"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Tap on input field",
+        "Select item"
+      ],
+      "expected_results": [
+        "When selecting, the text in the input should change.",
+      ],
+      "file": "selection_menu_input.json"
+    },
+    {
       "title": "Manage VideoCustom",
       "platforms": [
         "android"

@@ -47,3 +47,9 @@ public struct Binding<T: Comparable> {
     self.userInterfaceActionFactory = userInterfaceActionFactory
   }
 }
+
+extension Binding where T == String {
+  public static var empty: Self {
+    .init(name: "", getValue: { _ in "" }, userInterfaceActionFactory: { _, _ in nil })
+  }
+}

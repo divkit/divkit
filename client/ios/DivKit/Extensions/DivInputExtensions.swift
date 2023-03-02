@@ -60,14 +60,25 @@ extension DivInput: DivBlockModeling {
       $0.uiAction(context: context.actionContext)
     }
 
+    let inputType: TextInputBlock.InputType
+    let multiLineMode: Bool
+
+    if let inputMethod = inputMethod {
+      inputType = inputMethod.makeInputType(context.expressionResolver)
+      multiLineMode = inputMethod.isMultiLineMode(context.expressionResolver)
+    } else {
+      inputType = .keyboard(keyboardType.system)
+      multiLineMode = keyboardType == .multiLineText
+    }
+
     return TextInputBlock(
       widthTrait: makeContentWidthTrait(with: context),
       heightTrait: makeContentHeightTrait(with: context),
       hint: hintValue.with(typo: hintTypo),
       textValue: textValue,
       textTypo: textTypo,
-      multiLineMode: keyboardType == .multiLineText,
-      keyboardType: keyboardType.system,
+      multiLineMode: multiLineMode,
+      inputType: inputType,
       highlightColor: highlightColor,
       maxVisibleLines: maxVisibleLines,
       selectAllOnFocus: selectAllOnFocus,
@@ -93,7 +104,7 @@ extension DivAlignmentHorizontal {
 }
 
 extension DivInput.KeyboardType {
-  fileprivate var system: TextInputBlock.KeyboardType {
+  fileprivate var system: TextInputBlock.InputType.KeyboardType {
     switch self {
     case .singleLineText, .multiLineText:
       return .default
@@ -106,5 +117,51 @@ extension DivInput.KeyboardType {
     case .uri:
       return .URL
     }
+  }
+}
+
+extension DivKeyboardInput.KeyboardType {
+  fileprivate var system: TextInputBlock.InputType.KeyboardType {
+    switch self {
+    case .singleLineText, .multiLineText:
+      return .default
+    case .phone:
+      return .phonePad
+    case .number:
+      return .numbersAndPunctuation
+    case .email:
+      return .emailAddress
+    case .uri:
+      return .URL
+    }
+  }
+}
+
+extension DivInputMethod {
+  fileprivate func isMultiLineMode(_ resolver: ExpressionResolver) -> Bool {
+    switch self {
+    case let .divKeyboardInput(divKeyboardInput):
+      return divKeyboardInput.resolveKeyboardType(resolver) == .multiLineText
+    case .divSelectionInput:
+      return true
+    }
+  }
+
+  fileprivate func makeInputType(_ resolver: ExpressionResolver) -> TextInputBlock.InputType {
+    switch self {
+    case let .divKeyboardInput(divKeyboardInput):
+      return .keyboard(divKeyboardInput.resolveKeyboardType(resolver).system)
+    case let .divSelectionInput(divSelectionInput):
+      return .selection(divSelectionInput.items.map { $0.makeSelectionItem(resolver) })
+    }
+  }
+}
+
+extension DivSelectionInput.Item {
+  fileprivate func makeSelectionItem(_ resolver: ExpressionResolver) -> TextInputBlock.InputType
+    .SelectionItem {
+    let text = resolveText(resolver) ?? ""
+    let value = resolveValue(resolver) ?? text
+    return TextInputBlock.InputType.SelectionItem(value: value, text: text)
   }
 }
