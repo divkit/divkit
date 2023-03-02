@@ -76,43 +76,44 @@ final class DivGalleryExtensionsTests: XCTestCase {
     _ = try makeBlock(fromFile: "vertical_gallery_match_parent_height_items")
   }
 
-  func test_HorizontalGallery_WhenVerticallyInrinsic() {
-    let errorDescription = "DivGallery has no items [test_card_id/gallery]"
-
-    XCTAssertThrowsError(try makeBlock(fromFile: "horizontal_gallery_wrap_content_constrained_height_items")) { error in
-      XCTAssertTrue(error is DivBlockModelingError)
-      XCTAssertEqual((error as CustomStringConvertible).description, errorDescription)
-    }
-
+  func test_HorizontalGallery_WhenVerticallyInrinsic_Throws() {
+    XCTAssertThrowsError(
+      try makeBlock(fromFile: "horizontal_gallery_wrap_content_constrained_height_items"),
+      DivBlockModelingError(
+        "DivGallery has no items",
+        path: .root + "gallery"
+      )
+    )
   }
 
-  func test_HorizontalGallery_WhenAllItemsAreVerticallyResizable_FallbackHeight(
-  ) {
-    let errorDescription = "DivGallery has no items [test_card_id/gallery]"
-
-    XCTAssertThrowsError(try makeBlock(fromFile: "horizontal_gallery_match_parent_height_items")) { error in
-      XCTAssertTrue(error is DivBlockModelingError)
-      XCTAssertEqual((error as CustomStringConvertible).description, errorDescription)
-    }
+  func test_HorizontalGallery_WhenAllItemsAreVerticallyResizable_FallbackHeight_Throws() {
+    XCTAssertThrowsError(
+      try makeBlock(fromFile: "horizontal_gallery_match_parent_height_items"),
+      DivBlockModelingError(
+        "DivGallery has no items",
+        path: .root + "gallery"
+      )
+    )
   }
 
-  func test_VerticalGallery_WhenHorizontallyInrinsich() throws {
-    let errorDescription = "DivGallery has no items [test_card_id/gallery]"
-
-    XCTAssertThrowsError(try makeBlock(fromFile: "vertical_gallery_wrap_content_constrained_width_items")) { error in
-      XCTAssertTrue(error is DivBlockModelingError)
-      XCTAssertEqual((error as CustomStringConvertible).description, errorDescription)
-    }
+  func test_VerticalGallery_WhenHorizontallyInrinsic_Throws() {
+    XCTAssertThrowsError(
+      try makeBlock(fromFile: "vertical_gallery_wrap_content_constrained_width_items"),
+      DivBlockModelingError(
+        "DivGallery has no items",
+        path: .root + "gallery"
+      )
+    )
   }
 
-  func test_VerticalGallery_WhenHAllItemsAreHorizontallyResizable_FallbackWidth(
-  ) throws {
-    let errorDescription = "DivGallery has no items [test_card_id/gallery]"
-
-    XCTAssertThrowsError(try makeBlock(fromFile: "vertical_gallery_match_parent_width_items")) { error in
-      XCTAssertTrue(error is DivBlockModelingError)
-      XCTAssertEqual((error as CustomStringConvertible).description, errorDescription)
-    }
+  func test_VerticalGallery_WhenAllItemsAreHorizontallyResizable_FallbackWidth_Throws() {
+    XCTAssertThrowsError(
+      try makeBlock(fromFile: "vertical_gallery_match_parent_width_items"),
+      DivBlockModelingError(
+        "DivGallery has no items",
+        path: .root + "gallery"
+      )
+    )
   }
 
   func test_HorizontalGallery_WhenVerticallyInrinsic_AndHasNonResizableVerticallyItems_BuildsBlocks(
