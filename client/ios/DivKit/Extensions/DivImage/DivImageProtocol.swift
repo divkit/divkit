@@ -29,17 +29,15 @@ extension DivImageProtocol {
   }
 
   func checkLayoutTraits(context: DivBlockModelingContext) throws {
-    let expressionResolver = context.expressionResolver
-    guard width.makeLayoutTrait(with: expressionResolver) != .intrinsic else {
+    if case .intrinsic = makeContentWidthTrait(with: context) {
       throw DivBlockModelingError(
         "\(typeName) has wrap_content width",
         path: context.parentPath
       )
     }
 
-    guard
-      height.makeLayoutTrait(with: expressionResolver) != .intrinsic || aspect != nil
-    else {
+    if case let .trait(heightTrait) = resolveHeight(context),
+        case .intrinsic = heightTrait {
       throw DivBlockModelingError(
         "\(typeName) without aspect has wrap_content height",
         path: context.parentPath
