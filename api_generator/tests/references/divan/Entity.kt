@@ -23,3 +23,5 @@ import kotlin.collections.Map
 
 @Generated
 sealed interface Entity
+
+fun Entity.asList() = listOf(this)

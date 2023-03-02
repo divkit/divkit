@@ -9,7 +9,7 @@ from .divan_entities import (
 )
 from ..base import Generator
 from ..documentation.translations import translations
-from ...schema.modeling.text import Text, EMPTY
+from ... import utils
 from ...schema.modeling.entities import (
     StringEnumeration,
     EntityEnumeration,
@@ -17,9 +17,7 @@ from ...schema.modeling.entities import (
     Declarable,
     DescriptionLanguage,
 )
-
-from ... import utils
-from . import utils as divan_utils
+from ...schema.modeling.text import Text, EMPTY
 
 
 class DivanGenerator(Generator):
@@ -28,25 +26,31 @@ class DivanGenerator(Generator):
         self.kotlin_annotations = config.generation.kotlin_annotations
         self.top_level_annotations = config.generation.top_level_annotations
         self.translations = translations(DescriptionLanguage.EN)
+        self.remove_prefix = config.generation.remove_prefix
+        self.supertype_entities = set(
+            map(lambda s: utils.capitalize_camel_case(s), config.generation.supertype_entities)
+        )
 
     def generate(self, objects: List[Declarable]):
-        updated_objects = list(map(lambda obj: update_base(obj), objects))
+        updated_objects = list(map(lambda obj: update_base(obj, self.remove_prefix), objects))
         super(DivanGenerator, self).generate(updated_objects)
         self._generate_enums_values(updated_objects)
 
     def filename(self, name: str) -> str:
-        return f'{divan_utils.capitalize_camel_case(name)}.kt'
+        return f'{utils.capitalize_camel_case(name, self.remove_prefix)}.kt'
 
     def _entity_declaration(self, entity: DivanEntity) -> Text:
         return self.__entity_declaration_with(entity, with_factory_methods=True)
 
     def __entity_declaration_with(self, entity: DivanEntity, with_factory_methods: bool) -> Text:
+        if entity.generate_as_protocol:
+            return Text()
         result_declaration = Text()
         result_declaration += entity.header_comment_block(self.translations)
         for annotation in self.top_level_annotations + self.kotlin_annotations:
             result_declaration += annotation
 
-        result_declaration += f'class {divan_utils.capitalize_camel_case(entity.name)} internal constructor('
+        result_declaration += f'class {utils.capitalize_camel_case(entity.name, self.remove_prefix)} internal constructor('
         result_declaration += '    @JsonIgnore'
         result_declaration += '    val properties: Properties,'
         result_declaration += f'){entity.supertype_declaration} {{'
@@ -90,12 +94,15 @@ class DivanGenerator(Generator):
                 add_declaration(ent.params_comment_block, ent.properties_factory_method_declaration)
                 add_declaration(ent.params_comment_block, ent.references_factory_method_declaration)
                 add_declaration(ent.params_comment_block, ent.override_method_declaration)
-                add_declaration(ent.params_comment_block, ent.override_component_method_declaration)
                 add_declaration(ent.params_comment_block, ent.defer_method_declaration)
-                add_declaration(ent.params_comment_block, ent.defer_component_method_declaration)
                 add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_method_declaration)
-                add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_component_method_declaration)
-                add_declaration(Text(), ent.operator_plus_component_declaration)
+
+                if self.supertype_entities.intersection(ent.supertypes_list):
+                    add_declaration(ent.params_comment_block, ent.override_component_method_declaration)
+                    add_declaration(ent.params_comment_block, ent.defer_component_method_declaration)
+                    add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_component_method_declaration)
+                    add_declaration(Text(), ent.operator_plus_component_declaration)
+
                 add_declaration(Text(), ent.as_list_method_declaration)
 
             def sort_predicate(d: Declarable):
@@ -105,7 +112,7 @@ class DivanGenerator(Generator):
 
             inner_types = sorted(filter(lambda t: isinstance(t, Entity), entity.inner_types), key=sort_predicate)
             for ind, nested_entity in enumerate(inner_types):
-                nested_entity = update_base(nested_entity)
+                nested_entity = update_base(nested_entity, self.remove_prefix)
                 add_methods_declarations(ent=cast(DivanEntity, nested_entity))
 
         return result_declaration
@@ -118,7 +125,7 @@ class DivanGenerator(Generator):
             inner_types_decl = Text()
             inner_types = sorted(filter(lambda t: isinstance(t, decl_type), entity.inner_types), key=sort_predicate)
             for ind, inner_type in enumerate(inner_types):
-                inner_type = update_base(inner_type)
+                inner_type = update_base(inner_type, self.remove_prefix)
                 if isinstance(inner_type, decl_type):
                     inner_types_decl += decl_method(inner_type)
                     if ind != len(inner_types) - 1:
@@ -150,12 +157,15 @@ class DivanGenerator(Generator):
 
     def _enumeration_declaration(self, enumeration: Union[DivanEntityEnumeration, DivanStringEnumeration]) -> Text:
         result_declaration = Text()
+        name = utils.capitalize_camel_case(enumeration.name, self.remove_prefix)
         if isinstance(enumeration, DivanStringEnumeration):
             result_declaration += enumeration.header_comment_block(self.translations)
         for annotation in self.top_level_annotations + self.kotlin_annotations:
             result_declaration += annotation
 
-        result_declaration += f'sealed interface {divan_utils.capitalize_camel_case(enumeration.name)}'
+        result_declaration += f'sealed interface {name}'
+        result_declaration += EMPTY
+        result_declaration += f'fun {name}.asList() = listOf(this)'
         return result_declaration
 
     def _generate_enums_values(self, divan_objects: List[Declarable]):
@@ -170,7 +180,7 @@ class DivanGenerator(Generator):
             # filtering like "type" properties
             if len(enum.cases) > 1:
                 for name, value in enum.cases:
-                    values[value] = (values.get(value) or []) + [full_name(enum)]
+                    values[value] = (values.get(value) or []) + [full_name(enum, self.remove_prefix)]
         self.__generate_enum_values(values)
 
     def __inner_string_enums(self, entity: Entity) -> List[str]:
@@ -180,7 +190,7 @@ class DivanGenerator(Generator):
             classes = []
             inner_types = sorted(filter(lambda t: isinstance(t, decl_type), entity.inner_types), key=sort_predicate)
             for inner_type in inner_types:
-                inner_type = update_base(inner_type)
+                inner_type = update_base(inner_type, self.remove_prefix)
                 if isinstance(inner_type, decl_type):
                     classes += method(inner_type)
             return classes
@@ -210,7 +220,7 @@ class DivanGenerator(Generator):
             enum_values_declaration += self.__generate_scope_extension(value_name)
             enum_values_declaration += EMPTY
 
-        with open(f'{self._config.output_path}/_EnumValues.kt', 'w') as file:
+        with open(f'{self._config.output_path}/EnumValues.kt', 'w') as file:
             head_for_file = self._head_for_file + '\n' if self._head_for_file.strip() else ''
             declaration = str(enum_values_declaration)
             file_content = f'{head_for_file}{declaration}'
@@ -220,20 +230,19 @@ class DivanGenerator(Generator):
         obj_declaration = Text()
         for annotation in self.top_level_annotations:
             obj_declaration += annotation
-        obj_declaration += f'object {format_value_object_name(value_name)} : EnumValue("{value_name}"),'
+        obj_declaration += f'object {self.format_value_object_name(value_name)} : EnumValue("{value_name}"),'
         for index, name in enumerate(enum_names):
-            obj_declaration += Text(name + (',' if index + 1 != len(enum_names) else '')).indented(level=1, indent_width=4)
+            obj_declaration += Text(name + (',' if index + 1 != len(enum_names) else '')).indented(indent_width=4)
         return obj_declaration
 
     def __generate_scope_extension(self, value_name: str) -> Text:
         extension_declaration = Text()
         for annotation in self.top_level_annotations:
             extension_declaration += annotation
-        object_name = format_value_object_name(value_name)
-        extension_declaration += f'val DivScope.{divan_utils.snake_case(value_name)}: {object_name}'
+        object_name = self.format_value_object_name(value_name)
+        extension_declaration += f'val DivScope.{utils.snake_case(value_name)}: {object_name}'
         extension_declaration += utils.indented(f'get() = {object_name}', level=1, indent_width=4)
         return extension_declaration
 
-
-def format_value_object_name(value_name: str) -> str:
-    return divan_utils.capitalize_camel_case(value_name) + "EnumValue"
+    def format_value_object_name(self, value_name: str) -> str:
+        return utils.capitalize_camel_case(value_name, self.remove_prefix) + "EnumValue"

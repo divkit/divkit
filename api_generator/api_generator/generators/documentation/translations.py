@@ -23,8 +23,8 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "ru": "Может иметь один из следующих типов:"
     },
     "div_generator_factory_method_name": {
-        "en": "Can be created using the method [`{}`].",
-        "ru": "Можно создать при помощи метода [`{}`]."
+        "en": "Can be created using the method [{}].",
+        "ru": "Можно создать при помощи метода [{}]."
     },
     "div_generator_html_formatting": {
         "en": "Limited HTML formatting is allowed.",

@@ -6,6 +6,7 @@
     "div_state": {
       "type": "object",
       "generate_swift_optional_arguments": false,
+      "alias_divan": "item",
       "properties": {
         "state_id": {
           "type": "string",

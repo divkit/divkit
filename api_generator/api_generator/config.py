@@ -60,6 +60,8 @@ class Config:
             self.kotlin_annotations: List[str] = dictionary.get('kotlinAnnotations') or []
             self.top_level_annotations: List[str] = dictionary.get('topLevelAnnotations') or []
             self.generate_equality: bool = dictionary.get('generateEquality') or False
+            self.remove_prefix: str = dictionary.get('removePrefix') or ''
+            self.supertype_entities: List[str] = dictionary.get('supertypeEntities') or []
 
     def __init__(self, generator_path: Optional[str], config_path: str, schema_path: str, output_path: str):
         self.schema_path: str = schema_path

@@ -20,15 +20,18 @@ def __camel_case_components(string: str) -> List[str]:
     return result
 
 
-def name_components(string: str) -> List[str]:
+def name_components(string: str, remove_prefix: str = '') -> List[str]:
     components = []
     for component in re.split(r'[_\-:\s]+', string):
         components.extend(__camel_case_components(component))
+    components = list(filter(lambda x: x, components))
+    if len(components) > 1 and components[0].lower() == remove_prefix.lower():
+        components = components[1::]
     return list(filter(lambda x: x, components))
 
 
-def capitalize_camel_case(string: str) -> str:
-    return ''.join(map(lambda component: component.capitalize(), name_components(string)))
+def capitalize_camel_case(string: str, remove_prefix: str = '') -> str:
+    return ''.join(map(lambda component: component.capitalize(), name_components(string, remove_prefix)))
 
 
 def snake_case(string: str) -> str:
