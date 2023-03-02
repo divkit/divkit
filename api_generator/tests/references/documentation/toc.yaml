@@ -37,8 +37,14 @@ items:
   -name: entity_with_optional_string_enum_property
    href: concepts/divs/entity_with_optional_string_enum_property.md
    hidden: true
+  -name: entity_with_property_with_default_value
+   href: concepts/divs/entity_with_property_with_default_value.md
+   hidden: true
   -name: entity_with_required_property
    href: concepts/divs/entity_with_required_property.md
+   hidden: true
+  -name: entity_with_simple_properties
+   href: concepts/divs/entity_with_simple_properties.md
    hidden: true
   -name: entity_with_strict_array
    href: concepts/divs/entity_with_strict_array.md
@@ -54,10 +60,4 @@ items:
    hidden: true
   -name: entity_without_properties
    href: concepts/divs/entity_without_properties.md
-   hidden: true
-  -name: entity_with_property_with_default_value
-   href: concepts/divs/entity_with_property_with_default_value.md
-   hidden: true
-  -name: entity_with_simple_properties
-   href: concepts/divs/entity_with_simple_properties.md
    hidden: true

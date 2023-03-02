@@ -154,167 +154,6 @@
       }
     },
     {
-      "entity_with_array.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "entity.json"
-              ],
-              "type": "$defined_entity"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_enums.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_enums"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "enum": [
-                "first",
-                "second"
-              ]
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_expressions.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_expressions"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "common.json#/non_empty_string"
-              ],
-              "type": "string",
-              "minLength": 1,
-              "clientMinLength": 1
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_of_nested_items.json": {
-        "type": "object",
-        "definitions": {},
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_of_nested_items"
-            ]
-          },
-          "items": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "#/definitions/item"
-              ],
-              "type": "object",
-              "properties": {
-                "property": {
-                  "$resolved_refs": [
-                    "common.json#/non_empty_string"
-                  ],
-                  "type": "string",
-                  "minLength": 1,
-                  "clientMinLength": 1
-                },
-                "entity": {
-                  "$resolved_refs": [
-                    "entity.json"
-                  ],
-                  "type": "$defined_entity"
-                }
-              },
-              "required": [
-                "property",
-                "entity"
-              ],
-              "$typename": "item"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "items"
-        ]
-      }
-    },
-    {
-      "entity_with_array_with_transform.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_array_with_transform"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "common.json#/color"
-              ],
-              "type": "string",
-              "format": "color"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
       "entity_with_complex_property.json": {
         "type": "object",
         "definitions": {},
@@ -517,58 +356,6 @@
         "required": [
           "type",
           "property"
-        ]
-      }
-    },
-    {
-      "entity_with_strict_array.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_strict_array"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "$resolved_refs": [
-                "entity.json"
-              ],
-              "type": "$defined_entity"
-            },
-            "minItems": 1,
-            "strictParsing": true
-          }
-        },
-        "required": [
-          "type",
-          "array"
-        ]
-      }
-    },
-    {
-      "entity_with_string_array_property.json": {
-        "type": "object",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "entity_with_string_array_property"
-            ]
-          },
-          "array": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            },
-            "minItems": 1
-          }
-        },
-        "required": [
-          "type",
-          "array"
         ]
       }
     },
@@ -883,6 +670,219 @@
           "en": "Entity with simple properties.",
           "ru": "Объект с простыми свойствами."
         }
+      }
+    },
+    {
+      "entity_with_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "entity.json"
+              ],
+              "type": "$defined_entity"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_enums.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_enums"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "first",
+                "second"
+              ]
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_expressions.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_expressions"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "common.json#/non_empty_string"
+              ],
+              "type": "string",
+              "minLength": 1,
+              "clientMinLength": 1
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_of_nested_items.json": {
+        "type": "object",
+        "definitions": {},
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_of_nested_items"
+            ]
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "#/definitions/item"
+              ],
+              "type": "object",
+              "properties": {
+                "property": {
+                  "$resolved_refs": [
+                    "common.json#/non_empty_string"
+                  ],
+                  "type": "string",
+                  "minLength": 1,
+                  "clientMinLength": 1
+                },
+                "entity": {
+                  "$resolved_refs": [
+                    "entity.json"
+                  ],
+                  "type": "$defined_entity"
+                }
+              },
+              "required": [
+                "property",
+                "entity"
+              ],
+              "$typename": "item"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "items"
+        ]
+      }
+    },
+    {
+      "entity_with_array_with_transform.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_array_with_transform"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "common.json#/color"
+              ],
+              "type": "string",
+              "format": "color"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
+      "entity_with_strict_array.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_strict_array"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "$resolved_refs": [
+                "entity.json"
+              ],
+              "type": "$defined_entity"
+            },
+            "minItems": 1,
+            "strictParsing": true
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
+      }
+    },
+    {
+      "entity_with_string_array_property.json": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "entity_with_string_array_property"
+            ]
+          },
+          "array": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "type",
+          "array"
+        ]
       }
     }
   ]

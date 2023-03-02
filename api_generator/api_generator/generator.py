@@ -52,7 +52,8 @@ def generate_api(config: Config, check_hash_files: bool = False, save_hash_files
         print('Input and output were not changed, won\'t write anything to the disk')
         return
 
-    generator.generate(objects)
+    sorted_objects = sorted(objects, key=lambda obj: obj.name)
+    generator.generate(sorted_objects)
 
     if save_hash_files:
         def save_hash_file(filename: str, hash: str):

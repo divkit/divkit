@@ -1,12 +1,30 @@
 // Generated code. Do not modify.
 
-import './entity.dart';
+import 'package:equatable/equatable.dart';
 
-class EntityWithArray {
+import '../utils/parsing_extensions.dart';
+import 'entity.dart';
+
+class EntityWithArray with EquatableMixin {
   const EntityWithArray({
     required this.array,
   });
 
+  static const type = "entity_with_array";
+  // at least 1 elements
   final List<Entity> array;
-  static const String type = "entity_with_array";
+
+  @override
+  List<Object?> get props => [
+        array,
+      ];
+
+  static EntityWithArray? fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return null;
+    }
+    return EntityWithArray(
+      array: (json['array'] as List<dynamic>).map((j) => Entity.fromJson(j as Map <String, dynamic>)!).toList(),
+    );
+  }
 }

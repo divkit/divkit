@@ -1,6 +1,9 @@
 from __future__ import annotations
 from typing import List, Optional, cast
+
+from ..base import declaration_comment
 from ... import utils
+from .utils import allowed_name, get_full_name, make_imports
 from ...schema.modeling.entities import (
     Declarable,
     Entity,
@@ -17,8 +20,10 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    StringEnumeration,
+    EntityEnumeration,
+    ObjectFormat,
 )
-from ...schema.modeling.text import Text, EMPTY
 
 
 def update_base(obj: Declarable) -> Declarable:
@@ -57,62 +62,6 @@ def update_property_type_base(property_type: PropertyType):
         raise NotImplementedError
 
 
-def _dart_full_name(obj: Declarable) -> str:
-    full_name = utils.snake_case(obj.name)
-    if obj.parent is not None:
-        full_name = utils.snake_case(obj.parent.name) + full_name
-    return full_name
-
-
-def _make_dart_imports(items: List[str]) -> Text:
-    if not items:
-        return EMPTY
-    result = Text()
-    for item in items:
-        result += f'import \'./{utils.snake_case(item)}.dart\';'
-    return result
-
-
-dart_keywords = [
-    'default',
-    # ToDo(man-y): Dart has a strange system of allowed variable names that needs to be sorted out.
-    # Example:
-    #   void main() {
-    #       int double = 1;
-    #       print(double); it works!
-    #       double int = 0.0;
-    #       print(int);  //  it works too!
-    #       int int = 1;
-    #       print(int); it not works!!!
-    #   }
-    # While there is an exact certainty that it is impossible to use only the 'default'.
-    # 'abstract', 'else', 'import', 'show',
-    # 'as', 'enum', 'in', 'static',
-    # 'assert', 'export', 'interface', 'super',
-    # 'async', 'extends', 'is', 'switch',
-    # 'await', 'extension', 'late', 'sync',
-    # 'break', 'external', 'library', 'this',
-    # 'case', 'factory', 'mixin', 'throw',
-    # 'catch', 'false', 'new', 'true',
-    # 'class', 'final', 'null', 'try',
-    # 'const', 'finally', 'on', 'typedef',
-    # 'continue', 'for', 'operator', 'var',
-    # 'covariant', 'Function', 'part', 'void',
-    # 'default', 'get', 'required', 'while',
-    # 'deferred', 'hide', 'rethrow', 'with',
-    # 'do', 'if', 'return', 'yield',
-    # 'dynamic', 'implements', 'set',
-    # 'int', 'double', 'bool',
-]
-
-
-def allowed_name(name: str) -> str:
-    if name in dart_keywords:
-        return f'{name}_'
-    else:
-        return name
-
-
 class DartEntity(Entity):
     def update_base(self):
         for prop in self.properties:
@@ -124,16 +73,51 @@ class DartEntity(Entity):
         return list(filter(None, map(lambda p: p.property_type_dart.referenced_top_level_type_name, self.properties)))
 
     @property
-    def imports(self) -> Optional[Text]:
+    def imports(self) -> List[str]:
         types = self.referenced_top_level_types
         for inner_type in self.inner_types:
             if isinstance(inner_type, DartEntity):
                 types += inner_type.referenced_top_level_types
-        dart_full_name = _dart_full_name(self)
-        unique_types = list(filter(lambda t: t != dart_full_name, set(types)))
-        return None if not unique_types else _make_dart_imports(sorted(unique_types))
+        full_name = get_full_name(self)
+        unique_types = list(filter(lambda t: t != full_name, set(types)))
+        return [] if not unique_types else make_imports(sorted(unique_types))
 
-    pass
+    @property
+    def import_parsing_extensions(self) -> List[str]:
+        # ToDo(man-y): Follow the import execution logic if necessary.
+        # if any(isinstance(item, (Color, Int, Bool, BoolInt, Double, Url)) for item in
+        #        [p.property_type for p in self.instance_properties]):
+        return ["import '../utils/parsing_extensions.dart';"]
+        # else:
+        #     return []
+
+    @property
+    def is_main_declaration(self) -> bool:
+        return self.parent is None
+
+    @property
+    def has_super(self) -> bool:
+        return self._implemented_protocol is not None
+
+    @property
+    def super_entity(self) -> DartEntity:
+        return cast(DartEntity, self._implemented_protocol)
+
+    @property
+    def props(self) -> List[DartProperty]:
+        self.update_base()
+        return cast(List[DartProperty], self.properties)
+
+    @property
+    def static_properties(self) -> List[DartProperty]:
+        return list(filter(lambda p: isinstance(p.property_type, StaticString), self.props))
+
+    @property
+    def instance_properties(self) -> List[DartProperty]:
+        return list(filter(lambda p: not isinstance(p.property_type, StaticString), self.props))
+
+
+pass
 
 
 class DartProperty(Property):
@@ -152,45 +136,241 @@ class DartProperty(Property):
             name = utils.lower_camel_case(self.name)
         return utils.fixing_first_digit(name)
 
+    @property
+    def has_default(self) -> bool:
+        prop_type = cast(DartPropertyType, self.property_type)
+        return self.default_value is not None or prop_type.empty_constructor is not None
+
+    @property
+    def type_declaration(self) -> str:
+        optionality = '?' if self.optional and not self.has_default else ''
+        return cast(DartPropertyType, self.property_type).declaration() + optionality
+
+    @property
+    def get_default_import(self) -> Optional[str]:
+        prop = self.property_type_dart
+        default = self.default_value
+        if default is not None and isinstance(prop, Object):
+            if prop.object is None:
+                return None
+            if isinstance(prop.object, EntityEnumeration):
+                default_value_dict = utils.json_dict(default)
+                type_val = default_value_dict.get('type')
+                enum_case = None
+                for case in prop.object.entities:
+                    ent = case[1]
+                    if isinstance(ent, Entity) and ent.static_type == type_val:
+                        enum_case = case
+                if enum_case is None:
+                    raise ValueError(type_val)
+                return utils.capitalize_camel_case(enum_case[0])
+
+    # ToDo(man-y): Transfer the parsing strategy to the subtypes themselves.
+    def get_parse_strategy(self) -> str:
+        property_type = cast(DartPropertyType, self.property_type)
+        prop_type_decl = property_type.declaration()
+        required_cast = '' if self.optional or self.has_default else '!'
+
+        if isinstance(property_type, Int):
+            return f"safeParseInt(json['{self.name}']){required_cast}"
+        elif isinstance(property_type, Color):
+            return f"safeParseColor(json['{self.name}']){required_cast}"
+        elif isinstance(property_type, Double):
+            return f"safeParseDouble(json['{self.name}']){required_cast}"
+        elif isinstance(property_type, (Bool, BoolInt)):
+            return f"safeParseBool(json['{self.name}']){required_cast}"
+        elif isinstance(property_type, (String, StaticString)):
+            return f"json['{self.name}']{required_cast}"
+        elif isinstance(property_type, Dictionary):
+            return f"json{required_cast}"
+        elif isinstance(property_type, Url):
+            return f"safeParseUri(json['{self.name}']){required_cast}"
+        elif property_type.is_class():
+            return f"{prop_type_decl}.fromJson(json['{self.name}']){required_cast}"
+        elif property_type.is_list():
+            inner_item_type = property_type.get_list_inner_class()
+            if inner_item_type.is_class():
+                if inner_item_type.is_string_enumeration():
+                    return f"(json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
+                           f"{'?' if self.optional or self.has_default else ''}.map((s) => {prop_type_decl[5:-1]}" \
+                           ".fromJson(s)!).toList()"
+                else:
+                    return f"(json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
+                           f"{'?' if self.optional or self.has_default else ''}.map((j) => {prop_type_decl[5:-1]}." \
+                           "fromJson(j as Map <String, dynamic>)!).toList()"
+            else:
+                return f"(json['{self.name}'] as List<dynamic>{'?' if self.optional or self.has_default else ''})" \
+                       f"{'?' if self.optional or self.has_default else ''}.map((v) => (v as {prop_type_decl[5:-1]}))" \
+                       ".toList()"
+
+    def add_default_value_to(self, declaration: str, in_constructor=True) -> str:
+        prop_type = cast(DartPropertyType, self.property_type)
+        empty_dict_deserialization = prop_type.empty_constructor
+        if self.default_value is not None:
+            default_value_declaration_to_use = prop_type.internal_declaration(self.default_value)
+        elif empty_dict_deserialization is not None:
+            default_value_declaration_to_use = empty_dict_deserialization
+        else:
+            return declaration
+
+        if in_constructor:
+            default_value_declaration_to_use = f'{declaration} = {default_value_declaration_to_use}'
+        else:
+            default_value_declaration_to_use = f'{declaration} ?? {default_value_declaration_to_use}'
+
+        return default_value_declaration_to_use
+
+    @property
+    def comment(self) -> str:
+        return declaration_comment(self, lambda p: cast(str, self.property_type_dart.internal_declaration(
+            self.default_value)))
+
     pass
 
 
 class DartPropertyType(PropertyType):
     @property
+    def empty_constructor(self) -> Optional[str]:
+        if isinstance(self, Object) and isinstance(self.object, Entity) and \
+                self.object.all_properties_are_optional_except_default_values:
+            return f'const {get_full_name(self.object)}()'
+        return None
+
+    @property
     def referenced_top_level_type_name(self) -> Optional[str]:
         if isinstance(self, Object):
             obj = self.object
             if obj is not None and obj.parent is None:
-                return _dart_full_name(obj)
+                return get_full_name(obj)
             return None
         elif isinstance(self, DartArray):
             return self.property_type_dart.referenced_top_level_type_name
         return None
 
-    def declaration_by_prefixed(self) -> str:
+    def is_string_enumeration(self):
+        return isinstance(self, Object) and isinstance(self.object, StringEnumeration)
+
+    def is_class(self):
+        return isinstance(self, (Object, DartObject))
+
+    def get_list_inner_class(self) -> DartPropertyType:
+        if isinstance(self, (Array, DartArray)):
+            return cast(DartPropertyType, self.property_type)
+
+    def is_list(self):
+        return isinstance(self, (Array, DartArray))
+
+    def declaration(self) -> str:
         if isinstance(self, (Int, Color)):
             return 'int'
         elif isinstance(self, Double):
             return 'double'
         elif isinstance(self, (Bool, BoolInt)):
             return 'bool'
-        elif isinstance(self, String):
+        elif isinstance(self, (String, StaticString)):
             return 'String'
         elif isinstance(self, Dictionary):
             return 'Map<String, dynamic>'
-        elif isinstance(self, StaticString):
-            return 'String'
         elif isinstance(self, Url):
             return 'Uri'
         elif isinstance(self, Array):
             item_type = cast(DartPropertyType, self.property_type)
-            item_decl = item_type.declaration_by_prefixed()
+            item_decl = item_type.declaration()
             return f'List<{item_decl}>'
         elif isinstance(self, Object):
             if self.name.startswith('$predefined_'):
                 return self.name.replace('$predefined_', '')
 
             return self.object.resolved_prefixed_declaration.replace('.', '')
+
+    def internal_declaration(self, default_value: str) -> Optional[str]:
+        if isinstance(self, (Int, Bool, BoolInt, Double)):
+            return default_value
+        elif isinstance(self, String):
+            value_with_escaping_quotes = default_value.replace('"', '\"')
+            return f'"{value_with_escaping_quotes}"'
+        elif isinstance(self, Url):
+            return f'const Uri.parse("{default_value}")'
+        elif isinstance(self, Color):
+            color_value = default_value[1::].upper()
+            if len(color_value) == 3:
+                joined = ''.join(c + c for c in color_value)
+                color_argb_hex = f'FF{joined}'
+            elif len(color_value) == 4:
+                color_argb_hex = ''.join(c + c for c in color_value)
+            elif len(color_value) == 6:
+                color_argb_hex = f'FF{color_value}'
+            elif len(color_value) == 8:
+                color_argb_hex = color_value
+            else:
+                raise ValueError
+            return f'0x{color_argb_hex}'
+        elif isinstance(self, Array):
+            without_whitespaces = default_value.replace(' ', '').replace('\n', '')
+            if not without_whitespaces.startswith('[') or not without_whitespaces.endswith(']'):
+                return None
+            if without_whitespaces == '[]':
+                values = []
+            else:
+                values = without_whitespaces[1:-1].split(',')
+            item_type = cast(DartPropertyType, self.property_type)
+            declarations = list(filter(None, map(lambda value: item_type.internal_declaration(value), values)))
+            if len(values) != len(declarations):
+                return None
+            joined = ', '.join(declarations)
+            return f'[{joined}]'
+        elif isinstance(self, Object):
+            if self.object is None:
+                return None
+
+            if isinstance(self.object, StringEnumeration):
+                enum_case = next((case for case in self.object.cases if case[1] == default_value), None)
+                if enum_case is None:
+                    raise ValueError(default_value)
+                str_enum = cast(StringEnumeration, self.object)
+                full_name = get_full_name(str_enum)
+
+                return f'{full_name}.{allowed_name(utils.fixing_first_digit(utils.lower_camel_case(enum_case[0])))}'
+
+            default_value_dict = utils.json_dict(default_value)
+            if isinstance(self.object, EntityEnumeration):
+                type_val = default_value_dict.get('type')
+                enum_case = None
+                for case in self.object.entities:
+                    ent = case[1]
+                    if isinstance(ent, Entity) and ent.static_type == type_val:
+                        enum_case = case
+                if enum_case is None:
+                    raise ValueError(type_val)
+                prop_type = cast(DartPropertyType,
+                                 DartObject(name='', object=enum_case[1], format=ObjectFormat.DEFAULT))
+                case_constructor: Optional[str] = prop_type.internal_declaration(default_value)
+                if case_constructor is None:
+                    return None
+
+                return f'const {get_full_name(self.object)}.{allowed_name(utils.lower_camel_case(enum_case[0]))}({case_constructor})'
+
+            if isinstance(self.object, DartEntity):
+                entity = cast(DartEntity, self.object)
+                entity.__class__ = DartEntity
+
+                pref = ''
+                prop_init = ''
+                args = []
+                for prop in entity.instance_properties:
+                    str_type = default_value_dict.get(prop.dict_field)
+                    if str_type is None:
+                        continue
+                    declaration = cast(DartPropertyType, prop.property_type).internal_declaration(str_type)
+                    args.append(f'{prop.declaration_name}: {declaration}')
+                if len(args) != 0:
+                    prop_init = ', '.join(args)
+                    prop_init += ','
+                    pref = 'const '
+
+                return f'{pref}{get_full_name(entity)}({prop_init})'
+        else:
+            return None
 
     pass
 
