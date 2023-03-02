@@ -1,0 +1,97 @@
+{
+  "description": "Grid with paddings and content which doesn't fit in it",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_with_background": {
+      "type": "text",
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    },
+    "cell_with_one_pixel_margin": {
+      "type": "text_with_background",
+      "width": {
+        "type": "fixed",
+        "value": 50
+      },
+      "margins": {
+        "top": 1,
+        "left": 1,
+        "right": 1,
+        "bottom": 1
+      }
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "grid",
+          "column_count": 4,
+          "width": {
+            "type": "fixed",
+            "value": 200
+          },
+          "height": {
+            "type": "fixed",
+            "value": 50
+          },
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BB00FF"
+            }
+          },
+          "items": [
+            {
+              "type": "cell_with_one_pixel_margin",
+              "height": {
+                "type": "match_parent",
+                "weight": 1
+              },
+              "text": "match_parent"
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "height": {
+                "type": "fixed",
+                "value": 50
+              },
+              "text": "fixed height = 50"
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "height": {
+                "type": "wrap_content"
+              },
+              "text": "not constrained"
+            },
+            {
+              "type": "cell_with_one_pixel_margin",
+              "height": {
+                "type": "wrap_content",
+                "constrained": true
+              },
+              "text": "constrained"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

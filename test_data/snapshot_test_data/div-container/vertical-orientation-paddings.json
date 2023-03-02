@@ -1,0 +1,203 @@
+{
+  "description": "Vertical container with paddings",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "width": {
+        "type": "fixed",
+        "value": 80
+      },
+      "height": {
+        "type": "fixed",
+        "value": 220
+      },
+      "orientation": "vertical",
+      "paddings": {
+        "top": 10,
+        "right": 10,
+        "bottom": 10,
+        "left": 10
+      },
+      "border": {
+        "stroke": {
+          "color": "#A0FFA0"
+        }
+      },
+      "margins": {
+        "right": 10
+      }
+    },
+    "item": {
+      "type": "text",
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0A0FF"
+        }
+      ],
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      },
+      "font_size": 16
+    },
+    "width_item": {
+      "type": "item",
+      "height": {
+        "type": "fixed",
+        "value": 40
+      },
+      "margins": {
+        "top": 5,
+        "bottom": 5
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "test_container",
+                  "items": [
+                    {
+                      "type": "item",
+                      "height": {
+                        "type": "fixed",
+                        "value": 220
+                      },
+                      "text": "fixed height = 220"
+                    }
+                  ]
+                },
+                {
+                  "type": "test_container",
+                  "items": [
+                    {
+                      "type": "item",
+                      "height": {
+                        "type": "wrap_content"
+                      },
+                      "text": "not constrained element with very very long text"
+                    }
+                  ]
+                },
+                {
+                  "type": "test_container",
+                  "items": [
+                    {
+                      "type": "item",
+                      "height": {
+                        "type": "wrap_content",
+                        "constrained": true
+                      },
+                      "text": "constrained element with very very long text"
+                    },
+                    {
+                      "type": "item",
+                      "height": {
+                        "type": "fixed",
+                        "value": 60
+                      },
+                      "text": "fixed height"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "margins": {
+                "top": 10
+              },
+              "items": [
+                {
+                  "type": "test_container",
+                  "items": [
+                    {
+                      "type": "item",
+                      "height": {
+                        "type": "match_parent"
+                      },
+                      "text": "match_parent"
+                    },
+                    {
+                      "type": "item",
+                      "height": {
+                        "type": "fixed",
+                        "value": 60
+                      },
+                      "text": "fixed height"
+                    }
+                  ]
+                },
+                {
+                  "type": "test_container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 170
+                  },
+                  "items": [
+                    {
+                      "type": "width_item",
+                      "width": {
+                        "type": "match_parent"
+                      },
+                      "text": "match_parent"
+                    },
+                    {
+                      "type": "width_item",
+                      "width": {
+                        "type": "fixed",
+                        "value": 170
+                      },
+                      "text": "fixed width = 170"
+                    },
+                    {
+                      "type": "width_item",
+                      "width": {
+                        "type": "wrap_content"
+                      },
+                      "text": "not constrained element"
+                    },
+                    {
+                      "type": "width_item",
+                      "width": {
+                        "type": "wrap_content",
+                        "constrained": true
+                      },
+                      "text": "constrained element"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "description": "Horizontal container with paddings",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "orientation": "horizontal",
+      "border": {
+        "stroke": {
+          "color": "#A0FFA0"
+        }
+      },
+      "margins": {
+        "bottom": 10
+      },
+      "paddings": {
+        "top": 10,
+        "right": 10,
+        "bottom": 10,
+        "left": 10
+      }
+    },
+    "item": {
+      "type": "text",
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0A0FF"
+        }
+      ],
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      },
+      "font_size": 16
+    },
+    "height_item": {
+      "type": "item",
+      "width": {
+        "type": "fixed",
+        "value": 60
+      },
+      "margins": {
+        "left": 5,
+        "right": 5
+      }
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "width": {
+            "type": "fixed",
+            "value": 320
+          },
+          "items": [
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "fixed",
+                    "value": 320
+                  },
+                  "text": "fixed width = 320"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content"
+                  },
+                  "text": "not constrained element with very very long text"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  },
+                  "text": "constrained element with very very long text"
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80
+                  },
+                  "text": "fixed width"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "items": [
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "match_parent"
+                  },
+                  "text": "match_parent"
+                },
+                {
+                  "type": "item",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80
+                  },
+                  "text": "fixed width"
+                }
+              ]
+            },
+            {
+              "type": "test_container",
+              "height": {
+                "type": "fixed",
+                "value": 100
+              },
+              "items": [
+                {
+                  "type": "height_item",
+                  "height": {
+                    "type": "match_parent"
+                  },
+                  "text": "match_parent"
+                },
+                {
+                  "type": "height_item",
+                  "height": {
+                    "type": "fixed",
+                    "value": 120
+                  },
+                  "text": "fixed height = 120"
+                },
+                {
+                  "type": "height_item",
+                  "height": {
+                    "type": "wrap_content"
+                  },
+                  "text": "not constrained element"
+                },
+                {
+                  "type": "height_item",
+                  "height": {
+                    "type": "wrap_content",
+                    "constrained": true
+                  },
+                  "text": "constrained element"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

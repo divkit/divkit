@@ -1,0 +1,76 @@
+{
+  "description": "Horizontal pager with paddings and items which are higher than pager",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "text_page": {
+      "type": "text",
+      "height": {
+        "type": "wrap_content",
+        "constrained": true
+      },
+      "margins": {
+        "left": 5,
+        "right": 5
+      },
+      "background": [
+        {
+          "color": "#AAAAAA",
+          "type": "solid"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "pager",
+          "width": {
+            "type": "fixed",
+            "value": 100
+          },
+          "height": {
+            "type": "fixed",
+            "value": 60
+          },
+          "layout_mode": {
+            "type": "fixed",
+            "neighbour_page_width": {
+              "type": "fixed",
+              "value": 0
+            }
+          },
+          "paddings": {
+            "left": 10,
+            "top": 10,
+            "right": 10,
+            "bottom": 10
+          },
+          "border": {
+            "stroke": {
+              "color": "#BBFF0000",
+              "width": 1
+            },
+            "corner_radius": 10
+          },
+          "items": [
+            {
+              "type": "text_page",
+              "text": "For millions of years mankind lived just like animals"
+            },
+            {
+              "type": "text_page",
+              "text": "We learned to talk"
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
