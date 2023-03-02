@@ -1,3 +1,36 @@
+## 23.4.0
+
+# Android Client:
+Added:
+* Added `shimmer` extension
+* Supported `aspect ratio` in `overlap container`
+* Supported min/max sizes for containers with `wrap_content constrained` size
+
+Fixes:
+* Fixed `timers` in Div2View inside RecyclerView
+* Fixed `ellipsize` containing image span
+* Fixed `focus` when `accessibility` is turned on
+* Fixed `transition animations` in `state layout`
+
+# iOS Client:
+Added:
+* added `images` support for `ellipsis` in DivText
+
+Fixes:
+* fixed alignment inside wrap DivContainer
+* fixed views reuse in DivContainer
+* fixed concurrency issues in DivTriggersStorage
+* fixed transition animations inside DivGallery/DivPager
+
+# Web Client:
+Added:
+* `aspect` support for `container` (`aspect-ratio` css property support is required!)
+
+Fixes:
+* Updated missing function error text, to better match other platforms
+* Fixed error in `gallery` after destroy
+* Fixed element `wrap_content` sizes with `constrained` in `grid`
+
 ## 23.3.0
 
 # Android Client:

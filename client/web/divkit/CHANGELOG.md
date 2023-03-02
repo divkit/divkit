@@ -1,3 +1,13 @@
+## 23.4.0 (March 1, 2023)
+
+Added:
+* `aspect` support for `container` (`aspect-ratio` css property support is required!)
+
+Fixes:
+* Updated missing function error text, to better match other platforms
+* Fixed error in `gallery` after destroy
+* Fixed element `wrap_content` sizes with `constrained` in `grid`
+
 ## 23.1.0 (February 1, 2023)
 
 Added:
