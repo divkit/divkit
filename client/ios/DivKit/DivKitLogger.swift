@@ -1,6 +1,6 @@
 import Foundation
 
-private var externalLogger: (String) -> Void = { _ in }
+private var externalLogger: (DivErrorLevel, String) -> Void = { _,_  in }
 
 public enum DivKitLogger {
   public static var isEnabled: Bool = false
@@ -8,7 +8,7 @@ public enum DivKitLogger {
   public static func error(_ message: String) {
     if isEnabled {
       print("[DivKit] [ERROR] \(message)")
-      externalLogger(message)
+      externalLogger(.error, message)
     }
   }
 
@@ -22,12 +22,15 @@ public enum DivKitLogger {
   public static func warning(_ message: String) {
     if isEnabled {
       print("[DivKit] [WARNING] \(message)")
-      externalLogger(message)
+      externalLogger(.warning, message)
     }
   }
 
-  public static func setLogger(_ logger: @escaping (String) -> Void) {
+  public static func setLogger(_ logger: @escaping (DivErrorLevel, String) -> Void) {
     Thread.assertIsMain()
     externalLogger = logger
+  }
+  public static func setLogger(_ logger: @escaping (String) -> Void) {
+    setLogger({ logger($1) })
   }
 }
