@@ -1278,7 +1278,7 @@
         "Select item"
       ],
       "expected_results": [
-        "When selecting, the text in the input should change.",
+        "When selecting, the text in the input should change."
       ],
       "file": "selection_menu_input.json"
     },
