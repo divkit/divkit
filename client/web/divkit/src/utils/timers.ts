@@ -12,6 +12,8 @@ interface TimerState {
     tickTimeout?: number;
     tickStarted?: number;
     tickPassed?: number;
+    tickCount?: number;
+    tickCountPredict?: number;
     durationStarted?: number;
     durationPassed?: number;
     hold?: boolean;
@@ -145,6 +147,10 @@ export class TimersController {
         }
         this.updateVariable(timer, value);
         this.callActions(timer, 'tick');
+
+        if (timer.tickCount !== undefined) {
+            ++timer.tickCount;
+        }
     }
 
     private startOrResume(timer: TimerState): void {
@@ -157,18 +163,26 @@ export class TimersController {
         if (duration) {
             timer.durationTimeout = window.setTimeout(() => {
                 this.updateVariable(timer, duration);
+                if (
+                    timer.tickCountPredict &&
+                    timer.tickCount !== undefined &&
+                    timer.tickCount < timer.tickCountPredict
+                ) {
+                    this.callActions(timer, 'tick');
+                }
                 this.stop(timer);
             }, Math.max(0, duration - (timer.durationPassed || 0)));
         }
         const tick = timer.tick;
         if (tick) {
             const startTick = () => {
-                timer.tickStarted = performance.now();
+                const started = timer.tickStarted = performance.now();
+                const duration = Math.max(0, tick - (timer.tickPassed || 0));
                 timer.tickTimeout = window.setTimeout(() => {
                     this.tickOrUnholdAction(timer);
-                    timer.tickPassed = 0;
+                    timer.tickPassed = ((performance.now() - started) - duration) % tick;
                     startTick();
-                }, Math.max(0, tick - (timer.tickPassed || 0)));
+                }, duration);
             };
 
             startTick();
@@ -216,6 +230,11 @@ export class TimersController {
                 }
             }));
             return;
+        }
+
+        if (timer.duration !== undefined && timer.tick !== undefined) {
+            timer.tickCount = 0;
+            timer.tickCountPredict = Math.floor(timer.duration / timer.tick);
         }
 
         this.startOrResume(timer);
