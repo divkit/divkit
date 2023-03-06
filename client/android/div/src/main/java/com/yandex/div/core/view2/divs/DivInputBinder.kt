@@ -1,20 +1,23 @@
 package com.yandex.div.core.view2.divs
 
 import android.graphics.drawable.Drawable
-import android.text.Editable
 import android.text.InputType
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.variables.TwoWayStringVariableBinder
+import com.yandex.div.core.util.mask.MaskHelper
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivTypefaceResolver
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivInputView
+import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivFixedLengthInputMask
 import com.yandex.div2.DivInput
 import com.yandex.div2.DivSizeUnit
+import java.util.regex.PatternSyntaxException
 import javax.inject.Inject
 
 /**
@@ -24,7 +27,8 @@ import javax.inject.Inject
 internal class DivInputBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
     private val typefaceResolver: DivTypefaceResolver,
-    private val variableBinder: TwoWayStringVariableBinder
+    private val variableBinder: TwoWayStringVariableBinder,
+    private val errorCollectors: ErrorCollectors
 ) : DivViewBinder<DivInput, DivInputView> {
 
     override fun bindView(view: DivInputView, div: DivInput, divView: Div2View) {
@@ -61,7 +65,7 @@ internal class DivInputBinder @Inject constructor(
             observeKeyboardType(div, expressionResolver)
             observeSelectAllOnFocus(div, expressionResolver)
 
-            observeText(div, divView)
+            observeText(div, expressionResolver, divView)
         }
     }
 
@@ -190,21 +194,112 @@ internal class DivInputBinder @Inject constructor(
         addSubscription(div.selectAllOnFocus.observeAndGet(resolver, callback))
     }
 
-    private fun DivInputView.observeText(div: DivInput, divView: Div2View) {
+    private fun DivInputView.observeText(
+        div: DivInput,
+        resolver: ExpressionResolver,
+        divView: Div2View
+    ) {
         removeBoundVariableChangeAction()
+
+        var maskHelper: MaskHelper? = null
+
+        observeMask(div, resolver, divView) {
+            maskHelper = it
+
+            maskHelper?.let { mask ->
+                setText(mask.value)
+                setSelection(mask.cursorPosition)
+            }
+        }
 
         val callbacks = object : TwoWayStringVariableBinder.Callbacks {
             override fun onVariableChanged(value: String?) {
-                text = Editable.Factory.getInstance().newEditable(value)
+                val valueToSet = maskHelper?.let {
+                    it.applyChangeFrom(value ?: "")
+
+                    it.value
+                } ?: value
+
+                setText(valueToSet)
             }
 
             override fun setViewStateChangeListener(valueUpdater: (String) -> Unit) {
                 setBoundVariableChangeAction { editable ->
-                    valueUpdater(editable?.toString() ?: "")
+                    val fieldValue = editable?.toString() ?: ""
+
+                    maskHelper?.apply {
+                        if (value != fieldValue) {
+                            applyChangeFrom(text?.toString() ?: "")
+
+                            setText(value)
+                            setSelection(cursorPosition)
+                        }
+                    }
+
+                    val valueToUpdate = maskHelper?.rawValue ?: fieldValue
+
+                    valueUpdater(valueToUpdate)
                 }
             }
         }
 
         addSubscription(variableBinder.bindVariable(divView, div.textVariable, callbacks))
+    }
+
+    private fun DivInputView.observeMask(
+        div: DivInput,
+        resolver: ExpressionResolver,
+        divView: Div2View,
+        onMaskUpdate: (MaskHelper?) -> Unit
+    ) {
+        var maskHelper: MaskHelper? = null
+
+        val errorCollector = errorCollectors.getOrCreate(divView.dataTag, divView.divData)
+
+        val updateMaskData = { _: Any ->
+            val inputMask = div.mask?.value()
+
+            maskHelper = when (inputMask) {
+                null -> null
+                is DivFixedLengthInputMask -> {
+                    val maskData = MaskHelper.MaskData(
+                        inputMask.pattern.evaluate(resolver),
+                        inputMask.patternElements.map {
+                            MaskHelper.MaskKey(
+                                key = it.key.evaluate(resolver).first(),
+                                filter = it.regex?.evaluate(resolver),
+                                placeholder = it.placeholder.evaluate(resolver).first()
+                            )
+                        },
+                        inputMask.alwaysVisible.evaluate(resolver)
+                    )
+
+                    maskHelper?.apply { updateMaskData(maskData) } ?: MaskHelper(maskData) {
+                        when (it) {
+                            is PatternSyntaxException -> errorCollector.logError(
+                                IllegalArgumentException("Invalid regex pattern '${it.pattern}'.")
+                            )
+                        }
+                    }
+                }
+                else -> null
+            }
+
+            onMaskUpdate(maskHelper)
+        }
+
+        when (val inputMask = div.mask?.value()) {
+            null -> Unit
+            is DivFixedLengthInputMask -> {
+                addSubscription(inputMask.pattern.observeAndGet(resolver, updateMaskData))
+                inputMask.patternElements.forEach { patternElement ->
+                    addSubscription(patternElement.key.observe(resolver, updateMaskData))
+                    patternElement.regex?.let { addSubscription(it.observe(resolver, updateMaskData)) }
+                    addSubscription(patternElement.placeholder.observe(resolver, updateMaskData))
+                }
+                addSubscription(inputMask.alwaysVisible.observe(resolver, updateMaskData))
+            }
+            else -> Unit
+        }
     }
 }

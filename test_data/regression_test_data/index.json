@@ -1643,6 +1643,36 @@
         "No relayout"
       ],
       "file": "size_provider_recursive.json"
+    },
+    {
+      "title": "Input mask",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "steps": [
+        "Type single-key mask",
+        "Type multi-key mask",
+        "Switch show/hide placeholders"
+      ],
+      "expected_results": [
+        "Single-key mask works correctly",
+        "Multi-key mask works correctly",
+        "Placeholders shown/hidden"
+      ],
+      "file": "input_mask.json"
+    },
+    {
+      "title": "Phone input mask",
+      "platforms": [
+        "android"
+      ],
+      "tags": [
+        "DivInput"
+      ],
+      "file": "input_mask.json"
     }
   ]
 }
