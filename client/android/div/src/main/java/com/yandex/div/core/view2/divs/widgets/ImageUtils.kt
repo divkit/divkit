@@ -31,7 +31,7 @@ internal fun Bitmap.applyFilters(
 
     target.doOnLayout {
         val scale = max(target.height / height.toFloat(), target.width / width.toFloat())
-        val bitmap = Bitmap.createScaledBitmap(
+        var bitmap = Bitmap.createScaledBitmap(
             this,
             (scale * width).toInt(),
             (scale * height).toInt(),
@@ -39,31 +39,40 @@ internal fun Bitmap.applyFilters(
         )
         for (filter in filters) {
             when (filter) {
-                is DivFilter.Blur -> bitmap.applyBlur(filter.value, component, resolver)
+                is DivFilter.Blur -> bitmap = bitmap.getBlurredBitmap(filter.value, component, resolver)
             }
         }
         actionAfterFilters(bitmap)
     }
 }
 
-internal fun Bitmap.applyBlur(blur: DivBlur, component: Div2Component, resolver: ExpressionResolver) {
+internal fun Bitmap.getBlurredBitmap(blur: DivBlur, component: Div2Component, resolver: ExpressionResolver): Bitmap {
     var radius = blur.radius.evaluate(resolver)
     if (radius == 0) {
-        return
+        return this
     }
 
     radius = radius.dpToPx()
+    var sampling = 1f
     if (radius > RADIUS_MAX_VALUE_PX) {
+        sampling = radius * 1f / RADIUS_MAX_VALUE_PX
         radius = RADIUS_MAX_VALUE_PX
     }
 
+    val bitmap = if (sampling == 1f) {
+        this
+    } else {
+        Bitmap.createScaledBitmap(this, (width / sampling).toInt(), (height / sampling).toInt(), false)
+    }
+
     val rs = component.renderScript
-    val input = Allocation.createFromBitmap(rs, this)
+    val input = Allocation.createFromBitmap(rs, bitmap)
     val output = Allocation.createTyped(rs, input.type)
     ScriptIntrinsicBlur.create(rs, Element.U8_4(rs)).apply {
         setRadius(radius.toFloat())
         setInput(input)
         forEach(output)
     }
-    output.copyTo(this)
+    output.copyTo(bitmap)
+    return bitmap
 }

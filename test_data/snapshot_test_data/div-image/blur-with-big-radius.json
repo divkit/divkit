@@ -1,0 +1,96 @@
+{
+  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre (android didn't support blur radius > 25 px)",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "title": {
+      "type": "text",
+      "font_size": 16,
+      "margins": {
+        "left": 10,
+        "right": 10
+      }
+    },
+    "chess_card": {
+      "type": "image",
+      "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+      "margins": {
+        "left": 10,
+        "top": 5,
+        "right": 10,
+        "bottom": 5
+      },
+      "height": {
+        "type": "fixed",
+        "value": 70
+      },
+      "width": {
+        "type": "fixed",
+        "value": 300
+      },
+      "filters": [
+        {
+          "type": "blur",
+          "$radius": "radius"
+        }
+      ]
+    }
+  },
+  "card": {
+    "log_id": "snapshot_test_card",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "title",
+              "text": "blur radius: 10 dp"
+            },
+            {
+              "type": "chess_card",
+              "radius": 10
+            },
+            {
+              "type": "title",
+              "text": "blur radius: 20 dp"
+            },
+            {
+              "type": "chess_card",
+              "radius": 20
+            },
+            {
+              "type": "title",
+              "text": "blur radius: 30 dp"
+            },
+            {
+              "type": "chess_card",
+              "radius": 30
+            },
+            {
+              "type": "title",
+              "text": "blur radius: 40 dp"
+            },
+            {
+              "type": "chess_card",
+              "radius": 40
+            },
+            {
+              "type": "title",
+              "text": "blur radius: 50 dp"
+            },
+            {
+              "type": "chess_card",
+              "radius": 50
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
