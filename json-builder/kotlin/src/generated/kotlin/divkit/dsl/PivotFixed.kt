@@ -137,15 +137,17 @@ fun PivotFixed.defer(
 )
 
 /**
+ * @param unit Measurement unit. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param value Coordinate value.
  */
 @Generated
 fun PivotFixed.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    unit: ExpressionProperty<SizeUnit>? = null,
     value: ExpressionProperty<Int>? = null,
 ): PivotFixed = PivotFixed(
     PivotFixed.Properties(
-        unit = properties.unit,
+        unit = unit ?: properties.unit,
         value = value ?: properties.value,
     )
 )

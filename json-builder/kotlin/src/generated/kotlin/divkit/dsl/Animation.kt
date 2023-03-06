@@ -105,8 +105,6 @@ class Animation internal constructor(
      */
     @Generated
     sealed interface Name
-
-    fun Name.asList() = listOf(this)
 }
 
 /**
@@ -126,7 +124,7 @@ fun DivScope.animation(
     endValue: Double? = null,
     interpolator: AnimationInterpolator? = null,
     items: List<Animation>? = null,
-    name: Animation.Name,
+    name: Animation.Name? = null,
     repeat: Count? = null,
     startDelay: Int? = null,
     startValue: Double? = null,
@@ -278,6 +276,8 @@ fun Animation.defer(
 /**
  * @param duration Animation duration in milliseconds.
  * @param endValue Final value of an animation.
+ * @param interpolator Animation speed nature. When the value is set to `spring` — animation of damping fluctuations cut to 0.7 with the `damping=1` parameter. Other options correspond to the Bezier curve:<li>`linear` — cubic-bezier(0, 0, 1, 1);</li><li>`ease` — cubic-bezier(0.25, 0.1, 0.25, 1);</li><li>`ease_in` — cubic-bezier(0.42, 0, 1, 1);</li><li>`ease_out` — cubic-bezier(0, 0, 0.58, 1);</li><li>`ease_in_out` — cubic-bezier(0.42, 0, 0.58, 1).</li>
+ * @param name Animation type.
  * @param startDelay Delay in milliseconds before animation starts.
  * @param startValue Starting value of an animation.
  */
@@ -286,15 +286,17 @@ fun Animation.evaluate(
     `use named arguments`: Guard = Guard.instance,
     duration: ExpressionProperty<Int>? = null,
     endValue: ExpressionProperty<Double>? = null,
+    interpolator: ExpressionProperty<AnimationInterpolator>? = null,
+    name: ExpressionProperty<Animation.Name>? = null,
     startDelay: ExpressionProperty<Int>? = null,
     startValue: ExpressionProperty<Double>? = null,
 ): Animation = Animation(
     Animation.Properties(
         duration = duration ?: properties.duration,
         endValue = endValue ?: properties.endValue,
-        interpolator = properties.interpolator,
+        interpolator = interpolator ?: properties.interpolator,
         items = properties.items,
-        name = properties.name,
+        name = name ?: properties.name,
         repeat = properties.repeat,
         startDelay = startDelay ?: properties.startDelay,
         startValue = startValue ?: properties.startValue,
@@ -303,3 +305,6 @@ fun Animation.evaluate(
 
 @Generated
 fun Animation.asList() = listOf(this)
+
+@Generated
+fun Animation.Name.asList() = listOf(this)

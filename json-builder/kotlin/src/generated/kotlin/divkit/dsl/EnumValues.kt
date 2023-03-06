@@ -24,6 +24,56 @@ sealed class EnumValue(
 )
 
 @Generated
+object DefaultEnumValue : EnumValue("default"),
+    Accessibility.Mode,
+    Gallery.ScrollMode
+
+@Generated
+object MergeEnumValue : EnumValue("merge"),
+    Accessibility.Mode
+
+@Generated
+object ExcludeEnumValue : EnumValue("exclude"),
+    Accessibility.Mode
+
+@Generated
+object NoneEnumValue : EnumValue("none"),
+    Accessibility.Type,
+    LineStyle,
+    Tabs.TabTitleStyle.AnimationType,
+    Text.Truncate,
+    TransitionSelector
+
+@Generated
+object ButtonEnumValue : EnumValue("button"),
+    Accessibility.Type
+
+@Generated
+object ImageEnumValue : EnumValue("image"),
+    Accessibility.Type
+
+@Generated
+object TextEnumValue : EnumValue("text"),
+    Accessibility.Type,
+    FontFamily
+
+@Generated
+object EditTextEnumValue : EnumValue("edit_text"),
+    Accessibility.Type
+
+@Generated
+object HeaderEnumValue : EnumValue("header"),
+    Accessibility.Type
+
+@Generated
+object TabBarEnumValue : EnumValue("tab_bar"),
+    Accessibility.Type
+
+@Generated
+object ListEnumValue : EnumValue("list"),
+    Accessibility.Type
+
+@Generated
 object SelfEnumValue : EnumValue("_self"),
     Action.Target
 
@@ -50,28 +100,20 @@ object RightEnumValue : EnumValue("right"),
     Tooltip.Position
 
 @Generated
-object LinearEnumValue : EnumValue("linear"),
-    AnimationInterpolator
+object TopEnumValue : EnumValue("top"),
+    AlignmentVertical,
+    SlideTransition.Edge,
+    Tooltip.Position
 
 @Generated
-object EaseEnumValue : EnumValue("ease"),
-    AnimationInterpolator
+object BottomEnumValue : EnumValue("bottom"),
+    AlignmentVertical,
+    SlideTransition.Edge,
+    Tooltip.Position
 
 @Generated
-object EaseInEnumValue : EnumValue("ease_in"),
-    AnimationInterpolator
-
-@Generated
-object EaseOutEnumValue : EnumValue("ease_out"),
-    AnimationInterpolator
-
-@Generated
-object EaseInOutEnumValue : EnumValue("ease_in_out"),
-    AnimationInterpolator
-
-@Generated
-object SpringEnumValue : EnumValue("spring"),
-    AnimationInterpolator
+object BaselineEnumValue : EnumValue("baseline"),
+    AlignmentVertical
 
 @Generated
 object FadeEnumValue : EnumValue("fade"),
@@ -100,9 +142,78 @@ object NoAnimationEnumValue : EnumValue("no_animation"),
     Animation.Name
 
 @Generated
-object TextEnumValue : EnumValue("text"),
-    Accessibility.Type,
-    FontFamily
+object LinearEnumValue : EnumValue("linear"),
+    AnimationInterpolator
+
+@Generated
+object EaseEnumValue : EnumValue("ease"),
+    AnimationInterpolator
+
+@Generated
+object EaseInEnumValue : EnumValue("ease_in"),
+    AnimationInterpolator
+
+@Generated
+object EaseOutEnumValue : EnumValue("ease_out"),
+    AnimationInterpolator
+
+@Generated
+object EaseInOutEnumValue : EnumValue("ease_in_out"),
+    AnimationInterpolator
+
+@Generated
+object SpringEnumValue : EnumValue("spring"),
+    AnimationInterpolator
+
+@Generated
+object SourceInEnumValue : EnumValue("source_in"),
+    BlendMode
+
+@Generated
+object SourceAtopEnumValue : EnumValue("source_atop"),
+    BlendMode
+
+@Generated
+object DarkenEnumValue : EnumValue("darken"),
+    BlendMode
+
+@Generated
+object LightenEnumValue : EnumValue("lighten"),
+    BlendMode
+
+@Generated
+object MultiplyEnumValue : EnumValue("multiply"),
+    BlendMode
+
+@Generated
+object ScreenEnumValue : EnumValue("screen"),
+    BlendMode
+
+@Generated
+object NoWrapEnumValue : EnumValue("no_wrap"),
+    Container.LayoutMode
+
+@Generated
+object WrapEnumValue : EnumValue("wrap"),
+    Container.LayoutMode
+
+@Generated
+object VerticalEnumValue : EnumValue("vertical"),
+    Container.Orientation,
+    Gallery.Orientation,
+    Pager.Orientation,
+    Separator.DelimiterStyle.Orientation
+
+@Generated
+object HorizontalEnumValue : EnumValue("horizontal"),
+    Container.Orientation,
+    Gallery.Orientation,
+    Pager.Orientation,
+    Separator.DelimiterStyle.Orientation
+
+@Generated
+object OverlapEnumValue : EnumValue("overlap"),
+    Container.Orientation
 
 @Generated
 object DisplayEnumValue : EnumValue("display"),
@@ -125,6 +236,20 @@ object BoldEnumValue : EnumValue("bold"),
     FontWeight
 
 @Generated
+object StartEnumValue : EnumValue("start"),
+    Gallery.CrossContentAlignment,
+    Text.Truncate
+
+@Generated
+object EndEnumValue : EnumValue("end"),
+    Gallery.CrossContentAlignment,
+    Text.Truncate
+
+@Generated
+object PagingEnumValue : EnumValue("paging"),
+    Gallery.ScrollMode
+
+@Generated
 object FillEnumValue : EnumValue("fill"),
     ImageScale
 
@@ -137,12 +262,42 @@ object FitEnumValue : EnumValue("fit"),
     ImageScale
 
 @Generated
-object NoneEnumValue : EnumValue("none"),
-    Accessibility.Type,
-    LineStyle,
-    Tabs.TabTitleStyle.AnimationType,
-    Text.Truncate,
-    TransitionSelector
+object WormEnumValue : EnumValue("worm"),
+    Indicator.Animation
+
+@Generated
+object SliderEnumValue : EnumValue("slider"),
+    Indicator.Animation
+
+@Generated
+object SingleLineTextEnumValue : EnumValue("single_line_text"),
+    Input.KeyboardType,
+    KeyboardInput.KeyboardType
+
+@Generated
+object MultiLineTextEnumValue : EnumValue("multi_line_text"),
+    Input.KeyboardType,
+    KeyboardInput.KeyboardType
+
+@Generated
+object PhoneEnumValue : EnumValue("phone"),
+    Input.KeyboardType,
+    KeyboardInput.KeyboardType
+
+@Generated
+object NumberEnumValue : EnumValue("number"),
+    Input.KeyboardType,
+    KeyboardInput.KeyboardType
+
+@Generated
+object EmailEnumValue : EnumValue("email"),
+    Input.KeyboardType,
+    KeyboardInput.KeyboardType
+
+@Generated
+object UriEnumValue : EnumValue("uri"),
+    Input.KeyboardType,
+    KeyboardInput.KeyboardType
 
 @Generated
 object SingleEnumValue : EnumValue("single"),
@@ -157,18 +312,20 @@ object PartialEnumValue : EnumValue("partial"),
     Patch.Mode
 
 @Generated
-object VerticalEnumValue : EnumValue("vertical"),
-    Container.Orientation,
-    Gallery.Orientation,
-    Pager.Orientation,
-    Separator.DelimiterStyle.Orientation
+object NearestCornerEnumValue : EnumValue("nearest_corner"),
+    RadialGradientRelativeRadius.Value
 
 @Generated
-object HorizontalEnumValue : EnumValue("horizontal"),
-    Container.Orientation,
-    Gallery.Orientation,
-    Pager.Orientation,
-    Separator.DelimiterStyle.Orientation
+object FarthestCornerEnumValue : EnumValue("farthest_corner"),
+    RadialGradientRelativeRadius.Value
+
+@Generated
+object NearestSideEnumValue : EnumValue("nearest_side"),
+    RadialGradientRelativeRadius.Value
+
+@Generated
+object FarthestSideEnumValue : EnumValue("farthest_side"),
+    RadialGradientRelativeRadius.Value
 
 @Generated
 object DpEnumValue : EnumValue("dp"),
@@ -183,16 +340,12 @@ object PxEnumValue : EnumValue("px"),
     SizeUnit
 
 @Generated
-object TopEnumValue : EnumValue("top"),
-    AlignmentVertical,
-    SlideTransition.Edge,
-    Tooltip.Position
+object SlideEnumValue : EnumValue("slide"),
+    Tabs.TabTitleStyle.AnimationType
 
 @Generated
-object BottomEnumValue : EnumValue("bottom"),
-    AlignmentVertical,
-    SlideTransition.Edge,
-    Tooltip.Position
+object MiddleEnumValue : EnumValue("middle"),
+    Text.Truncate
 
 @Generated
 object TopLeftEnumValue : EnumValue("top-left"),
@@ -249,151 +402,48 @@ object GoneEnumValue : EnumValue("gone"),
     Visibility
 
 @Generated
-object SourceInEnumValue : EnumValue("source_in"),
-    BlendMode
+val DivScope.default: DefaultEnumValue
+    get() = DefaultEnumValue
 
 @Generated
-object SourceAtopEnumValue : EnumValue("source_atop"),
-    BlendMode
+val DivScope.merge: MergeEnumValue
+    get() = MergeEnumValue
 
 @Generated
-object DarkenEnumValue : EnumValue("darken"),
-    BlendMode
+val DivScope.exclude: ExcludeEnumValue
+    get() = ExcludeEnumValue
 
 @Generated
-object LightenEnumValue : EnumValue("lighten"),
-    BlendMode
+val DivScope.none: NoneEnumValue
+    get() = NoneEnumValue
 
 @Generated
-object MultiplyEnumValue : EnumValue("multiply"),
-    BlendMode
+val DivScope.button: ButtonEnumValue
+    get() = ButtonEnumValue
 
 @Generated
-object ScreenEnumValue : EnumValue("screen"),
-    BlendMode
+val DivScope.image: ImageEnumValue
+    get() = ImageEnumValue
 
 @Generated
-object NearestCornerEnumValue : EnumValue("nearest_corner"),
-    RadialGradientRelativeRadius.Value
+val DivScope.text: TextEnumValue
+    get() = TextEnumValue
 
 @Generated
-object FarthestCornerEnumValue : EnumValue("farthest_corner"),
-    RadialGradientRelativeRadius.Value
+val DivScope.edit_text: EditTextEnumValue
+    get() = EditTextEnumValue
 
 @Generated
-object NearestSideEnumValue : EnumValue("nearest_side"),
-    RadialGradientRelativeRadius.Value
+val DivScope.header: HeaderEnumValue
+    get() = HeaderEnumValue
 
 @Generated
-object FarthestSideEnumValue : EnumValue("farthest_side"),
-    RadialGradientRelativeRadius.Value
+val DivScope.tab_bar: TabBarEnumValue
+    get() = TabBarEnumValue
 
 @Generated
-object SlideEnumValue : EnumValue("slide"),
-    Tabs.TabTitleStyle.AnimationType
-
-@Generated
-object StartEnumValue : EnumValue("start"),
-    Gallery.CrossContentAlignment,
-    Text.Truncate
-
-@Generated
-object EndEnumValue : EnumValue("end"),
-    Gallery.CrossContentAlignment,
-    Text.Truncate
-
-@Generated
-object PagingEnumValue : EnumValue("paging"),
-    Gallery.ScrollMode
-
-@Generated
-object DefaultEnumValue : EnumValue("default"),
-    Accessibility.Mode,
-    Gallery.ScrollMode
-
-@Generated
-object BaselineEnumValue : EnumValue("baseline"),
-    AlignmentVertical
-
-@Generated
-object MergeEnumValue : EnumValue("merge"),
-    Accessibility.Mode
-
-@Generated
-object ExcludeEnumValue : EnumValue("exclude"),
-    Accessibility.Mode
-
-@Generated
-object ButtonEnumValue : EnumValue("button"),
-    Accessibility.Type
-
-@Generated
-object ImageEnumValue : EnumValue("image"),
-    Accessibility.Type
-
-@Generated
-object EditTextEnumValue : EnumValue("edit_text"),
-    Accessibility.Type
-
-@Generated
-object HeaderEnumValue : EnumValue("header"),
-    Accessibility.Type
-
-@Generated
-object TabBarEnumValue : EnumValue("tab_bar"),
-    Accessibility.Type
-
-@Generated
-object ListEnumValue : EnumValue("list"),
-    Accessibility.Type
-
-@Generated
-object WormEnumValue : EnumValue("worm"),
-    Indicator.Animation
-
-@Generated
-object SliderEnumValue : EnumValue("slider"),
-    Indicator.Animation
-
-@Generated
-object MiddleEnumValue : EnumValue("middle"),
-    Text.Truncate
-
-@Generated
-object NoWrapEnumValue : EnumValue("no_wrap"),
-    Container.LayoutMode
-
-@Generated
-object WrapEnumValue : EnumValue("wrap"),
-    Container.LayoutMode
-
-@Generated
-object OverlapEnumValue : EnumValue("overlap"),
-    Container.Orientation
-
-@Generated
-object SingleLineTextEnumValue : EnumValue("single_line_text"),
-    Input.KeyboardType
-
-@Generated
-object MultiLineTextEnumValue : EnumValue("multi_line_text"),
-    Input.KeyboardType
-
-@Generated
-object PhoneEnumValue : EnumValue("phone"),
-    Input.KeyboardType
-
-@Generated
-object NumberEnumValue : EnumValue("number"),
-    Input.KeyboardType
-
-@Generated
-object EmailEnumValue : EnumValue("email"),
-    Input.KeyboardType
-
-@Generated
-object UriEnumValue : EnumValue("uri"),
-    Input.KeyboardType
+val DivScope.list: ListEnumValue
+    get() = ListEnumValue
 
 @Generated
 val DivScope.self: SelfEnumValue
@@ -416,28 +466,16 @@ val DivScope.right: RightEnumValue
     get() = RightEnumValue
 
 @Generated
-val DivScope.linear: LinearEnumValue
-    get() = LinearEnumValue
+val DivScope.top: TopEnumValue
+    get() = TopEnumValue
 
 @Generated
-val DivScope.ease: EaseEnumValue
-    get() = EaseEnumValue
+val DivScope.bottom: BottomEnumValue
+    get() = BottomEnumValue
 
 @Generated
-val DivScope.ease_in: EaseInEnumValue
-    get() = EaseInEnumValue
-
-@Generated
-val DivScope.ease_out: EaseOutEnumValue
-    get() = EaseOutEnumValue
-
-@Generated
-val DivScope.ease_in_out: EaseInOutEnumValue
-    get() = EaseInOutEnumValue
-
-@Generated
-val DivScope.spring: SpringEnumValue
-    get() = SpringEnumValue
+val DivScope.baseline: BaselineEnumValue
+    get() = BaselineEnumValue
 
 @Generated
 val DivScope.fade: FadeEnumValue
@@ -464,8 +502,72 @@ val DivScope.no_animation: NoAnimationEnumValue
     get() = NoAnimationEnumValue
 
 @Generated
-val DivScope.text: TextEnumValue
-    get() = TextEnumValue
+val DivScope.linear: LinearEnumValue
+    get() = LinearEnumValue
+
+@Generated
+val DivScope.ease: EaseEnumValue
+    get() = EaseEnumValue
+
+@Generated
+val DivScope.ease_in: EaseInEnumValue
+    get() = EaseInEnumValue
+
+@Generated
+val DivScope.ease_out: EaseOutEnumValue
+    get() = EaseOutEnumValue
+
+@Generated
+val DivScope.ease_in_out: EaseInOutEnumValue
+    get() = EaseInOutEnumValue
+
+@Generated
+val DivScope.spring: SpringEnumValue
+    get() = SpringEnumValue
+
+@Generated
+val DivScope.source_in: SourceInEnumValue
+    get() = SourceInEnumValue
+
+@Generated
+val DivScope.source_atop: SourceAtopEnumValue
+    get() = SourceAtopEnumValue
+
+@Generated
+val DivScope.darken: DarkenEnumValue
+    get() = DarkenEnumValue
+
+@Generated
+val DivScope.lighten: LightenEnumValue
+    get() = LightenEnumValue
+
+@Generated
+val DivScope.multiply: MultiplyEnumValue
+    get() = MultiplyEnumValue
+
+@Generated
+val DivScope.screen: ScreenEnumValue
+    get() = ScreenEnumValue
+
+@Generated
+val DivScope.no_wrap: NoWrapEnumValue
+    get() = NoWrapEnumValue
+
+@Generated
+val DivScope.wrap: WrapEnumValue
+    get() = WrapEnumValue
+
+@Generated
+val DivScope.vertical: VerticalEnumValue
+    get() = VerticalEnumValue
+
+@Generated
+val DivScope.horizontal: HorizontalEnumValue
+    get() = HorizontalEnumValue
+
+@Generated
+val DivScope.overlap: OverlapEnumValue
+    get() = OverlapEnumValue
 
 @Generated
 val DivScope.display: DisplayEnumValue
@@ -488,6 +590,18 @@ val DivScope.bold: BoldEnumValue
     get() = BoldEnumValue
 
 @Generated
+val DivScope.start: StartEnumValue
+    get() = StartEnumValue
+
+@Generated
+val DivScope.end: EndEnumValue
+    get() = EndEnumValue
+
+@Generated
+val DivScope.paging: PagingEnumValue
+    get() = PagingEnumValue
+
+@Generated
 val DivScope.fill: FillEnumValue
     get() = FillEnumValue
 
@@ -500,8 +614,36 @@ val DivScope.fit: FitEnumValue
     get() = FitEnumValue
 
 @Generated
-val DivScope.none: NoneEnumValue
-    get() = NoneEnumValue
+val DivScope.worm: WormEnumValue
+    get() = WormEnumValue
+
+@Generated
+val DivScope.slider: SliderEnumValue
+    get() = SliderEnumValue
+
+@Generated
+val DivScope.single_line_text: SingleLineTextEnumValue
+    get() = SingleLineTextEnumValue
+
+@Generated
+val DivScope.multi_line_text: MultiLineTextEnumValue
+    get() = MultiLineTextEnumValue
+
+@Generated
+val DivScope.phone: PhoneEnumValue
+    get() = PhoneEnumValue
+
+@Generated
+val DivScope.number: NumberEnumValue
+    get() = NumberEnumValue
+
+@Generated
+val DivScope.email: EmailEnumValue
+    get() = EmailEnumValue
+
+@Generated
+val DivScope.uri: UriEnumValue
+    get() = UriEnumValue
 
 @Generated
 val DivScope.single: SingleEnumValue
@@ -516,12 +658,20 @@ val DivScope.partial: PartialEnumValue
     get() = PartialEnumValue
 
 @Generated
-val DivScope.vertical: VerticalEnumValue
-    get() = VerticalEnumValue
+val DivScope.nearest_corner: NearestCornerEnumValue
+    get() = NearestCornerEnumValue
 
 @Generated
-val DivScope.horizontal: HorizontalEnumValue
-    get() = HorizontalEnumValue
+val DivScope.farthest_corner: FarthestCornerEnumValue
+    get() = FarthestCornerEnumValue
+
+@Generated
+val DivScope.nearest_side: NearestSideEnumValue
+    get() = NearestSideEnumValue
+
+@Generated
+val DivScope.farthest_side: FarthestSideEnumValue
+    get() = FarthestSideEnumValue
 
 @Generated
 val DivScope.dp: DpEnumValue
@@ -536,12 +686,12 @@ val DivScope.px: PxEnumValue
     get() = PxEnumValue
 
 @Generated
-val DivScope.top: TopEnumValue
-    get() = TopEnumValue
+val DivScope.slide: SlideEnumValue
+    get() = SlideEnumValue
 
 @Generated
-val DivScope.bottom: BottomEnumValue
-    get() = BottomEnumValue
+val DivScope.middle: MiddleEnumValue
+    get() = MiddleEnumValue
 
 @Generated
 val DivScope.top_left: TopLeftEnumValue
@@ -594,147 +744,3 @@ val DivScope.invisible: InvisibleEnumValue
 @Generated
 val DivScope.gone: GoneEnumValue
     get() = GoneEnumValue
-
-@Generated
-val DivScope.source_in: SourceInEnumValue
-    get() = SourceInEnumValue
-
-@Generated
-val DivScope.source_atop: SourceAtopEnumValue
-    get() = SourceAtopEnumValue
-
-@Generated
-val DivScope.darken: DarkenEnumValue
-    get() = DarkenEnumValue
-
-@Generated
-val DivScope.lighten: LightenEnumValue
-    get() = LightenEnumValue
-
-@Generated
-val DivScope.multiply: MultiplyEnumValue
-    get() = MultiplyEnumValue
-
-@Generated
-val DivScope.screen: ScreenEnumValue
-    get() = ScreenEnumValue
-
-@Generated
-val DivScope.nearest_corner: NearestCornerEnumValue
-    get() = NearestCornerEnumValue
-
-@Generated
-val DivScope.farthest_corner: FarthestCornerEnumValue
-    get() = FarthestCornerEnumValue
-
-@Generated
-val DivScope.nearest_side: NearestSideEnumValue
-    get() = NearestSideEnumValue
-
-@Generated
-val DivScope.farthest_side: FarthestSideEnumValue
-    get() = FarthestSideEnumValue
-
-@Generated
-val DivScope.slide: SlideEnumValue
-    get() = SlideEnumValue
-
-@Generated
-val DivScope.start: StartEnumValue
-    get() = StartEnumValue
-
-@Generated
-val DivScope.end: EndEnumValue
-    get() = EndEnumValue
-
-@Generated
-val DivScope.paging: PagingEnumValue
-    get() = PagingEnumValue
-
-@Generated
-val DivScope.default: DefaultEnumValue
-    get() = DefaultEnumValue
-
-@Generated
-val DivScope.baseline: BaselineEnumValue
-    get() = BaselineEnumValue
-
-@Generated
-val DivScope.merge: MergeEnumValue
-    get() = MergeEnumValue
-
-@Generated
-val DivScope.exclude: ExcludeEnumValue
-    get() = ExcludeEnumValue
-
-@Generated
-val DivScope.button: ButtonEnumValue
-    get() = ButtonEnumValue
-
-@Generated
-val DivScope.image: ImageEnumValue
-    get() = ImageEnumValue
-
-@Generated
-val DivScope.edit_text: EditTextEnumValue
-    get() = EditTextEnumValue
-
-@Generated
-val DivScope.header: HeaderEnumValue
-    get() = HeaderEnumValue
-
-@Generated
-val DivScope.tab_bar: TabBarEnumValue
-    get() = TabBarEnumValue
-
-@Generated
-val DivScope.list: ListEnumValue
-    get() = ListEnumValue
-
-@Generated
-val DivScope.worm: WormEnumValue
-    get() = WormEnumValue
-
-@Generated
-val DivScope.slider: SliderEnumValue
-    get() = SliderEnumValue
-
-@Generated
-val DivScope.middle: MiddleEnumValue
-    get() = MiddleEnumValue
-
-@Generated
-val DivScope.no_wrap: NoWrapEnumValue
-    get() = NoWrapEnumValue
-
-@Generated
-val DivScope.wrap: WrapEnumValue
-    get() = WrapEnumValue
-
-@Generated
-val DivScope.overlap: OverlapEnumValue
-    get() = OverlapEnumValue
-
-@Generated
-val DivScope.single_line_text: SingleLineTextEnumValue
-    get() = SingleLineTextEnumValue
-
-@Generated
-val DivScope.multi_line_text: MultiLineTextEnumValue
-    get() = MultiLineTextEnumValue
-
-@Generated
-val DivScope.phone: PhoneEnumValue
-    get() = PhoneEnumValue
-
-@Generated
-val DivScope.number: NumberEnumValue
-    get() = NumberEnumValue
-
-@Generated
-val DivScope.email: EmailEnumValue
-    get() = EmailEnumValue
-
-@Generated
-val DivScope.uri: UriEnumValue
-    get() = UriEnumValue

@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Background
 
+@Generated
 fun Background.asList() = listOf(this)

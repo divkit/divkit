@@ -70,7 +70,7 @@ class LinearGradient internal constructor(
 fun DivScope.linearGradient(
     `use named arguments`: Guard = Guard.instance,
     angle: Int? = null,
-    colors: List<Color>,
+    colors: List<Color>? = null,
 ): LinearGradient = LinearGradient(
     LinearGradient.Properties(
         angle = valueOrNull(angle),

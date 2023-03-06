@@ -68,8 +68,8 @@ class NumberVariable internal constructor(
 @Generated
 fun DivScope.numberVariable(
     `use named arguments`: Guard = Guard.instance,
-    name: String,
-    value: Double,
+    name: String? = null,
+    value: Double? = null,
 ): NumberVariable = NumberVariable(
     NumberVariable.Properties(
         name = valueOrNull(name),

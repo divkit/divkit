@@ -1,6 +1,13 @@
 {
   "type": "object",
   "$description": "translations.json#/div_fixed_size",
+  "codegen": {
+    "divan": {
+      "forced_properties_order": [
+        "value"
+      ]
+    }
+  },
   "properties": {
     "value": {
       "$ref": "common.json#/non_negative_integer",

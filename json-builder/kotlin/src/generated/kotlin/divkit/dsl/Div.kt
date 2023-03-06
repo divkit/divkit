@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Div
 
+@Generated
 fun Div.asList() = listOf(this)

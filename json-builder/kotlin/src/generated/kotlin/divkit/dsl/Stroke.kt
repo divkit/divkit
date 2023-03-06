@@ -73,7 +73,7 @@ class Stroke internal constructor(
 @Generated
 fun DivScope.stroke(
     `use named arguments`: Guard = Guard.instance,
-    color: Color,
+    color: Color? = null,
     unit: SizeUnit? = null,
     width: Int? = null,
 ): Stroke = Stroke(
@@ -160,11 +160,12 @@ fun Stroke.defer(
 fun Stroke.evaluate(
     `use named arguments`: Guard = Guard.instance,
     color: ExpressionProperty<Color>? = null,
+    unit: ExpressionProperty<SizeUnit>? = null,
     width: ExpressionProperty<Int>? = null,
 ): Stroke = Stroke(
     Stroke.Properties(
         color = color ?: properties.color,
-        unit = properties.unit,
+        unit = unit ?: properties.unit,
         width = width ?: properties.width,
     )
 )

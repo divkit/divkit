@@ -25,65 +25,13 @@ import kotlin.collections.Map
  * Required properties: `type`.
  */
 @Generated
-class InfinityCount internal constructor(
-    @JsonIgnore
-    val properties: Properties,
-) : Count {
+object InfinityCount : Count {
     @JsonAnyGetter
-    internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
-        mapOf("type" to "infinity")
-    )
-
-    operator fun plus(additive: Properties): InfinityCount = InfinityCount(
-        Properties(
-        )
-    )
-
-    class Properties internal constructor(
-    ) {
-        internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
-            val result = mutableMapOf<String, Any>()
-            result.putAll(properties)
-            return result
-        }
-    }
+    internal fun getJsonProperties(): Map<String, Any> = mapOf("type" to "infinity")
 }
 
 @Generated
-fun DivScope.infinityCount(
-
-): InfinityCount = InfinityCount(
-    InfinityCount.Properties(
-    )
-)
-
-@Generated
-fun DivScope.infinityCountProps(
-
-) = InfinityCount.Properties(
-)
-
-@Generated
-fun TemplateScope.infinityCountRefs(
-    `use named arguments`: Guard = Guard.instance,
-) = InfinityCount.Properties(
-)
-
-@Generated
-fun InfinityCount.override(
-
-): InfinityCount = InfinityCount(
-    InfinityCount.Properties(
-    )
-)
-
-@Generated
-fun InfinityCount.defer(
-    `use named arguments`: Guard = Guard.instance,
-): InfinityCount = InfinityCount(
-    InfinityCount.Properties(
-    )
-)
+fun DivScope.infinityCount(): InfinityCount = InfinityCount
 
 @Generated
 fun InfinityCount.asList() = listOf(this)

@@ -346,7 +346,7 @@ fun DivScope.gifImage(
     doubletapActions: List<Action>? = null,
     extensions: List<Extension>? = null,
     focus: Focus? = null,
-    gifUrl: Url,
+    gifUrl: Url? = null,
     height: Size? = null,
     id: String? = null,
     longtapActions: List<Action>? = null,
@@ -904,39 +904,51 @@ fun GifImage.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal image alignment.
+ * @param contentAlignmentVertical Vertical image alignment.
  * @param gifUrl Direct URL to a GIF image.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
+ * @param visibility Element visibility.
  */
 @Generated
 fun GifImage.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     gifUrl: ExpressionProperty<Url>? = null,
     placeholderColor: ExpressionProperty<Color>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scale: ExpressionProperty<ImageScale>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): GifImage = GifImage(
     GifImage.Properties(
         accessibility = properties.accessibility,
         action = properties.action,
         actionAnimation = properties.actionAnimation,
         actions = properties.actions,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         aspect = properties.aspect,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
-        contentAlignmentHorizontal = properties.contentAlignmentHorizontal,
-        contentAlignmentVertical = properties.contentAlignmentVertical,
+        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         focus = properties.focus,
@@ -950,7 +962,7 @@ fun GifImage.evaluate(
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
         rowSpan = rowSpan ?: properties.rowSpan,
-        scale = properties.scale,
+        scale = scale ?: properties.scale,
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
         transform = properties.transform,
@@ -958,7 +970,7 @@ fun GifImage.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1216,24 +1228,36 @@ fun Component<GifImage>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal image alignment.
+ * @param contentAlignmentVertical Vertical image alignment.
  * @param gifUrl Direct URL to a GIF image.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<GifImage>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     gifUrl: ExpressionProperty<Url>? = null,
     placeholderColor: ExpressionProperty<Color>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scale: ExpressionProperty<ImageScale>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<GifImage> = Component(
     template = template,
     properties = GifImage.Properties(
@@ -1241,15 +1265,15 @@ fun Component<GifImage>.evaluate(
         action = null,
         actionAnimation = null,
         actions = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         aspect = null,
         background = null,
         border = null,
         columnSpan = columnSpan,
-        contentAlignmentHorizontal = null,
-        contentAlignmentVertical = null,
+        contentAlignmentHorizontal = contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical,
         doubletapActions = null,
         extensions = null,
         focus = null,
@@ -1263,7 +1287,7 @@ fun Component<GifImage>.evaluate(
         preloadRequired = preloadRequired,
         preview = preview,
         rowSpan = rowSpan,
-        scale = null,
+        scale = scale,
         selectedActions = null,
         tooltips = null,
         transform = null,
@@ -1271,7 +1295,7 @@ fun Component<GifImage>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,

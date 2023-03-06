@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface AppearanceTransition
 
+@Generated
 fun AppearanceTransition.asList() = listOf(this)

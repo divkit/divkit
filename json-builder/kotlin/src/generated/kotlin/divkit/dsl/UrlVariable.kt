@@ -68,8 +68,8 @@ class UrlVariable internal constructor(
 @Generated
 fun DivScope.urlVariable(
     `use named arguments`: Guard = Guard.instance,
-    name: String,
-    value: Url,
+    name: String? = null,
+    value: Url? = null,
 ): UrlVariable = UrlVariable(
     UrlVariable.Properties(
         name = valueOrNull(name),

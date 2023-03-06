@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface RadialGradientCenter
 
+@Generated
 fun RadialGradientCenter.asList() = listOf(this)

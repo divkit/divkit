@@ -25,4 +25,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface LineStyle
 
+@Generated
 fun LineStyle.asList() = listOf(this)

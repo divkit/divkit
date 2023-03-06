@@ -25,4 +25,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface BlendMode
 
+@Generated
 fun BlendMode.asList() = listOf(this)

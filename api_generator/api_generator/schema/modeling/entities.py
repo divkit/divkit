@@ -1,7 +1,8 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Dict, Union, Tuple, cast
+from copy import deepcopy
+from typing import List, Optional, Dict, Union, Tuple, cast, Any, Set
 from dataclasses import dataclass
 from enum import Enum, auto
 import re
@@ -9,6 +10,8 @@ import re
 from ..utils import is_dict_with_keys_of_type, is_list_of_type
 from .utils import (
     alias,
+    alias_for,
+
     fixing_reserved_typename
 )
 from ...utils import capitalize_camel_case
@@ -24,6 +27,94 @@ from . import builders
 class DescriptionLanguage(str, Enum):
     EN = 'en'
     RU = 'ru'
+
+
+def _build_generator_properties(
+        dictionary: Dict[str, Any],
+        location: ElementLocation,
+        config: Config.GenerationConfig,
+        mode: GenerationMode,
+        properties_list: List[Property],
+) -> Optional[GeneratorProperties]:
+    generator_properties: Dict[str, Any] = dictionary.get("codegen", None)
+    generator_properties_location = location + "codegen"
+    if generator_properties is None:
+        return None
+
+    if not isinstance(generator_properties, Dict):
+        raise GenericError(
+            location=generator_properties_location,
+            text='Must have format {String : Any}'
+        )
+
+    lang: GeneratedLanguage = config.lang
+    specific_properties: Dict[str, Any] = generator_properties.get(lang.value, None)
+    if specific_properties is None:
+        return GeneralGeneratorProperties(
+            general_properties=generator_properties,
+            lang=lang,
+            mode=mode
+        )
+    if not isinstance(specific_properties, Dict):
+        raise GenericError(
+            location=generator_properties_location + lang.value,
+            text='Must have format {String : Any}'
+        )
+
+    if lang is GeneratedLanguage.DIVAN:
+        return DivanGeneratorProperties(
+            general_properties=generator_properties,
+            location=generator_properties_location,
+            lang=lang,
+            mode=mode,
+            specific_properties=specific_properties,
+            properties_list=properties_list,
+        )
+    generator_properties_classes = {
+        GeneratedLanguage.SWIFT: SwiftGeneratorProperties,
+        GeneratedLanguage.TYPE_SCRIPT: TypeScriptGeneratorProperties,
+        GeneratedLanguage.KOTLIN_DSL: KotlinDSLGeneratorProperties,
+        GeneratedLanguage.DOCUMENTATION: DocumentationGeneratorProperties,
+    }
+    specific_properties_class = generator_properties_classes.get(lang, None)
+    if specific_properties_class is None:
+        raise NotImplementedError
+
+    return specific_properties_class(
+        general_properties=generator_properties,
+        lang=lang,
+        mode=mode,
+        specific_properties=specific_properties,
+    )
+
+
+def _get_property_by_name(name: str, properties: List[Property], location: ElementLocation) -> Property:
+    found_property = None
+    for property in properties:
+        if property.name == name:
+            found_property = property
+            break
+    if found_property is None:
+        raise GenericError(location, f"Object does not contains \"{name}\" property")
+    return deepcopy(found_property)
+
+
+class GeneratorProperties(ABC):
+    def __init__(
+            self,
+            general_properties: Dict[str, Any],
+            lang: GeneratedLanguage,
+            mode: GenerationMode,
+    ):
+        self.general_properties = general_properties
+        protocol_name = general_properties.get('protocol_name')
+        self.protocol_names: List[str] = []
+        if protocol_name is not None:
+            if not isinstance(protocol_name, List):
+                protocol_name = [protocol_name]
+            if is_list_of_type(protocol_name, str):
+                self.protocol_names: List[str] = list(map(lambda n: n + mode.name_suffix, protocol_name))
+        self.alias = alias_for(lang, general_properties)
 
 
 def description_doc(description_translations: Dict[str, str], lang: DescriptionLanguage, description: str) -> str:
@@ -194,6 +285,14 @@ class Entity(Declarable):
             inner_type.parent = self
         self.__resolve_property_objects()
 
+        self.generator_properties: Optional[GeneratorProperties] = _build_generator_properties(
+            dictionary,
+            location,
+            config,
+            mode,
+            self._properties
+        )
+
     def __str__(self):
         joined = '\n'.join(map(lambda x: f'\t{self._name} property: {x}', self._properties))
         return f'Entity "{self._name}":\n{joined}'
@@ -232,6 +331,10 @@ class Entity(Declarable):
     @property
     def super_entities(self) -> Optional[str]:
         return self._super_entities
+
+    @property
+    def is_deprecated(self) -> bool:
+        return self._is_deprecated
 
     @property
     def swift_super_protocol(self) -> Optional[str]:
@@ -776,3 +879,130 @@ class Property:
 
     def description_doc(self, lang: DescriptionLanguage = DescriptionLanguage.EN) -> str:
         return description_doc(self.description_translations, lang, self.description)
+
+
+class GeneralGeneratorProperties(GeneratorProperties):
+    pass
+
+
+class TypeScriptGeneratorProperties(GeneratorProperties):
+    def __init__(
+            self,
+            general_properties: Dict[str, Any],
+            lang: GeneratedLanguage,
+            mode: GenerationMode,
+            specific_properties: Dict[str, Any],
+    ):
+        super().__init__(general_properties, lang, mode)
+        self.templatable: bool = specific_properties.get('templatable', True)
+
+
+class SwiftGeneratorProperties(GeneratorProperties):
+    def __init__(
+            self,
+            general_properties: Dict[str, Any],
+            lang: GeneratedLanguage,
+            mode: GenerationMode,
+            specific_properties: Dict[str, Any],
+    ):
+        super().__init__(general_properties, lang, mode)
+        self.generate_optional_args: bool = specific_properties.get('generate_optional_arguments', True)
+        self.super_protocol: Optional[str] = specific_properties.get('super_protocol')
+
+
+class DocumentationGeneratorProperties(GeneratorProperties):
+    def __init__(
+            self,
+            general_properties: Dict[str, Any],
+            lang: GeneratedLanguage,
+            mode: GenerationMode,
+            specific_properties: Dict[str, Any],
+    ):
+        super().__init__(general_properties, lang, mode)
+        self.include_in_toc: bool = specific_properties.get('include_in_toc', False)
+
+
+class KotlinDSLGeneratorProperties(GeneratorProperties):
+    def __init__(
+            self,
+            general_properties: Dict[str, Any],
+            lang: GeneratedLanguage,
+            mode: GenerationMode,
+            specific_properties: Dict[str, Any],
+    ):
+        super().__init__(general_properties, lang, mode)
+        self.root_entity: bool = specific_properties.get('root_entity', False)
+
+
+class DivanGeneratorProperties(GeneratorProperties):
+    def __init__(
+            self,
+            general_properties: Dict[str, Any],
+            location: ElementLocation,
+            lang: GeneratedLanguage,
+            mode: GenerationMode,
+            specific_properties: Dict[str, Any],
+            properties_list: List[Property],
+    ):
+        super().__init__(general_properties, lang, mode)
+
+        self.forced_properties_order = specific_properties.get("forced_properties_order", [])
+        if not is_list_of_type(self.forced_properties_order, str):
+            raise GenericError(
+                location=location + lang.value + 'forced_properties_order',
+                text='Must have format [String]'
+            )
+        self.__resolve_forced_properties_order(location + lang.value + 'forced_properties_order', properties_list)
+
+        factories_dict: Dict[str, any] = specific_properties.get('factories')
+        self.factories: List[DivanFactory] = []
+        if factories_dict is not None:
+            self.__resolve_factories(location + lang.value + 'factories', factories_dict, properties_list)
+
+        self.plus_operator_declaration = specific_properties.get("plus_operator", True)
+
+    def __resolve_forced_properties_order(self, location: ElementLocation, properties_list: List[Property]):
+        found_properties: Set[str] = set()
+        for property in properties_list:
+            if property.name in self.forced_properties_order:
+                found_properties.add(property.name)
+
+        if len(self.forced_properties_order) != len(found_properties):
+            not_contains_props = ', '.join(filter(lambda prop: prop not in found_properties, self.forced_properties_order))
+            raise GenericError(location, f"Object does not contains properties: {not_contains_props}")
+
+    def __resolve_factories(
+            self,
+            location: ElementLocation,
+            factories_dict: Dict[str, any],
+            properties_list: List[Property]
+    ):
+        for factory_method_name in factories_dict:
+            factory = factories_dict[factory_method_name]
+            divan_factory = DivanFactory(factory_method_name=factory_method_name)
+            if "vararg_property" in factory:
+                vararg_property = _get_property_by_name(
+                    name=factory["vararg_property"],
+                    properties=properties_list,
+                    location=location + factory_method_name + "vararg_property",
+                )
+                if not isinstance(vararg_property.property_type, Array):
+                    raise GenericError(location + factory_method_name + "vararg_property", "Expected array type")
+                divan_factory.vararg_property = vararg_property
+            if "inlines" in factory:
+                divan_factory.inlines = dict()
+                for inline_property_name, inline_value in factory["inlines"].items():
+                    inline_property = _get_property_by_name(
+                        name=inline_property_name,
+                        properties=properties_list,
+                        location=location + factory_method_name + "inlines",
+                    )
+                    divan_factory.inlines[inline_property.name] = inline_value
+            self.factories.append(divan_factory)
+
+
+@dataclass
+class DivanFactory:
+    factory_method_name: str
+    vararg_property: Optional[Property] = None
+    inlines: Optional[Dict[str, str]] = None

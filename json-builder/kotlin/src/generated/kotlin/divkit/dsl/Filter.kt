@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Filter
 
+@Generated
 fun Filter.asList() = listOf(this)

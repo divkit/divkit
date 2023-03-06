@@ -102,8 +102,6 @@ class Action internal constructor(
     @Generated
     sealed interface Target
 
-    fun Target.asList() = listOf(this)
-
     /**
      * Can be created using the method [actionMenuItem].
      * 
@@ -166,7 +164,7 @@ class Action internal constructor(
 fun DivScope.action(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: DownloadCallbacks? = null,
-    logId: String,
+    logId: String? = null,
     logUrl: Url? = null,
     menuItems: List<Action.MenuItem>? = null,
     payload: Map<String, Any>? = null,
@@ -321,6 +319,7 @@ fun Action.defer(
 /**
  * @param logUrl URL for logging.
  * @param referer Referer URL for logging.
+ * @param target The tab in which the URL must be opened.
  * @param url URL. Possible values: `url` or `div-action://`. To learn more, see [Interaction with elements](../../interaction.dita).
  */
 @Generated
@@ -328,6 +327,7 @@ fun Action.evaluate(
     `use named arguments`: Guard = Guard.instance,
     logUrl: ExpressionProperty<Url>? = null,
     referer: ExpressionProperty<Url>? = null,
+    target: ExpressionProperty<Action.Target>? = null,
     url: ExpressionProperty<Url>? = null,
 ): Action = Action(
     Action.Properties(
@@ -337,7 +337,7 @@ fun Action.evaluate(
         menuItems = properties.menuItems,
         payload = properties.payload,
         referer = referer ?: properties.referer,
-        target = properties.target,
+        target = target ?: properties.target,
         url = url ?: properties.url,
     )
 )
@@ -355,7 +355,7 @@ fun DivScope.actionMenuItem(
     `use named arguments`: Guard = Guard.instance,
     action: Action? = null,
     actions: List<Action>? = null,
-    text: String,
+    text: String? = null,
 ): Action.MenuItem = Action.MenuItem(
     Action.MenuItem.Properties(
         action = valueOrNull(action),
@@ -453,3 +453,6 @@ fun Action.MenuItem.evaluate(
 
 @Generated
 fun Action.MenuItem.asList() = listOf(this)
+
+@Generated
+fun Action.Target.asList() = listOf(this)

@@ -68,8 +68,8 @@ class IntegerVariable internal constructor(
 @Generated
 fun DivScope.integerVariable(
     `use named arguments`: Guard = Guard.instance,
-    name: String,
-    value: Int,
+    name: String? = null,
+    value: Int? = null,
 ): IntegerVariable = IntegerVariable(
     IntegerVariable.Properties(
         name = valueOrNull(name),

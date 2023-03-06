@@ -60,8 +60,7 @@ class SolidBackground internal constructor(
  */
 @Generated
 fun DivScope.solidBackground(
-    `use named arguments`: Guard = Guard.instance,
-    color: Color,
+    color: Color? = null,
 ): SolidBackground = SolidBackground(
     SolidBackground.Properties(
         color = valueOrNull(color),

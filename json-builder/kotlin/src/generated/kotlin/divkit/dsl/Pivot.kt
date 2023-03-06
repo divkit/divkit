@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Pivot
 
+@Generated
 fun Pivot.asList() = listOf(this)

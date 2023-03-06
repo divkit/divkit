@@ -67,8 +67,6 @@ class Patch internal constructor(
     @Generated
     sealed interface Mode
 
-    fun Mode.asList() = listOf(this)
-
     /**
      * Can be created using the method [patchChange].
      * 
@@ -118,7 +116,7 @@ class Patch internal constructor(
 @Generated
 fun DivScope.patch(
     `use named arguments`: Guard = Guard.instance,
-    changes: List<Patch.Change>,
+    changes: List<Patch.Change>? = null,
     mode: Patch.Mode? = null,
 ): Patch = Patch(
     Patch.Properties(
@@ -187,6 +185,20 @@ fun Patch.defer(
     )
 )
 
+/**
+ * @param mode Procedure for applying changes:<li>`transactional` — if an error occurs during application of at least one element, the changes aren't applied.</li><li>`partial` — all possible changes are applied. If there are errors, they are reported.</li>
+ */
+@Generated
+fun Patch.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    mode: ExpressionProperty<Patch.Mode>? = null,
+): Patch = Patch(
+    Patch.Properties(
+        changes = properties.changes,
+        mode = mode ?: properties.mode,
+    )
+)
+
 @Generated
 fun Patch.asList() = listOf(this)
 
@@ -197,7 +209,7 @@ fun Patch.asList() = listOf(this)
 @Generated
 fun DivScope.patchChange(
     `use named arguments`: Guard = Guard.instance,
-    id: String,
+    id: String? = null,
     items: List<Div>? = null,
 ): Patch.Change = Patch.Change(
     Patch.Change.Properties(
@@ -268,3 +280,6 @@ fun Patch.Change.defer(
 
 @Generated
 fun Patch.Change.asList() = listOf(this)
+
+@Generated
+fun Patch.Mode.asList() = listOf(this)

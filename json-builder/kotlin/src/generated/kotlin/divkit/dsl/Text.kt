@@ -36,6 +36,7 @@ class Text internal constructor(
 
     operator fun plus(additive: Properties): Text = Text(
         Properties(
+            text = additive.text ?: properties.text,
             accessibility = additive.accessibility ?: properties.accessibility,
             action = additive.action ?: properties.action,
             actionAnimation = additive.actionAnimation ?: properties.actionAnimation,
@@ -71,7 +72,6 @@ class Text internal constructor(
             selectable = additive.selectable ?: properties.selectable,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
             strike = additive.strike ?: properties.strike,
-            text = additive.text ?: properties.text,
             textAlignmentHorizontal = additive.textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
             textAlignmentVertical = additive.textAlignmentVertical ?: properties.textAlignmentVertical,
             textColor = additive.textColor ?: properties.textColor,
@@ -92,6 +92,10 @@ class Text internal constructor(
     )
 
     class Properties internal constructor(
+        /**
+         * Text.
+         */
+        val text: Property<String>?,
         /**
          * Accessibility settings.
          */
@@ -242,10 +246,6 @@ class Text internal constructor(
          */
         val strike: Property<LineStyle>?,
         /**
-         * Text.
-         */
-        val text: Property<String>?,
-        /**
          * Horizontal text alignment.
          * Default value: `left`.
          */
@@ -292,6 +292,7 @@ class Text internal constructor(
          * Text cropping method. Use `ellipsis` instead.
          * Default value: `end`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val truncate: Property<Truncate>?,
         /**
          * Underline.
@@ -320,6 +321,7 @@ class Text internal constructor(
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
+            result.tryPutProperty("text", text)
             result.tryPutProperty("accessibility", accessibility)
             result.tryPutProperty("action", action)
             result.tryPutProperty("action_animation", actionAnimation)
@@ -355,7 +357,6 @@ class Text internal constructor(
             result.tryPutProperty("selectable", selectable)
             result.tryPutProperty("selected_actions", selectedActions)
             result.tryPutProperty("strike", strike)
-            result.tryPutProperty("text", text)
             result.tryPutProperty("text_alignment_horizontal", textAlignmentHorizontal)
             result.tryPutProperty("text_alignment_vertical", textAlignmentVertical)
             result.tryPutProperty("text_color", textColor)
@@ -383,8 +384,6 @@ class Text internal constructor(
      */
     @Generated
     sealed interface Truncate
-
-    fun Truncate.asList() = listOf(this)
 
     /**
      * Text cropping marker. It is displayed when text size exceeds the limit on the number of lines.
@@ -635,6 +634,7 @@ class Text internal constructor(
 }
 
 /**
+ * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -669,7 +669,6 @@ class Text internal constructor(
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param strike Strikethrough.
- * @param text Text.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
@@ -689,6 +688,7 @@ class Text internal constructor(
  */
 @Generated
 fun DivScope.text(
+    text: String? = null,
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     action: Action? = null,
@@ -725,7 +725,6 @@ fun DivScope.text(
     selectable: Boolean? = null,
     selectedActions: List<Action>? = null,
     strike: LineStyle? = null,
-    text: String,
     textAlignmentHorizontal: AlignmentHorizontal? = null,
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
@@ -744,6 +743,7 @@ fun DivScope.text(
     width: Size? = null,
 ): Text = Text(
     Text.Properties(
+        text = valueOrNull(text),
         accessibility = valueOrNull(accessibility),
         action = valueOrNull(action),
         actionAnimation = valueOrNull(actionAnimation),
@@ -779,7 +779,6 @@ fun DivScope.text(
         selectable = valueOrNull(selectable),
         selectedActions = valueOrNull(selectedActions),
         strike = valueOrNull(strike),
-        text = valueOrNull(text),
         textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
         textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
@@ -800,6 +799,7 @@ fun DivScope.text(
 )
 
 /**
+ * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -834,7 +834,6 @@ fun DivScope.text(
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param strike Strikethrough.
- * @param text Text.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
@@ -855,6 +854,7 @@ fun DivScope.text(
 @Generated
 fun DivScope.textProps(
     `use named arguments`: Guard = Guard.instance,
+    text: String? = null,
     accessibility: Accessibility? = null,
     action: Action? = null,
     actionAnimation: Animation? = null,
@@ -890,7 +890,6 @@ fun DivScope.textProps(
     selectable: Boolean? = null,
     selectedActions: List<Action>? = null,
     strike: LineStyle? = null,
-    text: String? = null,
     textAlignmentHorizontal: AlignmentHorizontal? = null,
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
@@ -908,6 +907,7 @@ fun DivScope.textProps(
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
 ) = Text.Properties(
+    text = valueOrNull(text),
     accessibility = valueOrNull(accessibility),
     action = valueOrNull(action),
     actionAnimation = valueOrNull(actionAnimation),
@@ -943,7 +943,6 @@ fun DivScope.textProps(
     selectable = valueOrNull(selectable),
     selectedActions = valueOrNull(selectedActions),
     strike = valueOrNull(strike),
-    text = valueOrNull(text),
     textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
     textAlignmentVertical = valueOrNull(textAlignmentVertical),
     textColor = valueOrNull(textColor),
@@ -963,6 +962,7 @@ fun DivScope.textProps(
 )
 
 /**
+ * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -997,7 +997,6 @@ fun DivScope.textProps(
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param strike Strikethrough.
- * @param text Text.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
@@ -1018,6 +1017,7 @@ fun DivScope.textProps(
 @Generated
 fun TemplateScope.textRefs(
     `use named arguments`: Guard = Guard.instance,
+    text: ReferenceProperty<String>? = null,
     accessibility: ReferenceProperty<Accessibility>? = null,
     action: ReferenceProperty<Action>? = null,
     actionAnimation: ReferenceProperty<Animation>? = null,
@@ -1053,7 +1053,6 @@ fun TemplateScope.textRefs(
     selectable: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
-    text: ReferenceProperty<String>? = null,
     textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -1071,6 +1070,7 @@ fun TemplateScope.textRefs(
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
     width: ReferenceProperty<Size>? = null,
 ) = Text.Properties(
+    text = text,
     accessibility = accessibility,
     action = action,
     actionAnimation = actionAnimation,
@@ -1106,7 +1106,6 @@ fun TemplateScope.textRefs(
     selectable = selectable,
     selectedActions = selectedActions,
     strike = strike,
-    text = text,
     textAlignmentHorizontal = textAlignmentHorizontal,
     textAlignmentVertical = textAlignmentVertical,
     textColor = textColor,
@@ -1126,6 +1125,7 @@ fun TemplateScope.textRefs(
 )
 
 /**
+ * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -1160,7 +1160,6 @@ fun TemplateScope.textRefs(
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param strike Strikethrough.
- * @param text Text.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
@@ -1181,6 +1180,7 @@ fun TemplateScope.textRefs(
 @Generated
 fun Text.override(
     `use named arguments`: Guard = Guard.instance,
+    text: String? = null,
     accessibility: Accessibility? = null,
     action: Action? = null,
     actionAnimation: Animation? = null,
@@ -1216,7 +1216,6 @@ fun Text.override(
     selectable: Boolean? = null,
     selectedActions: List<Action>? = null,
     strike: LineStyle? = null,
-    text: String? = null,
     textAlignmentHorizontal: AlignmentHorizontal? = null,
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
@@ -1235,6 +1234,7 @@ fun Text.override(
     width: Size? = null,
 ): Text = Text(
     Text.Properties(
+        text = valueOrNull(text) ?: properties.text,
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
         action = valueOrNull(action) ?: properties.action,
         actionAnimation = valueOrNull(actionAnimation) ?: properties.actionAnimation,
@@ -1270,7 +1270,6 @@ fun Text.override(
         selectable = valueOrNull(selectable) ?: properties.selectable,
         selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
         strike = valueOrNull(strike) ?: properties.strike,
-        text = valueOrNull(text) ?: properties.text,
         textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal) ?: properties.textAlignmentHorizontal,
         textAlignmentVertical = valueOrNull(textAlignmentVertical) ?: properties.textAlignmentVertical,
         textColor = valueOrNull(textColor) ?: properties.textColor,
@@ -1291,6 +1290,7 @@ fun Text.override(
 )
 
 /**
+ * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -1325,7 +1325,6 @@ fun Text.override(
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param strike Strikethrough.
- * @param text Text.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
@@ -1346,6 +1345,7 @@ fun Text.override(
 @Generated
 fun Text.defer(
     `use named arguments`: Guard = Guard.instance,
+    text: ReferenceProperty<String>? = null,
     accessibility: ReferenceProperty<Accessibility>? = null,
     action: ReferenceProperty<Action>? = null,
     actionAnimation: ReferenceProperty<Animation>? = null,
@@ -1381,7 +1381,6 @@ fun Text.defer(
     selectable: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
-    text: ReferenceProperty<String>? = null,
     textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -1400,6 +1399,7 @@ fun Text.defer(
     width: ReferenceProperty<Size>? = null,
 ): Text = Text(
     Text.Properties(
+        text = text ?: properties.text,
         accessibility = accessibility ?: properties.accessibility,
         action = action ?: properties.action,
         actionAnimation = actionAnimation ?: properties.actionAnimation,
@@ -1435,7 +1435,6 @@ fun Text.defer(
         selectable = selectable ?: properties.selectable,
         selectedActions = selectedActions ?: properties.selectedActions,
         strike = strike ?: properties.strike,
-        text = text ?: properties.text,
         textAlignmentHorizontal = textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
         textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
@@ -1456,44 +1455,66 @@ fun Text.defer(
 )
 
 /**
+ * @param text Text.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontWeight Style.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
- * @param text Text.
+ * @param strike Strikethrough.
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param underline Underline.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Text.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    text: ExpressionProperty<String>? = null,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     autoEllipsize: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
+    fontFamily: ExpressionProperty<FontFamily>? = null,
     fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
     maxLines: ExpressionProperty<Int>? = null,
     minHiddenLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectable: ExpressionProperty<Boolean>? = null,
-    text: ExpressionProperty<String>? = null,
+    strike: ExpressionProperty<LineStyle>? = null,
+    textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
+    truncate: ExpressionProperty<Text.Truncate>? = null,
+    underline: ExpressionProperty<LineStyle>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Text = Text(
     Text.Properties(
+        text = text ?: properties.text,
         accessibility = properties.accessibility,
         action = properties.action,
         actionAnimation = properties.actionAnimation,
         actions = properties.actions,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         autoEllipsize = autoEllipsize ?: properties.autoEllipsize,
         background = properties.background,
@@ -1504,10 +1525,10 @@ fun Text.evaluate(
         extensions = properties.extensions,
         focus = properties.focus,
         focusedTextColor = focusedTextColor ?: properties.focusedTextColor,
-        fontFamily = properties.fontFamily,
+        fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
-        fontSizeUnit = properties.fontSizeUnit,
-        fontWeight = properties.fontWeight,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontWeight = fontWeight ?: properties.fontWeight,
         height = properties.height,
         id = properties.id,
         images = properties.images,
@@ -1522,10 +1543,9 @@ fun Text.evaluate(
         rowSpan = rowSpan ?: properties.rowSpan,
         selectable = selectable ?: properties.selectable,
         selectedActions = properties.selectedActions,
-        strike = properties.strike,
-        text = text ?: properties.text,
-        textAlignmentHorizontal = properties.textAlignmentHorizontal,
-        textAlignmentVertical = properties.textAlignmentVertical,
+        strike = strike ?: properties.strike,
+        textAlignmentHorizontal = textAlignmentHorizontal ?: properties.textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical ?: properties.textAlignmentVertical,
         textColor = textColor ?: properties.textColor,
         textGradient = properties.textGradient,
         tooltips = properties.tooltips,
@@ -1534,9 +1554,9 @@ fun Text.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        truncate = properties.truncate,
-        underline = properties.underline,
-        visibility = properties.visibility,
+        truncate = truncate ?: properties.truncate,
+        underline = underline ?: properties.underline,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1544,6 +1564,7 @@ fun Text.evaluate(
 )
 
 /**
+ * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -1578,7 +1599,6 @@ fun Text.evaluate(
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param strike Strikethrough.
- * @param text Text.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
@@ -1599,6 +1619,7 @@ fun Text.evaluate(
 @Generated
 fun Component<Text>.override(
     `use named arguments`: Guard = Guard.instance,
+    text: String? = null,
     accessibility: Accessibility? = null,
     action: Action? = null,
     actionAnimation: Animation? = null,
@@ -1634,7 +1655,6 @@ fun Component<Text>.override(
     selectable: Boolean? = null,
     selectedActions: List<Action>? = null,
     strike: LineStyle? = null,
-    text: String? = null,
     textAlignmentHorizontal: AlignmentHorizontal? = null,
     textAlignmentVertical: AlignmentVertical? = null,
     textColor: Color? = null,
@@ -1654,6 +1674,7 @@ fun Component<Text>.override(
 ): Component<Text> = Component(
     template = template,
     properties = Text.Properties(
+        text = valueOrNull(text),
         accessibility = valueOrNull(accessibility),
         action = valueOrNull(action),
         actionAnimation = valueOrNull(actionAnimation),
@@ -1689,7 +1710,6 @@ fun Component<Text>.override(
         selectable = valueOrNull(selectable),
         selectedActions = valueOrNull(selectedActions),
         strike = valueOrNull(strike),
-        text = valueOrNull(text),
         textAlignmentHorizontal = valueOrNull(textAlignmentHorizontal),
         textAlignmentVertical = valueOrNull(textAlignmentVertical),
         textColor = valueOrNull(textColor),
@@ -1710,6 +1730,7 @@ fun Component<Text>.override(
 )
 
 /**
+ * @param text Text.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -1744,7 +1765,6 @@ fun Component<Text>.override(
  * @param selectable Ability to select and copy text.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
  * @param strike Strikethrough.
- * @param text Text.
  * @param textAlignmentHorizontal Horizontal text alignment.
  * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
@@ -1765,6 +1785,7 @@ fun Component<Text>.override(
 @Generated
 fun Component<Text>.defer(
     `use named arguments`: Guard = Guard.instance,
+    text: ReferenceProperty<String>? = null,
     accessibility: ReferenceProperty<Accessibility>? = null,
     action: ReferenceProperty<Action>? = null,
     actionAnimation: ReferenceProperty<Animation>? = null,
@@ -1800,7 +1821,6 @@ fun Component<Text>.defer(
     selectable: ReferenceProperty<Boolean>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
     strike: ReferenceProperty<LineStyle>? = null,
-    text: ReferenceProperty<String>? = null,
     textAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
     textAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
     textColor: ReferenceProperty<Color>? = null,
@@ -1820,6 +1840,7 @@ fun Component<Text>.defer(
 ): Component<Text> = Component(
     template = template,
     properties = Text.Properties(
+        text = text,
         accessibility = accessibility,
         action = action,
         actionAnimation = actionAnimation,
@@ -1855,7 +1876,6 @@ fun Component<Text>.defer(
         selectable = selectable,
         selectedActions = selectedActions,
         strike = strike,
-        text = text,
         textAlignmentHorizontal = textAlignmentHorizontal,
         textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
@@ -1876,45 +1896,67 @@ fun Component<Text>.defer(
 )
 
 /**
+ * @param text Text.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param autoEllipsize Automatic text cropping to fit the container size.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param focusedTextColor Text color when focusing on the element.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontWeight Style.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text.
  * @param maxLines Maximum number of lines not to be cropped when breaking the limits.
  * @param minHiddenLines Minimum number of cropped lines when breaking the limits.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectable Ability to select and copy text.
- * @param text Text.
+ * @param strike Strikethrough.
+ * @param textAlignmentHorizontal Horizontal text alignment.
+ * @param textAlignmentVertical Vertical text alignment.
  * @param textColor Text color. Not used if the `text_gradient` parameter is set.
+ * @param truncate Text cropping method. Use `ellipsis` instead.
+ * @param underline Underline.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Text>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    text: ExpressionProperty<String>? = null,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     autoEllipsize: ExpressionProperty<Boolean>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     focusedTextColor: ExpressionProperty<Color>? = null,
+    fontFamily: ExpressionProperty<FontFamily>? = null,
     fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
     maxLines: ExpressionProperty<Int>? = null,
     minHiddenLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectable: ExpressionProperty<Boolean>? = null,
-    text: ExpressionProperty<String>? = null,
+    strike: ExpressionProperty<LineStyle>? = null,
+    textAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    textAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     textColor: ExpressionProperty<Color>? = null,
+    truncate: ExpressionProperty<Text.Truncate>? = null,
+    underline: ExpressionProperty<LineStyle>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Text> = Component(
     template = template,
     properties = Text.Properties(
+        text = text,
         accessibility = null,
         action = null,
         actionAnimation = null,
         actions = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         autoEllipsize = autoEllipsize,
         background = null,
@@ -1925,10 +1967,10 @@ fun Component<Text>.evaluate(
         extensions = null,
         focus = null,
         focusedTextColor = focusedTextColor,
-        fontFamily = null,
+        fontFamily = fontFamily,
         fontSize = fontSize,
-        fontSizeUnit = null,
-        fontWeight = null,
+        fontSizeUnit = fontSizeUnit,
+        fontWeight = fontWeight,
         height = null,
         id = null,
         images = null,
@@ -1943,10 +1985,9 @@ fun Component<Text>.evaluate(
         rowSpan = rowSpan,
         selectable = selectable,
         selectedActions = null,
-        strike = null,
-        text = text,
-        textAlignmentHorizontal = null,
-        textAlignmentVertical = null,
+        strike = strike,
+        textAlignmentHorizontal = textAlignmentHorizontal,
+        textAlignmentVertical = textAlignmentVertical,
         textColor = textColor,
         textGradient = null,
         tooltips = null,
@@ -1955,9 +1996,9 @@ fun Component<Text>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        truncate = null,
-        underline = null,
-        visibility = null,
+        truncate = truncate,
+        underline = underline,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1985,7 +2026,7 @@ fun DivScope.textEllipsis(
     actions: List<Action>? = null,
     images: List<Text.Image>? = null,
     ranges: List<Text.Range>? = null,
-    text: String,
+    text: String? = null,
 ): Text.Ellipsis = Text.Ellipsis(
     Text.Ellipsis.Properties(
         actions = valueOrNull(actions),
@@ -2110,10 +2151,10 @@ fun Text.Ellipsis.asList() = listOf(this)
 fun DivScope.textImage(
     `use named arguments`: Guard = Guard.instance,
     height: FixedSize? = null,
-    start: Int,
+    start: Int? = null,
     tintColor: Color? = null,
     tintMode: BlendMode? = null,
-    url: Url,
+    url: Url? = null,
     width: FixedSize? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
@@ -2237,6 +2278,7 @@ fun Text.Image.defer(
 /**
  * @param start A symbol to insert prior to an image. To insert an image at the end of the text, specify the number of the last character plus one.
  * @param tintColor New color of a contour image.
+ * @param tintMode Blend mode of the color specified in `tint_color`.
  * @param url Image URL.
  */
 @Generated
@@ -2244,13 +2286,14 @@ fun Text.Image.evaluate(
     `use named arguments`: Guard = Guard.instance,
     start: ExpressionProperty<Int>? = null,
     tintColor: ExpressionProperty<Color>? = null,
+    tintMode: ExpressionProperty<BlendMode>? = null,
     url: ExpressionProperty<Url>? = null,
 ): Text.Image = Text.Image(
     Text.Image.Properties(
         height = properties.height,
         start = start ?: properties.start,
         tintColor = tintColor ?: properties.tintColor,
-        tintMode = properties.tintMode,
+        tintMode = tintMode ?: properties.tintMode,
         url = url ?: properties.url,
         width = properties.width,
     )
@@ -2282,14 +2325,14 @@ fun DivScope.textRange(
     actions: List<Action>? = null,
     background: TextRangeBackground? = null,
     border: TextRangeBorder? = null,
-    end: Int,
+    end: Int? = null,
     fontFamily: FontFamily? = null,
     fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
-    start: Int,
+    start: Int? = null,
     strike: LineStyle? = null,
     textColor: Color? = null,
     topOffset: Int? = null,
@@ -2532,42 +2575,55 @@ fun Text.Range.defer(
 
 /**
  * @param end Ordinal number of the last character to be included in the range.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param start Ordinal number of a character which the range begins from. The first character has a number `0`.
+ * @param strike Strikethrough.
  * @param textColor Text color.
  * @param topOffset Top margin of the character range. Units specified in `font_size_unit`.
+ * @param underline Underline.
  */
 @Generated
 fun Text.Range.evaluate(
     `use named arguments`: Guard = Guard.instance,
     end: ExpressionProperty<Int>? = null,
+    fontFamily: ExpressionProperty<FontFamily>? = null,
     fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
     start: ExpressionProperty<Int>? = null,
+    strike: ExpressionProperty<LineStyle>? = null,
     textColor: ExpressionProperty<Color>? = null,
     topOffset: ExpressionProperty<Int>? = null,
+    underline: ExpressionProperty<LineStyle>? = null,
 ): Text.Range = Text.Range(
     Text.Range.Properties(
         actions = properties.actions,
         background = properties.background,
         border = properties.border,
         end = end ?: properties.end,
-        fontFamily = properties.fontFamily,
+        fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
-        fontSizeUnit = properties.fontSizeUnit,
-        fontWeight = properties.fontWeight,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontWeight = fontWeight ?: properties.fontWeight,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         start = start ?: properties.start,
-        strike = properties.strike,
+        strike = strike ?: properties.strike,
         textColor = textColor ?: properties.textColor,
         topOffset = topOffset ?: properties.topOffset,
-        underline = properties.underline,
+        underline = underline ?: properties.underline,
     )
 )
 
 @Generated
 fun Text.Range.asList() = listOf(this)
+
+@Generated
+fun Text.Truncate.asList() = listOf(this)

@@ -61,7 +61,7 @@ class FixedCount internal constructor(
 @Generated
 fun DivScope.fixedCount(
     `use named arguments`: Guard = Guard.instance,
-    value: Int,
+    value: Int? = null,
 ): FixedCount = FixedCount(
     FixedCount.Properties(
         value = valueOrNull(value),

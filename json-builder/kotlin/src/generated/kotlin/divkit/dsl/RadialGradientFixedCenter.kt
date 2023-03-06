@@ -70,7 +70,7 @@ class RadialGradientFixedCenter internal constructor(
 fun DivScope.radialGradientFixedCenter(
     `use named arguments`: Guard = Guard.instance,
     unit: SizeUnit? = null,
-    value: Int,
+    value: Int? = null,
 ): RadialGradientFixedCenter = RadialGradientFixedCenter(
     RadialGradientFixedCenter.Properties(
         unit = valueOrNull(unit),
@@ -139,15 +139,17 @@ fun RadialGradientFixedCenter.defer(
 )
 
 /**
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param value Coordinate value.
  */
 @Generated
 fun RadialGradientFixedCenter.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    unit: ExpressionProperty<SizeUnit>? = null,
     value: ExpressionProperty<Int>? = null,
 ): RadialGradientFixedCenter = RadialGradientFixedCenter(
     RadialGradientFixedCenter.Properties(
-        unit = properties.unit,
+        unit = unit ?: properties.unit,
         value = value ?: properties.value,
     )
 )

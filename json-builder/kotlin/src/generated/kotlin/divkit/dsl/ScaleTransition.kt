@@ -229,6 +229,7 @@ fun ScaleTransition.defer(
 
 /**
  * @param duration Animation duration in milliseconds.
+ * @param interpolator Transition speed nature.
  * @param pivotX Relative coordinate `X` of the point that won't change its position in case of scaling.
  * @param pivotY Relative coordinate `Y` of the point that won't change its position in case of scaling.
  * @param scale Value of the scale  from which the element starts appearing or at which it finishes disappearing.
@@ -238,6 +239,7 @@ fun ScaleTransition.defer(
 fun ScaleTransition.evaluate(
     `use named arguments`: Guard = Guard.instance,
     duration: ExpressionProperty<Int>? = null,
+    interpolator: ExpressionProperty<AnimationInterpolator>? = null,
     pivotX: ExpressionProperty<Double>? = null,
     pivotY: ExpressionProperty<Double>? = null,
     scale: ExpressionProperty<Double>? = null,
@@ -245,7 +247,7 @@ fun ScaleTransition.evaluate(
 ): ScaleTransition = ScaleTransition(
     ScaleTransition.Properties(
         duration = duration ?: properties.duration,
-        interpolator = properties.interpolator,
+        interpolator = interpolator ?: properties.interpolator,
         pivotX = pivotX ?: properties.pivotX,
         pivotY = pivotY ?: properties.pivotY,
         scale = scale ?: properties.scale,

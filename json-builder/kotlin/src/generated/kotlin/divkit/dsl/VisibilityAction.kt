@@ -112,7 +112,7 @@ class VisibilityAction internal constructor(
 fun DivScope.visibilityAction(
     `use named arguments`: Guard = Guard.instance,
     downloadCallbacks: DownloadCallbacks? = null,
-    logId: String,
+    logId: String? = null,
     logLimit: Int? = null,
     payload: Map<String, Any>? = null,
     referer: Url? = null,

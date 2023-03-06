@@ -25,4 +25,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Visibility
 
+@Generated
 fun Visibility.asList() = listOf(this)

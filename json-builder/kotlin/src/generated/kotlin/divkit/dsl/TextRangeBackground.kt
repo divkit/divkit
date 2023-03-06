@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface TextRangeBackground
 
+@Generated
 fun TextRangeBackground.asList() = listOf(this)

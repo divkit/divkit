@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Drawable
 
+@Generated
 fun Drawable.asList() = listOf(this)

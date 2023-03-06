@@ -61,8 +61,6 @@ class RadialGradientRelativeRadius internal constructor(
      */
     @Generated
     sealed interface Value
-
-    fun Value.asList() = listOf(this)
 }
 
 /**
@@ -71,7 +69,7 @@ class RadialGradientRelativeRadius internal constructor(
 @Generated
 fun DivScope.radialGradientRelativeRadius(
     `use named arguments`: Guard = Guard.instance,
-    value: RadialGradientRelativeRadius.Value,
+    value: RadialGradientRelativeRadius.Value? = null,
 ): RadialGradientRelativeRadius = RadialGradientRelativeRadius(
     RadialGradientRelativeRadius.Properties(
         value = valueOrNull(value),
@@ -126,5 +124,21 @@ fun RadialGradientRelativeRadius.defer(
     )
 )
 
+/**
+ * @param value Type of the relative radius of the gradient transition.
+ */
+@Generated
+fun RadialGradientRelativeRadius.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<RadialGradientRelativeRadius.Value>? = null,
+): RadialGradientRelativeRadius = RadialGradientRelativeRadius(
+    RadialGradientRelativeRadius.Properties(
+        value = value ?: properties.value,
+    )
+)
+
 @Generated
 fun RadialGradientRelativeRadius.asList() = listOf(this)
+
+@Generated
+fun RadialGradientRelativeRadius.Value.asList() = listOf(this)

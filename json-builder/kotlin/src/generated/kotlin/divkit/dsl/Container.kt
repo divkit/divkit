@@ -36,6 +36,7 @@ class Container internal constructor(
 
     operator fun plus(additive: Properties): Container = Container(
         Properties(
+            orientation = additive.orientation ?: properties.orientation,
             accessibility = additive.accessibility ?: properties.accessibility,
             action = additive.action ?: properties.action,
             actionAnimation = additive.actionAnimation ?: properties.actionAnimation,
@@ -59,7 +60,6 @@ class Container internal constructor(
             lineSeparator = additive.lineSeparator ?: properties.lineSeparator,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
-            orientation = additive.orientation ?: properties.orientation,
             paddings = additive.paddings ?: properties.paddings,
             rowSpan = additive.rowSpan ?: properties.rowSpan,
             selectedActions = additive.selectedActions ?: properties.selectedActions,
@@ -78,6 +78,11 @@ class Container internal constructor(
     )
 
     class Properties internal constructor(
+        /**
+         * Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+         * Default value: `vertical`.
+         */
+        val orientation: Property<Orientation>?,
         /**
          * Accessibility settings.
          */
@@ -177,11 +182,6 @@ class Container internal constructor(
          */
         val margins: Property<EdgeInsets>?,
         /**
-         * Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
-         * Default value: `vertical`.
-         */
-        val orientation: Property<Orientation>?,
-        /**
          * Internal margins from the element stroke.
          */
         val paddings: Property<EdgeInsets>?,
@@ -243,6 +243,7 @@ class Container internal constructor(
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
+            result.tryPutProperty("orientation", orientation)
             result.tryPutProperty("accessibility", accessibility)
             result.tryPutProperty("action", action)
             result.tryPutProperty("action_animation", actionAnimation)
@@ -266,7 +267,6 @@ class Container internal constructor(
             result.tryPutProperty("line_separator", lineSeparator)
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
-            result.tryPutProperty("orientation", orientation)
             result.tryPutProperty("paddings", paddings)
             result.tryPutProperty("row_span", rowSpan)
             result.tryPutProperty("selected_actions", selectedActions)
@@ -293,8 +293,6 @@ class Container internal constructor(
     @Generated
     sealed interface LayoutMode
 
-    fun LayoutMode.asList() = listOf(this)
-
     /**
      * Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
      * 
@@ -302,8 +300,6 @@ class Container internal constructor(
      */
     @Generated
     sealed interface Orientation
-
-    fun Orientation.asList() = listOf(this)
 
     /**
      * Can be created using the method [containerSeparator].
@@ -386,7 +382,6 @@ class Container internal constructor(
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
- * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -403,7 +398,8 @@ class Container internal constructor(
  * @param width Element width.
  */
 @Generated
-fun DivScope.container(
+fun DivScope.row(
+    vararg items: Div,
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     action: Action? = null,
@@ -423,12 +419,10 @@ fun DivScope.container(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
-    items: List<Div>,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
-    orientation: Container.Orientation? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -443,253 +437,8 @@ fun DivScope.container(
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Container = Container(
-    Container.Properties(
-        accessibility = valueOrNull(accessibility),
-        action = valueOrNull(action),
-        actionAnimation = valueOrNull(actionAnimation),
-        actions = valueOrNull(actions),
-        alignmentHorizontal = valueOrNull(alignmentHorizontal),
-        alignmentVertical = valueOrNull(alignmentVertical),
-        alpha = valueOrNull(alpha),
-        aspect = valueOrNull(aspect),
-        background = valueOrNull(background),
-        border = valueOrNull(border),
-        columnSpan = valueOrNull(columnSpan),
-        contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
-        contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
-        doubletapActions = valueOrNull(doubletapActions),
-        extensions = valueOrNull(extensions),
-        focus = valueOrNull(focus),
-        height = valueOrNull(height),
-        id = valueOrNull(id),
-        items = valueOrNull(items),
-        layoutMode = valueOrNull(layoutMode),
-        lineSeparator = valueOrNull(lineSeparator),
-        longtapActions = valueOrNull(longtapActions),
-        margins = valueOrNull(margins),
-        orientation = valueOrNull(orientation),
-        paddings = valueOrNull(paddings),
-        rowSpan = valueOrNull(rowSpan),
-        selectedActions = valueOrNull(selectedActions),
-        separator = valueOrNull(separator),
-        tooltips = valueOrNull(tooltips),
-        transform = valueOrNull(transform),
-        transitionChange = valueOrNull(transitionChange),
-        transitionIn = valueOrNull(transitionIn),
-        transitionOut = valueOrNull(transitionOut),
-        transitionTriggers = valueOrNull(transitionTriggers),
-        visibility = valueOrNull(visibility),
-        visibilityAction = valueOrNull(visibilityAction),
-        visibilityActions = valueOrNull(visibilityActions),
-        width = valueOrNull(width),
-    )
-)
-
-/**
- * @param accessibility Accessibility settings.
- * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
- * @param actions Multiple actions when clicking on an element.
- * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
- * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
- * @param background Element background. It can contain multiple layers.
- * @param border Element stroke.
- * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
- * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
- * @param doubletapActions Action when double-clicking on an element.
- * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param focus Parameters when focusing on an element or losing focus.
- * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
- * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param items Nested elements.
- * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
- * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
- * @param margins External margins from the element stroke.
- * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
- * @param paddings Internal margins from the element stroke.
- * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
- * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
- * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
- * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
- * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param visibility Element visibility.
- * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
- * @param visibilityActions Actions when an element appears on the screen.
- * @param width Element width.
- */
-@Generated
-fun DivScope.containerProps(
-    `use named arguments`: Guard = Guard.instance,
-    accessibility: Accessibility? = null,
-    action: Action? = null,
-    actionAnimation: Animation? = null,
-    actions: List<Action>? = null,
-    alignmentHorizontal: AlignmentHorizontal? = null,
-    alignmentVertical: AlignmentVertical? = null,
-    alpha: Double? = null,
-    aspect: Aspect? = null,
-    background: List<Background>? = null,
-    border: Border? = null,
-    columnSpan: Int? = null,
-    contentAlignmentHorizontal: AlignmentHorizontal? = null,
-    contentAlignmentVertical: AlignmentVertical? = null,
-    doubletapActions: List<Action>? = null,
-    extensions: List<Extension>? = null,
-    focus: Focus? = null,
-    height: Size? = null,
-    id: String? = null,
-    items: List<Div>? = null,
-    layoutMode: Container.LayoutMode? = null,
-    lineSeparator: Container.Separator? = null,
-    longtapActions: List<Action>? = null,
-    margins: EdgeInsets? = null,
-    orientation: Container.Orientation? = null,
-    paddings: EdgeInsets? = null,
-    rowSpan: Int? = null,
-    selectedActions: List<Action>? = null,
-    separator: Container.Separator? = null,
-    tooltips: List<Tooltip>? = null,
-    transform: Transform? = null,
-    transitionChange: ChangeTransition? = null,
-    transitionIn: AppearanceTransition? = null,
-    transitionOut: AppearanceTransition? = null,
-    transitionTriggers: List<TransitionTrigger>? = null,
-    visibility: Visibility? = null,
-    visibilityAction: VisibilityAction? = null,
-    visibilityActions: List<VisibilityAction>? = null,
-    width: Size? = null,
-) = Container.Properties(
-    accessibility = valueOrNull(accessibility),
-    action = valueOrNull(action),
-    actionAnimation = valueOrNull(actionAnimation),
-    actions = valueOrNull(actions),
-    alignmentHorizontal = valueOrNull(alignmentHorizontal),
-    alignmentVertical = valueOrNull(alignmentVertical),
-    alpha = valueOrNull(alpha),
-    aspect = valueOrNull(aspect),
-    background = valueOrNull(background),
-    border = valueOrNull(border),
-    columnSpan = valueOrNull(columnSpan),
-    contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
-    contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
-    doubletapActions = valueOrNull(doubletapActions),
-    extensions = valueOrNull(extensions),
-    focus = valueOrNull(focus),
-    height = valueOrNull(height),
-    id = valueOrNull(id),
-    items = valueOrNull(items),
-    layoutMode = valueOrNull(layoutMode),
-    lineSeparator = valueOrNull(lineSeparator),
-    longtapActions = valueOrNull(longtapActions),
-    margins = valueOrNull(margins),
-    orientation = valueOrNull(orientation),
-    paddings = valueOrNull(paddings),
-    rowSpan = valueOrNull(rowSpan),
-    selectedActions = valueOrNull(selectedActions),
-    separator = valueOrNull(separator),
-    tooltips = valueOrNull(tooltips),
-    transform = valueOrNull(transform),
-    transitionChange = valueOrNull(transitionChange),
-    transitionIn = valueOrNull(transitionIn),
-    transitionOut = valueOrNull(transitionOut),
-    transitionTriggers = valueOrNull(transitionTriggers),
-    visibility = valueOrNull(visibility),
-    visibilityAction = valueOrNull(visibilityAction),
-    visibilityActions = valueOrNull(visibilityActions),
-    width = valueOrNull(width),
-)
-
-/**
- * @param accessibility Accessibility settings.
- * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
- * @param actions Multiple actions when clicking on an element.
- * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
- * @param alignmentVertical Vertical alignment of an element inside the parent element.
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
- * @param background Element background. It can contain multiple layers.
- * @param border Element stroke.
- * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
- * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
- * @param doubletapActions Action when double-clicking on an element.
- * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
- * @param focus Parameters when focusing on an element or losing focus.
- * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
- * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param items Nested elements.
- * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
- * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
- * @param margins External margins from the element stroke.
- * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
- * @param paddings Internal margins from the element stroke.
- * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
- * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
- * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
- * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
- * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
- * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
- * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
- * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
- * @param visibility Element visibility.
- * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
- * @param visibilityActions Actions when an element appears on the screen.
- * @param width Element width.
- */
-@Generated
-fun TemplateScope.containerRefs(
-    `use named arguments`: Guard = Guard.instance,
-    accessibility: ReferenceProperty<Accessibility>? = null,
-    action: ReferenceProperty<Action>? = null,
-    actionAnimation: ReferenceProperty<Animation>? = null,
-    actions: ReferenceProperty<List<Action>>? = null,
-    alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
-    alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
-    alpha: ReferenceProperty<Double>? = null,
-    aspect: ReferenceProperty<Aspect>? = null,
-    background: ReferenceProperty<List<Background>>? = null,
-    border: ReferenceProperty<Border>? = null,
-    columnSpan: ReferenceProperty<Int>? = null,
-    contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
-    contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
-    doubletapActions: ReferenceProperty<List<Action>>? = null,
-    extensions: ReferenceProperty<List<Extension>>? = null,
-    focus: ReferenceProperty<Focus>? = null,
-    height: ReferenceProperty<Size>? = null,
-    id: ReferenceProperty<String>? = null,
-    items: ReferenceProperty<List<Div>>? = null,
-    layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
-    lineSeparator: ReferenceProperty<Container.Separator>? = null,
-    longtapActions: ReferenceProperty<List<Action>>? = null,
-    margins: ReferenceProperty<EdgeInsets>? = null,
-    orientation: ReferenceProperty<Container.Orientation>? = null,
-    paddings: ReferenceProperty<EdgeInsets>? = null,
-    rowSpan: ReferenceProperty<Int>? = null,
-    selectedActions: ReferenceProperty<List<Action>>? = null,
-    separator: ReferenceProperty<Container.Separator>? = null,
-    tooltips: ReferenceProperty<List<Tooltip>>? = null,
-    transform: ReferenceProperty<Transform>? = null,
-    transitionChange: ReferenceProperty<ChangeTransition>? = null,
-    transitionIn: ReferenceProperty<AppearanceTransition>? = null,
-    transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
-    visibility: ReferenceProperty<Visibility>? = null,
-    visibilityAction: ReferenceProperty<VisibilityAction>? = null,
-    visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
-    width: ReferenceProperty<Size>? = null,
-) = Container.Properties(
+): Container = container(
+    orientation = horizontal,
     accessibility = accessibility,
     action = action,
     actionAnimation = actionAnimation,
@@ -708,12 +457,11 @@ fun TemplateScope.containerRefs(
     focus = focus,
     height = height,
     id = id,
-    items = items,
+    items = items.toList(),
     layoutMode = layoutMode,
     lineSeparator = lineSeparator,
     longtapActions = longtapActions,
     margins = margins,
-    orientation = orientation,
     paddings = paddings,
     rowSpan = rowSpan,
     selectedActions = selectedActions,
@@ -754,7 +502,6 @@ fun TemplateScope.containerRefs(
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
- * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -771,7 +518,8 @@ fun TemplateScope.containerRefs(
  * @param width Element width.
  */
 @Generated
-fun Container.override(
+fun DivScope.row(
+    items: List<Div>,
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     action: Action? = null,
@@ -791,12 +539,10 @@ fun Container.override(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
-    items: List<Div>? = null,
     layoutMode: Container.LayoutMode? = null,
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
-    orientation: Container.Orientation? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -811,47 +557,45 @@ fun Container.override(
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Container = Container(
-    Container.Properties(
-        accessibility = valueOrNull(accessibility) ?: properties.accessibility,
-        action = valueOrNull(action) ?: properties.action,
-        actionAnimation = valueOrNull(actionAnimation) ?: properties.actionAnimation,
-        actions = valueOrNull(actions) ?: properties.actions,
-        alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
-        alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
-        alpha = valueOrNull(alpha) ?: properties.alpha,
-        aspect = valueOrNull(aspect) ?: properties.aspect,
-        background = valueOrNull(background) ?: properties.background,
-        border = valueOrNull(border) ?: properties.border,
-        columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
-        contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal) ?: properties.contentAlignmentHorizontal,
-        contentAlignmentVertical = valueOrNull(contentAlignmentVertical) ?: properties.contentAlignmentVertical,
-        doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
-        extensions = valueOrNull(extensions) ?: properties.extensions,
-        focus = valueOrNull(focus) ?: properties.focus,
-        height = valueOrNull(height) ?: properties.height,
-        id = valueOrNull(id) ?: properties.id,
-        items = valueOrNull(items) ?: properties.items,
-        layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
-        lineSeparator = valueOrNull(lineSeparator) ?: properties.lineSeparator,
-        longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
-        margins = valueOrNull(margins) ?: properties.margins,
-        orientation = valueOrNull(orientation) ?: properties.orientation,
-        paddings = valueOrNull(paddings) ?: properties.paddings,
-        rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
-        selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
-        separator = valueOrNull(separator) ?: properties.separator,
-        tooltips = valueOrNull(tooltips) ?: properties.tooltips,
-        transform = valueOrNull(transform) ?: properties.transform,
-        transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
-        transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
-        transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
-        transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
-        visibility = valueOrNull(visibility) ?: properties.visibility,
-        visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
-        visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
-        width = valueOrNull(width) ?: properties.width,
-    )
+): Container = container(
+    orientation = horizontal,
+    accessibility = accessibility,
+    action = action,
+    actionAnimation = actionAnimation,
+    actions = actions,
+    alignmentHorizontal = alignmentHorizontal,
+    alignmentVertical = alignmentVertical,
+    alpha = alpha,
+    aspect = aspect,
+    background = background,
+    border = border,
+    columnSpan = columnSpan,
+    contentAlignmentHorizontal = contentAlignmentHorizontal,
+    contentAlignmentVertical = contentAlignmentVertical,
+    doubletapActions = doubletapActions,
+    extensions = extensions,
+    focus = focus,
+    height = height,
+    id = id,
+    items = items,
+    layoutMode = layoutMode,
+    lineSeparator = lineSeparator,
+    longtapActions = longtapActions,
+    margins = margins,
+    paddings = paddings,
+    rowSpan = rowSpan,
+    selectedActions = selectedActions,
+    separator = separator,
+    tooltips = tooltips,
+    transform = transform,
+    transitionChange = transitionChange,
+    transitionIn = transitionIn,
+    transitionOut = transitionOut,
+    transitionTriggers = transitionTriggers,
+    visibility = visibility,
+    visibilityAction = visibilityAction,
+    visibilityActions = visibilityActions,
+    width = width,
 )
 
 /**
@@ -878,7 +622,6 @@ fun Container.override(
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
- * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -895,141 +638,84 @@ fun Container.override(
  * @param width Element width.
  */
 @Generated
-fun Container.defer(
+fun DivScope.column(
+    vararg items: Div,
     `use named arguments`: Guard = Guard.instance,
-    accessibility: ReferenceProperty<Accessibility>? = null,
-    action: ReferenceProperty<Action>? = null,
-    actionAnimation: ReferenceProperty<Animation>? = null,
-    actions: ReferenceProperty<List<Action>>? = null,
-    alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
-    alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
-    alpha: ReferenceProperty<Double>? = null,
-    aspect: ReferenceProperty<Aspect>? = null,
-    background: ReferenceProperty<List<Background>>? = null,
-    border: ReferenceProperty<Border>? = null,
-    columnSpan: ReferenceProperty<Int>? = null,
-    contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
-    contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
-    doubletapActions: ReferenceProperty<List<Action>>? = null,
-    extensions: ReferenceProperty<List<Extension>>? = null,
-    focus: ReferenceProperty<Focus>? = null,
-    height: ReferenceProperty<Size>? = null,
-    id: ReferenceProperty<String>? = null,
-    items: ReferenceProperty<List<Div>>? = null,
-    layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
-    lineSeparator: ReferenceProperty<Container.Separator>? = null,
-    longtapActions: ReferenceProperty<List<Action>>? = null,
-    margins: ReferenceProperty<EdgeInsets>? = null,
-    orientation: ReferenceProperty<Container.Orientation>? = null,
-    paddings: ReferenceProperty<EdgeInsets>? = null,
-    rowSpan: ReferenceProperty<Int>? = null,
-    selectedActions: ReferenceProperty<List<Action>>? = null,
-    separator: ReferenceProperty<Container.Separator>? = null,
-    tooltips: ReferenceProperty<List<Tooltip>>? = null,
-    transform: ReferenceProperty<Transform>? = null,
-    transitionChange: ReferenceProperty<ChangeTransition>? = null,
-    transitionIn: ReferenceProperty<AppearanceTransition>? = null,
-    transitionOut: ReferenceProperty<AppearanceTransition>? = null,
-    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
-    visibility: ReferenceProperty<Visibility>? = null,
-    visibilityAction: ReferenceProperty<VisibilityAction>? = null,
-    visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
-    width: ReferenceProperty<Size>? = null,
-): Container = Container(
-    Container.Properties(
-        accessibility = accessibility ?: properties.accessibility,
-        action = action ?: properties.action,
-        actionAnimation = actionAnimation ?: properties.actionAnimation,
-        actions = actions ?: properties.actions,
-        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
-        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
-        alpha = alpha ?: properties.alpha,
-        aspect = aspect ?: properties.aspect,
-        background = background ?: properties.background,
-        border = border ?: properties.border,
-        columnSpan = columnSpan ?: properties.columnSpan,
-        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
-        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
-        doubletapActions = doubletapActions ?: properties.doubletapActions,
-        extensions = extensions ?: properties.extensions,
-        focus = focus ?: properties.focus,
-        height = height ?: properties.height,
-        id = id ?: properties.id,
-        items = items ?: properties.items,
-        layoutMode = layoutMode ?: properties.layoutMode,
-        lineSeparator = lineSeparator ?: properties.lineSeparator,
-        longtapActions = longtapActions ?: properties.longtapActions,
-        margins = margins ?: properties.margins,
-        orientation = orientation ?: properties.orientation,
-        paddings = paddings ?: properties.paddings,
-        rowSpan = rowSpan ?: properties.rowSpan,
-        selectedActions = selectedActions ?: properties.selectedActions,
-        separator = separator ?: properties.separator,
-        tooltips = tooltips ?: properties.tooltips,
-        transform = transform ?: properties.transform,
-        transitionChange = transitionChange ?: properties.transitionChange,
-        transitionIn = transitionIn ?: properties.transitionIn,
-        transitionOut = transitionOut ?: properties.transitionOut,
-        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
-        visibility = visibility ?: properties.visibility,
-        visibilityAction = visibilityAction ?: properties.visibilityAction,
-        visibilityActions = visibilityActions ?: properties.visibilityActions,
-        width = width ?: properties.width,
-    )
-)
-
-/**
- * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
- * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
- * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
- */
-@Generated
-fun Container.evaluate(
-    `use named arguments`: Guard = Guard.instance,
-    alpha: ExpressionProperty<Double>? = null,
-    columnSpan: ExpressionProperty<Int>? = null,
-    rowSpan: ExpressionProperty<Int>? = null,
-): Container = Container(
-    Container.Properties(
-        accessibility = properties.accessibility,
-        action = properties.action,
-        actionAnimation = properties.actionAnimation,
-        actions = properties.actions,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
-        alpha = alpha ?: properties.alpha,
-        aspect = properties.aspect,
-        background = properties.background,
-        border = properties.border,
-        columnSpan = columnSpan ?: properties.columnSpan,
-        contentAlignmentHorizontal = properties.contentAlignmentHorizontal,
-        contentAlignmentVertical = properties.contentAlignmentVertical,
-        doubletapActions = properties.doubletapActions,
-        extensions = properties.extensions,
-        focus = properties.focus,
-        height = properties.height,
-        id = properties.id,
-        items = properties.items,
-        layoutMode = properties.layoutMode,
-        lineSeparator = properties.lineSeparator,
-        longtapActions = properties.longtapActions,
-        margins = properties.margins,
-        orientation = properties.orientation,
-        paddings = properties.paddings,
-        rowSpan = rowSpan ?: properties.rowSpan,
-        selectedActions = properties.selectedActions,
-        separator = properties.separator,
-        tooltips = properties.tooltips,
-        transform = properties.transform,
-        transitionChange = properties.transitionChange,
-        transitionIn = properties.transitionIn,
-        transitionOut = properties.transitionOut,
-        transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
-        visibilityAction = properties.visibilityAction,
-        visibilityActions = properties.visibilityActions,
-        width = properties.width,
-    )
+    accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
+    alignmentHorizontal: AlignmentHorizontal? = null,
+    alignmentVertical: AlignmentVertical? = null,
+    alpha: Double? = null,
+    aspect: Aspect? = null,
+    background: List<Background>? = null,
+    border: Border? = null,
+    columnSpan: Int? = null,
+    contentAlignmentHorizontal: AlignmentHorizontal? = null,
+    contentAlignmentVertical: AlignmentVertical? = null,
+    doubletapActions: List<Action>? = null,
+    extensions: List<Extension>? = null,
+    focus: Focus? = null,
+    height: Size? = null,
+    id: String? = null,
+    layoutMode: Container.LayoutMode? = null,
+    lineSeparator: Container.Separator? = null,
+    longtapActions: List<Action>? = null,
+    margins: EdgeInsets? = null,
+    paddings: EdgeInsets? = null,
+    rowSpan: Int? = null,
+    selectedActions: List<Action>? = null,
+    separator: Container.Separator? = null,
+    tooltips: List<Tooltip>? = null,
+    transform: Transform? = null,
+    transitionChange: ChangeTransition? = null,
+    transitionIn: AppearanceTransition? = null,
+    transitionOut: AppearanceTransition? = null,
+    transitionTriggers: List<TransitionTrigger>? = null,
+    visibility: Visibility? = null,
+    visibilityAction: VisibilityAction? = null,
+    visibilityActions: List<VisibilityAction>? = null,
+    width: Size? = null,
+): Container = container(
+    orientation = vertical,
+    accessibility = accessibility,
+    action = action,
+    actionAnimation = actionAnimation,
+    actions = actions,
+    alignmentHorizontal = alignmentHorizontal,
+    alignmentVertical = alignmentVertical,
+    alpha = alpha,
+    aspect = aspect,
+    background = background,
+    border = border,
+    columnSpan = columnSpan,
+    contentAlignmentHorizontal = contentAlignmentHorizontal,
+    contentAlignmentVertical = contentAlignmentVertical,
+    doubletapActions = doubletapActions,
+    extensions = extensions,
+    focus = focus,
+    height = height,
+    id = id,
+    items = items.toList(),
+    layoutMode = layoutMode,
+    lineSeparator = lineSeparator,
+    longtapActions = longtapActions,
+    margins = margins,
+    paddings = paddings,
+    rowSpan = rowSpan,
+    selectedActions = selectedActions,
+    separator = separator,
+    tooltips = tooltips,
+    transform = transform,
+    transitionChange = transitionChange,
+    transitionIn = transitionIn,
+    transitionOut = transitionOut,
+    transitionTriggers = transitionTriggers,
+    visibility = visibility,
+    visibilityAction = visibilityAction,
+    visibilityActions = visibilityActions,
+    width = width,
 )
 
 /**
@@ -1056,7 +742,6 @@ fun Container.evaluate(
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
- * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1073,7 +758,369 @@ fun Container.evaluate(
  * @param width Element width.
  */
 @Generated
-fun Component<Container>.override(
+fun DivScope.column(
+    items: List<Div>,
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
+    alignmentHorizontal: AlignmentHorizontal? = null,
+    alignmentVertical: AlignmentVertical? = null,
+    alpha: Double? = null,
+    aspect: Aspect? = null,
+    background: List<Background>? = null,
+    border: Border? = null,
+    columnSpan: Int? = null,
+    contentAlignmentHorizontal: AlignmentHorizontal? = null,
+    contentAlignmentVertical: AlignmentVertical? = null,
+    doubletapActions: List<Action>? = null,
+    extensions: List<Extension>? = null,
+    focus: Focus? = null,
+    height: Size? = null,
+    id: String? = null,
+    layoutMode: Container.LayoutMode? = null,
+    lineSeparator: Container.Separator? = null,
+    longtapActions: List<Action>? = null,
+    margins: EdgeInsets? = null,
+    paddings: EdgeInsets? = null,
+    rowSpan: Int? = null,
+    selectedActions: List<Action>? = null,
+    separator: Container.Separator? = null,
+    tooltips: List<Tooltip>? = null,
+    transform: Transform? = null,
+    transitionChange: ChangeTransition? = null,
+    transitionIn: AppearanceTransition? = null,
+    transitionOut: AppearanceTransition? = null,
+    transitionTriggers: List<TransitionTrigger>? = null,
+    visibility: Visibility? = null,
+    visibilityAction: VisibilityAction? = null,
+    visibilityActions: List<VisibilityAction>? = null,
+    width: Size? = null,
+): Container = container(
+    orientation = vertical,
+    accessibility = accessibility,
+    action = action,
+    actionAnimation = actionAnimation,
+    actions = actions,
+    alignmentHorizontal = alignmentHorizontal,
+    alignmentVertical = alignmentVertical,
+    alpha = alpha,
+    aspect = aspect,
+    background = background,
+    border = border,
+    columnSpan = columnSpan,
+    contentAlignmentHorizontal = contentAlignmentHorizontal,
+    contentAlignmentVertical = contentAlignmentVertical,
+    doubletapActions = doubletapActions,
+    extensions = extensions,
+    focus = focus,
+    height = height,
+    id = id,
+    items = items,
+    layoutMode = layoutMode,
+    lineSeparator = lineSeparator,
+    longtapActions = longtapActions,
+    margins = margins,
+    paddings = paddings,
+    rowSpan = rowSpan,
+    selectedActions = selectedActions,
+    separator = separator,
+    tooltips = tooltips,
+    transform = transform,
+    transitionChange = transitionChange,
+    transitionIn = transitionIn,
+    transitionOut = transitionOut,
+    transitionTriggers = transitionTriggers,
+    visibility = visibility,
+    visibilityAction = visibilityAction,
+    visibilityActions = visibilityActions,
+    width = width,
+)
+
+/**
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun DivScope.stack(
+    vararg items: Div,
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
+    alignmentHorizontal: AlignmentHorizontal? = null,
+    alignmentVertical: AlignmentVertical? = null,
+    alpha: Double? = null,
+    aspect: Aspect? = null,
+    background: List<Background>? = null,
+    border: Border? = null,
+    columnSpan: Int? = null,
+    contentAlignmentHorizontal: AlignmentHorizontal? = null,
+    contentAlignmentVertical: AlignmentVertical? = null,
+    doubletapActions: List<Action>? = null,
+    extensions: List<Extension>? = null,
+    focus: Focus? = null,
+    height: Size? = null,
+    id: String? = null,
+    layoutMode: Container.LayoutMode? = null,
+    lineSeparator: Container.Separator? = null,
+    longtapActions: List<Action>? = null,
+    margins: EdgeInsets? = null,
+    paddings: EdgeInsets? = null,
+    rowSpan: Int? = null,
+    selectedActions: List<Action>? = null,
+    separator: Container.Separator? = null,
+    tooltips: List<Tooltip>? = null,
+    transform: Transform? = null,
+    transitionChange: ChangeTransition? = null,
+    transitionIn: AppearanceTransition? = null,
+    transitionOut: AppearanceTransition? = null,
+    transitionTriggers: List<TransitionTrigger>? = null,
+    visibility: Visibility? = null,
+    visibilityAction: VisibilityAction? = null,
+    visibilityActions: List<VisibilityAction>? = null,
+    width: Size? = null,
+): Container = container(
+    orientation = overlap,
+    accessibility = accessibility,
+    action = action,
+    actionAnimation = actionAnimation,
+    actions = actions,
+    alignmentHorizontal = alignmentHorizontal,
+    alignmentVertical = alignmentVertical,
+    alpha = alpha,
+    aspect = aspect,
+    background = background,
+    border = border,
+    columnSpan = columnSpan,
+    contentAlignmentHorizontal = contentAlignmentHorizontal,
+    contentAlignmentVertical = contentAlignmentVertical,
+    doubletapActions = doubletapActions,
+    extensions = extensions,
+    focus = focus,
+    height = height,
+    id = id,
+    items = items.toList(),
+    layoutMode = layoutMode,
+    lineSeparator = lineSeparator,
+    longtapActions = longtapActions,
+    margins = margins,
+    paddings = paddings,
+    rowSpan = rowSpan,
+    selectedActions = selectedActions,
+    separator = separator,
+    tooltips = tooltips,
+    transform = transform,
+    transitionChange = transitionChange,
+    transitionIn = transitionIn,
+    transitionOut = transitionOut,
+    transitionTriggers = transitionTriggers,
+    visibility = visibility,
+    visibilityAction = visibilityAction,
+    visibilityActions = visibilityActions,
+    width = width,
+)
+
+/**
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun DivScope.stack(
+    items: List<Div>,
+    `use named arguments`: Guard = Guard.instance,
+    accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
+    alignmentHorizontal: AlignmentHorizontal? = null,
+    alignmentVertical: AlignmentVertical? = null,
+    alpha: Double? = null,
+    aspect: Aspect? = null,
+    background: List<Background>? = null,
+    border: Border? = null,
+    columnSpan: Int? = null,
+    contentAlignmentHorizontal: AlignmentHorizontal? = null,
+    contentAlignmentVertical: AlignmentVertical? = null,
+    doubletapActions: List<Action>? = null,
+    extensions: List<Extension>? = null,
+    focus: Focus? = null,
+    height: Size? = null,
+    id: String? = null,
+    layoutMode: Container.LayoutMode? = null,
+    lineSeparator: Container.Separator? = null,
+    longtapActions: List<Action>? = null,
+    margins: EdgeInsets? = null,
+    paddings: EdgeInsets? = null,
+    rowSpan: Int? = null,
+    selectedActions: List<Action>? = null,
+    separator: Container.Separator? = null,
+    tooltips: List<Tooltip>? = null,
+    transform: Transform? = null,
+    transitionChange: ChangeTransition? = null,
+    transitionIn: AppearanceTransition? = null,
+    transitionOut: AppearanceTransition? = null,
+    transitionTriggers: List<TransitionTrigger>? = null,
+    visibility: Visibility? = null,
+    visibilityAction: VisibilityAction? = null,
+    visibilityActions: List<VisibilityAction>? = null,
+    width: Size? = null,
+): Container = container(
+    orientation = overlap,
+    accessibility = accessibility,
+    action = action,
+    actionAnimation = actionAnimation,
+    actions = actions,
+    alignmentHorizontal = alignmentHorizontal,
+    alignmentVertical = alignmentVertical,
+    alpha = alpha,
+    aspect = aspect,
+    background = background,
+    border = border,
+    columnSpan = columnSpan,
+    contentAlignmentHorizontal = contentAlignmentHorizontal,
+    contentAlignmentVertical = contentAlignmentVertical,
+    doubletapActions = doubletapActions,
+    extensions = extensions,
+    focus = focus,
+    height = height,
+    id = id,
+    items = items,
+    layoutMode = layoutMode,
+    lineSeparator = lineSeparator,
+    longtapActions = longtapActions,
+    margins = margins,
+    paddings = paddings,
+    rowSpan = rowSpan,
+    selectedActions = selectedActions,
+    separator = separator,
+    tooltips = tooltips,
+    transform = transform,
+    transitionChange = transitionChange,
+    transitionIn = transitionIn,
+    transitionOut = transitionOut,
+    transitionTriggers = transitionTriggers,
+    visibility = visibility,
+    visibilityAction = visibilityAction,
+    visibilityActions = visibilityActions,
+    width = width,
+)
+
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun DivScope.container(
+    orientation: Container.Orientation? = null,
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     action: Action? = null,
@@ -1098,7 +1145,6 @@ fun Component<Container>.override(
     lineSeparator: Container.Separator? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
-    orientation: Container.Orientation? = null,
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
@@ -1113,9 +1159,9 @@ fun Component<Container>.override(
     visibilityAction: VisibilityAction? = null,
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
-): Component<Container> = Component(
-    template = template,
-    properties = Container.Properties(
+): Container = Container(
+    Container.Properties(
+        orientation = valueOrNull(orientation),
         accessibility = valueOrNull(accessibility),
         action = valueOrNull(action),
         actionAnimation = valueOrNull(actionAnimation),
@@ -1139,7 +1185,6 @@ fun Component<Container>.override(
         lineSeparator = valueOrNull(lineSeparator),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
-        orientation = valueOrNull(orientation),
         paddings = valueOrNull(paddings),
         rowSpan = valueOrNull(rowSpan),
         selectedActions = valueOrNull(selectedActions),
@@ -1154,10 +1199,11 @@ fun Component<Container>.override(
         visibilityAction = valueOrNull(visibilityAction),
         visibilityActions = valueOrNull(visibilityActions),
         width = valueOrNull(width),
-    ).mergeWith(properties)
+    )
 )
 
 /**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -1181,7 +1227,6 @@ fun Component<Container>.override(
  * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
- * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param paddings Internal margins from the element stroke.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
@@ -1198,8 +1243,131 @@ fun Component<Container>.override(
  * @param width Element width.
  */
 @Generated
-fun Component<Container>.defer(
+fun DivScope.containerProps(
     `use named arguments`: Guard = Guard.instance,
+    orientation: Container.Orientation? = null,
+    accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
+    alignmentHorizontal: AlignmentHorizontal? = null,
+    alignmentVertical: AlignmentVertical? = null,
+    alpha: Double? = null,
+    aspect: Aspect? = null,
+    background: List<Background>? = null,
+    border: Border? = null,
+    columnSpan: Int? = null,
+    contentAlignmentHorizontal: AlignmentHorizontal? = null,
+    contentAlignmentVertical: AlignmentVertical? = null,
+    doubletapActions: List<Action>? = null,
+    extensions: List<Extension>? = null,
+    focus: Focus? = null,
+    height: Size? = null,
+    id: String? = null,
+    items: List<Div>? = null,
+    layoutMode: Container.LayoutMode? = null,
+    lineSeparator: Container.Separator? = null,
+    longtapActions: List<Action>? = null,
+    margins: EdgeInsets? = null,
+    paddings: EdgeInsets? = null,
+    rowSpan: Int? = null,
+    selectedActions: List<Action>? = null,
+    separator: Container.Separator? = null,
+    tooltips: List<Tooltip>? = null,
+    transform: Transform? = null,
+    transitionChange: ChangeTransition? = null,
+    transitionIn: AppearanceTransition? = null,
+    transitionOut: AppearanceTransition? = null,
+    transitionTriggers: List<TransitionTrigger>? = null,
+    visibility: Visibility? = null,
+    visibilityAction: VisibilityAction? = null,
+    visibilityActions: List<VisibilityAction>? = null,
+    width: Size? = null,
+) = Container.Properties(
+    orientation = valueOrNull(orientation),
+    accessibility = valueOrNull(accessibility),
+    action = valueOrNull(action),
+    actionAnimation = valueOrNull(actionAnimation),
+    actions = valueOrNull(actions),
+    alignmentHorizontal = valueOrNull(alignmentHorizontal),
+    alignmentVertical = valueOrNull(alignmentVertical),
+    alpha = valueOrNull(alpha),
+    aspect = valueOrNull(aspect),
+    background = valueOrNull(background),
+    border = valueOrNull(border),
+    columnSpan = valueOrNull(columnSpan),
+    contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
+    contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+    doubletapActions = valueOrNull(doubletapActions),
+    extensions = valueOrNull(extensions),
+    focus = valueOrNull(focus),
+    height = valueOrNull(height),
+    id = valueOrNull(id),
+    items = valueOrNull(items),
+    layoutMode = valueOrNull(layoutMode),
+    lineSeparator = valueOrNull(lineSeparator),
+    longtapActions = valueOrNull(longtapActions),
+    margins = valueOrNull(margins),
+    paddings = valueOrNull(paddings),
+    rowSpan = valueOrNull(rowSpan),
+    selectedActions = valueOrNull(selectedActions),
+    separator = valueOrNull(separator),
+    tooltips = valueOrNull(tooltips),
+    transform = valueOrNull(transform),
+    transitionChange = valueOrNull(transitionChange),
+    transitionIn = valueOrNull(transitionIn),
+    transitionOut = valueOrNull(transitionOut),
+    transitionTriggers = valueOrNull(transitionTriggers),
+    visibility = valueOrNull(visibility),
+    visibilityAction = valueOrNull(visibilityAction),
+    visibilityActions = valueOrNull(visibilityActions),
+    width = valueOrNull(width),
+)
+
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun TemplateScope.containerRefs(
+    `use named arguments`: Guard = Guard.instance,
+    orientation: ReferenceProperty<Container.Orientation>? = null,
     accessibility: ReferenceProperty<Accessibility>? = null,
     action: ReferenceProperty<Action>? = null,
     actionAnimation: ReferenceProperty<Animation>? = null,
@@ -1223,7 +1391,569 @@ fun Component<Container>.defer(
     lineSeparator: ReferenceProperty<Container.Separator>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
+    paddings: ReferenceProperty<EdgeInsets>? = null,
+    rowSpan: ReferenceProperty<Int>? = null,
+    selectedActions: ReferenceProperty<List<Action>>? = null,
+    separator: ReferenceProperty<Container.Separator>? = null,
+    tooltips: ReferenceProperty<List<Tooltip>>? = null,
+    transform: ReferenceProperty<Transform>? = null,
+    transitionChange: ReferenceProperty<ChangeTransition>? = null,
+    transitionIn: ReferenceProperty<AppearanceTransition>? = null,
+    transitionOut: ReferenceProperty<AppearanceTransition>? = null,
+    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    visibility: ReferenceProperty<Visibility>? = null,
+    visibilityAction: ReferenceProperty<VisibilityAction>? = null,
+    visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
+    width: ReferenceProperty<Size>? = null,
+) = Container.Properties(
+    orientation = orientation,
+    accessibility = accessibility,
+    action = action,
+    actionAnimation = actionAnimation,
+    actions = actions,
+    alignmentHorizontal = alignmentHorizontal,
+    alignmentVertical = alignmentVertical,
+    alpha = alpha,
+    aspect = aspect,
+    background = background,
+    border = border,
+    columnSpan = columnSpan,
+    contentAlignmentHorizontal = contentAlignmentHorizontal,
+    contentAlignmentVertical = contentAlignmentVertical,
+    doubletapActions = doubletapActions,
+    extensions = extensions,
+    focus = focus,
+    height = height,
+    id = id,
+    items = items,
+    layoutMode = layoutMode,
+    lineSeparator = lineSeparator,
+    longtapActions = longtapActions,
+    margins = margins,
+    paddings = paddings,
+    rowSpan = rowSpan,
+    selectedActions = selectedActions,
+    separator = separator,
+    tooltips = tooltips,
+    transform = transform,
+    transitionChange = transitionChange,
+    transitionIn = transitionIn,
+    transitionOut = transitionOut,
+    transitionTriggers = transitionTriggers,
+    visibility = visibility,
+    visibilityAction = visibilityAction,
+    visibilityActions = visibilityActions,
+    width = width,
+)
+
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Container.override(
+    `use named arguments`: Guard = Guard.instance,
+    orientation: Container.Orientation? = null,
+    accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
+    alignmentHorizontal: AlignmentHorizontal? = null,
+    alignmentVertical: AlignmentVertical? = null,
+    alpha: Double? = null,
+    aspect: Aspect? = null,
+    background: List<Background>? = null,
+    border: Border? = null,
+    columnSpan: Int? = null,
+    contentAlignmentHorizontal: AlignmentHorizontal? = null,
+    contentAlignmentVertical: AlignmentVertical? = null,
+    doubletapActions: List<Action>? = null,
+    extensions: List<Extension>? = null,
+    focus: Focus? = null,
+    height: Size? = null,
+    id: String? = null,
+    items: List<Div>? = null,
+    layoutMode: Container.LayoutMode? = null,
+    lineSeparator: Container.Separator? = null,
+    longtapActions: List<Action>? = null,
+    margins: EdgeInsets? = null,
+    paddings: EdgeInsets? = null,
+    rowSpan: Int? = null,
+    selectedActions: List<Action>? = null,
+    separator: Container.Separator? = null,
+    tooltips: List<Tooltip>? = null,
+    transform: Transform? = null,
+    transitionChange: ChangeTransition? = null,
+    transitionIn: AppearanceTransition? = null,
+    transitionOut: AppearanceTransition? = null,
+    transitionTriggers: List<TransitionTrigger>? = null,
+    visibility: Visibility? = null,
+    visibilityAction: VisibilityAction? = null,
+    visibilityActions: List<VisibilityAction>? = null,
+    width: Size? = null,
+): Container = Container(
+    Container.Properties(
+        orientation = valueOrNull(orientation) ?: properties.orientation,
+        accessibility = valueOrNull(accessibility) ?: properties.accessibility,
+        action = valueOrNull(action) ?: properties.action,
+        actionAnimation = valueOrNull(actionAnimation) ?: properties.actionAnimation,
+        actions = valueOrNull(actions) ?: properties.actions,
+        alignmentHorizontal = valueOrNull(alignmentHorizontal) ?: properties.alignmentHorizontal,
+        alignmentVertical = valueOrNull(alignmentVertical) ?: properties.alignmentVertical,
+        alpha = valueOrNull(alpha) ?: properties.alpha,
+        aspect = valueOrNull(aspect) ?: properties.aspect,
+        background = valueOrNull(background) ?: properties.background,
+        border = valueOrNull(border) ?: properties.border,
+        columnSpan = valueOrNull(columnSpan) ?: properties.columnSpan,
+        contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal) ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = valueOrNull(contentAlignmentVertical) ?: properties.contentAlignmentVertical,
+        doubletapActions = valueOrNull(doubletapActions) ?: properties.doubletapActions,
+        extensions = valueOrNull(extensions) ?: properties.extensions,
+        focus = valueOrNull(focus) ?: properties.focus,
+        height = valueOrNull(height) ?: properties.height,
+        id = valueOrNull(id) ?: properties.id,
+        items = valueOrNull(items) ?: properties.items,
+        layoutMode = valueOrNull(layoutMode) ?: properties.layoutMode,
+        lineSeparator = valueOrNull(lineSeparator) ?: properties.lineSeparator,
+        longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
+        margins = valueOrNull(margins) ?: properties.margins,
+        paddings = valueOrNull(paddings) ?: properties.paddings,
+        rowSpan = valueOrNull(rowSpan) ?: properties.rowSpan,
+        selectedActions = valueOrNull(selectedActions) ?: properties.selectedActions,
+        separator = valueOrNull(separator) ?: properties.separator,
+        tooltips = valueOrNull(tooltips) ?: properties.tooltips,
+        transform = valueOrNull(transform) ?: properties.transform,
+        transitionChange = valueOrNull(transitionChange) ?: properties.transitionChange,
+        transitionIn = valueOrNull(transitionIn) ?: properties.transitionIn,
+        transitionOut = valueOrNull(transitionOut) ?: properties.transitionOut,
+        transitionTriggers = valueOrNull(transitionTriggers) ?: properties.transitionTriggers,
+        visibility = valueOrNull(visibility) ?: properties.visibility,
+        visibilityAction = valueOrNull(visibilityAction) ?: properties.visibilityAction,
+        visibilityActions = valueOrNull(visibilityActions) ?: properties.visibilityActions,
+        width = valueOrNull(width) ?: properties.width,
+    )
+)
+
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Container.defer(
+    `use named arguments`: Guard = Guard.instance,
     orientation: ReferenceProperty<Container.Orientation>? = null,
+    accessibility: ReferenceProperty<Accessibility>? = null,
+    action: ReferenceProperty<Action>? = null,
+    actionAnimation: ReferenceProperty<Animation>? = null,
+    actions: ReferenceProperty<List<Action>>? = null,
+    alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    alpha: ReferenceProperty<Double>? = null,
+    aspect: ReferenceProperty<Aspect>? = null,
+    background: ReferenceProperty<List<Background>>? = null,
+    border: ReferenceProperty<Border>? = null,
+    columnSpan: ReferenceProperty<Int>? = null,
+    contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    doubletapActions: ReferenceProperty<List<Action>>? = null,
+    extensions: ReferenceProperty<List<Extension>>? = null,
+    focus: ReferenceProperty<Focus>? = null,
+    height: ReferenceProperty<Size>? = null,
+    id: ReferenceProperty<String>? = null,
+    items: ReferenceProperty<List<Div>>? = null,
+    layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
+    lineSeparator: ReferenceProperty<Container.Separator>? = null,
+    longtapActions: ReferenceProperty<List<Action>>? = null,
+    margins: ReferenceProperty<EdgeInsets>? = null,
+    paddings: ReferenceProperty<EdgeInsets>? = null,
+    rowSpan: ReferenceProperty<Int>? = null,
+    selectedActions: ReferenceProperty<List<Action>>? = null,
+    separator: ReferenceProperty<Container.Separator>? = null,
+    tooltips: ReferenceProperty<List<Tooltip>>? = null,
+    transform: ReferenceProperty<Transform>? = null,
+    transitionChange: ReferenceProperty<ChangeTransition>? = null,
+    transitionIn: ReferenceProperty<AppearanceTransition>? = null,
+    transitionOut: ReferenceProperty<AppearanceTransition>? = null,
+    transitionTriggers: ReferenceProperty<List<TransitionTrigger>>? = null,
+    visibility: ReferenceProperty<Visibility>? = null,
+    visibilityAction: ReferenceProperty<VisibilityAction>? = null,
+    visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
+    width: ReferenceProperty<Size>? = null,
+): Container = Container(
+    Container.Properties(
+        orientation = orientation ?: properties.orientation,
+        accessibility = accessibility ?: properties.accessibility,
+        action = action ?: properties.action,
+        actionAnimation = actionAnimation ?: properties.actionAnimation,
+        actions = actions ?: properties.actions,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        aspect = aspect ?: properties.aspect,
+        background = background ?: properties.background,
+        border = border ?: properties.border,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        doubletapActions = doubletapActions ?: properties.doubletapActions,
+        extensions = extensions ?: properties.extensions,
+        focus = focus ?: properties.focus,
+        height = height ?: properties.height,
+        id = id ?: properties.id,
+        items = items ?: properties.items,
+        layoutMode = layoutMode ?: properties.layoutMode,
+        lineSeparator = lineSeparator ?: properties.lineSeparator,
+        longtapActions = longtapActions ?: properties.longtapActions,
+        margins = margins ?: properties.margins,
+        paddings = paddings ?: properties.paddings,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        selectedActions = selectedActions ?: properties.selectedActions,
+        separator = separator ?: properties.separator,
+        tooltips = tooltips ?: properties.tooltips,
+        transform = transform ?: properties.transform,
+        transitionChange = transitionChange ?: properties.transitionChange,
+        transitionIn = transitionIn ?: properties.transitionIn,
+        transitionOut = transitionOut ?: properties.transitionOut,
+        transitionTriggers = transitionTriggers ?: properties.transitionTriggers,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = visibilityAction ?: properties.visibilityAction,
+        visibilityActions = visibilityActions ?: properties.visibilityActions,
+        width = width ?: properties.width,
+    )
+)
+
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
+ */
+@Generated
+fun Container.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    orientation: ExpressionProperty<Container.Orientation>? = null,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
+    alpha: ExpressionProperty<Double>? = null,
+    columnSpan: ExpressionProperty<Int>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
+    layoutMode: ExpressionProperty<Container.LayoutMode>? = null,
+    rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
+): Container = Container(
+    Container.Properties(
+        orientation = orientation ?: properties.orientation,
+        accessibility = properties.accessibility,
+        action = properties.action,
+        actionAnimation = properties.actionAnimation,
+        actions = properties.actions,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
+        alpha = alpha ?: properties.alpha,
+        aspect = properties.aspect,
+        background = properties.background,
+        border = properties.border,
+        columnSpan = columnSpan ?: properties.columnSpan,
+        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
+        doubletapActions = properties.doubletapActions,
+        extensions = properties.extensions,
+        focus = properties.focus,
+        height = properties.height,
+        id = properties.id,
+        items = properties.items,
+        layoutMode = layoutMode ?: properties.layoutMode,
+        lineSeparator = properties.lineSeparator,
+        longtapActions = properties.longtapActions,
+        margins = properties.margins,
+        paddings = properties.paddings,
+        rowSpan = rowSpan ?: properties.rowSpan,
+        selectedActions = properties.selectedActions,
+        separator = properties.separator,
+        tooltips = properties.tooltips,
+        transform = properties.transform,
+        transitionChange = properties.transitionChange,
+        transitionIn = properties.transitionIn,
+        transitionOut = properties.transitionOut,
+        transitionTriggers = properties.transitionTriggers,
+        visibility = visibility ?: properties.visibility,
+        visibilityAction = properties.visibilityAction,
+        visibilityActions = properties.visibilityActions,
+        width = properties.width,
+    )
+)
+
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Container>.override(
+    `use named arguments`: Guard = Guard.instance,
+    orientation: Container.Orientation? = null,
+    accessibility: Accessibility? = null,
+    action: Action? = null,
+    actionAnimation: Animation? = null,
+    actions: List<Action>? = null,
+    alignmentHorizontal: AlignmentHorizontal? = null,
+    alignmentVertical: AlignmentVertical? = null,
+    alpha: Double? = null,
+    aspect: Aspect? = null,
+    background: List<Background>? = null,
+    border: Border? = null,
+    columnSpan: Int? = null,
+    contentAlignmentHorizontal: AlignmentHorizontal? = null,
+    contentAlignmentVertical: AlignmentVertical? = null,
+    doubletapActions: List<Action>? = null,
+    extensions: List<Extension>? = null,
+    focus: Focus? = null,
+    height: Size? = null,
+    id: String? = null,
+    items: List<Div>? = null,
+    layoutMode: Container.LayoutMode? = null,
+    lineSeparator: Container.Separator? = null,
+    longtapActions: List<Action>? = null,
+    margins: EdgeInsets? = null,
+    paddings: EdgeInsets? = null,
+    rowSpan: Int? = null,
+    selectedActions: List<Action>? = null,
+    separator: Container.Separator? = null,
+    tooltips: List<Tooltip>? = null,
+    transform: Transform? = null,
+    transitionChange: ChangeTransition? = null,
+    transitionIn: AppearanceTransition? = null,
+    transitionOut: AppearanceTransition? = null,
+    transitionTriggers: List<TransitionTrigger>? = null,
+    visibility: Visibility? = null,
+    visibilityAction: VisibilityAction? = null,
+    visibilityActions: List<VisibilityAction>? = null,
+    width: Size? = null,
+): Component<Container> = Component(
+    template = template,
+    properties = Container.Properties(
+        orientation = valueOrNull(orientation),
+        accessibility = valueOrNull(accessibility),
+        action = valueOrNull(action),
+        actionAnimation = valueOrNull(actionAnimation),
+        actions = valueOrNull(actions),
+        alignmentHorizontal = valueOrNull(alignmentHorizontal),
+        alignmentVertical = valueOrNull(alignmentVertical),
+        alpha = valueOrNull(alpha),
+        aspect = valueOrNull(aspect),
+        background = valueOrNull(background),
+        border = valueOrNull(border),
+        columnSpan = valueOrNull(columnSpan),
+        contentAlignmentHorizontal = valueOrNull(contentAlignmentHorizontal),
+        contentAlignmentVertical = valueOrNull(contentAlignmentVertical),
+        doubletapActions = valueOrNull(doubletapActions),
+        extensions = valueOrNull(extensions),
+        focus = valueOrNull(focus),
+        height = valueOrNull(height),
+        id = valueOrNull(id),
+        items = valueOrNull(items),
+        layoutMode = valueOrNull(layoutMode),
+        lineSeparator = valueOrNull(lineSeparator),
+        longtapActions = valueOrNull(longtapActions),
+        margins = valueOrNull(margins),
+        paddings = valueOrNull(paddings),
+        rowSpan = valueOrNull(rowSpan),
+        selectedActions = valueOrNull(selectedActions),
+        separator = valueOrNull(separator),
+        tooltips = valueOrNull(tooltips),
+        transform = valueOrNull(transform),
+        transitionChange = valueOrNull(transitionChange),
+        transitionIn = valueOrNull(transitionIn),
+        transitionOut = valueOrNull(transitionOut),
+        transitionTriggers = valueOrNull(transitionTriggers),
+        visibility = valueOrNull(visibility),
+        visibilityAction = valueOrNull(visibilityAction),
+        visibilityActions = valueOrNull(visibilityActions),
+        width = valueOrNull(width),
+    ).mergeWith(properties)
+)
+
+/**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param accessibility Accessibility settings.
+ * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actions Multiple actions when clicking on an element.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
+ * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param aspect Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.
+ * @param background Element background. It can contain multiple layers.
+ * @param border Element stroke.
+ * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param doubletapActions Action when double-clicking on an element.
+ * @param extensions Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
+ * @param focus Parameters when focusing on an element or losing focus.
+ * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
+ * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param items Nested elements.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
+ * @param lineSeparator Separator between elements along the cross axis. Not used if the `layout_mode` parameter is set to `no_wrap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
+ * @param margins External margins from the element stroke.
+ * @param paddings Internal margins from the element stroke.
+ * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param selectedActions List of [actions](div-action.md) to be executed when selecting an element in [pager](div-pager.md).
+ * @param separator Separator between elements along the main axis. Not used if the `orientation` parameter is set to `overlap`. Only new browsers are supported on the web (the `gap` property must be supported for flex blocks).
+ * @param tooltips Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
+ * @param transform Applies the passed transformation to the element. Content that doesn't fit into the original view area is cut off.
+ * @param transitionChange Change animation. It is played when the position or size of an element changes in the new layout.
+ * @param transitionIn Appearance animation. It is played when an element with a new ID appears. To learn more about the concept of transitions, see [Animated transitions](../../interaction.dita#animation/transition-animation).
+ * @param transitionOut Disappearance animation. It is played when an element disappears in the new layout.
+ * @param transitionTriggers Animation starting triggers. Default value: `[state_change, visibility_change]`.
+ * @param visibility Element visibility.
+ * @param visibilityAction Tracking visibility of a single element. Not used if the `visibility_actions` parameter is set.
+ * @param visibilityActions Actions when an element appears on the screen.
+ * @param width Element width.
+ */
+@Generated
+fun Component<Container>.defer(
+    `use named arguments`: Guard = Guard.instance,
+    orientation: ReferenceProperty<Container.Orientation>? = null,
+    accessibility: ReferenceProperty<Accessibility>? = null,
+    action: ReferenceProperty<Action>? = null,
+    actionAnimation: ReferenceProperty<Animation>? = null,
+    actions: ReferenceProperty<List<Action>>? = null,
+    alignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    alpha: ReferenceProperty<Double>? = null,
+    aspect: ReferenceProperty<Aspect>? = null,
+    background: ReferenceProperty<List<Background>>? = null,
+    border: ReferenceProperty<Border>? = null,
+    columnSpan: ReferenceProperty<Int>? = null,
+    contentAlignmentHorizontal: ReferenceProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ReferenceProperty<AlignmentVertical>? = null,
+    doubletapActions: ReferenceProperty<List<Action>>? = null,
+    extensions: ReferenceProperty<List<Extension>>? = null,
+    focus: ReferenceProperty<Focus>? = null,
+    height: ReferenceProperty<Size>? = null,
+    id: ReferenceProperty<String>? = null,
+    items: ReferenceProperty<List<Div>>? = null,
+    layoutMode: ReferenceProperty<Container.LayoutMode>? = null,
+    lineSeparator: ReferenceProperty<Container.Separator>? = null,
+    longtapActions: ReferenceProperty<List<Action>>? = null,
+    margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
     rowSpan: ReferenceProperty<Int>? = null,
     selectedActions: ReferenceProperty<List<Action>>? = null,
@@ -1241,6 +1971,7 @@ fun Component<Container>.defer(
 ): Component<Container> = Component(
     template = template,
     properties = Container.Properties(
+        orientation = orientation,
         accessibility = accessibility,
         action = action,
         actionAnimation = actionAnimation,
@@ -1264,7 +1995,6 @@ fun Component<Container>.defer(
         lineSeparator = lineSeparator,
         longtapActions = longtapActions,
         margins = margins,
-        orientation = orientation,
         paddings = paddings,
         rowSpan = rowSpan,
         selectedActions = selectedActions,
@@ -1283,43 +2013,57 @@ fun Component<Container>.defer(
 )
 
 /**
+ * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.
+ * @param contentAlignmentVertical Vertical element alignment. The `baseline` value aligns elements along their own specified baseline (for text and other elements that have a baseline). Elements that don't have their baseline value specified are aligned along the top edge. For child elements, it can be redefined using the `alignment_vertical` property.
+ * @param layoutMode Element placement method. The `wrap` value transfers elements to the next line if they don't fit in the previous one. If the `wrap` value is set:<li>A separate line is allocated for each element along the main axis with the size value set to `match_parent`.</li><li>Elements along the cross axis with the size value `match_parent` are ignored.</li>
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Container>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    orientation: ExpressionProperty<Container.Orientation>? = null,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
+    layoutMode: ExpressionProperty<Container.LayoutMode>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Container> = Component(
     template = template,
     properties = Container.Properties(
+        orientation = orientation,
         accessibility = null,
         action = null,
         actionAnimation = null,
         actions = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         aspect = null,
         background = null,
         border = null,
         columnSpan = columnSpan,
-        contentAlignmentHorizontal = null,
-        contentAlignmentVertical = null,
+        contentAlignmentHorizontal = contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical,
         doubletapActions = null,
         extensions = null,
         focus = null,
         height = null,
         id = null,
         items = null,
-        layoutMode = null,
+        layoutMode = layoutMode,
         lineSeparator = null,
         longtapActions = null,
         margins = null,
-        orientation = null,
         paddings = null,
         rowSpan = rowSpan,
         selectedActions = null,
@@ -1330,7 +2074,7 @@ fun Component<Container>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1346,6 +2090,12 @@ operator fun Component<Container>.plus(additive: Container.Properties): Componen
 @Generated
 fun Container.asList() = listOf(this)
 
+@Generated
+fun Container.LayoutMode.asList() = listOf(this)
+
+@Generated
+fun Container.Orientation.asList() = listOf(this)
+
 /**
  * @param showAtEnd Enables displaying the separator after the last item.
  * @param showAtStart Enables displaying the separator before the first item.
@@ -1358,7 +2108,7 @@ fun DivScope.containerSeparator(
     showAtEnd: Boolean? = null,
     showAtStart: Boolean? = null,
     showBetween: Boolean? = null,
-    style: Drawable,
+    style: Drawable? = null,
 ): Container.Separator = Container.Separator(
     Container.Separator.Properties(
         showAtEnd = valueOrNull(showAtEnd),

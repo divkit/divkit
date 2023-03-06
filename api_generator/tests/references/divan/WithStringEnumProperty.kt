@@ -58,14 +58,12 @@ class WithStringEnumProperty internal constructor(
      */
     @Generated
     sealed interface Property
-
-    fun Property.asList() = listOf(this)
 }
 
 @Generated
 fun DivScope.withStringEnumProperty(
     `use named arguments`: Guard = Guard.instance,
-    property: WithStringEnumProperty.Property,
+    property: WithStringEnumProperty.Property? = null,
 ): WithStringEnumProperty = WithStringEnumProperty(
     WithStringEnumProperty.Properties(
         property = valueOrNull(property),
@@ -109,6 +107,16 @@ fun WithStringEnumProperty.defer(
 )
 
 @Generated
+fun WithStringEnumProperty.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    property: ExpressionProperty<WithStringEnumProperty.Property>? = null,
+): WithStringEnumProperty = WithStringEnumProperty(
+    WithStringEnumProperty.Properties(
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
 fun Component<WithStringEnumProperty>.override(
     `use named arguments`: Guard = Guard.instance,
     property: WithStringEnumProperty.Property? = null,
@@ -131,6 +139,17 @@ fun Component<WithStringEnumProperty>.defer(
 )
 
 @Generated
+fun Component<WithStringEnumProperty>.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    property: ExpressionProperty<WithStringEnumProperty.Property>? = null,
+): Component<WithStringEnumProperty> = Component(
+    template = template,
+    properties = WithStringEnumProperty.Properties(
+        property = property,
+    ).mergeWith(properties)
+)
+
+@Generated
 operator fun Component<WithStringEnumProperty>.plus(additive: WithStringEnumProperty.Properties): Component<WithStringEnumProperty> = Component(
     template = template,
     properties = additive.mergeWith(properties)
@@ -138,3 +157,6 @@ operator fun Component<WithStringEnumProperty>.plus(additive: WithStringEnumProp
 
 @Generated
 fun WithStringEnumProperty.asList() = listOf(this)
+
+@Generated
+fun WithStringEnumProperty.Property.asList() = listOf(this)

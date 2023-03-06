@@ -3,6 +3,11 @@
   "typescript_templatable": false,
   "generate_swift_optional_arguments": false,
   "root_entity": true,
+  "codegen": {
+    "divan": {
+      "plus_operator": false
+    }
+  },
   "definitions": {
     "div_state": {
       "type": "object",

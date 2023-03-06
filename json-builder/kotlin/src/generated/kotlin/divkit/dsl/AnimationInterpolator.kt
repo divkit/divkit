@@ -25,4 +25,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface AnimationInterpolator
 
+@Generated
 fun AnimationInterpolator.asList() = listOf(this)

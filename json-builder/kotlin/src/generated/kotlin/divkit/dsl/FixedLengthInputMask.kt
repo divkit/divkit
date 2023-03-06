@@ -127,8 +127,8 @@ class FixedLengthInputMask internal constructor(
 fun DivScope.fixedLengthInputMask(
     `use named arguments`: Guard = Guard.instance,
     alwaysVisible: Boolean? = null,
-    pattern: String,
-    patternElements: List<FixedLengthInputMask.PatternElement>,
+    pattern: String? = null,
+    patternElements: List<FixedLengthInputMask.PatternElement>? = null,
 ): FixedLengthInputMask = FixedLengthInputMask(
     FixedLengthInputMask.Properties(
         alwaysVisible = valueOrNull(alwaysVisible),
@@ -237,7 +237,7 @@ fun FixedLengthInputMask.asList() = listOf(this)
 @Generated
 fun DivScope.fixedLengthInputMaskPatternElement(
     `use named arguments`: Guard = Guard.instance,
-    key: String,
+    key: String? = null,
     placeholder: String? = null,
     regex: String? = null,
 ): FixedLengthInputMask.PatternElement = FixedLengthInputMask.PatternElement(

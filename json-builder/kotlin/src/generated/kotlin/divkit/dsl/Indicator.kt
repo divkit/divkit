@@ -85,11 +85,13 @@ class Indicator internal constructor(
          * Active indicator color.
          * Default value: `#ffdc60`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val activeItemColor: Property<Color>?,
         /**
          * A size multiplier for an active indicator.
          * Default value: `1.3`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val activeItemSize: Property<Double>?,
         /**
          * Active indicator shape.
@@ -146,6 +148,7 @@ class Indicator internal constructor(
          * Indicator color.
          * Default value: `#33919cb5`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val inactiveItemColor: Property<Color>?,
         /**
          * Inactive indicator shape, minimum size. Used when all the indicators don't fit on the screen.
@@ -167,6 +170,7 @@ class Indicator internal constructor(
          * A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
          * Default value: `0.5`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val minimumItemSize: Property<Double>?,
         /**
          * Internal margins from the element stroke.
@@ -188,11 +192,13 @@ class Indicator internal constructor(
          * Indicator shape.
          * Default value: `{"type":"rounded_rectangle"}`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val shape: Property<Shape>?,
         /**
          * Spacing between indicator centers.
          * Default value: `{"type": "fixed","value":15}`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val spaceBetweenCenters: Property<FixedSize>?,
         /**
          * Tooltips linked to an element. A tooltip can be shown by `div-action://show_tooltip?id=`, hidden by `div-action://hide_tooltip?id=` where `id` — tooltip id.
@@ -288,8 +294,6 @@ class Indicator internal constructor(
      */
     @Generated
     sealed interface Animation
-
-    fun Animation.asList() = listOf(this)
 }
 
 /**
@@ -896,32 +900,40 @@ fun Indicator.defer(
 /**
  * @param activeItemColor Active indicator color.
  * @param activeItemSize A size multiplier for an active indicator.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animation Animation of switching between indicators.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Indicator.evaluate(
     `use named arguments`: Guard = Guard.instance,
     activeItemColor: ExpressionProperty<Color>? = null,
     activeItemSize: ExpressionProperty<Double>? = null,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    animation: ExpressionProperty<Indicator.Animation>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     inactiveItemColor: ExpressionProperty<Color>? = null,
     minimumItemSize: ExpressionProperty<Double>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Indicator = Indicator(
     Indicator.Properties(
         accessibility = properties.accessibility,
         activeItemColor = activeItemColor ?: properties.activeItemColor,
         activeItemSize = activeItemSize ?: properties.activeItemSize,
         activeShape = properties.activeShape,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
-        animation = properties.animation,
+        animation = animation ?: properties.animation,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
@@ -947,7 +959,7 @@ fun Indicator.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1201,22 +1213,30 @@ fun Component<Indicator>.defer(
 /**
  * @param activeItemColor Active indicator color.
  * @param activeItemSize A size multiplier for an active indicator.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
+ * @param animation Animation of switching between indicators.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param inactiveItemColor Indicator color.
  * @param minimumItemSize A size multiplier for a minimal indicator. It is used when the required number of indicators don't fit on the screen.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Indicator>.evaluate(
     `use named arguments`: Guard = Guard.instance,
     activeItemColor: ExpressionProperty<Color>? = null,
     activeItemSize: ExpressionProperty<Double>? = null,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
+    animation: ExpressionProperty<Indicator.Animation>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     inactiveItemColor: ExpressionProperty<Color>? = null,
     minimumItemSize: ExpressionProperty<Double>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Indicator> = Component(
     template = template,
     properties = Indicator.Properties(
@@ -1224,10 +1244,10 @@ fun Component<Indicator>.evaluate(
         activeItemColor = activeItemColor,
         activeItemSize = activeItemSize,
         activeShape = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
-        animation = null,
+        animation = animation,
         background = null,
         border = null,
         columnSpan = columnSpan,
@@ -1253,7 +1273,7 @@ fun Component<Indicator>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1268,3 +1288,6 @@ operator fun Component<Indicator>.plus(additive: Indicator.Properties): Componen
 
 @Generated
 fun Indicator.asList() = listOf(this)
+
+@Generated
+fun Indicator.Animation.asList() = listOf(this)

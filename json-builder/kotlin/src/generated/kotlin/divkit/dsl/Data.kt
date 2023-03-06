@@ -32,17 +32,6 @@ class Data internal constructor(
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())
 
-    operator fun plus(additive: Properties): Data = Data(
-        Properties(
-            logId = additive.logId ?: properties.logId,
-            states = additive.states ?: properties.states,
-            timers = additive.timers ?: properties.timers,
-            transitionAnimationSelector = additive.transitionAnimationSelector ?: properties.transitionAnimationSelector,
-            variableTriggers = additive.variableTriggers ?: properties.variableTriggers,
-            variables = additive.variables ?: properties.variables,
-        )
-    )
-
     class Properties internal constructor(
         /**
          * Logging ID.
@@ -60,6 +49,7 @@ class Data internal constructor(
          * Events that trigger transition animations.
          * Default value: `none`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val transitionAnimationSelector: Property<TransitionSelector>?,
         /**
          * Triggers for changing variables.
@@ -136,8 +126,8 @@ class Data internal constructor(
 @Generated
 fun DivScope.data(
     `use named arguments`: Guard = Guard.instance,
-    logId: String,
-    states: List<Data.State>,
+    logId: String? = null,
+    states: List<Data.State>? = null,
     timers: List<Timer>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     variableTriggers: List<Trigger>? = null,
@@ -261,6 +251,24 @@ fun Data.defer(
     )
 )
 
+/**
+ * @param transitionAnimationSelector Events that trigger transition animations.
+ */
+@Generated
+fun Data.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
+): Data = Data(
+    Data.Properties(
+        logId = properties.logId,
+        states = properties.states,
+        timers = properties.timers,
+        transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
+        variableTriggers = properties.variableTriggers,
+        variables = properties.variables,
+    )
+)
+
 @Generated
 fun Data.asList() = listOf(this)
 
@@ -271,8 +279,8 @@ fun Data.asList() = listOf(this)
 @Generated
 fun DivScope.dataState(
     `use named arguments`: Guard = Guard.instance,
-    div: Div,
-    stateId: Int,
+    div: Div? = null,
+    stateId: Int? = null,
 ): Data.State = Data.State(
     Data.State.Properties(
         div = valueOrNull(div),

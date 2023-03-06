@@ -61,7 +61,7 @@ class PageSize internal constructor(
 @Generated
 fun DivScope.pageSize(
     `use named arguments`: Guard = Guard.instance,
-    pageWidth: PercentageSize,
+    pageWidth: PercentageSize? = null,
 ): PageSize = PageSize(
     PageSize.Properties(
         pageWidth = valueOrNull(pageWidth),

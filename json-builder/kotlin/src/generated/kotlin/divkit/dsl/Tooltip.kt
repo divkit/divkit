@@ -96,8 +96,6 @@ class Tooltip internal constructor(
      */
     @Generated
     sealed interface Position
-
-    fun Position.asList() = listOf(this)
 }
 
 /**
@@ -114,11 +112,11 @@ fun DivScope.tooltip(
     `use named arguments`: Guard = Guard.instance,
     animationIn: Animation? = null,
     animationOut: Animation? = null,
-    div: Div,
+    div: Div? = null,
     duration: Int? = null,
-    id: String,
+    id: String? = null,
     offset: Point? = null,
-    position: Tooltip.Position,
+    position: Tooltip.Position? = null,
 ): Tooltip = Tooltip(
     Tooltip.Properties(
         animationIn = valueOrNull(animationIn),
@@ -253,11 +251,13 @@ fun Tooltip.defer(
 
 /**
  * @param duration Duration of the tooltip visibility in milliseconds. When the value is set to `0`, the tooltip will be visible until the user hides it.
+ * @param position The position of a tooltip relative to an element it belongs to.
  */
 @Generated
 fun Tooltip.evaluate(
     `use named arguments`: Guard = Guard.instance,
     duration: ExpressionProperty<Int>? = null,
+    position: ExpressionProperty<Tooltip.Position>? = null,
 ): Tooltip = Tooltip(
     Tooltip.Properties(
         animationIn = properties.animationIn,
@@ -266,9 +266,12 @@ fun Tooltip.evaluate(
         duration = duration ?: properties.duration,
         id = properties.id,
         offset = properties.offset,
-        position = properties.position,
+        position = position ?: properties.position,
     )
 )
 
 @Generated
 fun Tooltip.asList() = listOf(this)
+
+@Generated
+fun Tooltip.Position.asList() = listOf(this)

@@ -58,14 +58,12 @@ class WithArrayOfEnums internal constructor(
      */
     @Generated
     sealed interface Item
-
-    fun Item.asList() = listOf(this)
 }
 
 @Generated
 fun DivScope.withArrayOfEnums(
     `use named arguments`: Guard = Guard.instance,
-    items: List<WithArrayOfEnums.Item>,
+    items: List<WithArrayOfEnums.Item>? = null,
 ): WithArrayOfEnums = WithArrayOfEnums(
     WithArrayOfEnums.Properties(
         items = valueOrNull(items),
@@ -138,3 +136,6 @@ operator fun Component<WithArrayOfEnums>.plus(additive: WithArrayOfEnums.Propert
 
 @Generated
 fun WithArrayOfEnums.asList() = listOf(this)
+
+@Generated
+fun WithArrayOfEnums.Item.asList() = listOf(this)

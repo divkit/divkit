@@ -166,7 +166,7 @@ fun WithOptionalComplexProperty.asList() = listOf(this)
 @Generated
 fun DivScope.withOptionalComplexPropertyProperty(
     `use named arguments`: Guard = Guard.instance,
-    value: Url,
+    value: Url? = null,
 ): WithOptionalComplexProperty.Property = WithOptionalComplexProperty.Property(
     WithOptionalComplexProperty.Property.Properties(
         value = valueOrNull(value),

@@ -92,7 +92,7 @@ class WithArrayOfNestedItems internal constructor(
 @Generated
 fun DivScope.withArrayOfNestedItems(
     `use named arguments`: Guard = Guard.instance,
-    items: List<WithArrayOfNestedItems.Item>,
+    items: List<WithArrayOfNestedItems.Item>? = null,
 ): WithArrayOfNestedItems = WithArrayOfNestedItems(
     WithArrayOfNestedItems.Properties(
         items = valueOrNull(items),
@@ -169,8 +169,8 @@ fun WithArrayOfNestedItems.asList() = listOf(this)
 @Generated
 fun DivScope.withArrayOfNestedItemsItem(
     `use named arguments`: Guard = Guard.instance,
-    entity: Entity,
-    property: String,
+    entity: Entity? = null,
+    property: String? = null,
 ): WithArrayOfNestedItems.Item = WithArrayOfNestedItems.Item(
     WithArrayOfNestedItems.Item.Properties(
         entity = valueOrNull(entity),

@@ -169,7 +169,7 @@ fun WithComplexPropertyWithDefaultValue.asList() = listOf(this)
 @Generated
 fun DivScope.withComplexPropertyWithDefaultValueProperty(
     `use named arguments`: Guard = Guard.instance,
-    value: String,
+    value: String? = null,
 ): WithComplexPropertyWithDefaultValue.Property = WithComplexPropertyWithDefaultValue.Property(
     WithComplexPropertyWithDefaultValue.Property.Properties(
         value = valueOrNull(value),

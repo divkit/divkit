@@ -408,14 +408,14 @@ fun DivScope.slider(
     thumbSecondaryStyle: Drawable? = null,
     thumbSecondaryTextStyle: Slider.TextStyle? = null,
     thumbSecondaryValueVariable: String? = null,
-    thumbStyle: Drawable,
+    thumbStyle: Drawable? = null,
     thumbTextStyle: Slider.TextStyle? = null,
     thumbValueVariable: String? = null,
     tickMarkActiveStyle: Drawable? = null,
     tickMarkInactiveStyle: Drawable? = null,
     tooltips: List<Tooltip>? = null,
-    trackActiveStyle: Drawable,
-    trackInactiveStyle: Drawable,
+    trackActiveStyle: Drawable? = null,
+    trackInactiveStyle: Drawable? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
     transitionIn: AppearanceTransition? = null,
@@ -961,25 +961,31 @@ fun Slider.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Slider.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     maxValue: ExpressionProperty<Int>? = null,
     minValue: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Slider = Slider(
     Slider.Properties(
         accessibility = properties.accessibility,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         background = properties.background,
         border = properties.border,
@@ -1011,7 +1017,7 @@ fun Slider.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1269,26 +1275,32 @@ fun Component<Slider>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param maxValue Maximum value. It must be greater than the minimum value.
  * @param minValue Minimum value.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Slider>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     maxValue: ExpressionProperty<Int>? = null,
     minValue: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Slider> = Component(
     template = template,
     properties = Slider.Properties(
         accessibility = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         background = null,
         border = null,
@@ -1320,7 +1332,7 @@ fun Component<Slider>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1345,7 +1357,7 @@ fun Slider.asList() = listOf(this)
 @Generated
 fun DivScope.sliderTextStyle(
     `use named arguments`: Guard = Guard.instance,
-    fontSize: Int,
+    fontSize: Int? = null,
     fontSizeUnit: SizeUnit? = null,
     fontWeight: FontWeight? = null,
     offset: Point? = null,
@@ -1454,18 +1466,21 @@ fun Slider.TextStyle.defer(
 
 /**
  * @param fontSize Font size.
+ * @param fontWeight Style.
  * @param textColor Text color.
  */
 @Generated
 fun Slider.TextStyle.evaluate(
     `use named arguments`: Guard = Guard.instance,
     fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
     textColor: ExpressionProperty<Color>? = null,
 ): Slider.TextStyle = Slider.TextStyle(
     Slider.TextStyle.Properties(
         fontSize = fontSize ?: properties.fontSize,
-        fontSizeUnit = properties.fontSizeUnit,
-        fontWeight = properties.fontWeight,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontWeight = fontWeight ?: properties.fontWeight,
         offset = properties.offset,
         textColor = textColor ?: properties.textColor,
     )

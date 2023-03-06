@@ -61,7 +61,7 @@ class PercentageSize internal constructor(
 @Generated
 fun DivScope.percentageSize(
     `use named arguments`: Guard = Guard.instance,
-    value: Double,
+    value: Double? = null,
 ): PercentageSize = PercentageSize(
     PercentageSize.Properties(
         value = valueOrNull(value),

@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Shape
 
+@Generated
 fun Shape.asList() = listOf(this)

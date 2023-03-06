@@ -61,7 +61,7 @@ class RadialGradientRelativeCenter internal constructor(
 @Generated
 fun DivScope.radialGradientRelativeCenter(
     `use named arguments`: Guard = Guard.instance,
-    value: Double,
+    value: Double? = null,
 ): RadialGradientRelativeCenter = RadialGradientRelativeCenter(
     RadialGradientRelativeCenter.Properties(
         value = valueOrNull(value),

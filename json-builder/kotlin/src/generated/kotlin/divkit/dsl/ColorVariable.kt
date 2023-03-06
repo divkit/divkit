@@ -68,8 +68,8 @@ class ColorVariable internal constructor(
 @Generated
 fun DivScope.colorVariable(
     `use named arguments`: Guard = Guard.instance,
-    name: String,
-    value: Color,
+    name: String? = null,
+    value: Color? = null,
 ): ColorVariable = ColorVariable(
     ColorVariable.Properties(
         name = valueOrNull(name),

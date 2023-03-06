@@ -270,8 +270,6 @@ class Gallery internal constructor(
     @Generated
     sealed interface CrossContentAlignment
 
-    fun CrossContentAlignment.asList() = listOf(this)
-
     /**
      * Gallery orientation.
      * 
@@ -280,8 +278,6 @@ class Gallery internal constructor(
     @Generated
     sealed interface Orientation
 
-    fun Orientation.asList() = listOf(this)
-
     /**
      * Scroll type: `default` — continuous, `paging` — page-by-page.
      * 
@@ -289,8 +285,6 @@ class Gallery internal constructor(
      */
     @Generated
     sealed interface ScrollMode
-
-    fun ScrollMode.asList() = listOf(this)
 }
 
 /**
@@ -348,7 +342,7 @@ fun DivScope.gallery(
     height: Size? = null,
     id: String? = null,
     itemSpacing: Int? = null,
-    items: List<Div>,
+    items: List<Div>? = null,
     margins: EdgeInsets? = null,
     orientation: Gallery.Orientation? = null,
     paddings: EdgeInsets? = null,
@@ -850,37 +844,49 @@ fun Gallery.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnCount Number of columns for block layout.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
  * @param itemSpacing Spacing between elements.
+ * @param orientation Gallery orientation.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Gallery.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnCount: ExpressionProperty<Int>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    crossContentAlignment: ExpressionProperty<Gallery.CrossContentAlignment>? = null,
     crossSpacing: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
     itemSpacing: ExpressionProperty<Int>? = null,
+    orientation: ExpressionProperty<Gallery.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scrollMode: ExpressionProperty<Gallery.ScrollMode>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Gallery = Gallery(
     Gallery.Properties(
         accessibility = properties.accessibility,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         background = properties.background,
         border = properties.border,
         columnCount = columnCount ?: properties.columnCount,
         columnSpan = columnSpan ?: properties.columnSpan,
-        crossContentAlignment = properties.crossContentAlignment,
+        crossContentAlignment = crossContentAlignment ?: properties.crossContentAlignment,
         crossSpacing = crossSpacing ?: properties.crossSpacing,
         defaultItem = defaultItem ?: properties.defaultItem,
         extensions = properties.extensions,
@@ -890,11 +896,11 @@ fun Gallery.evaluate(
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         items = properties.items,
         margins = properties.margins,
-        orientation = properties.orientation,
+        orientation = orientation ?: properties.orientation,
         paddings = properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         rowSpan = rowSpan ?: properties.rowSpan,
-        scrollMode = properties.scrollMode,
+        scrollMode = scrollMode ?: properties.scrollMode,
         selectedActions = properties.selectedActions,
         tooltips = properties.tooltips,
         transform = properties.transform,
@@ -902,7 +908,7 @@ fun Gallery.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1136,38 +1142,50 @@ fun Component<Gallery>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnCount Number of columns for block layout.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param crossContentAlignment Aligning elements in the direction perpendicular to the scroll direction. In horizontal galleries:<li>`start` — alignment to the top of the card;</li><li>`center` — to the center;</li><li>`end` — to the bottom.</li></p><p>In vertical galleries:<li>`start` — alignment to the left of the card;</li><li>`center` — to the center;</li><li>`end` — to the right.</li>
  * @param crossSpacing Spacing between elements across the scroll axis. By default, the value set to `item_spacing`.
  * @param defaultItem Ordinal number of the gallery element to be scrolled to by default. For `scroll_mode`:<li>`default` — the scroll position is set to the beginning of the element, without taking into account `item_spacing`;</li><li>`paging` — the scroll position is set to the center of the element.</li>
  * @param itemSpacing Spacing between elements.
+ * @param orientation Gallery orientation.
  * @param restrictParentScroll If the parameter is enabled, the gallery won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scrollMode Scroll type: `default` — continuous, `paging` — page-by-page.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Gallery>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnCount: ExpressionProperty<Int>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    crossContentAlignment: ExpressionProperty<Gallery.CrossContentAlignment>? = null,
     crossSpacing: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
     itemSpacing: ExpressionProperty<Int>? = null,
+    orientation: ExpressionProperty<Gallery.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scrollMode: ExpressionProperty<Gallery.ScrollMode>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Gallery> = Component(
     template = template,
     properties = Gallery.Properties(
         accessibility = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         background = null,
         border = null,
         columnCount = columnCount,
         columnSpan = columnSpan,
-        crossContentAlignment = null,
+        crossContentAlignment = crossContentAlignment,
         crossSpacing = crossSpacing,
         defaultItem = defaultItem,
         extensions = null,
@@ -1177,11 +1195,11 @@ fun Component<Gallery>.evaluate(
         itemSpacing = itemSpacing,
         items = null,
         margins = null,
-        orientation = null,
+        orientation = orientation,
         paddings = null,
         restrictParentScroll = restrictParentScroll,
         rowSpan = rowSpan,
-        scrollMode = null,
+        scrollMode = scrollMode,
         selectedActions = null,
         tooltips = null,
         transform = null,
@@ -1189,7 +1207,7 @@ fun Component<Gallery>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1204,3 +1222,12 @@ operator fun Component<Gallery>.plus(additive: Gallery.Properties): Component<Ga
 
 @Generated
 fun Gallery.asList() = listOf(this)
+
+@Generated
+fun Gallery.CrossContentAlignment.asList() = listOf(this)
+
+@Generated
+fun Gallery.Orientation.asList() = listOf(this)
+
+@Generated
+fun Gallery.ScrollMode.asList() = listOf(this)

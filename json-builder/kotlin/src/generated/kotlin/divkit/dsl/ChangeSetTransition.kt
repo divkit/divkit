@@ -61,7 +61,7 @@ class ChangeSetTransition internal constructor(
 @Generated
 fun DivScope.changeSetTransition(
     `use named arguments`: Guard = Guard.instance,
-    items: List<ChangeTransition>,
+    items: List<ChangeTransition>? = null,
 ): ChangeSetTransition = ChangeSetTransition(
     ChangeSetTransition.Properties(
         items = valueOrNull(items),

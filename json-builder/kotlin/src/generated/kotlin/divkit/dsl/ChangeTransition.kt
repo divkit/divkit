@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface ChangeTransition
 
+@Generated
 fun ChangeTransition.asList() = listOf(this)

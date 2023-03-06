@@ -89,8 +89,6 @@ class SlideTransition internal constructor(
      */
     @Generated
     sealed interface Edge
-
-    fun Edge.asList() = listOf(this)
 }
 
 /**
@@ -216,22 +214,29 @@ fun SlideTransition.defer(
 
 /**
  * @param duration Animation duration in milliseconds.
+ * @param edge Edge of a parent element for one of the action types:<li>where the element will move from when appearing;</li><li>where the element will move to when disappearing.</li>
+ * @param interpolator Transition speed nature.
  * @param startDelay Delay in milliseconds before animation starts.
  */
 @Generated
 fun SlideTransition.evaluate(
     `use named arguments`: Guard = Guard.instance,
     duration: ExpressionProperty<Int>? = null,
+    edge: ExpressionProperty<SlideTransition.Edge>? = null,
+    interpolator: ExpressionProperty<AnimationInterpolator>? = null,
     startDelay: ExpressionProperty<Int>? = null,
 ): SlideTransition = SlideTransition(
     SlideTransition.Properties(
         distance = properties.distance,
         duration = duration ?: properties.duration,
-        edge = properties.edge,
-        interpolator = properties.interpolator,
+        edge = edge ?: properties.edge,
+        interpolator = interpolator ?: properties.interpolator,
         startDelay = startDelay ?: properties.startDelay,
     )
 )
 
 @Generated
 fun SlideTransition.asList() = listOf(this)
+
+@Generated
+fun SlideTransition.Edge.asList() = listOf(this)

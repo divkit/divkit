@@ -61,7 +61,7 @@ class PivotPercentage internal constructor(
 @Generated
 fun DivScope.pivotPercentage(
     `use named arguments`: Guard = Guard.instance,
-    value: Double,
+    value: Double? = null,
 ): PivotPercentage = PivotPercentage(
     PivotPercentage.Properties(
         value = valueOrNull(value),

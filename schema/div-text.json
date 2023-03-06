@@ -1,6 +1,13 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_text",
+  "codegen": {
+    "divan": {
+      "forced_properties_order": [
+        "text"
+      ]
+    }
+  },
   "definitions": {
     "range": {
       "type": "object",

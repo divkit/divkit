@@ -66,8 +66,8 @@ class Point internal constructor(
 @Generated
 fun DivScope.point(
     `use named arguments`: Guard = Guard.instance,
-    x: Dimension,
-    y: Dimension,
+    x: Dimension? = null,
+    y: Dimension? = null,
 ): Point = Point(
     Point.Properties(
         x = valueOrNull(x),

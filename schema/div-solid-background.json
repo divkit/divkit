@@ -1,6 +1,13 @@
 {
   "type": "object",
   "$description": "translations.json#/div_solid_background",
+  "codegen": {
+    "divan": {
+      "forced_properties_order": [
+        "color"
+      ]
+    }
+  },
   "properties": {
     "color": {
       "$ref": "common.json#/color",

@@ -25,4 +25,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface FontFamily
 
+@Generated
 fun FontFamily.asList() = listOf(this)

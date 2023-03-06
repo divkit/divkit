@@ -36,119 +36,121 @@ class FixedSize internal constructor(
 
     operator fun plus(additive: Properties): FixedSize = FixedSize(
         Properties(
-            unit = additive.unit ?: properties.unit,
             value = additive.value ?: properties.value,
+            unit = additive.unit ?: properties.unit,
         )
     )
 
     class Properties internal constructor(
         /**
+         * Element size.
+         */
+        val value: Property<Int>?,
+        /**
          * Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
          * Default value: `dp`.
          */
         val unit: Property<SizeUnit>?,
-        /**
-         * Element size.
-         */
-        val value: Property<Int>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
-            result.tryPutProperty("unit", unit)
             result.tryPutProperty("value", value)
+            result.tryPutProperty("unit", unit)
             return result
         }
     }
 }
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param value Element size.
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  */
 @Generated
 fun DivScope.fixedSize(
+    value: Int? = null,
     `use named arguments`: Guard = Guard.instance,
     unit: SizeUnit? = null,
-    value: Int,
 ): FixedSize = FixedSize(
     FixedSize.Properties(
-        unit = valueOrNull(unit),
         value = valueOrNull(value),
+        unit = valueOrNull(unit),
     )
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param value Element size.
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  */
 @Generated
 fun DivScope.fixedSizeProps(
     `use named arguments`: Guard = Guard.instance,
-    unit: SizeUnit? = null,
     value: Int? = null,
+    unit: SizeUnit? = null,
 ) = FixedSize.Properties(
-    unit = valueOrNull(unit),
     value = valueOrNull(value),
+    unit = valueOrNull(unit),
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param value Element size.
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  */
 @Generated
 fun TemplateScope.fixedSizeRefs(
     `use named arguments`: Guard = Guard.instance,
-    unit: ReferenceProperty<SizeUnit>? = null,
     value: ReferenceProperty<Int>? = null,
+    unit: ReferenceProperty<SizeUnit>? = null,
 ) = FixedSize.Properties(
-    unit = unit,
     value = value,
+    unit = unit,
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param value Element size.
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  */
 @Generated
 fun FixedSize.override(
     `use named arguments`: Guard = Guard.instance,
-    unit: SizeUnit? = null,
     value: Int? = null,
+    unit: SizeUnit? = null,
 ): FixedSize = FixedSize(
     FixedSize.Properties(
-        unit = valueOrNull(unit) ?: properties.unit,
         value = valueOrNull(value) ?: properties.value,
+        unit = valueOrNull(unit) ?: properties.unit,
     )
 )
 
 /**
- * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param value Element size.
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  */
 @Generated
 fun FixedSize.defer(
     `use named arguments`: Guard = Guard.instance,
-    unit: ReferenceProperty<SizeUnit>? = null,
     value: ReferenceProperty<Int>? = null,
+    unit: ReferenceProperty<SizeUnit>? = null,
 ): FixedSize = FixedSize(
     FixedSize.Properties(
-        unit = unit ?: properties.unit,
         value = value ?: properties.value,
+        unit = unit ?: properties.unit,
     )
 )
 
 /**
  * @param value Element size.
+ * @param unit Unit of measurement. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  */
 @Generated
 fun FixedSize.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Int>? = null,
+    unit: ExpressionProperty<SizeUnit>? = null,
 ): FixedSize = FixedSize(
     FixedSize.Properties(
-        unit = properties.unit,
         value = value ?: properties.value,
+        unit = unit ?: properties.unit,
     )
 )
 

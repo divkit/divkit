@@ -61,7 +61,7 @@ class AppearanceSetTransition internal constructor(
 @Generated
 fun DivScope.appearanceSetTransition(
     `use named arguments`: Guard = Guard.instance,
-    items: List<AppearanceTransition>,
+    items: List<AppearanceTransition>? = null,
 ): AppearanceSetTransition = AppearanceSetTransition(
     AppearanceSetTransition.Properties(
         items = valueOrNull(items),

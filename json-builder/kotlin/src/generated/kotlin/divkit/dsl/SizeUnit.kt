@@ -25,4 +25,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface SizeUnit
 
+@Generated
 fun SizeUnit.asList() = listOf(this)

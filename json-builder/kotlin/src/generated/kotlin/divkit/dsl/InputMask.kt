@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface InputMask
 
+@Generated
 fun InputMask.asList() = listOf(this)

@@ -222,7 +222,7 @@ fun WrapContentSize.asList() = listOf(this)
 fun DivScope.wrapContentSizeConstraintSize(
     `use named arguments`: Guard = Guard.instance,
     unit: SizeUnit? = null,
-    value: Int,
+    value: Int? = null,
 ): WrapContentSize.ConstraintSize = WrapContentSize.ConstraintSize(
     WrapContentSize.ConstraintSize.Properties(
         unit = valueOrNull(unit),
@@ -286,13 +286,17 @@ fun WrapContentSize.ConstraintSize.defer(
     )
 )
 
+/**
+ * @param unit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ */
 @Generated
 fun WrapContentSize.ConstraintSize.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    unit: ExpressionProperty<SizeUnit>? = null,
     value: ExpressionProperty<Int>? = null,
 ): WrapContentSize.ConstraintSize = WrapContentSize.ConstraintSize(
     WrapContentSize.ConstraintSize.Properties(
-        unit = properties.unit,
+        unit = unit ?: properties.unit,
         value = value ?: properties.value,
     )
 )

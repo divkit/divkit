@@ -54,6 +54,7 @@ class Input internal constructor(
             hintColor = additive.hintColor ?: properties.hintColor,
             hintText = additive.hintText ?: properties.hintText,
             id = additive.id ?: properties.id,
+            inputMethod = additive.inputMethod ?: properties.inputMethod,
             keyboardType = additive.keyboardType ?: properties.keyboardType,
             letterSpacing = additive.letterSpacing ?: properties.letterSpacing,
             lineHeight = additive.lineHeight ?: properties.lineHeight,
@@ -161,9 +162,14 @@ class Input internal constructor(
          */
         val id: Property<String>?,
         /**
+         * Data entry method. If nothing is specified, the value will be taken from keyboard_type.
+         */
+        val inputMethod: Property<InputMethod>?,
+        /**
          * Keyboard type.
          * Default value: `multi_line_text`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val keyboardType: Property<KeyboardType>?,
         /**
          * Spacing between characters.
@@ -280,6 +286,7 @@ class Input internal constructor(
             result.tryPutProperty("hint_color", hintColor)
             result.tryPutProperty("hint_text", hintText)
             result.tryPutProperty("id", id)
+            result.tryPutProperty("input_method", inputMethod)
             result.tryPutProperty("keyboard_type", keyboardType)
             result.tryPutProperty("letter_spacing", letterSpacing)
             result.tryPutProperty("line_height", lineHeight)
@@ -314,8 +321,6 @@ class Input internal constructor(
      */
     @Generated
     sealed interface KeyboardType
-
-    fun KeyboardType.asList() = listOf(this)
 
     /**
      * Text input line used in the native interface.
@@ -374,6 +379,7 @@ class Input internal constructor(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -419,6 +425,7 @@ fun DivScope.input(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    inputMethod: InputMethod? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -431,7 +438,7 @@ fun DivScope.input(
     selectAllOnFocus: Boolean? = null,
     selectedActions: List<Action>? = null,
     textColor: Color? = null,
-    textVariable: String,
+    textVariable: String? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionChange: ChangeTransition? = null,
@@ -462,6 +469,7 @@ fun DivScope.input(
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
+        inputMethod = valueOrNull(inputMethod),
         keyboardType = valueOrNull(keyboardType),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
@@ -507,6 +515,7 @@ fun DivScope.input(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -552,6 +561,7 @@ fun DivScope.inputProps(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    inputMethod: InputMethod? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -594,6 +604,7 @@ fun DivScope.inputProps(
     hintColor = valueOrNull(hintColor),
     hintText = valueOrNull(hintText),
     id = valueOrNull(id),
+    inputMethod = valueOrNull(inputMethod),
     keyboardType = valueOrNull(keyboardType),
     letterSpacing = valueOrNull(letterSpacing),
     lineHeight = valueOrNull(lineHeight),
@@ -638,6 +649,7 @@ fun DivScope.inputProps(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -683,6 +695,7 @@ fun TemplateScope.inputRefs(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    inputMethod: ReferenceProperty<InputMethod>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -725,6 +738,7 @@ fun TemplateScope.inputRefs(
     hintColor = hintColor,
     hintText = hintText,
     id = id,
+    inputMethod = inputMethod,
     keyboardType = keyboardType,
     letterSpacing = letterSpacing,
     lineHeight = lineHeight,
@@ -769,6 +783,7 @@ fun TemplateScope.inputRefs(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -814,6 +829,7 @@ fun Input.override(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    inputMethod: InputMethod? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -857,6 +873,7 @@ fun Input.override(
         hintColor = valueOrNull(hintColor) ?: properties.hintColor,
         hintText = valueOrNull(hintText) ?: properties.hintText,
         id = valueOrNull(id) ?: properties.id,
+        inputMethod = valueOrNull(inputMethod) ?: properties.inputMethod,
         keyboardType = valueOrNull(keyboardType) ?: properties.keyboardType,
         letterSpacing = valueOrNull(letterSpacing) ?: properties.letterSpacing,
         lineHeight = valueOrNull(lineHeight) ?: properties.lineHeight,
@@ -902,6 +919,7 @@ fun Input.override(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -947,6 +965,7 @@ fun Input.defer(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    inputMethod: ReferenceProperty<InputMethod>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -990,6 +1009,7 @@ fun Input.defer(
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = id ?: properties.id,
+        inputMethod = inputMethod ?: properties.inputMethod,
         keyboardType = keyboardType ?: properties.keyboardType,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
@@ -1017,55 +1037,70 @@ fun Input.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
+ * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param textColor Text color.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Input.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    fontFamily: ExpressionProperty<FontFamily>? = null,
     fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
     highlightColor: ExpressionProperty<Color>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
+    keyboardType: ExpressionProperty<Input.KeyboardType>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
     textColor: ExpressionProperty<Color>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Input = Input(
     Input.Properties(
         accessibility = properties.accessibility,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
         extensions = properties.extensions,
         focus = properties.focus,
-        fontFamily = properties.fontFamily,
+        fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
-        fontSizeUnit = properties.fontSizeUnit,
-        fontWeight = properties.fontWeight,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontWeight = fontWeight ?: properties.fontWeight,
         height = properties.height,
         highlightColor = highlightColor ?: properties.highlightColor,
         hintColor = hintColor ?: properties.hintColor,
         hintText = hintText ?: properties.hintText,
         id = properties.id,
-        keyboardType = properties.keyboardType,
+        inputMethod = properties.inputMethod,
+        keyboardType = keyboardType ?: properties.keyboardType,
         letterSpacing = letterSpacing ?: properties.letterSpacing,
         lineHeight = lineHeight ?: properties.lineHeight,
         margins = properties.margins,
@@ -1084,7 +1119,7 @@ fun Input.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1110,6 +1145,7 @@ fun Input.evaluate(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -1155,6 +1191,7 @@ fun Component<Input>.override(
     hintColor: Color? = null,
     hintText: String? = null,
     id: String? = null,
+    inputMethod: InputMethod? = null,
     keyboardType: Input.KeyboardType? = null,
     letterSpacing: Double? = null,
     lineHeight: Int? = null,
@@ -1199,6 +1236,7 @@ fun Component<Input>.override(
         hintColor = valueOrNull(hintColor),
         hintText = valueOrNull(hintText),
         id = valueOrNull(id),
+        inputMethod = valueOrNull(inputMethod),
         keyboardType = valueOrNull(keyboardType),
         letterSpacing = valueOrNull(letterSpacing),
         lineHeight = valueOrNull(lineHeight),
@@ -1244,6 +1282,7 @@ fun Component<Input>.override(
  * @param hintColor Text color.
  * @param hintText Tooltip text.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
+ * @param inputMethod Data entry method. If nothing is specified, the value will be taken from keyboard_type.
  * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
@@ -1289,6 +1328,7 @@ fun Component<Input>.defer(
     hintColor: ReferenceProperty<Color>? = null,
     hintText: ReferenceProperty<String>? = null,
     id: ReferenceProperty<String>? = null,
+    inputMethod: ReferenceProperty<InputMethod>? = null,
     keyboardType: ReferenceProperty<Input.KeyboardType>? = null,
     letterSpacing: ReferenceProperty<Double>? = null,
     lineHeight: ReferenceProperty<Int>? = null,
@@ -1333,6 +1373,7 @@ fun Component<Input>.defer(
         hintColor = hintColor,
         hintText = hintText,
         id = id,
+        inputMethod = inputMethod,
         keyboardType = keyboardType,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
@@ -1360,56 +1401,71 @@ fun Component<Input>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Font size.
+ * @param fontSizeUnit Unit of measurement:<li>`px` — a physical pixel.</li><li>`dp` — a logical pixel that doesn't depend on screen density.</li><li>`sp` — a logical pixel that depends on the font size on a device. Specify height in `sp`. Only available on Android.</li>
+ * @param fontWeight Style.
  * @param highlightColor Text highlight color. If the value isn't set, the color set in the client will be used instead.
  * @param hintColor Text color.
  * @param hintText Tooltip text.
+ * @param keyboardType Keyboard type.
  * @param letterSpacing Spacing between characters.
  * @param lineHeight Line spacing of the text. Units specified in `font_size_unit`.
  * @param maxVisibleLines Maximum number of lines to be displayed in the input field.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
  * @param selectAllOnFocus Highlighting input text when focused.
  * @param textColor Text color.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Input>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    fontFamily: ExpressionProperty<FontFamily>? = null,
     fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
     highlightColor: ExpressionProperty<Color>? = null,
     hintColor: ExpressionProperty<Color>? = null,
     hintText: ExpressionProperty<String>? = null,
+    keyboardType: ExpressionProperty<Input.KeyboardType>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
     lineHeight: ExpressionProperty<Int>? = null,
     maxVisibleLines: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
     selectAllOnFocus: ExpressionProperty<Boolean>? = null,
     textColor: ExpressionProperty<Color>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Input> = Component(
     template = template,
     properties = Input.Properties(
         accessibility = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         background = null,
         border = null,
         columnSpan = columnSpan,
         extensions = null,
         focus = null,
-        fontFamily = null,
+        fontFamily = fontFamily,
         fontSize = fontSize,
-        fontSizeUnit = null,
-        fontWeight = null,
+        fontSizeUnit = fontSizeUnit,
+        fontWeight = fontWeight,
         height = null,
         highlightColor = highlightColor,
         hintColor = hintColor,
         hintText = hintText,
         id = null,
-        keyboardType = null,
+        inputMethod = null,
+        keyboardType = keyboardType,
         letterSpacing = letterSpacing,
         lineHeight = lineHeight,
         margins = null,
@@ -1428,7 +1484,7 @@ fun Component<Input>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1444,13 +1500,16 @@ operator fun Component<Input>.plus(additive: Input.Properties): Component<Input>
 @Generated
 fun Input.asList() = listOf(this)
 
+@Generated
+fun Input.KeyboardType.asList() = listOf(this)
+
 /**
  * @param color Text input line color.
  */
 @Generated
 fun DivScope.inputNativeInterface(
     `use named arguments`: Guard = Guard.instance,
-    color: Color,
+    color: Color? = null,
 ): Input.NativeInterface = Input.NativeInterface(
     Input.NativeInterface.Properties(
         color = valueOrNull(color),

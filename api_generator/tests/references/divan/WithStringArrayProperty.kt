@@ -57,7 +57,7 @@ class WithStringArrayProperty internal constructor(
 @Generated
 fun DivScope.withStringArrayProperty(
     `use named arguments`: Guard = Guard.instance,
-    array: List<String>,
+    array: List<String>? = null,
 ): WithStringArrayProperty = WithStringArrayProperty(
     WithStringArrayProperty.Properties(
         array = valueOrNull(array),

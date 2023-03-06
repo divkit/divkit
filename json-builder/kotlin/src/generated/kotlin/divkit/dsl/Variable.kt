@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Variable
 
+@Generated
 fun Variable.asList() = listOf(this)

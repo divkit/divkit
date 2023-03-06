@@ -57,7 +57,7 @@ class WithArray internal constructor(
 @Generated
 fun DivScope.withArray(
     `use named arguments`: Guard = Guard.instance,
-    array: List<Entity>,
+    array: List<Entity>? = null,
 ): WithArray = WithArray(
     WithArray.Properties(
         array = valueOrNull(array),

@@ -1,4 +1,4 @@
-from typing import List, cast, Dict, Union
+from typing import List, Dict, Union
 
 from .divan_entities import (
     update_base,
@@ -50,21 +50,32 @@ class DivanGenerator(Generator):
         for annotation in self.top_level_annotations + self.kotlin_annotations:
             result_declaration += annotation
 
-        result_declaration += f'class {utils.capitalize_camel_case(entity.name, self.remove_prefix)} internal constructor('
-        result_declaration += '    @JsonIgnore'
-        result_declaration += '    val properties: Properties,'
-        result_declaration += f'){entity.supertype_declaration} {{'
+        if entity.is_deprecated:
+            result_declaration += f'@Deprecated("{self.translations["div_generator_deprecated_message"]}")'
 
-        serialization_declaration = entity.serialization_declaration.indented(indent_width=4)
+        entity_name = utils.capitalize_camel_case(entity.name, self.remove_prefix)
+
+        has_properties = len(entity.instance_properties) > 0
+        if not has_properties:
+            result_declaration += f'object {entity_name}{entity.supertype_declaration} {{'
+        else:
+            result_declaration += f'class {entity_name} internal constructor('
+            result_declaration += '    @JsonIgnore'
+            result_declaration += '    val properties: Properties,'
+            result_declaration += f'){entity.supertype_declaration} {{'
+
+        serialization_declaration = entity.serialization_declaration(has_properties).indented(indent_width=4)
 
         if serialization_declaration.lines:
             result_declaration += serialization_declaration
+
+        if has_properties:
+            if entity.generator_properties is None or entity.generator_properties.plus_operator_declaration:
+                result_declaration += EMPTY
+                result_declaration += entity.operator_plus_declaration.indented(indent_width=4)
+
             result_declaration += EMPTY
-
-        result_declaration += entity.operator_plus_declaration.indented(indent_width=4)
-
-        result_declaration += EMPTY
-        result_declaration += entity.properties_class_declaration(self.translations).indented(indent_width=4)
+            result_declaration += entity.properties_class_declaration(self.translations).indented(indent_width=4)
 
         nested_classes_declaration = self.__nested_classes_declaration(entity)
         if nested_classes_declaration.lines:
@@ -90,18 +101,23 @@ class DivanGenerator(Generator):
                     result_declaration += method_declaration
                     result_declaration += EMPTY
 
-                add_declaration(ent.params_comment_block, ent.factory_method_declaration)
-                add_declaration(ent.params_comment_block, ent.properties_factory_method_declaration)
-                add_declaration(ent.params_comment_block, ent.references_factory_method_declaration)
-                add_declaration(ent.params_comment_block, ent.override_method_declaration)
-                add_declaration(ent.params_comment_block, ent.defer_method_declaration)
-                add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_method_declaration)
+                for comment_block, declaration in ent.alternative_factories_declarations:
+                    add_declaration(comment_block, declaration)
 
-                if self.supertype_entities.intersection(ent.supertypes_list):
-                    add_declaration(ent.params_comment_block, ent.override_component_method_declaration)
-                    add_declaration(ent.params_comment_block, ent.defer_component_method_declaration)
-                    add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_component_method_declaration)
-                    add_declaration(Text(), ent.operator_plus_component_declaration)
+                add_declaration(ent.params_comment_block(), ent.factory_method_declaration)
+
+                if has_properties:
+                    add_declaration(ent.params_comment_block(), ent.properties_factory_method_declaration)
+                    add_declaration(ent.params_comment_block(), ent.references_factory_method_declaration)
+                    add_declaration(ent.params_comment_block(), ent.override_method_declaration)
+                    add_declaration(ent.params_comment_block(), ent.defer_method_declaration)
+                    add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_method_declaration)
+
+                    if self.supertype_entities.intersection(ent.supertypes_list):
+                        add_declaration(ent.params_comment_block(), ent.override_component_method_declaration)
+                        add_declaration(ent.params_comment_block(), ent.defer_component_method_declaration)
+                        add_declaration(ent.evaluatable_params_comment_block, ent.evaluate_component_method_declaration)
+                        add_declaration(Text(), ent.operator_plus_component_declaration)
 
                 add_declaration(Text(), ent.as_list_method_declaration)
 
@@ -110,10 +126,17 @@ class DivanGenerator(Generator):
 
             add_methods_declarations(ent=entity)
 
-            inner_types = sorted(filter(lambda t: isinstance(t, Entity), entity.inner_types), key=sort_predicate)
+            inner_types = sorted(entity.inner_types, key=sort_predicate)
             for ind, nested_entity in enumerate(inner_types):
                 nested_entity = update_base(nested_entity, self.remove_prefix)
-                add_methods_declarations(ent=cast(DivanEntity, nested_entity))
+                if isinstance(nested_entity, DivanEntity):
+                    add_methods_declarations(ent=nested_entity)
+                elif isinstance(nested_entity, (DivanEntityEnumeration, DivanStringEnumeration)):
+                    name = full_name(nested_entity, self.remove_prefix)
+                    for annotation in self.top_level_annotations:
+                        result_declaration += annotation
+                    result_declaration += f'fun {name}.asList() = listOf(this)'
+                    result_declaration += EMPTY
 
         return result_declaration
 
@@ -133,8 +156,14 @@ class DivanGenerator(Generator):
 
             return inner_types_decl
 
-        declarations = [declaration_of(StringEnumeration, self._string_enumeration_declaration),
-                        declaration_of(EntityEnumeration, self._entity_enumeration_declaration),
+        declarations = [declaration_of(StringEnumeration,
+                                       lambda ent: self._enumeration_declaration(ent,
+                                                                                 with_as_list_method=False)
+                                       ),
+                        declaration_of(EntityEnumeration,
+                                       lambda ent: self._enumeration_declaration(ent,
+                                                                                 with_as_list_method=False)
+                                       ),
                         declaration_of(Entity,
                                        lambda ent: self.__entity_declaration_with(ent,
                                                                                   with_factory_methods=False)
@@ -150,12 +179,13 @@ class DivanGenerator(Generator):
         return result
 
     def _entity_enumeration_declaration(self, entity_enumeration: DivanEntityEnumeration) -> Text:
-        return self._enumeration_declaration(entity_enumeration)
+        return self._enumeration_declaration(entity_enumeration, with_as_list_method=True)
 
     def _string_enumeration_declaration(self, string_enumeration: DivanStringEnumeration) -> Text:
-        return self._enumeration_declaration(string_enumeration)
+        return self._enumeration_declaration(string_enumeration, with_as_list_method=True)
 
-    def _enumeration_declaration(self, enumeration: Union[DivanEntityEnumeration, DivanStringEnumeration]) -> Text:
+    def _enumeration_declaration(self, enumeration: Union[DivanEntityEnumeration, DivanStringEnumeration],
+                                 with_as_list_method: bool) -> Text:
         result_declaration = Text()
         name = utils.capitalize_camel_case(enumeration.name, self.remove_prefix)
         if isinstance(enumeration, DivanStringEnumeration):
@@ -164,8 +194,13 @@ class DivanGenerator(Generator):
             result_declaration += annotation
 
         result_declaration += f'sealed interface {name}'
-        result_declaration += EMPTY
-        result_declaration += f'fun {name}.asList() = listOf(this)'
+
+        if with_as_list_method:
+            result_declaration += EMPTY
+            for annotation in self.top_level_annotations + self.kotlin_annotations:
+                result_declaration += annotation
+            result_declaration += f'fun {name}.asList() = listOf(this)'
+
         return result_declaration
 
     def _generate_enums_values(self, divan_objects: List[Declarable]):

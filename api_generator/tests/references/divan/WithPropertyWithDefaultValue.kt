@@ -272,7 +272,7 @@ fun WithPropertyWithDefaultValue.asList() = listOf(this)
 fun DivScope.withPropertyWithDefaultValueNested(
     `use named arguments`: Guard = Guard.instance,
     int: Int? = null,
-    nonOptional: String,
+    nonOptional: String? = null,
     url: Url? = null,
 ): WithPropertyWithDefaultValue.Nested = WithPropertyWithDefaultValue.Nested(
     WithPropertyWithDefaultValue.Nested.Properties(

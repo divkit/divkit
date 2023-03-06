@@ -25,4 +25,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface TransitionSelector
 
+@Generated
 fun TransitionSelector.asList() = listOf(this)

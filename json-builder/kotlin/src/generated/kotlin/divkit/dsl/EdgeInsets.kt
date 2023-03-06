@@ -208,13 +208,14 @@ fun EdgeInsets.evaluate(
     left: ExpressionProperty<Int>? = null,
     right: ExpressionProperty<Int>? = null,
     top: ExpressionProperty<Int>? = null,
+    unit: ExpressionProperty<SizeUnit>? = null,
 ): EdgeInsets = EdgeInsets(
     EdgeInsets.Properties(
         bottom = bottom ?: properties.bottom,
         left = left ?: properties.left,
         right = right ?: properties.right,
         top = top ?: properties.top,
-        unit = properties.unit,
+        unit = unit ?: properties.unit,
     )
 )
 

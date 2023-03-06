@@ -57,7 +57,7 @@ class WithRequiredProperty internal constructor(
 @Generated
 fun DivScope.withRequiredProperty(
     `use named arguments`: Guard = Guard.instance,
-    property: String,
+    property: String? = null,
 ): WithRequiredProperty = WithRequiredProperty(
     WithRequiredProperty.Properties(
         property = valueOrNull(property),

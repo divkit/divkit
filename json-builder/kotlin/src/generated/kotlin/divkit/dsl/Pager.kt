@@ -249,8 +249,6 @@ class Pager internal constructor(
      */
     @Generated
     sealed interface Orientation
-
-    fun Orientation.asList() = listOf(this)
 }
 
 /**
@@ -302,8 +300,8 @@ fun DivScope.pager(
     height: Size? = null,
     id: String? = null,
     itemSpacing: FixedSize? = null,
-    items: List<Div>,
-    layoutMode: PagerLayoutMode,
+    items: List<Div>? = null,
+    layoutMode: PagerLayoutMode? = null,
     margins: EdgeInsets? = null,
     orientation: Pager.Orientation? = null,
     paddings: EdgeInsets? = null,
@@ -765,25 +763,33 @@ fun Pager.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param orientation Pager orientation.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Pager.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
+    orientation: ExpressionProperty<Pager.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Pager = Pager(
     Pager.Properties(
         accessibility = properties.accessibility,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         background = properties.background,
         border = properties.border,
@@ -797,7 +803,7 @@ fun Pager.evaluate(
         items = properties.items,
         layoutMode = properties.layoutMode,
         margins = properties.margins,
-        orientation = properties.orientation,
+        orientation = orientation ?: properties.orientation,
         paddings = properties.paddings,
         restrictParentScroll = restrictParentScroll ?: properties.restrictParentScroll,
         rowSpan = rowSpan ?: properties.rowSpan,
@@ -808,7 +814,7 @@ fun Pager.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1024,26 +1030,34 @@ fun Component<Pager>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultItem Ordinal number of the pager element that will be opened by default.
+ * @param orientation Pager orientation.
  * @param restrictParentScroll If the parameter is enabled, the pager won't transmit the scroll gesture to the parent element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Pager>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultItem: ExpressionProperty<Int>? = null,
+    orientation: ExpressionProperty<Pager.Orientation>? = null,
     restrictParentScroll: ExpressionProperty<Boolean>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Pager> = Component(
     template = template,
     properties = Pager.Properties(
         accessibility = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         background = null,
         border = null,
@@ -1057,7 +1071,7 @@ fun Component<Pager>.evaluate(
         items = null,
         layoutMode = null,
         margins = null,
-        orientation = null,
+        orientation = orientation,
         paddings = null,
         restrictParentScroll = restrictParentScroll,
         rowSpan = rowSpan,
@@ -1068,7 +1082,7 @@ fun Component<Pager>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1083,3 +1097,6 @@ operator fun Component<Pager>.plus(additive: Pager.Properties): Component<Pager>
 
 @Generated
 fun Pager.asList() = listOf(this)
+
+@Generated
+fun Pager.Orientation.asList() = listOf(this)

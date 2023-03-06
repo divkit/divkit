@@ -163,17 +163,19 @@ fun ChangeBoundsTransition.defer(
 
 /**
  * @param duration Animation duration in milliseconds.
+ * @param interpolator Transition speed nature.
  * @param startDelay Delay in milliseconds before animation starts.
  */
 @Generated
 fun ChangeBoundsTransition.evaluate(
     `use named arguments`: Guard = Guard.instance,
     duration: ExpressionProperty<Int>? = null,
+    interpolator: ExpressionProperty<AnimationInterpolator>? = null,
     startDelay: ExpressionProperty<Int>? = null,
 ): ChangeBoundsTransition = ChangeBoundsTransition(
     ChangeBoundsTransition.Properties(
         duration = duration ?: properties.duration,
-        interpolator = properties.interpolator,
+        interpolator = interpolator ?: properties.interpolator,
         startDelay = startDelay ?: properties.startDelay,
     )
 )

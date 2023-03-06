@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface TextGradient
 
+@Generated
 fun TextGradient.asList() = listOf(this)

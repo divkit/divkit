@@ -105,6 +105,7 @@ class State internal constructor(
         /**
          * ID of an element to search in the hierarchy. The ID must be unique at one hierarchy level.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val divId: Property<String>?,
         /**
          * Extensions for additional processing of an element. The list of extensions is given in  [DivExtension](../../extensions.dita).
@@ -155,6 +156,7 @@ class State internal constructor(
          * It determines which events trigger transition animations.
          * Default value: `state_change`.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val transitionAnimationSelector: Property<TransitionSelector>?,
         /**
          * Change animation. It is played when the position or size of an element changes in the new layout.
@@ -254,10 +256,12 @@ class State internal constructor(
             /**
              * State appearance animation. Use `transition_in` instead.
              */
+            @Deprecated("Marked as deprecated in json schema")
             val animationIn: Property<Animation>?,
             /**
              * State disappearance animation. Use `transition_out` instead.
              */
+            @Deprecated("Marked as deprecated in json schema")
             val animationOut: Property<Animation>?,
             /**
              * Contents. If the parameter is missing, the state won't be displayed.
@@ -270,6 +274,7 @@ class State internal constructor(
             /**
              * Actions when swiping the state horizontally.
              */
+            @Deprecated("Marked as deprecated in json schema")
             val swipeOutActions: Property<List<Action>>?,
         ) {
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -338,7 +343,7 @@ fun DivScope.state(
     paddings: EdgeInsets? = null,
     rowSpan: Int? = null,
     selectedActions: List<Action>? = null,
-    states: List<State.Item>,
+    states: List<State.Item>? = null,
     tooltips: List<Tooltip>? = null,
     transform: Transform? = null,
     transitionAnimationSelector: TransitionSelector? = null,
@@ -769,23 +774,31 @@ fun State.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param transitionAnimationSelector It determines which events trigger transition animations.
+ * @param visibility Element visibility.
  */
 @Generated
 fun State.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): State = State(
     State.Properties(
         accessibility = properties.accessibility,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         background = properties.background,
         border = properties.border,
@@ -803,12 +816,12 @@ fun State.evaluate(
         states = properties.states,
         tooltips = properties.tooltips,
         transform = properties.transform,
-        transitionAnimationSelector = properties.transitionAnimationSelector,
+        transitionAnimationSelector = transitionAnimationSelector ?: properties.transitionAnimationSelector,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1012,24 +1025,32 @@ fun Component<State>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param defaultStateId ID of the status that will be set by default. If the parameter isnt set, the first state of the `states` will be set.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param transitionAnimationSelector It determines which events trigger transition animations.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<State>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     defaultStateId: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    transitionAnimationSelector: ExpressionProperty<TransitionSelector>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<State> = Component(
     template = template,
     properties = State.Properties(
         accessibility = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         background = null,
         border = null,
@@ -1047,12 +1068,12 @@ fun Component<State>.evaluate(
         states = null,
         tooltips = null,
         transform = null,
-        transitionAnimationSelector = null,
+        transitionAnimationSelector = transitionAnimationSelector,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1081,7 +1102,7 @@ fun DivScope.stateItem(
     animationIn: Animation? = null,
     animationOut: Animation? = null,
     div: Div? = null,
-    stateId: String,
+    stateId: String? = null,
     swipeOutActions: List<Action>? = null,
 ): State.Item = State.Item(
     State.Item.Properties(

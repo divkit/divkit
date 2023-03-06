@@ -61,7 +61,7 @@ class NeighbourPageSize internal constructor(
 @Generated
 fun DivScope.neighbourPageSize(
     `use named arguments`: Guard = Guard.instance,
-    neighbourPageWidth: FixedSize,
+    neighbourPageWidth: FixedSize? = null,
 ): NeighbourPageSize = NeighbourPageSize(
     NeighbourPageSize.Properties(
         neighbourPageWidth = valueOrNull(neighbourPageWidth),

@@ -17,11 +17,8 @@ import kotlin.Suppress
 import kotlin.collections.List
 import kotlin.collections.Map
 
-/**
- * Possible values: [fill, no_scale, fit].
- */
 @Generated
-sealed interface ImageScale
+sealed interface InputMethod
 
 @Generated
-fun ImageScale.asList() = listOf(this)
+fun InputMethod.asList() = listOf(this)

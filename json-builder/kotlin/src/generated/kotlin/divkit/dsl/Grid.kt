@@ -308,7 +308,7 @@ fun DivScope.grid(
     alpha: Double? = null,
     background: List<Background>? = null,
     border: Border? = null,
-    columnCount: Int,
+    columnCount: Int? = null,
     columnSpan: Int? = null,
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
@@ -317,7 +317,7 @@ fun DivScope.grid(
     focus: Focus? = null,
     height: Size? = null,
     id: String? = null,
-    items: List<Div>,
+    items: List<Div>? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -817,33 +817,43 @@ fun Grid.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnCount Number of columns.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal alignment of grid contents.
+ * @param contentAlignmentVertical Vertical alignment of grid contents.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Grid.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnCount: ExpressionProperty<Int>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Grid = Grid(
     Grid.Properties(
         accessibility = properties.accessibility,
         action = properties.action,
         actionAnimation = properties.actionAnimation,
         actions = properties.actions,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         background = properties.background,
         border = properties.border,
         columnCount = columnCount ?: properties.columnCount,
         columnSpan = columnSpan ?: properties.columnSpan,
-        contentAlignmentHorizontal = properties.contentAlignmentHorizontal,
-        contentAlignmentVertical = properties.contentAlignmentVertical,
+        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         focus = properties.focus,
@@ -861,7 +871,7 @@ fun Grid.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1095,18 +1105,28 @@ fun Component<Grid>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnCount Number of columns.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal alignment of grid contents.
+ * @param contentAlignmentVertical Vertical alignment of grid contents.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Grid>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnCount: ExpressionProperty<Int>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Grid> = Component(
     template = template,
     properties = Grid.Properties(
@@ -1114,15 +1134,15 @@ fun Component<Grid>.evaluate(
         action = null,
         actionAnimation = null,
         actions = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         background = null,
         border = null,
         columnCount = columnCount,
         columnSpan = columnSpan,
-        contentAlignmentHorizontal = null,
-        contentAlignmentVertical = null,
+        contentAlignmentHorizontal = contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical,
         doubletapActions = null,
         extensions = null,
         focus = null,
@@ -1140,7 +1160,7 @@ fun Component<Grid>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,

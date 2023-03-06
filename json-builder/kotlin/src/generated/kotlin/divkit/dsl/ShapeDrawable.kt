@@ -46,6 +46,7 @@ class ShapeDrawable internal constructor(
         /**
          * Fill color.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val color: Property<Color>?,
         /**
          * Shape.
@@ -54,6 +55,7 @@ class ShapeDrawable internal constructor(
         /**
          * Stroke style.
          */
+        @Deprecated("Marked as deprecated in json schema")
         val stroke: Property<Stroke>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
@@ -75,8 +77,8 @@ class ShapeDrawable internal constructor(
 @Generated
 fun DivScope.shapeDrawable(
     `use named arguments`: Guard = Guard.instance,
-    color: Color,
-    shape: Shape,
+    color: Color? = null,
+    shape: Shape? = null,
     stroke: Stroke? = null,
 ): ShapeDrawable = ShapeDrawable(
     ShapeDrawable.Properties(

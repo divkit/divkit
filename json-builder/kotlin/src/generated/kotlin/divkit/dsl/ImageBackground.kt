@@ -112,7 +112,7 @@ fun DivScope.imageBackground(
     contentAlignmentHorizontal: AlignmentHorizontal? = null,
     contentAlignmentVertical: AlignmentVertical? = null,
     filters: List<Filter>? = null,
-    imageUrl: Url,
+    imageUrl: Url? = null,
     preloadRequired: Boolean? = null,
     scale: ImageScale? = null,
 ): ImageBackground = ImageBackground(
@@ -249,24 +249,30 @@ fun ImageBackground.defer(
 
 /**
  * @param alpha Image transparency.
+ * @param contentAlignmentHorizontal Horizontal image alignment.
+ * @param contentAlignmentVertical Vertical image alignment.
  * @param imageUrl Image URL.
  * @param preloadRequired Background image must be loaded before the display.
+ * @param scale Image scaling.
  */
 @Generated
 fun ImageBackground.evaluate(
     `use named arguments`: Guard = Guard.instance,
     alpha: ExpressionProperty<Double>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     imageUrl: ExpressionProperty<Url>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
+    scale: ExpressionProperty<ImageScale>? = null,
 ): ImageBackground = ImageBackground(
     ImageBackground.Properties(
         alpha = alpha ?: properties.alpha,
-        contentAlignmentHorizontal = properties.contentAlignmentHorizontal,
-        contentAlignmentVertical = properties.contentAlignmentVertical,
+        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
         filters = properties.filters,
         imageUrl = imageUrl ?: properties.imageUrl,
         preloadRequired = preloadRequired ?: properties.preloadRequired,
-        scale = properties.scale,
+        scale = scale ?: properties.scale,
     )
 )
 

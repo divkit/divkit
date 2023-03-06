@@ -36,6 +36,7 @@ class Image internal constructor(
 
     operator fun plus(additive: Properties): Image = Image(
         Properties(
+            imageUrl = additive.imageUrl ?: properties.imageUrl,
             accessibility = additive.accessibility ?: properties.accessibility,
             action = additive.action ?: properties.action,
             actionAnimation = additive.actionAnimation ?: properties.actionAnimation,
@@ -57,7 +58,6 @@ class Image internal constructor(
             height = additive.height ?: properties.height,
             highPriorityPreviewShow = additive.highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
             id = additive.id ?: properties.id,
-            imageUrl = additive.imageUrl ?: properties.imageUrl,
             longtapActions = additive.longtapActions ?: properties.longtapActions,
             margins = additive.margins ?: properties.margins,
             paddings = additive.paddings ?: properties.paddings,
@@ -83,6 +83,10 @@ class Image internal constructor(
     )
 
     class Properties internal constructor(
+        /**
+         * Direct URL to an image.
+         */
+        val imageUrl: Property<Url>?,
         /**
          * Accessibility settings.
          */
@@ -173,10 +177,6 @@ class Image internal constructor(
          * Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
          */
         val id: Property<String>?,
-        /**
-         * Direct URL to an image.
-         */
-        val imageUrl: Property<Url>?,
         /**
          * Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
          */
@@ -271,6 +271,7 @@ class Image internal constructor(
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
+            result.tryPutProperty("image_url", imageUrl)
             result.tryPutProperty("accessibility", accessibility)
             result.tryPutProperty("action", action)
             result.tryPutProperty("action_animation", actionAnimation)
@@ -292,7 +293,6 @@ class Image internal constructor(
             result.tryPutProperty("height", height)
             result.tryPutProperty("high_priority_preview_show", highPriorityPreviewShow)
             result.tryPutProperty("id", id)
-            result.tryPutProperty("image_url", imageUrl)
             result.tryPutProperty("longtap_actions", longtapActions)
             result.tryPutProperty("margins", margins)
             result.tryPutProperty("paddings", paddings)
@@ -320,6 +320,7 @@ class Image internal constructor(
 }
 
 /**
+ * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -341,7 +342,6 @@ class Image internal constructor(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param imageUrl Direct URL to an image.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -366,6 +366,7 @@ class Image internal constructor(
  */
 @Generated
 fun DivScope.image(
+    imageUrl: Url? = null,
     `use named arguments`: Guard = Guard.instance,
     accessibility: Accessibility? = null,
     action: Action? = null,
@@ -388,7 +389,6 @@ fun DivScope.image(
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
     id: String? = null,
-    imageUrl: Url,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -412,6 +412,7 @@ fun DivScope.image(
     width: Size? = null,
 ): Image = Image(
     Image.Properties(
+        imageUrl = valueOrNull(imageUrl),
         accessibility = valueOrNull(accessibility),
         action = valueOrNull(action),
         actionAnimation = valueOrNull(actionAnimation),
@@ -433,7 +434,6 @@ fun DivScope.image(
         height = valueOrNull(height),
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
         id = valueOrNull(id),
-        imageUrl = valueOrNull(imageUrl),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -459,6 +459,7 @@ fun DivScope.image(
 )
 
 /**
+ * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -480,7 +481,6 @@ fun DivScope.image(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param imageUrl Direct URL to an image.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -506,6 +506,7 @@ fun DivScope.image(
 @Generated
 fun DivScope.imageProps(
     `use named arguments`: Guard = Guard.instance,
+    imageUrl: Url? = null,
     accessibility: Accessibility? = null,
     action: Action? = null,
     actionAnimation: Animation? = null,
@@ -527,7 +528,6 @@ fun DivScope.imageProps(
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
     id: String? = null,
-    imageUrl: Url? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -550,6 +550,7 @@ fun DivScope.imageProps(
     visibilityActions: List<VisibilityAction>? = null,
     width: Size? = null,
 ) = Image.Properties(
+    imageUrl = valueOrNull(imageUrl),
     accessibility = valueOrNull(accessibility),
     action = valueOrNull(action),
     actionAnimation = valueOrNull(actionAnimation),
@@ -571,7 +572,6 @@ fun DivScope.imageProps(
     height = valueOrNull(height),
     highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
     id = valueOrNull(id),
-    imageUrl = valueOrNull(imageUrl),
     longtapActions = valueOrNull(longtapActions),
     margins = valueOrNull(margins),
     paddings = valueOrNull(paddings),
@@ -596,6 +596,7 @@ fun DivScope.imageProps(
 )
 
 /**
+ * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -617,7 +618,6 @@ fun DivScope.imageProps(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param imageUrl Direct URL to an image.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -643,6 +643,7 @@ fun DivScope.imageProps(
 @Generated
 fun TemplateScope.imageRefs(
     `use named arguments`: Guard = Guard.instance,
+    imageUrl: ReferenceProperty<Url>? = null,
     accessibility: ReferenceProperty<Accessibility>? = null,
     action: ReferenceProperty<Action>? = null,
     actionAnimation: ReferenceProperty<Animation>? = null,
@@ -664,7 +665,6 @@ fun TemplateScope.imageRefs(
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
     id: ReferenceProperty<String>? = null,
-    imageUrl: ReferenceProperty<Url>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -687,6 +687,7 @@ fun TemplateScope.imageRefs(
     visibilityActions: ReferenceProperty<List<VisibilityAction>>? = null,
     width: ReferenceProperty<Size>? = null,
 ) = Image.Properties(
+    imageUrl = imageUrl,
     accessibility = accessibility,
     action = action,
     actionAnimation = actionAnimation,
@@ -708,7 +709,6 @@ fun TemplateScope.imageRefs(
     height = height,
     highPriorityPreviewShow = highPriorityPreviewShow,
     id = id,
-    imageUrl = imageUrl,
     longtapActions = longtapActions,
     margins = margins,
     paddings = paddings,
@@ -733,6 +733,7 @@ fun TemplateScope.imageRefs(
 )
 
 /**
+ * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -754,7 +755,6 @@ fun TemplateScope.imageRefs(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param imageUrl Direct URL to an image.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -780,6 +780,7 @@ fun TemplateScope.imageRefs(
 @Generated
 fun Image.override(
     `use named arguments`: Guard = Guard.instance,
+    imageUrl: Url? = null,
     accessibility: Accessibility? = null,
     action: Action? = null,
     actionAnimation: Animation? = null,
@@ -801,7 +802,6 @@ fun Image.override(
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
     id: String? = null,
-    imageUrl: Url? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -825,6 +825,7 @@ fun Image.override(
     width: Size? = null,
 ): Image = Image(
     Image.Properties(
+        imageUrl = valueOrNull(imageUrl) ?: properties.imageUrl,
         accessibility = valueOrNull(accessibility) ?: properties.accessibility,
         action = valueOrNull(action) ?: properties.action,
         actionAnimation = valueOrNull(actionAnimation) ?: properties.actionAnimation,
@@ -846,7 +847,6 @@ fun Image.override(
         height = valueOrNull(height) ?: properties.height,
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow) ?: properties.highPriorityPreviewShow,
         id = valueOrNull(id) ?: properties.id,
-        imageUrl = valueOrNull(imageUrl) ?: properties.imageUrl,
         longtapActions = valueOrNull(longtapActions) ?: properties.longtapActions,
         margins = valueOrNull(margins) ?: properties.margins,
         paddings = valueOrNull(paddings) ?: properties.paddings,
@@ -872,6 +872,7 @@ fun Image.override(
 )
 
 /**
+ * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -893,7 +894,6 @@ fun Image.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param imageUrl Direct URL to an image.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -919,6 +919,7 @@ fun Image.override(
 @Generated
 fun Image.defer(
     `use named arguments`: Guard = Guard.instance,
+    imageUrl: ReferenceProperty<Url>? = null,
     accessibility: ReferenceProperty<Accessibility>? = null,
     action: ReferenceProperty<Action>? = null,
     actionAnimation: ReferenceProperty<Animation>? = null,
@@ -940,7 +941,6 @@ fun Image.defer(
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
     id: ReferenceProperty<String>? = null,
-    imageUrl: ReferenceProperty<Url>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -964,6 +964,7 @@ fun Image.defer(
     width: ReferenceProperty<Size>? = null,
 ): Image = Image(
     Image.Properties(
+        imageUrl = imageUrl ?: properties.imageUrl,
         accessibility = accessibility ?: properties.accessibility,
         action = action ?: properties.action,
         actionAnimation = actionAnimation ?: properties.actionAnimation,
@@ -985,7 +986,6 @@ fun Image.defer(
         height = height ?: properties.height,
         highPriorityPreviewShow = highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
         id = id ?: properties.id,
-        imageUrl = imageUrl ?: properties.imageUrl,
         longtapActions = longtapActions ?: properties.longtapActions,
         margins = margins ?: properties.margins,
         paddings = paddings ?: properties.paddings,
@@ -1011,44 +1011,59 @@ fun Image.defer(
 )
 
 /**
+ * @param imageUrl Direct URL to an image.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal image alignment.
+ * @param contentAlignmentVertical Vertical image alignment.
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
- * @param imageUrl Direct URL to an image.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param tintColor New color of a contour image.
+ * @param tintMode Blend mode of the color specified in `tint_color`.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Image.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    imageUrl: ExpressionProperty<Url>? = null,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     highPriorityPreviewShow: ExpressionProperty<Boolean>? = null,
-    imageUrl: ExpressionProperty<Url>? = null,
     placeholderColor: ExpressionProperty<Color>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scale: ExpressionProperty<ImageScale>? = null,
     tintColor: ExpressionProperty<Color>? = null,
+    tintMode: ExpressionProperty<BlendMode>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Image = Image(
     Image.Properties(
+        imageUrl = imageUrl ?: properties.imageUrl,
         accessibility = properties.accessibility,
         action = properties.action,
         actionAnimation = properties.actionAnimation,
         actions = properties.actions,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         appearanceAnimation = properties.appearanceAnimation,
         aspect = properties.aspect,
         background = properties.background,
         border = properties.border,
         columnSpan = columnSpan ?: properties.columnSpan,
-        contentAlignmentHorizontal = properties.contentAlignmentHorizontal,
-        contentAlignmentVertical = properties.contentAlignmentVertical,
+        contentAlignmentHorizontal = contentAlignmentHorizontal ?: properties.contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical ?: properties.contentAlignmentVertical,
         doubletapActions = properties.doubletapActions,
         extensions = properties.extensions,
         filters = properties.filters,
@@ -1056,7 +1071,6 @@ fun Image.evaluate(
         height = properties.height,
         highPriorityPreviewShow = highPriorityPreviewShow ?: properties.highPriorityPreviewShow,
         id = properties.id,
-        imageUrl = imageUrl ?: properties.imageUrl,
         longtapActions = properties.longtapActions,
         margins = properties.margins,
         paddings = properties.paddings,
@@ -1064,17 +1078,17 @@ fun Image.evaluate(
         preloadRequired = preloadRequired ?: properties.preloadRequired,
         preview = preview ?: properties.preview,
         rowSpan = rowSpan ?: properties.rowSpan,
-        scale = properties.scale,
+        scale = scale ?: properties.scale,
         selectedActions = properties.selectedActions,
         tintColor = tintColor ?: properties.tintColor,
-        tintMode = properties.tintMode,
+        tintMode = tintMode ?: properties.tintMode,
         tooltips = properties.tooltips,
         transform = properties.transform,
         transitionChange = properties.transitionChange,
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1082,6 +1096,7 @@ fun Image.evaluate(
 )
 
 /**
+ * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -1103,7 +1118,6 @@ fun Image.evaluate(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param imageUrl Direct URL to an image.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1129,6 +1143,7 @@ fun Image.evaluate(
 @Generated
 fun Component<Image>.override(
     `use named arguments`: Guard = Guard.instance,
+    imageUrl: Url? = null,
     accessibility: Accessibility? = null,
     action: Action? = null,
     actionAnimation: Animation? = null,
@@ -1150,7 +1165,6 @@ fun Component<Image>.override(
     height: Size? = null,
     highPriorityPreviewShow: Boolean? = null,
     id: String? = null,
-    imageUrl: Url? = null,
     longtapActions: List<Action>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
@@ -1175,6 +1189,7 @@ fun Component<Image>.override(
 ): Component<Image> = Component(
     template = template,
     properties = Image.Properties(
+        imageUrl = valueOrNull(imageUrl),
         accessibility = valueOrNull(accessibility),
         action = valueOrNull(action),
         actionAnimation = valueOrNull(actionAnimation),
@@ -1196,7 +1211,6 @@ fun Component<Image>.override(
         height = valueOrNull(height),
         highPriorityPreviewShow = valueOrNull(highPriorityPreviewShow),
         id = valueOrNull(id),
-        imageUrl = valueOrNull(imageUrl),
         longtapActions = valueOrNull(longtapActions),
         margins = valueOrNull(margins),
         paddings = valueOrNull(paddings),
@@ -1222,6 +1236,7 @@ fun Component<Image>.override(
 )
 
 /**
+ * @param imageUrl Direct URL to an image.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
  * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
@@ -1243,7 +1258,6 @@ fun Component<Image>.override(
  * @param height Element height. For Android: if there is text in this or in a child element, specify height in `sp` to scale the element together with the text. To learn more about units of size measurement, see [Layout inside the card](../../layout.dita).
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
  * @param id Element ID. It must be unique within the root element. It is used as `accessibilityIdentifier` on iOS.
- * @param imageUrl Direct URL to an image.
  * @param longtapActions Action when long-clicking an element. Doesn't work on devices that don't support touch gestures.
  * @param margins External margins from the element stroke.
  * @param paddings Internal margins from the element stroke.
@@ -1269,6 +1283,7 @@ fun Component<Image>.override(
 @Generated
 fun Component<Image>.defer(
     `use named arguments`: Guard = Guard.instance,
+    imageUrl: ReferenceProperty<Url>? = null,
     accessibility: ReferenceProperty<Accessibility>? = null,
     action: ReferenceProperty<Action>? = null,
     actionAnimation: ReferenceProperty<Animation>? = null,
@@ -1290,7 +1305,6 @@ fun Component<Image>.defer(
     height: ReferenceProperty<Size>? = null,
     highPriorityPreviewShow: ReferenceProperty<Boolean>? = null,
     id: ReferenceProperty<String>? = null,
-    imageUrl: ReferenceProperty<Url>? = null,
     longtapActions: ReferenceProperty<List<Action>>? = null,
     margins: ReferenceProperty<EdgeInsets>? = null,
     paddings: ReferenceProperty<EdgeInsets>? = null,
@@ -1315,6 +1329,7 @@ fun Component<Image>.defer(
 ): Component<Image> = Component(
     template = template,
     properties = Image.Properties(
+        imageUrl = imageUrl,
         accessibility = accessibility,
         action = action,
         actionAnimation = actionAnimation,
@@ -1336,7 +1351,6 @@ fun Component<Image>.defer(
         height = height,
         highPriorityPreviewShow = highPriorityPreviewShow,
         id = id,
-        imageUrl = imageUrl,
         longtapActions = longtapActions,
         margins = margins,
         paddings = paddings,
@@ -1362,45 +1376,60 @@ fun Component<Image>.defer(
 )
 
 /**
+ * @param imageUrl Direct URL to an image.
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
+ * @param contentAlignmentHorizontal Horizontal image alignment.
+ * @param contentAlignmentVertical Vertical image alignment.
  * @param highPriorityPreviewShow It sets the priority of displaying the preview — the preview is decoded in the main stream and displayed as the first frame. Use the parameter carefully — it will worsen the preview display time and can worsen the application launch time.
- * @param imageUrl Direct URL to an image.
  * @param placeholderColor Placeholder background before the image is loaded.
  * @param preloadRequired Background image must be loaded before the display.
  * @param preview Image preview encoded in `base64`. It will be shown instead of `placeholder_color` before the image is loaded. Format `data url`: `data:[;base64],<data>`
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param scale Image scaling:<li>`fit` places the entire image into the element (free space is filled with background);</li><li>`fill` scales the image to the element size and cuts off the excess.</li>
  * @param tintColor New color of a contour image.
+ * @param tintMode Blend mode of the color specified in `tint_color`.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Image>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    imageUrl: ExpressionProperty<Url>? = null,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
+    contentAlignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    contentAlignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     highPriorityPreviewShow: ExpressionProperty<Boolean>? = null,
-    imageUrl: ExpressionProperty<Url>? = null,
     placeholderColor: ExpressionProperty<Color>? = null,
     preloadRequired: ExpressionProperty<Boolean>? = null,
     preview: ExpressionProperty<String>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    scale: ExpressionProperty<ImageScale>? = null,
     tintColor: ExpressionProperty<Color>? = null,
+    tintMode: ExpressionProperty<BlendMode>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Image> = Component(
     template = template,
     properties = Image.Properties(
+        imageUrl = imageUrl,
         accessibility = null,
         action = null,
         actionAnimation = null,
         actions = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         appearanceAnimation = null,
         aspect = null,
         background = null,
         border = null,
         columnSpan = columnSpan,
-        contentAlignmentHorizontal = null,
-        contentAlignmentVertical = null,
+        contentAlignmentHorizontal = contentAlignmentHorizontal,
+        contentAlignmentVertical = contentAlignmentVertical,
         doubletapActions = null,
         extensions = null,
         filters = null,
@@ -1408,7 +1437,6 @@ fun Component<Image>.evaluate(
         height = null,
         highPriorityPreviewShow = highPriorityPreviewShow,
         id = null,
-        imageUrl = imageUrl,
         longtapActions = null,
         margins = null,
         paddings = null,
@@ -1416,17 +1444,17 @@ fun Component<Image>.evaluate(
         preloadRequired = preloadRequired,
         preview = preview,
         rowSpan = rowSpan,
-        scale = null,
+        scale = scale,
         selectedActions = null,
         tintColor = tintColor,
-        tintMode = null,
+        tintMode = tintMode,
         tooltips = null,
         transform = null,
         transitionChange = null,
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,

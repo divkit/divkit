@@ -57,7 +57,7 @@ class WithArrayWithTransform internal constructor(
 @Generated
 fun DivScope.withArrayWithTransform(
     `use named arguments`: Guard = Guard.instance,
-    array: List<Color>,
+    array: List<Color>? = null,
 ): WithArrayWithTransform = WithArrayWithTransform(
     WithArrayWithTransform.Properties(
         array = valueOrNull(array),

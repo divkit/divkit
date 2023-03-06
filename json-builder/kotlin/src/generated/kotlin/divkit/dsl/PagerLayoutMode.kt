@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface PagerLayoutMode
 
+@Generated
 fun PagerLayoutMode.asList() = listOf(this)

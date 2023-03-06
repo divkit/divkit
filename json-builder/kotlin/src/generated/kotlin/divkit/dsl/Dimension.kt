@@ -34,26 +34,26 @@ class Dimension internal constructor(
 
     operator fun plus(additive: Properties): Dimension = Dimension(
         Properties(
-            unit = additive.unit ?: properties.unit,
             value = additive.value ?: properties.value,
+            unit = additive.unit ?: properties.unit,
         )
     )
 
     class Properties internal constructor(
         /**
-         * Default value: `dp`.
-         */
-        val unit: Property<SizeUnit>?,
-        /**
          * Value.
          */
         val value: Property<Double>?,
+        /**
+         * Default value: `dp`.
+         */
+        val unit: Property<SizeUnit>?,
     ) {
         internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
             val result = mutableMapOf<String, Any>()
             result.putAll(properties)
-            result.tryPutProperty("unit", unit)
             result.tryPutProperty("value", value)
+            result.tryPutProperty("unit", unit)
             return result
         }
     }
@@ -64,13 +64,13 @@ class Dimension internal constructor(
  */
 @Generated
 fun DivScope.dimension(
+    value: Double? = null,
     `use named arguments`: Guard = Guard.instance,
     unit: SizeUnit? = null,
-    value: Double,
 ): Dimension = Dimension(
     Dimension.Properties(
-        unit = valueOrNull(unit),
         value = valueOrNull(value),
+        unit = valueOrNull(unit),
     )
 )
 
@@ -80,11 +80,11 @@ fun DivScope.dimension(
 @Generated
 fun DivScope.dimensionProps(
     `use named arguments`: Guard = Guard.instance,
-    unit: SizeUnit? = null,
     value: Double? = null,
+    unit: SizeUnit? = null,
 ) = Dimension.Properties(
-    unit = valueOrNull(unit),
     value = valueOrNull(value),
+    unit = valueOrNull(unit),
 )
 
 /**
@@ -93,11 +93,11 @@ fun DivScope.dimensionProps(
 @Generated
 fun TemplateScope.dimensionRefs(
     `use named arguments`: Guard = Guard.instance,
-    unit: ReferenceProperty<SizeUnit>? = null,
     value: ReferenceProperty<Double>? = null,
+    unit: ReferenceProperty<SizeUnit>? = null,
 ) = Dimension.Properties(
-    unit = unit,
     value = value,
+    unit = unit,
 )
 
 /**
@@ -106,12 +106,12 @@ fun TemplateScope.dimensionRefs(
 @Generated
 fun Dimension.override(
     `use named arguments`: Guard = Guard.instance,
-    unit: SizeUnit? = null,
     value: Double? = null,
+    unit: SizeUnit? = null,
 ): Dimension = Dimension(
     Dimension.Properties(
-        unit = valueOrNull(unit) ?: properties.unit,
         value = valueOrNull(value) ?: properties.value,
+        unit = valueOrNull(unit) ?: properties.unit,
     )
 )
 
@@ -121,12 +121,12 @@ fun Dimension.override(
 @Generated
 fun Dimension.defer(
     `use named arguments`: Guard = Guard.instance,
-    unit: ReferenceProperty<SizeUnit>? = null,
     value: ReferenceProperty<Double>? = null,
+    unit: ReferenceProperty<SizeUnit>? = null,
 ): Dimension = Dimension(
     Dimension.Properties(
-        unit = unit ?: properties.unit,
         value = value ?: properties.value,
+        unit = unit ?: properties.unit,
     )
 )
 
@@ -137,10 +137,11 @@ fun Dimension.defer(
 fun Dimension.evaluate(
     `use named arguments`: Guard = Guard.instance,
     value: ExpressionProperty<Double>? = null,
+    unit: ExpressionProperty<SizeUnit>? = null,
 ): Dimension = Dimension(
     Dimension.Properties(
-        unit = properties.unit,
         value = value ?: properties.value,
+        unit = unit ?: properties.unit,
     )
 )
 

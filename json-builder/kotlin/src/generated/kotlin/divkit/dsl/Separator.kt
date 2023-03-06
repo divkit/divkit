@@ -287,8 +287,6 @@ class Separator internal constructor(
          */
         @Generated
         sealed interface Orientation
-
-        fun Orientation.asList() = listOf(this)
     }
 
 }
@@ -805,24 +803,30 @@ fun Separator.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Separator.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Separator = Separator(
     Separator.Properties(
         accessibility = properties.accessibility,
         action = properties.action,
         actionAnimation = properties.actionAnimation,
         actions = properties.actions,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         background = properties.background,
         border = properties.border,
@@ -844,7 +848,7 @@ fun Separator.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1060,16 +1064,22 @@ fun Component<Separator>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param rowSpan Merges cells in a string of the [grid](div-grid.md) element.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Separator>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     rowSpan: ExpressionProperty<Int>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Separator> = Component(
     template = template,
     properties = Separator.Properties(
@@ -1077,8 +1087,8 @@ fun Component<Separator>.evaluate(
         action = null,
         actionAnimation = null,
         actions = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         background = null,
         border = null,
@@ -1100,7 +1110,7 @@ fun Component<Separator>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1194,15 +1204,17 @@ fun Separator.DelimiterStyle.defer(
 
 /**
  * @param color Separator color. To prevent the separator from being displayed, set transparency in the alpha channel. For example, `#00FFFFFF`.
+ * @param orientation Separator orientation:<li>`vertical` — vertical;</li><li>`horizontal` — horizontal.</li><
  */
 @Generated
 fun Separator.DelimiterStyle.evaluate(
     `use named arguments`: Guard = Guard.instance,
     color: ExpressionProperty<Color>? = null,
+    orientation: ExpressionProperty<Separator.DelimiterStyle.Orientation>? = null,
 ): Separator.DelimiterStyle = Separator.DelimiterStyle(
     Separator.DelimiterStyle.Properties(
         color = color ?: properties.color,
-        orientation = properties.orientation,
+        orientation = orientation ?: properties.orientation,
     )
 )
 

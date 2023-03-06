@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface IndicatorItemPlacement
 
+@Generated
 fun IndicatorItemPlacement.asList() = listOf(this)

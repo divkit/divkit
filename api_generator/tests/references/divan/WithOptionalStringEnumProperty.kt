@@ -58,8 +58,6 @@ class WithOptionalStringEnumProperty internal constructor(
      */
     @Generated
     sealed interface Property
-
-    fun Property.asList() = listOf(this)
 }
 
 @Generated
@@ -109,6 +107,16 @@ fun WithOptionalStringEnumProperty.defer(
 )
 
 @Generated
+fun WithOptionalStringEnumProperty.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    property: ExpressionProperty<WithOptionalStringEnumProperty.Property>? = null,
+): WithOptionalStringEnumProperty = WithOptionalStringEnumProperty(
+    WithOptionalStringEnumProperty.Properties(
+        property = property ?: properties.property,
+    )
+)
+
+@Generated
 fun Component<WithOptionalStringEnumProperty>.override(
     `use named arguments`: Guard = Guard.instance,
     property: WithOptionalStringEnumProperty.Property? = null,
@@ -131,6 +139,17 @@ fun Component<WithOptionalStringEnumProperty>.defer(
 )
 
 @Generated
+fun Component<WithOptionalStringEnumProperty>.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    property: ExpressionProperty<WithOptionalStringEnumProperty.Property>? = null,
+): Component<WithOptionalStringEnumProperty> = Component(
+    template = template,
+    properties = WithOptionalStringEnumProperty.Properties(
+        property = property,
+    ).mergeWith(properties)
+)
+
+@Generated
 operator fun Component<WithOptionalStringEnumProperty>.plus(additive: WithOptionalStringEnumProperty.Properties): Component<WithOptionalStringEnumProperty> = Component(
     template = template,
     properties = additive.mergeWith(properties)
@@ -138,3 +157,6 @@ operator fun Component<WithOptionalStringEnumProperty>.plus(additive: WithOption
 
 @Generated
 fun WithOptionalStringEnumProperty.asList() = listOf(this)
+
+@Generated
+fun WithOptionalStringEnumProperty.Property.asList() = listOf(this)

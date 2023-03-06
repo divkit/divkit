@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface RadialGradientRadius
 
+@Generated
 fun RadialGradientRadius.asList() = listOf(this)

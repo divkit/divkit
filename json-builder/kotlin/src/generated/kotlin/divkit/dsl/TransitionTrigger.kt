@@ -25,4 +25,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface TransitionTrigger
 
+@Generated
 fun TransitionTrigger.asList() = listOf(this)

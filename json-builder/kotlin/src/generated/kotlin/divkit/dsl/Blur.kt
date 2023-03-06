@@ -61,7 +61,7 @@ class Blur internal constructor(
 @Generated
 fun DivScope.blur(
     `use named arguments`: Guard = Guard.instance,
-    radius: Int,
+    radius: Int? = null,
 ): Blur = Blur(
     Blur.Properties(
         radius = valueOrNull(radius),

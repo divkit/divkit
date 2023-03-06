@@ -59,7 +59,7 @@ class Aspect internal constructor(
 @Generated
 fun DivScope.aspect(
     `use named arguments`: Guard = Guard.instance,
-    ratio: Double,
+    ratio: Double? = null,
 ): Aspect = Aspect(
     Aspect.Properties(
         ratio = valueOrNull(ratio),

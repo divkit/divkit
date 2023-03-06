@@ -72,8 +72,6 @@ class Trigger internal constructor(
      */
     @Generated
     sealed interface Mode
-
-    fun Mode.asList() = listOf(this)
 }
 
 /**
@@ -84,8 +82,8 @@ class Trigger internal constructor(
 @Generated
 fun DivScope.trigger(
     `use named arguments`: Guard = Guard.instance,
-    actions: List<Action>,
-    condition: Boolean,
+    actions: List<Action>? = null,
+    condition: Boolean? = null,
     mode: Trigger.Mode? = null,
 ): Trigger = Trigger(
     Trigger.Properties(
@@ -169,18 +167,23 @@ fun Trigger.defer(
 
 /**
  * @param condition Condition for activating a trigger. For example, `liked && subscribed`.
+ * @param mode Trigger activation mode:<li>`on_condition` — a trigger is activated when the condition changes from `false` to `true`;</li><li>`on_variable` — a trigger is activated when the condition is met and the variable value changes.</li>
  */
 @Generated
 fun Trigger.evaluate(
     `use named arguments`: Guard = Guard.instance,
     condition: ExpressionProperty<Boolean>? = null,
+    mode: ExpressionProperty<Trigger.Mode>? = null,
 ): Trigger = Trigger(
     Trigger.Properties(
         actions = properties.actions,
         condition = condition ?: properties.condition,
-        mode = properties.mode,
+        mode = mode ?: properties.mode,
     )
 )
 
 @Generated
 fun Trigger.asList() = listOf(this)
+
+@Generated
+fun Trigger.Mode.asList() = listOf(this)

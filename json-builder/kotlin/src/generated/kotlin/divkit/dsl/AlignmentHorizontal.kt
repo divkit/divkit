@@ -23,4 +23,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface AlignmentHorizontal
 
+@Generated
 fun AlignmentHorizontal.asList() = listOf(this)

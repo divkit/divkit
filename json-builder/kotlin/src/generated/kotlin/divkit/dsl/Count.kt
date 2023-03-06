@@ -20,4 +20,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface Count
 
+@Generated
 fun Count.asList() = listOf(this)

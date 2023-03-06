@@ -87,7 +87,7 @@ fun DivScope.radialGradient(
     `use named arguments`: Guard = Guard.instance,
     centerX: RadialGradientCenter? = null,
     centerY: RadialGradientCenter? = null,
-    colors: List<Color>,
+    colors: List<Color>? = null,
     radius: RadialGradientRadius? = null,
 ): RadialGradient = RadialGradient(
     RadialGradient.Properties(

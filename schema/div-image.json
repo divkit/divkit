@@ -1,6 +1,13 @@
 {
   "java_extends": "DivBlockWithId",
   "$description": "translations.json#/div_image",
+  "codegen": {
+    "divan": {
+      "forced_properties_order": [
+        "image_url"
+      ]
+    }
+  },
   "allOf": [
     {
       "$ref": "div-base.json"

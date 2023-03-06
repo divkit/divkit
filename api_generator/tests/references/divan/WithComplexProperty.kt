@@ -89,7 +89,7 @@ class WithComplexProperty internal constructor(
 @Generated
 fun DivScope.withComplexProperty(
     `use named arguments`: Guard = Guard.instance,
-    property: WithComplexProperty.Property,
+    property: WithComplexProperty.Property? = null,
 ): WithComplexProperty = WithComplexProperty(
     WithComplexProperty.Properties(
         property = valueOrNull(property),
@@ -166,7 +166,7 @@ fun WithComplexProperty.asList() = listOf(this)
 @Generated
 fun DivScope.withComplexPropertyProperty(
     `use named arguments`: Guard = Guard.instance,
-    value: Url,
+    value: Url? = null,
 ): WithComplexProperty.Property = WithComplexProperty.Property(
     WithComplexProperty.Property.Properties(
         value = valueOrNull(value),

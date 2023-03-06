@@ -407,6 +407,7 @@ class Tabs internal constructor(
              * Style. Use `active_font_weight` and `inactive_font_weight` instead.
              * Default value: `regular`.
              */
+            @Deprecated("Marked as deprecated in json schema")
             val fontWeight: Property<FontWeight>?,
             /**
              * Background color of the inactive tab title.
@@ -473,8 +474,6 @@ class Tabs internal constructor(
          */
         @Generated
         sealed interface AnimationType
-
-        fun AnimationType.asList() = listOf(this)
     }
 
 }
@@ -532,7 +531,7 @@ fun DivScope.tabs(
     hasSeparator: Boolean? = null,
     height: Size? = null,
     id: String? = null,
-    items: List<Tabs.Item>,
+    items: List<Tabs.Item>? = null,
     margins: EdgeInsets? = null,
     paddings: EdgeInsets? = null,
     restrictParentScroll: Boolean? = null,
@@ -1051,6 +1050,8 @@ fun Tabs.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
@@ -1060,10 +1061,13 @@ fun Tabs.defer(
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Tabs.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     dynamicHeight: ExpressionProperty<Boolean>? = null,
@@ -1073,11 +1077,12 @@ fun Tabs.evaluate(
     selectedTab: ExpressionProperty<Int>? = null,
     separatorColor: ExpressionProperty<Color>? = null,
     switchTabsByContentSwipeEnabled: ExpressionProperty<Boolean>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Tabs = Tabs(
     Tabs.Properties(
         accessibility = properties.accessibility,
-        alignmentHorizontal = properties.alignmentHorizontal,
-        alignmentVertical = properties.alignmentVertical,
+        alignmentHorizontal = alignmentHorizontal ?: properties.alignmentHorizontal,
+        alignmentVertical = alignmentVertical ?: properties.alignmentVertical,
         alpha = alpha ?: properties.alpha,
         background = properties.background,
         border = properties.border,
@@ -1106,7 +1111,7 @@ fun Tabs.evaluate(
         transitionIn = properties.transitionIn,
         transitionOut = properties.transitionOut,
         transitionTriggers = properties.transitionTriggers,
-        visibility = properties.visibility,
+        visibility = visibility ?: properties.visibility,
         visibilityAction = properties.visibilityAction,
         visibilityActions = properties.visibilityActions,
         width = properties.width,
@@ -1346,6 +1351,8 @@ fun Component<Tabs>.defer(
 )
 
 /**
+ * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
+ * @param alignmentVertical Vertical alignment of an element inside the parent element.
  * @param alpha Sets transparency of the entire element: `0` — completely transparent, `1` — opaque.
  * @param columnSpan Merges cells in a column of the [grid](div-grid.md) element.
  * @param dynamicHeight Updating height when changing the active element. In the browser, the value is always `true`.
@@ -1355,10 +1362,13 @@ fun Component<Tabs>.defer(
  * @param selectedTab Ordinal number of the tab that will be opened by default.
  * @param separatorColor Separator color.
  * @param switchTabsByContentSwipeEnabled Switching tabs by scrolling through the contents.
+ * @param visibility Element visibility.
  */
 @Generated
 fun Component<Tabs>.evaluate(
     `use named arguments`: Guard = Guard.instance,
+    alignmentHorizontal: ExpressionProperty<AlignmentHorizontal>? = null,
+    alignmentVertical: ExpressionProperty<AlignmentVertical>? = null,
     alpha: ExpressionProperty<Double>? = null,
     columnSpan: ExpressionProperty<Int>? = null,
     dynamicHeight: ExpressionProperty<Boolean>? = null,
@@ -1368,12 +1378,13 @@ fun Component<Tabs>.evaluate(
     selectedTab: ExpressionProperty<Int>? = null,
     separatorColor: ExpressionProperty<Color>? = null,
     switchTabsByContentSwipeEnabled: ExpressionProperty<Boolean>? = null,
+    visibility: ExpressionProperty<Visibility>? = null,
 ): Component<Tabs> = Component(
     template = template,
     properties = Tabs.Properties(
         accessibility = null,
-        alignmentHorizontal = null,
-        alignmentVertical = null,
+        alignmentHorizontal = alignmentHorizontal,
+        alignmentVertical = alignmentVertical,
         alpha = alpha,
         background = null,
         border = null,
@@ -1402,7 +1413,7 @@ fun Component<Tabs>.evaluate(
         transitionIn = null,
         transitionOut = null,
         transitionTriggers = null,
-        visibility = null,
+        visibility = visibility,
         visibilityAction = null,
         visibilityActions = null,
         width = null,
@@ -1426,8 +1437,8 @@ fun Tabs.asList() = listOf(this)
 @Generated
 fun DivScope.tabsItem(
     `use named arguments`: Guard = Guard.instance,
-    div: Div,
-    title: String,
+    div: Div? = null,
+    title: String? = null,
     titleClickAction: Action? = null,
 ): Tabs.Item = Tabs.Item(
     Tabs.Item.Properties(
@@ -1845,11 +1856,17 @@ fun Tabs.TabTitleStyle.defer(
 
 /**
  * @param activeBackgroundColor Background color of the active tab title.
+ * @param activeFontWeight Active tab title style.
  * @param activeTextColor Color of the active tab title text.
  * @param animationDuration Duration of active title change animation.
+ * @param animationType Active title change animation.
  * @param cornerRadius Title corner rounding radius. If the parameter isn't specified, the rounding is maximum (half of the smallest size). Not used if the `corners_radius` parameter is set.
+ * @param fontFamily Font family:<li>`text` — a standard text font;</li><li>`display` — a family of fonts with a large font size.</li>
  * @param fontSize Title font size.
+ * @param fontSizeUnit Units of title font size measurement.
+ * @param fontWeight Style. Use `active_font_weight` and `inactive_font_weight` instead.
  * @param inactiveBackgroundColor Background color of the inactive tab title.
+ * @param inactiveFontWeight Inactive tab title style.
  * @param inactiveTextColor Color of the inactive tab title text.
  * @param itemSpacing Spacing between neighbouring tab titles.
  * @param letterSpacing Spacing between title characters.
@@ -1859,11 +1876,17 @@ fun Tabs.TabTitleStyle.defer(
 fun Tabs.TabTitleStyle.evaluate(
     `use named arguments`: Guard = Guard.instance,
     activeBackgroundColor: ExpressionProperty<Color>? = null,
+    activeFontWeight: ExpressionProperty<FontWeight>? = null,
     activeTextColor: ExpressionProperty<Color>? = null,
     animationDuration: ExpressionProperty<Int>? = null,
+    animationType: ExpressionProperty<Tabs.TabTitleStyle.AnimationType>? = null,
     cornerRadius: ExpressionProperty<Int>? = null,
+    fontFamily: ExpressionProperty<FontFamily>? = null,
     fontSize: ExpressionProperty<Int>? = null,
+    fontSizeUnit: ExpressionProperty<SizeUnit>? = null,
+    fontWeight: ExpressionProperty<FontWeight>? = null,
     inactiveBackgroundColor: ExpressionProperty<Color>? = null,
+    inactiveFontWeight: ExpressionProperty<FontWeight>? = null,
     inactiveTextColor: ExpressionProperty<Color>? = null,
     itemSpacing: ExpressionProperty<Int>? = null,
     letterSpacing: ExpressionProperty<Double>? = null,
@@ -1871,18 +1894,18 @@ fun Tabs.TabTitleStyle.evaluate(
 ): Tabs.TabTitleStyle = Tabs.TabTitleStyle(
     Tabs.TabTitleStyle.Properties(
         activeBackgroundColor = activeBackgroundColor ?: properties.activeBackgroundColor,
-        activeFontWeight = properties.activeFontWeight,
+        activeFontWeight = activeFontWeight ?: properties.activeFontWeight,
         activeTextColor = activeTextColor ?: properties.activeTextColor,
         animationDuration = animationDuration ?: properties.animationDuration,
-        animationType = properties.animationType,
+        animationType = animationType ?: properties.animationType,
         cornerRadius = cornerRadius ?: properties.cornerRadius,
         cornersRadius = properties.cornersRadius,
-        fontFamily = properties.fontFamily,
+        fontFamily = fontFamily ?: properties.fontFamily,
         fontSize = fontSize ?: properties.fontSize,
-        fontSizeUnit = properties.fontSizeUnit,
-        fontWeight = properties.fontWeight,
+        fontSizeUnit = fontSizeUnit ?: properties.fontSizeUnit,
+        fontWeight = fontWeight ?: properties.fontWeight,
         inactiveBackgroundColor = inactiveBackgroundColor ?: properties.inactiveBackgroundColor,
-        inactiveFontWeight = properties.inactiveFontWeight,
+        inactiveFontWeight = inactiveFontWeight ?: properties.inactiveFontWeight,
         inactiveTextColor = inactiveTextColor ?: properties.inactiveTextColor,
         itemSpacing = itemSpacing ?: properties.itemSpacing,
         letterSpacing = letterSpacing ?: properties.letterSpacing,

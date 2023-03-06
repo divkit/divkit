@@ -57,7 +57,7 @@ class WithArrayOfExpressions internal constructor(
 @Generated
 fun DivScope.withArrayOfExpressions(
     `use named arguments`: Guard = Guard.instance,
-    items: List<String>,
+    items: List<String>? = null,
 ): WithArrayOfExpressions = WithArrayOfExpressions(
     WithArrayOfExpressions.Properties(
         items = valueOrNull(items),

@@ -68,8 +68,8 @@ class StringVariable internal constructor(
 @Generated
 fun DivScope.stringVariable(
     `use named arguments`: Guard = Guard.instance,
-    name: String,
-    value: String,
+    name: String? = null,
+    value: String? = null,
 ): StringVariable = StringVariable(
     StringVariable.Properties(
         name = valueOrNull(name),

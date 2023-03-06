@@ -97,7 +97,7 @@ fun DivScope.timer(
     `use named arguments`: Guard = Guard.instance,
     duration: Int? = null,
     endActions: List<Action>? = null,
-    id: String,
+    id: String? = null,
     tickActions: List<Action>? = null,
     tickInterval: Int? = null,
     valueVariable: String? = null,

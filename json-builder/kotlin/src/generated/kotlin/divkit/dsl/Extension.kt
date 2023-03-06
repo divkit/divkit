@@ -66,7 +66,7 @@ class Extension internal constructor(
 @Generated
 fun DivScope.extension(
     `use named arguments`: Guard = Guard.instance,
-    id: String,
+    id: String? = null,
     params: Map<String, Any>? = null,
 ): Extension = Extension(
     Extension.Properties(

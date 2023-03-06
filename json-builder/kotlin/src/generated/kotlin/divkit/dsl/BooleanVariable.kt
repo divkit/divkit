@@ -68,8 +68,8 @@ class BooleanVariable internal constructor(
 @Generated
 fun DivScope.booleanVariable(
     `use named arguments`: Guard = Guard.instance,
-    name: String,
-    value: Boolean,
+    name: String? = null,
+    value: Boolean? = null,
 ): BooleanVariable = BooleanVariable(
     BooleanVariable.Properties(
         name = valueOrNull(name),

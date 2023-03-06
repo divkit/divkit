@@ -86,7 +86,7 @@ fun DivScope.shadow(
     alpha: Double? = null,
     blur: Int? = null,
     color: Color? = null,
-    offset: Point,
+    offset: Point? = null,
 ): Shadow = Shadow(
     Shadow.Properties(
         alpha = valueOrNull(alpha),

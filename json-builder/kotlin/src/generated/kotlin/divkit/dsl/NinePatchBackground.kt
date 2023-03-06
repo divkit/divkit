@@ -68,8 +68,8 @@ class NinePatchBackground internal constructor(
 @Generated
 fun DivScope.ninePatchBackground(
     `use named arguments`: Guard = Guard.instance,
-    imageUrl: Url,
-    insets: AbsoluteEdgeInsets,
+    imageUrl: Url? = null,
+    insets: AbsoluteEdgeInsets? = null,
 ): NinePatchBackground = NinePatchBackground(
     NinePatchBackground.Properties(
         imageUrl = valueOrNull(imageUrl),

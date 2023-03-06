@@ -61,8 +61,6 @@ class WithStringEnumPropertyWithDefaultValue internal constructor(
      */
     @Generated
     sealed interface Value
-
-    fun Value.asList() = listOf(this)
 }
 
 @Generated
@@ -112,6 +110,16 @@ fun WithStringEnumPropertyWithDefaultValue.defer(
 )
 
 @Generated
+fun WithStringEnumPropertyWithDefaultValue.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<WithStringEnumPropertyWithDefaultValue.Value>? = null,
+): WithStringEnumPropertyWithDefaultValue = WithStringEnumPropertyWithDefaultValue(
+    WithStringEnumPropertyWithDefaultValue.Properties(
+        value = value ?: properties.value,
+    )
+)
+
+@Generated
 fun Component<WithStringEnumPropertyWithDefaultValue>.override(
     `use named arguments`: Guard = Guard.instance,
     value: WithStringEnumPropertyWithDefaultValue.Value? = null,
@@ -134,6 +142,17 @@ fun Component<WithStringEnumPropertyWithDefaultValue>.defer(
 )
 
 @Generated
+fun Component<WithStringEnumPropertyWithDefaultValue>.evaluate(
+    `use named arguments`: Guard = Guard.instance,
+    value: ExpressionProperty<WithStringEnumPropertyWithDefaultValue.Value>? = null,
+): Component<WithStringEnumPropertyWithDefaultValue> = Component(
+    template = template,
+    properties = WithStringEnumPropertyWithDefaultValue.Properties(
+        value = value,
+    ).mergeWith(properties)
+)
+
+@Generated
 operator fun Component<WithStringEnumPropertyWithDefaultValue>.plus(additive: WithStringEnumPropertyWithDefaultValue.Properties): Component<WithStringEnumPropertyWithDefaultValue> = Component(
     template = template,
     properties = additive.mergeWith(properties)
@@ -141,3 +160,6 @@ operator fun Component<WithStringEnumPropertyWithDefaultValue>.plus(additive: Wi
 
 @Generated
 fun WithStringEnumPropertyWithDefaultValue.asList() = listOf(this)
+
+@Generated
+fun WithStringEnumPropertyWithDefaultValue.Value.asList() = listOf(this)

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, cast, Dict
+from typing import List, cast, Dict, Optional
 
 from ...schema.modeling.entities import (
     Entity,
@@ -19,11 +19,60 @@ from ...schema.modeling.entities import (
     Color,
     String,
     Dictionary,
+    DivanGeneratorProperties,
 )
 from ... import utils
 from ...schema.modeling.text import Text
 
 GUARD_INSTANCE_PARAM = '`use named arguments`: Guard = Guard.instance,'
+
+
+def preset_factory_method_declaration(
+        entity: DivanEntity,
+        factory_method_name: str,
+        inlines: Dict[str, str],
+        vararg_prop: DivanProperty,
+        vararg_items: bool,
+        remove_prefix: str
+) -> Text:
+    type_name = full_name(entity, remove_prefix)
+    basic_method_name = entity.factory_method_name_with_parent
+
+    declaration = Text(f'fun DivScope.{factory_method_name}(')
+
+    vararg_prop_name_declaration = vararg_prop.name_declaration
+    array_vararg_type_name_declaration = cast(DivanPropertyType, vararg_prop.property_type).declaration(
+        prefixed=True,
+        remove_prefix=remove_prefix
+    )
+    array_item_vararg_type = cast(DivanPropertyType, cast(DivanArray, vararg_prop.property_type).property_type)
+    array_item_vararg_type_name_declaration = array_item_vararg_type.declaration(
+        prefixed=True,
+        remove_prefix=remove_prefix
+    )
+    if vararg_items:
+        items_prop_decl = f'vararg {vararg_prop_name_declaration}: {array_item_vararg_type_name_declaration},'
+    else:
+        items_prop_decl = f'{vararg_prop_name_declaration}: {array_vararg_type_name_declaration},'
+    declaration += utils.indented(items_prop_decl, level=1, indent_width=4)
+
+    declaration += entity.literal_properties_signature(
+        force_named_arguments=False,
+        force_default_nulls=False,
+        exclude=[vararg_prop.name, *inlines.keys()]
+    ).indented(level=1, indent_width=4)
+    declaration += f'): {type_name} = {basic_method_name}('
+    for property in cast(List[DivanProperty], entity.instance_properties):
+        property_name_declaration = property.name_declaration
+        if property.name in inlines.keys():
+            prop_decl = f'{property_name_declaration} = {inlines[property.name]},'
+        elif property.name == vararg_prop.name and vararg_items:
+            prop_decl = f'{property_name_declaration} = {vararg_prop_name_declaration}.toList(),'
+        else:
+            prop_decl = f'{property_name_declaration} = {property_name_declaration},'
+        declaration += utils.indented(prop_decl, level=1, indent_width=4)
+    declaration += ')'
+    return declaration
 
 
 def full_name(obj: Declarable, remove_prefix: str) -> str:
@@ -97,6 +146,11 @@ class DivanEntity(Entity):
         for prop in self.properties:
             prop.__class__ = DivanProperty
             cast(DivanProperty, prop).update_base()
+        self.generator_properties: Optional[DivanGeneratorProperties] = self.generator_properties
+        if self.generator_properties is not None:
+            forced_property_order = self.generator_properties.forced_properties_order
+            if forced_property_order:
+                self.apply_property_reorder()
 
     @property
     def supertype_declaration(self) -> str:
@@ -130,10 +184,40 @@ class DivanEntity(Entity):
         return comment(*lines)
 
     @property
-    def params_comment_block(self) -> Text:
+    def alternative_factories_declarations(self) -> List[(Text, Text)]:
+        result = []
+        if self.generator_properties is None:
+            return result
+        for factory in self.generator_properties.factories:
+            params_declaration = self.params_comment_block(exclude_params=list(factory.inlines.keys()))
+            vararg_prop = factory.vararg_property
+            vararg_prop.__class__ = DivanProperty
+            vararg_prop = cast(DivanProperty, vararg_prop)
+            vararg_prop.update_base()
+            result.append((params_declaration, preset_factory_method_declaration(
+                self,
+                factory_method_name=factory.factory_method_name,
+                inlines=factory.inlines,
+                vararg_prop=vararg_prop,
+                vararg_items=True,
+                remove_prefix=self.remove_prefix
+            )))
+            result.append((params_declaration, preset_factory_method_declaration(
+                self,
+                factory_method_name=factory.factory_method_name,
+                inlines=factory.inlines,
+                vararg_prop=vararg_prop,
+                vararg_items=False,
+                remove_prefix=self.remove_prefix
+            )))
+        return result
+
+    def params_comment_block(self,  exclude_params: List[str] = None) -> Text:
+        if exclude_params is None:
+            exclude_params = []
         params = [
             f'@param {cast(DivanProperty, prop).name_declaration} {prop.description_doc()}'
-            for prop in self.properties if prop.description_doc() is not None
+            for prop in self.properties if prop.name not in exclude_params and prop.description_doc() is not None
         ]
         return comment(*params) if params else Text()
 
@@ -146,18 +230,20 @@ class DivanEntity(Entity):
         ]
         return comment(*params) if params else Text()
 
-    @property
-    def serialization_declaration(self) -> Text:
-        result = Text()
+    def serialization_declaration(self, has_properties: bool) -> Text:
+        result = Text('@JsonAnyGetter')
+        fun_declaration = 'internal fun getJsonProperties(): Map<String, Any>'
         static_type = self.static_type
-        if static_type is None:
-            result += '@JsonAnyGetter'
-            result += 'internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(emptyMap())'
+
+        if has_properties:
+            if static_type is not None:
+                result += f'{fun_declaration} = properties.mergeWith('
+                result += utils.indented(f'mapOf("type" to "{static_type}")', indent_width=4)
+                result += ')'
+            else:
+                result += f'{fun_declaration} = properties.mergeWith(emptyMap())'
         else:
-            result += '@JsonAnyGetter'
-            result += 'internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith('
-            result += f'    mapOf("type" to "{static_type}")'
-            result += ')'
+            result += f'{fun_declaration} = mapOf("type" to "{static_type}")'
         return result
 
     def literal_properties_signature(
@@ -166,7 +252,9 @@ class DivanEntity(Entity):
             force_default_nulls: bool,
             exclude: List[str] = None,
     ) -> Text:
-        forced_property_order = []
+        forced_property_order: List[str] = []
+        if self.generator_properties is not None:
+            forced_property_order = self.generator_properties.forced_properties_order
         if exclude is None:
             exclude = []
         is_named_guard_added = False
@@ -178,7 +266,7 @@ class DivanEntity(Entity):
                 if property.name not in forced_property_order or force_named_arguments:
                     signature_declaration += GUARD_INSTANCE_PARAM
                     is_named_guard_added = True
-            required = not force_default_nulls and not property.optional
+            required = False  # not force_default_nulls and not property.optional
             default = 'null'
             property_type = cast(DivanPropertyType, property.property_type)
             type_name_declaration = property_type.declaration(prefixed=True, remove_prefix=self.remove_prefix)
@@ -234,6 +322,11 @@ class DivanEntity(Entity):
     def factory_method_declaration(self) -> Text:
         type_name = full_name(self, self.remove_prefix)
         method_name = self.factory_method_name_with_parent
+
+        has_properties = len(self.instance_properties) > 0
+        if not has_properties:
+            return Text(f'fun DivScope.{method_name}(): {type_name} = {type_name}')
+
         declaration = Text(f'fun DivScope.{method_name}(')
         declaration += self.literal_properties_signature(
             force_named_arguments=False,
@@ -419,6 +512,16 @@ class DivanEntity(Entity):
         declaration += ')'
         return declaration
 
+    def apply_property_reorder(self):
+        if self.generator_properties is None:
+            return
+        forced_order = self.generator_properties.forced_properties_order
+        self._properties = sorted(
+            self._properties,
+            key=lambda property: property.name in forced_order,
+            reverse=True
+        )
+
     @property
     def factory_method_name_with_parent(self) -> str:
         name = utils.capitalize_camel_case(self.name, self.remove_prefix)
@@ -469,7 +572,8 @@ class DivanProperty(Property):
             comment_lines.append(translations["div_generator_default_value"].format(default_value))
         if comment_lines:
             declaration += comment(*comment_lines)
-
+        if self.is_deprecated:
+            declaration += f'@Deprecated("{translations["div_generator_deprecated_message"]}")'
         declaration += f'val {self.name_declaration}: {type_declaration}?'
         return declaration
 
@@ -522,8 +626,11 @@ class DivanPropertyType(PropertyType):
     def is_primitive(self) -> bool:
         if isinstance(self, (Int, Double, Bool, BoolInt, String, StaticString, Color, Url)):
             return True
-        elif isinstance(self, (Dictionary, Array, Object)):
+        elif isinstance(self, (Dictionary, Array)):
             return False
+        elif isinstance(self, Object):
+            inner_obj = self.object
+            return isinstance(inner_obj, StringEnumeration)
         raise NotImplementedError
 
 

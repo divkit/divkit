@@ -57,7 +57,7 @@ class WithStrictArray internal constructor(
 @Generated
 fun DivScope.withStrictArray(
     `use named arguments`: Guard = Guard.instance,
-    array: List<Entity>,
+    array: List<Entity>? = null,
 ): WithStrictArray = WithStrictArray(
     WithStrictArray.Properties(
         array = valueOrNull(array),

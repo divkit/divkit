@@ -23,4 +23,5 @@ import kotlin.collections.Map
 @Generated
 sealed interface FontWeight
 
+@Generated
 fun FontWeight.asList() = listOf(this)
