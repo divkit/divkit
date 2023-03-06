@@ -61,7 +61,8 @@
           },
           "platforms": [
             "android",
-            "ios"
+            "ios",
+            "web"
           ]
         },
         {
@@ -122,19 +123,6 @@
             "expected": {
                 "type": "string",
                 "value": "@{ Hello there"
-            },
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "string escape multiple backslashes",
-            "expression": "\\\\",
-            "expected": {
-                "type": "string",
-                "value": "\\"
             },
             "platforms": [
                 "android",

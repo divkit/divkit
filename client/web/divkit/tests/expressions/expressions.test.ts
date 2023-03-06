@@ -79,6 +79,9 @@ describe('expressions', () => {
                         it(name, () => {
                             runCase(item);
                         });
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log('skip', file, name, item.name);
                     }
                 }
             });
