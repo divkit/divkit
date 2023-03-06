@@ -1,9 +1,10 @@
 import type { EvalValue, IntegerValue, NumberValue } from '../eval';
+import type { VariablesMap } from '../eval';
 import { registerFunc } from './funcs';
 import { INTEGER, MAX_INT, MAX_NUMBER, MIN_INT, MIN_NUMBER, NUMBER } from '../const';
 import { checkIntegerOverflow, roundInteger } from '../utils';
 
-function div<T extends IntegerValue | NumberValue>(arg0: T, arg1: T): EvalValue {
+function div<T extends IntegerValue | NumberValue>(_vars: VariablesMap, arg0: T, arg1: T): EvalValue {
     if (arg1.value === 0) {
         throw new Error('Division by zero is not supported.');
     }
@@ -19,7 +20,7 @@ function div<T extends IntegerValue | NumberValue>(arg0: T, arg1: T): EvalValue 
     };
 }
 
-function mod<T extends IntegerValue | NumberValue>(arg0: T, arg1: T): EvalValue {
+function mod<T extends IntegerValue | NumberValue>(_vars: VariablesMap, arg0: T, arg1: T): EvalValue {
     if (arg1.value === 0) {
         throw new Error('Division by zero is not supported.');
     }
@@ -35,7 +36,7 @@ function mod<T extends IntegerValue | NumberValue>(arg0: T, arg1: T): EvalValue 
     };
 }
 
-function mul<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
+function mul<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
     let res = args.length ? args[0].value : 0;
     for (let i = 1; i < args.length; ++i) {
         res *= args[i].value;
@@ -50,7 +51,7 @@ function mul<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
     };
 }
 
-function sub<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
+function sub<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
     let res = args.length ? args[0].value : 0;
     for (let i = 1; i < args.length; ++i) {
         res -= args[i].value;
@@ -65,7 +66,7 @@ function sub<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
     };
 }
 
-function sum<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
+function sum<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
     let res = 0;
     for (let i = 0; i < args.length; ++i) {
         res += args[i].value;
@@ -80,7 +81,7 @@ function sum<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
     };
 }
 
-function abs(arg: IntegerValue | NumberValue): EvalValue {
+function abs(_vars: VariablesMap, arg: IntegerValue | NumberValue): EvalValue {
     const res = Math.abs(arg.value);
 
     if (arg.type === INTEGER) {
@@ -93,7 +94,7 @@ function abs(arg: IntegerValue | NumberValue): EvalValue {
     };
 }
 
-function max<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
+function max<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
     if (!args.length) {
         throw new Error('Non empty argument list is required for function \'max\'.');
     }
@@ -104,7 +105,7 @@ function max<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
     };
 }
 
-function min<T extends IntegerValue | NumberValue>(...args: T[]): EvalValue {
+function min<T extends IntegerValue | NumberValue>(_vars: VariablesMap, ...args: T[]): EvalValue {
     if (!args.length) {
         throw new Error('Non empty argument list is required for function \'min\'.');
     }
@@ -143,9 +144,8 @@ function minInteger(): EvalValue {
     };
 }
 
-function round(arg: NumberValue): EvalValue {
+function round(_vars: VariablesMap, arg: NumberValue): EvalValue {
     const sign = Math.sign(arg.value);
-
 
     return {
         type: NUMBER,
@@ -154,28 +154,28 @@ function round(arg: NumberValue): EvalValue {
     };
 }
 
-function floor(arg: NumberValue): EvalValue {
+function floor(_vars: VariablesMap, arg: NumberValue): EvalValue {
     return {
         type: NUMBER,
         value: Math.floor(arg.value)
     };
 }
 
-function ceil(arg: NumberValue): EvalValue {
+function ceil(_vars: VariablesMap, arg: NumberValue): EvalValue {
     return {
         type: NUMBER,
         value: Math.ceil(arg.value)
     };
 }
 
-function signum(arg: IntegerValue | NumberValue): EvalValue {
+function signum(_vars: VariablesMap, arg: IntegerValue | NumberValue): EvalValue {
     return {
         type: arg.type,
         value: Math.sign(arg.value)
     };
 }
 
-function copySign<T extends IntegerValue | NumberValue>(arg0: T, arg1: T): EvalValue {
+function copySign<T extends IntegerValue | NumberValue>(_vars: VariablesMap, arg0: T, arg1: T): EvalValue {
     let res: number;
 
     if (arg1.value === 0 && arg0.type === INTEGER) {

@@ -1,24 +1,25 @@
 import type { EvalValue, IntegerValue, StringValue } from '../eval';
+import type { VariablesMap } from '../eval';
 import { registerFunc } from './funcs';
 import { BOOLEAN, INTEGER, STRING } from '../const';
 import { escapeRegExp } from '../../utils/escapeRegExp';
 import { valToString } from '../utils';
 
-function len(arg: StringValue): EvalValue {
+function len(_vars: VariablesMap, arg: StringValue): EvalValue {
     return {
         type: INTEGER,
         value: arg.value.length
     };
 }
 
-function contains(wholeStr: StringValue, partStr: StringValue): EvalValue {
+function contains(_vars: VariablesMap, wholeStr: StringValue, partStr: StringValue): EvalValue {
     return {
         type: BOOLEAN,
         value: wholeStr.value.includes(partStr.value) ? 1 : 0
     };
 }
 
-function substring(str: StringValue, start: IntegerValue, end: IntegerValue): EvalValue {
+function substring(_vars: VariablesMap, str: StringValue, start: IntegerValue, end: IntegerValue): EvalValue {
     if (end.value < start.value) {
         throw new Error('Indexes should be in ascending order.');
     }
@@ -36,7 +37,7 @@ function substring(str: StringValue, start: IntegerValue, end: IntegerValue): Ev
     };
 }
 
-function replaceAll(str: StringValue, what: StringValue, replacer: StringValue): EvalValue {
+function replaceAll(_vars: VariablesMap, str: StringValue, what: StringValue, replacer: StringValue): EvalValue {
     let res: string;
 
     if (what.value) {
@@ -52,49 +53,49 @@ function replaceAll(str: StringValue, what: StringValue, replacer: StringValue):
     };
 }
 
-function index(str: StringValue, what: StringValue): EvalValue {
+function index(_vars: VariablesMap, str: StringValue, what: StringValue): EvalValue {
     return {
         type: INTEGER,
         value: str.value.indexOf(what.value)
     };
 }
 
-function lastIndex(str: StringValue, what: StringValue): EvalValue {
+function lastIndex(_vars: VariablesMap, str: StringValue, what: StringValue): EvalValue {
     return {
         type: INTEGER,
         value: str.value.lastIndexOf(what.value)
     };
 }
 
-function trim(str: StringValue): EvalValue {
+function trim(_vars: VariablesMap, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.trim()
     };
 }
 
-function trimLeft(str: StringValue): EvalValue {
+function trimLeft(_vars: VariablesMap, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.replace(/^\s+/, '')
     };
 }
 
-function trimRight(str: StringValue): EvalValue {
+function trimRight(_vars: VariablesMap, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.replace(/\s+$/, '')
     };
 }
 
-function toUpperCase(str: StringValue): EvalValue {
+function toUpperCase(_vars: VariablesMap, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.toUpperCase()
     };
 }
 
-function toLowerCase(str: StringValue): EvalValue {
+function toLowerCase(_vars: VariablesMap, str: StringValue): EvalValue {
     return {
         type: STRING,
         value: str.value.toLowerCase()
@@ -119,7 +120,12 @@ function calcPad(val: StringValue | IntegerValue, len: IntegerValue, pad: String
     return part;
 }
 
-function padStart(val: StringValue | IntegerValue, len: IntegerValue, pad: StringValue): EvalValue {
+function padStart(
+    _vars: VariablesMap,
+    val: StringValue | IntegerValue,
+    len: IntegerValue,
+    pad: StringValue
+): EvalValue {
     const prefix = calcPad(val, len, pad);
 
     return {
@@ -128,7 +134,12 @@ function padStart(val: StringValue | IntegerValue, len: IntegerValue, pad: Strin
     };
 }
 
-function padEnd(val: StringValue | IntegerValue, len: IntegerValue, pad: StringValue): EvalValue {
+function padEnd(
+    _vars: VariablesMap,
+    val: StringValue | IntegerValue,
+    len: IntegerValue,
+    pad: StringValue
+): EvalValue {
     const suffix = calcPad(val, len, pad);
 
     return {

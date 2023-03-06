@@ -1,9 +1,19 @@
 import type { DatetimeValue, EvalValue, IntegerValue } from '../eval';
+import type { VariablesMap } from '../eval';
 import { registerFunc } from './funcs';
 import { DATETIME, INTEGER } from '../const';
 import { valToString } from '../utils';
 
-function parseUnixTime(arg: IntegerValue): EvalValue {
+function getMaxDate(date: Date): number {
+    const copy = new Date(date);
+
+    copy.setMonth(copy.getMonth() + 1);
+    copy.setDate(0);
+
+    return copy.getDate();
+}
+
+function parseUnixTime(_vars: VariablesMap, arg: IntegerValue): EvalValue {
     return {
         type: DATETIME,
         value: new Date(arg.value * 1000)
@@ -17,14 +27,14 @@ function nowLocal(): EvalValue {
     };
 }
 
-function addMillis(datetime: DatetimeValue, milliseconds: IntegerValue): EvalValue {
+function addMillis(_vars: VariablesMap, datetime: DatetimeValue, milliseconds: IntegerValue): EvalValue {
     return {
         type: DATETIME,
         value: new Date(datetime.value.getTime() + milliseconds.value)
     };
 }
 
-function setYear(datetime: DatetimeValue, year: IntegerValue): EvalValue {
+function setYear(_vars: VariablesMap, datetime: DatetimeValue, year: IntegerValue): EvalValue {
     const copy = new Date(datetime.value);
 
     copy.setFullYear(year.value);
@@ -35,7 +45,7 @@ function setYear(datetime: DatetimeValue, year: IntegerValue): EvalValue {
     };
 }
 
-function setMonth(datetime: DatetimeValue, month: IntegerValue): EvalValue {
+function setMonth(_vars: VariablesMap, datetime: DatetimeValue, month: IntegerValue): EvalValue {
     if (month.value < 1 || month.value > 12) {
         throw new Error(`Expecting month in [1..12], instead got ${month.value}.`);
     }
@@ -50,16 +60,7 @@ function setMonth(datetime: DatetimeValue, month: IntegerValue): EvalValue {
     };
 }
 
-function getMaxDate(date: Date): number {
-    const copy = new Date(date);
-
-    copy.setMonth(copy.getMonth() + 1);
-    copy.setDate(0);
-
-    return copy.getDate();
-}
-
-function setDay(datetime: DatetimeValue, day: IntegerValue): EvalValue {
+function setDay(_vars: VariablesMap, datetime: DatetimeValue, day: IntegerValue): EvalValue {
     const copy = new Date(datetime.value);
 
     if (day.value <= 0 && day.value !== -1 || day.value > getMaxDate(copy)) {
@@ -74,7 +75,7 @@ function setDay(datetime: DatetimeValue, day: IntegerValue): EvalValue {
     };
 }
 
-function setHours(datetime: DatetimeValue, hours: IntegerValue): EvalValue {
+function setHours(_vars: VariablesMap, datetime: DatetimeValue, hours: IntegerValue): EvalValue {
     if (hours.value < 0 || hours.value > 23) {
         throw new Error(`Expecting hours in [0..23], instead got ${hours.value}.`);
     }
@@ -89,7 +90,7 @@ function setHours(datetime: DatetimeValue, hours: IntegerValue): EvalValue {
     };
 }
 
-function setMinutes(datetime: DatetimeValue, minutes: IntegerValue): EvalValue {
+function setMinutes(_vars: VariablesMap, datetime: DatetimeValue, minutes: IntegerValue): EvalValue {
     if (minutes.value < 0 || minutes.value > 59) {
         throw new Error(`Expecting minutes in [0..59], instead got ${minutes.value}.`);
     }
@@ -104,7 +105,7 @@ function setMinutes(datetime: DatetimeValue, minutes: IntegerValue): EvalValue {
     };
 }
 
-function setSeconds(datetime: DatetimeValue, seconds: IntegerValue): EvalValue {
+function setSeconds(_vars: VariablesMap, datetime: DatetimeValue, seconds: IntegerValue): EvalValue {
     if (seconds.value < 0 || seconds.value > 59) {
         throw new Error(`Expecting seconds in [0..59], instead got ${seconds.value}.`);
     }
@@ -119,7 +120,7 @@ function setSeconds(datetime: DatetimeValue, seconds: IntegerValue): EvalValue {
     };
 }
 
-function setMillis(datetime: DatetimeValue, millis: IntegerValue): EvalValue {
+function setMillis(_vars: VariablesMap, datetime: DatetimeValue, millis: IntegerValue): EvalValue {
     if (millis.value < 0 || millis.value > 999) {
         throw new Error(`Expecting millis in [0..999], instead got ${millis.value}.`);
     }

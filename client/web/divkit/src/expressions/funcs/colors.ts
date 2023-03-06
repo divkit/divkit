@@ -1,11 +1,14 @@
 import type { ColorValue, EvalValue, NumberValue, StringValue } from '../eval';
+import type { ParsedColor } from '../../utils/correctColor';
+import type { VariablesMap } from '../eval';
 import { registerFunc } from './funcs';
 import { COLOR, NUMBER, STRING } from '../const';
-import { ParsedColor } from '../../utils/correctColor';
 import { safeConvertColor, stringifyColor } from '../utils';
 
-function colorGetter(field: keyof ParsedColor): (color: StringValue | ColorValue) => EvalValue {
-    return color => {
+function colorGetter(
+    field: keyof ParsedColor
+): (_vars: VariablesMap, color: StringValue | ColorValue) => EvalValue {
+    return (_vars, color) => {
         const parsed = safeConvertColor(color.value);
 
         return {
@@ -15,8 +18,10 @@ function colorGetter(field: keyof ParsedColor): (color: StringValue | ColorValue
     };
 }
 
-function colorSetter(field: keyof ParsedColor): (color: StringValue | ColorValue, val: NumberValue) => EvalValue {
-    return (color, val) => {
+function colorSetter(
+    field: keyof ParsedColor
+): (_vars: VariablesMap, color: StringValue | ColorValue, val: NumberValue) => EvalValue {
+    return (_vars, color, val) => {
         const parsed = safeConvertColor(color.value);
 
         parsed[field] = val.value * 255;
@@ -38,7 +43,7 @@ const setColorRed = colorSetter('r');
 const setColorGreen = colorSetter('g');
 const setColorBlue = colorSetter('b');
 
-function rgb(red: NumberValue, green: NumberValue, blue: NumberValue): EvalValue {
+function rgb(_vars: VariablesMap, red: NumberValue, green: NumberValue, blue: NumberValue): EvalValue {
     const parsed: ParsedColor = {
         a: 255,
         r: red.value * 255,
@@ -52,7 +57,13 @@ function rgb(red: NumberValue, green: NumberValue, blue: NumberValue): EvalValue
     };
 }
 
-function argb(alpha: NumberValue, red: NumberValue, green: NumberValue, blue: NumberValue): EvalValue {
+function argb(
+    _vars: VariablesMap,
+    alpha: NumberValue,
+    red: NumberValue,
+    green: NumberValue,
+    blue: NumberValue
+): EvalValue {
     const parsed: ParsedColor = {
         a: alpha.value * 255,
         r: red.value * 255,

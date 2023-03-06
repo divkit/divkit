@@ -1,4 +1,5 @@
 import type { EvalValue, IntegerValue } from '../eval';
+import type { VariablesMap } from '../eval';
 import { registerFunc } from './funcs';
 import { INTEGER } from '../const';
 
@@ -27,35 +28,35 @@ const HOURS_IN_DAY = 24;
 const MS_IN_DAY = 1000 * 60 * 60 * 24;
 const MS_IN_WEEK = 1000 * 60 * 60 * 24 * 7;
 
-function getIntervalSeconds(milliseconds: IntegerValue): EvalValue {
+function getIntervalSeconds(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
     return getDuration(milliseconds, MS_IN_SECOND, SECONDS_IN_MINUTE);
 }
 
-function getIntervalTotalSeconds(milliseconds: IntegerValue): EvalValue {
+function getIntervalTotalSeconds(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
     return getDuration(milliseconds, MS_IN_SECOND);
 }
 
-function getIntervalMinutes(milliseconds: IntegerValue): EvalValue {
+function getIntervalMinutes(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
     return getDuration(milliseconds, MS_IN_MINUTE, MINUTES_IN_HOUR);
 }
 
-function getIntervalTotalMinutes(milliseconds: IntegerValue): EvalValue {
+function getIntervalTotalMinutes(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
     return getDuration(milliseconds, MS_IN_MINUTE);
 }
 
-function getIntervalHours(milliseconds: IntegerValue): EvalValue {
+function getIntervalHours(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
     return getDuration(milliseconds, MS_IN_HOUR, HOURS_IN_DAY);
 }
 
-function getIntervalTotalHours(milliseconds: IntegerValue): EvalValue {
+function getIntervalTotalHours(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
     return getDuration(milliseconds, MS_IN_HOUR);
 }
 
-function getIntervalTotalDays(milliseconds: IntegerValue): EvalValue {
+function getIntervalTotalDays(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
     return getDuration(milliseconds, MS_IN_DAY);
 }
 
-function getIntervalTotalWeeks(milliseconds: IntegerValue): EvalValue {
+function getIntervalTotalWeeks(_vars: VariablesMap, milliseconds: IntegerValue): EvalValue {
     return getDuration(milliseconds, MS_IN_WEEK);
 }
 

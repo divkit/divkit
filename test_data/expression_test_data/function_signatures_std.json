@@ -155,6 +155,142 @@
       ],
       "result_type": "string",
       "platforms": ["ios", "web"]
+    },
+    {
+      "name": "getIntegerValue(string, integer) integer",
+      "function_name": "getIntegerValue",
+      "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Variable name."
+          },
+          {
+              "type": "integer",
+              "doc": "Fallback value."
+          }
+      ],
+      "result_type": "integer",
+      "platforms": ["web"]
+    },
+    {
+      "name": "getNumberValue(string, number) number",
+      "function_name": "getNumberValue",
+      "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Variable name."
+          },
+          {
+              "type": "number",
+              "doc": "Fallback value."
+          }
+      ],
+      "result_type": "number",
+      "platforms": ["web"]
+    },
+    {
+      "name": "getStringValue(string, string) string",
+      "function_name": "getStringValue",
+      "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Variable name."
+          },
+          {
+              "type": "string",
+              "doc": "Fallback value."
+          }
+      ],
+      "result_type": "string",
+      "platforms": ["web"]
+    },
+    {
+      "name": "getUrlValue(string, url) url",
+      "function_name": "getUrlValue",
+      "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Variable name."
+          },
+          {
+              "type": "url",
+              "doc": "Fallback value."
+          }
+      ],
+      "result_type": "url",
+      "platforms": ["web"]
+    },
+    {
+      "name": "getUrlValue(string, string) url",
+      "function_name": "getUrlValue",
+      "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Variable name."
+          },
+          {
+              "type": "string",
+              "doc": "Fallback value."
+          }
+      ],
+      "result_type": "url",
+      "platforms": ["web"]
+    },
+    {
+      "name": "getColorValue(string, color) color",
+      "function_name": "getColorValue",
+      "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Variable name."
+          },
+          {
+              "type": "color",
+              "doc": "Fallback value."
+          }
+      ],
+      "result_type": "color",
+      "platforms": ["web"]
+    },
+    {
+      "name": "getColorValue(string, string) color",
+      "function_name": "getColorValue",
+      "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Variable name."
+          },
+          {
+              "type": "string",
+              "doc": "Fallback value."
+          }
+      ],
+      "result_type": "color",
+      "platforms": ["web"]
+    },
+    {
+      "name": "getBooleanValue(string, boolean) boolean",
+      "function_name": "getBooleanValue",
+      "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "Variable name."
+          },
+          {
+              "type": "boolean",
+              "doc": "Fallback value."
+          }
+      ],
+      "result_type": "boolean",
+      "platforms": ["web"]
     }
   ]
 }

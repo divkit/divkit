@@ -141,3 +141,7 @@ export function stringifyColor(color: ParsedColor): string {
         return padLeft(Math.round(it).toString(16), 2);
     }).join('').toUpperCase()}`;
 }
+
+export function transformColorValue(color: string): string {
+    return stringifyColor(safeConvertColor(color));
+}

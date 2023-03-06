@@ -8,7 +8,7 @@ import {
     TemplateLiteral,
     UnaryExpression, Variable
 } from './ast';
-import { findBestMatchedFunc, Func, funcByArgs, funcs } from './funcs/funcs';
+import { findBestMatchedFunc, Func, funcByArgs } from './funcs/funcs';
 import { evalError, roundInteger, typeToString, valToInternal, valToPreview, valToString } from './utils';
 import { BOOLEAN, DATETIME, INTEGER, NUMBER, STRING } from './const';
 import { register } from './funcs';
@@ -384,7 +384,7 @@ function evalCallExpression(vars: VariablesMap, expr: CallExpression): EvalValue
     }
 
     try {
-        return func.cb(...args);
+        return func.cb(vars, ...args);
     } catch (err: any) {
         const prefix = `${funcName}(${argsToStr(args)})`;
         evalError(prefix, err.message);

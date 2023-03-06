@@ -1,0 +1,468 @@
+{
+  "cases": [
+    {
+      "name": "getIntegerValue(correctIntVar, fallback) => intVal",
+      "expression": "@{getIntegerValue('abc', 456)}",
+      "expected": {
+        "type": "integer",
+        "value": 123
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntegerValue(incorrectIntVar, fallback) => intVal",
+      "expression": "@{getIntegerValue('abc', 456)}",
+      "expected": {
+        "type": "integer",
+        "value": 456
+      },
+      "variables": [
+        {
+          "type": "number",
+          "name": "abc",
+          "value": 123.0
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getIntegerValue(nonexistentIntVar, fallback) => intVal",
+      "expression": "@{getIntegerValue('abc', 456)}",
+      "expected": {
+        "type": "integer",
+        "value": 456
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getNumberValue(correctNumberVar, fallback) => numberVal",
+      "expression": "@{getNumberValue('abc', 456.0)}",
+      "expected": {
+        "type": "number",
+        "value": 123.0
+      },
+      "variables": [
+        {
+          "type": "number",
+          "name": "abc",
+          "value": 123.0
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getNumberValue(incorrectNumberVar, fallback) => numberVal",
+      "expression": "@{getNumberValue('abc', 456.0)}",
+      "expected": {
+        "type": "number",
+        "value": 456.0
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getNumberValue(nonexistentNumberVar, fallback) => numberVal",
+      "expression": "@{getNumberValue('abc', 456.0)}",
+      "expected": {
+        "type": "number",
+        "value": 456.0
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getBooleanValue(correctBooleanVar, fallback) => booleanVal",
+      "expression": "@{getBooleanValue('abc', false)}",
+      "expected": {
+        "type": "boolean",
+        "value": true
+      },
+      "variables": [
+        {
+          "type": "boolean",
+          "name": "abc",
+          "value": true
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getBooleanValue(incorrectBooleanVar, fallback) => booleanVal",
+      "expression": "@{getBooleanValue('abc', false)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getBooleanValue(nonexistentBooleanVar, fallback) => booleanVal",
+      "expression": "@{getBooleanValue('abc', false)}",
+      "expected": {
+        "type": "boolean",
+        "value": false
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getStringValue(correctStringVar, fallback) => stringVal",
+      "expression": "@{getStringValue('abc', 'b')}",
+      "expected": {
+        "type": "string",
+        "value": "a"
+      },
+      "variables": [
+        {
+          "type": "string",
+          "name": "abc",
+          "value": "a"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getStringValue(incorrectStringVar, fallback) => stringVal",
+      "expression": "@{getStringValue('abc', 'b')}",
+      "expected": {
+        "type": "string",
+        "value": "b"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getStringValue(nonexistentStringVar, fallback) => stringVal",
+      "expression": "@{getStringValue('abc', 'b')}",
+      "expected": {
+        "type": "string",
+        "value": "b"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(correctColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "abc",
+          "value": "#FF000000"
+        },
+        {
+          "type": "color",
+          "name": "fallback",
+          "value": "#FFFFFFFF"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(incorrectColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        },
+        {
+          "type": "color",
+          "name": "fallback",
+          "value": "#FFFFFFFF"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', fallback)}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "fallback",
+          "value": "#FFFFFFFF"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(correctColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "abc",
+          "value": "#FF000000"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(incorrectColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(correctColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', '#fff')}",
+      "expected": {
+        "type": "color",
+        "value": "#FF000000"
+      },
+      "variables": [
+        {
+          "type": "color",
+          "name": "abc",
+          "value": "#000"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(incorrectColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', '#fff')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal",
+      "expression": "@{getColorValue('abc', '#fff')}",
+      "expected": {
+        "type": "color",
+        "value": "#FFFFFFFF"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getUrlValue(correctUrlVar, fallback) => urlVal",
+      "expression": "@{getUrlValue('abc', fallback)}",
+      "expected": {
+        "type": "url",
+        "value": "https://var"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "name": "abc",
+          "value": "https://var"
+        },
+        {
+          "type": "url",
+          "name": "fallback",
+          "value": "https://fallback"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getUrlValue(incorrectUrlVar, fallback) => urlVal",
+      "expression": "@{getUrlValue('abc', fallback)}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        },
+        {
+          "type": "url",
+          "name": "fallback",
+          "value": "https://fallback"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getUrlValue(nonexistentUrlVar, fallback) => urlVal",
+      "expression": "@{getUrlValue('abc', fallback)}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "name": "fallback",
+          "value": "https://fallback"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getUrlValue(correctUrlVar, fallback) => urlVal",
+      "expression": "@{getUrlValue('abc', 'https://fallback')}",
+      "expected": {
+        "type": "url",
+        "value": "https://var"
+      },
+      "variables": [
+        {
+          "type": "url",
+          "name": "abc",
+          "value": "https://var"
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getUrlValue(incorrectUrlVar, fallback) => urlVal",
+      "expression": "@{getUrlValue('abc', 'https://fallback')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [
+        {
+          "type": "integer",
+          "name": "abc",
+          "value": 123
+        }
+      ],
+      "platforms": [
+        "web"
+      ]
+    },
+    {
+      "name": "getUrlValue(nonexistentUrlVar, fallback) => urlVal",
+      "expression": "@{getUrlValue('abc', 'https://fallback')}",
+      "expected": {
+        "type": "url",
+        "value": "https://fallback"
+      },
+      "variables": [],
+      "platforms": [
+        "web"
+      ]
+    }
+  ]
+}

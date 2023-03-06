@@ -1,9 +1,14 @@
 import type { BooleanValue, ColorValue, EvalValue, IntegerValue, NumberValue, StringValue, UrlValue } from '../eval';
+import type { VariablesMap } from '../eval';
+import type { VariableType, VariableValue } from '../variable';
 import { registerFunc } from './funcs';
 import { BOOLEAN, COLOR, INTEGER, MAX_INT, MIN_INT, NUMBER, STRING, URL } from '../const';
-import { valToString } from '../utils';
+import { transformColorValue, valToString } from '../utils';
 
-function toString(arg: IntegerValue | NumberValue | BooleanValue | ColorValue | UrlValue): EvalValue {
+function toString(
+    _vars: VariablesMap,
+    arg: IntegerValue | NumberValue | BooleanValue | ColorValue | UrlValue
+): EvalValue {
     return {
         type: STRING,
         value: valToString(arg)
@@ -11,7 +16,7 @@ function toString(arg: IntegerValue | NumberValue | BooleanValue | ColorValue | 
 }
 
 
-function toNumber(arg: IntegerValue | StringValue): EvalValue {
+function toNumber(_vars: VariablesMap, arg: IntegerValue | StringValue): EvalValue {
     const num = Number(arg.value);
 
     if (isNaN(num) || !Number.isFinite(num)) {
@@ -25,7 +30,7 @@ function toNumber(arg: IntegerValue | StringValue): EvalValue {
 }
 
 
-function toIntegerNumber(arg: NumberValue): EvalValue {
+function toIntegerNumber(_vars: VariablesMap, arg: NumberValue): EvalValue {
     if (arg.value > MAX_INT || arg.value < MIN_INT) {
         throw new Error('Unable to convert value to Integer.');
     }
@@ -38,7 +43,7 @@ function toIntegerNumber(arg: NumberValue): EvalValue {
     };
 }
 
-function toIntegerString(arg: StringValue): EvalValue {
+function toIntegerString(_vars: VariablesMap, arg: StringValue): EvalValue {
     const num = Number(arg.value);
 
     if (isNaN(num) || num % 1 !== 0 || num > MAX_INT || num < MIN_INT) {
@@ -51,7 +56,7 @@ function toIntegerString(arg: StringValue): EvalValue {
     };
 }
 
-function toIntegerBoolean(arg: BooleanValue): EvalValue {
+function toIntegerBoolean(_vars: VariablesMap, arg: BooleanValue): EvalValue {
     return {
         type: INTEGER,
         value: arg.value ? 1 : 0
@@ -59,7 +64,7 @@ function toIntegerBoolean(arg: BooleanValue): EvalValue {
 }
 
 
-function toBooleanInteger(arg: IntegerValue): EvalValue {
+function toBooleanInteger(_vars: VariablesMap, arg: IntegerValue): EvalValue {
     if (arg.value !== 1 && arg.value !== 0) {
         throw new Error('Unable to convert value to Boolean.');
     }
@@ -70,7 +75,7 @@ function toBooleanInteger(arg: IntegerValue): EvalValue {
     };
 }
 
-function toBooleanString(arg: StringValue): EvalValue {
+function toBooleanString(_vars: VariablesMap, arg: StringValue): EvalValue {
     if (arg.value !== 'true' && arg.value !== 'false') {
         throw new Error('Unable to convert value to Boolean.');
     }
@@ -81,7 +86,7 @@ function toBooleanString(arg: StringValue): EvalValue {
     };
 }
 
-function encodeUri(str: StringValue): EvalValue {
+function encodeUri(_vars: VariablesMap, str: StringValue): EvalValue {
     try {
         return {
             type: STRING,
@@ -92,7 +97,7 @@ function encodeUri(str: StringValue): EvalValue {
     }
 }
 
-function decodeUri(str: StringValue): EvalValue {
+function decodeUri(_vars: VariablesMap, str: StringValue): EvalValue {
     try {
         return {
             type: STRING,
@@ -101,6 +106,56 @@ function decodeUri(str: StringValue): EvalValue {
     } catch (_err) {
         throw new Error('Unable to decodeUri string.');
     }
+}
+
+function getValueForced(
+    vars: VariablesMap,
+    varName: StringValue,
+    fallback: IntegerValue | NumberValue | StringValue | BooleanValue | UrlValue | ColorValue,
+    type: VariableType
+): EvalValue {
+    const variable = vars.get(varName.value);
+    let value: VariableValue;
+
+    if (variable && variable.getType() === type) {
+        value = variable.getValue();
+    } else {
+        value = fallback.value;
+    }
+
+    if (type === 'color') {
+        value = transformColorValue(value as string);
+    }
+
+    return {
+        type,
+        // value is synced with type by params
+        value: value as any
+    };
+}
+
+function getValue(
+    vars: VariablesMap,
+    varName: StringValue,
+    fallback: IntegerValue | NumberValue | StringValue | BooleanValue | UrlValue | ColorValue
+): EvalValue {
+    return getValueForced(vars, varName, fallback, fallback.type);
+}
+
+function getColorValue(
+    vars: VariablesMap,
+    varName: StringValue,
+    fallback: IntegerValue | NumberValue | StringValue | BooleanValue | UrlValue | ColorValue
+) {
+    return getValueForced(vars, varName, fallback, 'color');
+}
+
+function getUrlValue(
+    vars: VariablesMap,
+    varName: StringValue,
+    fallback: IntegerValue | NumberValue | StringValue | BooleanValue | UrlValue | ColorValue
+) {
+    return getValueForced(vars, varName, fallback, 'url');
 }
 
 export function registerStd(): void {
@@ -122,4 +177,13 @@ export function registerStd(): void {
 
     registerFunc('encodeUri', [STRING], encodeUri);
     registerFunc('decodeUri', [STRING], decodeUri);
+
+    registerFunc('getIntegerValue', [STRING, INTEGER], getValue);
+    registerFunc('getNumberValue', [STRING, NUMBER], getValue);
+    registerFunc('getBooleanValue', [STRING, BOOLEAN], getValue);
+    registerFunc('getStringValue', [STRING, STRING], getValue);
+    registerFunc('getColorValue', [STRING, COLOR], getColorValue);
+    registerFunc('getColorValue', [STRING, STRING], getColorValue);
+    registerFunc('getUrlValue', [STRING, URL], getUrlValue);
+    registerFunc('getUrlValue', [STRING, STRING], getUrlValue);
 }
