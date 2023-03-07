@@ -1,7 +1,8 @@
 package com.yandex.div.core.expression
 
+import com.yandex.div.core.Disposable
+import com.yandex.div.core.ObserverList
 import com.yandex.div.core.expression.variables.VariableController
-import com.yandex.div.core.expression.variables.subscribeToVariable
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
@@ -28,6 +29,23 @@ internal class ExpressionResolverImpl(
         variableController.getMutableVariable(variableName)?.getValue()
     }
 
+    private val evaluationsCache = mutableMapOf<String, Any>()
+    private val varToExpressions = mutableMapOf<String, MutableSet<String>>()
+
+
+    private val expressionObservers = mutableMapOf<String, ObserverList<() -> Unit>>()
+
+    init {
+        variableController.setOnAnyVariableChangeCallback { v ->
+            varToExpressions[v.name]?.forEach { expr ->
+                evaluationsCache.remove(expr)
+                expressionObservers[expr]?.forEach {
+                    it.invoke()
+                }
+            }
+        }
+    }
+
     override fun <R, T : Any> get(
         expressionKey: String,
         rawExpression: String,
@@ -38,6 +56,9 @@ internal class ExpressionResolverImpl(
         logger: ParsingErrorLogger
     ): T {
         return try {
+            tryFindInCache<T>(rawExpression)?.let {
+                return it
+            }
             tryResolve(expressionKey, rawExpression, evaluable, converter, validator, fieldType)
         } catch (e: ParsingException) {
             if (e.reason == ParsingExceptionReason.MISSING_VARIABLE) {
@@ -46,6 +67,12 @@ internal class ExpressionResolverImpl(
             logger.logError(e)
             errorCollector.logError(e)
             tryResolve(expressionKey, rawExpression, evaluable, converter, validator, fieldType)
+        }
+    }
+
+    private fun <T : Any> tryFindInCache(rawExpression: String): T? {
+        return evaluationsCache[rawExpression]?.let {
+            it as T
         }
     }
 
@@ -76,6 +103,14 @@ internal class ExpressionResolverImpl(
         }
 
         safeValidate(expressionKey, rawExpression, validator, convertedValue)
+
+        if (evaluable.checkIsCacheable()) {
+            evaluable.variables.forEach { varName ->
+                val expressions = varToExpressions.getOrPut(varName) { mutableSetOf() }
+                expressions.add(rawExpression)
+            }
+            evaluationsCache[rawExpression] = convertedValue
+        }
         return convertedValue
     }
 
@@ -158,17 +193,21 @@ internal class ExpressionResolverImpl(
         }
     }
 
-
-    override fun <T> onChange(variableName: String, callback: (T?) -> Unit) =
-        subscribeToVariable<T>(
-            variableName,
-            errorCollector,
-            variableController,
-            invokeChangeOnSubscription = false,
-            callback
-        )
-
     override fun notifyResolveFailed(e: ParsingException) {
         errorCollector.logError(e)
+    }
+
+    override fun subscribeToExpression(
+        rawExpression: String,
+        variableNames: List<String>,
+        callback: () -> Unit
+    ): Disposable {
+        variableNames.forEach {
+            val expressions = varToExpressions.getOrPut(it) { mutableSetOf() }
+            expressions.add(rawExpression)
+        }
+        val observers = expressionObservers.getOrPut(rawExpression) { ObserverList() }
+        observers.addObserver(callback)
+        return Disposable { expressionObservers[rawExpression]?.removeObserver(callback) }
     }
 }

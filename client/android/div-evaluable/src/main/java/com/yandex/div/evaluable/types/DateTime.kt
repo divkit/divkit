@@ -9,7 +9,7 @@ import java.util.SimpleTimeZone
 
 private const val TO_MILLIS = 60 * 1000
 
-internal class DateTime(
+class DateTime(
     internal val timestampMillis: Long,
     internal val timezoneMinutes: Int,
 ) : Comparable<DateTime> {

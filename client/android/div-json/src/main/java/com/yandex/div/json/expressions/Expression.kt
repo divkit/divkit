@@ -121,14 +121,12 @@ abstract class Expression<T : Any> {
                 logError(resolveFailed(expressionKey, rawExpression, e), resolver)
                 return Disposable.NULL
             }
-            return variablesName
-                .ifEmpty { return Disposable.NULL }
-                .fold(CompositeDisposable()) { subscription, variable ->
-                    subscription += resolver.onChange<T>(variable) {
-                        callback(evaluate(resolver))
-                    }
-                    subscription
-                }
+            if (variablesName.isEmpty())
+                return Disposable.NULL
+
+            return resolver.subscribeToExpression(rawExpression, variablesName) {
+                callback(evaluate(resolver))
+            }
         }
 
         private fun tryResolveOrUseLast(resolver: ExpressionResolver): T {
