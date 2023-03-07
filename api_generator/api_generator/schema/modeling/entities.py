@@ -963,6 +963,8 @@ class DivanGeneratorProperties(GeneratorProperties):
 
         self.alias_factory = specific_properties.get("alias_factory", None)
 
+        self.required_properties = specific_properties.get("required_properties_at_factory", False)
+
     def __resolve_forced_properties_order(self, location: ElementLocation, properties_list: List[Property]):
         found_properties: Set[str] = set()
         for property in properties_list:

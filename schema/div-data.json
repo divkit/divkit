@@ -15,7 +15,12 @@
       "generate_swift_optional_arguments": false,
       "codegen": {
         "divan": {
-          "alias_factory": "root"
+          "alias_factory": "root",
+          "required_properties_at_factory": true,
+          "forced_properties_order": [
+            "state_id",
+            "div"
+          ]
         }
       },
       "properties": {

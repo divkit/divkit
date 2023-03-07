@@ -266,7 +266,9 @@ class DivanEntity(Entity):
                 if property.name not in forced_property_order or force_named_arguments:
                     signature_declaration += GUARD_INSTANCE_PARAM
                     is_named_guard_added = True
-            required = False  # not force_default_nulls and not property.optional
+            required = False
+            if self.generator_properties is not None and self.generator_properties.required_properties:
+                required = not force_default_nulls and not property.optional
             default = 'null'
             property_type = cast(DivanPropertyType, property.property_type)
             type_name_declaration = property_type.declaration(prefixed=True, remove_prefix=self.remove_prefix)
@@ -515,10 +517,17 @@ class DivanEntity(Entity):
     def apply_property_reorder(self):
         if self.generator_properties is None:
             return
+
         forced_order = self.generator_properties.forced_properties_order
+
+        def comparator(property: Property) -> int:
+            if property.name not in forced_order:
+                return -1
+            return len(forced_order) - forced_order.index(property.name)
+
         self._properties = sorted(
             self._properties,
-            key=lambda property: property.name in forced_order,
+            key=comparator,
             reverse=True
         )
 

@@ -88,26 +88,26 @@ class Data internal constructor(
 
         operator fun plus(additive: Properties): State = State(
             Properties(
-                div = additive.div ?: properties.div,
                 stateId = additive.stateId ?: properties.stateId,
+                div = additive.div ?: properties.div,
             )
         )
 
         class Properties internal constructor(
             /**
-             * Contents.
-             */
-            val div: Property<Div>?,
-            /**
              * State ID.
              */
             val stateId: Property<Int>?,
+            /**
+             * Contents.
+             */
+            val div: Property<Div>?,
         ) {
             internal fun mergeWith(properties: Map<String, Any>): Map<String, Any> {
                 val result = mutableMapOf<String, Any>()
                 result.putAll(properties)
-                result.tryPutProperty("div", div)
                 result.tryPutProperty("state_id", stateId)
+                result.tryPutProperty("div", div)
                 return result
             }
         }
@@ -273,78 +273,77 @@ fun Data.evaluate(
 fun Data.asList() = listOf(this)
 
 /**
- * @param div Contents.
  * @param stateId State ID.
+ * @param div Contents.
  */
 @Generated
 fun DivScope.root(
-    `use named arguments`: Guard = Guard.instance,
-    div: Div? = null,
-    stateId: Int? = null,
+    stateId: Int,
+    div: Div,
 ): Data.State = Data.State(
     Data.State.Properties(
-        div = valueOrNull(div),
         stateId = valueOrNull(stateId),
+        div = valueOrNull(div),
     )
 )
 
 /**
- * @param div Contents.
  * @param stateId State ID.
+ * @param div Contents.
  */
 @Generated
 fun DivScope.rootProps(
     `use named arguments`: Guard = Guard.instance,
-    div: Div? = null,
     stateId: Int? = null,
+    div: Div? = null,
 ) = Data.State.Properties(
-    div = valueOrNull(div),
     stateId = valueOrNull(stateId),
+    div = valueOrNull(div),
 )
 
 /**
- * @param div Contents.
  * @param stateId State ID.
+ * @param div Contents.
  */
 @Generated
 fun TemplateScope.rootRefs(
     `use named arguments`: Guard = Guard.instance,
-    div: ReferenceProperty<Div>? = null,
     stateId: ReferenceProperty<Int>? = null,
+    div: ReferenceProperty<Div>? = null,
 ) = Data.State.Properties(
-    div = div,
     stateId = stateId,
+    div = div,
 )
 
 /**
- * @param div Contents.
  * @param stateId State ID.
+ * @param div Contents.
  */
 @Generated
 fun Data.State.override(
     `use named arguments`: Guard = Guard.instance,
-    div: Div? = null,
     stateId: Int? = null,
+    div: Div? = null,
 ): Data.State = Data.State(
     Data.State.Properties(
-        div = valueOrNull(div) ?: properties.div,
         stateId = valueOrNull(stateId) ?: properties.stateId,
+        div = valueOrNull(div) ?: properties.div,
     )
 )
 
 /**
- * @param div Contents.
  * @param stateId State ID.
+ * @param div Contents.
  */
 @Generated
 fun Data.State.defer(
     `use named arguments`: Guard = Guard.instance,
-    div: ReferenceProperty<Div>? = null,
     stateId: ReferenceProperty<Int>? = null,
+    div: ReferenceProperty<Div>? = null,
 ): Data.State = Data.State(
     Data.State.Properties(
-        div = div ?: properties.div,
         stateId = stateId ?: properties.stateId,
+        div = div ?: properties.div,
     )
 )
 
