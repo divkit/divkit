@@ -43,8 +43,8 @@ final class DivBlockProvider {
 
   @ObservableProperty
   private(set) var block: Block = noDataBlock
-  @ObservableProperty
-  private(set) var errors: UIStatePayloadFactory.Errors? = nil
+  @Property
+  private(set) var errors: [UIStatePayload.Error] = []
 
   init(
     json: Signal<JsonProvider>,
@@ -69,6 +69,7 @@ final class DivBlockProvider {
 
   func update(reasons: [DivActionURLHandler.UpdateReason]) {
     guard var divData = divData else {
+      block = makeErrorsBlock(errors.map { $0.description })
       return
     }
 
@@ -79,13 +80,13 @@ final class DivBlockProvider {
     }
     self.divData = divData
 
+    let context = divKitComponents.makeContext(
+      cardId: cardId,
+      cachedImageHolders: block.getImageHolders(),
+      debugParams: AppComponents.debugParams,
+      parentScrollView: parentScrollView
+    )
     do {
-      let context = divKitComponents.makeContext(
-        cardId: cardId,
-        cachedImageHolders: block.getImageHolders(),
-        debugParams: AppComponents.debugParams,
-        parentScrollView: parentScrollView
-      )
       divRenderTime.start()
       let newBlock = try divData.makeBlock(
         context: context
@@ -97,10 +98,12 @@ final class DivBlockProvider {
           templateParsing: divTemplateParsingTime.time,
           render: divRenderTime.time
         )
-        .addingErrorsInfo(context.errorsStorage.errors.map { $0.description })
+        .addingErrorsInfo(errors.map { $0.description } +
+                          context.errorsStorage.errors.map { $0.description })
     } catch {
-      block = makeErrorBlock("\(error)")
-      errors = [(message: error.localizedDescription, stack: nil)]
+      errors = [UIStatePayload.Error(error)] + errors
+      block = makeErrorsBlock(errors.map { $0.description } +
+                              context.errorsStorage.errors.map { $0.description })
       DemoAppLogger.error("Failed to build block: \(error)")
     }
   }
@@ -109,8 +112,9 @@ final class DivBlockProvider {
     do {
       block = try block.updated(withStates: blockStates)
     } catch {
-      block = makeErrorBlock("\(error)")
-      errors = [(message: error.localizedDescription, stack: nil)]
+      errors = [UIStatePayload.Error(error)] + errors
+      block = makeErrorsBlock(errors.map { $0.description })
+
       DemoAppLogger.error("Failed to update block: \(error)")
     }
   }
@@ -139,12 +143,13 @@ final class DivBlockProvider {
       errors = result.errorsOrWarnings.map {
         $0.map {
           let traceback = $0.traceback
-          return (message: traceback.last!, stack: traceback)
+          return UIStatePayload.Error(message: traceback.message, stack: traceback.path)
         }
-      }
+      } ?? []
     } catch {
-      block = makeErrorBlock("\(error)")
-      errors = [(message: error.localizedDescription, stack: nil)]
+      errors = [UIStatePayload.Error(error)]
+      block = makeErrorsBlock(errors.map { "\($0.description)" })
+
       DemoAppLogger.error("Failed to parse DivData: \(error)")
       return
     }
@@ -180,6 +185,29 @@ private func makeErrorBlock(_ text: String) -> Block {
     widthTrait: .resizable,
     text: text.with(typo: Typo(size: 18, weight: .regular))
   ).addingEdgeGaps(20)
+}
+
+private func makeErrorsBlock(_ errors: [String]) -> Block {
+  guard !errors.isEmpty else {
+    return noDataBlock
+  }
+
+  let separator = SeparatorBlock(color: .gray, direction: .horizontal)
+  let errorsHeader = TextBlock(
+    widthTrait: .resizable,
+    text: "Errors: \(errors.count)".with(typo: Typo(size: 18, weight: .bold))
+  ).addingEdgeGaps(10)
+
+  let errorBlocks = errors.map {
+    TextBlock(
+      widthTrait: .resizable,
+      text: $0.with(typo: Typo(size: 14, weight: .regular))
+    ).addingEdgeGaps(10)
+  }
+  return try! ContainerBlock(
+    layoutDirection: .vertical,
+    children: [separator, errorsHeader] + errorBlocks
+  )
 }
 
 extension Block {
@@ -223,18 +251,11 @@ extension Block {
     guard !errorList.isEmpty else {
       return self
     }
-
-    let text = "Errors (\(errorList.count)):\n\n" + errorList.joined(separator: "\n")
-    let textBlock = TextBlock(
-      widthTrait: .resizable,
-      text: text.with(typo: Typo(size: 18, weight: .regular))
-    )
-    .addingEdgeGaps(20)
-    .with(background: .solidColor(.red))
+   let errorsBlock = makeErrorsBlock(errorList)
 
     let block = try? ContainerBlock(
       layoutDirection: .vertical,
-      children: [self, textBlock]
+      children: [self, errorsBlock]
     )
 
     return block ?? self
@@ -248,15 +269,23 @@ extension TimeMeasure.Time {
 }
 
 extension DeserializationError {
-  fileprivate var traceback: [String] {
-    var result: [String] = []
+  fileprivate var traceback: (message: String, path: [String]) {
     switch self {
     case let .nestedObjectError(fieldName, error):
-      result.append("Error in nested object in field '\(fieldName)'")
-      result.append(contentsOf: error.traceback)
+      let nestedTraceback = error.traceback
+      return (nestedTraceback.message, [fieldName] + nestedTraceback.path)
     default:
-      result.append(description)
+      return (description, [])
     }
-    return result
+  }
+}
+
+extension UIStatePayload.Error {
+  var description: String {
+    return "\(message)\nPath: \(stack?.joined(separator: "/") ?? "nil")"
+  }
+  init(_ error: Error) {
+    message = (error as CustomStringConvertible).description
+    stack = nil
   }
 }

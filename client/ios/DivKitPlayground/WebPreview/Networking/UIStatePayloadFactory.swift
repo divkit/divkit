@@ -10,16 +10,14 @@ struct ScreenshotInfo {
 }
 
 final class UIStatePayloadFactory {
-  typealias Errors = [(message: String, stack: [String]?)]
-
   private let deviceInfo: DeviceInfo
   private let clientId = UUID().uuidString
-  @ObservableVariable
-  private var errors: Errors?
+  @Variable
+  private var errors: [UIStatePayload.Error]
 
   init(
     deviceInfo: DeviceInfo,
-    errors: ObservableVariable<Errors?>
+    errors: Variable<[UIStatePayload.Error]>
   ) {
     self.deviceInfo = deviceInfo
     _errors = errors
@@ -44,12 +42,7 @@ final class UIStatePayloadFactory {
         height: screenshotInfo.height
       ),
       screenshot: screenshotInfo.data,
-      errors: (errors ?? []).map {
-        UIStatePayload.Error(
-          message: $0.message,
-          stack: $0.stack
-        )
-      },
+      errors: errors,
       renderingTime: renderingTime
     )
   }
