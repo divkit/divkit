@@ -77,14 +77,15 @@ extension Array where Element: TemplateValue {
       if let resultValue = itemResult.value {
         result.append(resultValue)
       }
-      errors.append(contentsOf: itemResult.errorsOrWarnings?.asArray() ?? [])
+      errors.append(contentsOf: (itemResult.errorsOrWarnings?.asArray() ?? [])
+        .map { .nestedObjectError(field: "\(index)", error: $0) })
     }
     if result.count != count,
        validator?.isPartialDeserializationAllowed == false {
-      return .failure(NonEmptyArray(.invalidValue(result: result, value: self)))
+      return .failure(NonEmptyArray(.invalidValue(result: result, value: self), errors))
     }
     guard validator?.isValid(result) != false else {
-      return .failure(NonEmptyArray(.invalidValue(result: result, value: self)))
+      return .failure(NonEmptyArray(.invalidValue(result: result, value: self), errors))
     }
     return errors.isEmpty
       ? .success(result)

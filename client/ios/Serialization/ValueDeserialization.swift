@@ -128,7 +128,8 @@ public func deserialize<T: ValidSerializationValue, U>(
     if let resultValue = transformResult.value {
       result.append(resultValue)
     }
-    errors.append(contentsOf: transformResult.errorsOrWarnings?.asArray() ?? [])
+    errors.append(contentsOf: (transformResult.errorsOrWarnings?.asArray() ?? [])
+      .map { .nestedObjectError(field: "\(index)", error: $0)})
   }
 
   if result.count != resultBeforeTransform.count,

@@ -109,33 +109,39 @@ private let missingRequiredFieldErrors: [DeserializationError] = [
 private let invalidFieldErrors: [DeserializationError] = [
   .nestedObjectError(
     field: statesKey,
-    error: DeserializationError.nestedObjectError(
-      field: divKey,
-      error: DeserializationError.invalidValue(
-        result: nil,
-        value: [
-          "type": "container",
-          "items": [],
-        ]
-      )
-    )
-  ),
-  .nestedObjectError(
-    field: statesKey,
-    error: DeserializationError.nestedObjectError(
-      field: divKey,
-      error: DeserializationError.nestedObjectError(
-        field: itemsKey,
-        error: DeserializationError.invalidValue(
-          result: [],
-          value: []
+    error: .nestedObjectError(
+      field: "0",
+      error: .nestedObjectError(
+        field: divKey,
+        error: .invalidValue(
+          result: nil,
+          value: [
+            "type": "container",
+            "items": [],
+          ]
         )
       )
     )
   ),
   .nestedObjectError(
     field: statesKey,
-    error: DeserializationError.invalidValue(
+    error: .nestedObjectError(
+      field: "0",
+      error: .nestedObjectError(
+        field: divKey,
+        error: .nestedObjectError(
+          field: itemsKey,
+          error: .invalidValue(
+            result: [],
+            value: []
+          )
+        )
+      )
+    )
+  ),
+  .nestedObjectError(
+    field: statesKey,
+    error: .invalidValue(
       result: [],
       value: [
         "state_id": 0,
@@ -151,7 +157,7 @@ private let invalidFieldErrors: [DeserializationError] = [
 private let typeMismatchErrors: [DeserializationError] = [
   .nestedObjectError(
     field: logIdKey,
-    error: DeserializationError.typeMismatch(
+    error: .typeMismatch(
       expected: "String",
       representation: 0
     )
@@ -161,26 +167,32 @@ private let typeMismatchErrors: [DeserializationError] = [
 private let missingTypeErrors: [DeserializationError] = [
   .nestedObjectError(
     field: statesKey,
-    error: DeserializationError.nestedObjectError(
-      field: divKey,
-      error: DeserializationError.invalidValue(
-        result: nil,
-        value: [
-          "type": "unknown_type",
-        ]
+    error: .nestedObjectError(
+      field: "0",
+      error: .nestedObjectError(
+        field: divKey,
+        error: .invalidValue(
+          result: nil,
+          value: [
+            "type": "unknown_type",
+          ]
+        )
       )
     )
   ),
   .nestedObjectError(
     field: statesKey,
-    error: DeserializationError.nestedObjectError(
-      field: divKey,
-      error: DeserializationError.requiredFieldIsMissing(field: typeKey)
+    error: .nestedObjectError(
+      field: "0",
+      error: .nestedObjectError(
+        field: divKey,
+        error: .requiredFieldIsMissing(field: typeKey)
+      )
     )
   ),
   .nestedObjectError(
     field: statesKey,
-    error: DeserializationError.invalidValue(
+    error: .invalidValue(
       result: [],
       value: [
         "state_id": 0,
