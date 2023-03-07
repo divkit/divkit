@@ -3,6 +3,8 @@ import { correctEdgeInsertsObject } from '../../src/utils/correctEdgeInsertsObje
 describe('correctEdgeInsertsObject', () => {
     test('simple', () => {
         expect(correctEdgeInsertsObject(undefined, null)).toBe(null);
+        // @ts-expect-error wrong data
+        expect(correctEdgeInsertsObject(123, null)).toBe(null);
         expect(correctEdgeInsertsObject({
             top: 1
         }, {

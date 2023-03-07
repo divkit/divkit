@@ -19,7 +19,7 @@
     import { genClassName } from '../../utils/genClassName';
     import { makeStyle } from '../../utils/makeStyle';
     import { ARROW_LEFT, ARROW_RIGHT, END, HOME } from '../../utils/keyboard/codes';
-    import { pxToEm } from '../../utils/pxToEm';
+    import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
     import { isPositiveNumber } from '../../utils/isPositiveNumber';
     import { correctPositiveNumber } from '../../utils/correctPositiveNumber';
     import { correctEdgeInserts } from '../../utils/correctEdgeInserts';
@@ -29,6 +29,9 @@
     import { isNonNegativeNumber } from '../../utils/isNonNegativeNumber';
     import { assignIfDifferent } from '../../utils/assignIfDifferent';
     import { Coords, getTouchCoords } from '../../utils/getTouchCoords';
+    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
+    import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
+    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
 
     export let json: Partial<DivTabsData> = {};
     export let templateContext: TemplateContext;
@@ -179,6 +182,11 @@
         tabInactiveBackground = correctColor(tabStyle.inactive_background_color, 1, tabInactiveBackground);
     }
 
+    let tabItemSpacing = 0;
+    $: {
+        tabItemSpacing = correctNonNegativeNumber(tabStyle.item_spacing, tabItemSpacing);
+    }
+
     $: jsonSeparator = rootCtx.getDerivedFromVars(json.has_separator);
     $: jsonSeparatorColor = rootCtx.getDerivedFromVars(json.separator_color);
     $: jsonSeparatorPaddings = rootCtx.getDerivedFromVars(json.separator_paddings);
@@ -205,6 +213,12 @@
         Boolean($jsonSwipeEnabled);
 
     $: jsonRestrictParentScroll = rootCtx.getDerivedFromVars(json.restrict_parent_scroll);
+
+    $: jsonTitlePaddings = rootCtx.getDerivedFromVars(json.title_paddings);
+    let titlePadding: EdgeInsets | null = null;
+    $: {
+        titlePadding = correctEdgeInsertsObject($jsonTitlePaddings ? $jsonTitlePaddings : undefined, titlePadding);
+    }
 
     let isSwipeInitialized = false;
     let isAnimated = false;
@@ -502,6 +516,7 @@
             bind:this={tabsElem}
             class="{css.tabs__list} {$jsonRestrictParentScroll ? rootCss['root_restrict-scroll'] : ''}"
             role="tablist"
+            style:--divkit-tabs-title-padding={titlePadding ? edgeInsertsToCss(titlePadding) : ''}
             style:--divkit-tabs-font-size={pxToEm(tabFontSize)}
             style:--divkit-tabs-paddings={tabPaddings}
             style:--divkit-tabs-line-height={tabLineHeight}
@@ -513,6 +528,7 @@
             style:--divkit-tabs-active-background-color={tabActiveBackground}
             style:--divkit-tabs-inactive-background-color={tabInactiveBackground}
             style:--divkit-tabs-border-radius={tabBorderRadius}
+            style:--divkit-tabs-items-spacing={tabItemSpacing ? pxToEmWithUnits(tabItemSpacing) : ''}
             on:keydown={onTabKeydown}
         >
             {#each items as item, index}

@@ -9,6 +9,7 @@ export interface TabsTitleStyle {
     font_size?: number;
     // font_size_unit
     paddings?: EdgeInsets;
+    item_spacing?: number;
     line_height?: number;
     letter_spacing?: number;
     font_weight?: FontWeight;

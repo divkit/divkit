@@ -5,7 +5,7 @@ export function correctEdgeInsertsObject(
     edgeInsets: EdgeInsets | undefined,
     defaultVal: EdgeInsets | null
 ): EdgeInsets | null {
-    if (!edgeInsets) {
+    if (!edgeInsets || typeof edgeInsets !== 'object') {
         return defaultVal;
     }
 

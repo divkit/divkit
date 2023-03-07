@@ -3,7 +3,7 @@
 
 .tabs__list {
     display: flex;
-    padding: 0 1.2em .8em;
+    padding: var(--divkit-tabs-title-padding, 0 1.2em .8em);
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
     overflow-x: scroll;
@@ -17,6 +17,7 @@
 .tabs__item {
     display: inline-block;
     flex: 0 0 auto;
+    margin-left: var(--divkit-tabs-items-spacing, 0);
     padding: var(--divkit-tabs-paddings, .5em .6667em);
     font-size: var(--divkit-tabs-font-size, 1.2em);
     line-height: var(--divkit-tabs-line-height, 1.25);
@@ -28,6 +29,10 @@
     color: var(--divkit-tabs-inactive-text-color, rgba(0, 0, 0, .5));
     background: var(--divkit-tabs-inactive-background-color, none);
     text-decoration: none;
+}
+
+.tabs__item:first-child {
+    margin-left: 0;
 }
 
 .tabs__item_selected {
