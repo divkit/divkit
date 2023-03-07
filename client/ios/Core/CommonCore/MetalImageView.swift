@@ -145,8 +145,8 @@ extension MetalImageView: MTKViewDelegate {
     let scaledImage = image
       .transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
       .transformed(by: CGAffineTransform(
-        translationX: layout.origin.x * screenFactorX,
-        y: layout.origin.y * screenFactorY
+        translationX: layout.origin.x.roundedToScreenScale * screenFactorX,
+        y: layout.origin.y.roundedToScreenScale * screenFactorY
       ))
 
     let ciContext: CIContext?
