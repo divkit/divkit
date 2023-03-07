@@ -7,10 +7,10 @@ import { valToString } from '../utils';
 function getMaxDate(date: Date): number {
     const copy = new Date(date);
 
-    copy.setMonth(copy.getMonth() + 1);
-    copy.setDate(0);
+    copy.setUTCMonth(copy.getUTCMonth() + 1);
+    copy.setUTCDate(0);
 
-    return copy.getDate();
+    return copy.getUTCDate();
 }
 
 function parseUnixTime(_vars: VariablesMap, arg: IntegerValue): EvalValue {
@@ -37,7 +37,7 @@ function addMillis(_vars: VariablesMap, datetime: DatetimeValue, milliseconds: I
 function setYear(_vars: VariablesMap, datetime: DatetimeValue, year: IntegerValue): EvalValue {
     const copy = new Date(datetime.value);
 
-    copy.setFullYear(year.value);
+    copy.setUTCFullYear(year.value);
 
     return {
         type: DATETIME,
@@ -52,7 +52,7 @@ function setMonth(_vars: VariablesMap, datetime: DatetimeValue, month: IntegerVa
 
     const copy = new Date(datetime.value);
 
-    copy.setMonth(month.value - 1);
+    copy.setUTCMonth(month.value - 1);
 
     return {
         type: DATETIME,
@@ -67,7 +67,7 @@ function setDay(_vars: VariablesMap, datetime: DatetimeValue, day: IntegerValue)
         throw new Error(`Unable to set day ${day.value} for date ${valToString(datetime)}.`);
     }
 
-    copy.setDate(day.value === -1 ? 0 : day.value);
+    copy.setUTCDate(day.value === -1 ? 0 : day.value);
 
     return {
         type: DATETIME,
@@ -82,7 +82,7 @@ function setHours(_vars: VariablesMap, datetime: DatetimeValue, hours: IntegerVa
 
     const copy = new Date(datetime.value);
 
-    copy.setHours(hours.value - copy.getTimezoneOffset() / 60);
+    copy.setUTCHours(hours.value);
 
     return {
         type: DATETIME,
@@ -97,7 +97,7 @@ function setMinutes(_vars: VariablesMap, datetime: DatetimeValue, minutes: Integ
 
     const copy = new Date(datetime.value);
 
-    copy.setMinutes(minutes.value);
+    copy.setUTCMinutes(minutes.value);
 
     return {
         type: DATETIME,
@@ -112,7 +112,7 @@ function setSeconds(_vars: VariablesMap, datetime: DatetimeValue, seconds: Integ
 
     const copy = new Date(datetime.value);
 
-    copy.setSeconds(seconds.value);
+    copy.setUTCSeconds(seconds.value);
 
     return {
         type: DATETIME,
@@ -127,7 +127,7 @@ function setMillis(_vars: VariablesMap, datetime: DatetimeValue, millis: Integer
 
     const copy = new Date(datetime.value);
 
-    copy.setMilliseconds(millis.value);
+    copy.setUTCMilliseconds(millis.value);
 
     return {
         type: DATETIME,
@@ -135,10 +135,42 @@ function setMillis(_vars: VariablesMap, datetime: DatetimeValue, millis: Integer
     };
 }
 
+const getter = (
+    method: 'getUTCFullYear' | 'getUTCMonth' | 'getUTCDate' | 'getUTCDay' | 'getUTCHours' | 'getUTCMinutes' |
+        'getUTCSeconds' | 'getUTCMilliseconds'
+) => {
+    return (_vars: VariablesMap, datetime: DatetimeValue): EvalValue => {
+        const copy = new Date(datetime.value.getTime());
+
+        let value: number = copy[method]();
+
+        if (method === 'getUTCMonth') {
+            ++value;
+        } else if (method === 'getUTCDay' && value === 0) {
+            value = 7;
+        }
+
+        return {
+            type: INTEGER,
+            value
+        };
+    };
+};
+
+const getYear = getter('getUTCFullYear');
+const getMonth = getter('getUTCMonth');
+const getDay = getter('getUTCDate');
+const getDayOfWeek = getter('getUTCDay');
+const getHours = getter('getUTCHours');
+const getMinutes = getter('getUTCMinutes');
+const getSeconds = getter('getUTCSeconds');
+const getMillis = getter('getUTCMilliseconds');
+
 export function registerDatetime(): void {
     registerFunc('parseUnixTime', [INTEGER], parseUnixTime);
     registerFunc('nowLocal', [], nowLocal);
     registerFunc('addMillis', [DATETIME, INTEGER], addMillis);
+
     registerFunc('setYear', [DATETIME, INTEGER], setYear);
     registerFunc('setMonth', [DATETIME, INTEGER], setMonth);
     registerFunc('setDay', [DATETIME, INTEGER], setDay);
@@ -146,4 +178,13 @@ export function registerDatetime(): void {
     registerFunc('setMinutes', [DATETIME, INTEGER], setMinutes);
     registerFunc('setSeconds', [DATETIME, INTEGER], setSeconds);
     registerFunc('setMillis', [DATETIME, INTEGER], setMillis);
+
+    registerFunc('getYear', [DATETIME], getYear);
+    registerFunc('getMonth', [DATETIME], getMonth);
+    registerFunc('getDay', [DATETIME], getDay);
+    registerFunc('getDayOfWeek', [DATETIME], getDayOfWeek);
+    registerFunc('getHours', [DATETIME], getHours);
+    registerFunc('getMinutes', [DATETIME], getMinutes);
+    registerFunc('getSeconds', [DATETIME], getSeconds);
+    registerFunc('getMillis', [DATETIME], getMillis);
 }

@@ -210,7 +210,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -226,7 +227,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -242,7 +244,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -258,7 +261,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -274,7 +278,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -290,7 +295,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -306,7 +312,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     },
     {
@@ -322,7 +329,8 @@
       "result_type": "integer",
       "platforms": [
         "android",
-        "ios"
+        "ios",
+        "web"
       ]
     }
   ]
