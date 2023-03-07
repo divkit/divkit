@@ -961,6 +961,8 @@ class DivanGeneratorProperties(GeneratorProperties):
 
         self.plus_operator_declaration = specific_properties.get("plus_operator", True)
 
+        self.alias_factory = specific_properties.get("alias_factory", None)
+
     def __resolve_forced_properties_order(self, location: ElementLocation, properties_list: List[Property]):
         found_properties: Set[str] = set()
         for property in properties_list:

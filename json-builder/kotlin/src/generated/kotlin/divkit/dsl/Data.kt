@@ -74,7 +74,7 @@ class Data internal constructor(
     }
 
     /**
-     * Can be created using the method [dataState].
+     * Can be created using the method [root].
      * 
      * Required properties: `state_id, div`.
      */
@@ -277,7 +277,7 @@ fun Data.asList() = listOf(this)
  * @param stateId State ID.
  */
 @Generated
-fun DivScope.dataState(
+fun DivScope.root(
     `use named arguments`: Guard = Guard.instance,
     div: Div? = null,
     stateId: Int? = null,
@@ -293,7 +293,7 @@ fun DivScope.dataState(
  * @param stateId State ID.
  */
 @Generated
-fun DivScope.dataStateProps(
+fun DivScope.rootProps(
     `use named arguments`: Guard = Guard.instance,
     div: Div? = null,
     stateId: Int? = null,
@@ -307,7 +307,7 @@ fun DivScope.dataStateProps(
  * @param stateId State ID.
  */
 @Generated
-fun TemplateScope.dataStateRefs(
+fun TemplateScope.rootRefs(
     `use named arguments`: Guard = Guard.instance,
     div: ReferenceProperty<Div>? = null,
     stateId: ReferenceProperty<Int>? = null,

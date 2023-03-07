@@ -524,6 +524,8 @@ class DivanEntity(Entity):
 
     @property
     def factory_method_name_with_parent(self) -> str:
+        if self.generator_properties is not None and self.generator_properties.alias_factory is not None:
+            return self.generator_properties.alias_factory
         name = utils.capitalize_camel_case(self.name, self.remove_prefix)
         current_parent = self.parent
         while current_parent is not None:

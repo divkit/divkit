@@ -13,6 +13,11 @@
       "type": "object",
       "typescript_templatable": false,
       "generate_swift_optional_arguments": false,
+      "codegen": {
+        "divan": {
+          "alias_factory": "root"
+        }
+      },
       "properties": {
         "state_id": {
           "type": "integer",
