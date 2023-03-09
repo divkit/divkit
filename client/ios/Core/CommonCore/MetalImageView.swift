@@ -139,14 +139,14 @@ extension MetalImageView: MTKViewDelegate {
 
     let screenFactorX = drawableSize.width / view.bounds.width
     let screenFactorY = drawableSize.height / view.bounds.height
-    let scaleX = layout.width / image.extent.width * screenFactorX
-    let scaleY = layout.height / image.extent.height * screenFactorY
+    let scaleX = (layout.width * screenFactorX).rounded(.up) / image.extent.width
+    let scaleY = (layout.height * screenFactorX).rounded(.up) / image.extent.height
 
     let scaledImage = image
       .transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
       .transformed(by: CGAffineTransform(
-        translationX: layout.origin.x * screenFactorX,
-        y: layout.origin.y * screenFactorY
+        translationX: (layout.origin.x * screenFactorX).rounded(.down),
+        y: (layout.origin.y * screenFactorY).rounded(.down)
       ))
 
     let ciContext: CIContext?
