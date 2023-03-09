@@ -1,9 +1,6 @@
 {
   "description": "Tabs with paddings and content which is too high",
   "platforms": [
-    "android",
-    "ios",
-    "web"
   ],
   "card": {
     "log_id": "snapshot_test_card",

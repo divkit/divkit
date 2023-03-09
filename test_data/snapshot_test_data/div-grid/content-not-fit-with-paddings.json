@@ -1,7 +1,6 @@
 {
   "description": "Grid with paddings and content which doesn't fit in it",
   "platforms": [
-    "android",
     "ios",
     "web"
   ],

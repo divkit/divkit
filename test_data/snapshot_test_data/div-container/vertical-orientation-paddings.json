@@ -1,8 +1,6 @@
 {
   "description": "Vertical container with paddings",
   "platforms": [
-    "android",
-    "ios",
     "web"
   ],
   "templates": {

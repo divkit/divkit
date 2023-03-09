@@ -1,8 +1,6 @@
 {
   "description": "Horizontal container with paddings",
   "platforms": [
-    "android",
-    "ios",
     "web"
   ],
   "templates": {

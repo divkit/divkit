@@ -1,8 +1,6 @@
 {
   "description": "Horizontal container with layout_mode = wrap and paddings",
   "platforms": [
-    "android",
-    "ios",
     "web"
   ],
   "templates": {

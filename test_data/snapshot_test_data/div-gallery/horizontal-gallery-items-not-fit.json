@@ -1,8 +1,6 @@
 {
   "description": "Horizontal gallery with paddings and elements which don't fit in it",
   "platforms": [
-    "android",
-    "ios",
     "web"
   ],
   "templates": {

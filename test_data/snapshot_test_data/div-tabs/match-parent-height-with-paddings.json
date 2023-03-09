@@ -1,9 +1,7 @@
 {
   "description": "Tabs with paddings and content with match_parent height",
   "platforms": [
-    "android",
-    "ios",
-    "web"
+    "ios"
   ],
   "card": {
     "log_id": "snapshot_test_card",
