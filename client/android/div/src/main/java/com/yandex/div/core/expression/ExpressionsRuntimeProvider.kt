@@ -1,6 +1,7 @@
 package com.yandex.div.core.expression
 
 import com.yandex.div.DivDataTag
+import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
@@ -27,6 +28,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     private val globalVariableController: GlobalVariableController,
     private val divActionHandler: DivActionHandler,
     private val errorCollectors: ErrorCollectors,
+    private val logger: Div2Logger
 ) {
     private val runtimes = Collections.synchronizedMap(mutableMapOf<Any, ExpressionsRuntime>())
 
@@ -97,6 +99,7 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
                     ?: throw EvaluableException("Unknown variable $name")
             },
             errorCollector,
+            logger
         )
 
         return ExpressionsRuntime(

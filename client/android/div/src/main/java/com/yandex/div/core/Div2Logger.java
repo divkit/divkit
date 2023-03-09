@@ -156,4 +156,11 @@ public interface Div2Logger {
     default void logSwipedAway(Div2View div2View, View view, DivAction action) {
         //do nothing
     }
+
+    /**
+     * Is called when trigger activates.
+     */
+    default void logTrigger(Div2View divView, DivAction action) {
+        //do nothing
+    }
 }

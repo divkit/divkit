@@ -1,11 +1,13 @@
 package com.yandex.div.core.expression.triggers
 
+import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.CompositeDisposable
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.expression.variables.VariableController
+import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.Evaluable
@@ -25,6 +27,7 @@ internal class TriggersController(
     private val divActionHandler: DivActionHandler,
     private val evaluator: Evaluator,
     private val errorCollector: ErrorCollector,
+    private val logger: Div2Logger
 ) {
     private val executors = mutableListOf<TriggerExecutor>()
     init {
@@ -51,6 +54,7 @@ internal class TriggersController(
                 divActionHandler,
                 variableController,
                 errorCollector,
+                logger
             ))
         }
     }
@@ -80,7 +84,8 @@ private class TriggerExecutor(
     private val resolver: ExpressionResolver,
     private val divActionHandler: DivActionHandler,
     private val variableController: VariableController,
-    private val errorCollector: ErrorCollector
+    private val errorCollector: ErrorCollector,
+    private val logger: Div2Logger
 ) {
     private val changeTrigger = { _: Variable -> tryTriggerActions() }
     private var modeObserver = mode.observeAndGet(resolver) { currentMode = it }
@@ -125,6 +130,7 @@ private class TriggerExecutor(
         }
 
         actions.forEach {
+            logger.logTrigger(viewFacade as Div2View, it)
             divActionHandler.handleAction(it, viewFacade)
         }
     }

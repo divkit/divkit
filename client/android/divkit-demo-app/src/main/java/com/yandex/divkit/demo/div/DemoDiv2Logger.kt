@@ -111,6 +111,12 @@ class DemoDiv2Logger(
         }
     }
 
+    override fun logTrigger(divView: Div2View, action: DivAction) {
+        log(TAG) {
+            "logTrigger(cardId = ${divView.logId}, id = ${action.logId})"
+        }
+    }
+
     private inline fun log(tag: String, message : () -> String) {
         KLog.d(tag, message)
         capturedLogActions.add(message.invoke())
