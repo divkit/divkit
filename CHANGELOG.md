@@ -1,3 +1,30 @@
+## 23.5.0
+
+# Android Client:
+
+Additions:
+* Sampling for div-blur
+* Masks for div-input
+* Cache for evaluated expressions
+
+Fixes and changes:
+* fixed image binding perfomance
+
+# iOS Client:
+* added `selection` input method into `DivInput`.
+* added error level into `externalLogger`.
+* fixed `DivImage` layout trait check.
+
+# Web Client:
+Additions:
+* Functions for getting `datetime ` components
+* Functions for getting value of a variable, if it exists. `getStringValue`, `getIntegerValue`, etc
+
+Fixes and changes:
+* `timers` ticks should now be more accurate and reliable. Time intervals would correct time error, there is also an extra tick before end the duration if the ticks doesn't trigger in time
+* `visibility_action` actions will now evaluate expressions on the trigger, and not when the creating the component
+
+
 ## 23.4.0
 
 # Android Client:
