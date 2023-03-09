@@ -266,7 +266,12 @@ extension NSAttributedString {
         typesetter: typesetter,
         range: CFRange(location: offset - 1, length: 1)
       )
-      lines.append(layout)
+      textHeight += layout.bounds.height
+      let fitsByHeight = textHeight.isApproximatelyLessOrEqualThan(size.height)
+      let nextLineFitsByLineNumber = lines.count < maxNumberOfLines - 1 && !singleLineBreakMode
+      if fitsByHeight, nextLineFitsByLineNumber {
+        lines.append(layout)
+      }
     }
 
     return TextLayout(lines: lines, sourceLength: length)
@@ -796,11 +801,12 @@ extension NSAttributedString {
       return nil
     }
 
-    let overrun = truncatedLine.typographicBounds.width - width
+    let overrun = (truncatedLine.typographicBounds.width - width).roundedUpToScreenScale
     if overrun.isApproximatelyGreaterThan(0) {
+      let roundedWidth = (width - overrun).roundedDownToScreenScale
       return CTLineCreateTruncatedLine(
         remainingLine,
-        Double(width - overrun),
+        Double(roundedWidth),
         remainingString.truncationType,
         tokenLine
       )

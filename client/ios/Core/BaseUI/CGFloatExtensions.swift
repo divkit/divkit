@@ -22,6 +22,16 @@ extension CGFloat {
     rounded(toStep: 1 / PlatformDescription.screenScale())
   }
 
+  public var roundedUpToScreenScale: CGFloat {
+    let screenScale = PlatformDescription.screenScale()
+    return (self / screenScale).rounded(.up) * screenScale
+  }
+
+  public var roundedDownToScreenScale: CGFloat {
+    let screenScale = PlatformDescription.screenScale()
+    return (self / screenScale).rounded(.down) * screenScale
+  }
+
   public var flooredToScreenScale: CGFloat {
     floored(toStep: 1 / PlatformDescription.screenScale())
   }

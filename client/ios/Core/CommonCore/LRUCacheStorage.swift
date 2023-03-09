@@ -8,7 +8,7 @@ public final class LRUCacheStorage<Storage: OrderedDictionary>: CacheStorage
   private let maxCapacity: Int
   private var currentCapacity: Int
 
-  init(
+  public init(
     storage: Storage,
     maxCapacity: UInt
   ) {
@@ -50,7 +50,7 @@ public final class LRUCacheStorage<Storage: OrderedDictionary>: CacheStorage
     }
   }
 
-  func asArray() -> [CacheRecord] {
+  public func asArray() -> [CacheRecord] {
     storage.asArray().map { CacheRecord(key: $0.key, size: $0.item.size) }
   }
 }

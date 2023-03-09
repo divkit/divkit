@@ -12,7 +12,7 @@ public final class LinkedListOrderedDictionary<T>: OrderedDictionary {
 
   private var state: State
 
-  init(items: [(key: String, item: T)]) {
+  public init(items: [(key: String, item: T)]) {
     state = .empty
     items.reversed().forEach {
       insertFirst(key: $0.key, item: $0.item)

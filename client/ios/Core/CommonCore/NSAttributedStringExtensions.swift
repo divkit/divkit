@@ -5,8 +5,6 @@ import Foundation
 
 import BaseUI
 
-@_implementationOnly import CoreText
-
 extension NSAttributedString {
   public var isEmpty: Bool {
     length == 0

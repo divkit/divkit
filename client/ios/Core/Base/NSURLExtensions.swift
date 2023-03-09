@@ -86,6 +86,10 @@ extension URL {
     return lowercased == "http" || lowercased == "https"
   }
 
+  public var isBlobURL: Bool {
+    scheme?.lowercased() == "blob"
+  }
+
   public func URLWithDefaultScheme(_ defaultScheme: String) -> URL {
     guard scheme == nil || scheme!.isEmpty else {
       return self

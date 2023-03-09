@@ -4,6 +4,7 @@ import UIKit
 
 import BaseTiny
 
+@objc(YCLabel)
 public final class Label: UIView {
   private var useAttributesFromText = false
 

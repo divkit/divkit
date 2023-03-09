@@ -52,7 +52,7 @@ extension UIDevice {
   }
 
   // https://gist.github.com/adamawolf/3048717
-  public var humanReadableModel: String {
+  @objc public var humanReadableModel: String {
     let name = systemModelName
     switch name {
     case "iPhone1,1": return "iPhone"

@@ -1,6 +1,11 @@
 // Copyright 2019 Yandex LLC. All rights reserved.
 
-struct CacheRecord: Codable, Equatable {
-  let key: String
-  let size: Int
+public struct CacheRecord: Codable, Equatable {
+  public let key: String
+  public let size: Int
+
+  public init(key: String, size: Int) {
+    self.key = key
+    self.size = size
+  }
 }
