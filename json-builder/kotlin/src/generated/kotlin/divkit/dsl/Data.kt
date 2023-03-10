@@ -125,9 +125,9 @@ class Data internal constructor(
  */
 @Generated
 fun DivScope.data(
+    logId: String,
+    states: List<Data.State>,
     `use named arguments`: Guard = Guard.instance,
-    logId: String? = null,
-    states: List<Data.State>? = null,
     timers: List<Timer>? = null,
     transitionAnimationSelector: TransitionSelector? = null,
     variableTriggers: List<Trigger>? = null,
