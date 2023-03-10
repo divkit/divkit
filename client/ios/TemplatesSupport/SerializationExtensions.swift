@@ -297,10 +297,10 @@ extension Context {
     _ key: String,
     validator: AnyArrayValueValidator<T.ResolvedValue>? = nil,
     type: T.Type
-  ) throws -> [T.ResolvedValue] {
-    try templateData.getArray(
+  ) -> DeserializationResult<[T.ResolvedValue]> {
+    templateData.getArray(
       key,
-      transform: { deserializeTemplate($0, type: type).value },
+      transform: { deserializeTemplate($0, type: type) },
       validator: validator
     )
   }
