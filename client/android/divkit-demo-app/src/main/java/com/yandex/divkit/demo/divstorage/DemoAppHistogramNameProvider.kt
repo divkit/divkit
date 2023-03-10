@@ -1,5 +1,6 @@
 package com.yandex.divkit.demo.divstorage
 
+import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.storage.histogram.HistogramNameProvider
 
 /**
@@ -27,6 +28,14 @@ class DemoAppHistogramNameProvider: HistogramNameProvider {
      * Base name for templates parsing histogram.
      */
     override val divParsingHistogramName: String = "Storage.Templates.Parsing"
+    /**
+     * Display suffix in report for first start.
+     */
+    override val coldCallTypeSuffix: String get() = HistogramCallType.CALL_TYPE_COLD
+    /**
+     * Display suffix in report for hot start.
+     */
+    override val hotCallTypeSuffix: String get() = HistogramCallType.CALL_TYPE_WARM
 
     //currently used only as component name
     override fun getHistogramNameFromCardId(cardId: String): String = componentName

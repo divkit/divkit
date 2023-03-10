@@ -2,6 +2,7 @@ package com.yandex.div.storage.histogram
 
 import androidx.annotation.AnyThread
 import com.yandex.div.core.annotations.Mockable
+import com.yandex.div.histogram.HistogramCallType
 import com.yandex.div.histogram.HistogramFilter
 import com.yandex.div.histogram.reporter.HistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
@@ -41,23 +42,21 @@ internal class HistogramRecorder(
             histogramName: String,
             time: Long,
             filter: HistogramFilter = HistogramFilter.ON,
-    ) = histogramReporter.reportDuration(
-            histogramName = getFullHistogramName(histogramName),
+    ) =
+        histogramReporter.reportDuration(
+            histogramName = histogramName,
             duration = time,
             componentName = histogramNameProvider?.componentName,
-            filter = filter
+            filter = filter,
+            forceCallType = getHistogramCallType(histogramName),
     )
 
-    private fun getFullHistogramName(histogramName: String): String {
-        val callType = if (recordedHistograms.add(histogramName)) {
-            histogramNameProvider?.coldCallTypeSuffix
+    private fun getHistogramCallType(histogramName: String): String {
+        return if (recordedHistograms.add(histogramName)) {
+            histogramNameProvider?.coldCallTypeSuffix ?: HistogramCallType.CALL_TYPE_COLD
         } else {
-            histogramNameProvider?.hotCallTypeSuffix
+            histogramNameProvider?.hotCallTypeSuffix ?:  HistogramCallType.CALL_TYPE_WARM
         }
-
-        return StringBuilder(histogramName).apply {
-            callType?.let { append(".$it") }
-        }.toString()
     }
 
     fun reportTemplatesParseTime(parsingHistogramNames: Set<String>, duration: Long) {
