@@ -59,19 +59,41 @@ extension Block {
 
   public func sizeFor(
     widthOfHorizontallyResizableBlock: CGFloat,
-    heightOfVerticallyResizableBlock: CGFloat
+    heightOfVerticallyResizableBlock: CGFloat,
+    constrainedWidth: CGFloat,
+    constrainedHeight: CGFloat
   ) -> CGSize {
     if calculateWidthFirst {
-      let width = isHorizontallyResizable ? widthOfHorizontallyResizableBlock :
-        widthOfHorizontallyNonResizableBlock
-      let height = isVerticallyResizable ? heightOfVerticallyResizableBlock :
-        heightOfVerticallyNonResizableBlock(forWidth: width)
+      let width: CGFloat
+      if isHorizontallyResizable {
+        width = widthOfHorizontallyResizableBlock
+      } else {
+        let intrinsicWidth = widthOfHorizontallyNonResizableBlock
+        width = isHorizontallyConstrained ? min(intrinsicWidth, constrainedWidth) : intrinsicWidth
+      }
+      let height: CGFloat
+      if isVerticallyResizable {
+        height = heightOfVerticallyResizableBlock
+      } else {
+        let intrinsicHeight = heightOfVerticallyNonResizableBlock(forWidth: width)
+        height = isVerticallyConstrained ? min(intrinsicHeight, constrainedHeight) : intrinsicHeight
+      }
       return CGSize(width: width, height: height)
     } else {
-      let height = isVerticallyResizable ? heightOfVerticallyResizableBlock :
-        heightOfVerticallyNonResizableBlock
-      let width = isHorizontallyResizable ? widthOfHorizontallyResizableBlock :
-        widthOfHorizontallyNonResizableBlock(forHeight: height)
+      let height: CGFloat
+      if isVerticallyResizable {
+        height = heightOfVerticallyResizableBlock
+      } else {
+        let intrinsicHeight = heightOfVerticallyNonResizableBlock
+        height = isVerticallyConstrained ? min(intrinsicHeight, constrainedHeight) : intrinsicHeight
+      }
+      let width: CGFloat
+      if isHorizontallyResizable {
+        width = widthOfHorizontallyResizableBlock
+      } else {
+        let intrinsicWidth = widthOfHorizontallyNonResizableBlock(forHeight: height)
+        width = isHorizontallyConstrained ? min(intrinsicWidth, constrainedWidth) : intrinsicWidth
+      }
       return CGSize(width: width, height: height)
     }
   }
@@ -79,7 +101,9 @@ extension Block {
   public func size(forResizableBlockSize resizableBlockSize: CGSize) -> CGSize {
     sizeFor(
       widthOfHorizontallyResizableBlock: resizableBlockSize.width,
-      heightOfVerticallyResizableBlock: resizableBlockSize.height
+      heightOfVerticallyResizableBlock: resizableBlockSize.height,
+      constrainedWidth: .infinity,
+      constrainedHeight: .infinity
     )
   }
 

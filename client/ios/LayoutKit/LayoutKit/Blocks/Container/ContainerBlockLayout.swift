@@ -121,16 +121,14 @@ struct ContainerBlockLayout {
       zip(children, gaps.dropFirst()).forEach { child, gapAfterBlock in
         let block = child.content
         let widthIfResizable = blockMeasure.measureNext(block.horizontalMeasure)
-        var blockSize = block.sizeFor(
+        let widthIfConstrained = block
+          .isHorizontallyConstrained ? (constrainedBlockSizesIterator.next() ?? 0) : 0
+        let blockSize = block.sizeFor(
           widthOfHorizontallyResizableBlock: widthIfResizable,
-          heightOfVerticallyResizableBlock: size.height
+          heightOfVerticallyResizableBlock: size.height,
+          constrainedWidth: widthIfConstrained,
+          constrainedHeight: size.height
         )
-        if block.isVerticallyConstrained, blockSize.height > size.height {
-          blockSize.height = size.height
-        }
-        if block.isHorizontallyConstrained {
-          blockSize.width = constrainedBlockSizesIterator.next() ?? 0
-        }
         containerAscent = getMaxAscent(
           current: containerAscent, child: child, childSize: blockSize
         )
@@ -178,9 +176,10 @@ struct ContainerBlockLayout {
 
       zip(children, gaps.dropFirst()).forEach { child, gapAfterBlock in
         let block = child.content
-        let width = (block.isHorizontallyResizable || block.isHorizontallyConstrained)
+        var width = block.isHorizontallyResizable
           ? size.width
           : block.widthOfHorizontallyNonResizableBlock
+        width = block.isHorizontallyConstrained ? min(width, size.width) : width
         let alignmentSpace = size.width - width
         let x = child.crossAlignment.offset(forAvailableSpace: alignmentSpace)
         let heightIfResizable = blockMeasure.measureNext(block.verticalMeasure)
