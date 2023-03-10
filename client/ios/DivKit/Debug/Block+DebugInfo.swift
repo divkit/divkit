@@ -47,6 +47,10 @@ extension Block {
       )
       .addingEdgeInsets(debugParams.errorCounterInsets)
       .addingEdgeGaps(2)
+      .addingAccessibilityID(withTraits: (
+        "divLayoutErrorCounter",
+        .button
+      ))
       .addingDecorations(action: action)
 
     let debugInfoBlock = DebugInfoBlock(
