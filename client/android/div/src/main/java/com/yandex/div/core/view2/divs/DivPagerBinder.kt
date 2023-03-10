@@ -46,7 +46,8 @@ internal class DivPagerBinder @Inject constructor(
     private val divBinder: Provider<DivBinder>,
     private val divPatchCache: DivPatchCache,
     private val divActionBinder: DivActionBinder,
-    ) : DivViewBinder<DivPager, DivPagerView> {
+    private val pagerIndicatorConnector: PagerIndicatorConnector
+) : DivViewBinder<DivPager, DivPagerView> {
 
     private var changePageCallbackForState: ViewPager2.OnPageChangeCallback? = null
     @get:VisibleForTesting
@@ -60,6 +61,9 @@ internal class DivPagerBinder @Inject constructor(
         divView: Div2View,
         path: DivStatePath
     ) {
+        div.id?.let {
+            pagerIndicatorConnector.submitPager(it, view)
+        }
         val resolver = divView.expressionResolver
         val oldDiv = view.div
         if (div == oldDiv) {

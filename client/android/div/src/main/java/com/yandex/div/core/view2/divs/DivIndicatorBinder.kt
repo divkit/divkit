@@ -1,11 +1,9 @@
 package com.yandex.div.core.view2.divs
 
 import android.util.DisplayMetrics
-import android.view.View
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
-import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.internal.widget.indicator.IndicatorParams
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -18,11 +16,13 @@ import javax.inject.Inject
 
 internal class DivIndicatorBinder @Inject constructor(
     private val baseBinder: DivBaseBinder,
+    private val pagerIndicatorConnector: PagerIndicatorConnector
 ) : DivViewBinder<DivIndicator, DivPagerIndicatorView> {
-
-    private val lateAttach = mutableListOf<(View) -> Boolean>()
-
     override fun bindView(view: DivPagerIndicatorView, div: DivIndicator, divView: Div2View) {
+        div.pagerId?.let {
+            pagerIndicatorConnector.submitIndicator(it, view)
+        }
+
         val oldDiv = view.div
         if (div == oldDiv) return
 
@@ -34,14 +34,6 @@ internal class DivIndicatorBinder @Inject constructor(
         if (oldDiv != null) baseBinder.unbindExtensions(view, oldDiv, divView)
         baseBinder.bindView(view, div, oldDiv, divView)
         view.observeStyle(expressionResolver, div)
-        lateAttach.add { rootView ->
-            val pagerId = div.pagerId
-
-            return@add rootView.findViewWithTag<DivPagerView>(pagerId)?.let {
-                view.attachPager(it.viewPager)
-                true
-            } ?: false
-        }
     }
 
     private fun DivPagerIndicatorView.observeStyle(resolver: ExpressionResolver, indicator: DivIndicator) {
@@ -111,10 +103,6 @@ internal class DivIndicatorBinder @Inject constructor(
         )
 
         setStyle(style)
-    }
-
-    fun attachAll(view: View) {
-        lateAttach.removeAll { it.invoke(view) }
     }
 
     fun DivIndicator.Animation.convert(): IndicatorParams.Animation {

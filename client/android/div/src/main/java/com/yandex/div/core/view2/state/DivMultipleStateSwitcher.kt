@@ -36,6 +36,6 @@ internal class DivMultipleStateSwitcher @Inject constructor(
             divBinder.bind(rootView, rootDiv, divView, DivStatePath.fromState(state.stateId))
         }
 
-        divBinder.attachIndicators(divView)
+        divBinder.attachIndicators()
     }
 }

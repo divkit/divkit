@@ -4,13 +4,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
-import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.yandex.div.internal.widget.indicator.animations.getIndicatorAnimator
 import com.yandex.div.internal.widget.indicator.forms.getIndicatorDrawer
 import kotlin.math.min
 
-@SuppressWarnings("rawtypes")
 internal open class PagerIndicatorView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -18,27 +16,42 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private var stripDrawer: IndicatorsStripDrawer? = null
-
     private var pager: ViewPager2? = null
-    private var pagerAdapter: RecyclerView.Adapter<*>? = null
-    private var onPageChangeListener: ViewPager2.OnPageChangeCallback? = null
-    private var dataSetObserver: RecyclerView.AdapterDataObserver? = null
     private var style: IndicatorParams.Style? = null
+
+    private val onPageChangeListener: ViewPager2.OnPageChangeCallback = object: ViewPager2.OnPageChangeCallback() {
+        override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            stripDrawer?.let {
+                // ViewPager may emit negative positionOffset for very fast scrolling
+                val offset = when {
+                    positionOffset < 0 -> 0f
+                    positionOffset > 1 -> 1f
+                    else -> positionOffset
+                }
+                it.onPageScrolled(position, offset)
+                invalidate()
+            }
+        }
+
+        override fun onPageSelected(position: Int) {
+            stripDrawer?.let {
+                it.onPageSelected(position)
+                invalidate()
+            }
+        }
+    }
 
     fun setStyle(style: IndicatorParams.Style) {
         this.style = style
 
-        stripDrawer = IndicatorsStripDrawer(style, getIndicatorDrawer(style), getIndicatorAnimator(style))
-
-        stripDrawer?.calculateMaximumVisibleItems(
-            measuredWidth - paddingLeft - paddingRight,
-            measuredHeight - paddingTop - paddingBottom
-        )
-
-        pager?.let {
-            detachPager()
-            attachPager(it)
+        stripDrawer = IndicatorsStripDrawer(style, getIndicatorDrawer(style), getIndicatorAnimator(style)).apply {
+            calculateMaximumVisibleItems(
+                measuredWidth - paddingLeft - paddingRight,
+                measuredHeight - paddingTop - paddingBottom
+            )
+            update()
         }
+
         requestLayout()
     }
 
@@ -59,7 +72,7 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
         val selectedWidth = style?.activeShape?.itemSize?.width ?: 0f
         val desiredWidth = when (val itemPlacement = style?.itemsPlacement) {
             is IndicatorParams.ItemPlacement.Default ->
-                (itemPlacement.spaceBetweenCenters * (pagerAdapter?.itemCount ?: 0) + selectedWidth).toInt() + paddingLeft + paddingRight
+                (itemPlacement.spaceBetweenCenters * (pager?.adapter?.itemCount ?: 0) + selectedWidth).toInt() + paddingLeft + paddingRight
             is IndicatorParams.ItemPlacement.Stretch -> widthSize
             null -> selectedWidth.toInt() + paddingLeft + paddingRight
         }
@@ -83,42 +96,28 @@ internal open class PagerIndicatorView @JvmOverloads constructor(
         stripDrawer?.onDraw(canvas)
     }
 
-    fun attachPager(pager2: ViewPager2) {
-        pagerAdapter = pager2.adapter
-        if (pagerAdapter == null) {
-            throw IllegalStateException("Attached pager adapter is null!")
+    fun attachPager(newPager: ViewPager2) {
+        if (pager === newPager) {
+            return
         }
-        pagerAdapter?.let {
-            stripDrawer?.setItemsCount(it.itemCount)
-            invalidate()
-        }
-        stripDrawer?.onPageSelected(pager2.currentItem)
-        onPageChangeListener = object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-                // ViewPager may emit negative positionOffset for very fast scrolling
-                val offset = when {
-                    positionOffset < 0 -> 0f
-                    positionOffset > 1 -> 1f
-                    else -> positionOffset
-                }
-                stripDrawer?.onPageScrolled(position, offset)
-                invalidate()
-            }
 
-            override fun onPageSelected(position: Int) {
-                stripDrawer?.onPageSelected(position)
-                invalidate()
-            }
-        }.apply {
-            pager2.registerOnPageChangeCallback(this)
+        pager?.unregisterOnPageChangeCallback(onPageChangeListener)
+
+        pager = newPager.apply {
+            requireNotNull(adapter) { "Attached pager adapter is null!" }
+            registerOnPageChangeCallback(onPageChangeListener)
         }
-        pager = pager2
+
+        stripDrawer?.update()
     }
 
-    private fun detachPager() {
-        onPageChangeListener?.let {
-            pager?.unregisterOnPageChangeCallback(it)
+    private fun IndicatorsStripDrawer.update() {
+        pager?.let {
+            it.adapter?.let { adapter ->
+                setItemsCount(adapter.itemCount)
+            }
+            onPageSelected(it.currentItem)
+            invalidate()
         }
-        dataSetObserver?.let { pagerAdapter?.unregisterAdapterDataObserver(it) }
     }
 }

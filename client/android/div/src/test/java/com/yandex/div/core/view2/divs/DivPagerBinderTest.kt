@@ -36,6 +36,7 @@ class DivPagerBinderTest: DivBinderTest() {
         divBinder = { divBinder },
         divPatchCache = mock(),
         divActionBinder = mock(),
+        pagerIndicatorConnector = PagerIndicatorConnector()
     )
 
     private val div = div()

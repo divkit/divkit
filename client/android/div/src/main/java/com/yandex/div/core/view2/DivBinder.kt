@@ -21,6 +21,7 @@ import com.yandex.div.core.view2.divs.DivSeparatorBinder
 import com.yandex.div.core.view2.divs.DivSliderBinder
 import com.yandex.div.core.view2.divs.DivStateBinder
 import com.yandex.div.core.view2.divs.DivTextBinder
+import com.yandex.div.core.view2.divs.PagerIndicatorConnector
 import com.yandex.div.core.view2.divs.applyMargins
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.tabs.DivTabsBinder
@@ -72,7 +73,8 @@ internal class DivBinder @Inject constructor(
     private val indicatorBinder: DivIndicatorBinder,
     private val sliderBinder: DivSliderBinder,
     private val inputBinder: DivInputBinder,
-    private val extensionController: DivExtensionController
+    private val extensionController: DivExtensionController,
+    private val pagerIndicatorConnector: PagerIndicatorConnector
 ) {
     @MainThread
     fun bind(view: View, div: Div, divView: Div2View, path: DivStatePath) = suppressExpressionErrors {
@@ -107,8 +109,8 @@ internal class DivBinder @Inject constructor(
     }
 
     @MainThread
-    fun attachIndicators(view: View) {
-        indicatorBinder.attachAll(view)
+    internal fun attachIndicators() {
+        pagerIndicatorConnector.attach()
     }
 
     private fun bindText(view: View, data: DivText, divView: Div2View) {

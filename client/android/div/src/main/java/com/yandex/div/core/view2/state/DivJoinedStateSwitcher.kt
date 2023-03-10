@@ -39,7 +39,7 @@ internal class DivJoinedStateSwitcher @Inject constructor(
         }
         divBinder.bind(view, div, divView, path.parentState())
 
-        divBinder.attachIndicators(divView)
+        divBinder.attachIndicators()
     }
 
     private fun findCommonPath(pathList: List<DivStatePath>, rootPath: DivStatePath): DivStatePath {

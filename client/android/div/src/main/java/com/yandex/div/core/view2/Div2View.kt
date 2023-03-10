@@ -64,7 +64,6 @@ import com.yandex.div2.DivAction
 import com.yandex.div2.DivData
 import com.yandex.div2.DivPatch
 import com.yandex.div2.DivTransitionSelector
-import java.lang.ref.WeakReference
 import java.util.WeakHashMap
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -240,7 +239,7 @@ class Div2View private constructor(
             } else {
                 rebind(data, false)
             }
-            div2Component.divBinder.attachIndicators(this)
+            div2Component.divBinder.attachIndicators()
             false
         } else {
             updateNow(data, tag)
@@ -280,7 +279,7 @@ class Div2View private constructor(
         } else {
             updateNow(data, tag)
         }
-        div2Component.divBinder.attachIndicators(this)
+        div2Component.divBinder.attachIndicators()
         sendCreationHistograms()
         return result
     }
@@ -583,7 +582,6 @@ class Div2View private constructor(
                 val rootDivView = buildViewAndUpdateState(it, stateId, temporary)
                 addView(rootDivView)
             }
-            div2Component.divBinder.attachIndicators(this)
         }
 
         return newState != null
@@ -597,6 +595,7 @@ class Div2View private constructor(
         val rootView = view.getChildAt(0)
         div2Component.divBinder.bind(rootView, newState.div, this, DivStatePath.fromState(stateId))
         div2Component.stateManager.updateState(dataTag, stateId, temporary)
+        div2Component.divBinder.attachIndicators()
     }
 
     private fun buildViewAndUpdateState(
@@ -605,7 +604,9 @@ class Div2View private constructor(
         isUpdateTemporary: Boolean = true
     ): View {
         div2Component.stateManager.updateState(dataTag, stateId, isUpdateTemporary)
-        return divBuilder.buildView(newState.div, this, DivStatePath.fromState(newState.stateId))
+        return divBuilder.buildView(newState.div, this, DivStatePath.fromState(newState.stateId)).also {
+            div2Component.divBinder.attachIndicators()
+        }
     }
 
     private fun buildViewAsyncAndUpdateState(
@@ -621,12 +622,12 @@ class Div2View private constructor(
                 suppressExpressionErrors {
                     div2Component.divBinder.bind(view, newState.div, this, path)
                 }
-                div2Component.divBinder.attachIndicators(view)
+                div2Component.divBinder.attachIndicators()
             }
         } else {
             div2Component.divBinder.bind(view, newState.div, this, path)
             doOnAttach {
-                div2Component.divBinder.attachIndicators(view)
+                div2Component.divBinder.attachIndicators()
             }
         }
         return view
