@@ -10,7 +10,10 @@ import androidx.recyclerview.widget.OrientationHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.R
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.json.expressions.Expression
+import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
+import com.yandex.div2.DivAlignmentHorizontal
 import com.yandex.div2.DivAlignmentVertical
 import com.yandex.div2.DivGallery
 
@@ -42,28 +45,59 @@ internal interface DivGalleryItemHelper {
         bottom: Int,
         isRelayoutingChildren: Boolean = false
     ) {
-        val parentHeight = view.measuredHeight
-        val div = try {
-            divItems[child.getTag(R.id.div_gallery_item_index) as Int]
-        } catch (e: Exception) {
-            null
-        }
-        val newTop = when (getVerticalAlignment(div)) {
-            DivAlignmentVertical.CENTER -> (parentHeight - child.measuredHeight) / 2
-            DivAlignmentVertical.BOTTOM -> parentHeight - child.measuredHeight
-            else -> 0
-        }
-        if (newTop < 0) {
+        val childDiv = runCatching { divItems[child.getTag(R.id.div_gallery_item_index) as Int].value() }.getOrNull()
+
+        val resolver = divView.expressionResolver
+        val parentAlignment = div.crossContentAlignment
+        val orientation = getLayoutManagerOrientation()
+
+        val shouldRelayout = (orientation == RecyclerView.VERTICAL && child.measuredWidth == 0) ||
+                (orientation == RecyclerView.HORIZONTAL && child.measuredHeight == 0)
+
+        if (shouldRelayout) {
             superLayoutDecoratedWithMargins(child, left, top, right, bottom)
             if (!isRelayoutingChildren) {
                 childrenToRelayout.add(child)
             }
-        } else {
-            superLayoutDecoratedWithMargins(child, left, top + newTop, right, bottom + newTop)
-            trackVisibilityAction(child)
-            if (!isRelayoutingChildren) {
-                childrenToRelayout.remove(child)
+            return
+        }
+
+        val horizontalOffset = if (orientation == RecyclerView.VERTICAL) {
+            val alignment = childDiv?.alignmentHorizontal.evaluateAlignment(resolver, parentAlignment) {
+                asCrossContentAlignment()
             }
+            calculateOffset(
+                view.measuredWidth - view.paddingLeft - view.paddingRight,
+                right - left,
+                alignment
+            )
+        } else {
+            0
+        }
+
+        val verticalOffset = if (orientation == RecyclerView.HORIZONTAL) {
+            val alignment = childDiv?.alignmentVertical.evaluateAlignment(resolver, parentAlignment) {
+                asCrossContentAlignment()
+            }
+            calculateOffset(
+                view.measuredHeight - view.paddingTop - view.paddingBottom,
+                bottom - top,
+                alignment
+            )
+        } else {
+            0
+        }
+
+        superLayoutDecoratedWithMargins(
+            child,
+            left + horizontalOffset,
+            top + verticalOffset,
+            right + horizontalOffset,
+            bottom + verticalOffset
+        )
+        trackVisibilityAction(child)
+        if (!isRelayoutingChildren) {
+            childrenToRelayout.remove(child)
         }
     }
 
@@ -169,15 +203,43 @@ internal interface DivGalleryItemHelper {
         }
     }
 
-    fun getVerticalAlignment(child: Div?): DivAlignmentVertical {
-        val resolver = divView.expressionResolver
-        child?.value()?.alignmentVertical?.let {
-            return it.evaluate(resolver)
+    companion object {
+        private fun calculateOffset(
+            totalSpace: Int,
+            decoratedMeasurement: Int,
+            crossContentAlignment: DivGallery.CrossContentAlignment
+        ): Int {
+            val availableSpace = totalSpace - decoratedMeasurement
+
+            return when (crossContentAlignment) {
+                DivGallery.CrossContentAlignment.START -> 0
+                DivGallery.CrossContentAlignment.CENTER -> availableSpace / 2
+                DivGallery.CrossContentAlignment.END -> availableSpace
+            }
         }
-        return when (div.crossContentAlignment.evaluate(resolver)) {
-            DivGallery.CrossContentAlignment.CENTER -> DivAlignmentVertical.CENTER
-            DivGallery.CrossContentAlignment.END -> DivAlignmentVertical.BOTTOM
-            else -> DivAlignmentVertical.TOP
+
+        private inline fun <T : Any> Expression<T>?.evaluateAlignment(
+            resolver: ExpressionResolver,
+            parentAlignment: Expression<DivGallery.CrossContentAlignment>,
+            asCrossContentAlignment: T.() -> DivGallery.CrossContentAlignment
+        ): DivGallery.CrossContentAlignment {
+            return this?.evaluate(resolver)?.asCrossContentAlignment() ?: parentAlignment.evaluate(resolver)
+        }
+
+        private fun DivAlignmentHorizontal.asCrossContentAlignment(): DivGallery.CrossContentAlignment {
+            return when (this) {
+                DivAlignmentHorizontal.LEFT -> DivGallery.CrossContentAlignment.START
+                DivAlignmentHorizontal.CENTER -> DivGallery.CrossContentAlignment.CENTER
+                DivAlignmentHorizontal.RIGHT -> DivGallery.CrossContentAlignment.END
+            }
+        }
+
+        private fun DivAlignmentVertical.asCrossContentAlignment(): DivGallery.CrossContentAlignment {
+            return when (this) {
+                DivAlignmentVertical.TOP, DivAlignmentVertical.BASELINE -> DivGallery.CrossContentAlignment.START
+                DivAlignmentVertical.CENTER -> DivGallery.CrossContentAlignment.CENTER
+                DivAlignmentVertical.BOTTOM -> DivGallery.CrossContentAlignment.END
+            }
         }
     }
 }
