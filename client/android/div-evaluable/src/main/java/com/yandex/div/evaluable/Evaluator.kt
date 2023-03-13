@@ -22,7 +22,6 @@ class Evaluator(
 
     internal fun evalUnary(unary: Evaluable.Unary): Any {
         val literal: Any = eval(unary.expression)
-        unary.updateIsCacheable(unary.expression.checkIsCacheable())
         return when (unary.token) {
             is Token.Operator.Unary.Plus -> {
                 when (literal) {
@@ -50,18 +49,13 @@ class Evaluator(
 
     internal fun evalBinary(binary: Evaluable.Binary): Any {
         val left: Any = eval(binary.left)
-        binary.updateIsCacheable(binary.left.checkIsCacheable())
+
         // Logical
         if (binary.token is Token.Operator.Binary.Logical) {
-            return evalLogical(binary.token, left) {
-                val res : Any = eval(binary.right)
-                binary.updateIsCacheable(binary.right.checkIsCacheable())
-                res
-            }
+            return evalLogical(binary.token, left) { eval(binary.right) }
         }
 
         val right: Any = eval(binary.right)
-        binary.updateIsCacheable(binary.right.checkIsCacheable())
         if (left.javaClass != right.javaClass) {
             throwExceptionOnEvaluationFailed(binary.token, left, right)
         }
@@ -136,7 +130,7 @@ class Evaluator(
     internal fun evalTernary(ternary: Evaluable.Ternary): Any {
         if (ternary.token is Token.Operator.TernaryIfElse) {
             val condition: Any = eval(ternary.firstExpression)
-            ternary.updateIsCacheable(ternary.firstExpression.checkIsCacheable())
+
             if (condition !is Boolean) {
                 throwExceptionOnEvaluationFailed(
                     "${ternary.firstExpression} ? ${ternary.secondExpression} : ${ternary.thirdExpression}",
@@ -144,13 +138,9 @@ class Evaluator(
                 )
             }
             return if (condition) {
-                val res : Any = eval(ternary.secondExpression)
-                ternary.updateIsCacheable(ternary.secondExpression.checkIsCacheable())
-                res
+                eval(ternary.secondExpression)
             } else {
-                val res : Any = eval(ternary.thirdExpression)
-                ternary.updateIsCacheable(ternary.thirdExpression.checkIsCacheable())
-                res
+                eval(ternary.thirdExpression)
             }
         } else {
             throwExceptionOnEvaluationFailed(ternary.rawExpr, "${ternary.token} was incorrectly parsed as a ternary operator.")
@@ -161,7 +151,6 @@ class Evaluator(
         val arguments = mutableListOf<Any>()
         for (arg in functionCall.arguments) {
             arguments.add(eval(arg))
-            functionCall.updateIsCacheable(arg.checkIsCacheable())
         }
         val argTypes = arguments.map { arg ->
             EvaluableType.of(arg)
@@ -171,8 +160,6 @@ class Evaluator(
         } catch (e: EvaluableException) {
             throwExceptionOnFunctionEvaluationFailed(functionCall.token.name, arguments, e.message ?: "")
         }
-
-        functionCall.updateIsCacheable(function.isPure)
         return function.invoke(arguments)
     }
 
@@ -181,7 +168,6 @@ class Evaluator(
         for (arg in stringTemplate.arguments) {
             val value: String = eval<Any>(arg).toString()
             stringParts.add(value)
-            stringTemplate.updateIsCacheable(arg.checkIsCacheable())
         }
         return stringParts.joinToString(separator = "")
     }

@@ -26,15 +26,11 @@ interface ExpressionResolver {
 
     /**
      * Create subscription on expression value change.
-     * @param variableNames list of strings, each defined within brackets '@{...}'. For example for '@{var1}' it should be 'var1'.
-     * @param callback an action performed when any of variables changes its value.
-     * @return subscription to any of [variableNames] change or [Disposable.NULL] if one isn't found.
+     * @param variableName string defined within brackets '@{...}'. For example for '@{var1}' it should be 'var1'.
+     * @param callback an action performed when expression changes its value.
+     * @return subscription to [variableName] change or [Disposable.NULL] if one isn't found.
      */
-    fun subscribeToExpression(
-        rawExpression: String,
-        variableNames: List<String>,
-        callback: () -> Unit
-    ): Disposable
+    fun <T> onChange(variableName: String, callback: (T?) -> Unit): Disposable
 
     fun notifyResolveFailed(e: ParsingException) = Unit
 
@@ -59,10 +55,7 @@ interface ExpressionResolver {
                 return null
             }
 
-            override fun subscribeToExpression(
-                rawExpression: String, variableNames: List<String>,
-                callback: () -> Unit
-            ): Disposable {
+            override fun <T> onChange(variableName: String, callback: (T?) -> Unit): Disposable {
                 return Disposable.NULL
             }
         }

@@ -1,6 +1,5 @@
 package com.yandex.div.evaluable
 
-import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 import org.mockito.kotlin.mock
@@ -14,7 +13,7 @@ private typealias NumOfInvokes = Int
 class EvaluableTest {
 
     private val variableProvider = mock<VariableProvider>()
-    private val functionProvider = BuiltinFunctionProvider
+    private val functionProvider = mock<FunctionProvider>()
     private val evaluator = Evaluator(variableProvider, functionProvider)
 
     // Ternary Operator Test
@@ -491,79 +490,6 @@ class EvaluableTest {
         assertLogicalExpression(false, TEST_VARIABLE_1, true, "true")
     }
 
-    @Test
-    fun `non pure function is not cacheable`() {
-        assertEvaluableIsOrNotCacheable("nowLocal()", false)
-    }
-
-    @Test
-    fun `pure function with non pure function as argument is not cacheable`() {
-        assertEvaluableIsOrNotCacheable("getYear(nowLocal())", false)
-    }
-
-    @Test
-    fun `unary expression is not cacheable`() {
-        assertEvaluableIsOrNotCacheable("-getYear(nowLocal())", false)
-    }
-
-    @Test
-    fun `binary expression is not cacheable`() {
-        assertEvaluableIsOrNotCacheable("getYear(nowLocal())+42", false)
-        assertEvaluableIsOrNotCacheable("42+getYear(nowLocal())", false)
-    }
-
-    @Test
-    fun `ternary expression is not cacheable`() {
-        assertEvaluableIsOrNotCacheable("true ? getYear(nowLocal()) : 42", false)
-        assertEvaluableIsOrNotCacheable("false ? 42 : getYear(nowLocal())", false)
-        assertEvaluableIsOrNotCacheable("getYear(nowLocal()) == 0 ? 10 : 42", false)
-    }
-
-    @Test
-    fun `string template is not cacheable`() {
-        assertStringTemplateIsOrNotCacheable("This is non cacheable @{nowLocal()}", false)
-    }
-
-    @Test
-    fun `ternary expression is cacheable`() {
-        assertEvaluableIsOrNotCacheable("true ? 42 : nowLocal()", true)
-        assertEvaluableIsOrNotCacheable("false ? nowLocal() : 42", true)
-        assertEvaluableIsOrNotCacheable("true ? 42 : 12", true)
-    }
-
-    @Test
-    fun `binary expression is cacheable`() {
-        assertEvaluableIsOrNotCacheable("true || nowLocal()", true)
-    }
-
-    @Test
-    fun `unary expression is cacheable`() {
-        assertEvaluableIsOrNotCacheable("-sum(2,2)", true)
-    }
-
-    @Test
-    fun `string template is cacheable`() {
-        assertStringTemplateIsOrNotCacheable("This is cacheable @{sum(2,2)}", true)
-    }
-
-    @Test
-    fun `pure function is cacheable`() {
-        assertEvaluableIsOrNotCacheable("mul(4,5)", true)
-    }
-
-    @Test
-    fun `pure function with pure function as argument is cacheable`() {
-        assertEvaluableIsOrNotCacheable("mul(sum(2,2),42)", true)
-    }
-
-    @Test
-    fun `variables do not affect caching`() {
-        setVariable(VAR_A, 1)
-        setVariable(VAR_B, 2)
-        assertEvaluableIsOrNotCacheable("sum($VAR_A,$VAR_B)", true)
-        assertEvaluableIsOrNotCacheable("$VAR_A + getYear(nowLocal())", false)
-    }
-
     // Stress tests
     @Test(expected = EvaluableException::class)
     fun `errors # invalid Int literal`() {
@@ -705,18 +631,6 @@ class EvaluableTest {
         }
         assert(actual is T)
         assertEquals(expected, actual as T)
-    }
-
-    private fun assertEvaluableIsOrNotCacheable(expr: String, shouldBeCacheable: Boolean) {
-        val evaluable = Evaluable.prepare("@{$expr}")
-        evaluator.eval<Any>(evaluable)
-        assertEquals(evaluable.checkIsCacheable(), shouldBeCacheable)
-    }
-
-    private fun assertStringTemplateIsOrNotCacheable(template: String, shouldBeCacheable: Boolean) {
-        val evaluable = Evaluable.prepare(template)
-        evaluator.eval<Any>(evaluable)
-        assertEquals(evaluable.checkIsCacheable(), shouldBeCacheable)
     }
 
     private fun setVariable(name: String, value: Any) {

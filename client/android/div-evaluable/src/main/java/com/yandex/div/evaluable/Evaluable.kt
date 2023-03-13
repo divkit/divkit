@@ -8,29 +8,8 @@ abstract class Evaluable(val rawExpr: String) {
 
     abstract val variables: List<String>
 
-    /**
-     * Value of this field is valid only after calling the eval method.
-     */
-    private var isCacheable = true
-
-    private var evalCalled = false
-
-    internal fun updateIsCacheable(value : Boolean) {
-        isCacheable = isCacheable && value
-    }
-
-    fun checkIsCacheable(): Boolean {
-        assert(evalCalled)
-        return isCacheable
-    }
-
     @Throws(EvaluableException::class)
-    internal fun eval(evaluator: Evaluator): Any {
-        return evalImpl(evaluator).also { evalCalled = true }
-    }
-
-    @Throws(EvaluableException::class)
-    protected abstract fun evalImpl(evaluator: Evaluator): Any
+    internal abstract fun eval(evaluator: Evaluator): Any
 
     internal class Lazy(private val expr: String): Evaluable(expr) {
         private val tokens = Tokenizer.tokenize(expr)
@@ -41,13 +20,11 @@ abstract class Evaluable(val rawExpr: String) {
             } else {
                 tokens.filterIsInstance(Token.Operand.Variable::class.java).map { it.name }
             }
-        override fun evalImpl(evaluator: Evaluator): Any {
+        override fun eval(evaluator: Evaluator): Any {
             if (!this::expression.isInitialized) {
                 expression = Parser.parse(tokens, rawExpr)
             }
-            val res = expression.eval(evaluator)
-            updateIsCacheable(expression.isCacheable)
-            return res
+            return expression.eval(evaluator)
         }
         override fun toString(): String = expr
     }
@@ -58,7 +35,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = expression.variables
-        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalUnary(this)
+        override fun eval(evaluator: Evaluator): Any = evaluator.evalUnary(this)
         override fun toString(): String = "$token$expression"
     }
 
@@ -69,7 +46,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = left.variables + right.variables
-        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalBinary(this)
+        override fun eval(evaluator: Evaluator): Any = evaluator.evalBinary(this)
         override fun toString(): String = "($left $token $right)"
     }
 
@@ -82,7 +59,7 @@ abstract class Evaluable(val rawExpr: String) {
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = firstExpression.variables +
                 secondExpression.variables + thirdExpression.variables
-        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalTernary(this)
+        override fun eval(evaluator: Evaluator): Any = evaluator.evalTernary(this)
         override fun toString(): String {
             val opIf = Token.Operator.TernaryIf
             val opElse = Token.Operator.TernaryElse
@@ -97,7 +74,7 @@ abstract class Evaluable(val rawExpr: String) {
     ) : Evaluable(rawExpression) {
         override val variables: List<String> =
             arguments.map { it.variables }.reduceOrNull { acc, vars -> acc + vars } ?: emptyList()
-        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalFunctionCall(this)
+        override fun eval(evaluator: Evaluator): Any = evaluator.evalFunctionCall(this)
         override fun toString(): String {
             val argsString = arguments.joinToString(separator = Token.Function.ArgumentDelimiter.toString())
             return "${token.name}($argsString)"
@@ -109,7 +86,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = arguments.map { it.variables }.reduce { acc, vars -> acc + vars }
-        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalStringTemplate(this)
+        override fun eval(evaluator: Evaluator): Any = evaluator.evalStringTemplate(this)
         override fun toString(): String = arguments.joinToString(separator = "")
     }
 
@@ -118,7 +95,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = listOf(token.name)
-        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalVariable(this)
+        override fun eval(evaluator: Evaluator): Any = evaluator.evalVariable(this)
         override fun toString(): String = token.name
     }
 
@@ -127,7 +104,7 @@ abstract class Evaluable(val rawExpr: String) {
         val rawExpression: String,
     ) : Evaluable(rawExpression) {
         override val variables: List<String> = emptyList()
-        override fun evalImpl(evaluator: Evaluator): Any = evaluator.evalValue(this)
+        override fun eval(evaluator: Evaluator): Any = evaluator.evalValue(this)
         override fun toString(): String = when (token) {
             is Token.Operand.Literal.Str -> "'${token.value}'"
             is Token.Operand.Literal.Num -> token.value.toString()

@@ -59,14 +59,13 @@ internal abstract class TwoWayVariableBinder<T>(
                 ?.set(value.toStringValue())
         }
 
-        return variableController.subscribeToVariableChange(
+        return subscribeToVariable<T>(
             variableName,
             errorCollectors.getOrCreate(tag, data),
-            invokeOnSubscription = true
-        ) { changed: Variable ->
-            @Suppress("UNCHECKED_CAST")
-            val value = changed.getValue() as? T
-            if (pendingValue == value) return@subscribeToVariableChange
+            variableController,
+            invokeChangeOnSubscription = true
+        ) { value: T? ->
+            if (pendingValue == value) return@subscribeToVariable
             pendingValue = value
             callbacks.onVariableChanged(value)
         }

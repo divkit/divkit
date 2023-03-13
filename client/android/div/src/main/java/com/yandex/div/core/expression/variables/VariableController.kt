@@ -1,96 +1,33 @@
 package com.yandex.div.core.expression.variables
 
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.ObserverList
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.data.Variable
-import com.yandex.div.internal.Assert
-import com.yandex.div.json.missingVariable
 
 @Mockable
 internal class VariableController(
     private val variables: Map<String, Variable>,
 ) {
     private val extraVariablesSources = mutableListOf<VariableSource>()
-    private val onChangeObservers = mutableMapOf<String, ObserverList<(Variable) -> Unit>>()
+    private val declarationObservers = mutableMapOf<String, MutableList<(Variable) -> Unit>>()
 
-    private var onAnyVariableChangeCallback: ((Variable) -> Unit)? = null
-    private val notifyVariableChangedCallback = { v : Variable -> notifyVariableChanged(v) }
-
-    init {
-        variables.values.forEach {
-            it.addObserver(notifyVariableChangedCallback)
-        }
+    internal val declarationNotifier = VariableDeclarationNotifier { name, action ->
+        subscribeToDeclaration(name, action)
     }
 
-    private fun addObserver(name: String, observer: (Variable) -> Unit) {
-        val observers = onChangeObservers.getOrPut(name) {
-            ObserverList()
+    private fun subscribeToDeclaration(name: String, action: (Variable) -> Unit): Disposable {
+        getMutableVariable(name)?.let { variable ->
+            action(variable)
+            return Disposable.NULL
         }
-        observers.addObserver(observer)
-    }
 
+        val variableObservers = declarationObservers.getOrPut(name) { mutableListOf() }
+        variableObservers.add(action)
 
-    fun subscribeToVariablesChange(
-        names: List<String>,
-        invokeOnSubscription: Boolean = false,
-        observer: (Variable) -> Unit
-    ): Disposable {
-        names.forEach { name ->
-            subscribeToVariableChangeImpl(name, null, invokeOnSubscription, observer)
-        }
         return Disposable {
-            names.forEach { name ->
-                removeChangeObserver(name, observer)
-            }
+            variableObservers.remove(action)
         }
     }
-
-    fun subscribeToVariableChange(
-        name: String,
-        errorCollector: ErrorCollector? = null,
-        invokeOnSubscription: Boolean = false,
-        observer: (Variable) -> Unit
-    ): Disposable {
-        subscribeToVariableChangeImpl(name, errorCollector, invokeOnSubscription, observer)
-        return Disposable {
-            removeChangeObserver(name, observer)
-        }
-    }
-
-    private fun subscribeToVariableChangeImpl(
-        name: String,
-        errorCollector: ErrorCollector? = null,
-        invokeOnSubscription: Boolean = false,
-        observer: (Variable) -> Unit
-    ) {
-        val variable = getMutableVariable(name)
-            ?: run {
-                errorCollector?.logError(missingVariable(name))
-                addObserver(name, observer)
-                return
-            }
-
-        if (invokeOnSubscription) {
-            // Any on variable changed notify should be executed on main thread.
-            Assert.assertMainThread()
-            observer.invoke(variable)
-        }
-        addObserver(name, observer)
-        return
-    }
-
-    private fun removeChangeObserver(name: String, observer: (Variable) -> Unit) {
-        onChangeObservers[name]?.removeObserver(observer)
-    }
-
-    private fun notifyVariableChanged(v: Variable) {
-        Assert.assertMainThread()
-        onAnyVariableChangeCallback?.invoke(v)
-        onChangeObservers[v.name]?.forEach { it.invoke(v) }
-    }
-
 
     /**
      * aka "adding references to global variables"
@@ -101,9 +38,10 @@ internal class VariableController(
     }
 
     private fun onVariableDeclared(variable: Variable) {
-        Assert.assertMainThread()
-        variable.addObserver(notifyVariableChangedCallback)
-        onChangeObservers[variable.name]?.forEach { it.invoke(variable) }
+        declarationObservers[variable.name]?.let { observers ->
+            observers.forEach { it.invoke(variable) }
+            observers.clear()
+        }
     }
 
     fun getMutableVariable(name: String): Variable? {
@@ -118,10 +56,5 @@ internal class VariableController(
         }
 
         return null
-    }
-
-    fun setOnAnyVariableChangeCallback(callback: (Variable) -> Unit) {
-        Assert.assertNull(onAnyVariableChangeCallback)
-        onAnyVariableChangeCallback = callback
     }
 }
