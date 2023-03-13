@@ -1141,6 +1141,9 @@
     },
     {
       "title": "Variables triggers",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "Triggers"
       ],
@@ -1413,6 +1416,9 @@
     },
     {
       "title": "States default state",
+      "automated": [
+        "web"
+      ],
       "file": "states_default_state.json"
     },
     {
