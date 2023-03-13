@@ -5,6 +5,9 @@
       "tags": [
         "DivAction"
       ],
+      "automated": [
+        "web"
+      ],
       "steps": [
         "Tap on text 'Click on me'"
       ],
@@ -288,6 +291,9 @@
     },
     {
       "title": "Root state switching",
+      "automated": [
+        "web"
+      ],
       "steps": [
         "Press 'CHANGE STATE (TEMPORARY)'",
         "Restart the app",
@@ -442,6 +448,9 @@
     },
     {
       "title": "Actions on tap",
+      "automated": [
+        "web"
+      ],
       "steps": [
         "Tap on top button",
         "Double tap on top button",
@@ -1072,6 +1081,9 @@
     },
     {
       "title": "Visibility in div-base",
+      "automated": [
+        "web"
+      ],
       "steps": [
         "Check different combinations of visibility properties"
       ],
@@ -1331,6 +1343,9 @@
     },
     {
       "title": "Actions logging",
+      "automated": [
+        "web"
+      ],
       "steps": [
         "Click on Test button",
         "Double click Test button",
