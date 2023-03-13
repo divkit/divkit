@@ -1,0 +1,236 @@
+{
+  "description": "Vertical container with elements with wrap_content constrained size",
+  "platforms": [
+    "android",
+    "ios",
+    "web"
+  ],
+  "templates": {
+    "test_container": {
+      "type": "container",
+      "orientation": "vertical",
+      "height": {
+        "type": "fixed",
+        "value": 200
+      },
+      "border": {
+        "stroke": {
+          "color": "#A0FFA0"
+        }
+      },
+      "margins": {
+        "right": 10
+      }
+    },
+    "item": {
+      "type": "text",
+      "border": {
+        "corner_radius": 10,
+        "stroke": {
+          "color": "#0000FF"
+        }
+      },
+      "background": [
+        {
+          "type": "solid",
+          "color": "#A0A0FF"
+        }
+      ],
+      "paddings": {
+        "top": 8,
+        "right": 8,
+        "bottom": 8,
+        "left": 8
+      },
+      "font_size": 16
+    }
+  },
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "container",
+          "orientation": "vertical",
+          "items": [
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "items": [
+                {
+                  "type": "test_container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 110
+                  },
+                  "items": [
+                    {
+                      "type": "item",
+                      "width": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "min_size": {
+                          "value": 80
+                        }
+                      },
+                      "height": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "max_size": {
+                          "value": 100
+                        }
+                      },
+                      "text": "min\nwidth\n=80\nmax\nheight\n=100"
+                    },
+                    {
+                      "type": "item",
+                      "width": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "max_size": {
+                          "value": 100
+                        }
+                      },
+                      "height": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "min_size": {
+                          "value": 100
+                        }
+                      },
+                      "text": "max width = 100, min height = 100"
+                    }
+                  ]
+                },
+                {
+                  "type": "test_container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 120
+                  },
+                  "items": [
+                    {
+                      "type": "item",
+                      "width": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "min_size": {
+                          "value": 80
+                        },
+                        "max_size": {
+                          "value": 110
+                        }
+                      },
+                      "height": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "min_size": {
+                          "value": 100
+                        },
+                        "max_size": {
+                          "value": 120
+                        }
+                      },
+                      "text": "min width = 80, max width = 110\nmin height = 100, max height = 120"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "container",
+              "orientation": "horizontal",
+              "margins": {
+                "top": 10
+              },
+              "items": [
+                {
+                  "type": "test_container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80
+                  },
+                  "items": [
+                    {
+                      "type": "item",
+                      "width": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "min_size": {
+                          "value": 100
+                        }
+                      },
+                      "height": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "min_size": {
+                          "value": 220
+                        }
+                      },
+                      "text": "min\nwidth\n=320\nmin\nheight\n=60"
+                    }
+                  ]
+                },
+                {
+                  "type": "test_container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80
+                  },
+                  "items": [
+                    {
+                      "type": "item",
+                      "width": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "min_size": {
+                          "value": 100
+                        }
+                      },
+                      "height": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "min_size": {
+                          "value": 220
+                        }
+                      },
+                      "text": "min width = 320\nmin height = 60\nFor millions of years mankind lived just like animals. Then something happened"
+                    }
+                  ]
+                },
+                {
+                  "type": "test_container",
+                  "width": {
+                    "type": "fixed",
+                    "value": 80
+                  },
+                  "items": [
+                    {
+                      "type": "item",
+                      "width": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "max_size": {
+                          "value": 70
+                        }
+                      },
+                      "height": {
+                        "type": "wrap_content",
+                        "constrained": true,
+                        "max_size": {
+                          "value": 180
+                        }
+                      },
+                      "text": "max width = 70\nmax height = 180\nFor millions of years mankind lived just like animals"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
