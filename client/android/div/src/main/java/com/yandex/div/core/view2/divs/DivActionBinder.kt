@@ -423,27 +423,34 @@ internal class DivActionBinder @Inject constructor(
                 }
             DivAnimation.Name.NATIVE -> {
                 if (view != null) {
-                    val animation = ContextCompat
-                        .getDrawable(view.context, R.drawable.native_animation_background)
-                    val drawables = mutableListOf<Drawable>()
-
-                    if (view.background is LayerDrawable) {
-                        val layers = view.background as LayerDrawable
-                        for (i in 0 until layers.numberOfLayers) {
-                            drawables.add(layers.getDrawable(i))
-                        }
-                    } else {
-                        drawables.add(view.background)
+                    val layers = view.background as? LayerDrawable
+                    val shouldAddAnimation = layers == null || (0 until layers.numberOfLayers).none {
+                        layers.getId(it) == R.drawable.native_animation_background
                     }
 
-                    animation?.let { drawables.add(it) }
+                    if (shouldAddAnimation) {
+                        val drawables = mutableListOf<Drawable>()
 
-                    val layerDrawable = LayerDrawable(drawables.toTypedArray())
-                    layerDrawable.setId(
-                        drawables.size - 1,
-                        R.drawable.native_animation_background
-                    ) //mark background has animation
-                    view.background = layerDrawable
+                        layers?.let {
+                            for (i in 0 until it.numberOfLayers) {
+                                drawables.add(it.getDrawable(i))
+                            }
+                        } ?: drawables.add(view.background)
+
+                        val animation = ContextCompat.getDrawable(
+                            view.context,
+                            R.drawable.native_animation_background
+                        )
+
+                        animation?.let { drawables.add(it) }
+
+                        val layerDrawable = LayerDrawable(drawables.toTypedArray())
+                        layerDrawable.setId(
+                            drawables.size - 1,
+                            R.drawable.native_animation_background
+                        ) //mark background has animation
+                        view.background = layerDrawable
+                    }
                 }
                 null
             }
