@@ -117,7 +117,10 @@ extension Field {
       }
       return .success(value)
     case let .link(link):
-      return context.templateData.getArray(link, transform: transform, validator: validator)
+      return safeValueForLink(
+        { try context.templateData.getArray($0, transform: transform, validator: validator) },
+        link: link
+      )
     }
   }
 }
@@ -382,7 +385,10 @@ extension Field {
         .resolveValue(context: context, validator: validator)
       return result ?? .failure(NonEmptyArray(.generic))
     case let .link(link):
-      return context.getArray(link, validator: validator, type: T.Element.self)
+      return safeValueForLink(
+        { try context.getArray($0, validator: validator, type: T.Element.self) },
+        link: link
+      )
     }
   }
 
@@ -427,7 +433,10 @@ extension Field {
     case let .value(value):
       return .success(value)
     case let .link(link):
-      return context.templateData.getArray(link)
+      return safeValueForLink(
+        { try context.templateData.getArray($0) },
+        link: link
+      )
     }
   }
 

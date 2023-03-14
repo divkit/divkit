@@ -68,30 +68,50 @@ extension Dictionary where Key == String {
   }
 
   @usableFromInline
-  func getResult<U>(_ block: () throws -> U) -> DeserializationResult<U> {
-    do {
-      return try .success(block())
-    } catch let error as DeserializationError {
-      return .failure(NonEmptyArray(error))
-    } catch {
-      assertionFailure("Closure should throw only DeserializationError")
-      return .failure(NonEmptyArray(.unexpectedError(message: error.localizedDescription)))
-    }
-  }
-
-  @usableFromInline
   func getArray<T, U>(
     _ key: [Key],
     transform: (T) throws -> U,
     validator: AnyArrayValueValidator<U>?
-  ) -> DeserializationResult<[U]> {
-    return getArray(
-      key,
-      transform: { element in
-        getResult { try transform(element) }
-      },
-      validator: validator
-    )
+  ) throws -> [U] {
+    let dict = try enclosedDictForKeySequence(key)
+    guard let valueBeforeConversion = dict[key.last!] else {
+      throw DeserializationError.noData
+    }
+
+    guard let array = valueBeforeConversion as? NSArray else {
+      throw invalidFieldErrorForKey(key, representation: valueBeforeConversion)
+    }
+
+    var result: [U] = []
+    result.reserveCapacity(array.count)
+    for index in 0..<array.count {
+      do {
+        guard let element = array[index] as? T else {
+          throw invalidFieldErrorForKey(
+            key,
+            element: index,
+            representation: array[index]
+          )
+        }
+
+        result.append(try transform(element))
+      } catch {
+        if validator?.isPartialDeserializationAllowed == false {
+          throw error
+        }
+      }
+    }
+
+    if result.count != array.count,
+       validator?.isPartialDeserializationAllowed == false {
+      throw invalidFieldErrorForKey(key, representation: array)
+    }
+
+    if validator?.isValid(result) == false {
+      throw invalidFieldErrorForKey(key, representation: array)
+    }
+
+    return result
   }
 }
 
@@ -187,80 +207,16 @@ extension Dictionary where Key == String {
   @usableFromInline
   func getArray<T, U>(
     _ key: [Key],
-    transform: (T) -> DeserializationResult<U>,
-    validator: AnyArrayValueValidator<U>?
-  ) -> DeserializationResult<[U]> {
-    var errors: [DeserializationError] = []
-
-    let dictResult = getResult { try enclosedDictForKeySequence(key) }
-    if case .failure(let dictErrors) = dictResult {
-      return .failure(dictErrors)
-    }
-
-    errors.append(contentsOf: dictResult.errorsOrWarnings?.asArray() ?? [])
-
-    guard let dict = dictResult.value,
-      let valueBeforeConversion = dict[key.last!] else {
-      return .failure(NonEmptyArray(.noData, errors))
-    }
-
-    guard let array = valueBeforeConversion as? NSArray else {
-      return .failure(
-        NonEmptyArray(
-          invalidFieldErrorForKey(key, representation: valueBeforeConversion),
-          errors
-        )
-      )
-    }
-
-    var result: [U] = []
-
-    result.reserveCapacity(array.count)
-    for index in 0..<array.count {
-      if let element = array[index] as? T {
-        let resultElement = transform(element)
-        errors.append(contentsOf: resultElement.errorsOrWarnings?.asArray() ?? [])
-        if let resultValue = resultElement.value {
-          result.append(resultValue)
-          continue
-        }
-      }
-      errors.append(
-        invalidFieldErrorForKey(key, element: index, representation: array[index])
-      )
-      if validator?.isPartialDeserializationAllowed == false {
-        return .failure(NonEmptyArray(errors)!)
-      }
-    }
-
-    if validator?.isValid(result) == false {
-      errors.append(invalidFieldErrorForKey(key, representation: array))
-      return .failure(NonEmptyArray(errors)!)
-    }
-
-    if result.count != array.count, validator?.isPartialDeserializationAllowed == false {
-      errors.append(invalidFieldErrorForKey(key, representation: array))
-      return .failure(NonEmptyArray(errors)!)
-    }
-
-    return errors.isEmpty
-    ? .success(result)
-    : .partialSuccess(result, warnings: NonEmptyArray(errors)!)
-  }
-
-  @usableFromInline
-  func getArray<T, U>(
-    _ key: [Key],
     transform: (T) -> U?,
     validator: AnyArrayValueValidator<U>?
-  ) -> DeserializationResult<[U]> {
-    getArray(
+  ) throws -> [U] {
+    try getArray(
       key,
-      transform: {
-        if let result = transform($0) {
-          return .success(result)
+      transform: { (value: T) throws -> U in
+        guard let result = transform(value) else {
+          throw invalidFieldErrorForKey(key, representation: value)
         }
-        return .failure(NonEmptyArray(.generic))
+        return result
       },
       validator: validator
     )
@@ -348,8 +304,8 @@ extension Dictionary where Key == String {
   public func getArray(
     _ key: Key...,
     validator: AnyArrayValueValidator<Any>? = nil
-  ) -> DeserializationResult<[Any]> {
-    getArray(key, transform: { .success($0) }, validator: validator)
+  ) throws -> [Any] {
+    try getArray(key, transform: { (value: Any) throws -> Any in value }, validator: validator)
   }
 
   @inlinable
@@ -357,8 +313,8 @@ extension Dictionary where Key == String {
     _ key: Key...,
     transform: (T) throws -> U,
     validator: AnyArrayValueValidator<U>? = nil
-  ) -> DeserializationResult<[U]> {
-    getArray(key, transform: transform, validator: validator)
+  ) throws -> [U] {
+    try getArray(key, transform: transform, validator: validator)
   }
 
   @inlinable
@@ -366,25 +322,16 @@ extension Dictionary where Key == String {
     _ key: Key...,
     transform: (T) -> U?,
     validator: AnyArrayValueValidator<U>? = nil
-  ) -> DeserializationResult<[U]> {
-    getArray(key, transform: transform, validator: validator)
-  }
-
-  @inlinable
-  public func getArray<T: ValidSerializationValue, U>(
-    _ key: Key...,
-    transform: (T) -> DeserializationResult<U>,
-    validator: AnyArrayValueValidator<U>? = nil
-  ) -> DeserializationResult<[U]> {
-    getArray(key, transform: transform, validator: validator)
+  ) throws -> [U] {
+    try getArray(key, transform: transform, validator: validator)
   }
 
   @inlinable
   public func getArray<T: ValidSerializationValue>(
     _ key: Key...,
     validator: AnyArrayValueValidator<T>? = nil
-  ) -> DeserializationResult<[T]> {
-    getArray(
+  ) throws -> [T] {
+    try getArray(
       key, transform: { (obj: Any) -> T? in obj as? T },
       validator: validator
     )
@@ -394,8 +341,8 @@ extension Dictionary where Key == String {
   public func getArray<T: Deserializable>(
     _ key: Key...,
     validator: AnyArrayValueValidator<T>? = nil
-  ) -> DeserializationResult<[T]> {
-    getArray(
+  ) throws -> [T] {
+    try getArray(
       key,
       transform: { (dict: Self) in try T(dictionary: dict) },
       validator: validator

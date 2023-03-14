@@ -30,7 +30,7 @@ public indirect enum DeserializationError: Error, CustomStringConvertible {
     case let .unknownType(type):
       return "Unknown type: \(type)"
     case let .invalidFieldRepresentation(field, representation):
-      return "Invalid '\(field)' value: \(dbgStr(representation))"
+      return "Invalid '\(field)' value: \(dbgStr(representation))]"
     case let .typeMismatch(expected, representation):
       return "Type mismatch: \(dbgStr(representation)), but '\(expected)' expected"
     case let .invalidValue(result, value):

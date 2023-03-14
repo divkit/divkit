@@ -9,7 +9,7 @@ struct Palette {
   }
 
   func makeVariables(theme: Theme) -> DivVariables {
-    guard let palette = json.getArray(theme.rawValue).value as? [[String: String]] else {
+    guard let palette = try? json.getArray(theme.rawValue) as? [[String: String]] else {
       return [:]
     }
 
