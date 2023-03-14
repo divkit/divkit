@@ -3,15 +3,15 @@ import Foundation
 import CommonCore
 import LayoutKitInterface
 
-public enum DivActionIntent {
+enum DivActionIntent {
   case showTooltip(id: String, multiple: Bool)
   case hideTooltip(id: String)
   case download(patchUrl: URL)
   case setState(divStatePath: DivStatePath, lifetime: DivStateLifetime)
   case setVariable(name: String, value: String)
   case setCurrentItem(id: String, index: Int)
-  case setNextItem(id: String)
-  case setPreviousItem(id: String)
+  case setNextItem(id: String, overflow: OverflowMode)
+  case setPreviousItem(id: String, overflow: OverflowMode)
   case timer(id: String, action: DivTimerAction)
 
   public static let scheme = "div-action"
@@ -56,12 +56,12 @@ public enum DivActionIntent {
       guard let id = url.id else {
         return nil
       }
-      self = .setNextItem(id: id)
+      self = .setNextItem(id: id, overflow: url.overflow)
     case "set_previous_item":
       guard let id = url.id else {
         return nil
       }
-      self = .setPreviousItem(id: id)
+      self = .setPreviousItem(id: id, overflow: url.overflow)
     case "timer":
       guard let id = url.id, let action = url.timerAction else {
         return nil
@@ -127,6 +127,21 @@ extension URL {
     default:
       DivKitLogger.failure("Unknown action '\(action)' for timer.")
       return nil
+    }
+  }
+
+  fileprivate var overflow: OverflowMode {
+    guard let overflow = queryParamValue(forName: "overflow") else {
+      return .clamp
+    }
+    switch overflow {
+    case "clamp":
+      return .clamp
+    case "ring":
+      return .ring
+    default:
+      DivKitLogger.failure("Unknown overflow: '\(overflow)'.")
+      return .clamp
     }
   }
 }
