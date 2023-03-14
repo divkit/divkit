@@ -86,6 +86,20 @@ function toBooleanString(_vars: VariablesMap, arg: StringValue): EvalValue {
     };
 }
 
+function toColor(_vars: VariablesMap, arg: StringValue): EvalValue {
+    return {
+        type: COLOR,
+        value: transformColorValue(arg.value)
+    };
+}
+
+function toUrl(_vars: VariablesMap, arg: StringValue): EvalValue {
+    return {
+        type: URL,
+        value: arg.value
+    };
+}
+
 function encodeUri(_vars: VariablesMap, str: StringValue): EvalValue {
     try {
         return {
@@ -174,6 +188,10 @@ export function registerStd(): void {
 
     registerFunc('toBoolean', [INTEGER], toBooleanInteger);
     registerFunc('toBoolean', [STRING], toBooleanString);
+
+    registerFunc('toColor', [STRING], toColor);
+
+    registerFunc('toUrl', [STRING], toUrl);
 
     registerFunc('encodeUri', [STRING], encodeUri);
     registerFunc('decodeUri', [STRING], decodeUri);

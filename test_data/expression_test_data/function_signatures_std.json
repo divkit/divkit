@@ -157,6 +157,32 @@
       "platforms": ["ios", "web"]
     },
     {
+      "name": "toColor(str) color",
+      "function_name": "toColor",
+      "doc": "Converts argument value to color type. Returns color value.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "String value to convert."
+          }
+      ],
+      "result_type": "color",
+      "platforms": ["web"]
+    },
+    {
+      "name": "toUrl(str) url",
+      "function_name": "toUrl",
+      "doc": "Converts argument value to url type. Returns url value.",
+      "arguments": [
+          {
+              "type": "string",
+              "doc": "String value to convert."
+          }
+      ],
+      "result_type": "url",
+      "platforms": ["web"]
+    },
+    {
       "name": "getIntegerValue(string, integer) integer",
       "function_name": "getIntegerValue",
       "doc": "Returns the value of a variable by its name. If the variable doesn't exist or has incorrect type, the default value would be returned.",
