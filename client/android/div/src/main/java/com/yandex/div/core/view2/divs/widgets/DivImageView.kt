@@ -25,6 +25,7 @@ internal open class DivImageView @JvmOverloads constructor(
 
     internal var div: DivImage? = null
     internal var imageUrl: Uri? = null
+    internal var preview: String? = null
 
     private var borderDrawer: DivBorderDrawer? = null
     override val border: DivBorder?
@@ -49,6 +50,11 @@ internal open class DivImageView @JvmOverloads constructor(
     override fun resetImageLoaded() {
         super.resetImageLoaded()
         imageUrl = null
+    }
+
+    fun resetPreviewLoaded() {
+        super.resetImageLoaded()
+        preview = null
     }
 
     override fun setAdjustViewBounds(adjustViewBounds: Boolean) = Unit

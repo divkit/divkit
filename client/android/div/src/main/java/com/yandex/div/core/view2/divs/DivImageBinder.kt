@@ -55,10 +55,10 @@ internal class DivImageBinder @Inject constructor(
             div.scale.observeAndGet(expressionResolver) { scale -> view.imageScale = scale.toImageScale() }
         )
         view.observeContentAlignment(expressionResolver, div.contentAlignmentHorizontal, div.contentAlignmentVertical)
-        view.observePreview(divView, expressionResolver, errorCollector, div)
         view.addSubscription(
             div.imageUrl.observeAndGet(expressionResolver) { view.applyImage(divView, expressionResolver, errorCollector, div) }
         )
+        view.observePreview(divView, expressionResolver, errorCollector, div)
         view.observeTint(expressionResolver, div.tintColor, div.tintMode)
         view.observeFilters(div.filters, divView, subscriber, expressionResolver)
     }
@@ -122,12 +122,10 @@ internal class DivImageBinder @Inject constructor(
                                             div: DivImage) {
         div.preview?.let {
             val callback = { _: Any ->
-                if (!isImageLoaded) {
-                    applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShow(resolver, this, div))
-                }
+                applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShow(resolver, this, div))
             }
 
-            addSubscription(it.observe(resolver, callback))
+            addSubscription(it.observeAndGet(resolver, callback))
         }
     }
 
@@ -136,10 +134,24 @@ internal class DivImageBinder @Inject constructor(
                                           div: DivImage,
                                           errorCollector: ErrorCollector,
                                           synchronous: Boolean) {
+        if (isImageLoaded) {
+            return
+        }
+
+        val newPreview = div.preview?.evaluate(resolver)
+
+        if (preview != null && newPreview == preview) {
+            return
+        }
+
+        resetPreviewLoaded()
+
+        preview = newPreview
+
         placeholderLoader.applyPlaceholder(
             this,
             errorCollector,
-            div.preview?.evaluate(resolver),
+            newPreview,
             div.placeholderColor.evaluate(resolver),
             synchronous = synchronous,
             onSetPlaceholder = { drawable ->
@@ -173,6 +185,7 @@ internal class DivImageBinder @Inject constructor(
         val isHighPriorityShowPreview = isHighPriorityShow(resolver, this, div)
 
         resetImageLoaded()
+        resetPreviewLoaded()
 
         applyPreview(divView, resolver, div, errorCollector, synchronous = isHighPriorityShowPreview)
 
