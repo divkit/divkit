@@ -47,7 +47,11 @@ class DivStorageCardsLoadTest {
                     activityClass = DIV_STORAGE_BENCHMARK_ACTIVITY,
                     extras = divStorageBenchmarkActivityExtras(
                         assetNames = arrayOf("div2-perf/benchmark-with-templates.json",
-                            "div2-perf/state-benchmark-multiple-change.json")
+                            "div2-perf/state-benchmark-multiple-change.json"),
+                        prohibitedHistograms = arrayOf("Storage.Templates.Load",
+                            "com.yandex.divkit.demo.Storage.Templates.Parsing",
+                            "com.yandex.divkit.demo.Storage.Data.Load",
+                            "com.yandex.divkit.demo.Storage.Templates.Load"),
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )
@@ -69,7 +73,13 @@ class DivStorageCardsLoadTest {
                     activityClass = DIV_STORAGE_BENCHMARK_ACTIVITY,
                     extras = divStorageBenchmarkActivityExtras(
                         assetNames = arrayOf("div2-perf/benchmark-without-templates.json",
-                            "div2-perf/state-benchmark-multiple-change.json")
+                            "div2-perf/state-benchmark-multiple-change.json"),
+                        prohibitedHistograms = arrayOf("Storage.Templates.Load",
+                            "Storage.Templates.Parsing",
+                            "com.yandex.divkit.demo.Storage.Data.Load",
+                            "com.yandex.divkit.demo.Storage.Templates.Parsing",
+                            "com.yandex.divkit.demo.Storage.Templates.Load",
+                        )
                     ),
                     waitCondition = Until.findObject(By.textContains("Finished"))
                 )

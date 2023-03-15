@@ -2,6 +2,8 @@ package com.yandex.divkit.demo.benchmark
 
 import android.app.Activity
 import com.yandex.div.core.Div2Context
+import com.yandex.div.histogram.DivParsingHistogramReporter
+import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.internal.util.forEach
 import com.yandex.div.storage.DivDataRepository
 import com.yandex.div.storage.DivStorageComponent
@@ -11,18 +13,19 @@ import com.yandex.divkit.demo.divstorage.DemoAppHistogramNameProvider
 import com.yandex.divkit.demo.utils.JsonAssetReader
 import com.yandex.divkit.demo.utils.coroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import javax.inject.Provider
 
 private const val CARD_ID = "card_id"
 
 internal class DivStorageBenchmark(
     divContext: Div2Context,
-    val activity: Activity,
-    private val viewController: DivStorageBenchmarkViewController
+    private val activity: Activity,
+    private val viewController: DivStorageBenchmarkViewController,
+    prohibitedHistograms: Array<String>?,
 ) {
 
     private val assetReader = JsonAssetReader(divContext)
@@ -31,6 +34,8 @@ internal class DivStorageBenchmark(
     private val exceptionHandler = BenchmarkCoroutineExceptionHandler(viewController)
     private val mainContext = Dispatchers.Main + exceptionHandler
     private val backgroundContext = newSingleThreadContext("BenchmarkThread")
+    private val histogramReporterDelegate = DivStorageBenchmarkReporterDelegate(
+        Container.histogramReporterDelegate, prohibitedHistograms)
 
     fun run(assetNames: Array<String>) {
         activity.coroutineScope.launch(mainContext) {
@@ -45,8 +50,9 @@ internal class DivStorageBenchmark(
     private val createStorageComponent get() = DivStorageComponent.create(
         context = activity,
         errorLogger = { throw(it) },
-        histogramReporter = Container.histogramReporterDelegate,
+        histogramReporter = histogramReporterDelegate,
         histogramNameProvider = DemoAppHistogramNameProvider(),
+        parsingHistogramReporter = { DivParsingHistogramReporter.DEFAULT },
     )
 
     private suspend fun putAssetsToDivStorage(jsonFiles: List<JSONObject>) {
@@ -91,5 +97,24 @@ internal class DivStorageBenchmark(
 
     private fun finish() {
         viewController.showMessage("Finished")
+    }
+}
+
+internal class DivStorageBenchmarkReporterDelegate(
+    private val histogramReporter: HistogramReporterDelegate,
+    prohibitedHistograms: Array<String>?,
+): HistogramReporterDelegate {
+
+    private val prohibitedHistogramsList = prohibitedHistograms?.asList()
+    override fun reportDuration(histogramName: String, duration: Long, forceCallType: String?) {
+        if (prohibitedHistogramsList == null || !prohibitedHistogramsList.contains(histogramName)) {
+            histogramReporter.reportDuration(histogramName, duration, forceCallType)
+        }
+    }
+
+    override fun reportSize(histogramName: String, size: Int) {
+        if (prohibitedHistogramsList == null || !prohibitedHistogramsList.contains(histogramName)) {
+            histogramReporter.reportSize(histogramName, size)
+        }
     }
 }

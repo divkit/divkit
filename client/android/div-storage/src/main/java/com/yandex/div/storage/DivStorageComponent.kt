@@ -1,6 +1,8 @@
 package com.yandex.div.storage
 
 import android.content.Context
+import com.yandex.div.core.DivKit
+import com.yandex.div.histogram.DivParsingHistogramReporter
 import com.yandex.div.histogram.reporter.HistogramReporterDelegate
 import com.yandex.div.json.ParsingErrorLogger
 import com.yandex.div.storage.analytics.CardErrorLoggerFactory
@@ -25,12 +27,15 @@ interface DivStorageComponent {
                 histogramNameProvider: HistogramNameProvider? = null,
                 errorLogger: ParsingErrorLogger = ParsingErrorLogger.LOG,
                 cardErrorTransformer: Provider<out CardErrorTransformer>? = null,
+                parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
+                    LazyProvider { DivKit.getInstance(context).parsingHistogramReporter },
         ): DivStorageComponent = createInternal(
                 context,
                 histogramReporter,
                 histogramNameProvider,
                 errorLogger,
                 cardErrorTransformer,
+                parsingHistogramReporter,
         )
 
         internal fun createInternal(
@@ -38,7 +43,9 @@ interface DivStorageComponent {
                 histogramReporter: HistogramReporterDelegate = HistogramReporterDelegate.NoOp,
                 histogramNameProvider: HistogramNameProvider? = null,
                 errorLogger: ParsingErrorLogger = ParsingErrorLogger.LOG,
-                cardErrorTransformer: Provider<out CardErrorTransformer>? = null
+                cardErrorTransformer: Provider<out CardErrorTransformer>? = null,
+                parsingHistogramReporter: Provider<DivParsingHistogramReporter> =
+                    LazyProvider { DivKit.getInstance(context).parsingHistogramReporter },
         ): InternalStorageComponent {
             val openHelperProvider = DatabaseOpenHelperProvider { c, name, version, ccb, ucb ->
                 AndroidDatabaseOpenHelper(c, name, version, ccb, ucb)
@@ -47,7 +54,8 @@ interface DivStorageComponent {
                     context,
                     openHelperProvider,
             )
-            val parsingHistogramProxy = LazyProvider { DivParsingHistogramProxy(context) }
+            val parsingHistogramProxy =
+                LazyProvider { DivParsingHistogramProxy { parsingHistogramReporter.get() } }
             val histogramRecorder = HistogramRecorder(histogramReporter, histogramNameProvider)
             val templatesContainer = TemplatesContainer(
                     divStorage = divStorage,

@@ -42,14 +42,13 @@ internal class HistogramRecorder(
             histogramName: String,
             time: Long,
             filter: HistogramFilter = HistogramFilter.ON,
-    ) =
-        histogramReporter.reportDuration(
+    ) = histogramReporter.reportDuration(
             histogramName = histogramName,
             duration = time,
             componentName = histogramNameProvider?.componentName,
             filter = filter,
             forceCallType = getHistogramCallType(histogramName),
-    )
+        )
 
     private fun getHistogramCallType(histogramName: String): String {
         return if (recordedHistograms.add(histogramName)) {
@@ -61,7 +60,7 @@ internal class HistogramRecorder(
 
     fun reportTemplatesParseTime(parsingHistogramNames: Set<String>, duration: Long) {
         parsingHistogramNames.forEach {
-            histogramReporter.reportDuration(it, duration)
+            histogramReporter.reportDuration(it, duration, histogramNameProvider?.componentName)
         }
     }
 }

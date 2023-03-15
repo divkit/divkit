@@ -15,10 +15,11 @@ class DivStorageBenchmarkActivity : AppCompatActivity() {
         setContentView(rootLayout)
 
         val assetNames = intent.getStringArrayExtra(EXTRA_ASSET_NAMES)
+        val prohibitedHistograms = intent.getStringArrayExtra(EXTRA_PROHIBITED_HISTOGRAMS)
 
         val viewController = DivStorageBenchmarkViewController(rootLayout)
         val divContext = divContext(activity = this)
-        benchmark = DivStorageBenchmark(divContext, this, viewController)
+        benchmark = DivStorageBenchmark(divContext, this, viewController, prohibitedHistograms)
 
         if (assetNames == null || assetNames.isEmpty()) {
             viewController.showMessage("Error: asset file is not specified")

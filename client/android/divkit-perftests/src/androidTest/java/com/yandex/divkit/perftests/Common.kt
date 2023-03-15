@@ -12,6 +12,7 @@ const val DIV_STORAGE_BENCHMARK_ACTIVITY = "$PACKAGE_NAME.benchmark.DivStorageBe
 private const val EXTRA_ASSET_NAME = "asset_name"
 private const val EXTRA_ASSET_NAMES = "asset_names"
 private const val EXTRA_STATE_PATHS = "state_paths"
+private const val EXTRA_PROHIBITED_HISTOGRAMS = "prohibited_histograms"
 
 fun divBenchmarkActivityExtras(assetName: String): Bundle {
     return bundleOf(
@@ -32,8 +33,11 @@ fun divFeedBenchmarkActivityExtras(assetNames: Array<String>): Bundle {
     )
 }
 
-fun divStorageBenchmarkActivityExtras(assetNames: Array<String>): Bundle {
+fun divStorageBenchmarkActivityExtras(
+    assetNames: Array<String>, prohibitedHistograms: Array<String>
+): Bundle {
     return bundleOf(
         EXTRA_ASSET_NAMES to assetNames,
+        EXTRA_PROHIBITED_HISTOGRAMS to prohibitedHistograms,
     )
 }
