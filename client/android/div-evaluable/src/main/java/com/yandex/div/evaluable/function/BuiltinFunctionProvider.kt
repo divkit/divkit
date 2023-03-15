@@ -75,6 +75,7 @@ object BuiltinFunctionProvider : FunctionProvider {
 
         // Datetime functions
         registry.register(ParseUnixTime)
+        registry.register(ParseUnixTimeAsLocal)
         registry.register(NowLocal)
         registry.register(AddMillis)
         registry.register(SetYear)
@@ -92,6 +93,10 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(GetMinutes)
         registry.register(GetSeconds)
         registry.register(GetMillis)
+        registry.register(FormatDateAsLocal)
+        registry.register(FormatDateAsUTC)
+        registry.register(FormatDateAsLocalWithLocale)
+        registry.register(FormatDateAsUTCWithLocale)
 
         // Interval functions
         registry.register(GetIntervalTotalWeeks)

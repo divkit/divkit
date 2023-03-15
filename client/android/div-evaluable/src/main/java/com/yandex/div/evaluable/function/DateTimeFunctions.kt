@@ -6,9 +6,12 @@ import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionArgument
 import com.yandex.div.evaluable.throwExceptionOnFunctionEvaluationFailed
 import com.yandex.div.evaluable.types.DateTime
+import java.text.SimpleDateFormat
 import java.util.TimeZone
 import java.util.Calendar
+import java.util.Date
 import java.util.GregorianCalendar
+import java.util.Locale
 
 internal object ParseUnixTime : Function() {
 
@@ -23,7 +26,25 @@ internal object ParseUnixTime : Function() {
         val timestampInSeconds = first as Int
         return DateTime(
             timestampMillis = timestampInSeconds * 1000L,
-            timezoneMinutes = 0,
+            timezone = TimeZone.getTimeZone("UTC"),
+        )
+    }
+}
+
+internal object ParseUnixTimeAsLocal : Function() {
+
+    override val name = "parseUnixTimeAsLocal"
+
+    override val declaredArgs = listOf(FunctionArgument(type = EvaluableType.INTEGER))
+    override val resultType = EvaluableType.DATETIME
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val first = args.first()
+        val timestampInSeconds = first as Int
+        return DateTime(
+            timestampMillis = timestampInSeconds * 1000L,
+            timezone = TimeZone.getDefault(),
         )
     }
 }
@@ -39,7 +60,7 @@ internal object NowLocal : Function() {
     override fun evaluate(args: List<Any>): Any {
         return DateTime(
             timestampMillis = System.currentTimeMillis(),
-            timezoneMinutes = TimeZone.getDefault().rawOffset * 60,
+            timezone = TimeZone.getDefault(),
         )
     }
 }
@@ -61,7 +82,7 @@ internal object AddMillis : Function() {
 
         return DateTime(
             timestampMillis = datetime.timestampMillis + millis,
-            timezoneMinutes = datetime.timezoneMinutes,
+            timezone = datetime.timezone,
         )
     }
 }
@@ -86,7 +107,7 @@ internal object SetYear : Function() {
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
-            timezoneMinutes = datetime.timezoneMinutes,
+            timezone = datetime.timezone,
         )
     }
 }
@@ -115,7 +136,7 @@ internal object SetMonth : Function() {
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
-            timezoneMinutes = datetime.timezoneMinutes,
+            timezone = datetime.timezone,
         )
     }
 }
@@ -146,7 +167,7 @@ internal object SetDay : Function() {
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
-            timezoneMinutes = datetime.timezoneMinutes,
+            timezone = datetime.timezone,
         )
     }
 }
@@ -176,7 +197,7 @@ internal object SetHours : Function() {
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
-            timezoneMinutes = datetime.timezoneMinutes,
+            timezone = datetime.timezone,
         )
     }
 }
@@ -205,7 +226,7 @@ internal object SetMinutes : Function() {
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
-            timezoneMinutes = datetime.timezoneMinutes,
+            timezone = datetime.timezone,
         )
     }
 }
@@ -234,7 +255,7 @@ internal object SetSeconds : Function() {
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
-            timezoneMinutes = datetime.timezoneMinutes,
+            timezone = datetime.timezone,
         )
     }
 }
@@ -264,7 +285,7 @@ internal object SetMillis : Function() {
 
         return DateTime(
             timestampMillis = calendar.timeInMillis,
-            timezoneMinutes = datetime.timezoneMinutes,
+            timezone = datetime.timezone,
         )
     }
 }
@@ -431,13 +452,124 @@ internal object GetMillis : Function() {
     }
 }
 
-private fun DateTime.toCalendar(): Calendar {
-    val timezone = TimeZone.getDefault()
-    timezone.rawOffset = timezoneMinutes / 60
+internal object FormatDateAsLocal : Function() {
+    override val name = "formatDateAsLocal"
 
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME),
+        FunctionArgument(type = EvaluableType.STRING)
+    )
+    override val resultType = EvaluableType.STRING
+
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+        val pattern = args[1] as String
+
+        throwExceptionIfZInTimezone(pattern)
+
+        val date = datetime.toDate()
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+        sdf.timeZone = TimeZone.getDefault()
+
+        return sdf.format(date)
+    }
+}
+
+internal object FormatDateAsUTC : Function() {
+    override val name = "formatDateAsUTC"
+
+    override val declaredArgs = listOf(
+        FunctionArgument(type = EvaluableType.DATETIME),
+        FunctionArgument(type = EvaluableType.STRING)
+    )
+    override val resultType = EvaluableType.STRING
+
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+        val pattern = args[1] as String
+
+        throwExceptionIfZInTimezone(pattern)
+
+        val date = datetime.toDate()
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+
+        return sdf.format(date)
+    }
+}
+
+internal object FormatDateAsLocalWithLocale : Function() {
+    override val name = "formatDateAsLocalWithLocale"
+
+    override val declaredArgs = listOf(
+            FunctionArgument(type = EvaluableType.DATETIME),
+            FunctionArgument(type = EvaluableType.STRING),
+            FunctionArgument(type = EvaluableType.STRING)
+    )
+    override val resultType = EvaluableType.STRING
+
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+        val pattern = args[1] as String
+        val locale = args[2] as String
+
+        throwExceptionIfZInTimezone(pattern)
+
+        val date = datetime.toDate()
+        val sdf = SimpleDateFormat(pattern, Locale.Builder().setLanguageTag(locale).build())
+        sdf.timeZone = TimeZone.getDefault()
+
+        return sdf.format(date)
+    }
+}
+
+internal object FormatDateAsUTCWithLocale : Function() {
+    override val name = "formatDateAsUTCWithLocale"
+
+    override val declaredArgs = listOf(
+            FunctionArgument(type = EvaluableType.DATETIME),
+            FunctionArgument(type = EvaluableType.STRING),
+            FunctionArgument(type = EvaluableType.STRING)
+    )
+    override val resultType = EvaluableType.STRING
+
+    override val isPure = true
+
+    override fun evaluate(args: List<Any>): Any {
+        val datetime = args[0] as DateTime
+        val pattern = args[1] as String
+        val locale = args[2] as String
+
+        throwExceptionIfZInTimezone(pattern)
+
+        val date = datetime.toDate()
+        val sdf = SimpleDateFormat(pattern, Locale.Builder().setLanguageTag(locale).build())
+        sdf.timeZone = TimeZone.getTimeZone("UTC")
+
+        return sdf.format(date)
+    }
+}
+
+private fun throwExceptionIfZInTimezone(pattern: String): Unit {
+    if (pattern.toLowerCase().contains("z")) {
+        throw EvaluableException("z/Z not supported in [$pattern]")
+    }
+}
+
+private fun DateTime.toCalendar(): Calendar {
     val calendar = GregorianCalendar.getInstance()
     calendar.timeZone = timezone
     calendar.timeInMillis = timestampMillis
 
     return calendar
+}
+
+private fun DateTime.toDate(): Date {
+    return Date(timestampMillis  - timezone.rawOffset)
 }

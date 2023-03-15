@@ -480,6 +480,105 @@
         "ios",
         "web"
       ]
+    },
+    {
+      "name": "formatDateAsUTC(setDay(parseUnixTime(0), 13)) => 01/01/1970 00:00:000",
+      "expression": "@{formatDateAsUTC(setDay(parseUnixTime(0), 13), 'dd/MM/yyyy HH:mm:SSS')}",
+      "expected": {
+        "type": "string",
+        "value": "13/01/1970 00:00:000"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "formatDateAsUTCWithLocale(parseUnixTime(0)) => Thu, Jan 1, 70",
+      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'EEE, MMM d, yy', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "Thu, Jan 1, 70"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "formatDateAsUTCWithLocale(parseUnixTime(0), en-US) => 12 o'clock AM",
+      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'hh \\'o\\'\\'clock\\' a', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "12 o'clock AM"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "formatDateAsUTCWithLocale(parseUnixTime(0), en-US) => 01970 January 01 AD 12:00 AM",
+      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'yyyyy MMMM dd GGG hh:mm aaa', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "01970 January 01 AD 12:00 AM"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+     {
+      "name": "formatDateAsUTCWithLocale(parseUnixTime(0), en-US) => 0:00 AM",
+      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'K:mm a', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "0:00 AM"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+     {
+      "name": "formatDateAsUTCWithLocale(setDay(parseUnixTime(0), 13), en-US) => 1970-01-01T00:00:00.000",
+      "expression": "@{formatDateAsUTCWithLocale(setDay(parseUnixTime(0), 13), 'yyyy-MM-dd\\'T\\'HH:mm:ss.SSS', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1970-01-13T00:00:00.000"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+      {
+      "name": "formatDateAsUTCWithLocale(parseUnixTime(0), en-US) => 1970-W01-4",
+      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'YYYY-\\'W\\'ww-u', 'en-US')}",
+      "expected": {
+        "type": "string",
+        "value": "1970-W01-4"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "formatDateAsUTCWithLocale(parseUnixTime(0), ru-RU) => 01970 января 01 н. э. чт",
+      "expression": "@{formatDateAsUTCWithLocale(parseUnixTime(0), 'yyyyy MMMM dd GGG EEE', 'ru-RU')}",
+      "expected": {
+        "type": "string",
+        "value": "01970 января 01 н. э. чт"
+      },
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "formatDateAsUTC(parseUnixTime(0), 'dd/MM/yyyy HH:mm Z') => error",
+      "expression": "@{formatDateAsUTC(parseUnixTime(0), 'dd/MM/yyyy HH:mm Z')}",
+      "expected": {
+        "type": "error",
+        "value": "z/Z not supported in [dd/MM/yyyy HH:mm Z]"
+      },
+      "platforms": [
+        "android"
+      ]
     }
   ]
 }

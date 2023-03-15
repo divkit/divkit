@@ -18,6 +18,21 @@
       ]
     },
     {
+      "name": "parseUnixTimeAsLocal(integer) datetime",
+      "function_name": "parseUnixTimeAsLocal",
+      "doc": "Creates datetime in local timezone from integer value of unix time. Returns datetime value.",
+      "arguments": [
+        {
+          "type": "integer",
+          "doc": "Time in local time zone seconds from the epoch."
+        }
+      ],
+      "result_type": "datetime",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
       "name": "nowLocal() datetime",
       "function_name": "nowLocal",
       "doc": "Creates datetime from time of now. Returns datetime value.",
@@ -331,6 +346,90 @@
         "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "name": "formatDateAsLocal(datetime, pattern) string",
+      "function_name": "formatDateAsLocal",
+      "doc": "Formatting dates in a local timezone in users locale. Used default locale. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get milliseconds."
+        },
+        {
+          "type": "string",
+          "doc": "Date and time formats are specified by date and time pattern strings."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "formatDateAsUTC(datetime, pattern) string",
+      "function_name": "formatDateAsUTC",
+      "doc": "Formatting dates in a UTC timezone in users locale. Used default locale. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get milliseconds."
+        },
+        {
+          "type": "string",
+          "doc": "Date and time formats are specified by date and time pattern strings."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "formatDateAsLocalWithLocale(datetime, pattern, locale) string",
+      "function_name": "formatDateAsLocalWithLocale",
+      "doc": "Formatting dates in a local timezone with localization. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get milliseconds."
+        },
+        {
+          "type": "string",
+          "doc": "Date and time formats are specified by date and time pattern strings."
+        },
+        {
+          "type": "string",
+          "doc": "Language for specified date and time pattern strings."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
+      ]
+    },
+    {
+      "name": "formatDateAsUTCWithLocale(datetime, pattern, locale) string",
+      "function_name": "formatDateAsUTCWithLocale",
+      "doc": "Formatting dates in a UTC timezone with localization. Look https://en.wikipedia.org/wiki/ISO_8601 for more. `Z` for timezones not supported.",
+      "arguments": [
+        {
+          "type": "datetime",
+          "doc": "Datetime value, date to get milliseconds."
+        },
+        {
+          "type": "string",
+          "doc": "Date and time formats are specified by date and time pattern strings."
+        },
+        {
+          "type": "string",
+          "doc": "Language for specified date and time pattern strings."
+        }
+      ],
+      "result_type": "string",
+      "platforms": [
+        "android"
       ]
     }
   ]

@@ -1,21 +1,18 @@
 package com.yandex.div.evaluable.types
 
 import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.GregorianCalendar
-import java.util.Locale
-import java.util.SimpleTimeZone
+import java.util.*
 
 private const val TO_MILLIS = 60 * 1000
 
 internal class DateTime(
     internal val timestampMillis: Long,
-    internal val timezoneMinutes: Int,
+    internal val timezone: TimeZone,
 ) : Comparable<DateTime> {
     private val calendar by lazy(LazyThreadSafetyMode.NONE) {
         Calendar.getInstance(utcTimezone).apply { timeInMillis = timestampMillis }
     }
+    internal val timezoneMinutes = timezone.rawOffset / 60
     private val timestampUtc = timestampMillis - (timezoneMinutes * TO_MILLIS)
 
     override fun toString(): String {
@@ -47,7 +44,7 @@ internal class DateTime(
             val date: Date = dateFormat.parse(source)!!
             return DateTime(
                 timestampMillis = date.time + Calendar.getInstance().timeZone.rawOffset,
-                timezoneMinutes = 0,
+                timezone = TimeZone.getTimeZone("UTC"),
             )
         }
 
