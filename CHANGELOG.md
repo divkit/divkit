@@ -1,3 +1,8 @@
+## 23.5.1
+
+# Android Client:
+* Fixed image preview binding
+
 ## 23.5.0
 
 # Android Client:
