@@ -1,3 +1,25 @@
+## 23.6.0
+
+# Android Client:
+Additions:
+* Added format date function
+* Added trigger logging
+
+Fixes:
+* Fixed image preview
+* Fixed ripple animation duplication
+* Fixed alignment in `DivGallery`
+
+# iOS Client:
+* Added `overflow` parameter support in `div-action` for `DivPager` navigation.
+* Fixed constrained element size calculation inside `DivContainer`.
+* Fixed `MetalImageView` images rendering.
+
+# Web Client:
+Additions:
+* `toUrl` / `toColor` functions
+
+
 ## 23.5.0
 
 # Android Client:

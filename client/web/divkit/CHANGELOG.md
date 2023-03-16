@@ -1,3 +1,9 @@
+## 23.6.0 (March 20, 2023)
+
+Additions:
+* `toUrl` / `toColor` functions
+
+
 ## 23.5.0 (March 13, 2023)
 
 Additions:
@@ -8,6 +14,7 @@ Fixes and changes:
 * `timers` ticks should now be more accurate and reliable. Time intervals would correct time error, there is also an extra tick before end the duration if the ticks doesn't trigger in time
 * `visibility_action` actions will now evaluate expressions on the trigger, and not when the creating the component
 
+
 ## 23.4.0 (March 1, 2023)
 
 Added:
@@ -17,6 +24,7 @@ Fixes:
 * Updated missing function error text, to better match other platforms
 * Fixed error in `gallery` after destroy
 * Fixed element `wrap_content` sizes with `constrained` in `grid`
+
 
 ## 23.1.0 (February 1, 2023)
 
