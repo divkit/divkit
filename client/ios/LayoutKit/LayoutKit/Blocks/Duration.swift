@@ -2,7 +2,7 @@ public struct Duration: ExpressibleByFloatLiteral, ExpressibleByIntegerLiteral, 
   public let value: Double
 
   public init(_ value: Double) {
-    precondition(value > 0, "Duration must be positive number")
+    precondition(value >= 0, "Duration must be non-negative number")
     self.value = value
   }
 

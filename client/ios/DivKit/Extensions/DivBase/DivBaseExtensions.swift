@@ -362,7 +362,7 @@ extension DivTooltip {
     return BlockTooltip(
       id: id,
       block: block,
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)) ?? 0,
+      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
       offset: offset?.cast(with: expressionResolver) ?? .zero,
       position: position
     )

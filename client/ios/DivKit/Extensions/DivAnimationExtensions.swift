@@ -41,8 +41,8 @@ extension DivAnimation {
       kind: kind,
       start: startValue ?? kind.defaultStartValue(for: type),
       end: endValue ?? kind.defaultEndValue(for: type),
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)) ?? .default,
-      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)) ?? 0,
+      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
+      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)),
       timingFunction: resolveInterpolator(expressionResolver).asTimingFunction()
     )
 
@@ -105,8 +105,4 @@ extension TimeOrientation {
     case .reverse: return .direct
     }
   }
-}
-
-extension Duration {
-  fileprivate static let `default` = Duration(milliseconds: 100)!
 }

@@ -10,8 +10,8 @@ extension DivFadeTransition {
       kind: .fade,
       start: resolveAlpha(expressionResolver),
       end: 1,
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)) ?? 0.3,
-      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)) ?? 0,
+      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
+      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)),
       timingFunction: resolveInterpolator(expressionResolver).asTimingFunction()
     )
   }

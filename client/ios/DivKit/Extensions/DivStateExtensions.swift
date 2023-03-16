@@ -202,8 +202,8 @@ extension DivAnimation {
       kind: kind,
       start: resolveStartValue(expressionResolver) ?? kind.defaultStartValue(for: type),
       end: resolveEndValue(expressionResolver) ?? kind.defaultEndValue(for: type),
-      duration: Duration(milliseconds: resolveDuration(expressionResolver)) ?? 0.3,
-      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)) ?? 0,
+      duration: Duration(milliseconds: resolveDuration(expressionResolver)),
+      delay: Delay(milliseconds: resolveStartDelay(expressionResolver)),
       timingFunction: resolveInterpolator(expressionResolver).asTimingFunction()
     )
 
