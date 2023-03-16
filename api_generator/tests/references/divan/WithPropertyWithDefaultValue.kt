@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withPropertyWithDefaultValue].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class WithPropertyWithDefaultValue internal constructor(
@@ -73,7 +73,7 @@ class WithPropertyWithDefaultValue internal constructor(
      * 
      * Can be created using the method [withPropertyWithDefaultValueNested].
      * 
-     * Required properties: `non_optional`.
+     * Required parameters: `non_optional`.
      */
     @Generated
     class Nested internal constructor(

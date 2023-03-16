@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withArrayWithTransform].
  * 
- * Required properties: `type, array`.
+ * Required parameters: `type, array`.
  */
 @Generated
 class WithArrayWithTransform internal constructor(

@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withStringEnumPropertyWithDefaultValue].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class WithStringEnumPropertyWithDefaultValue internal constructor(

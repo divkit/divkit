@@ -83,7 +83,7 @@ __full_translations: Dict[str, Dict[str, str]] = {
         "ru": "Обязательный параметр."
     },
     "div_generator_required_properties": {
-        "en": "Required properties: `{}`.",
+        "en": "Required parameters: `{}`.",
         "ru": "Обязательные параметры: `{}`."
     },
     "div_generator_schemes": {

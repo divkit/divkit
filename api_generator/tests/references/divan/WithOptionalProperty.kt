@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withOptionalProperty].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class WithOptionalProperty internal constructor(

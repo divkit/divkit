@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withComplexPropertyWithDefaultValue].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class WithComplexPropertyWithDefaultValue internal constructor(
@@ -59,7 +59,7 @@ class WithComplexPropertyWithDefaultValue internal constructor(
     /**
      * Can be created using the method [withComplexPropertyWithDefaultValueProperty].
      * 
-     * Required properties: `value`.
+     * Required parameters: `value`.
      */
     @Generated
     class Property internal constructor(

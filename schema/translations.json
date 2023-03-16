@@ -84,8 +84,8 @@
     "ru": "Одно действие при нажатии на элемент. Не используется, если задан параметр `actions`."
   },
   "div_actionable_action_animation": {
-    "en": "Click animation. The web only supports the following values: `fade`, `scale`, and `set`.",
-    "ru": "Анимация нажатия. В вебе поддерживаются только значения `fade`, `scale` и `set`."
+    "en": "Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.",
+    "ru": "Анимация нажатия. В вебе поддерживаются только значения `fade`, `scale`, `native`, `no_animation` и `set`."
   },
   "div_actionable_actions": {
     "en": "Multiple actions when clicking on an element.",
@@ -166,10 +166,6 @@
   "div_appearance_transition_slide": {
     "en": "Transition with slide animation.",
     "ru": "Переход с анимацией перемещения."
-  },
-  "div_container_aspect": {
-    "en": "Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.",
-    "ru": "Фиксированное соотношение размеров элемента. Высота элемента вычисляется исходя из ширины, значение параметра `height` игнорируется. В вебе требуется поддержка свойства `aspect-ratio` в css для работы."
   },
   "div_aspect": {
     "en": "Fixed aspect ratio. The element's height is calculated based on the width, ignoring the `height` value.",
@@ -362,6 +358,10 @@
   "div_container": {
     "en": "Container. It contains other elements and is responsible for their location. It is used to arrange elements vertically, horizontally, and with an overlay in a certain order, simulating the third dimension.",
     "ru": "Контейнер. Содержит в себе другие элементы и отвечает за их расположение. Позволяет располагать элементы по вертикали, горизонтали и с наложением в определенном порядке, имитируя третье измерение."
+  },
+  "div_container_aspect": {
+    "en": "Size with a fixed aspect ratio. It counts height from width and ignores `height` value. The web requires the `aspect-ratio` css property for work.",
+    "ru": "Фиксированное соотношение размеров элемента. Высота элемента вычисляется исходя из ширины, значение параметра `height` игнорируется. В вебе требуется поддержка свойства `aspect-ratio` в css для работы."
   },
   "div_container_content_alignment_horizontal": {
     "en": "Horizontal element alignment. For child elements, it can be redefined using the `alignment_horizontal` property.",
@@ -959,6 +959,10 @@
     "en": "Maximum number of lines to be displayed in the input field.",
     "ru": "Максимальное количество строк, которое будет видно в поле ввода."
   },
+  "div_input_method": {
+    "en": "Data entry method. If nothing is specified, the value will be taken from keyboard_type.",
+    "ru": "Способ ввода данных. Если ничего не указывать, то значение возьмется из keyboard_type."
+  },
   "div_input_native_interface": {
     "en": "Text input line used in the native interface.",
     "ru": "Нативный внешний вид - линия ввода текста."
@@ -978,10 +982,6 @@
   "div_input_text_variable": {
     "en": "Name of text storage variable.",
     "ru": "Название переменной для хранения текста."
-  },
-  "div_input_method": {
-    "en": "Data entry method. If nothing is specified, the value will be taken from keyboard_type.",
-    "ru": "Способ ввода данных. Если ничего не указывать, то значение возьмется из keyboard_type."
   },
   "div_keyboard_input": {
     "en": "Keyboard input method.",
@@ -1195,13 +1195,13 @@
     "en": "Selection item from the menu.",
     "ru": "Элемент выбора из списка."
   },
-  "div_selection_input_item_value": {
-    "en": "Value of the item that is displayed in the selection menu.",
-    "ru": "Значение элемента, которое отображается в меню выбора."
-  },
   "div_selection_input_item_text": {
     "en": "The text that is displayed in the input. If the value is missing, the text from div_selection_input_item_value will appear in the input.",
     "ru": "Текст, который отображается в div_input. Если значение отсутствует, то в div_input покажется текст из div_selection_input_item_value"
+  },
+  "div_selection_input_item_value": {
+    "en": "Value of the item that is displayed in the selection menu.",
+    "ru": "Значение элемента, которое отображается в меню выбора."
   },
   "div_separator": {
     "en": "A separating line between elements.",

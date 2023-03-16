@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withArrayOfEnums].
  * 
- * Required properties: `type, items`.
+ * Required parameters: `type, items`.
  */
 @Generated
 class WithArrayOfEnums internal constructor(

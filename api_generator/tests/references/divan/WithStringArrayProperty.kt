@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withStringArrayProperty].
  * 
- * Required properties: `type, array`.
+ * Required parameters: `type, array`.
  */
 @Generated
 class WithStringArrayProperty internal constructor(

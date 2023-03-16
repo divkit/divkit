@@ -26,7 +26,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [withSimpleProperties].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class WithSimpleProperties internal constructor(

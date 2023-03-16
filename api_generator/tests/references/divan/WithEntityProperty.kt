@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withEntityProperty].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class WithEntityProperty internal constructor(

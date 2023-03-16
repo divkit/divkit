@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withRequiredProperty].
  * 
- * Required properties: `type, property`.
+ * Required parameters: `type, property`.
  */
 @Generated
 class WithRequiredProperty internal constructor(

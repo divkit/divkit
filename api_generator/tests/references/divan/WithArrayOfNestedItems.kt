@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withArrayOfNestedItems].
  * 
- * Required properties: `type, items`.
+ * Required parameters: `type, items`.
  */
 @Generated
 class WithArrayOfNestedItems internal constructor(
@@ -56,7 +56,7 @@ class WithArrayOfNestedItems internal constructor(
     /**
      * Can be created using the method [withArrayOfNestedItemsItem].
      * 
-     * Required properties: `property, entity`.
+     * Required parameters: `property, entity`.
      */
     @Generated
     class Item internal constructor(

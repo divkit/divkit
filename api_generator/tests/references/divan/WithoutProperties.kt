@@ -24,7 +24,7 @@ import kotlin.collections.Map
 /**
  * Can be created using the method [withoutProperties].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 object WithoutProperties : Entity {
