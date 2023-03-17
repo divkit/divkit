@@ -45,13 +45,17 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
         errorCollector: ErrorCollector
     ) {
         data.variables?.forEach {
+            val existingVariable = v.getMutableVariable(it.name) ?: run {
+                v.declare(it.toVariable())
+                return@forEach
+            }
             val consistent = when (it) {
-                is DivVariable.Bool -> v.getMutableVariable(it.value.name) is Variable.BooleanVariable
-                is DivVariable.Integer -> v.getMutableVariable(it.value.name) is Variable.IntegerVariable
-                is DivVariable.Number -> v.getMutableVariable(it.value.name) is Variable.DoubleVariable
-                is DivVariable.Str -> v.getMutableVariable(it.value.name) is Variable.StringVariable
-                is DivVariable.Color -> v.getMutableVariable(it.value.name) is Variable.ColorVariable
-                is DivVariable.Url -> v.getMutableVariable(it.value.name) is Variable.UrlVariable
+                is DivVariable.Bool -> existingVariable is Variable.BooleanVariable
+                is DivVariable.Integer -> existingVariable is Variable.IntegerVariable
+                is DivVariable.Number -> existingVariable is Variable.DoubleVariable
+                is DivVariable.Str -> existingVariable is Variable.StringVariable
+                is DivVariable.Color -> existingVariable is Variable.ColorVariable
+                is DivVariable.Url -> existingVariable is Variable.UrlVariable
             }.apply { /*exhaustive*/ }
 
             // This usually happens when you're using same DivDataTag for DivData
@@ -71,13 +75,11 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
     }
 
     private fun createRuntimeFor(data: DivData, tag: DivDataTag): ExpressionsRuntime {
-        val variables = mutableMapOf<String, Variable>()
-        data.variables?.forEach { divVariable: DivVariable ->
-            val v = divVariable.toVariable()
-            variables[v.name] = v
-        }
+        val variableController = VariableController().apply {
+            data.variables?.forEach { divVariable: DivVariable ->
+                declare(divVariable.toVariable())
+            }
 
-        val variableController = VariableController(variables).apply {
             addSource(globalVariableController.variableSource)
         }
 

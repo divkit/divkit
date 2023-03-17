@@ -16,22 +16,26 @@ import org.robolectric.RobolectricTestRunner
  */
 @RunWith(RobolectricTestRunner::class)
 class VariableControllerTest {
-    private val localVariables = mutableMapOf(
-        "zero" to mock<Variable.IntegerVariable> {
+    private val localVariables = listOf(
+        mock<Variable.IntegerVariable> {
+            on { name } doReturn "zero"
             on { getValue() } doReturn 0
         },
-        "some_text" to mock<Variable.StringVariable> {
+        mock<Variable.StringVariable> {
+            on { name } doReturn "some_text"
             on { getValue() } doReturn "lorem ipsum"
         },
     )
+
     private val declareVariableObserver = argumentCaptor<(Variable) -> Unit>()
     private val source = mock<VariableSource> {
         on { observeDeclaration(declareVariableObserver.capture()) } doAnswer {}
     }
 
-    private val underTest = VariableController(
-        localVariables,
-    ).apply { addSource(source) }
+    private val underTest = VariableController().apply {
+        localVariables.forEach { v -> declare(v) }
+        addSource(source)
+    }
 
     @Test
     fun `null returned when no variable specified`() {
