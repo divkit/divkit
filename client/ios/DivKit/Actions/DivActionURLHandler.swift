@@ -144,8 +144,8 @@ public final class DivActionURLHandler {
         index: index,
         numberOfPages: pagerState.numberOfPages
       )
-    case is TabViewState:
-      setTabsCurrentItem(id: id, index: index)
+    case let tabsState as TabViewState:
+      setTabsCurrentItem(id: id, index: index, countOfPages: tabsState.countOfPages)
     default:
       return
     }
@@ -172,7 +172,16 @@ public final class DivActionURLHandler {
         numberOfPages: pagerState.numberOfPages
       )
     case let tabsState as TabViewState:
-      setTabsCurrentItem(id: id, index: Int(tabsState.selectedPageIndex) + 1)
+      let nextIndex = getNextIndex(
+        current: Int(tabsState.selectedPageIndex),
+        count: tabsState.countOfPages,
+        overflow: overflow
+      )
+      setTabsCurrentItem(
+        id: id,
+        index: nextIndex,
+        countOfPages: tabsState.countOfPages
+      )
     default:
       return
     }
@@ -212,7 +221,16 @@ public final class DivActionURLHandler {
         numberOfPages: pagerState.numberOfPages
       )
     case let tabsState as TabViewState:
-      setTabsCurrentItem(id: id, index: Int(tabsState.selectedPageIndex) - 1)
+      let prevIndex = getPreviousIndex(
+        current: Int(tabsState.selectedPageIndex),
+        count: tabsState.countOfPages,
+        overflow: overflow
+      )
+      setTabsCurrentItem(
+        id: id,
+        index: prevIndex,
+        countOfPages: tabsState.countOfPages
+      )
     default:
       return
     }
@@ -253,10 +271,13 @@ public final class DivActionURLHandler {
     )
   }
 
-  private func setTabsCurrentItem(id: String, index: Int) {
+  private func setTabsCurrentItem(id: String, index: Int, countOfPages: Int) {
     blockStateStorage.setState(
       id: id,
-      state: TabViewState(selectedPageIndex: CGFloat(max(0, index)))
+      state: TabViewState(
+        selectedPageIndex: CGFloat(max(0, index)),
+        countOfPages: countOfPages
+      )
     )
   }
 }

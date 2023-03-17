@@ -88,7 +88,8 @@ extension DivTabs: DivBlockModeling {
       index = CGFloat(resolveSelectedTab(context.expressionResolver))
     }
     let newState = TabViewState(
-      selectedPageIndex: min(index, CGFloat(tabs.count) - 1)
+      selectedPageIndex: min(index, CGFloat(tabs.count) - 1),
+      countOfPages: tabs.count
     )
     stateStorage.setState(path: path, state: newState)
     return newState

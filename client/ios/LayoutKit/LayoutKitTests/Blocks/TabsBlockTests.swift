@@ -5,7 +5,7 @@ import LayoutKit
 
 final class TabsBlockTests: XCTestCase {
   func test_WhenUpdatesState_UsesIt() throws {
-    let state = TabViewState(selectedPageIndex: 1)
+    let state = TabViewState(selectedPageIndex: 1, countOfPages: 1)
     let states = [TabsBlockTestModels.path: state]
     let block = TabsBlockTestModels.base
 
@@ -33,7 +33,7 @@ final class TabsBlockTests: XCTestCase {
   }
 
   func test_WhenUpdatesState_DoesNotTouchInitialBlock() throws {
-    let state = TabViewState(selectedPageIndex: 1)
+    let state = TabViewState(selectedPageIndex: 1, countOfPages: 1)
     let states = [TabsBlockTestModels.path: state]
     let block = TabsBlockTestModels.base
 

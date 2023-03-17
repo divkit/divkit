@@ -207,13 +207,15 @@ internal class TabContentsView: BlockView {
 
   private func updateSelectedPageIndexFromRelativeContentOffset(isIntermediate: Bool) {
     notifyDelegateAboutSelectedPageIndexChange(
-      relativeContentOffset,
+      selectedPageIndex: relativeContentOffset,
+      countOfPages: model.pages.count,
       isIntermediate: isIntermediate
     )
   }
 
   private func notifyDelegateAboutSelectedPageIndexChange(
-    _ selectedPageIndex: CGFloat,
+    selectedPageIndex: CGFloat,
+    countOfPages: Int,
     isIntermediate: Bool
   ) {
     let roundedIndex = selectedPageIndex.rounded(.toNearestOrAwayFromZero)
@@ -224,7 +226,7 @@ internal class TabContentsView: BlockView {
     let index = isIntermediate ? selectedPageIndex : roundedIndex
     self.selectedPageIndex = index
     updatesDelegate?.onSelectedPageIndexChanged(index, inModel: model)
-    let state = TabViewState(selectedPageIndex: index)
+    let state = TabViewState(selectedPageIndex: index, countOfPages: countOfPages)
     observer?.elementStateChanged(state, forPath: model.path)
   }
 }

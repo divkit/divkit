@@ -15,7 +15,7 @@ final class GalleryBlockTests: XCTestCase {
   }
 
   func test_WhenUpdatesState_SendsStatesToItems() throws {
-    let state = TabViewState(selectedPageIndex: 1)
+    let state = TabViewState(selectedPageIndex: 1, countOfPages: 1)
     let states = [TabsBlockTestModels.path: state]
     let block = GalleryBlockTestModels.tabs
 
