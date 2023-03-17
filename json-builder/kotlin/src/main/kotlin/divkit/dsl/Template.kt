@@ -5,7 +5,6 @@ import divkit.dsl.scope.DivScope
 import divkit.dsl.scope.TemplateScope
 import kotlin.Any
 import kotlin.String
-import kotlin.Unit
 import kotlin.collections.Iterator
 import kotlin.collections.List
 import kotlin.collections.MutableMap
@@ -31,20 +30,33 @@ fun <T : Div> template(name: String, builder: TemplateScope.() -> T): Template<T
 }
 
 
+// JvmName is set to prevent jvm signature clash
+@JvmName("renderDiv")
 fun <T : Div> DivScope.render(
     template: Template<T>, vararg
     resolutions: Resolution<out Any>
-): Component<T> = internalRender(
+): Component<T> = internalRenderDiv(
+    template,
+    resolutions.iterator()
+)
+
+
+// JvmName is set to prevent jvm signature clash
+@JvmName("renderComponent")
+fun <T : Div> DivScope.render(
+    template: Template<Component<T>>, vararg
+    resolutions: Resolution<out Any>
+): Component<T> = internalRenderComponent(
     template,
     resolutions.iterator()
 )
 
 
 fun <T : Div> DivScope.render(template: Template<T>, resolutions: List<Resolution<out Any>>):
-        Component<T> = internalRender(template, resolutions.iterator())
+        Component<T> = internalRenderDiv(template, resolutions.iterator())
 
 
-private fun <T : Div> DivScope.internalRender(
+private fun <T : Div> DivScope.internalRenderDiv(
     template: Template<T>,
     resolutions: Iterator<Resolution<out Any>>
 ): Component<T> {
@@ -64,6 +76,35 @@ private fun <T : Div> DivScope.internalRender(
     }
     return Component(
         template = template,
+        properties = properties
+    )
+}
+
+private fun <T : Div> DivScope.internalRenderComponent(
+    template: Template<Component<T>>,
+    resolutions: Iterator<Resolution<out Any>>
+): Component<T> {
+    registerTemplates(this.templates, template)
+    registerSupplements(this.supplements, template)
+    val properties = mutableMapOf<String, Any>()
+    for (resolution in resolutions) {
+        when (resolution) {
+            is FinalResolution -> {
+                properties[resolution.reference.name] = resolution.value
+            }
+
+            is ProxyResolution -> {
+                properties["$" + resolution.reference.name] = resolution.proxy.name
+            }
+        }
+    }
+    return Component(
+        template = Template(
+            name = template.name,
+            div = template.div.template.div,
+            dependencies = template.dependencies,
+            supplements = template.supplements
+        ),
         properties = properties
     )
 }
