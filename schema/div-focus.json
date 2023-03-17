@@ -2,7 +2,8 @@
   "type": "object",
   "$description": "translations.json#/div_focus",
   "platforms": [
-    "android"
+    "android",
+    "ios"
   ],
   "properties": {
     "background": {

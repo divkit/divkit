@@ -134,7 +134,8 @@
       "$ref": "div-focus.json",
       "$description": "translations.json#/div_base_focus",
       "platforms": [
-        "android"
+        "android",
+        "ios"
       ]
     },
     "visibility": {
