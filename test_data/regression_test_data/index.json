@@ -85,6 +85,9 @@
     },
     {
       "title": "Paged gallery scroll",
+      "automated": [
+        "web"
+      ],
       "tags": [
         "DivGallery",
         "scroll"
