@@ -3,11 +3,11 @@ package com.yandex.div.core.expression.variables
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.data.Variable
+import com.yandex.div.internal.Assert
 
 @Mockable
-internal class VariableController(
-    private val variables: Map<String, Variable>,
-) {
+internal class VariableController {
+    private val variables = mutableMapOf<String, Variable>()
     private val extraVariablesSources = mutableListOf<VariableSource>()
     private val declarationObservers = mutableMapOf<String, MutableList<(Variable) -> Unit>>()
 
@@ -56,5 +56,15 @@ internal class VariableController(
         }
 
         return null
+    }
+
+    fun declare(variable: Variable) {
+        val prevVariable = variables.put(variable.name, variable)
+        if (prevVariable != null) {
+            Assert.fail("Variable '${variable.name}' already declared!")
+            variables[variable.name] = prevVariable
+            return
+        }
+        onVariableDeclared(variable)
     }
 }
