@@ -1,6 +1,8 @@
 package com.yandex.div.core.expression.triggers
 
 import com.yandex.div.core.Div2Logger
+import com.yandex.div.core.CompositeDisposable
+import com.yandex.div.core.Disposable
 import com.yandex.div.core.DivActionHandler
 import com.yandex.div.core.DivViewFacade
 import com.yandex.div.core.annotations.Mockable
@@ -86,11 +88,10 @@ private class TriggerExecutor(
     private val logger: Div2Logger
 ) {
     private val changeTrigger = { _: Variable -> tryTriggerActions() }
-    private val observedVariables = mutableListOf<Variable>()
     private var modeObserver = mode.observeAndGet(resolver) { currentMode = it }
     private var currentMode = DivTrigger.Mode.ON_CONDITION
     private var wasConditionSatisfied = false
-    private var isInitialized = false
+    private var observersDisposable = Disposable.NULL
 
     var view: DivViewFacade? = null
         set(value) {
@@ -104,13 +105,17 @@ private class TriggerExecutor(
 
     private fun stopObserving() {
         modeObserver.close()
-        observedVariables.forEach { it.removeObserver(changeTrigger) }
+        observersDisposable.close()
     }
 
     private fun startObserving() {
-        initIfNeeded()
         modeObserver.close()
-        observedVariables.forEach { it.addObserver(changeTrigger) }
+        observersDisposable = variableController.subscribeToVariablesChange(
+            condition.variables,
+            invokeOnSubscription = false,
+            changeTrigger
+        )
+
         modeObserver = mode.observeAndGet(resolver) { currentMode = it }
         tryTriggerActions()
     }
@@ -152,30 +157,5 @@ private class TriggerExecutor(
         }
 
         return true
-    }
-
-    private fun initIfNeeded() {
-        if (!isInitialized) {
-            isInitialized = true
-            condition.variables.forEach { variableName ->
-                startTracking(variableName)
-            }
-        }
-    }
-
-    private fun startTracking(variableName: String) {
-        val variable = variableController.getMutableVariable(variableName)
-
-        if (variable != null) {
-            variable.addObserver(changeTrigger)
-            observedVariables.add(variable)
-            return
-        }
-
-        variableController.declarationNotifier.doOnVariableDeclared(variableName) {
-            it.addObserver(changeTrigger)
-            observedVariables.add(it)
-            tryTriggerActions()
-        }
     }
 }

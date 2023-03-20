@@ -5,7 +5,7 @@ import java.util.*
 
 private const val TO_MILLIS = 60 * 1000
 
-internal class DateTime(
+class DateTime(
     internal val timestampMillis: Long,
     internal val timezone: TimeZone,
 ) : Comparable<DateTime> {

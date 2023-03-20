@@ -19,4 +19,10 @@ internal class VariableSource(
     internal fun observeDeclaration(observer: (Variable) -> Unit) {
         declarationObservers.add(observer)
     }
+
+    internal fun observeVariables(observer: (Variable) -> Unit) {
+        variables.values.forEach {
+            it.addObserver(observer)
+        }
+    }
 }
