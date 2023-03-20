@@ -32,17 +32,11 @@
     },
     "min_size": {
       "$ref": "#/definitions/constraint_size",
-      "$description": "translations.json#/div_size_min",
-      "platforms": [
-        "web"
-      ]
+      "$description": "translations.json#/div_size_min"
     },
     "max_size": {
       "$ref": "#/definitions/constraint_size",
-      "$description": "translations.json#/div_size_max",
-      "platforms": [
-        "web"
-      ]
+      "$description": "translations.json#/div_size_max"
     }
   },
   "required": [
