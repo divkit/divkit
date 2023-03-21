@@ -5,24 +5,6 @@ import type { BooleanInt } from '../../typings/common';
 
 export type KeyboardType = 'single_line_text' | 'multi_line_text' | 'phone' | 'number' | 'email' | 'uri';
 
-export interface KeyboardInput {
-    type: 'keyboard';
-    keyboard_type?: KeyboardType;
-}
-
-export interface SelectionInputItem {
-    text: string;
-    // value = text
-    value?: string;
-}
-
-export interface SelectionInput {
-    type: 'selection';
-    items: SelectionInputItem[];
-}
-
-export type InputMethod = KeyboardInput | SelectionInput;
-
 export interface DivInputData extends DivBaseData, DivActionableData {
     type: 'type';
 
@@ -39,8 +21,6 @@ export interface DivInputData extends DivBaseData, DivActionableData {
     hint_color?: string;
     highlight_color?: string;
     // native_interface
-    /** @deprecated */
     keyboard_type?: KeyboardType;
-    input_method?: InputMethod;
     select_all_on_focus?: BooleanInt;
 }

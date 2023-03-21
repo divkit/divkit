@@ -101,9 +101,7 @@
         "input_method": {
           "$ref": "div-input-method.json",
           "$description": "translations.json#/div_input_method",
-          "platforms": [
-            "web"
-          ]
+          "platforms": []
         },
         "select_all_on_focus": {
           "$ref": "common.json#/boolean_int",
@@ -112,10 +110,7 @@
         },
         "mask": {
           "$ref": "div-input-mask.json",
-          "$description": "translations.json#/div_input_mask",
-          "platforms": [
-            "android"
-          ]
+          "$description": "translations.json#/div_input_mask"
         }
       }
     }

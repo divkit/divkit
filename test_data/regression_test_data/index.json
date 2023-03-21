@@ -1286,8 +1286,7 @@
     {
       "title": "Text input (selection menu)",
       "platforms": [
-        "ios",
-        "web"
+        "ios"
       ],
       "tags": [
         "DivInput"

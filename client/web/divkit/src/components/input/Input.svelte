@@ -5,14 +5,7 @@
 
     import type { LayoutParams } from '../../types/layoutParams';
     import type { DivBase, TemplateContext } from '../../../typings/common';
-    import type {
-        DivInputData,
-        KeyboardType,
-        SelectionInput,
-        KeyboardInput,
-        SelectionInputItem
-    } from '../../types/input';
-    import type { EdgeInsets } from '../../types/edgeInserts';
+    import type { DivInputData, KeyboardType } from '../../types/input';
     import { ROOT_CTX, RootCtxValue } from '../../context/root';
     import { genClassName } from '../../utils/genClassName';
     import { pxToEm, pxToEmWithUnits } from '../../utils/pxToEm';
@@ -25,9 +18,6 @@
     import Outer from '../utilities/Outer.svelte';
     import { createVariable } from '../../expressions/variable';
     import { correctNonNegativeNumber } from '../../utils/correctNonNegativeNumber';
-    import { correctEdgeInsertsObject } from '../../utils/correctEdgeInsertsObject';
-    import { edgeInsertsToCss } from '../../utils/edgeInsertsToCss';
-    import { makeStyle } from '../../utils/makeStyle';
 
     export let json: Partial<DivInputData> = {};
     export let templateContext: TemplateContext;
@@ -105,7 +95,6 @@
     }
 
     const jsonKeyboardType = rootCtx.getDerivedFromVars(json.keyboard_type);
-    const jsonInputMethod = rootCtx.getDerivedFromVars(json.input_method);
     const KEYBOARD_MAP: Record<KeyboardType, string> = {
         email: 'email',
         number: 'number',
@@ -116,53 +105,10 @@
     };
     let keyboardType = 'multi_line_text';
     let inputType = 'text';
-    let inputMethod: 'keyboard' | 'select' = 'keyboard';
-    let selectItems: SelectionInputItem[] = [];
     $: {
-        const inputMethodType = $jsonInputMethod?.type;
-        if (inputMethodType === 'keyboard') {
-            inputMethod = 'keyboard';
-            const type = ($jsonInputMethod as KeyboardInput).keyboard_type;
-            if (type && type in KEYBOARD_MAP) {
-                inputType = KEYBOARD_MAP[type as KeyboardType];
-                keyboardType = type;
-            } else {
-                keyboardType = 'multi_line_text';
-                inputType = KEYBOARD_MAP[keyboardType as KeyboardType];
-            }
-        } else if (inputMethodType === 'selection') {
-            inputMethod = 'select';
-            const items = ($jsonInputMethod as SelectionInput).items;
-            const filteredItems = Array.isArray(items) && items.filter(it => it.text);
-            if (filteredItems && filteredItems.length) {
-                selectItems = items;
-            } else {
-                selectItems = [];
-                rootCtx.logError(wrapError(new Error('Empty selection "items" in "input"')));
-            }
-        } else if ($jsonKeyboardType && $jsonKeyboardType in KEYBOARD_MAP) {
+        if ($jsonKeyboardType && $jsonKeyboardType in KEYBOARD_MAP) {
             inputType = KEYBOARD_MAP[$jsonKeyboardType as KeyboardType];
             keyboardType = $jsonKeyboardType;
-        } else {
-            keyboardType = 'multi_line_text';
-            inputType = KEYBOARD_MAP[keyboardType as KeyboardType];
-        }
-    }
-
-    let selectText = '';
-    $: {
-        if (inputMethod === 'select') {
-            const item = selectItems.find(it => {
-                return (it.value || it.text) === $valueVariable;
-            });
-            if (item) {
-                selectText = item.text;
-            } else {
-                selectText = '';
-                if ($valueVariable) {
-                    rootCtx.logError(wrapError(new Error('Value from the variable was not found in the selection items for "input"')));
-                }
-            }
         }
     }
 
@@ -171,14 +117,10 @@
 
     $: jsonPaddings = rootCtx.getDerivedFromVars(json.paddings);
     let maxHeight = '';
-    let selfPadding: EdgeInsets | null = null;
-    let padding = '';
     $: {
         if (isPositiveNumber($jsonVisibleMaxLines)) {
             maxHeight = `calc(${$jsonVisibleMaxLines * (lineHeight || 1.25) + 'em'} + ${pxToEmWithUnits(correctNonNegativeNumber($jsonPaddings?.top, 0) + correctNonNegativeNumber($jsonPaddings?.bottom, 0))})`;
         }
-        selfPadding = correctEdgeInsertsObject(($jsonPaddings) ? $jsonPaddings : undefined, selfPadding);
-        padding = selfPadding ? edgeInsertsToCss(selfPadding) : '';
     }
 
     $: jsonAccessibility = rootCtx.getDerivedFromVars(json.accessibility);
@@ -233,9 +175,7 @@
     }
 
     function checkVerticalOverflow(): void {
-        if (holder) {
-            verticalOverflow = holder.scrollHeight > holder.offsetHeight;
-        }
+        verticalOverflow = holder.scrollHeight > holder.offsetHeight;
     }
 
     onMount(() => {
@@ -249,57 +189,44 @@
         style={stl}
         customDescription={true}
         customActions={'input'}
-        customPaddings={inputMethod === 'select'}
         {json}
         {origJson}
         {templateContext}
         {layoutParams}
     >
-        {#if inputMethod === 'keyboard'}
-            <span class={css.input__wrapper}>
-                <span class={css.input__holder} aria-hidden="true" bind:this={holder}>
-                    <!--appends zero-space at end-->
-                    {value}{#if value.endsWith('\n') || !value}​{/if}
-                </span>
-                {#if isMultiline}
-                    <textarea
-                        bind:this={input}
-                        class={css.input__input}
-                        autocomplete="off"
-                        autocapitalize="off"
-                        aria-label={description}
-                        {placeholder}
-                        {value}
-                        on:input={onInput}
-                        on:mousedown={$jsonSelectAll ? onMousedown : undefined}
-                        on:click={$jsonSelectAll ? onClick : undefined}
-                    ></textarea>
-                {:else}
-                    <input
-                        bind:this={input}
-                        type={inputType}
-                        class={css.input__input}
-                        autocomplete="off"
-                        autocapitalize="off"
-                        aria-label={description}
-                        {placeholder}
-                        {value}
-                        on:input={onInput}
-                        on:mousedown={$jsonSelectAll ? onMousedown : undefined}
-                        on:click={$jsonSelectAll ? onClick : undefined}
-                    >
-                {/if}
+        <span class={css.input__wrapper}>
+            <span class={css.input__holder} aria-hidden="true" bind:this={holder}>
+                <!--appends zero-space at end-->
+                {value}{#if value.endsWith('\n') || !value}​{/if}
             </span>
-        {:else}
-            <span class={css['input__select-text']} style={makeStyle({ padding })} aria-hidden="true">
-                <!--Space holder should have height even it has no value-->
-                {selectText || '​'}
-            </span>
-            <select class={css.input__select} aria-label={description} bind:value={$valueVariable}>
-                {#each selectItems as item}
-                    <option class={css.input__option} value={item.value || item.text}>{item.text}</option>
-                {/each}
-            </select>
-        {/if}
+            {#if isMultiline}
+                <textarea
+                    bind:this={input}
+                    class={css.input__input}
+                    autocomplete="off"
+                    autocapitalize="off"
+                    aria-label={description}
+                    {placeholder}
+                    {value}
+                    on:input={onInput}
+                    on:mousedown={$jsonSelectAll ? onMousedown : undefined}
+                    on:click={$jsonSelectAll ? onClick : undefined}
+                ></textarea>
+            {:else}
+                <input
+                    bind:this={input}
+                    type={inputType}
+                    class={css.input__input}
+                    autocomplete="off"
+                    autocapitalize="off"
+                    aria-label={description}
+                    {placeholder}
+                    {value}
+                    on:input={onInput}
+                    on:mousedown={$jsonSelectAll ? onMousedown : undefined}
+                    on:click={$jsonSelectAll ? onClick : undefined}
+                >
+            {/if}
+        </span>
     </Outer>
 {/if}
