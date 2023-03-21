@@ -1,9 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`applyTemplate not found 1`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`applyTemplate not found 1`] = `Array []`;

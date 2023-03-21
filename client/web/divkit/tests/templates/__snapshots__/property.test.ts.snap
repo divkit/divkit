@@ -104,13 +104,7 @@ Object {
 }
 `;
 
-exports[`property test_property_with_link_missing_data 2`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`property test_property_with_link_missing_data 2`] = `Array []`;
 
 exports[`property test_property_with_override 1`] = `
 Object {
@@ -124,13 +118,7 @@ Object {
 }
 `;
 
-exports[`property test_property_with_override 2`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`property test_property_with_override 2`] = `Array []`;
 
 exports[`property test_property_with_override_in_template 1`] = `
 Object {

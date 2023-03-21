@@ -58,16 +58,7 @@ Object {
 }
 `;
 
-exports[`array test_array_missing_data 2`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`array test_array_missing_data 2`] = `Array []`;
 
 exports[`array test_array_missing_one_link 1`] = `
 Object {
@@ -108,13 +99,7 @@ Object {
 }
 `;
 
-exports[`array test_array_missing_one_link 2`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`array test_array_missing_one_link 2`] = `Array []`;
 
 exports[`array test_array_nested 1`] = `
 Object {

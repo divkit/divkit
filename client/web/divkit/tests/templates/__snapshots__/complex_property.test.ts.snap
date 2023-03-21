@@ -45,13 +45,7 @@ Object {
 }
 `;
 
-exports[`complex_property test_complex_property_with_internal_link_missing_data 2`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`complex_property test_complex_property_with_internal_link_missing_data 2`] = `Array []`;
 
 exports[`complex_property test_complex_property_with_internal_link_override_in_template 1`] = `
 Object {
@@ -96,13 +90,7 @@ Object {
 }
 `;
 
-exports[`complex_property test_complex_property_with_link_missing_data 2`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`complex_property test_complex_property_with_link_missing_data 2`] = `Array []`;
 
 exports[`complex_property test_complex_property_with_override_in_template 1`] = `
 Object {

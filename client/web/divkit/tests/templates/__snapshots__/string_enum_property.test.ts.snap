@@ -40,13 +40,7 @@ Object {
 }
 `;
 
-exports[`string_enum_property test_string_enum_property_with_link_missing_data 2`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`string_enum_property test_string_enum_property_with_link_missing_data 2`] = `Array []`;
 
 exports[`string_enum_property test_string_enum_property_with_override 1`] = `
 Object {
@@ -60,13 +54,7 @@ Object {
 }
 `;
 
-exports[`string_enum_property test_string_enum_property_with_override 2`] = `
-Array [
-  Array [
-    [Error: Missing template field],
-  ],
-]
-`;
+exports[`string_enum_property test_string_enum_property_with_override 2`] = `Array []`;
 
 exports[`string_enum_property test_string_enum_property_without_link 1`] = `
 Object {

@@ -78,14 +78,6 @@ export function applyTemplate(
             if (val !== undefined) {
                 const prop = key.substring(1);
                 base[prop] = val;
-            } else {
-                logError(wrapError(new Error('Missing template field'), {
-                    level: 'warn',
-                    additional: {
-                        key,
-                        template: json.type
-                    }
-                }));
             }
         });
 
