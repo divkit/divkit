@@ -21,6 +21,7 @@ import org.json.JSONObject
 import java.math.BigInteger
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
+import java.util.concurrent.ConcurrentHashMap
 import javax.inject.Provider
 import kotlin.system.measureTimeMillis
 
@@ -246,7 +247,10 @@ internal class TemplatesContainer(
     }
 
     private fun calculateJsonChecksum(json: JSONObject): String? {
-        val md5bytes = messageDigest?.digest(json.toString().toByteArray(Charsets.UTF_8)) ?: return null
+        val input = json.toString().toByteArray(Charsets.UTF_8)
+        val md5bytes = synchronized(this) {
+            messageDigest?.digest(input)
+        } ?: return null
         return BigInteger(1, md5bytes).toString(16).padStart(length = 32, padChar = '0')
     }
 }
@@ -258,7 +262,7 @@ private class CommonTemplatesPool(
         private val histogramRecorder: HistogramRecorder,
         private val parsingHistogramProxy: Provider<DivParsingHistogramProxy>,
 ) {
-    private val commonTemplates = mutableMapOf<TemplateHash, DivTemplate>()
+    private val commonTemplates = ConcurrentHashMap<TemplateHash, DivTemplate>()
     private val env: DivParsingEnvironment = createEmptyEnv(logger)
 
     fun load(templateReferences: TemplateReferenceResolver): Map<TemplateHash, DivTemplate> {
