@@ -86,6 +86,9 @@ class Evaluator(
         if (operator is Token.Operator.Binary.Logical.Or && left) {
             return left
         }
+        if (operator is Token.Operator.Binary.Logical.And && !left) {
+            return left
+        }
         val right: Any = rightEvaluator()
         if (right !is Boolean) {
             throwExceptionOnEvaluationFailed(operator, left, right)

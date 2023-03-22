@@ -22,14 +22,14 @@ class EvaluableTest {
     fun `ternary # evaluate first expression without second`() {
         setVariable(VAR_A, 1)
         setVariable(VAR_B, 2.0)
-        assertTernaryExpression("true ? $VAR_A : $VAR_B", 1, VAR_A to 1, VAR_B to 0)
+        assertExpressionWithInvokeTimes("true ? $VAR_A : $VAR_B", 1, VAR_A to 1, VAR_B to 0)
     }
 
     @Test
     fun `ternary # evaluate second expression without first`() {
         setVariable(VAR_A, 1)
         setVariable(VAR_B, 2.0)
-        assertTernaryExpression("false ? $VAR_A : $VAR_B", 2.0, VAR_A to 0, VAR_B to 1)
+        assertExpressionWithInvokeTimes("false ? $VAR_A : $VAR_B", 2.0, VAR_A to 0, VAR_B to 1)
     }
 
     // Constant String Test
@@ -564,6 +564,22 @@ class EvaluableTest {
         assertEvaluableIsOrNotCacheable("$VAR_A + getYear(nowLocal())", false)
     }
 
+    @Test
+    fun `right side of OR not evaluated`() {
+        setVariable(TEST_VARIABLE_1, true)
+        setVariable(TEST_VARIABLE_2, false)
+        assertExpressionWithInvokeTimes("$TEST_VARIABLE_1 || $TEST_VARIABLE_2", true,
+            TEST_VARIABLE_1 to 1, TEST_VARIABLE_2 to 0)
+    }
+
+    @Test
+    fun `right side of AND not evaluated`() {
+        setVariable(TEST_VARIABLE_1, false)
+        setVariable(TEST_VARIABLE_2, true)
+        assertExpressionWithInvokeTimes("$TEST_VARIABLE_1 && $TEST_VARIABLE_2", false,
+            TEST_VARIABLE_1 to 1, TEST_VARIABLE_2 to 0)
+    }
+
     // Stress tests
     @Test(expected = EvaluableException::class)
     fun `errors # invalid Int literal`() {
@@ -695,7 +711,7 @@ class EvaluableTest {
         assertEquals(expected, actual as String)
     }
 
-    private inline fun <reified T> assertTernaryExpression(
+    private inline fun <reified T> assertExpressionWithInvokeTimes(
         expr: String, expected: T,
         vararg variablesInvokes: Pair<VariableName, NumOfInvokes>
     ) {
