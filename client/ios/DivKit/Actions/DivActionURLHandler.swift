@@ -58,7 +58,7 @@ public final class DivActionURLHandler {
 
   public func handleURL(
     _ url: URL,
-    cardId: DivCardID?,
+    cardId: DivCardID,
     completion: @escaping (Result<Void, Error>) -> Void = { _ in }
   ) -> Bool {
     guard let intent = DivActionIntent(url: url) else {
@@ -71,9 +71,6 @@ public final class DivActionURLHandler {
     case .hideTooltip:
       return false
     case let .download(patchUrl):
-      guard let cardId = cardId else {
-        return false
-      }
       patchProvider.getPatch(
         url: patchUrl,
         completion: { [unowned self] in
@@ -81,9 +78,6 @@ public final class DivActionURLHandler {
         }
       )
     case let .setState(divStatePath, lifetime):
-      guard let cardId = cardId else {
-        return false
-      }
       stateUpdater.set(
         path: divStatePath,
         cardId: cardId,
@@ -91,9 +85,6 @@ public final class DivActionURLHandler {
       )
       updateCard(.state(cardId))
     case let .setVariable(name, value):
-      guard let cardId = cardId else {
-        return false
-      }
       variableUpdater.update(
         cardId: cardId,
         name: DivVariableName(rawValue: name),
@@ -101,14 +92,14 @@ public final class DivActionURLHandler {
       )
     case let .setCurrentItem(id, index):
       setCurrentItem(id: id, index: index)
+      updateCard(.state(cardId))
     case let .setNextItem(id, overflow):
       setNextItem(id: id, overflow: overflow)
+      updateCard(.state(cardId))
     case let .setPreviousItem(id, overflow):
       setPreviousItem(id: id, overflow: overflow)
+      updateCard(.state(cardId))
     case let .timer(timerId, action):
-      guard let cardId = cardId else {
-        return false
-      }
       performTimerAction(cardId, timerId, action)
     }
 
