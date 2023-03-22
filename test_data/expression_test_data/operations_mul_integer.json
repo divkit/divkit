@@ -15,6 +15,30 @@
       ]
     },
     {
+      "name": "3000000000 * 2000000000 => 6000000000000000000",
+      "expression": "@{3000000000 * 2000000000}",
+      "expected": {
+        "type": "integer",
+        "value": 6000000000000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "300000000000000 * 2000000000 => error",
+      "expression": "@{300000000000000 * 2000000000}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [300000000000000 * 2000000000]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "3 * 2 * 4 => 24",
       "expression": "@{3 * 2 * 4}",
       "expected": {

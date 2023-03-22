@@ -1,46 +1,90 @@
 {
   "templates": {
-    "label_text": {
+    "page": {
       "type": "text",
+      "$text": "header",
+      "border": {
+        "corner_radius": 6,
+        "stroke": "#10000000"
+      },
+      "background": [
+        {
+          "color": "#0e000000",
+          "type": "solid"
+        }
+      ],
+      "font_size": 20,
+      "text_alignment_vertical": "center",
+      "text_alignment_horizontal": "center",
+      "text_color": "#000000",
       "width": {
         "type": "match_parent"
       },
       "height": {
-        "type": "wrap_content"
+        "type": "fixed",
+        "value": 100
+      }
+    },
+    "presets_holder": {
+      "type": "gallery",
+      "orientation": "vertical",
+      "column_count": 3,
+      "item_spacing": 4,
+      "height": {
+        "type": "fixed",
+        "value": 28
       },
       "paddings": {
-        "left": 12,
-        "top": 16,
-        "right": 12,
-        "bottom": 16
+        "top": 3,
+        "bottom": 3
+      }
+    },
+    "presets_header": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
       },
-      "margins": {
-        "top": 8,
-        "bottom": 8,
-        "left": 18,
-        "right": 18
+      "width": {
+        "type": "match_parent"
       },
-      "border": {
-        "corner_radius": 8
+      "font_size": 14,
+      "text_color": "#888888",
+      "text_alignment_vertical": "center",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      }
+    },
+    "presets_button": {
+      "type": "text",
+      "height": {
+        "type": "match_parent"
       },
+      "width": {
+        "type": "match_parent"
+      },
+      "font_size": 14,
+      "text_color": "#000",
       "background": [
         {
           "type": "solid",
-          "color": "#0E000000"
+          "color": "#0e000000"
         }
       ],
-      "font_size": 14,
-      "font_weight": "medium",
-      "text_alignment_vertical": "center",
+      "paddings": {
+        "left": 4,
+        "right": 4
+      },
       "text_alignment_horizontal": "center",
-      "text_color": "#000000",
-      "alpha": 1.0,
-      "alignment_horizontal": "center",
-      "alignment_vertical": "center"
+      "text_alignment_vertical": "center",
+      "border": {
+        "corner_radius": 6
+      }
     }
   },
   "card": {
-    "log_id": "action_animation",
+    "type": "div2",
+    "log_id": "snapshot_test_card",
     "states": [
       {
         "state_id": 0,
@@ -48,392 +92,627 @@
           "type": "container",
           "items": [
             {
-              "type": "label_text",
-              "text": "Fade, interpolator: ease, duration: 500",
-              "action_animation": {
-                "name": "fade",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.2,
-                "interpolator": "ease"
+              "type": "indicator",
+              "active_item_color": "@{active_item_color}",
+              "active_item_size": "@{active_item_size}",
+              "inactive_item_color": "@{inactive_item_color}",
+              "minimum_item_size": "@{minimum_item_size}",
+              "space_between_centers": {
+                "type": "fixed",
+                "value": "@{space_between_centers.value}",
+                "unit": "@{space_between_centers.unit}"
               },
-              "actions": [
+              "margins": {
+                "top": 4
+              },
+              "paddings": {
+                "top": 2,
+                "bottom": 2
+              },
+              "animation": "@{indicator_animation}",
+              "shape": {
+                "type": "rounded_rectangle",
+                "item_width": {
+                  "type": "fixed",
+                  "value": "@{item_width.value}",
+                  "unit": "@{item_width.unit}"
+                },
+                "item_height": {
+                  "type": "fixed",
+                  "value": "@{item_height.value}",
+                  "unit": "@{item_height.unit}"
+                },
+                "corner_radius": {
+                  "type": "fixed",
+                  "value": "@{corner_radius.value}",
+                  "unit": "@{corner_radius.unit}"
+                }
+              },
+              "pager_id": "pager_id",
+              "alignment_horizontal": "center",
+              "height": {
+                "type": "wrap_content"
+              },
+              "width": {
+                "type": "fixed",
+                "value": "@{indicator_width}"
+              },
+              "background": [
                 {
-                  "log_id": "animation_ease_fade",
-                  "url": "fake"
+                  "type": "solid",
+                  "color": "#0e000000"
+                }
+              ],
+              "border": {
+                "corner_radius": 15
+              }
+            },
+            {
+              "type": "pager",
+              "id": "pager_id",
+              "paddings": {
+                "right": 4,
+                "left": 4
+              },
+              "margins": {
+                "top": 8
+              },
+              "layout_mode": {
+                "type": "percentage",
+                "page_width": {
+                  "type": "percentage",
+                  "value": 95
+                }
+              },
+              "item_spacing": {
+                "type": "fixed",
+                "value": 4
+              },
+              "items": [
+                {
+                  "type": "page",
+                  "text": "Item 1"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 2"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 3"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 4"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 5"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 6"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 7"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 8"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 9"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 10"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 11"
+                },
+                {
+                  "type": "page",
+                  "text": "Item 12"
                 }
               ]
             },
             {
-              "type": "label_text",
-              "text": "Scale, interpolator: ease, duration: 500",
-              "action_animation": {
-                "name": "scale",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.6,
-                "interpolator": "ease"
-              },        
-              "actions": [
+              "type": "presets_holder",
+              "margins": {
+                "top": 16
+              },
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
                 {
-                  "log_id": "animation_ease_scale",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Set, interpolator: ease, duration: 500",
-              "action_animation": {
-                "name": "set",
-                "items": [
-                  {
-                    "name": "fade",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.2
-                  },
-                  {
-                    "name": "scale",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.6
+                  "type": "presets_header",
+                  "text": "Active item color"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "red",
+                  "action": {
+                    "url": "div-action://set_variable?name=active_item_color&value=%23ff0000",
+                    "log_id": "active_item_color=red"
                   }
-                ],
-                "interpolator": "ease"
-              },
-              "actions": [
+                },
                 {
-                  "log_id": "animation_ease_set",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Fade, interpolator: ease_in, duration: 500",
-              "action_animation": {
-                "name": "fade",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.2,
-                "interpolator": "ease_in"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_ease_in_fade",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Scale, interpolator: ease_in, duration: 500",
-              "action_animation": {
-                "name": "scale",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.6,
-                "interpolator": "ease_in"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_ease_in_scale",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Set, interpolator: ease_in, duration: 500",
-              "action_animation": {
-                "name": "set",
-                "items": [
-                  {
-                    "name": "fade",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.2
-                  },
-                  {
-                    "name": "scale",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.6
+                  "type": "presets_button",
+                  "text": "yellow",
+                  "action": {
+                    "url": "div-action://set_variable?name=active_item_color&value=%23ffcc00",
+                    "log_id": "active_item_color=yellow"
                   }
-                ],
-                "interpolator": "ease_in"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_ease_in_set",
-                  "url": "fake"
                 }
               ]
             },
             {
-              "type": "label_text",
-              "text": "Fade, interpolator: ease_in_out, duration: 500",
-              "action_animation": {
-                "name": "fade",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.2,
-                "interpolator": "ease_in_out"
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
               },
-              "actions": [
+              "items": [
                 {
-                  "log_id": "animation_ease_in_out_fade",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Scale, interpolator: ease_in_out, duration: 500",
-              "action_animation": {
-                "name": "scale",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.6,
-                "interpolator": "ease_in_out"
-              },
-              "actions": [
+                  "type": "presets_header",
+                  "text": "Active item scale"
+                },
                 {
-                  "log_id": "animation_ease_in_out_scale",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Set, interpolator: ease_in_out, duration: 500",
-              "action_animation": {
-                "name": "set",
-                "items": [
-                  {
-                    "name": "fade",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.2
-                  },
-                  {
-                    "name": "scale",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.6
+                  "type": "presets_button",
+                  "text": "x1.5",
+                  "action": {
+                    "url": "div-action://set_variable?name=active_item_size&value=1.5",
+                    "log_id": "active_item_scale=1"
                   }
-                ],
-                "interpolator": "ease_in_out"
-              },
-              "actions": [
+                },
                 {
-                  "log_id": "animation_ease_in_out_set",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Fade, interpolator: ease_out, duration: 500",
-              "action_animation": {
-                "name": "fade",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.2,
-                "interpolator": "ease_out"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_ease_out_fade",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Scale, interpolator: ease_out, duration: 500",
-              "action_animation": {
-                "name": "scale",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.6,
-                "interpolator": "ease_out"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_ease_out_scale",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Set, interpolator: ease_out, duration: 500",
-              "action_animation": {
-                "name": "set",
-                "items": [
-                  {
-                    "name": "fade",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.2
-                  },
-                  {
-                    "name": "scale",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.6
+                  "type": "presets_button",
+                  "text": "x2",
+                  "action": {
+                    "url": "div-action://set_variable?name=active_item_size&value=2",
+                    "log_id": "active_item_scale=2"
                   }
-                ],
-                "interpolator": "ease_out"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_ease_out_set",
-                  "url": "fake"
                 }
               ]
             },
             {
-              "type": "label_text",
-              "text": "Fade, interpolator: linear, duration: 500",
-              "action_animation": {
-                "name": "fade",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.2,
-                "interpolator": "linear"
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
               },
-              "actions": [
+              "items": [
                 {
-                  "log_id": "animation_linear_fade",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Scale, interpolator: linear, duration: 500",
-              "action_animation": {
-                "name": "scale",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.6,
-                "interpolator": "linear"
-              },
-              "actions": [
+                  "type": "presets_header",
+                  "text": "Inactive item color"
+                },
                 {
-                  "log_id": "animation_linear_scale",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Set, interpolator: linear, duration: 500",
-              "action_animation": {
-                "name": "set",
-                "items": [
-                  {
-                    "name": "fade",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.2
-                  },
-                  {
-                    "name": "scale",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.6
+                  "type": "presets_button",
+                  "text": "red",
+                  "action": {
+                    "url": "div-action://set_variable?name=inactive_item_color&value=%23ffaa0000",
+                    "log_id": "active_item_scale=1"
                   }
-                ],
-                "interpolator": "linear"
-              },
-              "actions": [
+                },
                 {
-                  "log_id": "animation_linear_set",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Fade, interpolator: spring, duration: 500",
-              "action_animation": {
-                "name": "fade",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.2,
-                "interpolator": "spring"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_spring_fade",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Scale, interpolator: spring, duration: 500",
-              "action_animation": {
-                "name": "scale",
-                "start_value": 1,
-                "duration": 500,
-                "end_value": 0.6,
-                "interpolator": "spring"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_spring_scale",
-                  "url": "fake"
-                }
-              ]
-            },
-            {
-              "type": "label_text",
-              "text": "Set, interpolator: spring, duration: 500",
-              "action_animation": {
-                "name": "set",
-                "items": [
-                  {
-                    "name": "fade",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.2
-                  },
-                  {
-                    "name": "scale",
-                    "start_value": 1,
-                    "duration": 500,
-                    "end_value": 0.6
+                  "type": "presets_button",
+                  "text": "yellow",
+                  "action": {
+                    "url": "div-action://set_variable?name=inactive_item_color&value=%23ffccaa00",
+                    "log_id": "active_item_scale=2"
                   }
-                ],
-                "interpolator": "spring"
-              },
-              "actions": [
-                {
-                  "log_id": "animation_spring_set",
-                  "url": "fake"
                 }
               ]
             },
             {
-              "type": "label_text",
-              "text": "No animation",
-              "action_animation": {
-                "name": "no_animation"
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
               },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Scale of furthest items"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "x1",
+                  "action": {
+                    "url": "div-action://set_variable?name=minimum_item_size&value=1",
+                    "log_id": "active_item_scale=1"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "x0.3",
+                  "action": {
+                    "url": "div-action://set_variable?name=minimum_item_size&value=0.3",
+                    "log_id": "active_item_scale=2"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Animation of page change"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "scale",
+                  "action": {
+                    "url": "div-action://set_variable?name=indicator_animation&value=scale",
+                    "log_id": "indicator_animation=scale"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "worm",
+                  "action": {
+                    "url": "div-action://set_variable?name=indicator_animation&value=worm",
+                    "log_id": "indicator_animation=worm"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Space between items"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "20 @{item_width.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=space_between_centers.value&value=20",
+                    "log_id": "space_between_centers.value=20"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "30 @{item_width.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=space_between_centers.value&value=30",
+                    "log_id": "space_between_centers.value=30"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Item's width"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "10 @{item_width.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_width.value&value=10",
+                    "log_id": "item_width.value=10"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "15 @{item_width.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_width.value&value=15",
+                    "log_id": "item_width.value=15"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Item's height"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "10 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_height.value&value=10",
+                    "log_id": "item_height.value=10"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "15 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=item_height.value&value=15",
+                    "log_id": "item_height.value=15"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Corners radius"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "5 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=corner_radius.value&value=10",
+                    "log_id": "corner_radius.value=5"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "8 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=corner_radius.value&value=15",
+                    "log_id": "corner_radius=8"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Indicator width"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "150 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=indicator_width&value=150",
+                    "log_id": "indicator_width=5"
+                  }
+                },
+                {
+                  "type": "presets_button",
+                  "text": "300 @{item_height.unit}",
+                  "action": {
+                    "url": "div-action://set_variable?name=indicator_width&value=300",
+                    "log_id": "indicator_width=8"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "presets_holder",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "items": [
+                {
+                  "type": "presets_header",
+                  "text": "Size unit"
+                },
+                {
+                  "type": "presets_button",
+                  "text": "dp",
+                  "actions": [
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=space_between_centers.unit&value=dp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=item_width.unit&value=dp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=item_height.unit&value=dp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=corner_radius.unit&value=dp"
+                    }
+                  ]
+                },
+                {
+                  "type": "presets_button",
+                  "text": "sp",
+                  "actions": [
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=space_between_centers.unit&value=sp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=item_width.unit&value=sp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=item_height.unit&value=sp"
+                    },
+                    {
+                      "log_id": "button_log_id",
+                      "url": "div-action://set_variable?name=corner_radius.unit&value=sp"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "presets_button",
+              "height": {
+                "type": "fixed",
+                "value": 40
+              },
+              "margins": {
+                "top": 4,
+                "bottom": 16
+              },
+              "text": "Reset state",
               "actions": [
                 {
-                  "log_id": "animation_no_animation",
-                  "url": "fake"
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=active_item_color&value=%23ffff0000"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=active_item_size&value=1.5"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=inactive_item_color&value=%23ffaa0000"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=minimum_item_size&value=1"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=indicator_animation&value=scale"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=space_between_centers.value&value=20"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_width.value&value=10"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_height.value&value=10"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=corner_radius.value&value=5"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=indicator_width&value=200"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=space_between_centers.unit&value=dp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_width.unit&value=dp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=item_height.unit&value=dp"
+                },
+                {
+                  "log_id": "button_log_id",
+                  "url": "div-action://set_variable?name=corner_radius.unit&value=dp"
                 }
               ]
             }
           ]
         }
+      }
+    ],
+    "variables": [
+      {
+        "name": "active_item_color",
+        "type": "color",
+        "value": "#ffff0000"
+      },
+      {
+        "name": "active_item_size",
+        "type": "number",
+        "value": 1.5
+      },
+      {
+        "name": "inactive_item_color",
+        "type": "color",
+        "value": "#ffaa0000"
+      },
+      {
+        "name": "minimum_item_size",
+        "type": "number",
+        "value": 1
+      },
+      {
+        "name": "indicator_animation",
+        "type": "string",
+        "value": "scale"
+      },
+      {
+        "name": "space_between_centers.value",
+        "type": "integer",
+        "value": 9223372036854775808
+      },
+      {
+        "name": "space_between_centers.unit",
+        "type": "string",
+        "value": "dp"
+      },
+      {
+        "name": "item_width.value",
+        "type": "integer",
+        "value": 10
+      },
+      {
+        "name": "item_width.unit",
+        "type": "string",
+        "value": "dp"
+      },
+      {
+        "name": "item_height.value",
+        "type": "integer",
+        "value": 10
+      },
+      {
+        "name": "item_height.unit",
+        "type": "string",
+        "value": "dp"
+      },
+      {
+        "name": "corner_radius.value",
+        "type": "integer",
+        "value": 5
+      },
+      {
+        "name": "corner_radius.unit",
+        "type": "string",
+        "value": "dp"
+      },
+      {
+        "name": "indicator_width",
+        "type": "integer",
+        "value": 200
       }
     ]
   }

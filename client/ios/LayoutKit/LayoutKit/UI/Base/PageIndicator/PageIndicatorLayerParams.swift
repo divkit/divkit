@@ -22,11 +22,15 @@ struct PageIndicatorLayerParams {
     switch itemPlacement {
     case let .fixed(spaceBetweenCenters):
       itemWidth = spaceBetweenCenters
-      let itemsVisibleWidth = boundsSize.width / itemWidth
-      visiblePageCount = min(Int(itemsVisibleWidth), numberOfPages)
+      if itemWidth != 0 {
+        let itemsVisibleWidth = boundsSize.width / itemWidth
+        visiblePageCount = min(Int(itemsVisibleWidth), numberOfPages)
+      } else {
+        visiblePageCount = 0
+      }
     case let .stretch(_, maxVisibleItems):
       visiblePageCount = min(maxVisibleItems, numberOfPages)
-      itemWidth = boundsSize.width / (CGFloat(visiblePageCount))
+      itemWidth = boundsSize.width / CGFloat(visiblePageCount)
     }
 
     let currentPage = Int(floor(position))

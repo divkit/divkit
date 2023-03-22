@@ -15,6 +15,18 @@
       ]
     },
     {
+      "name": "div(4000000000000000000, 2000000000) => 2000000000",
+      "expression": "@{div(4000000000000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 2000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "div(0, 2) => 0",
       "expression": "@{div(0, 2)}",
       "expected": {
@@ -54,6 +66,18 @@
         "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "name": "div(1000000000, 2000000000) => 0",
+      "expression": "@{div(1000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 0
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {
@@ -127,6 +151,18 @@
       ]
     },
     {
+      "name": "mod(30000000000, 20000000000) => 10000000000",
+      "expression": "@{mod(30000000000, 20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 10000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "mod(2, 0) => error",
       "expression": "@{mod(2, 0)}",
       "expected": {
@@ -169,6 +205,18 @@
       ]
     },
     {
+      "name": "mod(-30000000000, 20000000000) => -10000000000",
+      "expression": "@{mod(-30000000000, 20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": -10000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "mod(3, -2) => 1",
       "expression": "@{mod(3, -2)}",
       "expected": {
@@ -180,6 +228,18 @@
         "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "name": "mod(30000000000, -20000000000) => 10000000000",
+      "expression": "@{mod(30000000000, -20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 10000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {
@@ -197,6 +257,18 @@
       ]
     },
     {
+      "name": "mod(-30000000000, -20000000000) => -10000000000",
+      "expression": "@{mod(-30000000000, -20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": -10000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "mul(3, 2) => 6",
       "expression": "@{mul(3, 2)}",
       "expected": {
@@ -208,6 +280,30 @@
         "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "name": "mul(3000000000, 2000000000) => 6000000000000000000",
+      "expression": "@{mul(3000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 6000000000000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "mul(3000000000, 5000000000) => error",
+      "expression": "@{mul(3000000000, 5000000000)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [mul(3000000000, 5000000000)]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {
@@ -267,6 +363,18 @@
       ]
     },
     {
+      "name": "sub(5000000000, 2000000000) => 3000000000",
+      "expression": "@{sub(5000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 3000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "sub(1, +1) => 0",
       "expression": "@{sub(1, +1)}",
       "expected": {
@@ -292,6 +400,30 @@
         "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "name": "sub(2000000000, -3000000000) => 5000000000",
+      "expression": "@{sub(2000000000, -3000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 5000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "sub(7000000000000000000, -3000000000000000000) => error",
+      "expression": "@{sub(7000000000000000000, -3000000000000000000)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [sub(7000000000000000000, -3000000000000000000)]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {
@@ -323,6 +455,18 @@
       ]
     },
     {
+      "name": "sum(3000000000, 2000000000) => 5000000000",
+      "expression": "@{sum(3000000000, 2000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 5000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "sum(1, +1) => 2",
       "expression": "@{sum(1, +1)}",
       "expected": {
@@ -351,8 +495,34 @@
       ]
     },
     {
+      "name": "sum(7000000000, -3000000000) => 4000000000",
+      "expression": "@{sum(7000000000, -3000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 4000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "sum(7000000000000000000, 7000000000000000000) => error",
+      "expression": "@{sum(7000000000000000000, 7000000000000000000)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [sum(7000000000000000000, 7000000000000000000)]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "maxInteger() => 2147483647",
       "expression": "@{maxInteger()}",
+      "deprecated": true,
+      "description": "The size of integer was increased.",
       "expected": {
         "type": "integer",
         "value": 2147483647
@@ -360,13 +530,26 @@
       "variables": [],
       "platforms": [
         "android",
-        "ios",
         "web"
+      ]
+    },
+    {
+      "name": "maxInteger() => 9223372036854775807",
+      "expression": "@{maxInteger()}",
+      "expected": {
+        "type": "integer",
+        "value": 9223372036854775807
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {
       "name": "minInteger() => -2147483648",
       "expression": "@{minInteger()}",
+      "deprecated": true,
+      "description": "The size of integer was increased.",
       "expected": {
         "type": "integer",
         "value": -2147483648
@@ -374,8 +557,19 @@
       "variables": [],
       "platforms": [
         "android",
-        "ios",
         "web"
+      ]
+    },
+    {
+      "name": "minInteger() => -9223372036854775808",
+      "expression": "@{minInteger()}",
+      "expected": {
+        "type": "integer",
+        "value": -9223372036854775808
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {
@@ -407,6 +601,18 @@
       ]
     },
     {
+      "name": "abs(9223372036854775807) => 9223372036854775807",
+      "expression": "@{abs(9223372036854775807)}",
+      "expected": {
+        "type": "integer",
+        "value": 9223372036854775807
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "abs(-2147483647) => 2147483647",
       "expression": "@{abs(-2147483647)}",
       "expected": {
@@ -421,15 +627,40 @@
       ]
     },
     {
+      "name": "abs(-9223372036854775807) => 9223372036854775807",
+      "expression": "@{abs(-9223372036854775807)}",
+      "expected": {
+        "type": "integer",
+        "value": 9223372036854775807
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "abs(-2147483648) => error",
       "expression": "@{abs(-2147483648)}",
+      "deprecated": true,
+      "description": "The size of integer was increased.",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [abs(-2147483648)]. Integer overflow."
       },
       "variables": [],
       "platforms": [
-        "android",
+        "android"
+      ]
+    },
+    {
+      "name": "abs(-9223372036854775808) => error",
+      "expression": "@{abs(-9223372036854775808)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [abs(-9223372036854775808)]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
         "ios"
       ]
     },
@@ -576,6 +807,8 @@
     {
       "name": "copySign(-2147483648, 1) => error",
       "expression": "@{copySign(-2147483648, 1)}",
+      "deprecated": true,
+      "description": "The size of integer was increased.",
       "expected": {
         "type": "error",
         "value": "Failed to evaluate [copySign(-2147483648, 1)]. Integer overflow."
@@ -583,8 +816,19 @@
       "variables": [],
       "platforms": [
         "android",
-        "ios",
         "web"
+      ]
+    },
+    {
+      "name": "copySign(-9223372036854775808, 1) => error",
+      "expression": "@{copySign(-9223372036854775808, 1)}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [copySign(-9223372036854775808, 1)]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {
@@ -599,6 +843,18 @@
         "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "name": "copySign(-9223372036854775808, -1) => -9223372036854775808",
+      "expression": "@{copySign(-9223372036854775808, -1)}",
+      "expected": {
+        "type": "integer",
+        "value": -9223372036854775808
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     }
   ]

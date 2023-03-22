@@ -992,27 +992,29 @@ extension UnicodeScalarView {
     func scanNumber() -> Number? {
       var number: Number
       var endOfInt = self
+      let sign = scanCharacter { $0 == "-" } ?? ""
       if let integer = scanInteger() {
         if integer == "0", scanCharacter("x") {
-          return .integer("0x\(scanHex() ?? "")")
+          return .integer("\(sign)0x\(scanHex() ?? "")")
         }
         endOfInt = self
         if scanCharacter(".") {
           guard let fraction = scanInteger() else {
             self = endOfInt
-            return .number(integer)
+            return .number(sign + integer)
           }
-          number = .number("\(integer).\(fraction)")
+          number = .number("\(sign)\(integer).\(fraction)")
         } else {
-          number = .integer(integer)
+          number = .integer(sign + integer)
         }
       } else if scanCharacter(".") {
         guard let fraction = scanInteger() else {
           self = endOfInt
           return nil
         }
-        number = .number(".\(fraction)")
+        number = .number("\(sign).\(fraction)")
       } else {
+        self = endOfInt
         return nil
       }
       if let exponent = scanExponent() {
@@ -1027,7 +1029,7 @@ extension UnicodeScalarView {
     switch number {
     case let .integer(value):
       guard let result = Int(value) else {
-        return .error(.unexpectedToken(value), value)
+        return .error(CalcExpression.Value.integerError(value), value)
       }
       return .literal(.integer(result))
     case let .number(value):
@@ -1305,6 +1307,14 @@ extension UnicodeScalarView {
       // Prepare for next iteration
       var followedByWhitespace = skipWhitespace() || isEmpty
 
+      func appendLiteralWithNegativeValue() {
+        operandPosition = false
+        if let last = stack.last, last.isOperand {
+          stack.append(.symbol(.infix("+"), [], nil))
+        }
+        stack.append(expression)
+      }
+
       switch expression {
       case let .symbol(.infix(name), _, _):
         switch name {
@@ -1394,6 +1404,10 @@ extension UnicodeScalarView {
       case let .symbol(.variable(name), _, _) where !operandPosition:
         operandPosition = true
         stack.append(.symbol(.infix(name), [], nil))
+      case let .literal(.integer(value)) where value < 0:
+        appendLiteralWithNegativeValue()
+      case let .literal(.number(value)) where value < 0:
+        appendLiteralWithNegativeValue()
       default:
         operandPosition = false
         stack.append(expression)

@@ -685,7 +685,11 @@ extension AnyCalcExpression {
       case let floatValue as Float:
         return .number(Double(floatValue))
       case is Int, is UInt, is Int32, is UInt32, is Int64, is UInt64:
-        return try cast(Double(truncating: value as! NSNumber))
+        if let intValue = value as? Int {
+          return .integer(intValue)
+        } else {
+          throw CalcExpression.Value.integerOverflow()
+        }
       case let numberValue as NSNumber:
         // Hack to avoid losing type info for UIFont.Weight, etc
         if "\(value)".contains("rawValue") {
@@ -703,15 +707,6 @@ extension AnyCalcExpression {
       }
       values.append(value)
       return .number(Double(bitPattern: NanBox.bitPattern(for: values.count - 1)))
-    }
-
-    private func cast(_ value: Double) throws -> CalcExpression.Value {
-      if Double(CalcExpression.Value.minInteger) <= value,
-         value <= Double(CalcExpression.Value.maxInteger) {
-        return .integer(Int(value))
-      } else {
-        throw CalcExpression.Value.integerOverflow()
-      }
     }
 
     // Retrieve a value from the box, if it exists

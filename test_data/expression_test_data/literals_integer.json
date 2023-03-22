@@ -45,6 +45,8 @@
         {
             "name": "unsigned max integer literal",
             "expression": "@{2147483647}",
+            "deprecated": true,
+            "description": "The size of integer was increased.",
             "expected": {
                 "type": "integer",
                 "value": 2147483647
@@ -52,13 +54,26 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
+            ]
+        },
+        {
+            "name": "unsigned max integer literal",
+            "expression": "@{9223372036854775807}",
+            "expected": {
+                "type": "integer",
+                "value": 9223372036854775807
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
             ]
         },
         {
             "name": "positive max integer literal",
             "expression": "@{+2147483647}",
+            "deprecated": true,
+            "description": "The size of integer was increased.",
             "expected": {
                 "type": "integer",
                 "value": 2147483647
@@ -66,13 +81,26 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
+            ]
+        },
+        {
+            "name": "positive max integer literal",
+            "expression": "@{+9223372036854775807}",
+            "expected": {
+                "type": "integer",
+                "value": 9223372036854775807
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
             ]
         },
         {
             "name": "negative min integer literal",
             "expression": "@{-2147483648}",
+            "deprecated": true,
+            "description": "The size of integer was increased.",
             "expected": {
                 "type": "integer",
                 "value": -2147483648
@@ -80,13 +108,26 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
+            ]
+        },
+        {
+            "name": "negative min integer literal",
+            "expression": "@{-9223372036854775808}",
+            "expected": {
+                "type": "integer",
+                "value": -9223372036854775808
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
             ]
         },
         {
             "name": "value in brackets is overflowed",
             "expression": "@{-(2147483648)}",
+            "deprecated": true,
+            "description": "The size of integer was increased.",
             "expected": {
                 "type": "error",
                 "value": "Value 2147483648 can't be converted to Integer type."
@@ -94,13 +135,26 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
+            ]
+        },
+        {
+            "name": "value in brackets is overflowed",
+            "expression": "@{-(9223372036854775808)}",
+            "expected": {
+                "type": "error",
+                "value": "Value 9223372036854775808 can't be converted to Integer type."
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
             ]
         },
         {
             "name": "unsigned overflow integer literal",
             "expression": "@{2147483648}",
+            "deprecated": true,
+            "description": "The size of integer was increased.",
             "expected": {
                 "type": "error",
                 "value": "Value 2147483648 can't be converted to Integer type."
@@ -108,13 +162,26 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
+            ]
+        },
+        {
+            "name": "unsigned overflow integer literal",
+            "expression": "@{9223372036854775808}",
+            "expected": {
+                "type": "error",
+                "value": "Value 9223372036854775808 can't be converted to Integer type."
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
             ]
         },
         {
             "name": "positive overflow integer literal",
             "expression": "@{+2147483648}",
+            "deprecated": true,
+            "description": "The size of integer was increased.",
             "expected": {
                 "type": "error",
                 "value": "Value 2147483648 can't be converted to Integer type."
@@ -122,13 +189,26 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
+            ]
+        },
+        {
+            "name": "positive overflow integer literal",
+            "expression": "@{+9223372036854775808}",
+            "expected": {
+                "type": "error",
+                "value": "Value 9223372036854775808 can't be converted to Integer type."
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
             ]
         },
         {
             "name": "negative overflow integer literal",
             "expression": "@{-2147483649}",
+            "deprecated": true,
+            "description": "The size of integer was increased.",
             "expected": {
                 "type": "error",
                 "value": "Value -2147483649 can't be converted to Integer type."
@@ -136,8 +216,19 @@
             "variables": [],
             "platforms": [
                 "android",
-                "ios",
                 "web"
+            ]
+        },
+        {
+            "name": "negative overflow integer literal",
+            "expression": "@{-9223372036854775809}",
+            "expected": {
+                "type": "error",
+                "value": "Value -9223372036854775809 can't be converted to Integer type."
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
             ]
         },
         {

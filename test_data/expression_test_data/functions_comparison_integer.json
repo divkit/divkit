@@ -43,6 +43,18 @@
       ]
     },
     {
+      "name": "max(10000000000, 20000000000) => 20000000000",
+      "expression": "@{max(10000000000, 20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 20000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "max(-1, -2) => -1",
       "expression": "@{max(-1, -2)}",
       "expected": {
@@ -138,6 +150,18 @@
         "android",
         "ios",
         "web"
+      ]
+    },
+    {
+      "name": "min(10000000000, 20000000000) => 10000000000",
+      "expression": "@{min(10000000000, 20000000000)}",
+      "expected": {
+        "type": "integer",
+        "value": 10000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {

@@ -142,7 +142,13 @@ private func _modDouble(lhs: Double, rhs: Double) throws -> Double {
 }
 
 private func _mulInt(args: [Int]) throws -> Int {
-  args.reduce(1) { $0 * $1 }
+  try args.reduce(1) {
+    if case let (result, overflow) = $0.multipliedReportingOverflow(by: $1), !overflow {
+      return result
+    } else {
+      throw CalcExpression.Value.integerOverflow()
+    }
+  }
 }
 
 private func _mulDouble(args: [Double]) throws -> Double {
@@ -150,7 +156,13 @@ private func _mulDouble(args: [Double]) throws -> Double {
 }
 
 private func _subInt(args: [Int]) throws -> Int {
-  args.dropFirst().reduce(args[0]) { $0 - $1 }
+  try args.dropFirst().reduce(args[0]) {
+    if case let (result, overflow) = $0.subtractingReportingOverflow($1), !overflow {
+      return result
+    } else {
+      throw CalcExpression.Value.integerOverflow()
+    }
+  }
 }
 
 private func _subDouble(args: [Double]) throws -> Double {
@@ -158,7 +170,13 @@ private func _subDouble(args: [Double]) throws -> Double {
 }
 
 private func _sumInt(args: [Int]) throws -> Int {
-  args.reduce(0) { $0 + $1 }
+  try args.reduce(0) {
+    if case let (result, overflow) = $0.addingReportingOverflow($1), !overflow {
+      return result
+    } else {
+      throw CalcExpression.Value.integerOverflow()
+    }
+  }
 }
 
 private func _sumDouble(args: [Double]) throws -> Double {
@@ -166,11 +184,11 @@ private func _sumDouble(args: [Double]) throws -> Double {
 }
 
 private func _maxInteger() -> Int {
-  Int(Int32.max)
+  Int.max
 }
 
 private func _minInteger() -> Int {
-  Int(Int32.min)
+  Int.min
 }
 
 private func _maxNumber() -> Double {
@@ -197,8 +215,11 @@ private func _minDouble(args: [Double]) -> Double {
   args.reduce(args[0]) { min($0, $1) }
 }
 
-private func _absInt(value: Int) -> Int {
-  abs(value)
+private func _absInt(value: Int) throws -> Int {
+  guard value >= -Int.max else {
+    throw CalcExpression.Value.integerOverflow()
+  }
+  return abs(value)
 }
 
 private func _absDouble(value: Double) -> Double {
@@ -225,7 +246,10 @@ private func _ceil(value: Double) -> Double {
   ceil(value)
 }
 
-private func _copySignInt(lhs: Int, rhs: Int) -> Int {
+private func _copySignInt(lhs: Int, rhs: Int) throws -> Int {
+  guard lhs >= -Int.max && rhs >= 0 || lhs >= Int.min && rhs < 0 else {
+    throw CalcExpression.Value.integerOverflow()
+  }
   guard rhs != 0 else {
     return lhs
   }

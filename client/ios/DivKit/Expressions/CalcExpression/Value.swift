@@ -25,8 +25,8 @@ extension CalcExpression.Value {
 }
 
 extension CalcExpression.Value {
-  static let maxInteger = 2_147_483_647
-  static let minInteger = -2_147_483_648
+  static let maxInteger = Int.max
+  static let minInteger = Int.min
   static func integerError(_ value: Any) -> AnyCalcExpression.Error {
     .message("Value \(value) can't be converted to Integer type.")
   }
@@ -40,7 +40,11 @@ extension CalcExpression.Value {
   static func +(lhs: Self, rhs: Self) throws -> Self {
     switch (lhs, rhs) {
     case let (.integer(lValue), .integer(rValue)):
-      return .integer(lValue + rValue)
+      if case let (result, overflow) = lValue.addingReportingOverflow(rValue), !overflow {
+        return .integer(result)
+      } else {
+        throw CalcExpression.Value.integerOverflow()
+      }
     case let (.number(lValue), .number(rValue)):
       return .number(lValue + rValue)
     case let (.string(lValue), .string(rValue)):
@@ -58,7 +62,11 @@ extension CalcExpression.Value {
   static func -(lhs: Self, rhs: Self) throws -> Self {
     switch (lhs, rhs) {
     case let (.integer(lValue), .integer(rValue)):
-      return .integer(lValue - rValue)
+      if case let (result, overflow) = lValue.subtractingReportingOverflow(rValue), !overflow {
+        return .integer(result)
+      } else {
+        throw CalcExpression.Value.integerOverflow()
+      }
     case let (.number(lValue), .number(rValue)):
       return .number(lValue - rValue)
     case let (.datetime(lValue), .datetime(rValue)):
@@ -74,7 +82,11 @@ extension CalcExpression.Value {
   static func *(lhs: Self, rhs: Self) throws -> Self {
     switch (lhs, rhs) {
     case let (.integer(lValue), .integer(rValue)):
-      return .integer(lValue * rValue)
+      if case let (result, overflow) = lValue.multipliedReportingOverflow(by: rValue), !overflow {
+        return .integer(result)
+      } else {
+        throw CalcExpression.Value.integerOverflow()
+      }
     case let (.number(lValue), .number(rValue)):
       return .number(lValue * rValue)
     case let (.datetime(lValue), .datetime(rValue)):

@@ -15,6 +15,18 @@
       ]
     },
     {
+      "name": "3000000000 % 2000000000 => 1000000000",
+      "expression": "@{3000000000 % 2000000000}",
+      "expected": {
+        "type": "integer",
+        "value": 1000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "3 % 2 => 1",
       "expression": "@{3 % 2}",
       "expected": {

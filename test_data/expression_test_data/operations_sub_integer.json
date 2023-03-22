@@ -15,6 +15,18 @@
       ]
     },
     {
+      "name": "30000000000 - 10000000000 => 20000000000",
+      "expression": "@{30000000000 - 10000000000}",
+      "expected": {
+        "type": "integer",
+        "value": 20000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "3 - 1 - 2 => 0",
       "expression": "@{3 - 1 - 2}",
       "expected": {
@@ -57,8 +69,22 @@
       ]
     },
     {
+      "name": "5000000000000000000 - -6000000000000000000 => error",
+      "expression": "@{5000000000000000000 - -6000000000000000000}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [5000000000000000000 - -6000000000000000000]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "1 - 2147483648 => error",
       "expression": "@{1 - 2147483648}",
+      "deprecated": true,
+      "description": "The size of integer was increased.",
       "expected": {
         "type": "error",
         "value": "Value 2147483648 can't be converted to Integer type."
@@ -67,6 +93,18 @@
       "platforms": [
         "android",
         "web"
+      ]
+    },
+    {
+      "name": "1 - 9223372036854775808 => error",
+      "expression": "@{1 - 9223372036854775808}",
+      "expected": {
+        "type": "error",
+        "value": "Value 9223372036854775808 can't be converted to Integer type."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
       ]
     },
     {

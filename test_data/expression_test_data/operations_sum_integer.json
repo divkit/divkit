@@ -15,6 +15,30 @@
       ]
     },
     {
+      "name": "10000000000 + 10000000000 => 20000000000",
+      "expression": "@{10000000000 + 10000000000}",
+      "expected": {
+        "type": "integer",
+        "value": 20000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
+      "name": "5000000000000000000 + 6000000000000000000 => error",
+      "expression": "@{5000000000000000000 + 6000000000000000000}",
+      "expected": {
+        "type": "error",
+        "value": "Failed to evaluate [5000000000000000000 + 6000000000000000000]. Integer overflow."
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "1 + 1 + 2 => 4",
       "expression": "@{1 + 1 + 2}",
       "expected": {

@@ -15,6 +15,18 @@
             ]
         },
         {
+            "name": "70000000000 == 70000000000 => true",
+            "expression": "@{70000000000 == 70000000000}",
+            "expected": {
+                "type": "boolean",
+                "value": true
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
             "name": "7 != 7 => false",
             "expression": "@{7 != 7}",
             "expected": {

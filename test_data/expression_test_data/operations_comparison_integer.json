@@ -15,6 +15,18 @@
             ]
         },
         {
+            "name": "7000000000000 < 7000000000000 => false",
+            "expression": "@{7000000000000 < 7000000000000}",
+            "expected": {
+                "type": "boolean",
+                "value": false
+            },
+            "variables": [],
+            "platforms": [
+                "ios"
+            ]
+        },
+        {
             "name": "7 <= 7 => true",
             "expression": "@{7 <= 7}",
             "expected": {

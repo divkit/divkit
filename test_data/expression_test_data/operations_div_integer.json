@@ -15,6 +15,18 @@
       ]
     },
     {
+      "name": "4000000000000000000 / 2000000000 => 2000000000",
+      "expression": "@{4000000000000000000 / 2000000000}",
+      "expected": {
+        "type": "integer",
+        "value": 2000000000
+      },
+      "variables": [],
+      "platforms": [
+        "ios"
+      ]
+    },
+    {
       "name": "0 / 2 => 0",
       "expression": "@{0 / 2}",
       "expected": {
