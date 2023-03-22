@@ -15,7 +15,7 @@ public func calculateTemplateToType(in dict: [String: Any]) -> TemplateToType {
   for key in unresolved.keys {
     do {
       result[key] = try finalType(for: key, in: unresolved)
-    } catch DivError.circularReference {
+    } catch TemplateError.circularReference {
     } catch {
       assertionFailure()
     }
@@ -29,7 +29,7 @@ private func finalType(
   analyzedTypes: Set<String> = []
 ) throws -> String {
   guard !analyzedTypes.contains(type) else {
-    throw DivError.circularReference([type])
+    throw TemplateError.circularReference([type])
   }
 
   guard let next = dict[type] else {
@@ -42,7 +42,7 @@ private func finalType(
       in: dict,
       analyzedTypes: modified(analyzedTypes) { $0.insert(type) }
     )
-  } catch let DivError.circularReference(stack) {
-    throw DivError.circularReference([type] + stack)
+  } catch let TemplateError.circularReference(stack) {
+    throw TemplateError.circularReference([type] + stack)
   }
 }

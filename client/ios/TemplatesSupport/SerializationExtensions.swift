@@ -5,20 +5,6 @@ import Serialization
 
 extension Field {
   @inlinable
-  public init(
-    valueGetter: @autoclosure () -> T?,
-    linkGetter: @autoclosure () -> Link?
-  ) throws {
-    if let value = valueGetter() {
-      self = .value(value)
-    } else if let link = linkGetter() {
-      self = .link(link)
-    } else {
-      throw DeserializationError.generic
-    }
-  }
-
-  @inlinable
   public static func makeOptional(
     valueGetter: @autoclosure () -> T?,
     linkGetter: @autoclosure () -> Link?
@@ -33,80 +19,12 @@ extension Field {
   }
 }
 
-/// Deserialization for Field<T>
+/// Deserialization for Field<T>?
 extension Dictionary where Key == String, Value == Any {
   public func link(for key: String) -> Link? {
     self["$" + key] as? Link
   }
 
-  @usableFromInline
-  func makeField<T: ValidSerializationValue, U>(
-    _ key: String,
-    transform: (T) throws -> U,
-    validator: AnyValueValidator<U>? = nil
-  ) throws -> Field<U> {
-    try Field(
-      valueGetter: (try? getOptionalField(key, transform: transform, validator: validator))
-        .flatMap { $0 },
-      linkGetter: link(for: key)
-    )
-  }
-
-  @usableFromInline
-  func makeField<T: ValidSerializationValue, U>(
-    _ key: String,
-    transform: (T) throws -> U?
-  ) throws -> Field<U> {
-    try makeField(key, transform: { (value: T) throws -> U in
-      guard let result = try transform(value) else {
-        throw DeserializationError.generic
-      }
-      return result
-    })
-  }
-
-  public func getField(_ key: String) throws -> Field<CFString> {
-    try Field(
-      valueGetter: (try? getOptionalField(key)).flatMap { $0 },
-      linkGetter: link(for: key)
-    )
-  }
-
-  @inlinable
-  public func getField<T: RawRepresentable>(_ key: String) throws -> Field<T>
-    where T.RawValue: ValidSerializationValue {
-    try makeField(key, transform: { T(rawValue: $0) })
-  }
-
-  @inlinable
-  public func getField<T: ValidSerializationValue>(_ key: String) throws -> Field<T> {
-    try makeField(key, transform: { $0 as T })
-  }
-
-  @inlinable
-  public func getField<T: Deserializable>(_ key: String) throws -> Field<T> {
-    try makeField(
-      key,
-      transform: { (dict: Self) in try T(dictionary: dict) }
-    )
-  }
-
-  @inlinable
-  public func getField<T: TemplateDeserializable>(
-    _ key: String,
-    templateToType: TemplateToType,
-    validator: AnyValueValidator<T>? = nil
-  ) throws -> Field<T> {
-    try makeField(
-      key,
-      transform: { (dict: Self) in try T(dictionary: dict, templateToType: templateToType) },
-      validator: validator
-    )
-  }
-}
-
-/// Deserialization for Field<T>?
-extension Dictionary where Key == String, Value == Any {
   @inlinable
   public func getOptionalField<T, U>(
     _ key: String,
@@ -116,13 +34,6 @@ extension Dictionary where Key == String, Value == Any {
     Field.makeOptional(
       valueGetter: (try? self.getOptionalField(key, transform: transform, validator: validator))
         .flatMap { $0 },
-      linkGetter: link(for: key)
-    )
-  }
-
-  public func getOptionalField(_ key: String) throws -> Field<CFString>? {
-    Field.makeOptional(
-      valueGetter: (try? getOptionalField(key)).flatMap { $0 },
       linkGetter: link(for: key)
     )
   }
@@ -140,14 +51,6 @@ extension Dictionary where Key == String, Value == Any {
     try getOptionalField(
       key,
       transform: { $0 as T }
-    )
-  }
-
-  @inlinable
-  public func getOptionalField<T: Deserializable>(_ key: String) throws -> Field<T>? {
-    try getOptionalField(
-      key,
-      transform: { (dict: Self) in try? T(dictionary: dict) }
     )
   }
 
@@ -196,22 +99,6 @@ extension Dictionary where Key == String, Value == Any {
       }
       return result
     }, validator: validator)
-  }
-
-  @inlinable
-  public func getOptionalArray(_ key: String) throws -> Field<[String]>? {
-    try getOptionalArray(
-      key,
-      transform: { $0 as String }
-    )
-  }
-
-  @inlinable
-  public func getOptionalArray<T: Deserializable>(_ key: String) throws -> Field<[T]>? {
-    try getOptionalArray(
-      key,
-      transform: { (dict: Self) in try T(dictionary: dict) }
-    )
   }
 
   @inlinable
@@ -267,51 +154,12 @@ extension Context {
   }
 
   @inlinable
-  public func getField<T: TemplateValue & TemplateDeserializable>(
-    _ key: String,
-    validator: AnyValueValidator<T.ResolvedValue>? = nil,
-    type: T.Type
-  ) throws -> T.ResolvedValue {
-    try templateData.getField(
-      key,
-      transform: { deserializeTemplate($0, type: type).value },
-      validator: validator
-    )
-  }
-
-  @inlinable
-  public func getOptionalField<T: TemplateValue & TemplateDeserializable>(
-    _ key: String,
-    validator: AnyValueValidator<T.ResolvedValue>? = nil,
-    type: T.Type
-  ) throws -> T.ResolvedValue? {
-    try templateData.getOptionalField(
-      key,
-      transform: { deserializeTemplate($0, type: type).value },
-      validator: validator
-    )
-  }
-
-  @inlinable
   public func getArray<T: TemplateValue & TemplateDeserializable>(
     _ key: String,
     validator: AnyArrayValueValidator<T.ResolvedValue>? = nil,
     type: T.Type
   ) throws -> [T.ResolvedValue] {
     try templateData.getArray(
-      key,
-      transform: { deserializeTemplate($0, type: type).value },
-      validator: validator
-    )
-  }
-
-  @inlinable
-  public func getOptionalArray<T: TemplateValue & TemplateDeserializable>(
-    _ key: String,
-    validator: AnyArrayValueValidator<T.ResolvedValue>? = nil,
-    type: T.Type
-  ) throws -> [T.ResolvedValue]? {
-    try templateData.getOptionalArray(
       key,
       transform: { deserializeTemplate($0, type: type).value },
       validator: validator

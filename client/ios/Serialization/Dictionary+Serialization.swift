@@ -5,13 +5,6 @@ import CommonCore
 
 // MARK: Utils
 
-extension Dictionary {
-  fileprivate init<S: Sequence>(_ seq: S) where S.Iterator.Element == (Key, Value) {
-    self.init()
-    for (key, value) in seq { self[key] = value }
-  }
-}
-
 @usableFromInline
 func invalidFieldErrorForKey<T, U>(
   _ key: [T],
@@ -254,24 +247,6 @@ extension Dictionary where Key == String {
 // MARK: Required values (public interface)
 
 extension Dictionary where Key == String {
-  public func getField(_ key: Key..., validator: AnyValueValidator<Any>? = nil) throws -> Any {
-    try getField(key, transform: { $0 as Any }, validator: validator)
-  }
-
-  public func getField(
-    _ key: Key...,
-    validator: AnyValueValidator<CFString>? = nil
-  ) throws -> CFString {
-    let transform: (CFTypeRef) throws -> CFString = {
-      if let value: CFString = safeCFCast($0) {
-        return value
-      } else {
-        throw invalidFieldErrorForKey(key, representation: $0)
-      }
-    }
-    return try getField(key, transform: transform, validator: validator)
-  }
-
   @inlinable
   public func getField<T: ValidSerializationValue>(
     _ key: Key...,
@@ -311,15 +286,6 @@ extension Dictionary where Key == String {
   @inlinable
   public func getArray<T: ValidSerializationValue, U>(
     _ key: Key...,
-    transform: (T) throws -> U,
-    validator: AnyArrayValueValidator<U>? = nil
-  ) throws -> [U] {
-    try getArray(key, transform: transform, validator: validator)
-  }
-
-  @inlinable
-  public func getArray<T: ValidSerializationValue, U>(
-    _ key: Key...,
     transform: (T) -> U?,
     validator: AnyArrayValueValidator<U>? = nil
   ) throws -> [U] {
@@ -332,7 +298,8 @@ extension Dictionary where Key == String {
     validator: AnyArrayValueValidator<T>? = nil
   ) throws -> [T] {
     try getArray(
-      key, transform: { (obj: Any) -> T? in obj as? T },
+      key,
+      transform: { (obj: Any) -> T? in obj as? T },
       validator: validator
     )
   }
@@ -382,13 +349,6 @@ extension Dictionary where Key == String {
 extension Dictionary where Key == String {
   public func getOptionalField(
     _ key: Key...,
-    validator: AnyValueValidator<Any>? = nil
-  ) throws -> Any? {
-    try getOptionalField(key, transform: { $0 as Any }, validator: validator)
-  }
-
-  public func getOptionalField(
-    _ key: Key...,
     validator: AnyValueValidator<CFString>? = nil
   ) throws -> CFString? {
     try getOptionalField(key, transform: safeCFCast, validator: validator)
@@ -436,17 +396,6 @@ extension Dictionary where Key == String {
     try getOptionalField(
       key,
       transform: { (dict: Self) in try T(dictionary: dict) },
-      validator: validator
-    )
-  }
-
-  public func getOptionalArray(
-    _ key: Key...,
-    validator: AnyArrayValueValidator<Any>? = nil
-  ) throws -> [Any]? {
-    try getOptionalArray(
-      key,
-      transform: { (value: Any) throws -> Any in value },
       validator: validator
     )
   }
@@ -502,12 +451,5 @@ extension Dictionary where Key == String {
       key, transform: { (dict: Self) in try T(dictionary: dict) },
       validator: validator
     )
-  }
-
-  public func getOptionalURL(
-    _ key: Key...,
-    validator: AnyValueValidator<URL>? = nil
-  ) throws -> URL? {
-    try getOptionalField(key, transform: URL.init(string:), validator: validator)
   }
 }

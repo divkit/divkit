@@ -12,6 +12,4 @@ public struct Context {
     self.templateToType = templateToType
     self.templateData = templateData
   }
-
-  public static let empty = Context(templates: [:], templateToType: [:], templateData: [:])
 }

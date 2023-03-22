@@ -25,9 +25,7 @@ extension Field {
       return valueForLink(link)
     }
   }
-}
 
-extension Field {
   @inlinable
   public func value(
     validatedBy validator: AnyValueValidator<T>? = nil
@@ -103,44 +101,6 @@ extension Field {
     }
     return result
   }
-
-  @inlinable
-  public func resolveValue<U: ValidSerializationValue, C>(
-    context: Context,
-    transform: (U) -> C?,
-    validator: AnyArrayValueValidator<C>
-  ) -> DeserializationResult<T> where T == [C] {
-    switch self {
-    case let .value(value):
-      guard validator.isValid(value) != false else {
-        return .failure(NonEmptyArray(.invalidValue(result: value, value: nil)))
-      }
-      return .success(value)
-    case let .link(link):
-      return safeValueForLink(
-        { try context.templateData.getArray($0, transform: transform, validator: validator) },
-        link: link
-      )
-    }
-  }
-}
-
-extension Field where T == CFString {
-  @inlinable
-  public func resolveValue(
-    context: Context,
-    validator: AnyValueValidator<T>? = nil
-  ) -> DeserializationResult<CFString> {
-    resolveValue(
-      validator: validator,
-      valueForLink: { link in
-        safeValueForLink(
-          { try context.templateData.getField($0, validator: validator) },
-          link: link
-        )
-      }
-    )
-  }
 }
 
 extension Field where T: ValidSerializationValue {
@@ -172,24 +132,6 @@ extension Field where T: ValidSerializationValue {
 }
 
 extension Field where T: RawRepresentable, T.RawValue: ValidSerializationValue {
-  @inlinable
-  public func resolveValue(context: Context) -> DeserializationResult<T> {
-    resolveValue(context: context, transform: T.init(rawValue:))
-  }
-
-  @inlinable
-  public func resolveValue(
-    context: Context,
-    validator: AnyValueValidator<T>
-  ) -> DeserializationResult<T> {
-    resolveValue(context: context, transform: T.init(rawValue:), validator: validator)
-  }
-
-  @inlinable
-  public func resolveOptionalValue(context: Context) -> DeserializationResult<T> {
-    resolveOptionalValue(context: context, transform: T.init(rawValue:))
-  }
-
   @inlinable
   public func resolveOptionalValue(
     context: Context,
@@ -286,43 +228,13 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
       return value.tryResolveParent(templates: templates).map(Field.value)
     }
   }
-}
 
-extension Field where T: Deserializable {
-  @inlinable
-  public func resolveValue(context: Context) -> DeserializationResult<T> {
-    switch self {
-    case let .value(value):
-      return .success(value)
-    case let .link(link):
-      return safeValueForLink(
-        { try context.templateData.getField($0) },
-        link: link
-      )
-    }
-  }
-}
-
-extension Field where T: TemplateValue, T: TemplateDeserializable {
   @inlinable
   public func resolveOptionalValue(
     context: Context,
     useOnlyLinks: Bool
   ) -> DeserializationResult<T.ResolvedValue> {
     resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-  }
-
-  @inlinable
-  public func resolveValue(
-    context: Context,
-    validator: AnyValueValidator<T.ResolvedValue>,
-    useOnlyLinks: Bool
-  ) -> DeserializationResult<T.ResolvedValue> {
-    let result = resolveValue(context: context, useOnlyLinks: useOnlyLinks)
-    guard let value = result.value, validator.isValid(value) else {
-      return .failure(NonEmptyArray(.invalidValue(result: result.value, value: nil)))
-    }
-    return result
   }
 
   @inlinable
@@ -339,34 +251,6 @@ extension Field where T: TemplateValue, T: TemplateDeserializable {
       return .failure(NonEmptyArray(.invalidValue(result: result.value, value: nil)))
     }
     return result
-  }
-
-  @inlinable
-  public func value(
-    validatedBy validator: AnyValueValidator<T.ResolvedValue>? = nil,
-    templates: Templates,
-    templateToType: TemplateToType
-  ) -> DeserializationResult<T.ResolvedValue> {
-    switch self {
-    case let .value(value):
-      let context = Context(
-        templates: templates,
-        templateToType: templateToType,
-        templateData: [:]
-      )
-      let resolvedValue = try? value
-        .resolveParent(templates: templates)
-        .resolveValue(context: context, useOnlyLinks: true)
-      guard let result = resolvedValue,
-            let resultValue = result.value,
-            validator?.isValid(resultValue) != false else {
-        return .failure(NonEmptyArray(.invalidValue(result: resolvedValue?.value, value: nil)))
-      }
-
-      return result
-    case .link:
-      return .noValue
-    }
   }
 }
 
@@ -402,57 +286,6 @@ extension Field {
     let result = resolveValue(context: context, validator: validator, useOnlyLinks: useOnlyLinks)
     if case let .failure(errors) = result, errors.count == 1, case .noData = errors.first {
       return .noValue
-    }
-    return result
-  }
-
-  @inlinable
-  public func value<U: TemplateDeserializable & TemplateValue>(
-    validatedBy validator: AnyArrayValueValidator<U.ResolvedValue>? = nil,
-    templates: Templates,
-    templateToType: TemplateToType
-  ) -> DeserializationResult<[U.ResolvedValue]> where T == [U] {
-    switch self {
-    case let .value(value):
-      let context = Context(templates: templates, templateToType: templateToType, templateData: [:])
-      let result = try? value
-        .resolveParent(templates: templates)
-        .resolveValue(context: context, validator: validator)
-      return result ?? .failure(NonEmptyArray(.generic))
-    case .link:
-      return .noValue
-    }
-  }
-}
-
-extension Field {
-  @inlinable
-  public func resolveValue<U: Deserializable>(context: Context) -> DeserializationResult<T>
-    where T == [U] {
-    switch self {
-    case let .value(value):
-      return .success(value)
-    case let .link(link):
-      return safeValueForLink(
-        { try context.templateData.getArray($0) },
-        link: link
-      )
-    }
-  }
-
-  @inlinable
-  public func resolveValue<U: Deserializable>(
-    context: Context,
-    validator: AnyValueValidator<T>
-  ) -> DeserializationResult<T> where T == [U] {
-    let result = resolveValue(context: context)
-    guard let resultValue = result.value, validator.isValid(resultValue) else {
-      var errors: NonEmptyArray<DeserializationError> =
-        NonEmptyArray(.invalidValue(result: result.value, value: nil))
-      if let resultErrors = result.errorsOrWarnings {
-        errors.append(contentsOf: resultErrors)
-      }
-      return .failure(errors)
     }
     return result
   }

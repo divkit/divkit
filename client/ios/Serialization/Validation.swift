@@ -6,10 +6,6 @@ public protocol ValueValidator {
   func isValid(_ value: T) -> Bool
 }
 
-public protocol ArrayValueValidator: ValueValidator {
-  var isPartialDeserializationAllowed: Bool { get }
-}
-
 public class AnyValueValidator<T>: ValueValidator {
   private let validate: (T) -> Bool
 
@@ -26,7 +22,7 @@ public class AnyValueValidator<T>: ValueValidator {
   }
 }
 
-public final class AnyArrayValueValidator<U>: AnyValueValidator<[U]>, ArrayValueValidator {
+public final class AnyArrayValueValidator<U>: AnyValueValidator<[U]> {
   public let isPartialDeserializationAllowed: Bool
 
   public init(
@@ -98,13 +94,5 @@ public func makeStrictArrayValidator<T>(minItems: Int) -> AnyArrayValueValidator
   AnyArrayValueValidator(
     arrayValidator: { $0.count >= minItems },
     isPartialDeserializationAllowed: false
-  )
-}
-
-@inlinable
-public func makeNoOpArrayValidator<T>() -> AnyArrayValueValidator<T> {
-  AnyArrayValueValidator(
-    arrayValidator: alwaysTrueValidator(),
-    isPartialDeserializationAllowed: true
   )
 }
