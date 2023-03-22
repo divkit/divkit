@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
   name: "DivKit",
   platforms: [
-    .iOS(.v10),
+    .iOS(.v11),
   ],
   products: [
     .library(name: "BaseUI", targets: ["BaseUI"]),

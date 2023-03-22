@@ -18,9 +18,7 @@ final class ErrorListView: UIView {
   }
 
   public override func layoutSubviews() {
-    if #available(iOS 11.0, *) {
-      self.listView.frame = self.bounds.inset(by: safeAreaInsets)
-    }
+    self.listView.frame = self.bounds.inset(by: safeAreaInsets)
   }
 
   @available(*, unavailable)

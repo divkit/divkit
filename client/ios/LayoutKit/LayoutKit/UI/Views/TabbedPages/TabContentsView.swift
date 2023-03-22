@@ -149,9 +149,7 @@ internal class TabContentsView: BlockView {
     collectionView.showsVerticalScrollIndicator = false
     collectionView.isPagingEnabled = true
 
-    if #available(iOS 11, *) {
-      collectionView.disableContentInsetAdjustmentBehavior()
-    }
+    collectionView.disableContentInsetAdjustmentBehavior()
 
     super.init(frame: .zero)
     addSubview(collectionView)

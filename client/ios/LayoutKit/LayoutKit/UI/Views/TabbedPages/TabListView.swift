@@ -222,8 +222,6 @@ private func makeCollectionView(layout: UICollectionViewLayout) -> UICollectionV
   collectionView.backgroundColor = .clear
   collectionView.scrollsToTop = false
   collectionView.alwaysBounceHorizontal = true
-  if #available(iOS 11, *) {
-    collectionView.contentInsetAdjustmentBehavior = .never
-  }
+  collectionView.contentInsetAdjustmentBehavior = .never
   return collectionView
 }

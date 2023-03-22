@@ -202,9 +202,7 @@ public final class GalleryView: BlockView {
     collectionView.register(CellType.self, forCellWithReuseIdentifier: reuseID)
     collectionView.dataSource = dataSource
 
-    if #available(iOS 11, *) {
-      collectionView.disableContentInsetAdjustmentBehavior()
-    }
+    collectionView.disableContentInsetAdjustmentBehavior()
 
     super.init(frame: frame)
     (collectionView as UIScrollView).delegate = compoundScrollDelegate
