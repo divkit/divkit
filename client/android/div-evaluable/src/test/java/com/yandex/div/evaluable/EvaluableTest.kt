@@ -14,7 +14,7 @@ private typealias NumOfInvokes = Int
 class EvaluableTest {
 
     private val variableProvider = mock<VariableProvider>()
-    private val functionProvider = BuiltinFunctionProvider
+    private val functionProvider = BuiltinFunctionProvider(variableProvider)
     private val evaluator = Evaluator(variableProvider, functionProvider)
 
     // Ternary Operator Test

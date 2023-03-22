@@ -1,11 +1,9 @@
 package com.yandex.div.evaluable.function
 
-import com.yandex.div.evaluable.EvaluableType
+import com.yandex.div.evaluable.*
 import com.yandex.div.evaluable.Function
-import com.yandex.div.evaluable.FunctionArgument
-import com.yandex.div.evaluable.FunctionProvider
 
-object BuiltinFunctionProvider : FunctionProvider {
+class BuiltinFunctionProvider(variableProvider: VariableProvider) : FunctionProvider {
 
     private val registry = FunctionRegistry()
 
@@ -139,6 +137,14 @@ object BuiltinFunctionProvider : FunctionProvider {
         registry.register(NumberToString)
         registry.register(BooleanToString)
         registry.register(ColorToString)
+
+        // Variable functions
+        registry.register(GetIntegerValue(variableProvider))
+        registry.register(GetNumberValue(variableProvider))
+        registry.register(GetStringValue(variableProvider))
+        registry.register(GetColorValueString(variableProvider))
+        registry.register(GetColorValue(variableProvider))
+        registry.register(GetBooleanValue(variableProvider))
     }
 
     override fun get(name: String, args: List<EvaluableType>): Function {

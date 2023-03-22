@@ -80,7 +80,7 @@ class DivKit private constructor(
         @AnyThread
         fun warmUpStatics() {
             // Bootstraps all built in expression functions.
-            BuiltinFunctionProvider
+            BuiltinFunctionProvider { _ -> null }
         }
 
         @JvmStatic

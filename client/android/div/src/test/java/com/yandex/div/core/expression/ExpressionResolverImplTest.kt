@@ -7,6 +7,7 @@ import com.yandex.div.data.Variable
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.Function
 import com.yandex.div.evaluable.FunctionProvider
+import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.evaluable.types.DateTime
 import com.yandex.div.internal.parser.*
@@ -28,6 +29,7 @@ import java.util.*
 class ExpressionResolverImplTest {
     @get:Rule
     val rule = EnableAssertsRule(false)
+    private val variableProvider = mock<VariableProvider>()
 
     private val variables = mutableMapOf<String, Variable>().also { map ->
         listOf(
@@ -66,7 +68,7 @@ class ExpressionResolverImplTest {
 
     private val underTest = ExpressionResolverImpl(
         externalVariables,
-        ExpressionEvaluatorFactory(BuiltinFunctionProvider),
+        ExpressionEvaluatorFactory(BuiltinFunctionProvider(variableProvider)),
         mock(),
     )
 
@@ -76,7 +78,7 @@ class ExpressionResolverImplTest {
             ExpressionEvaluatorFactory(object : FunctionProvider {
                 override fun get(name: String, args: List<EvaluableType>): Function {
                     callback()
-                    return BuiltinFunctionProvider.get(name, args)
+                    return BuiltinFunctionProvider(variableProvider).get(name, args)
                 }
             }),
             mock()

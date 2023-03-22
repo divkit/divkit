@@ -3,6 +3,7 @@ package com.yandex.div.evaluable.multiplatform
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.evaluable.EvaluableType
 import com.yandex.div.evaluable.FunctionArgument
+import com.yandex.div.evaluable.VariableProvider
 import com.yandex.div.evaluable.function.BuiltinFunctionProvider
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.isForAndroidPlatform
 import com.yandex.div.evaluable.multiplatform.MultiplatformTestUtils.parsePlatform
@@ -12,12 +13,15 @@ import org.json.JSONObject
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
+import org.mockito.Mockito.mock
+import org.mockito.kotlin.mock
 import java.io.File
 import java.lang.RuntimeException
 
 @RunWith(Parameterized::class)
 class SignaturesMultiplatformTest(caseOrError: TestCaseOrError<SignatureTestCase>) {
-    private val functionProvider = BuiltinFunctionProvider
+    private val variableProvider = mock<VariableProvider>()
+    private val functionProvider = BuiltinFunctionProvider(variableProvider)
     private val signature = caseOrError.getCaseOrThrow()
 
     @Test

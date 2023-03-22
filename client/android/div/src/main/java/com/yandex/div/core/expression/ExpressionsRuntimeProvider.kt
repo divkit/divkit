@@ -83,7 +83,9 @@ internal class ExpressionsRuntimeProvider @Inject constructor(
             addSource(globalVariableController.variableSource)
         }
 
-        val evaluatorFactory = ExpressionEvaluatorFactory(BuiltinFunctionProvider)
+        val evaluatorFactory = ExpressionEvaluatorFactory(BuiltinFunctionProvider {
+            variableName -> variableController.getMutableVariable(variableName)?.getValue()
+        })
         val errorCollector = errorCollectors.getOrCreate(tag, data)
         val expressionResolver = ExpressionResolverImpl(
             variableController,
