@@ -1,5 +1,6 @@
 import Foundation
 
+import Base
 import Serialization
 import TemplatesSupport
 
@@ -10,7 +11,7 @@ extension Dictionary where Key == String, Value == Any {
     Field.makeOptional(
       valueGetter: (try? getOptionalField(
         key,
-        transform: { expressionTransform($0, transform: { $0 }) }
+        transform: { expressionTransform($0, transform: { safeCFCast($0 as CFTypeRef) }) }
       )).flatMap { $0 },
       linkGetter: link(for: key)
     )
