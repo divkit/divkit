@@ -343,7 +343,7 @@
             ]
         },
         {
-            "name": "a == b => false",
+            "name": "a == b => false (1)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "boolean",
@@ -368,7 +368,7 @@
             ]
         },
         {
-            "name": "b == a => false",
+            "name": "b == a => false (1)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "boolean",
@@ -393,7 +393,7 @@
             ]
         },
         {
-            "name": "a != b => true",
+            "name": "a != b => true (1)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "boolean",
@@ -418,7 +418,7 @@
             ]
         },
         {
-            "name": "b != a => true",
+            "name": "b != a => true (1)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "boolean",
@@ -1193,7 +1193,7 @@
             ]
         },
         {
-            "name": "a == b => false",
+            "name": "a == b => false (2)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "boolean",
@@ -1218,7 +1218,7 @@
             ]
         },
         {
-            "name": "b == a => false",
+            "name": "b == a => false (2)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "boolean",
@@ -1243,7 +1243,7 @@
             ]
         },
         {
-            "name": "a != b => true",
+            "name": "a != b => true (2)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "boolean",
@@ -1268,7 +1268,7 @@
             ]
         },
         {
-            "name": "b != a => true",
+            "name": "b != a => true (2)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "boolean",
@@ -1373,7 +1373,7 @@
             ]
         },
         {
-            "name": "7 == b => false",
+            "name": "7 == b => false (1)",
             "expression": "@{7 == b}",
             "expected": {
                 "type": "boolean",
@@ -1393,7 +1393,7 @@
             ]
         },
         {
-            "name": "b == 7 => false",
+            "name": "b == 7 => false (1)",
             "expression": "@{b == 7}",
             "expected": {
                 "type": "boolean",
@@ -1413,7 +1413,7 @@
             ]
         },
         {
-            "name": "7 != b => true",
+            "name": "7 != b => true (1)",
             "expression": "@{7 != b}",
             "expected": {
                 "type": "boolean",
@@ -1433,7 +1433,7 @@
             ]
         },
         {
-            "name": "b != 7 => true",
+            "name": "b != 7 => true (1)",
             "expression": "@{b != 7}",
             "expected": {
                 "type": "boolean",
@@ -2413,7 +2413,7 @@
             ]
         },
         {
-            "name": "7 == b => false",
+            "name": "7 == b => false (2)",
             "expression": "@{7 == b}",
             "expected": {
                 "type": "boolean",
@@ -2433,7 +2433,7 @@
             ]
         },
         {
-            "name": "b == 7 => false",
+            "name": "b == 7 => false (2)",
             "expression": "@{b == 7}",
             "expected": {
                 "type": "boolean",
@@ -2453,7 +2453,7 @@
             ]
         },
         {
-            "name": "7 != b => true",
+            "name": "7 != b => true (2)",
             "expression": "@{7 != b}",
             "expected": {
                 "type": "boolean",
@@ -2473,7 +2473,7 @@
             ]
         },
         {
-            "name": "b != 7 => true",
+            "name": "b != 7 => true (2)",
             "expression": "@{b != 7}",
             "expected": {
                 "type": "boolean",

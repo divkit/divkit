@@ -281,7 +281,7 @@
             ]
         },
         {
-            "name": "7 == a => error",
+            "name": "7 == a => error (1)",
             "expression": "@{7 == a}",
             "expected": {
                 "type": "error",
@@ -301,7 +301,7 @@
             ]
         },
         {
-            "name": "a == 7 => error",
+            "name": "a == 7 => error (1)",
             "expression": "@{a == 7}",
             "expected": {
                 "type": "error",
@@ -321,7 +321,7 @@
             ]
         },
         {
-            "name": "7 != a => error",
+            "name": "7 != a => error (1)",
             "expression": "@{7 != a}",
             "expected": {
                 "type": "error",
@@ -341,7 +341,7 @@
             ]
         },
         {
-            "name": "a != 7 => error",
+            "name": "a != 7 => error (1)",
             "expression": "@{a != 7}",
             "expected": {
                 "type": "error",
@@ -361,7 +361,7 @@
             ]
         },
         {
-            "name": "true == a => error",
+            "name": "true == a => error (1)",
             "expression": "@{true == a}",
             "expected": {
                 "type": "error",
@@ -381,7 +381,7 @@
             ]
         },
         {
-            "name": "a == true => error",
+            "name": "a == true => error (1)",
             "expression": "@{a == true}",
             "expected": {
                 "type": "error",
@@ -401,7 +401,7 @@
             ]
         },
         {
-            "name": "true != a => error",
+            "name": "true != a => error (1)",
             "expression": "@{true != a}",
             "expected": {
                 "type": "error",
@@ -421,7 +421,7 @@
             ]
         },
         {
-            "name": "a != true => error",
+            "name": "a != true => error (1)",
             "expression": "@{a != true}",
             "expected": {
                 "type": "error",
@@ -441,7 +441,7 @@
             ]
         },
         {
-            "name": "7 == a => error",
+            "name": "7 == a => error (2)",
             "expression": "@{7 == a}",
             "expected": {
                 "type": "error",
@@ -461,7 +461,7 @@
             ]
         },
         {
-            "name": "a == 7 => error",
+            "name": "a == 7 => error (2)",
             "expression": "@{a == 7}",
             "expected": {
                 "type": "error",
@@ -481,7 +481,7 @@
             ]
         },
         {
-            "name": "7 != a => error",
+            "name": "7 != a => error (2)",
             "expression": "@{7 != a}",
             "expected": {
                 "type": "error",
@@ -501,7 +501,7 @@
             ]
         },
         {
-            "name": "a != 7 => error",
+            "name": "a != 7 => error (2)",
             "expression": "@{a != 7}",
             "expected": {
                 "type": "error",
@@ -521,7 +521,7 @@
             ]
         },
         {
-            "name": "true == a => error",
+            "name": "true == a => error (2)",
             "expression": "@{true == a}",
             "expected": {
                 "type": "error",
@@ -541,7 +541,7 @@
             ]
         },
         {
-            "name": "a == true => error",
+            "name": "a == true => error (2)",
             "expression": "@{a == true}",
             "expected": {
                 "type": "error",
@@ -561,7 +561,7 @@
             ]
         },
         {
-            "name": "true != a => error",
+            "name": "true != a => error (2)",
             "expression": "@{true != a}",
             "expected": {
                 "type": "error",
@@ -581,7 +581,7 @@
             ]
         },
         {
-            "name": "a != true => error",
+            "name": "a != true => error (2)",
             "expression": "@{a != true}",
             "expected": {
                 "type": "error",
@@ -601,7 +601,7 @@
             ]
         },
         {
-            "name": "7 == a => error",
+            "name": "7 == a => error (3)",
             "expression": "@{7 == a}",
             "expected": {
                 "type": "error",
@@ -621,7 +621,7 @@
             ]
         },
         {
-            "name": "a == 7 => error",
+            "name": "a == 7 => error (3)",
             "expression": "@{a == 7}",
             "expected": {
                 "type": "error",
@@ -641,7 +641,7 @@
             ]
         },
         {
-            "name": "7 != a => error",
+            "name": "7 != a => error (3)",
             "expression": "@{7 != a}",
             "expected": {
                 "type": "error",
@@ -661,7 +661,7 @@
             ]
         },
         {
-            "name": "a != 7 => error",
+            "name": "a != 7 => error (3)",
             "expression": "@{a != 7}",
             "expected": {
                 "type": "error",
@@ -681,87 +681,7 @@
             ]
         },
         {
-            "name": "7 == a => error",
-            "expression": "@{7 == a}",
-            "expected": {
-                "type": "error",
-                "value": "Failed to evaluate [7 == true]. Operator '==' cannot be applied to different types: Integer and Boolean."
-            },
-            "variables": [
-                {
-                    "type": "boolean",
-                    "value": true,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a == 7 => error",
-            "expression": "@{a == 7}",
-            "expected": {
-                "type": "error",
-                "value": "Failed to evaluate [true == 7]. Operator '==' cannot be applied to different types: Boolean and Integer."
-            },
-            "variables": [
-                {
-                    "type": "boolean",
-                    "value": true,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 != a => error",
-            "expression": "@{7 != a}",
-            "expected": {
-                "type": "error",
-                "value": "Failed to evaluate [7 != true]. Operator '!=' cannot be applied to different types: Integer and Boolean."
-            },
-            "variables": [
-                {
-                    "type": "boolean",
-                    "value": true,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a != 7 => error",
-            "expression": "@{a != 7}",
-            "expected": {
-                "type": "error",
-                "value": "Failed to evaluate [true != 7]. Operator '!=' cannot be applied to different types: Boolean and Integer."
-            },
-            "variables": [
-                {
-                    "type": "boolean",
-                    "value": true,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 == a => error",
+            "name": "7 == a => error (4)",
             "expression": "@{7 == a}",
             "expected": {
                 "type": "error",
@@ -781,7 +701,7 @@
             ]
         },
         {
-            "name": "a == 7 => error",
+            "name": "a == 7 => error (4)",
             "expression": "@{a == 7}",
             "expected": {
                 "type": "error",
@@ -801,7 +721,7 @@
             ]
         },
         {
-            "name": "7 != a => error",
+            "name": "7 != a => error (4)",
             "expression": "@{7 != a}",
             "expected": {
                 "type": "error",
@@ -821,7 +741,7 @@
             ]
         },
         {
-            "name": "a != 7 => error",
+            "name": "a != 7 => error (4)",
             "expression": "@{a != 7}",
             "expected": {
                 "type": "error",
@@ -841,7 +761,7 @@
             ]
         },
         {
-            "name": "7 == a => error",
+            "name": "7 == a => error (5)",
             "expression": "@{7 == a}",
             "expected": {
                 "type": "error",
@@ -861,7 +781,7 @@
             ]
         },
         {
-            "name": "a == 7 => error",
+            "name": "a == 7 => error (5)",
             "expression": "@{a == 7}",
             "expected": {
                 "type": "error",
@@ -881,7 +801,7 @@
             ]
         },
         {
-            "name": "7 != a => error",
+            "name": "7 != a => error (5)",
             "expression": "@{7 != a}",
             "expected": {
                 "type": "error",
@@ -901,7 +821,7 @@
             ]
         },
         {
-            "name": "a != 7 => error",
+            "name": "a != 7 => error (5)",
             "expression": "@{a != 7}",
             "expected": {
                 "type": "error",
@@ -921,7 +841,7 @@
             ]
         },
         {
-            "name": "7.0 == a => error",
+            "name": "7.0 == a => error (1)",
             "expression": "@{7.0 == a}",
             "expected": {
                 "type": "error",
@@ -941,7 +861,7 @@
             ]
         },
         {
-            "name": "a == 7.0 => error",
+            "name": "a == 7.0 => error (1)",
             "expression": "@{a == 7.0}",
             "expected": {
                 "type": "error",
@@ -961,7 +881,7 @@
             ]
         },
         {
-            "name": "7.0 != a => error",
+            "name": "7.0 != a => error (1)",
             "expression": "@{7.0 != a}",
             "expected": {
                 "type": "error",
@@ -981,7 +901,7 @@
             ]
         },
         {
-            "name": "a != 7.0 => error",
+            "name": "a != 7.0 => error (1)",
             "expression": "@{a != 7.0}",
             "expected": {
                 "type": "error",
@@ -1001,7 +921,7 @@
             ]
         },
         {
-            "name": "7.0 == a => error",
+            "name": "7.0 == a => error (2)",
             "expression": "@{7.0 == a}",
             "expected": {
                 "type": "error",
@@ -1021,7 +941,7 @@
             ]
         },
         {
-            "name": "a == 7.0 => error",
+            "name": "a == 7.0 => error (2)",
             "expression": "@{a == 7.0}",
             "expected": {
                 "type": "error",
@@ -1041,7 +961,7 @@
             ]
         },
         {
-            "name": "7.0 != a => error",
+            "name": "7.0 != a => error (2)",
             "expression": "@{7.0 != a}",
             "expected": {
                 "type": "error",
@@ -1061,7 +981,7 @@
             ]
         },
         {
-            "name": "a != 7.0 => error",
+            "name": "a != 7.0 => error (2)",
             "expression": "@{a != 7.0}",
             "expected": {
                 "type": "error",
@@ -1081,7 +1001,7 @@
             ]
         },
         {
-            "name": "7.0 == a => error",
+            "name": "7.0 == a => error (3)",
             "expression": "@{7.0 == a}",
             "expected": {
                 "type": "error",
@@ -1101,7 +1021,7 @@
             ]
         },
         {
-            "name": "a == 7.0 => error",
+            "name": "a == 7.0 => error (3)",
             "expression": "@{a == 7.0}",
             "expected": {
                 "type": "error",
@@ -1121,7 +1041,7 @@
             ]
         },
         {
-            "name": "7.0 != a => error",
+            "name": "7.0 != a => error (3)",
             "expression": "@{7.0 != a}",
             "expected": {
                 "type": "error",
@@ -1141,7 +1061,7 @@
             ]
         },
         {
-            "name": "a != 7.0 => error",
+            "name": "a != 7.0 => error (3)",
             "expression": "@{a != 7.0}",
             "expected": {
                 "type": "error",
@@ -1161,7 +1081,7 @@
             ]
         },
         {
-            "name": "7.0 == a => error",
+            "name": "7.0 == a => error (4)",
             "expression": "@{7.0 == a}",
             "expected": {
                 "type": "error",
@@ -1181,7 +1101,7 @@
             ]
         },
         {
-            "name": "a == 7.0 => error",
+            "name": "a == 7.0 => error (4)",
             "expression": "@{a == 7.0}",
             "expected": {
                 "type": "error",
@@ -1201,7 +1121,7 @@
             ]
         },
         {
-            "name": "7.0 != a => error",
+            "name": "7.0 != a => error (4)",
             "expression": "@{7.0 != a}",
             "expected": {
                 "type": "error",
@@ -1221,7 +1141,7 @@
             ]
         },
         {
-            "name": "a != 7.0 => error",
+            "name": "a != 7.0 => error (4)",
             "expression": "@{a != 7.0}",
             "expected": {
                 "type": "error",
@@ -1241,7 +1161,7 @@
             ]
         },
         {
-            "name": "'abc' == a => error",
+            "name": "'abc' == a => error (1)",
             "expression": "@{'abc' == a}",
             "expected": {
                 "type": "error",
@@ -1261,7 +1181,7 @@
             ]
         },
         {
-            "name": "a == 'abc' => error",
+            "name": "a == 'abc' => error (1)",
             "expression": "@{a == 'abc'}",
             "expected": {
                 "type": "error",
@@ -1281,7 +1201,7 @@
             ]
         },
         {
-            "name": "'abc' != a => error",
+            "name": "'abc' != a => error (1)",
             "expression": "@{'abc' != a}",
             "expected": {
                 "type": "error",
@@ -1301,7 +1221,7 @@
             ]
         },
         {
-            "name": "a != 'abc' => error",
+            "name": "a != 'abc' => error (1)",
             "expression": "@{a != 'abc'}",
             "expected": {
                 "type": "error",
@@ -1321,7 +1241,7 @@
             ]
         },
         {
-            "name": "'abc' == a => error",
+            "name": "'abc' == a => error (2)",
             "expression": "@{'abc' == a}",
             "expected": {
                 "type": "error",
@@ -1341,7 +1261,7 @@
             ]
         },
         {
-            "name": "a == 'abc' => error",
+            "name": "a == 'abc' => error (2)",
             "expression": "@{a == 'abc'}",
             "expected": {
                 "type": "error",
@@ -1361,7 +1281,7 @@
             ]
         },
         {
-            "name": "'abc' != a => error",
+            "name": "'abc' != a => error (2)",
             "expression": "@{'abc' != a}",
             "expected": {
                 "type": "error",
@@ -1381,7 +1301,7 @@
             ]
         },
         {
-            "name": "a != 'abc' => error",
+            "name": "a != 'abc' => error (2)",
             "expression": "@{a != 'abc'}",
             "expected": {
                 "type": "error",
@@ -1401,7 +1321,7 @@
             ]
         },
         {
-            "name": "'abc' == a => error",
+            "name": "'abc' == a => error (3)",
             "expression": "@{'abc' == a}",
             "expected": {
                 "type": "error",
@@ -1421,7 +1341,7 @@
             ]
         },
         {
-            "name": "a == 'abc' => error",
+            "name": "a == 'abc' => error (3)",
             "expression": "@{a == 'abc'}",
             "expected": {
                 "type": "error",
@@ -1441,7 +1361,7 @@
             ]
         },
         {
-            "name": "'abc' != a => error",
+            "name": "'abc' != a => error (3)",
             "expression": "@{'abc' != a}",
             "expected": {
                 "type": "error",
@@ -1461,7 +1381,7 @@
             ]
         },
         {
-            "name": "a != 'abc' => error",
+            "name": "a != 'abc' => error (3)",
             "expression": "@{a != 'abc'}",
             "expected": {
                 "type": "error",
@@ -1481,7 +1401,7 @@
             ]
         },
         {
-            "name": "true == a => error",
+            "name": "true == a => error (3)",
             "expression": "@{true == a}",
             "expected": {
                 "type": "error",
@@ -1501,7 +1421,7 @@
             ]
         },
         {
-            "name": "a == true => error",
+            "name": "a == true => error (3)",
             "expression": "@{a == true}",
             "expected": {
                 "type": "error",
@@ -1521,7 +1441,7 @@
             ]
         },
         {
-            "name": "true != a => error",
+            "name": "true != a => error (3)",
             "expression": "@{true != a}",
             "expected": {
                 "type": "error",
@@ -1541,7 +1461,7 @@
             ]
         },
         {
-            "name": "a != true => error",
+            "name": "a != true => error (3)",
             "expression": "@{a != true}",
             "expected": {
                 "type": "error",
@@ -1561,7 +1481,7 @@
             ]
         },
         {
-            "name": "true == a => error",
+            "name": "true == a => error (4)",
             "expression": "@{true == a}",
             "expected": {
                 "type": "error",
@@ -1581,7 +1501,7 @@
             ]
         },
         {
-            "name": "a == true => error",
+            "name": "a == true => error (4)",
             "expression": "@{a == true}",
             "expected": {
                 "type": "error",
@@ -1601,7 +1521,7 @@
             ]
         },
         {
-            "name": "true != a => error",
+            "name": "true != a => error (4)",
             "expression": "@{true != a}",
             "expected": {
                 "type": "error",
@@ -1621,7 +1541,7 @@
             ]
         },
         {
-            "name": "a != true => error",
+            "name": "a != true => error (4)",
             "expression": "@{a != true}",
             "expected": {
                 "type": "error",
@@ -1641,7 +1561,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (1)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -1666,7 +1586,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (1)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -1691,7 +1611,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (1)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -1716,7 +1636,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (1)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -1741,7 +1661,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (2)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -1766,7 +1686,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (2)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -1791,7 +1711,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (2)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -1816,7 +1736,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (2)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -1841,7 +1761,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (3)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -1866,7 +1786,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (3)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -1891,7 +1811,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (3)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -1916,7 +1836,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (3)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -1941,7 +1861,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (4)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -1966,7 +1886,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (4)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -1991,7 +1911,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (4)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2016,7 +1936,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (4)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2041,7 +1961,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (5)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2066,7 +1986,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (5)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2091,7 +2011,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (5)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2116,7 +2036,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (5)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2141,7 +2061,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (6)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2166,7 +2086,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (6)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2191,7 +2111,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (6)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2216,7 +2136,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (6)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2241,7 +2161,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (7)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2266,7 +2186,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (7)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2291,7 +2211,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (7)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2316,7 +2236,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (7)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2341,7 +2261,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (8)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2366,7 +2286,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (8)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2391,7 +2311,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (8)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2416,7 +2336,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (8)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2441,7 +2361,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (9)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2466,7 +2386,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (9)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2491,7 +2411,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (9)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2516,7 +2436,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (9)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2541,7 +2461,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (10)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2566,7 +2486,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (10)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2591,7 +2511,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (10)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2616,7 +2536,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (10)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2641,7 +2561,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (11)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2666,7 +2586,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (11)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2691,7 +2611,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (11)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2716,7 +2636,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (11)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2741,7 +2661,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (12)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2766,7 +2686,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (12)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2791,7 +2711,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (12)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2816,7 +2736,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (12)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2841,7 +2761,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (13)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2866,7 +2786,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (13)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2891,7 +2811,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (13)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -2916,7 +2836,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (13)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -2941,7 +2861,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (14)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -2966,7 +2886,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (14)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -2991,7 +2911,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (14)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -3016,7 +2936,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (14)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",
@@ -3041,7 +2961,7 @@
             ]
         },
         {
-            "name": "b == a => error",
+            "name": "b == a => error (15)",
             "expression": "@{b == a}",
             "expected": {
                 "type": "error",
@@ -3066,7 +2986,7 @@
             ]
         },
         {
-            "name": "a == b => error",
+            "name": "a == b => error (15)",
             "expression": "@{a == b}",
             "expected": {
                 "type": "error",
@@ -3091,7 +3011,7 @@
             ]
         },
         {
-            "name": "b != a => error",
+            "name": "b != a => error (15)",
             "expression": "@{b != a}",
             "expected": {
                 "type": "error",
@@ -3116,7 +3036,7 @@
             ]
         },
         {
-            "name": "a != b => error",
+            "name": "a != b => error (15)",
             "expression": "@{a != b}",
             "expected": {
                 "type": "error",

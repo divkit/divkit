@@ -136,7 +136,7 @@
       ]
     },
     {
-      "name": "a % b => 1",
+      "name": "a % b => 1 (1)",
       "expression": "@{a % b}",
       "expected": {
         "type": "integer",
@@ -186,7 +186,7 @@
       ]
     },
     {
-      "name": "a % b => -1",
+      "name": "a % b => -1 (1)",
       "expression": "@{a % b}",
       "expected": {
         "type": "integer",
@@ -236,7 +236,7 @@
       ]
     },
     {
-      "name": "a % b => 1",
+      "name": "a % b => 1 (2)",
       "expression": "@{a % b}",
       "expected": {
         "type": "integer",
@@ -286,7 +286,7 @@
       ]
     },
     {
-      "name": "a % b => -1",
+      "name": "a % b => -1 (2)",
       "expression": "@{a % b}",
       "expected": {
         "type": "integer",

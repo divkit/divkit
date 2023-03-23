@@ -241,7 +241,7 @@
             ]
         },
         {
-            "name": "string template with boolean variable expression",
+            "name": "string template with true boolean variable expression",
             "expression": "This is a @{var} story.",
             "expected": {
                 "type": "string",
@@ -261,16 +261,16 @@
             ]
         },
         {
-            "name": "string template with boolean variable expression",
+            "name": "string template with false boolean variable expression",
             "expression": "a @{var} boolean literal",
             "expected": {
                 "type": "string",
-                "value": "a true boolean literal"
+                "value": "a false boolean literal"
             },
             "variables": [
                 {
                     "type": "boolean",
-                    "value": true,
+                    "value": false,
                     "name": "var"
                 }
             ],

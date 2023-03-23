@@ -389,7 +389,7 @@
             ]
         },
         {
-            "name": "a + b => error",
+            "name": "a + b (integer) => error",
             "expression": "@{a + b}",
             "expected": {
                 "type": "error",
@@ -412,7 +412,7 @@
             ]
         },
         {
-            "name": "a - b => error",
+            "name": "a - b (integer) => error",
             "expression": "@{a - b}",
             "expected": {
                 "type": "error",
@@ -435,7 +435,7 @@
             ]
         },
         {
-            "name": "a * b => error",
+            "name": "a * b (integer) => error",
             "expression": "@{a * b}",
             "expected": {
                 "type": "error",
@@ -458,7 +458,7 @@
             ]
         },
         {
-            "name": "a / b => error",
+            "name": "a / b (integer) => error",
             "expression": "@{a / b}",
             "expected": {
                 "type": "error",
@@ -481,7 +481,7 @@
             ]
         },
         {
-            "name": "a % b => error",
+            "name": "a % b (integer) => error",
             "expression": "@{a % b}",
             "expected": {
                 "type": "integer",
@@ -506,7 +506,7 @@
             ]
         },
         {
-            "name": "a ^ b => error",
+            "name": "a ^ b (integer) => error",
             "expression": "@{a ^ b}",
             "expected": {
                 "type": "error",
@@ -531,7 +531,7 @@
             ]
         },
         {
-            "name": "a & b => error",
+            "name": "a & b (integer) => error",
             "expression": "@{a & b}",
             "expected": {
                 "type": "error",
@@ -556,7 +556,7 @@
             ]
         },
         {
-            "name": "a | b => error",
+            "name": "a | b (integer) => error",
             "expression": "@{a | b}",
             "expected": {
                 "type": "error",
@@ -581,7 +581,7 @@
             ]
         },
         {
-            "name": "a && b => error",
+            "name": "a && b (integer) => error",
             "expression": "@{a && b}",
             "expected": {
                 "type": "error",
@@ -606,7 +606,7 @@
             ]
         },
         {
-            "name": "a || b => error",
+            "name": "a || b (integer) => error",
             "expression": "@{a || b}",
             "expected": {
                 "type": "error",
@@ -631,7 +631,7 @@
             ]
         },
         {
-            "name": "a + b => error",
+            "name": "a + b (number) => error",
             "expression": "@{a + b}",
             "expected": {
                 "type": "error",
@@ -654,7 +654,7 @@
             ]
         },
         {
-            "name": "a - b => error",
+            "name": "a - b => (number) error",
             "expression": "@{a - b}",
             "expected": {
                 "type": "error",
@@ -677,7 +677,7 @@
             ]
         },
         {
-            "name": "a * b => error",
+            "name": "a * b (number) => error",
             "expression": "@{a * b}",
             "expected": {
                 "type": "error",
@@ -700,7 +700,7 @@
             ]
         },
         {
-            "name": "a / b => error",
+            "name": "a / b (number) => error",
             "expression": "@{a / b}",
             "expected": {
                 "type": "error",
@@ -723,7 +723,7 @@
             ]
         },
         {
-            "name": "a % b => error",
+            "name": "a % b (number) => error",
             "expression": "@{a % b}",
             "expected": {
                 "type": "number",
@@ -748,7 +748,7 @@
             ]
         },
         {
-            "name": "a ^ b => error",
+            "name": "a ^ b (number) => error",
             "expression": "@{a ^ b}",
             "expected": {
                 "type": "error",
@@ -773,7 +773,7 @@
             ]
         },
         {
-            "name": "a & b => error",
+            "name": "a & b (number) => error",
             "expression": "@{a & b}",
             "expected": {
                 "type": "error",
@@ -798,7 +798,7 @@
             ]
         },
         {
-            "name": "a | b => error",
+            "name": "a | b (number) => error",
             "expression": "@{a | b}",
             "expected": {
                 "type": "error",
@@ -823,7 +823,7 @@
             ]
         },
         {
-            "name": "a && b => error",
+            "name": "a && b (number) => error",
             "expression": "@{a && b}",
             "expected": {
                 "type": "error",
@@ -848,7 +848,7 @@
             ]
         },
         {
-            "name": "a || b => error",
+            "name": "a || b (number) => error",
             "expression": "@{a || b}",
             "expected": {
                 "type": "error",
@@ -873,7 +873,7 @@
             ]
         },
         {
-            "name": "a - b => error",
+            "name": "a - b => error (3)",
             "expression": "@{a - b}",
             "expected": {
                 "type": "error",
@@ -898,7 +898,7 @@
             ]
         },
         {
-            "name": "a * b => error",
+            "name": "a * b => error (3)",
             "expression": "@{a * b}",
             "expected": {
                 "type": "error",
@@ -923,7 +923,7 @@
             ]
         },
         {
-            "name": "a / b => error",
+            "name": "a / b => error (3)",
             "expression": "@{a / b}",
             "expected": {
                 "type": "error",
@@ -948,7 +948,7 @@
             ]
         },
         {
-            "name": "a % b => error",
+            "name": "a % b => error (3)",
             "expression": "@{a % b}",
             "expected": {
                 "type": "error",
@@ -973,7 +973,7 @@
             ]
         },
         {
-            "name": "a ^ b => error",
+            "name": "a ^ b => error (3)",
             "expression": "@{a ^ b}",
             "expected": {
                 "type": "error",
@@ -998,7 +998,7 @@
             ]
         },
         {
-            "name": "a & b => error",
+            "name": "a & b => error (3)",
             "expression": "@{a & b}",
             "expected": {
                 "type": "error",
@@ -1023,7 +1023,7 @@
             ]
         },
         {
-            "name": "a | b => error",
+            "name": "a | b => error (3)",
             "expression": "@{a | b}",
             "expected": {
                 "type": "error",
@@ -1048,7 +1048,7 @@
             ]
         },
         {
-            "name": "a && b => error",
+            "name": "a && b => error (3)",
             "expression": "@{a && b}",
             "expected": {
                 "type": "error",
@@ -1073,7 +1073,7 @@
             ]
         },
         {
-            "name": "a || b => error",
+            "name": "a || b => error (3)",
             "expression": "@{a || b}",
             "expected": {
                 "type": "error",
@@ -1098,7 +1098,7 @@
             ]
         },
         {
-            "name": "a + b => error",
+            "name": "a + b => error (3)",
             "expression": "@{a + b}",
             "expected": {
                 "type": "error",
@@ -1123,7 +1123,7 @@
             ]
         },
         {
-            "name": "a - b => error",
+            "name": "a - b => error (4)",
             "expression": "@{a - b}",
             "expected": {
                 "type": "error",
@@ -1148,7 +1148,7 @@
             ]
         },
         {
-            "name": "a * b => error",
+            "name": "a * b => error (4)",
             "expression": "@{a * b}",
             "expected": {
                 "type": "error",
@@ -1173,7 +1173,7 @@
             ]
         },
         {
-            "name": "a / b => error",
+            "name": "a / b => error (4)",
             "expression": "@{a / b}",
             "expected": {
                 "type": "error",
@@ -1198,7 +1198,7 @@
             ]
         },
         {
-            "name": "a % b => error",
+            "name": "a % b => error (4)",
             "expression": "@{a % b}",
             "expected": {
                 "type": "error",
@@ -1223,7 +1223,7 @@
             ]
         },
         {
-            "name": "a ^ b => error",
+            "name": "a ^ b => error (4)",
             "expression": "@{a ^ b}",
             "expected": {
                 "type": "error",
@@ -1248,7 +1248,7 @@
             ]
         },
         {
-            "name": "a & b => error",
+            "name": "a & b => error (4)",
             "expression": "@{a & b}",
             "expected": {
                 "type": "error",
@@ -1273,7 +1273,7 @@
             ]
         },
         {
-            "name": "a | b => error",
+            "name": "a | b => error (4)",
             "expression": "@{a | b}",
             "expected": {
                 "type": "error",
@@ -1298,7 +1298,7 @@
             ]
         },
         {
-            "name": "a + b => error",
+            "name": "a + b => error (4)",
             "expression": "@{a + b}",
             "expected": {
                 "type": "error",
@@ -1323,7 +1323,7 @@
             ]
         },
         {
-            "name": "a - b => error",
+            "name": "a - b => error (5)",
             "expression": "@{a - b}",
             "expected": {
                 "type": "error",
@@ -1348,7 +1348,7 @@
             ]
         },
         {
-            "name": "a * b => error",
+            "name": "a * b => error (5)",
             "expression": "@{a * b}",
             "expected": {
                 "type": "error",
@@ -1373,7 +1373,7 @@
             ]
         },
         {
-            "name": "a / b => error",
+            "name": "a / b => error (5)",
             "expression": "@{a / b}",
             "expected": {
                 "type": "error",
@@ -1398,7 +1398,7 @@
             ]
         },
         {
-            "name": "a % b => error",
+            "name": "a % b => error (5)",
             "expression": "@{a % b}",
             "expected": {
                 "type": "error",
@@ -1423,7 +1423,7 @@
             ]
         },
         {
-            "name": "a ^ b => error",
+            "name": "a ^ b => error (5)",
             "expression": "@{a ^ b}",
             "expected": {
                 "type": "error",
@@ -1448,7 +1448,7 @@
             ]
         },
         {
-            "name": "a & b => error",
+            "name": "a & b => error (5)",
             "expression": "@{a & b}",
             "expected": {
                 "type": "error",
@@ -1473,7 +1473,7 @@
             ]
         },
         {
-            "name": "a | b => error",
+            "name": "a | b => error (5)",
             "expression": "@{a | b}",
             "expected": {
                 "type": "error",
@@ -1498,7 +1498,7 @@
             ]
         },
         {
-            "name": "a && b => error",
+            "name": "a && b => error (4)",
             "expression": "@{a && b}",
             "expected": {
                 "type": "error",
@@ -1523,7 +1523,7 @@
             ]
         },
         {
-            "name": "a || b => error",
+            "name": "a || b => error (4)",
             "expression": "@{a || b}",
             "expected": {
                 "type": "error",
@@ -1548,7 +1548,7 @@
             ]
         },
         {
-            "name": "a + b => error",
+            "name": "a + b => error (5)",
             "expression": "@{a + b}",
             "expected": {
                 "type": "error",
@@ -1572,7 +1572,7 @@
             ]
         },
         {
-            "name": "a - b => error",
+            "name": "a - b => error (6)",
             "expression": "@{a - b}",
             "expected": {
                 "type": "error",
@@ -1597,7 +1597,7 @@
             ]
         },
         {
-            "name": "a * b => error",
+            "name": "a * b => error (6)",
             "expression": "@{a * b}",
             "expected": {
                 "type": "error",
@@ -1622,7 +1622,7 @@
             ]
         },
         {
-            "name": "a / b => error",
+            "name": "a / b => error (6)",
             "expression": "@{a / b}",
             "expected": {
                 "type": "error",
@@ -1647,7 +1647,7 @@
             ]
         },
         {
-            "name": "a % b => error",
+            "name": "a % b => error (6)",
             "expression": "@{a % b}",
             "expected": {
                 "type": "error",
@@ -1672,7 +1672,7 @@
             ]
         },
         {
-            "name": "a ^ b => error",
+            "name": "a ^ b => error (6)",
             "expression": "@{a ^ b}",
             "expected": {
                 "type": "error",
@@ -1697,7 +1697,7 @@
             ]
         },
         {
-            "name": "a & b => error",
+            "name": "a & b => error (6)",
             "expression": "@{a & b}",
             "expected": {
                 "type": "error",

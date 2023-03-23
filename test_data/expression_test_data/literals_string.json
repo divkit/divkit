@@ -57,7 +57,7 @@
             ]
         },
         {
-            "name": "string literal without ending symbol",
+            "name": "string literal without starting symbol",
             "expression": "@{This is a string'}",
             "expected": {
                 "type": "error",

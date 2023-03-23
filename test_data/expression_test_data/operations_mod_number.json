@@ -110,7 +110,7 @@
       ]
     },
     {
-      "name": "a % b => 1.0",
+      "name": "a % b => 1.0 (1)",
       "expression": "@{a % b}",
       "expected": {
         "type": "number",
@@ -160,7 +160,7 @@
       ]
     },
     {
-      "name": "a % b => -1.0",
+      "name": "a % b => -1.0 (1)",
       "expression": "@{a % b}",
       "expected": {
         "type": "number",
@@ -210,7 +210,7 @@
       ]
     },
     {
-      "name": "a % b => 1.0",
+      "name": "a % b => 1.0 (2)",
       "expression": "@{a % b}",
       "expected": {
         "type": "number",
@@ -260,7 +260,7 @@
       ]
     },
     {
-      "name": "a % b => -1.0",
+      "name": "a % b => -1.0 (2)",
       "expression": "@{a % b}",
       "expected": {
         "type": "number",

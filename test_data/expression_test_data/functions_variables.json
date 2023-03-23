@@ -205,7 +205,7 @@
       ]
     },
     {
-      "name": "getColorValue(correctColorVar, fallback) => colorVal",
+      "name": "getColorValue(correctColorVar, fallbackVar) => colorVal",
       "expression": "@{getColorValue('abc', fallback)}",
       "expected": {
         "type": "color",
@@ -229,7 +229,7 @@
       ]
     },
     {
-      "name": "getColorValue(incorrectColorVar, fallback) => colorVal",
+      "name": "getColorValue(incorrectColorVar, fallbackVar) => colorVal",
       "expression": "@{getColorValue('abc', fallback)}",
       "expected": {
         "type": "color",
@@ -253,7 +253,7 @@
       ]
     },
     {
-      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal",
+      "name": "getColorValue(nonexistentColorVar, fallbackVar) => colorVal",
       "expression": "@{getColorValue('abc', fallback)}",
       "expected": {
         "type": "color",
@@ -272,7 +272,7 @@
       ]
     },
     {
-      "name": "getColorValue(correctColorVar, fallback) => colorVal",
+      "name": "getColorValue(correctColorVar, fallback) => colorVal (1)",
       "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
       "expected": {
         "type": "color",
@@ -291,7 +291,7 @@
       ]
     },
     {
-      "name": "getColorValue(incorrectColorVar, fallback) => colorVal",
+      "name": "getColorValue(incorrectColorVar, fallback) => colorVal (1)",
       "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
       "expected": {
         "type": "color",
@@ -310,7 +310,7 @@
       ]
     },
     {
-      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal",
+      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal (1)",
       "expression": "@{getColorValue('abc', '#FFFFFFFF')}",
       "expected": {
         "type": "color",
@@ -322,7 +322,7 @@
       ]
     },
     {
-      "name": "getColorValue(correctColorVar, fallback) => colorVal",
+      "name": "getColorValue(correctColorVar, fallback) => colorVal (2)",
       "expression": "@{getColorValue('abc', '#fff')}",
       "expected": {
         "type": "color",
@@ -341,7 +341,7 @@
       ]
     },
     {
-      "name": "getColorValue(incorrectColorVar, fallback) => colorVal",
+      "name": "getColorValue(incorrectColorVar, fallback) => colorVal (2)",
       "expression": "@{getColorValue('abc', '#fff')}",
       "expected": {
         "type": "color",
@@ -359,7 +359,7 @@
       ]
     },
     {
-      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal",
+      "name": "getColorValue(nonexistentColorVar, fallback) => colorVal (2)",
       "expression": "@{getColorValue('abc', '#fff')}",
       "expected": {
         "type": "color",
@@ -372,7 +372,7 @@
       ]
     },
     {
-      "name": "getUrlValue(correctUrlVar, fallback) => urlVal",
+      "name": "getUrlValue(correctUrlVar, fallbackVar) => urlVal",
       "expression": "@{getUrlValue('abc', fallback)}",
       "expected": {
         "type": "url",
@@ -395,7 +395,7 @@
       ]
     },
     {
-      "name": "getUrlValue(incorrectUrlVar, fallback) => urlVal",
+      "name": "getUrlValue(incorrectUrlVar, fallbackVar) => urlVal",
       "expression": "@{getUrlValue('abc', fallback)}",
       "expected": {
         "type": "url",
@@ -418,7 +418,7 @@
       ]
     },
     {
-      "name": "getUrlValue(nonexistentUrlVar, fallback) => urlVal",
+      "name": "getUrlValue(nonexistentUrlVar, fallbackVar) => urlVal",
       "expression": "@{getUrlValue('abc', fallback)}",
       "expected": {
         "type": "url",
@@ -436,7 +436,7 @@
       ]
     },
     {
-      "name": "getUrlValue(correctUrlVar, fallback) => urlVal",
+      "name": "getUrlValue(correctUrlVar, fallback) => urlVal (1)",
       "expression": "@{getUrlValue('abc', 'https://fallback')}",
       "expected": {
         "type": "url",
@@ -454,7 +454,7 @@
       ]
     },
     {
-      "name": "getUrlValue(incorrectUrlVar, fallback) => urlVal",
+      "name": "getUrlValue(incorrectUrlVar, fallback) => urlVal (1)",
       "expression": "@{getUrlValue('abc', 'https://fallback')}",
       "expected": {
         "type": "url",
@@ -472,7 +472,7 @@
       ]
     },
     {
-      "name": "getUrlValue(nonexistentUrlVar, fallback) => urlVal",
+      "name": "getUrlValue(nonexistentUrlVar, fallback) => urlVal (1)",
       "expression": "@{getUrlValue('abc', 'https://fallback')}",
       "expected": {
         "type": "url",

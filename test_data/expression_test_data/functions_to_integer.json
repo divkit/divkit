@@ -1,7 +1,7 @@
 {
   "cases": [
     {
-      "name": "positive number to integer => integer",
+      "name": "positive number to integer => integer (1)",
       "expression": "@{toInteger(2.7182)}",
       "expected": {
         "type": "integer",
@@ -15,7 +15,7 @@
       ]
     },
     {
-      "name": "positive number to integer => integer",
+      "name": "positive number to integer => integer (2)",
       "expression": "@{toInteger(3.1415)}",
       "expected": {
         "type": "integer",
@@ -29,7 +29,7 @@
       ]
     },
     {
-      "name": "negative number to integer => integer",
+      "name": "negative number to integer => integer (1)",
       "expression": "@{toInteger(-2.7182)}",
       "expected": {
         "type": "integer",
@@ -43,7 +43,7 @@
       ]
     },
     {
-      "name": "negative number to integer => integer",
+      "name": "negative number to integer => integer (2)",
       "expression": "@{toInteger(-3.1415)}",
       "expected": {
         "type": "integer",

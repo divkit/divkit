@@ -1,7 +1,7 @@
 {
     "cases": [
         {
-            "name": "unsigned scientific literal without decimal part and with unsigned lowercase E",
+            "name": "unsigned scientific literal without decimal part and with unsigned lowercase E (1)",
             "expression": "@{11e2}",
             "expected": {
                 "type": "number",
@@ -15,7 +15,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with unsigned lowercase E",
+            "name": "positive scientific literal without decimal part and with unsigned lowercase E (1)",
             "expression": "@{+11e2}",
             "expected": {
                 "type": "number",
@@ -29,7 +29,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with unsigned lowercase E",
+            "name": "negative scientific literal without decimal part and with unsigned lowercase E (1)",
             "expression": "@{-11e2}",
             "expected": {
                 "type": "number",
@@ -43,7 +43,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with unsigned uppercase E",
+            "name": "unsigned scientific literal without decimal part and with unsigned uppercase E (1)",
             "expression": "@{11E2}",
             "expected": {
                 "type": "number",
@@ -57,7 +57,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with unsigned uppercase E",
+            "name": "positive scientific literal without decimal part and with unsigned uppercase E (1)",
             "expression": "@{+11E2}",
             "expected": {
                 "type": "number",
@@ -71,7 +71,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with unsigned uppercase E",
+            "name": "negative scientific literal without decimal part and with unsigned uppercase E (1)",
             "expression": "@{-11E2}",
             "expected": {
                 "type": "number",
@@ -85,7 +85,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with positive lowercase E",
+            "name": "unsigned scientific literal without decimal part and with positive lowercase E (1)",
             "expression": "@{11e+2}",
             "expected": {
                 "type": "number",
@@ -99,7 +99,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with positive lowercase E",
+            "name": "positive scientific literal without decimal part and with positive lowercase E (1)",
             "expression": "@{+11e+2}",
             "expected": {
                 "type": "number",
@@ -113,7 +113,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with positive lowercase E",
+            "name": "negative scientific literal without decimal part and with positive lowercase E (1)",
             "expression": "@{-11e+2}",
             "expected": {
                 "type": "number",
@@ -127,7 +127,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with positive uppercase E",
+            "name": "unsigned scientific literal without decimal part and with positive uppercase E (1)",
             "expression": "@{11E+2}",
             "expected": {
                 "type": "number",
@@ -141,7 +141,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with positive uppercase E",
+            "name": "positive scientific literal without decimal part and with positive uppercase E (1)",
             "expression": "@{+11E+2}",
             "expected": {
                 "type": "number",
@@ -155,7 +155,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with positive uppercase E",
+            "name": "negative scientific literal without decimal part and with positive uppercase E (1)",
             "expression": "@{-11E+2}",
             "expected": {
                 "type": "number",
@@ -169,7 +169,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with negative lowercase E",
+            "name": "unsigned scientific literal without decimal part and with negative lowercase E (1)",
             "expression": "@{1100e-2}",
             "expected": {
                 "type": "number",
@@ -183,7 +183,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with negative lowercase E",
+            "name": "positive scientific literal without decimal part and with negative lowercase E (1)",
             "expression": "@{+1100e-2}",
             "expected": {
                 "type": "number",
@@ -197,7 +197,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with negative lowercase E",
+            "name": "negative scientific literal without decimal part and with negative lowercase E (1)",
             "expression": "@{-1100e-2}",
             "expected": {
                 "type": "number",
@@ -211,7 +211,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with negative uppercase E",
+            "name": "unsigned scientific literal without decimal part and with negative uppercase E (1)",
             "expression": "@{1100E-2}",
             "expected": {
                 "type": "number",
@@ -225,7 +225,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with negative uppercase E",
+            "name": "positive scientific literal without decimal part and with negative uppercase E (1)",
             "expression": "@{+1100E-2}",
             "expected": {
                 "type": "number",
@@ -239,7 +239,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with negative uppercase E",
+            "name": "negative scientific literal without decimal part and with negative uppercase E (1)",
             "expression": "@{-1100E-2}",
             "expected": {
                 "type": "number",
@@ -253,7 +253,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with unsigned lowercase E",
+            "name": "unsigned scientific literal without decimal part and with unsigned lowercase E (2)",
             "expression": "@{11.09e2}",
             "expected": {
                 "type": "number",
@@ -267,7 +267,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with unsigned lowercase E",
+            "name": "positive scientific literal without decimal part and with unsigned lowercase E (2)",
             "expression": "@{+11.09e2}",
             "expected": {
                 "type": "number",
@@ -281,7 +281,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with unsigned lowercase E",
+            "name": "negative scientific literal without decimal part and with unsigned lowercase E (2)",
             "expression": "@{-11.09e2}",
             "expected": {
                 "type": "number",
@@ -295,7 +295,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with unsigned uppercase E",
+            "name": "unsigned scientific literal without decimal part and with unsigned uppercase E (2)",
             "expression": "@{11.09E2}",
             "expected": {
                 "type": "number",
@@ -309,7 +309,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with unsigned uppercase E",
+            "name": "positive scientific literal without decimal part and with unsigned uppercase E (2)",
             "expression": "@{+11.09E2}",
             "expected": {
                 "type": "number",
@@ -323,7 +323,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with unsigned uppercase E",
+            "name": "negative scientific literal without decimal part and with unsigned uppercase E (2)",
             "expression": "@{-11.09E2}",
             "expected": {
                 "type": "number",
@@ -337,7 +337,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with positive lowercase E",
+            "name": "unsigned scientific literal without decimal part and with positive lowercase E (2)",
             "expression": "@{11.09e+2}",
             "expected": {
                 "type": "number",
@@ -351,7 +351,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with positive lowercase E",
+            "name": "positive scientific literal without decimal part and with positive lowercase E (2)",
             "expression": "@{+11.09e+2}",
             "expected": {
                 "type": "number",
@@ -365,7 +365,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with positive lowercase E",
+            "name": "negative scientific literal without decimal part and with positive lowercase E (2)",
             "expression": "@{-11.09e+2}",
             "expected": {
                 "type": "number",
@@ -379,7 +379,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with positive uppercase E",
+            "name": "unsigned scientific literal without decimal part and with positive uppercase E (2)",
             "expression": "@{11.09E+2}",
             "expected": {
                 "type": "number",
@@ -393,7 +393,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with positive uppercase E",
+            "name": "positive scientific literal without decimal part and with positive uppercase E (2)",
             "expression": "@{+11.09E+2}",
             "expected": {
                 "type": "number",
@@ -407,7 +407,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with positive uppercase E",
+            "name": "negative scientific literal without decimal part and with positive uppercase E (2)",
             "expression": "@{-11.09E+2}",
             "expected": {
                 "type": "number",
@@ -421,7 +421,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with negative lowercase E",
+            "name": "unsigned scientific literal without decimal part and with negative lowercase E (2)",
             "expression": "@{1100.09e-2}",
             "expected": {
                 "type": "number",
@@ -435,7 +435,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with negative lowercase E",
+            "name": "positive scientific literal without decimal part and with negative lowercase E (2)",
             "expression": "@{+1100.09e-2}",
             "expected": {
                 "type": "number",
@@ -449,7 +449,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with negative lowercase E",
+            "name": "negative scientific literal without decimal part and with negative lowercase E (2)",
             "expression": "@{-1100.09e-2}",
             "expected": {
                 "type": "number",
@@ -463,7 +463,7 @@
             ]
         },
         {
-            "name": "unsigned scientific literal without decimal part and with negative uppercase E",
+            "name": "unsigned scientific literal without decimal part and with negative uppercase E (2)",
             "expression": "@{1100.09E-2}",
             "expected": {
                 "type": "number",
@@ -477,7 +477,7 @@
             ]
         },
         {
-            "name": "positive scientific literal without decimal part and with negative uppercase E",
+            "name": "positive scientific literal without decimal part and with negative uppercase E (2)",
             "expression": "@{+1100.09E-2}",
             "expected": {
                 "type": "number",
@@ -491,7 +491,7 @@
             ]
         },
         {
-            "name": "negative scientific literal without decimal part and with negative uppercase E",
+            "name": "negative scientific literal without decimal part and with negative uppercase E (2)",
             "expression": "@{-1100.09E-2}",
             "expected": {
                 "type": "number",

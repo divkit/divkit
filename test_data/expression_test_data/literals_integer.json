@@ -43,7 +43,7 @@
             ]
         },
         {
-            "name": "unsigned max integer literal",
+            "name": "unsigned max integer literal (deprecated)",
             "expression": "@{2147483647}",
             "deprecated": true,
             "description": "The size of integer was increased.",
@@ -70,7 +70,7 @@
             ]
         },
         {
-            "name": "positive max integer literal",
+            "name": "positive max integer literal (deprecated)",
             "expression": "@{+2147483647}",
             "deprecated": true,
             "description": "The size of integer was increased.",
@@ -97,7 +97,7 @@
             ]
         },
         {
-            "name": "negative min integer literal",
+            "name": "negative min integer literal (deprecated)",
             "expression": "@{-2147483648}",
             "deprecated": true,
             "description": "The size of integer was increased.",
@@ -124,7 +124,7 @@
             ]
         },
         {
-            "name": "value in brackets is overflowed",
+            "name": "value in brackets is overflowed (deprecated)",
             "expression": "@{-(2147483648)}",
             "deprecated": true,
             "description": "The size of integer was increased.",
@@ -151,7 +151,7 @@
             ]
         },
         {
-            "name": "unsigned overflow integer literal",
+            "name": "unsigned overflow integer literal (deprecated)",
             "expression": "@{2147483648}",
             "deprecated": true,
             "description": "The size of integer was increased.",
@@ -178,7 +178,7 @@
             ]
         },
         {
-            "name": "positive overflow integer literal",
+            "name": "positive overflow integer literal (deprecated)",
             "expression": "@{+2147483648}",
             "deprecated": true,
             "description": "The size of integer was increased.",
@@ -205,7 +205,7 @@
             ]
         },
         {
-            "name": "negative overflow integer literal",
+            "name": "negative overflow integer literal (deprecated)",
             "expression": "@{-2147483649}",
             "deprecated": true,
             "description": "The size of integer was increased.",

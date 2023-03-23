@@ -393,7 +393,7 @@
             ]
         },
         {
-            "name": "7 < b => error",
+            "name": "7 < b => error (1)",
             "expression": "@{7 < b}",
             "expected": {
                 "type": "error",
@@ -413,7 +413,7 @@
             ]
         },
         {
-            "name": "7 <= b => error",
+            "name": "7 <= b => error (1)",
             "expression": "@{7 <= b}",
             "expected": {
                 "type": "error",
@@ -433,7 +433,7 @@
             ]
         },
         {
-            "name": "7 > b => error",
+            "name": "7 > b => error (1)",
             "expression": "@{7 > b}",
             "expected": {
                 "type": "error",
@@ -453,7 +453,7 @@
             ]
         },
         {
-            "name": "7 >= b => error",
+            "name": "7 >= b => error (1)",
             "expression": "@{7 >= b}",
             "expected": {
                 "type": "error",
@@ -473,7 +473,7 @@
             ]
         },
         {
-            "name": "7 < b => error",
+            "name": "7 < b => error (2)",
             "expression": "@{7 < b}",
             "expected": {
                 "type": "error",
@@ -493,7 +493,7 @@
             ]
         },
         {
-            "name": "7 <= b => error",
+            "name": "7 <= b => error (2)",
             "expression": "@{7 <= b}",
             "expected": {
                 "type": "error",
@@ -513,7 +513,7 @@
             ]
         },
         {
-            "name": "7 > b => error",
+            "name": "7 > b => error (2)",
             "expression": "@{7 > b}",
             "expected": {
                 "type": "error",
@@ -533,7 +533,7 @@
             ]
         },
         {
-            "name": "7 >= b => error",
+            "name": "7 >= b => error (2)",
             "expression": "@{7 >= b}",
             "expected": {
                 "type": "error",
@@ -553,7 +553,7 @@
             ]
         },
         {
-            "name": "7 < b => error",
+            "name": "7 < b => error (3)",
             "expression": "@{7 < b}",
             "expected": {
                 "type": "error",
@@ -573,7 +573,7 @@
             ]
         },
         {
-            "name": "7 <= b => error",
+            "name": "7 <= b => error (3)",
             "expression": "@{7 <= b}",
             "expected": {
                 "type": "error",
@@ -593,7 +593,7 @@
             ]
         },
         {
-            "name": "7 > b => error",
+            "name": "7 > b => error (3)",
             "expression": "@{7 > b}",
             "expected": {
                 "type": "error",
@@ -613,7 +613,7 @@
             ]
         },
         {
-            "name": "7 >= b => error",
+            "name": "7 >= b => error (3)",
             "expression": "@{7 >= b}",
             "expected": {
                 "type": "error",
@@ -633,7 +633,7 @@
             ]
         },
         {
-            "name": "7 < b => error",
+            "name": "7 < b => error (4)",
             "expression": "@{7 < b}",
             "expected": {
                 "type": "error",
@@ -653,7 +653,7 @@
             ]
         },
         {
-            "name": "7 <= b => error",
+            "name": "7 <= b => error (4)",
             "expression": "@{7 <= b}",
             "expected": {
                 "type": "error",
@@ -673,7 +673,7 @@
             ]
         },
         {
-            "name": "7 > b => error",
+            "name": "7 > b => error (4)",
             "expression": "@{7 > b}",
             "expected": {
                 "type": "error",
@@ -693,7 +693,7 @@
             ]
         },
         {
-            "name": "7 >= b => error",
+            "name": "7 >= b => error (4)",
             "expression": "@{7 >= b}",
             "expected": {
                 "type": "error",
@@ -713,7 +713,7 @@
             ]
         },
         {
-            "name": "7 < b => error",
+            "name": "7 < b => error (5)",
             "expression": "@{7 < b}",
             "expected": {
                 "type": "error",
@@ -733,7 +733,7 @@
             ]
         },
         {
-            "name": "7 <= b => error",
+            "name": "7 <= b => error (5)",
             "expression": "@{7 <= b}",
             "expected": {
                 "type": "error",
@@ -753,7 +753,7 @@
             ]
         },
         {
-            "name": "7 > b => error",
+            "name": "7 > b => error (5)",
             "expression": "@{7 > b}",
             "expected": {
                 "type": "error",
@@ -773,7 +773,7 @@
             ]
         },
         {
-            "name": "7 >= b => error",
+            "name": "7 >= b => error (5)",
             "expression": "@{7 >= b}",
             "expected": {
                 "type": "error",
@@ -793,7 +793,7 @@
             ]
         },
         {
-            "name": "7.0 < b => error",
+            "name": "7.0 < b => error (1)",
             "expression": "@{7.0 < b}",
             "expected": {
                 "type": "error",
@@ -813,7 +813,7 @@
             ]
         },
         {
-            "name": "7.0 <= b => error",
+            "name": "7.0 <= b => error (1)",
             "expression": "@{7.0 <= b}",
             "expected": {
                 "type": "error",
@@ -833,7 +833,7 @@
             ]
         },
         {
-            "name": "7.0 > b => error",
+            "name": "7.0 > b => error (1)",
             "expression": "@{7.0 > b}",
             "expected": {
                 "type": "error",
@@ -853,7 +853,7 @@
             ]
         },
         {
-            "name": "7.0 >= b => error",
+            "name": "7.0 >= b => error (1)",
             "expression": "@{7.0 >= b}",
             "expected": {
                 "type": "error",
@@ -873,7 +873,7 @@
             ]
         },
         {
-            "name": "7.0 < b => error",
+            "name": "7.0 < b => error (2)",
             "expression": "@{7.0 < b}",
             "expected": {
                 "type": "error",
@@ -893,7 +893,7 @@
             ]
         },
         {
-            "name": "7.0 <= b => error",
+            "name": "7.0 <= b => error (2)",
             "expression": "@{7.0 <= b}",
             "expected": {
                 "type": "error",
@@ -913,7 +913,7 @@
             ]
         },
         {
-            "name": "7.0 > b => error",
+            "name": "7.0 > b => error (2)",
             "expression": "@{7.0 > b}",
             "expected": {
                 "type": "error",
@@ -933,7 +933,7 @@
             ]
         },
         {
-            "name": "7.0 >= b => error",
+            "name": "7.0 >= b => error (2)",
             "expression": "@{7.0 >= b}",
             "expected": {
                 "type": "error",
@@ -953,7 +953,7 @@
             ]
         },
         {
-            "name": "7.0 < b => error",
+            "name": "7.0 < b => error (3)",
             "expression": "@{7.0 < b}",
             "expected": {
                 "type": "error",
@@ -973,7 +973,7 @@
             ]
         },
         {
-            "name": "7.0 <= b => error",
+            "name": "7.0 <= b => error (3)",
             "expression": "@{7.0 <= b}",
             "expected": {
                 "type": "error",
@@ -993,7 +993,7 @@
             ]
         },
         {
-            "name": "7.0 > b => error",
+            "name": "7.0 > b => error (3)",
             "expression": "@{7.0 > b}",
             "expected": {
                 "type": "error",
@@ -1013,7 +1013,7 @@
             ]
         },
         {
-            "name": "7.0 >= b => error",
+            "name": "7.0 >= b => error (3)",
             "expression": "@{7.0 >= b}",
             "expected": {
                 "type": "error",
@@ -1033,7 +1033,7 @@
             ]
         },
         {
-            "name": "7.0 < b => error",
+            "name": "7.0 < b => error (4)",
             "expression": "@{7.0 < b}",
             "expected": {
                 "type": "error",
@@ -1053,7 +1053,7 @@
             ]
         },
         {
-            "name": "7.0 <= b => error",
+            "name": "7.0 <= b => error (4)",
             "expression": "@{7.0 <= b}",
             "expected": {
                 "type": "error",
@@ -1073,7 +1073,7 @@
             ]
         },
         {
-            "name": "7.0 > b => error",
+            "name": "7.0 > b => error (4)",
             "expression": "@{7.0 > b}",
             "expected": {
                 "type": "error",
@@ -1093,7 +1093,7 @@
             ]
         },
         {
-            "name": "7.0 >= b => error",
+            "name": "7.0 >= b => error (4)",
             "expression": "@{7.0 >= b}",
             "expected": {
                 "type": "error",
@@ -1113,7 +1113,7 @@
             ]
         },
         {
-            "name": "'abc' < b => error",
+            "name": "'abc' < b => error (1)",
             "expression": "@{'abc' < b}",
             "expected": {
                 "type": "error",
@@ -1133,7 +1133,7 @@
             ]
         },
         {
-            "name": "'abc' <= b => error",
+            "name": "'abc' <= b => error (1)",
             "expression": "@{'abc' <= b}",
             "expected": {
                 "type": "error",
@@ -1153,7 +1153,7 @@
             ]
         },
         {
-            "name": "'abc' > b => error",
+            "name": "'abc' > b => error (1)",
             "expression": "@{'abc' > b}",
             "expected": {
                 "type": "error",
@@ -1173,7 +1173,7 @@
             ]
         },
         {
-            "name": "'abc' >= b => error",
+            "name": "'abc' >= b => error (1)",
             "expression": "@{'abc' >= b}",
             "expected": {
                 "type": "error",
@@ -1193,7 +1193,7 @@
             ]
         },
         {
-            "name": "'abc' < b => error",
+            "name": "'abc' < b => error (2)",
             "expression": "@{'abc' < b}",
             "expected": {
                 "type": "error",
@@ -1213,7 +1213,7 @@
             ]
         },
         {
-            "name": "'abc' <= b => error",
+            "name": "'abc' <= b => error (2)",
             "expression": "@{'abc' <= b}",
             "expected": {
                 "type": "error",
@@ -1233,7 +1233,7 @@
             ]
         },
         {
-            "name": "'abc' > b => error",
+            "name": "'abc' > b => error (2)",
             "expression": "@{'abc' > b}",
             "expected": {
                 "type": "error",
@@ -1253,7 +1253,7 @@
             ]
         },
         {
-            "name": "'abc' >= b => error",
+            "name": "'abc' >= b => error (2)",
             "expression": "@{'abc' >= b}",
             "expected": {
                 "type": "error",
@@ -1273,7 +1273,7 @@
             ]
         },
         {
-            "name": "'abc' < b => error",
+            "name": "'abc' < b => error (3)",
             "expression": "@{'abc' < b}",
             "expected": {
                 "type": "error",
@@ -1293,7 +1293,7 @@
             ]
         },
         {
-            "name": "'abc' <= b => error",
+            "name": "'abc' <= b => error (3)",
             "expression": "@{'abc' <= b}",
             "expected": {
                 "type": "error",
@@ -1313,7 +1313,7 @@
             ]
         },
         {
-            "name": "'abc' > b => error",
+            "name": "'abc' > b => error (3)",
             "expression": "@{'abc' > b}",
             "expected": {
                 "type": "error",
@@ -1333,7 +1333,7 @@
             ]
         },
         {
-            "name": "'abc' >= b => error",
+            "name": "'abc' >= b => error (3)",
             "expression": "@{'abc' >= b}",
             "expected": {
                 "type": "error",
@@ -1353,7 +1353,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (1)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -1378,7 +1378,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (1)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -1403,7 +1403,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (1)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -1428,7 +1428,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (1)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -1453,7 +1453,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (2)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -1478,7 +1478,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (2)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -1503,7 +1503,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (2)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -1528,7 +1528,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (2)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -1553,7 +1553,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (3)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -1578,7 +1578,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (3)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -1603,7 +1603,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (3)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -1628,7 +1628,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (3)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -1653,7 +1653,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (4)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -1678,7 +1678,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (4)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -1703,7 +1703,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (4)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -1728,7 +1728,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (4)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -1753,7 +1753,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (5)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -1778,7 +1778,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (5)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -1803,7 +1803,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (5)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -1828,7 +1828,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (5)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -1853,7 +1853,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (6)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -1878,7 +1878,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (6)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -1903,7 +1903,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (6)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -1928,7 +1928,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (6)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -1953,7 +1953,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (7)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -1978,7 +1978,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (7)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2003,7 +2003,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (7)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2028,7 +2028,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (7)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2053,7 +2053,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (8)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2078,7 +2078,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (8)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2103,7 +2103,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (8)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2128,7 +2128,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (8)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2153,7 +2153,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (9)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2178,7 +2178,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (9)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2203,7 +2203,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (9)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2228,7 +2228,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (9)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2253,7 +2253,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (10)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2278,7 +2278,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (10)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2303,7 +2303,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (10)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2328,7 +2328,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (10)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2353,7 +2353,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (11)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2378,7 +2378,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (11)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2403,7 +2403,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (11)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2428,7 +2428,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (11)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2453,7 +2453,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (12)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2478,7 +2478,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (12)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2503,7 +2503,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (12)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2528,7 +2528,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (12)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2553,7 +2553,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (13)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2578,7 +2578,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (13)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2603,7 +2603,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (13)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2628,7 +2628,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (13)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2653,7 +2653,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (14)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2678,7 +2678,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (14)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2703,7 +2703,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (14)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2728,7 +2728,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (14)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2753,7 +2753,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (15)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2778,7 +2778,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (15)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2803,7 +2803,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (15)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2828,7 +2828,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (15)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2853,7 +2853,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (16)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2878,7 +2878,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (16)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -2903,7 +2903,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (16)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -2928,7 +2928,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (16)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -2953,7 +2953,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (17)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -2978,7 +2978,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (17)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -3003,7 +3003,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (17)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -3028,7 +3028,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (17)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",
@@ -3053,7 +3053,7 @@
             ]
         },
         {
-            "name": "a < b => error",
+            "name": "a < b => error (18)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "error",
@@ -3078,7 +3078,7 @@
             ]
         },
         {
-            "name": "a <= b => error",
+            "name": "a <= b => error (18)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "error",
@@ -3103,7 +3103,7 @@
             ]
         },
         {
-            "name": "a > b => error",
+            "name": "a > b => error (18)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "error",
@@ -3128,7 +3128,7 @@
             ]
         },
         {
-            "name": "a >= b => error",
+            "name": "a >= b => error (18)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "error",

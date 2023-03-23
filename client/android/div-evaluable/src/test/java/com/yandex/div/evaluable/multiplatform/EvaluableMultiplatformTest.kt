@@ -64,6 +64,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
     }
 
     data class ExpressionTestCase(
+        val fileName: String,
         val name: String,
         val expression: String,
         val variables: List<TestVariable>,
@@ -123,13 +124,15 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
         fun cases(): List<TestCaseOrError<ExpressionTestCase>> {
             val cases = mutableListOf<TestCaseOrError<ExpressionTestCase>>()
             val errors = MultiplatformTestUtils.walkJSONs(TEST_CASES_FILE_PATH) { file, json ->
-                val newCases = json.optJSONArray(CASES_FIELD).toListOfJSONObject()
+                val newCases = json.optJSONArray(CASES_FIELD)
+                    .toListOfJSONObject()
                     .map { parseTestCase(file, it) }
-                    .filter { it.error != null || isForAndroidPlatform(it.testCase?.platform) }
                 cases.addAll(newCases)
+            }.map { TestCaseOrError<ExpressionTestCase>(it) }
 
-            }
-            return errors.map { TestCaseOrError<ExpressionTestCase>(it) } + cases
+            checkDuplicates(cases.asSequence() + errors.asSequence())
+
+            return errors + cases.filter { it.error != null || isForAndroidPlatform(it.testCase?.platform) }
         }
 
         private fun parseTestCase(file: File, json: JSONObject): TestCaseOrError<ExpressionTestCase> {
@@ -141,6 +144,7 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
 
             try {
                 val testCase = ExpressionTestCase(
+                    file.name,
                     name,
                     json.getString(CASE_EXPRESSION_VALUE_FIELD),
                     json.optJSONArray(CASE_VARIABLES_FIELD)?.let { array ->
@@ -166,6 +170,20 @@ class EvaluableMultiplatformTest(private val caseOrError: TestCaseOrError<Expres
                 return TestCaseOrError(testCase)
             } catch (e: JSONException) {
                 return TestCaseOrError(TestCaseParsingError(name, file, json, e))
+            }
+        }
+
+        private fun checkDuplicates(cases: Sequence<TestCaseOrError<ExpressionTestCase>>) {
+            val duplicate = cases.mapNotNull { it.testCase }
+                .groupingBy { it.fileName to it.name }
+                .eachCount()
+                .filterValues { it > 1 }
+                .keys
+
+            assert(duplicate.isEmpty()) {
+                duplicate.joinToString("\n", prefix = "Duplicate test case names:\n") {
+                    it.toList().joinToString("::")
+                }
             }
         }
 

@@ -29,20 +29,6 @@
       ]
     },
     {
-      "name": "len('') => 0",
-      "expression": "@{len('')}",
-      "expected": {
-        "type": "integer",
-        "value": 0
-      },
-      "variables": [],
-      "platforms": [
-        "android",
-        "ios",
-        "web"
-      ]
-    },
-    {
       "name": "contains('abc', 'b') => true",
       "expression": "@{contains('abc', 'b')}",
       "expected": {

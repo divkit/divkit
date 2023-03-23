@@ -517,622 +517,6 @@
             ]
         },
         {
-            "name": "-7 < -7 => false",
-            "expression": "@{-7 < -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 <= -7 => true",
-            "expression": "@{-7 <= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 > -7 => false",
-            "expression": "@{-7 > -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 >= -7 => true",
-            "expression": "@{-7 >= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 < 7 => false",
-            "expression": "@{7 < 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 <= 7 => true",
-            "expression": "@{7 <= 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 > 7 => false",
-            "expression": "@{7 > 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 >= 7 => true",
-            "expression": "@{7 >= 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 < +7 => false",
-            "expression": "@{7 < +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 <= +7 => true",
-            "expression": "@{7 <= +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 > +7 => false",
-            "expression": "@{7 > +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 >= +7 => true",
-            "expression": "@{7 >= +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 < 7 => false",
-            "expression": "@{+7 < 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 <= 7 => true",
-            "expression": "@{+7 <= 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 > 7 => false",
-            "expression": "@{+7 > 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 >= 7 => true",
-            "expression": "@{+7 >= 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 < +7 => false",
-            "expression": "@{+7 < +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 <= +7 => true",
-            "expression": "@{+7 <= +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 > +7 => false",
-            "expression": "@{+7 > +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 >= +7 => true",
-            "expression": "@{+7 >= +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 < -7 => false",
-            "expression": "@{7 < -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 <= -7 => false",
-            "expression": "@{7 <= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 > -7 => true",
-            "expression": "@{7 > -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "7 >= -7 => true",
-            "expression": "@{7 >= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 < 7 => true",
-            "expression": "@{-7 < 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 <= 7 => true",
-            "expression": "@{-7 <= 7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 > 7 => false",
-            "expression": "@{-7 > 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 >= 7 => false",
-            "expression": "@{-7 >= 7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 < -7 => false",
-            "expression": "@{-7 < -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 <= -7 => true",
-            "expression": "@{-7 <= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 > -7 => false",
-            "expression": "@{-7 > -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 >= -7 => true",
-            "expression": "@{-7 >= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 < -7 => false",
-            "expression": "@{+7 < -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 <= -7 => false",
-            "expression": "@{+7 <= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 > -7 => true",
-            "expression": "@{+7 > -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "+7 >= -7 => true",
-            "expression": "@{+7 >= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 < +7 => true",
-            "expression": "@{-7 < +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 <= +7 => true",
-            "expression": "@{-7 <= +7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 > +7 => false",
-            "expression": "@{-7 > +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 >= +7 => false",
-            "expression": "@{-7 >= +7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 < -7 => false",
-            "expression": "@{-7 < -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 <= -7 => true",
-            "expression": "@{-7 <= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 > -7 => false",
-            "expression": "@{-7 > -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 >= -7 => true",
-            "expression": "@{-7 >= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
             "name": "7 < 17 => true",
             "expression": "@{7 < 17}",
             "expected": {
@@ -1628,62 +1012,6 @@
             "expected": {
                 "type": "boolean",
                 "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 < -17 => false",
-            "expression": "@{-7 < -17}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 <= -17 => false",
-            "expression": "@{-7 <= -17}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 > -17 => true",
-            "expression": "@{-7 > -17}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 >= -17 => true",
-            "expression": "@{-7 >= -17}",
-            "expected": {
-                "type": "boolean",
-                "value": true
             },
             "variables": [],
             "platforms": [
@@ -2197,62 +1525,6 @@
             ]
         },
         {
-            "name": "-17 < -7 => true",
-            "expression": "@{-17 < -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 <= -7 => true",
-            "expression": "@{-17 <= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 > -7 => false",
-            "expression": "@{-17 > -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 >= -7 => false",
-            "expression": "@{-17 >= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
             "name": "a < b => false",
             "expression": "@{a < b}",
             "expected": {
@@ -2278,7 +1550,7 @@
             ]
         },
         {
-            "name": "a <= b => true",
+            "name": "a <= b => true (1)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "boolean",
@@ -2303,7 +1575,7 @@
             ]
         },
         {
-            "name": "a > b => false",
+            "name": "a > b => false (1)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "boolean",
@@ -2378,7 +1650,7 @@
             ]
         },
         {
-            "name": "a <= +b => true",
+            "name": "a <= +b => true (1)",
             "expression": "@{a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -2403,7 +1675,7 @@
             ]
         },
         {
-            "name": "a > +b => false",
+            "name": "a > +b => false (1)",
             "expression": "@{a > +b}",
             "expected": {
                 "type": "boolean",
@@ -2478,7 +1750,7 @@
             ]
         },
         {
-            "name": "+a <= b => true",
+            "name": "+a <= b => true (1)",
             "expression": "@{+a <= b}",
             "expected": {
                 "type": "boolean",
@@ -2503,7 +1775,7 @@
             ]
         },
         {
-            "name": "+a > b => false",
+            "name": "+a > b => false (1)",
             "expression": "@{+a > b}",
             "expected": {
                 "type": "boolean",
@@ -2578,7 +1850,7 @@
             ]
         },
         {
-            "name": "+a <= +b => true",
+            "name": "+a <= +b => true (1)",
             "expression": "@{+a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -2603,7 +1875,7 @@
             ]
         },
         {
-            "name": "+a > +b => false",
+            "name": "+a > +b => false (1)",
             "expression": "@{+a > +b}",
             "expected": {
                 "type": "boolean",
@@ -2653,7 +1925,7 @@
             ]
         },
         {
-            "name": "a < -b => false",
+            "name": "a < -b => false (1)",
             "expression": "@{a < -b}",
             "expected": {
                 "type": "boolean",
@@ -2678,7 +1950,7 @@
             ]
         },
         {
-            "name": "a <= -b => false",
+            "name": "a <= -b => false (1)",
             "expression": "@{a <= -b}",
             "expected": {
                 "type": "boolean",
@@ -2703,7 +1975,7 @@
             ]
         },
         {
-            "name": "a > -b => true",
+            "name": "a > -b => true (1)",
             "expression": "@{a > -b}",
             "expected": {
                 "type": "boolean",
@@ -2728,7 +2000,7 @@
             ]
         },
         {
-            "name": "a >= -b => true",
+            "name": "a >= -b => true (1)",
             "expression": "@{a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -2753,7 +2025,7 @@
             ]
         },
         {
-            "name": "-a < b => true",
+            "name": "-a < b => true (1)",
             "expression": "@{-a < b}",
             "expected": {
                 "type": "boolean",
@@ -2778,7 +2050,7 @@
             ]
         },
         {
-            "name": "-a <= b => true",
+            "name": "-a <= b => true (1)",
             "expression": "@{-a <= b}",
             "expected": {
                 "type": "boolean",
@@ -2803,7 +2075,7 @@
             ]
         },
         {
-            "name": "-a > b => false",
+            "name": "-a > b => false (1)",
             "expression": "@{-a > b}",
             "expected": {
                 "type": "boolean",
@@ -2828,7 +2100,7 @@
             ]
         },
         {
-            "name": "-a >= b => false",
+            "name": "-a >= b => false (1)",
             "expression": "@{-a >= b}",
             "expected": {
                 "type": "boolean",
@@ -2853,7 +2125,7 @@
             ]
         },
         {
-            "name": "-a < -b => false",
+            "name": "-a < -b => false (1)",
             "expression": "@{-a < -b}",
             "expected": {
                 "type": "boolean",
@@ -2928,7 +2200,7 @@
             ]
         },
         {
-            "name": "-a >= -b => true",
+            "name": "-a >= -b => true (1)",
             "expression": "@{-a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -2953,7 +2225,7 @@
             ]
         },
         {
-            "name": "+a < -b => false",
+            "name": "+a < -b => false (1)",
             "expression": "@{+a < -b}",
             "expected": {
                 "type": "boolean",
@@ -2978,7 +2250,7 @@
             ]
         },
         {
-            "name": "+a <= -b => false",
+            "name": "+a <= -b => false (1)",
             "expression": "@{+a <= -b}",
             "expected": {
                 "type": "boolean",
@@ -3003,7 +2275,7 @@
             ]
         },
         {
-            "name": "+a > -b => true",
+            "name": "+a > -b => true (1)",
             "expression": "@{+a > -b}",
             "expected": {
                 "type": "boolean",
@@ -3028,7 +2300,7 @@
             ]
         },
         {
-            "name": "+a >= -b => true",
+            "name": "+a >= -b => true (1)",
             "expression": "@{+a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -3053,7 +2325,7 @@
             ]
         },
         {
-            "name": "-a < +b => true",
+            "name": "-a < +b => true (1)",
             "expression": "@{-a < +b}",
             "expected": {
                 "type": "boolean",
@@ -3078,7 +2350,7 @@
             ]
         },
         {
-            "name": "-a <= +b => true",
+            "name": "-a <= +b => true (1)",
             "expression": "@{-a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -3103,7 +2375,7 @@
             ]
         },
         {
-            "name": "-a > +b => false",
+            "name": "-a > +b => false (1)",
             "expression": "@{-a > +b}",
             "expected": {
                 "type": "boolean",
@@ -3128,7 +2400,7 @@
             ]
         },
         {
-            "name": "-a >= +b => false",
+            "name": "-a >= +b => false (1)",
             "expression": "@{-a >= +b}",
             "expected": {
                 "type": "boolean",
@@ -3153,107 +2425,7 @@
             ]
         },
         {
-            "name": "-a < -b => false",
-            "expression": "@{-a < -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a <= -b => true",
-            "expression": "@{-a <= -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a > -b => false",
-            "expression": "@{-a > -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a >= -b => true",
-            "expression": "@{-a >= -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b < a => false",
+            "name": "b < a => false (1)",
             "expression": "@{b < a}",
             "expected": {
                 "type": "boolean",
@@ -3328,7 +2500,7 @@
             ]
         },
         {
-            "name": "b >= a => true",
+            "name": "b >= a => true (1)",
             "expression": "@{b >= a}",
             "expected": {
                 "type": "boolean",
@@ -3353,7 +2525,7 @@
             ]
         },
         {
-            "name": "b < +a => false",
+            "name": "b < +a => false (1)",
             "expression": "@{b < +a}",
             "expected": {
                 "type": "boolean",
@@ -3428,7 +2600,7 @@
             ]
         },
         {
-            "name": "b >= +a => true",
+            "name": "b >= +a => true (1)",
             "expression": "@{b >= +a}",
             "expected": {
                 "type": "boolean",
@@ -3453,7 +2625,7 @@
             ]
         },
         {
-            "name": "+b < a => false",
+            "name": "+b < a => false (1)",
             "expression": "@{+b < a}",
             "expected": {
                 "type": "boolean",
@@ -3528,7 +2700,7 @@
             ]
         },
         {
-            "name": "+b >= a => true",
+            "name": "+b >= a => true (1)",
             "expression": "@{+b >= a}",
             "expected": {
                 "type": "boolean",
@@ -3553,7 +2725,7 @@
             ]
         },
         {
-            "name": "+b < +a => false",
+            "name": "+b < +a => false (1)",
             "expression": "@{+b < +a}",
             "expected": {
                 "type": "boolean",
@@ -3628,7 +2800,7 @@
             ]
         },
         {
-            "name": "+b >= +a => true",
+            "name": "+b >= +a => true (1)",
             "expression": "@{+b >= +a}",
             "expected": {
                 "type": "boolean",
@@ -3653,7 +2825,7 @@
             ]
         },
         {
-            "name": "b < -a => false",
+            "name": "b < -a => false (1)",
             "expression": "@{b < -a}",
             "expected": {
                 "type": "boolean",
@@ -3678,7 +2850,7 @@
             ]
         },
         {
-            "name": "b <= -a => false",
+            "name": "b <= -a => false (1)",
             "expression": "@{b <= -a}",
             "expected": {
                 "type": "boolean",
@@ -3703,7 +2875,7 @@
             ]
         },
         {
-            "name": "b > -a => true",
+            "name": "b > -a => true (1)",
             "expression": "@{b > -a}",
             "expected": {
                 "type": "boolean",
@@ -3728,7 +2900,7 @@
             ]
         },
         {
-            "name": "b >= -a => true",
+            "name": "b >= -a => true (1)",
             "expression": "@{b >= -a}",
             "expected": {
                 "type": "boolean",
@@ -3753,7 +2925,7 @@
             ]
         },
         {
-            "name": "-b < a => true",
+            "name": "-b < a => true (1)",
             "expression": "@{-b < a}",
             "expected": {
                 "type": "boolean",
@@ -3778,7 +2950,7 @@
             ]
         },
         {
-            "name": "-b <= a => true",
+            "name": "-b <= a => true (1)",
             "expression": "@{-b <= a}",
             "expected": {
                 "type": "boolean",
@@ -3803,7 +2975,7 @@
             ]
         },
         {
-            "name": "-b > a => false",
+            "name": "-b > a => false (1)",
             "expression": "@{-b > a}",
             "expected": {
                 "type": "boolean",
@@ -3828,7 +3000,7 @@
             ]
         },
         {
-            "name": "-b >= a => false",
+            "name": "-b >= a => false (1)",
             "expression": "@{-b >= a}",
             "expected": {
                 "type": "boolean",
@@ -3878,7 +3050,7 @@
             ]
         },
         {
-            "name": "-b <= -a => true",
+            "name": "-b <= -a => true (1)",
             "expression": "@{-b <= -a}",
             "expected": {
                 "type": "boolean",
@@ -3903,7 +3075,7 @@
             ]
         },
         {
-            "name": "-b > -a => false",
+            "name": "-b > -a => false (1)",
             "expression": "@{-b > -a}",
             "expected": {
                 "type": "boolean",
@@ -3953,7 +3125,7 @@
             ]
         },
         {
-            "name": "+b < -a => false",
+            "name": "+b < -a => false (1)",
             "expression": "@{+b < -a}",
             "expected": {
                 "type": "boolean",
@@ -3978,7 +3150,7 @@
             ]
         },
         {
-            "name": "+b <= -a => false",
+            "name": "+b <= -a => false (1)",
             "expression": "@{+b <= -a}",
             "expected": {
                 "type": "boolean",
@@ -4003,7 +3175,7 @@
             ]
         },
         {
-            "name": "+b > -a => true",
+            "name": "+b > -a => true (1)",
             "expression": "@{+b > -a}",
             "expected": {
                 "type": "boolean",
@@ -4028,7 +3200,7 @@
             ]
         },
         {
-            "name": "+b >= -a => true",
+            "name": "+b >= -a => true (1)",
             "expression": "@{+b >= -a}",
             "expected": {
                 "type": "boolean",
@@ -4053,7 +3225,7 @@
             ]
         },
         {
-            "name": "-b < +a => true",
+            "name": "-b < +a => true (1)",
             "expression": "@{-b < +a}",
             "expected": {
                 "type": "boolean",
@@ -4078,7 +3250,7 @@
             ]
         },
         {
-            "name": "-b <= +a => true",
+            "name": "-b <= +a => true (1)",
             "expression": "@{-b <= +a}",
             "expected": {
                 "type": "boolean",
@@ -4103,7 +3275,7 @@
             ]
         },
         {
-            "name": "-b > +a => false",
+            "name": "-b > +a => false (1)",
             "expression": "@{-b > +a}",
             "expected": {
                 "type": "boolean",
@@ -4128,7 +3300,7 @@
             ]
         },
         {
-            "name": "-b >= +a => false",
+            "name": "-b >= +a => false (1)",
             "expression": "@{-b >= +a}",
             "expected": {
                 "type": "boolean",
@@ -4153,107 +3325,7 @@
             ]
         },
         {
-            "name": "-b < -a => false",
-            "expression": "@{-b < -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b <= -a => true",
-            "expression": "@{-b <= -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b > -a => false",
-            "expression": "@{-b > -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b >= -a => true",
-            "expression": "@{-b >= -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a < b => true",
+            "name": "a < b => true (1)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "boolean",
@@ -4278,7 +3350,7 @@
             ]
         },
         {
-            "name": "a <= b => true",
+            "name": "a <= b => true (2)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "boolean",
@@ -4303,7 +3375,7 @@
             ]
         },
         {
-            "name": "a > b => false",
+            "name": "a > b => false (2)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "boolean",
@@ -4328,7 +3400,7 @@
             ]
         },
         {
-            "name": "a >= b => false",
+            "name": "a >= b => false (1)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "boolean",
@@ -4353,7 +3425,7 @@
             ]
         },
         {
-            "name": "a < +b => true",
+            "name": "a < +b => true (1)",
             "expression": "@{a < +b}",
             "expected": {
                 "type": "boolean",
@@ -4378,7 +3450,7 @@
             ]
         },
         {
-            "name": "a <= +b => true",
+            "name": "a <= +b => true (2)",
             "expression": "@{a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -4403,7 +3475,7 @@
             ]
         },
         {
-            "name": "a > +b => false",
+            "name": "a > +b => false (2)",
             "expression": "@{a > +b}",
             "expected": {
                 "type": "boolean",
@@ -4428,7 +3500,7 @@
             ]
         },
         {
-            "name": "a >= +b => false",
+            "name": "a >= +b => false (1)",
             "expression": "@{a >= +b}",
             "expected": {
                 "type": "boolean",
@@ -4453,7 +3525,7 @@
             ]
         },
         {
-            "name": "+a < b => true",
+            "name": "+a < b => true (1)",
             "expression": "@{+a < b}",
             "expected": {
                 "type": "boolean",
@@ -4478,7 +3550,7 @@
             ]
         },
         {
-            "name": "+a <= b => true",
+            "name": "+a <= b => true (2)",
             "expression": "@{+a <= b}",
             "expected": {
                 "type": "boolean",
@@ -4503,7 +3575,7 @@
             ]
         },
         {
-            "name": "+a > b => false",
+            "name": "+a > b => false (2)",
             "expression": "@{+a > b}",
             "expected": {
                 "type": "boolean",
@@ -4528,7 +3600,7 @@
             ]
         },
         {
-            "name": "+a >= b => false",
+            "name": "+a >= b => false (1)",
             "expression": "@{+a >= b}",
             "expected": {
                 "type": "boolean",
@@ -4553,7 +3625,7 @@
             ]
         },
         {
-            "name": "+a < +b => true",
+            "name": "+a < +b => true (1)",
             "expression": "@{+a < +b}",
             "expected": {
                 "type": "boolean",
@@ -4578,7 +3650,7 @@
             ]
         },
         {
-            "name": "+a <= +b => true",
+            "name": "+a <= +b => true (2)",
             "expression": "@{+a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -4603,7 +3675,7 @@
             ]
         },
         {
-            "name": "+a > +b => false",
+            "name": "+a > +b => false (2)",
             "expression": "@{+a > +b}",
             "expected": {
                 "type": "boolean",
@@ -4628,7 +3700,7 @@
             ]
         },
         {
-            "name": "+a >= +b => false",
+            "name": "+a >= +b => false (1)",
             "expression": "@{+a >= +b}",
             "expected": {
                 "type": "boolean",
@@ -4653,7 +3725,7 @@
             ]
         },
         {
-            "name": "a < -b => false",
+            "name": "a < -b => false (2)",
             "expression": "@{a < -b}",
             "expected": {
                 "type": "boolean",
@@ -4728,7 +3800,7 @@
             ]
         },
         {
-            "name": "a >= -b => true",
+            "name": "a >= -b => true (2)",
             "expression": "@{a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -4778,7 +3850,7 @@
             ]
         },
         {
-            "name": "-a <= b => true",
+            "name": "-a <= b => true (2)",
             "expression": "@{-a <= b}",
             "expected": {
                 "type": "boolean",
@@ -4803,7 +3875,7 @@
             ]
         },
         {
-            "name": "-a > b => false",
+            "name": "-a > b => false (2)",
             "expression": "@{-a > b}",
             "expected": {
                 "type": "boolean",
@@ -4853,7 +3925,7 @@
             ]
         },
         {
-            "name": "-a < -b => false",
+            "name": "-a < -b => false (2)",
             "expression": "@{-a < -b}",
             "expected": {
                 "type": "boolean",
@@ -4878,7 +3950,7 @@
             ]
         },
         {
-            "name": "-a <= -b => false",
+            "name": "-a <= -b => false (1)",
             "expression": "@{-a <= -b}",
             "expected": {
                 "type": "boolean",
@@ -4903,7 +3975,7 @@
             ]
         },
         {
-            "name": "-a > -b => true",
+            "name": "-a > -b => true (1)",
             "expression": "@{-a > -b}",
             "expected": {
                 "type": "boolean",
@@ -4928,7 +4000,7 @@
             ]
         },
         {
-            "name": "-a >= -b => true",
+            "name": "-a >= -b => true (2)",
             "expression": "@{-a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -4953,7 +4025,7 @@
             ]
         },
         {
-            "name": "+a < -b => false",
+            "name": "+a < -b => false (2)",
             "expression": "@{+a < -b}",
             "expected": {
                 "type": "boolean",
@@ -5028,7 +4100,7 @@
             ]
         },
         {
-            "name": "+a >= -b => true",
+            "name": "+a >= -b => true (2)",
             "expression": "@{+a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -5078,7 +4150,7 @@
             ]
         },
         {
-            "name": "-a <= +b => true",
+            "name": "-a <= +b => true (2)",
             "expression": "@{-a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -5103,7 +4175,7 @@
             ]
         },
         {
-            "name": "-a > +b => false",
+            "name": "-a > +b => false (2)",
             "expression": "@{-a > +b}",
             "expected": {
                 "type": "boolean",
@@ -5153,107 +4225,7 @@
             ]
         },
         {
-            "name": "-a < -b => false",
-            "expression": "@{-a < -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a <= -b => false",
-            "expression": "@{-a <= -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a > -b => true",
-            "expression": "@{-a > -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a >= -b => true",
-            "expression": "@{-a >= -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b < a => false",
+            "name": "b < a => false (2)",
             "expression": "@{b < a}",
             "expected": {
                 "type": "boolean",
@@ -5278,7 +4250,7 @@
             ]
         },
         {
-            "name": "b <= a => false",
+            "name": "b <= a => false (1)",
             "expression": "@{b <= a}",
             "expected": {
                 "type": "boolean",
@@ -5303,7 +4275,7 @@
             ]
         },
         {
-            "name": "b > a => true",
+            "name": "b > a => true (1)",
             "expression": "@{b > a}",
             "expected": {
                 "type": "boolean",
@@ -5328,7 +4300,7 @@
             ]
         },
         {
-            "name": "b >= a => true",
+            "name": "b >= a => true (2)",
             "expression": "@{b >= a}",
             "expected": {
                 "type": "boolean",
@@ -5353,7 +4325,7 @@
             ]
         },
         {
-            "name": "b < +a => false",
+            "name": "b < +a => false (2)",
             "expression": "@{b < +a}",
             "expected": {
                 "type": "boolean",
@@ -5378,7 +4350,7 @@
             ]
         },
         {
-            "name": "b <= +a => false",
+            "name": "b <= +a => false (1)",
             "expression": "@{b <= +a}",
             "expected": {
                 "type": "boolean",
@@ -5403,7 +4375,7 @@
             ]
         },
         {
-            "name": "b > +a => true",
+            "name": "b > +a => true (1)",
             "expression": "@{b > +a}",
             "expected": {
                 "type": "boolean",
@@ -5428,7 +4400,7 @@
             ]
         },
         {
-            "name": "b >= +a => true",
+            "name": "b >= +a => true (2)",
             "expression": "@{b >= +a}",
             "expected": {
                 "type": "boolean",
@@ -5453,7 +4425,7 @@
             ]
         },
         {
-            "name": "+b < a => false",
+            "name": "+b < a => false (2)",
             "expression": "@{+b < a}",
             "expected": {
                 "type": "boolean",
@@ -5478,7 +4450,7 @@
             ]
         },
         {
-            "name": "+b <= a => false",
+            "name": "+b <= a => false (1)",
             "expression": "@{+b <= a}",
             "expected": {
                 "type": "boolean",
@@ -5503,7 +4475,7 @@
             ]
         },
         {
-            "name": "+b > a => true",
+            "name": "+b > a => true (1)",
             "expression": "@{+b > a}",
             "expected": {
                 "type": "boolean",
@@ -5528,7 +4500,7 @@
             ]
         },
         {
-            "name": "+b >= a => true",
+            "name": "+b >= a => true (2)",
             "expression": "@{+b >= a}",
             "expected": {
                 "type": "boolean",
@@ -5553,7 +4525,7 @@
             ]
         },
         {
-            "name": "+b < +a => false",
+            "name": "+b < +a => false (2)",
             "expression": "@{+b < +a}",
             "expected": {
                 "type": "boolean",
@@ -5578,7 +4550,7 @@
             ]
         },
         {
-            "name": "+b <= +a => false",
+            "name": "+b <= +a => false (1)",
             "expression": "@{+b <= +a}",
             "expected": {
                 "type": "boolean",
@@ -5603,7 +4575,7 @@
             ]
         },
         {
-            "name": "+b > +a => true",
+            "name": "+b > +a => true (1)",
             "expression": "@{+b > +a}",
             "expected": {
                 "type": "boolean",
@@ -5628,7 +4600,7 @@
             ]
         },
         {
-            "name": "+b >= +a => true",
+            "name": "+b >= +a => true (2)",
             "expression": "@{+b >= +a}",
             "expected": {
                 "type": "boolean",
@@ -5653,7 +4625,7 @@
             ]
         },
         {
-            "name": "b < -a => false",
+            "name": "b < -a => false (2)",
             "expression": "@{b < -a}",
             "expected": {
                 "type": "boolean",
@@ -5728,7 +4700,7 @@
             ]
         },
         {
-            "name": "b >= -a => true",
+            "name": "b >= -a => true (2)",
             "expression": "@{b >= -a}",
             "expected": {
                 "type": "boolean",
@@ -5778,7 +4750,7 @@
             ]
         },
         {
-            "name": "-b <= a => true",
+            "name": "-b <= a => true (2)",
             "expression": "@{-b <= a}",
             "expected": {
                 "type": "boolean",
@@ -5803,7 +4775,7 @@
             ]
         },
         {
-            "name": "-b > a => false",
+            "name": "-b > a => false (2)",
             "expression": "@{-b > a}",
             "expected": {
                 "type": "boolean",
@@ -5853,7 +4825,7 @@
             ]
         },
         {
-            "name": "-b < -a => true",
+            "name": "-b < -a => true (1)",
             "expression": "@{-b < -a}",
             "expected": {
                 "type": "boolean",
@@ -5878,7 +4850,7 @@
             ]
         },
         {
-            "name": "-b <= -a => true",
+            "name": "-b <= -a => true (2)",
             "expression": "@{-b <= -a}",
             "expected": {
                 "type": "boolean",
@@ -5903,7 +4875,7 @@
             ]
         },
         {
-            "name": "-b > -a => false",
+            "name": "-b > -a => false (2)",
             "expression": "@{-b > -a}",
             "expected": {
                 "type": "boolean",
@@ -5928,7 +4900,7 @@
             ]
         },
         {
-            "name": "-b >= -a => false",
+            "name": "-b >= -a => false (1)",
             "expression": "@{-b >= -a}",
             "expected": {
                 "type": "boolean",
@@ -5953,7 +4925,7 @@
             ]
         },
         {
-            "name": "+b < -a => false",
+            "name": "+b < -a => false (2)",
             "expression": "@{+b < -a}",
             "expected": {
                 "type": "boolean",
@@ -6028,7 +5000,7 @@
             ]
         },
         {
-            "name": "+b >= -a => true",
+            "name": "+b >= -a => true (2)",
             "expression": "@{+b >= -a}",
             "expected": {
                 "type": "boolean",
@@ -6078,7 +5050,7 @@
             ]
         },
         {
-            "name": "-b <= +a => true",
+            "name": "-b <= +a => true (2)",
             "expression": "@{-b <= +a}",
             "expected": {
                 "type": "boolean",
@@ -6103,7 +5075,7 @@
             ]
         },
         {
-            "name": "-b > +a => false",
+            "name": "-b > +a => false (2)",
             "expression": "@{-b > +a}",
             "expected": {
                 "type": "boolean",
@@ -6153,107 +5125,7 @@
             ]
         },
         {
-            "name": "-b < -a => true",
-            "expression": "@{-b < -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b <= -a => true",
-            "expression": "@{-b <= -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b > -a => false",
-            "expression": "@{-b > -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b >= -a => false",
-            "expression": "@{-b >= -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "a < b => true",
+            "name": "a < b => true (2)",
             "expression": "@{a < b}",
             "expected": {
                 "type": "boolean",
@@ -6278,7 +5150,7 @@
             ]
         },
         {
-            "name": "a <= b => true",
+            "name": "a <= b => true (3)",
             "expression": "@{a <= b}",
             "expected": {
                 "type": "boolean",
@@ -6303,7 +5175,7 @@
             ]
         },
         {
-            "name": "a > b => false",
+            "name": "a > b => false (3)",
             "expression": "@{a > b}",
             "expected": {
                 "type": "boolean",
@@ -6328,7 +5200,7 @@
             ]
         },
         {
-            "name": "a >= b => false",
+            "name": "a >= b => false (2)",
             "expression": "@{a >= b}",
             "expected": {
                 "type": "boolean",
@@ -6353,7 +5225,7 @@
             ]
         },
         {
-            "name": "a < +b => true",
+            "name": "a < +b => true (2)",
             "expression": "@{a < +b}",
             "expected": {
                 "type": "boolean",
@@ -6378,7 +5250,7 @@
             ]
         },
         {
-            "name": "a <= +b => true",
+            "name": "a <= +b => true (3)",
             "expression": "@{a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -6403,7 +5275,7 @@
             ]
         },
         {
-            "name": "a > +b => false",
+            "name": "a > +b => false (3)",
             "expression": "@{a > +b}",
             "expected": {
                 "type": "boolean",
@@ -6428,7 +5300,7 @@
             ]
         },
         {
-            "name": "a >= +b => false",
+            "name": "a >= +b => false (2)",
             "expression": "@{a >= +b}",
             "expected": {
                 "type": "boolean",
@@ -6453,7 +5325,7 @@
             ]
         },
         {
-            "name": "+a < b => true",
+            "name": "+a < b => true (2)",
             "expression": "@{+a < b}",
             "expected": {
                 "type": "boolean",
@@ -6478,7 +5350,7 @@
             ]
         },
         {
-            "name": "+a <= b => true",
+            "name": "+a <= b => true (3)",
             "expression": "@{+a <= b}",
             "expected": {
                 "type": "boolean",
@@ -6503,7 +5375,7 @@
             ]
         },
         {
-            "name": "+a > b => false",
+            "name": "+a > b => false (3)",
             "expression": "@{+a > b}",
             "expected": {
                 "type": "boolean",
@@ -6528,7 +5400,7 @@
             ]
         },
         {
-            "name": "+a >= b => false",
+            "name": "+a >= b => false (2)",
             "expression": "@{+a >= b}",
             "expected": {
                 "type": "boolean",
@@ -6553,7 +5425,7 @@
             ]
         },
         {
-            "name": "+a < +b => true",
+            "name": "+a < +b => true (2)",
             "expression": "@{+a < +b}",
             "expected": {
                 "type": "boolean",
@@ -6578,7 +5450,7 @@
             ]
         },
         {
-            "name": "+a <= +b => true",
+            "name": "+a <= +b => true (3)",
             "expression": "@{+a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -6603,7 +5475,7 @@
             ]
         },
         {
-            "name": "+a > +b => false",
+            "name": "+a > +b => false (3)",
             "expression": "@{+a > +b}",
             "expected": {
                 "type": "boolean",
@@ -6628,7 +5500,7 @@
             ]
         },
         {
-            "name": "+a >= +b => false",
+            "name": "+a >= +b => false (2)",
             "expression": "@{+a >= +b}",
             "expected": {
                 "type": "boolean",
@@ -6653,7 +5525,7 @@
             ]
         },
         {
-            "name": "a < -b => false",
+            "name": "a < -b => false (3)",
             "expression": "@{a < -b}",
             "expected": {
                 "type": "boolean",
@@ -6678,7 +5550,7 @@
             ]
         },
         {
-            "name": "a <= -b => false",
+            "name": "a <= -b => false (2)",
             "expression": "@{a <= -b}",
             "expected": {
                 "type": "boolean",
@@ -6703,7 +5575,7 @@
             ]
         },
         {
-            "name": "a > -b => true",
+            "name": "a > -b => true (2)",
             "expression": "@{a > -b}",
             "expected": {
                 "type": "boolean",
@@ -6728,7 +5600,7 @@
             ]
         },
         {
-            "name": "a >= -b => true",
+            "name": "a >= -b => true (3)",
             "expression": "@{a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -6753,7 +5625,7 @@
             ]
         },
         {
-            "name": "-a < b => true",
+            "name": "-a < b => true (2)",
             "expression": "@{-a < b}",
             "expected": {
                 "type": "boolean",
@@ -6778,7 +5650,7 @@
             ]
         },
         {
-            "name": "-a <= b => true",
+            "name": "-a <= b => true (3)",
             "expression": "@{-a <= b}",
             "expected": {
                 "type": "boolean",
@@ -6803,7 +5675,7 @@
             ]
         },
         {
-            "name": "-a > b => false",
+            "name": "-a > b => false (3)",
             "expression": "@{-a > b}",
             "expected": {
                 "type": "boolean",
@@ -6828,7 +5700,7 @@
             ]
         },
         {
-            "name": "-a >= b => false",
+            "name": "-a >= b => false (2)",
             "expression": "@{-a >= b}",
             "expected": {
                 "type": "boolean",
@@ -6853,7 +5725,7 @@
             ]
         },
         {
-            "name": "-a < -b => false",
+            "name": "-a < -b => false (3)",
             "expression": "@{-a < -b}",
             "expected": {
                 "type": "boolean",
@@ -6878,7 +5750,7 @@
             ]
         },
         {
-            "name": "-a <= -b => false",
+            "name": "-a <= -b => false (2)",
             "expression": "@{-a <= -b}",
             "expected": {
                 "type": "boolean",
@@ -6903,7 +5775,7 @@
             ]
         },
         {
-            "name": "-a > -b => true",
+            "name": "-a > -b => true (2)",
             "expression": "@{-a > -b}",
             "expected": {
                 "type": "boolean",
@@ -6928,7 +5800,7 @@
             ]
         },
         {
-            "name": "-a >= -b => true",
+            "name": "-a >= -b => true (3)",
             "expression": "@{-a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -6953,7 +5825,7 @@
             ]
         },
         {
-            "name": "+a < -b => false",
+            "name": "+a < -b => false (3)",
             "expression": "@{+a < -b}",
             "expected": {
                 "type": "boolean",
@@ -6978,7 +5850,7 @@
             ]
         },
         {
-            "name": "+a <= -b => false",
+            "name": "+a <= -b => false (2)",
             "expression": "@{+a <= -b}",
             "expected": {
                 "type": "boolean",
@@ -7003,7 +5875,7 @@
             ]
         },
         {
-            "name": "+a > -b => true",
+            "name": "+a > -b => true (2)",
             "expression": "@{+a > -b}",
             "expected": {
                 "type": "boolean",
@@ -7028,7 +5900,7 @@
             ]
         },
         {
-            "name": "+a >= -b => true",
+            "name": "+a >= -b => true (3)",
             "expression": "@{+a >= -b}",
             "expected": {
                 "type": "boolean",
@@ -7053,7 +5925,7 @@
             ]
         },
         {
-            "name": "-a < +b => true",
+            "name": "-a < +b => true (2)",
             "expression": "@{-a < +b}",
             "expected": {
                 "type": "boolean",
@@ -7078,7 +5950,7 @@
             ]
         },
         {
-            "name": "-a <= +b => true",
+            "name": "-a <= +b => true (3)",
             "expression": "@{-a <= +b}",
             "expected": {
                 "type": "boolean",
@@ -7103,7 +5975,7 @@
             ]
         },
         {
-            "name": "-a > +b => false",
+            "name": "-a > +b => false (3)",
             "expression": "@{-a > +b}",
             "expected": {
                 "type": "boolean",
@@ -7128,7 +6000,7 @@
             ]
         },
         {
-            "name": "-a >= +b => false",
+            "name": "-a >= +b => false (2)",
             "expression": "@{-a >= +b}",
             "expected": {
                 "type": "boolean",
@@ -7153,107 +6025,7 @@
             ]
         },
         {
-            "name": "-a < -b => false",
-            "expression": "@{-a < -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 17,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a <= -b => false",
-            "expression": "@{-a <= -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 17,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a > -b => true",
-            "expression": "@{-a > -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 17,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a >= -b => true",
-            "expression": "@{-a >= -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 17,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "b < a => false",
+            "name": "b < a => false (3)",
             "expression": "@{b < a}",
             "expected": {
                 "type": "boolean",
@@ -7278,7 +6050,7 @@
             ]
         },
         {
-            "name": "b <= a => false",
+            "name": "b <= a => false (2)",
             "expression": "@{b <= a}",
             "expected": {
                 "type": "boolean",
@@ -7303,7 +6075,7 @@
             ]
         },
         {
-            "name": "b > a => true",
+            "name": "b > a => true (2)",
             "expression": "@{b > a}",
             "expected": {
                 "type": "boolean",
@@ -7328,7 +6100,7 @@
             ]
         },
         {
-            "name": "b >= a => true",
+            "name": "b >= a => true (3)",
             "expression": "@{b >= a}",
             "expected": {
                 "type": "boolean",
@@ -7353,7 +6125,7 @@
             ]
         },
         {
-            "name": "b < +a => false",
+            "name": "b < +a => false (3)",
             "expression": "@{b < +a}",
             "expected": {
                 "type": "boolean",
@@ -7378,7 +6150,7 @@
             ]
         },
         {
-            "name": "b <= +a => false",
+            "name": "b <= +a => false (2)",
             "expression": "@{b <= +a}",
             "expected": {
                 "type": "boolean",
@@ -7403,7 +6175,7 @@
             ]
         },
         {
-            "name": "b > +a => true",
+            "name": "b > +a => true (2)",
             "expression": "@{b > +a}",
             "expected": {
                 "type": "boolean",
@@ -7428,7 +6200,7 @@
             ]
         },
         {
-            "name": "b >= +a => true",
+            "name": "b >= +a => true (3)",
             "expression": "@{b >= +a}",
             "expected": {
                 "type": "boolean",
@@ -7453,7 +6225,7 @@
             ]
         },
         {
-            "name": "+b < a => false",
+            "name": "+b < a => false (3)",
             "expression": "@{+b < a}",
             "expected": {
                 "type": "boolean",
@@ -7478,7 +6250,7 @@
             ]
         },
         {
-            "name": "+b <= a => false",
+            "name": "+b <= a => false (2)",
             "expression": "@{+b <= a}",
             "expected": {
                 "type": "boolean",
@@ -7503,7 +6275,7 @@
             ]
         },
         {
-            "name": "+b > a => true",
+            "name": "+b > a => true (2)",
             "expression": "@{+b > a}",
             "expected": {
                 "type": "boolean",
@@ -7528,7 +6300,7 @@
             ]
         },
         {
-            "name": "+b >= a => true",
+            "name": "+b >= a => true (3)",
             "expression": "@{+b >= a}",
             "expected": {
                 "type": "boolean",
@@ -7553,7 +6325,7 @@
             ]
         },
         {
-            "name": "+b < +a => false",
+            "name": "+b < +a => false (3)",
             "expression": "@{+b < +a}",
             "expected": {
                 "type": "boolean",
@@ -7578,7 +6350,7 @@
             ]
         },
         {
-            "name": "+b <= +a => false",
+            "name": "+b <= +a => false (2)",
             "expression": "@{+b <= +a}",
             "expected": {
                 "type": "boolean",
@@ -7603,7 +6375,7 @@
             ]
         },
         {
-            "name": "+b > +a => true",
+            "name": "+b > +a => true (2)",
             "expression": "@{+b > +a}",
             "expected": {
                 "type": "boolean",
@@ -7628,7 +6400,7 @@
             ]
         },
         {
-            "name": "+b >= +a => true",
+            "name": "+b >= +a => true (3)",
             "expression": "@{+b >= +a}",
             "expected": {
                 "type": "boolean",
@@ -7653,7 +6425,7 @@
             ]
         },
         {
-            "name": "b < -a => false",
+            "name": "b < -a => false (3)",
             "expression": "@{b < -a}",
             "expected": {
                 "type": "boolean",
@@ -7678,7 +6450,7 @@
             ]
         },
         {
-            "name": "b <= -a => false",
+            "name": "b <= -a => false (2)",
             "expression": "@{b <= -a}",
             "expected": {
                 "type": "boolean",
@@ -7703,7 +6475,7 @@
             ]
         },
         {
-            "name": "b > -a => true",
+            "name": "b > -a => true (2)",
             "expression": "@{b > -a}",
             "expected": {
                 "type": "boolean",
@@ -7728,7 +6500,7 @@
             ]
         },
         {
-            "name": "b >= -a => true",
+            "name": "b >= -a => true (3)",
             "expression": "@{b >= -a}",
             "expected": {
                 "type": "boolean",
@@ -7753,7 +6525,7 @@
             ]
         },
         {
-            "name": "-b < a => true",
+            "name": "-b < a => true (2)",
             "expression": "@{-b < a}",
             "expected": {
                 "type": "boolean",
@@ -7778,7 +6550,7 @@
             ]
         },
         {
-            "name": "-b <= a => true",
+            "name": "-b <= a => true (3)",
             "expression": "@{-b <= a}",
             "expected": {
                 "type": "boolean",
@@ -7803,7 +6575,7 @@
             ]
         },
         {
-            "name": "-b > a => false",
+            "name": "-b > a => false (3)",
             "expression": "@{-b > a}",
             "expected": {
                 "type": "boolean",
@@ -7828,7 +6600,7 @@
             ]
         },
         {
-            "name": "-b >= a => false",
+            "name": "-b >= a => false (2)",
             "expression": "@{-b >= a}",
             "expected": {
                 "type": "boolean",
@@ -7853,7 +6625,7 @@
             ]
         },
         {
-            "name": "-b < -a => true",
+            "name": "-b < -a => true (2)",
             "expression": "@{-b < -a}",
             "expected": {
                 "type": "boolean",
@@ -7878,7 +6650,7 @@
             ]
         },
         {
-            "name": "-b <= -a => true",
+            "name": "-b <= -a => true (3)",
             "expression": "@{-b <= -a}",
             "expected": {
                 "type": "boolean",
@@ -7903,7 +6675,7 @@
             ]
         },
         {
-            "name": "-b > -a => false",
+            "name": "-b > -a => false (3)",
             "expression": "@{-b > -a}",
             "expected": {
                 "type": "boolean",
@@ -7928,7 +6700,7 @@
             ]
         },
         {
-            "name": "-b >= -a => false",
+            "name": "-b >= -a => false (2)",
             "expression": "@{-b >= -a}",
             "expected": {
                 "type": "boolean",
@@ -7953,7 +6725,7 @@
             ]
         },
         {
-            "name": "+b < -a => false",
+            "name": "+b < -a => false (3)",
             "expression": "@{+b < -a}",
             "expected": {
                 "type": "boolean",
@@ -7978,7 +6750,7 @@
             ]
         },
         {
-            "name": "+b <= -a => false",
+            "name": "+b <= -a => false (2)",
             "expression": "@{+b <= -a}",
             "expected": {
                 "type": "boolean",
@@ -8003,7 +6775,7 @@
             ]
         },
         {
-            "name": "+b > -a => true",
+            "name": "+b > -a => true (2)",
             "expression": "@{+b > -a}",
             "expected": {
                 "type": "boolean",
@@ -8028,7 +6800,7 @@
             ]
         },
         {
-            "name": "+b >= -a => true",
+            "name": "+b >= -a => true (3)",
             "expression": "@{+b >= -a}",
             "expected": {
                 "type": "boolean",
@@ -8053,7 +6825,7 @@
             ]
         },
         {
-            "name": "-b < +a => true",
+            "name": "-b < +a => true (2)",
             "expression": "@{-b < +a}",
             "expected": {
                 "type": "boolean",
@@ -8078,7 +6850,7 @@
             ]
         },
         {
-            "name": "-b <= +a => true",
+            "name": "-b <= +a => true (3)",
             "expression": "@{-b <= +a}",
             "expected": {
                 "type": "boolean",
@@ -8103,7 +6875,7 @@
             ]
         },
         {
-            "name": "-b > +a => false",
+            "name": "-b > +a => false (3)",
             "expression": "@{-b > +a}",
             "expected": {
                 "type": "boolean",
@@ -8128,108 +6900,8 @@
             ]
         },
         {
-            "name": "-b >= +a => false",
+            "name": "-b >= +a => false (2)",
             "expression": "@{-b >= +a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 17,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b < -a => true",
-            "expression": "@{-b < -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 17,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b <= -a => true",
-            "expression": "@{-b <= -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 17,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b > -a => false",
-            "expression": "@{-b > -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "a"
-                },
-                {
-                    "type": "integer",
-                    "value": 17,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b >= -a => false",
-            "expression": "@{-b >= -a}",
             "expected": {
                 "type": "boolean",
                 "value": false
@@ -8973,86 +7645,6 @@
             ]
         },
         {
-            "name": "-7 < -b => false",
-            "expression": "@{-7 < -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 <= -b => true",
-            "expression": "@{-7 <= -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 > -b => false",
-            "expression": "@{-7 > -b}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-7 >= -b => true",
-            "expression": "@{-7 >= -b}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
             "name": "b < 7 => false",
             "expression": "@{b < 7}",
             "expected": {
@@ -9773,86 +8365,6 @@
             ]
         },
         {
-            "name": "-b < -7 => false",
-            "expression": "@{-b < -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b <= -7 => true",
-            "expression": "@{-b <= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b > -7 => false",
-            "expression": "@{-b > -7}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-b >= -7 => true",
-            "expression": "@{-b >= -7}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 7,
-                    "name": "b"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
             "name": "a < 17 => false",
             "expression": "@{a < 17}",
             "expected": {
@@ -10173,7 +8685,7 @@
             ]
         },
         {
-            "name": "a < -17 => false",
+            "name": "a < -17 => false (1)",
             "expression": "@{a < -17}",
             "expected": {
                 "type": "boolean",
@@ -10193,7 +8705,7 @@
             ]
         },
         {
-            "name": "a <= -17 => false",
+            "name": "a <= -17 => false (1)",
             "expression": "@{a <= -17}",
             "expected": {
                 "type": "boolean",
@@ -10213,7 +8725,7 @@
             ]
         },
         {
-            "name": "a > -17 => true",
+            "name": "a > -17 => true (1)",
             "expression": "@{a > -17}",
             "expected": {
                 "type": "boolean",
@@ -10233,7 +8745,7 @@
             ]
         },
         {
-            "name": "a >= -17 => true",
+            "name": "a >= -17 => true (1)",
             "expression": "@{a >= -17}",
             "expected": {
                 "type": "boolean",
@@ -10253,7 +8765,7 @@
             ]
         },
         {
-            "name": "-a < 17 => true",
+            "name": "-a < 17 => true (1)",
             "expression": "@{-a < 17}",
             "expected": {
                 "type": "boolean",
@@ -10273,7 +8785,7 @@
             ]
         },
         {
-            "name": "-a <= 17 => true",
+            "name": "-a <= 17 => true (1)",
             "expression": "@{-a <= 17}",
             "expected": {
                 "type": "boolean",
@@ -10293,7 +8805,7 @@
             ]
         },
         {
-            "name": "-a > 17 => false",
+            "name": "-a > 17 => false (1)",
             "expression": "@{-a > 17}",
             "expected": {
                 "type": "boolean",
@@ -10313,7 +8825,7 @@
             ]
         },
         {
-            "name": "-a >= 17 => false",
+            "name": "-a >= 17 => false (1)",
             "expression": "@{-a >= 17}",
             "expected": {
                 "type": "boolean",
@@ -10413,7 +8925,7 @@
             ]
         },
         {
-            "name": "+a < -17 => false",
+            "name": "+a < -17 => false (1)",
             "expression": "@{+a < -17}",
             "expected": {
                 "type": "boolean",
@@ -10433,7 +8945,7 @@
             ]
         },
         {
-            "name": "+a <= -17 => false",
+            "name": "+a <= -17 => false (1)",
             "expression": "@{+a <= -17}",
             "expected": {
                 "type": "boolean",
@@ -10453,7 +8965,7 @@
             ]
         },
         {
-            "name": "+a > -17 => true",
+            "name": "+a > -17 => true (1)",
             "expression": "@{+a > -17}",
             "expected": {
                 "type": "boolean",
@@ -10473,7 +8985,7 @@
             ]
         },
         {
-            "name": "+a >= -17 => true",
+            "name": "+a >= -17 => true (1)",
             "expression": "@{+a >= -17}",
             "expected": {
                 "type": "boolean",
@@ -10493,7 +9005,7 @@
             ]
         },
         {
-            "name": "-a < +17 => true",
+            "name": "-a < +17 => true (1)",
             "expression": "@{-a < +17}",
             "expected": {
                 "type": "boolean",
@@ -10513,7 +9025,7 @@
             ]
         },
         {
-            "name": "-a <= +17 => true",
+            "name": "-a <= +17 => true (1)",
             "expression": "@{-a <= +17}",
             "expected": {
                 "type": "boolean",
@@ -10533,7 +9045,7 @@
             ]
         },
         {
-            "name": "-a > +17 => false",
+            "name": "-a > +17 => false (1)",
             "expression": "@{-a > +17}",
             "expected": {
                 "type": "boolean",
@@ -10553,88 +9065,8 @@
             ]
         },
         {
-            "name": "-a >= +17 => false",
+            "name": "-a >= +17 => false (1)",
             "expression": "@{-a >= +17}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 27,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a < -17 => true",
-            "expression": "@{-a < -17}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 27,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a <= -17 => true",
-            "expression": "@{-a <= -17}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 27,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a > -17 => false",
-            "expression": "@{-a > -17}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 27,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a >= -17 => false",
-            "expression": "@{-a >= -17}",
             "expected": {
                 "type": "boolean",
                 "value": false
@@ -10973,7 +9405,7 @@
             ]
         },
         {
-            "name": "17 < -a => false",
+            "name": "17 < -a => false (1)",
             "expression": "@{17 < -a}",
             "expected": {
                 "type": "boolean",
@@ -10993,7 +9425,7 @@
             ]
         },
         {
-            "name": "17 <= -a => false",
+            "name": "17 <= -a => false (1)",
             "expression": "@{17 <= -a}",
             "expected": {
                 "type": "boolean",
@@ -11013,7 +9445,7 @@
             ]
         },
         {
-            "name": "17 > -a => true",
+            "name": "17 > -a => true (1)",
             "expression": "@{17 > -a}",
             "expected": {
                 "type": "boolean",
@@ -11033,7 +9465,7 @@
             ]
         },
         {
-            "name": "17 >= -a => true",
+            "name": "17 >= -a => true (1)",
             "expression": "@{17 >= -a}",
             "expected": {
                 "type": "boolean",
@@ -11053,7 +9485,7 @@
             ]
         },
         {
-            "name": "-17 < a => true",
+            "name": "-17 < a => true (1)",
             "expression": "@{-17 < a}",
             "expected": {
                 "type": "boolean",
@@ -11073,7 +9505,7 @@
             ]
         },
         {
-            "name": "-17 <= a => true",
+            "name": "-17 <= a => true (1)",
             "expression": "@{-17 <= a}",
             "expected": {
                 "type": "boolean",
@@ -11093,7 +9525,7 @@
             ]
         },
         {
-            "name": "-17 > a => false",
+            "name": "-17 > a => false (1)",
             "expression": "@{-17 > a}",
             "expected": {
                 "type": "boolean",
@@ -11113,7 +9545,7 @@
             ]
         },
         {
-            "name": "-17 >= a => false",
+            "name": "-17 >= a => false (1)",
             "expression": "@{-17 >= a}",
             "expected": {
                 "type": "boolean",
@@ -11213,7 +9645,7 @@
             ]
         },
         {
-            "name": "+17 < -a => false",
+            "name": "+17 < -a => false (1)",
             "expression": "@{+17 < -a}",
             "expected": {
                 "type": "boolean",
@@ -11233,7 +9665,7 @@
             ]
         },
         {
-            "name": "+17 <= -a => false",
+            "name": "+17 <= -a => false (1)",
             "expression": "@{+17 <= -a}",
             "expected": {
                 "type": "boolean",
@@ -11253,7 +9685,7 @@
             ]
         },
         {
-            "name": "+17 > -a => true",
+            "name": "+17 > -a => true (1)",
             "expression": "@{+17 > -a}",
             "expected": {
                 "type": "boolean",
@@ -11273,7 +9705,7 @@
             ]
         },
         {
-            "name": "+17 >= -a => true",
+            "name": "+17 >= -a => true (1)",
             "expression": "@{+17 >= -a}",
             "expected": {
                 "type": "boolean",
@@ -11293,7 +9725,7 @@
             ]
         },
         {
-            "name": "-17 < +a => true",
+            "name": "-17 < +a => true (1)",
             "expression": "@{-17 < +a}",
             "expected": {
                 "type": "boolean",
@@ -11313,7 +9745,7 @@
             ]
         },
         {
-            "name": "-17 <= +a => true",
+            "name": "-17 <= +a => true (1)",
             "expression": "@{-17 <= +a}",
             "expected": {
                 "type": "boolean",
@@ -11333,7 +9765,7 @@
             ]
         },
         {
-            "name": "-17 > +a => false",
+            "name": "-17 > +a => false (1)",
             "expression": "@{-17 > +a}",
             "expected": {
                 "type": "boolean",
@@ -11353,91 +9785,11 @@
             ]
         },
         {
-            "name": "-17 >= +a => false",
+            "name": "-17 >= +a => false (1)",
             "expression": "@{-17 >= +a}",
             "expected": {
                 "type": "boolean",
                 "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 27,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 < -a => false",
-            "expression": "@{-17 < -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 27,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 <= -a => false",
-            "expression": "@{-17 <= -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 27,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 > -a => true",
-            "expression": "@{-17 > -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": 27,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 >= -a => true",
-            "expression": "@{-17 >= -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
             },
             "variables": [
                 {
@@ -11773,7 +10125,7 @@
             ]
         },
         {
-            "name": "a < -17 => false",
+            "name": "a < -17 => false (2)",
             "expression": "@{a < -17}",
             "expected": {
                 "type": "boolean",
@@ -11793,7 +10145,7 @@
             ]
         },
         {
-            "name": "a <= -17 => false",
+            "name": "a <= -17 => false (2)",
             "expression": "@{a <= -17}",
             "expected": {
                 "type": "boolean",
@@ -11813,7 +10165,7 @@
             ]
         },
         {
-            "name": "a > -17 => true",
+            "name": "a > -17 => true (2)",
             "expression": "@{a > -17}",
             "expected": {
                 "type": "boolean",
@@ -11833,7 +10185,7 @@
             ]
         },
         {
-            "name": "a >= -17 => true",
+            "name": "a >= -17 => true (2)",
             "expression": "@{a >= -17}",
             "expected": {
                 "type": "boolean",
@@ -11853,7 +10205,7 @@
             ]
         },
         {
-            "name": "-a < 17 => true",
+            "name": "-a < 17 => true (2)",
             "expression": "@{-a < 17}",
             "expected": {
                 "type": "boolean",
@@ -11873,7 +10225,7 @@
             ]
         },
         {
-            "name": "-a <= 17 => true",
+            "name": "-a <= 17 => true (2)",
             "expression": "@{-a <= 17}",
             "expected": {
                 "type": "boolean",
@@ -11893,7 +10245,7 @@
             ]
         },
         {
-            "name": "-a > 17 => false",
+            "name": "-a > 17 => false (2)",
             "expression": "@{-a > 17}",
             "expected": {
                 "type": "boolean",
@@ -11913,7 +10265,7 @@
             ]
         },
         {
-            "name": "-a >= 17 => false",
+            "name": "-a >= 17 => false (2)",
             "expression": "@{-a >= 17}",
             "expected": {
                 "type": "boolean",
@@ -12013,7 +10365,7 @@
             ]
         },
         {
-            "name": "+a < -17 => false",
+            "name": "+a < -17 => false (2)",
             "expression": "@{+a < -17}",
             "expected": {
                 "type": "boolean",
@@ -12033,7 +10385,7 @@
             ]
         },
         {
-            "name": "+a <= -17 => false",
+            "name": "+a <= -17 => false (2)",
             "expression": "@{+a <= -17}",
             "expected": {
                 "type": "boolean",
@@ -12053,7 +10405,7 @@
             ]
         },
         {
-            "name": "+a > -17 => true",
+            "name": "+a > -17 => true (2)",
             "expression": "@{+a > -17}",
             "expected": {
                 "type": "boolean",
@@ -12073,7 +10425,7 @@
             ]
         },
         {
-            "name": "+a >= -17 => true",
+            "name": "+a >= -17 => true (2)",
             "expression": "@{+a >= -17}",
             "expected": {
                 "type": "boolean",
@@ -12093,7 +10445,7 @@
             ]
         },
         {
-            "name": "-a < +17 => true",
+            "name": "-a < +17 => true (2)",
             "expression": "@{-a < +17}",
             "expected": {
                 "type": "boolean",
@@ -12113,7 +10465,7 @@
             ]
         },
         {
-            "name": "-a <= +17 => true",
+            "name": "-a <= +17 => true (2)",
             "expression": "@{-a <= +17}",
             "expected": {
                 "type": "boolean",
@@ -12133,7 +10485,7 @@
             ]
         },
         {
-            "name": "-a > +17 => false",
+            "name": "-a > +17 => false (2)",
             "expression": "@{-a > +17}",
             "expected": {
                 "type": "boolean",
@@ -12153,91 +10505,11 @@
             ]
         },
         {
-            "name": "-a >= +17 => false",
+            "name": "-a >= +17 => false (2)",
             "expression": "@{-a >= +17}",
             "expected": {
                 "type": "boolean",
                 "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a < -17 => false",
-            "expression": "@{-a < -17}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a <= -17 => false",
-            "expression": "@{-a <= -17}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a > -17 => true",
-            "expression": "@{-a > -17}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-a >= -17 => true",
-            "expression": "@{-a >= -17}",
-            "expected": {
-                "type": "boolean",
-                "value": true
             },
             "variables": [
                 {
@@ -12573,7 +10845,7 @@
             ]
         },
         {
-            "name": "17 < -a => false",
+            "name": "17 < -a => false (2)",
             "expression": "@{17 < -a}",
             "expected": {
                 "type": "boolean",
@@ -12593,7 +10865,7 @@
             ]
         },
         {
-            "name": "17 <= -a => false",
+            "name": "17 <= -a => false (2)",
             "expression": "@{17 <= -a}",
             "expected": {
                 "type": "boolean",
@@ -12613,7 +10885,7 @@
             ]
         },
         {
-            "name": "17 > -a => true",
+            "name": "17 > -a => true (2)",
             "expression": "@{17 > -a}",
             "expected": {
                 "type": "boolean",
@@ -12633,7 +10905,7 @@
             ]
         },
         {
-            "name": "17 >= -a => true",
+            "name": "17 >= -a => true (2)",
             "expression": "@{17 >= -a}",
             "expected": {
                 "type": "boolean",
@@ -12653,7 +10925,7 @@
             ]
         },
         {
-            "name": "-17 < a => true",
+            "name": "-17 < a => true (2)",
             "expression": "@{-17 < a}",
             "expected": {
                 "type": "boolean",
@@ -12673,7 +10945,7 @@
             ]
         },
         {
-            "name": "-17 <= a => true",
+            "name": "-17 <= a => true (2)",
             "expression": "@{-17 <= a}",
             "expected": {
                 "type": "boolean",
@@ -12693,7 +10965,7 @@
             ]
         },
         {
-            "name": "-17 > a => false",
+            "name": "-17 > a => false (2)",
             "expression": "@{-17 > a}",
             "expected": {
                 "type": "boolean",
@@ -12713,7 +10985,7 @@
             ]
         },
         {
-            "name": "-17 >= a => false",
+            "name": "-17 >= a => false (2)",
             "expression": "@{-17 >= a}",
             "expected": {
                 "type": "boolean",
@@ -12813,7 +11085,7 @@
             ]
         },
         {
-            "name": "+17 < -a => false",
+            "name": "+17 < -a => false (2)",
             "expression": "@{+17 < -a}",
             "expected": {
                 "type": "boolean",
@@ -12833,7 +11105,7 @@
             ]
         },
         {
-            "name": "+17 <= -a => false",
+            "name": "+17 <= -a => false (2)",
             "expression": "@{+17 <= -a}",
             "expected": {
                 "type": "boolean",
@@ -12853,7 +11125,7 @@
             ]
         },
         {
-            "name": "+17 > -a => true",
+            "name": "+17 > -a => true (2)",
             "expression": "@{+17 > -a}",
             "expected": {
                 "type": "boolean",
@@ -12873,7 +11145,7 @@
             ]
         },
         {
-            "name": "+17 >= -a => true",
+            "name": "+17 >= -a => true (2)",
             "expression": "@{+17 >= -a}",
             "expected": {
                 "type": "boolean",
@@ -12893,7 +11165,7 @@
             ]
         },
         {
-            "name": "-17 < +a => true",
+            "name": "-17 < +a => true (2)",
             "expression": "@{-17 < +a}",
             "expected": {
                 "type": "boolean",
@@ -12913,7 +11185,7 @@
             ]
         },
         {
-            "name": "-17 <= +a => true",
+            "name": "-17 <= +a => true (2)",
             "expression": "@{-17 <= +a}",
             "expected": {
                 "type": "boolean",
@@ -12933,7 +11205,7 @@
             ]
         },
         {
-            "name": "-17 > +a => false",
+            "name": "-17 > +a => false (2)",
             "expression": "@{-17 > +a}",
             "expected": {
                 "type": "boolean",
@@ -12953,88 +11225,8 @@
             ]
         },
         {
-            "name": "-17 >= +a => false",
+            "name": "-17 >= +a => false (2)",
             "expression": "@{-17 >= +a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 < -a => true",
-            "expression": "@{-17 < -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 <= -a => true",
-            "expression": "@{-17 <= -a}",
-            "expected": {
-                "type": "boolean",
-                "value": true
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 > -a => false",
-            "expression": "@{-17 > -a}",
-            "expected": {
-                "type": "boolean",
-                "value": false
-            },
-            "variables": [
-                {
-                    "type": "integer",
-                    "value": -7,
-                    "name": "a"
-                }
-            ],
-            "platforms": [
-                "android",
-                "ios",
-                "web"
-            ]
-        },
-        {
-            "name": "-17 >= -a => false",
-            "expression": "@{-17 >= -a}",
             "expected": {
                 "type": "boolean",
                 "value": false

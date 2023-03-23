@@ -1,7 +1,7 @@
 {
   "cases": [
     {
-      "name": "var_a == var_b => true",
+      "name": "var_a == var_b => true (1)",
       "expression": "@{var_a == var_b}",
       "expected": {
         "type": "boolean",
@@ -26,7 +26,7 @@
       ]
     },
     {
-      "name": "var_a != var_b => false",
+      "name": "var_a != var_b => false (1)",
       "expression": "@{var_a != var_b}",
       "expected": {
         "type": "boolean",
@@ -51,7 +51,7 @@
       ]
     },
     {
-      "name": "var_a == var_b => true",
+      "name": "var_a == var_b => true (2)",
       "expression": "@{var_a == var_b}",
       "expected": {
         "type": "boolean",
@@ -76,7 +76,7 @@
       ]
     },
     {
-      "name": "var_a != var_b => false",
+      "name": "var_a != var_b => false (2)",
       "expression": "@{var_a != var_b}",
       "expected": {
         "type": "boolean",
