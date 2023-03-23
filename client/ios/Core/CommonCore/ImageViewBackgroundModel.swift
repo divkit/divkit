@@ -25,6 +25,7 @@ extension Optional where Wrapped == ImageViewBackgroundModel {
     view.subviews.filter { $0 == oldValue?.view }.forEach { $0.removeFromSuperview() }
     view.backgroundColor = self?.color
     if let backgroundView = self?.view {
+      backgroundView.frame = view.bounds
       backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
       view.addSubview(backgroundView)
     }
