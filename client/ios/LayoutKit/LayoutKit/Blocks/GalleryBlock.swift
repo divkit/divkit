@@ -74,7 +74,7 @@ extension GalleryBlock {
     direction: GalleryViewModel.Direction,
     crossAlignment: Alignment,
     scrollMode: GalleryViewModel.ScrollMode = .default,
-    state: GalleryViewState = .default,
+    state: GalleryViewState? = nil,
     widthTrait: LayoutTrait? = nil,
     heightTrait: LayoutTrait? = nil,
     areEmptySpaceTouchesEnabled: Bool = true,
@@ -95,7 +95,7 @@ extension GalleryBlock {
 
     try self.init(
       model: model,
-      state: state,
+      state: state ?? GalleryViewState(contentOffset: 0, itemsCount: children.count),
       widthTrait: widthTrait ?? (direction.isHorizontal ? .resizable : .intrinsic),
       heightTrait: heightTrait ?? (direction.isHorizontal ? .intrinsic : .resizable)
     )
@@ -122,7 +122,11 @@ extension GalleryBlock {
       direction: direction,
       crossAlignment: crossAlignment,
       scrollMode: scrollMode,
-      state: GalleryViewState(contentPosition: contentPosition, isScrolling: false),
+      state: GalleryViewState(
+        contentPosition: contentPosition,
+        itemsCount: children.count,
+        isScrolling: false
+      ),
       widthTrait: widthTrait,
       heightTrait: heightTrait,
       areEmptySpaceTouchesEnabled: areEmptySpaceTouchesEnabled,

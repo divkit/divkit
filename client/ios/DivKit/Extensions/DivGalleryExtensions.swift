@@ -66,12 +66,13 @@ extension DivGallery: DivBlockModeling, DivGalleryProtocol {
     } else {
       index = CGFloat(resolveDefaultItem(context.expressionResolver))
       if index == 0 {
-        return .default
+        return GalleryViewState(contentOffset: 0, itemsCount: itemsCount)
       }
     }
 
     let newState = GalleryViewState(
-      contentPageIndex: index.clamp(0.0...CGFloat(itemsCount - 1))
+      contentPageIndex: index.clamp(0.0...CGFloat(itemsCount - 1)),
+      itemsCount: itemsCount
     )
     context.blockStateStorage.setState(path: path, state: newState)
     return newState

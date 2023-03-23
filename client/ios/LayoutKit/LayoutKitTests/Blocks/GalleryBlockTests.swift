@@ -5,7 +5,7 @@ import LayoutKit
 
 final class GalleryBlockTests: XCTestCase {
   func test_WhenUpdatesState_UsesIt() throws {
-    let state = GalleryViewState(contentOffset: 1)
+    let state = GalleryViewState(contentOffset: 1, itemsCount: 2)
     let states = [GalleryBlockTestModels.path: state]
     let block = GalleryBlockTestModels.base
 
@@ -33,12 +33,12 @@ final class GalleryBlockTests: XCTestCase {
   }
 
   func test_WhenUpdatesState_DoesNotTouchInitialBlock() throws {
-    let state = GalleryViewState(contentOffset: 1)
+    let state = GalleryViewState(contentOffset: 1, itemsCount: 1)
     let states = [GalleryBlockTestModels.path: state]
     let block = GalleryBlockTestModels.base
 
     _ = try block.updated(withStates: states)
-    XCTAssertEqual(block.state, .default)
+    XCTAssertEqual(block.state, GalleryViewState(contentOffset: 0, itemsCount: 2))
   }
 }
 

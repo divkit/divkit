@@ -16,7 +16,7 @@ final class SwitchableContainerBlockTests: XCTestCase {
   }
 
   func test_WhenUpdatesState_SendsStatesToItems() throws {
-    let state = GalleryViewState(contentOffset: 1)
+    let state = GalleryViewState(contentOffset: 1, itemsCount: 2)
     let states = [GalleryBlockTestModels.path: state]
     let block = SwitchableContainerBlockTestModels.base
 

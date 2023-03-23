@@ -6,12 +6,12 @@ import CommonCore
 public struct GalleryViewState: ElementState, Equatable {
   @frozen
   public enum Position: Equatable {
-    case offset(CGFloat)
+    case offset(_ value: CGFloat, firstVisibleItemIndex: Int = 0)
     case paging(index: CGFloat)
 
     public var offset: CGFloat? {
       switch self {
-      case let .offset(value):
+      case let .offset(value, _):
         return value
       case .paging:
         return nil
@@ -39,8 +39,9 @@ public struct GalleryViewState: ElementState, Equatable {
     public static func ==(_ lhs: Position, _ rhs: Position) -> Bool {
       let accuracy = CGFloat(1e-4)
       switch (lhs, rhs) {
-      case let (.offset(lhs), .offset(rhs)):
-        return lhs.isApproximatelyEqualTo(rhs, withAccuracy: accuracy)
+      case let (.offset(lhsValue, lhsFirstVisibleItemIndex), .offset(rhsValue, rhsFirstVisibleItemIndex)):
+        return lhsFirstVisibleItemIndex == rhsFirstVisibleItemIndex
+          && lhsValue.isApproximatelyEqualTo(rhsValue, withAccuracy: accuracy)
       case let (.paging(index: lhs), .paging(index: rhs)):
         return lhs.isApproximatelyEqualTo(rhs, withAccuracy: accuracy)
       case (.paging, .offset):
@@ -51,48 +52,62 @@ public struct GalleryViewState: ElementState, Equatable {
     }
   }
 
-  public var contentPosition: Position
+  public let contentPosition: Position
+  public let itemsCount: Int
   public let isScrolling: Bool
 
-  public static let `default` = GalleryViewState(contentOffset: 0)
-
-  public init(contentOffset: CGFloat) {
+  public init(
+    contentOffset: CGFloat,
+    itemsCount: Int
+  ) {
     self.contentPosition = .offset(contentOffset)
+    self.itemsCount = itemsCount
     self.isScrolling = false
   }
 
-  public init(contentPageIndex: CGFloat) {
+  public init(
+    contentPageIndex: CGFloat,
+    itemsCount: Int
+  ) {
     self.contentPosition = .paging(index: contentPageIndex)
+    self.itemsCount = itemsCount
     self.isScrolling = false
   }
 
   public init(
     contentPosition: Position,
+    itemsCount: Int,
     isScrolling: Bool
   ) {
     self.contentPosition = contentPosition
+    self.itemsCount = itemsCount
     self.isScrolling = isScrolling
   }
 }
 
 extension GalleryViewState {
   public func resetToModelIfInconsistent(_ model: GalleryViewModel) -> GalleryViewState {
-    modified(self) {
-      switch contentPosition {
-      case let .paging(index: index):
-        if index < 0 || index >= CGFloat(model.items.count) {
-          $0.contentPosition = .paging(index: 0)
-        } else {
-          $0.contentPosition = .paging(index: index)
-        }
-      case .offset:
-        switch model.scrollMode {
-        case .autoPaging, .fixedPaging:
-          $0.contentPosition = .paging(index: 0)
-        case .default:
-          break
-        }
+    let newContentPosition: Position
+    let itemsCount = model.items.count
+    switch contentPosition {
+    case let .paging(index: index):
+      if index < 0 || index >= CGFloat(itemsCount) {
+        newContentPosition = .paging(index: 0)
+      } else {
+        newContentPosition = .paging(index: index)
+      }
+    case .offset:
+      switch model.scrollMode {
+      case .autoPaging, .fixedPaging:
+        newContentPosition = .paging(index: 0)
+      case .default:
+        newContentPosition = contentPosition
       }
     }
+    return GalleryViewState(
+      contentPosition: newContentPosition,
+      itemsCount: itemsCount,
+      isScrolling: isScrolling
+    )
   }
 }

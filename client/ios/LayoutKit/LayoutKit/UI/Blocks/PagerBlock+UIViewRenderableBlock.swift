@@ -58,7 +58,8 @@ private final class PagerView: BlockView {
     self.overscrollDelegate = overscrollDelegate
 
     let galleryState = GalleryViewState(
-      contentPageIndex: CGFloat(state.currentPage)
+      contentPageIndex: CGFloat(state.currentPage),
+      itemsCount: model.items.count
     )
     let layoutFactory: GalleryView.LayoutFactory = { [unowned self] model, boundsSize in
       let pagerLayout = PagerViewLayout(

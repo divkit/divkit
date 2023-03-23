@@ -5,7 +5,7 @@ import LayoutKit
 
 final class GridBlockTests: XCTestCase {
   func test_WhenUpdatesState_SendsStatesToChildren() throws {
-    let state = GalleryViewState(contentOffset: 1)
+    let state = GalleryViewState(contentOffset: 1, itemsCount: 2)
     let states = [GalleryBlockTestModels.path: state]
     let block = try! GridBlock(
       widthTrait: .intrinsic,

@@ -17,7 +17,7 @@ final class DivGalleryExtensionsTests: XCTestCase {
   }
 
   func test_WhenContextContainsGalleryState_RestoresIt() throws {
-    let expectedState = GalleryViewState(contentOffset: 16)
+    let expectedState = GalleryViewState(contentOffset: 16, itemsCount: 1)
     let blockStateStorage = DivBlockStateStorage()
     blockStateStorage.setState(path: .root + DivGallery.type, state: expectedState)
     let context = DivBlockModelingContext(
@@ -38,7 +38,7 @@ final class DivGalleryExtensionsTests: XCTestCase {
     let blockStateStorage = DivBlockStateStorage()
     blockStateStorage.setState(
       path: .root + DivGallery.type,
-      state: GalleryViewState(contentOffset: 100)
+      state: GalleryViewState(contentOffset: 100, itemsCount: 1)
     )
     let context = DivBlockModelingContext(
       blockStateStorage: blockStateStorage

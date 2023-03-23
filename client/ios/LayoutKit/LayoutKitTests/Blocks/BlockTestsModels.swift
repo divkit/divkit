@@ -39,7 +39,7 @@ enum BlockTestsModels {
           )),
           path: path
         ),
-        state: .default,
+        state: GalleryViewState(contentOffset: 0, itemsCount: 2),
         widthTrait: .fixed(128),
         heightTrait: .fixed(128)
       )
