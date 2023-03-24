@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [urlVariable].
  * 
- * Required properties: `value, name`.
+ * Required parameters: `value, name`.
  */
 @Generated
 class UrlVariable internal constructor(

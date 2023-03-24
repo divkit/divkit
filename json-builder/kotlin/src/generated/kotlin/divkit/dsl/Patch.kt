@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [patch].
  * 
- * Required properties: `changes`.
+ * Required parameters: `changes`.
  */
 @Generated
 class Patch internal constructor(
@@ -70,7 +70,7 @@ class Patch internal constructor(
     /**
      * Can be created using the method [patchChange].
      * 
-     * Required properties: `id`.
+     * Required parameters: `id`.
      */
     @Generated
     class Change internal constructor(

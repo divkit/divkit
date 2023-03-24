@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [wrapContentSize].
  * 
- * Required properties: `type`.
+ * Required parameters: `type`.
  */
 @Generated
 class WrapContentSize internal constructor(
@@ -69,7 +69,7 @@ class WrapContentSize internal constructor(
     /**
      * Can be created using the method [wrapContentSizeConstraintSize].
      * 
-     * Required properties: `value`.
+     * Required parameters: `value`.
      */
     @Generated
     class ConstraintSize internal constructor(

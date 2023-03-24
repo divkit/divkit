@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [input].
  * 
- * Required properties: `type, text_variable`.
+ * Required parameters: `type, text_variable`.
  */
 @Generated
 class Input internal constructor(
@@ -317,7 +317,7 @@ class Input internal constructor(
     /**
      * Keyboard type.
      * 
-     * Possible values: [single_line_text, multi_line_text, phone, number, email, uri].
+     * Possible values: [single_line_text, multi_line_text, phone, number, email, uri, decimal].
      */
     @Generated
     sealed interface KeyboardType
@@ -327,7 +327,7 @@ class Input internal constructor(
      * 
      * Can be created using the method [inputNativeInterface].
      * 
-     * Required properties: `color`.
+     * Required parameters: `color`.
      */
     @Generated
     class NativeInterface internal constructor(

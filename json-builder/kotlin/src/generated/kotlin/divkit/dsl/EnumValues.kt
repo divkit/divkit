@@ -300,6 +300,11 @@ object UriEnumValue : EnumValue("uri"),
     KeyboardInput.KeyboardType
 
 @Generated
+object DecimalEnumValue : EnumValue("decimal"),
+    Input.KeyboardType,
+    KeyboardInput.KeyboardType
+
+@Generated
 object SingleEnumValue : EnumValue("single"),
     LineStyle
 
@@ -644,6 +649,10 @@ val DivScope.email: EmailEnumValue
 @Generated
 val DivScope.uri: UriEnumValue
     get() = UriEnumValue
+
+@Generated
+val DivScope.decimal: DecimalEnumValue
+    get() = DecimalEnumValue
 
 @Generated
 val DivScope.single: SingleEnumValue

@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [container].
  * 
- * Required properties: `type, items`.
+ * Required parameters: `type, items`.
  */
 @Generated
 class Container internal constructor(
@@ -92,7 +92,7 @@ class Container internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -304,7 +304,7 @@ class Container internal constructor(
     /**
      * Can be created using the method [containerSeparator].
      * 
-     * Required properties: `style`.
+     * Required parameters: `style`.
      */
     @Generated
     class Separator internal constructor(
@@ -361,7 +361,7 @@ class Container internal constructor(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -481,7 +481,7 @@ fun DivScope.row(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -601,7 +601,7 @@ fun DivScope.row(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -721,7 +721,7 @@ fun DivScope.column(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -841,7 +841,7 @@ fun DivScope.column(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -961,7 +961,7 @@ fun DivScope.stack(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1082,7 +1082,7 @@ fun DivScope.stack(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1206,7 +1206,7 @@ fun DivScope.container(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1328,7 +1328,7 @@ fun DivScope.containerProps(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1450,7 +1450,7 @@ fun TemplateScope.containerRefs(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1574,7 +1574,7 @@ fun Container.override(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1766,7 +1766,7 @@ fun Container.evaluate(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -1891,7 +1891,7 @@ fun Component<Container>.override(
  * @param orientation Location of elements. `overlap` value overlays elements on top of each other in the order of enumeration. The lowest is the zero element of an array.
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.

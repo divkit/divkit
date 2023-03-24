@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [shapeDrawable].
  * 
- * Required properties: `type, shape, color`.
+ * Required parameters: `type, shape, color`.
  */
 @Generated
 class ShapeDrawable internal constructor(

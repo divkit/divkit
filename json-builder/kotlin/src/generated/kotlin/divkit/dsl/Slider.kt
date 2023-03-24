@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [slider].
  * 
- * Required properties: `type, track_inactive_style, track_active_style, thumb_style`.
+ * Required parameters: `type, track_inactive_style, track_active_style, thumb_style`.
  */
 @Generated
 class Slider internal constructor(
@@ -285,7 +285,7 @@ class Slider internal constructor(
     /**
      * Can be created using the method [sliderTextStyle].
      * 
-     * Required properties: `font_size`.
+     * Required parameters: `font_size`.
      */
     @Generated
     class TextStyle internal constructor(

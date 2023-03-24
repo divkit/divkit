@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [integerVariable].
  * 
- * Required properties: `value, name`.
+ * Required parameters: `value, name`.
  */
 @Generated
 class IntegerVariable internal constructor(

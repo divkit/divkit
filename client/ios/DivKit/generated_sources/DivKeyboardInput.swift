@@ -14,6 +14,7 @@ public final class DivKeyboardInput {
     case number = "number"
     case email = "email"
     case uri = "uri"
+    case decimal = "decimal"
   }
 
   public static let type: String = "keyboard"

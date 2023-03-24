@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [trigger].
  * 
- * Required properties: `condition, actions`.
+ * Required parameters: `condition, actions`.
  */
 @Generated
 class Trigger internal constructor(

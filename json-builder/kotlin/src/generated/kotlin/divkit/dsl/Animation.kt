@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [animation].
  * 
- * Required properties: `name`.
+ * Required parameters: `name`.
  */
 @Generated
 class Animation internal constructor(

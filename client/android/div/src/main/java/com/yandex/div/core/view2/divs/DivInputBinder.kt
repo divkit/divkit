@@ -183,9 +183,10 @@ internal class DivInputBinder @Inject constructor(
                     InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
             DivInput.KeyboardType.URI -> InputType.TYPE_CLASS_TEXT or
                     InputType.TYPE_TEXT_VARIATION_URI
-            DivInput.KeyboardType.NUMBER -> InputType.TYPE_CLASS_NUMBER or
-                    InputType.TYPE_NUMBER_FLAG_DECIMAL
+            DivInput.KeyboardType.NUMBER -> InputType.TYPE_CLASS_NUMBER
             DivInput.KeyboardType.PHONE -> InputType.TYPE_CLASS_PHONE
+            DivInput.KeyboardType.DECIMAL -> InputType.TYPE_CLASS_NUMBER or
+             InputType.TYPE_NUMBER_FLAG_DECIMAL
         }
     }
 

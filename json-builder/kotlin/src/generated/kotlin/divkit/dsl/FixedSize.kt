@@ -22,13 +22,13 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [fixedSize].
  * 
- * Required properties: `value, type`.
+ * Required parameters: `value, type`.
  */
 @Generated
 class FixedSize internal constructor(
     @JsonIgnore
     val properties: Properties,
-) : Size, RadialGradientRadius {
+) : RadialGradientRadius, Size {
     @JsonAnyGetter
     internal fun getJsonProperties(): Map<String, Any> = properties.mergeWith(
         mapOf("type" to "fixed")

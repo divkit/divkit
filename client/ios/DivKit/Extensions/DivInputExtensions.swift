@@ -111,11 +111,13 @@ extension DivInput.KeyboardType {
     case .phone:
       return .phonePad
     case .number:
-      return .numbersAndPunctuation
+      return .numberPad
     case .email:
       return .emailAddress
     case .uri:
       return .URL
+    case .decimal:
+      return .decimalPad
     }
   }
 }
@@ -128,11 +130,13 @@ extension DivKeyboardInput.KeyboardType {
     case .phone:
       return .phonePad
     case .number:
-      return .numbersAndPunctuation
+      return .numberPad
     case .email:
       return .emailAddress
     case .uri:
       return .URL
+    case .decimal:
+      return .decimalPad
     }
   }
 }

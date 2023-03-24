@@ -22,7 +22,7 @@ import kotlin.collections.Map
  * 
  * Can be created using the method [grid].
  * 
- * Required properties: `type, items, column_count`.
+ * Required parameters: `type, items, column_count`.
  */
 @Generated
 class Grid internal constructor(
@@ -83,7 +83,7 @@ class Grid internal constructor(
          */
         val action: Property<Action>?,
         /**
-         * Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+         * Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
          * Default value: `{"name": "fade", "start_value": 1, "end_value": 0.6, "duration": 100 }`.
          */
         val actionAnimation: Property<Animation>?,
@@ -263,7 +263,7 @@ class Grid internal constructor(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -375,7 +375,7 @@ fun DivScope.grid(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -485,7 +485,7 @@ fun DivScope.gridProps(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -595,7 +595,7 @@ fun TemplateScope.gridRefs(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -707,7 +707,7 @@ fun Grid.override(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -881,7 +881,7 @@ fun Grid.evaluate(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
@@ -994,7 +994,7 @@ fun Component<Grid>.override(
 /**
  * @param accessibility Accessibility settings.
  * @param action One action when clicking on an element. Not used if the `actions` parameter is set.
- * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, and `set`.
+ * @param actionAnimation Click animation. The web only supports the following values: `fade`, `scale`, `native`, `no_animation` and `set`.
  * @param actions Multiple actions when clicking on an element.
  * @param alignmentHorizontal Horizontal alignment of an element inside the parent element.
  * @param alignmentVertical Vertical alignment of an element inside the parent element.
