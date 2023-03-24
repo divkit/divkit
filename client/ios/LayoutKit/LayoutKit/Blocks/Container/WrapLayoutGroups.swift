@@ -1,3 +1,4 @@
+import BaseTiny
 import Foundation
 
 struct WrapLayoutGroups {
@@ -41,7 +42,8 @@ struct WrapLayoutGroups {
   private mutating func makeGroups() {
     addStartLineSeparator()
     children.forEach { child in
-      guard !child.isResizable(for: layoutDirection.opposite) else { return }
+      guard !child.isResizable(for: layoutDirection.opposite) && !child
+        .isConstrained(for: layoutDirection.opposite) else { return }
       if child.isResizable(for: layoutDirection) {
         startNewLine()
         var childSize = child.content.size(forResizableBlockSize: size)
@@ -57,13 +59,23 @@ struct WrapLayoutGroups {
         }
         addChild(child: child, size: childSize)
       } else {
-        let childSize = child.content.size(forResizableBlockSize: .zero)
+        let childSize = child.content.sizeFor(
+          widthOfHorizontallyResizableBlock: .zero,
+          heightOfVerticallyResizableBlock: .zero,
+          constrainedWidth: keyPath == \.width ?
+            size[keyPath: keyPath] : .infinity,
+          constrainedHeight: keyPath == \.height ?
+            size[keyPath: keyPath] : .infinity
+        )
         if childSize.isEmpty {
           return
         }
         if offset + childSize[keyPath: keyPath] + separatorOffset > size[keyPath: keyPath] {
           startNewLine()
-          addChild(child: child, size: childSize)
+          addChild(
+            child: child,
+            size: childSize
+          )
         } else {
           addChild(child: child, size: childSize)
         }
@@ -204,6 +216,15 @@ extension ContainerBlock.Child {
       return content.isHorizontallyResizable
     case .vertical:
       return content.isVerticallyResizable
+    }
+  }
+
+  fileprivate func isConstrained(for layoutDirection: ContainerBlock.LayoutDirection) -> Bool {
+    switch layoutDirection {
+    case .horizontal:
+      return content.isHorizontallyConstrained
+    case .vertical:
+      return content.isVerticallyConstrained
     }
   }
 }
