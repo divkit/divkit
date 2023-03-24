@@ -22,15 +22,15 @@ public final class DivTriggersStorage {
     self.variablesStorage = variablesStorage
     self.actionHandler = actionHandler
     self.urlOpener = urlOpener
-    variablesStorage.changeEvents.addObserver { [unowned self] event in
+    variablesStorage.addObserver { [unowned self] event in
       let cardIdTriggersPairs = makeCardIdTriggersPairsForEvent(event)
       cardIdTriggersPairs.forEach { (cardId, triggers) in
         tryRunTriggerActions(
           triggers: triggers,
           cardId: cardId,
           changesVariablesNames: event.kind.names,
-          newVariables: event.variables.new.makeVariables(for: cardId),
-          oldVariables: event.variables.old.makeVariables(for: cardId)
+          newVariables: event.newValues.makeVariables(for: cardId),
+          oldVariables: event.oldValues.makeVariables(for: cardId)
         )
       }
     }.dispose(in: autodisposePool)

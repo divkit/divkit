@@ -36,9 +36,9 @@ public enum DivVariableValue: Equatable {
 public typealias DivVariables = [DivVariableName: DivVariableValue]
 
 public final class DivVariablesStorage {
-  public struct Variables {
-    var global: DivVariables = [:]
-    var local: [DivCardID: DivVariables] = [:]
+  public struct Values {
+    public internal(set) var global: DivVariables = [:]
+    public internal(set) var local: [DivCardID: DivVariables] = [:]
 
     func makeVariables(for cardId: DivCardID) -> DivVariables {
       global + (local[cardId] ?? [:])
@@ -52,25 +52,14 @@ public final class DivVariablesStorage {
       case global(Set<DivVariableName>)
     }
 
-    public struct VariablesValues {
-      public let old: Variables
-      public let new: Variables
-
-      init(
-        old: Variables,
-        new: Variables
-      ) {
-        self.old = old
-        self.new = new
-      }
-    }
-
     public let kind: Kind
-    public let variables: VariablesValues
+    public let oldValues: Values
+    public let newValues: Values
 
-    init(kind: Kind, variables: VariablesValues) {
+    init(kind: Kind, oldValues: Values, newValues: Values) {
       self.kind = kind
-      self.variables = variables
+      self.oldValues = oldValues
+      self.newValues = newValues
     }
   }
 
@@ -79,7 +68,7 @@ public final class DivVariablesStorage {
     changeEventsPipe.signal
   }
 
-  private var storage = Variables()
+  private var storage = Values()
   private let rwLock = RWLock()
 
   public init() {}
@@ -96,19 +85,20 @@ public final class DivVariablesStorage {
     cardId: DivCardID,
     variables: DivVariables
   ) {
-    let oldVariables = storage
+    let oldValues = storage
     rwLock.write {
       storage.local[cardId] = variables
     }
 
     let changedVariables = makeChangedVariables(
-      old: rwLock.read { oldVariables.local[cardId] ?? [:] },
+      old: rwLock.read { oldValues.local[cardId] ?? [:] },
       new: variables
     )
     if changedVariables.isEmpty { return }
-    update(with: ChangeEvent(
+    update(ChangeEvent(
       kind: .local(cardId, changedVariables),
-      variables: ChangeEvent.VariablesValues(old: oldVariables, new: storage)
+      oldValues: oldValues,
+      newValues: storage
     ))
   }
 
@@ -128,14 +118,15 @@ public final class DivVariablesStorage {
     variables: DivVariables,
     triggerUpdate: Bool
   ) {
-    let oldVariables = storage
+    let oldValues = storage
     storage.global = variables
     if triggerUpdate {
-      let changedVariables = makeChangedVariables(old: oldVariables.global, new: variables)
+      let changedVariables = makeChangedVariables(old: oldValues.global, new: variables)
       if changedVariables.isEmpty { return }
-      update(with: ChangeEvent(
+      update(ChangeEvent(
         kind: .global(changedVariables),
-        variables: ChangeEvent.VariablesValues(old: oldVariables, new: storage)
+        oldValues: oldValues,
+        newValues: storage
       ))
     }
   }
@@ -155,11 +146,15 @@ public final class DivVariablesStorage {
 
   public func reset() {
     rwLock.write {
-      storage = Variables()
+      storage = Values()
     }
   }
 
-  private func update(with event: ChangeEvent) {
+  public func addObserver(_ action: @escaping (ChangeEvent) -> Void) -> Disposable {
+    changeEvents.addObserver(action)
+  }
+
+  private func update(_ event: ChangeEvent) {
     onMainThread { [weak self] in
       self?.changeEventsPipe.send(event)
     }
@@ -188,23 +183,25 @@ extension DivVariablesStorage: DivVariableUpdater {
     rwLock.write {
       var cardVariables = storage.local[cardId]
       if let localValue = cardVariables?[name] {
-        let oldStorage = storage
+        let oldValues = storage
         let isUpdated = cardVariables?
           .update(name: name, oldValue: localValue, value: value) ?? false
         storage.local[cardId] = cardVariables
         if isUpdated {
-          update(with: ChangeEvent(
+          update(ChangeEvent(
             kind: .local(cardId, [name]),
-            variables: ChangeEvent.VariablesValues(old: oldStorage, new: storage)
+            oldValues: oldValues,
+            newValues: storage
           ))
         }
       } else if let globalValue = storage.global[name] {
-        let oldVariables = storage
+        let oldValues = storage
         let isUpdated = storage.global.update(name: name, oldValue: globalValue, value: value)
         if isUpdated {
-          update(with: ChangeEvent(
+          update(ChangeEvent(
             kind: .global([name]),
-            variables: ChangeEvent.VariablesValues(old: oldVariables, new: storage)
+            oldValues: oldValues,
+            newValues: storage
           ))
         }
       } else {
