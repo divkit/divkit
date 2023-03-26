@@ -16,7 +16,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -35,7 +36,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -48,7 +50,8 @@
       "variables": [],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -67,7 +70,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -86,7 +90,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -99,7 +104,8 @@
       "variables": [],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -118,7 +124,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -137,7 +144,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -150,7 +158,8 @@
       "variables": [],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -169,7 +178,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -188,7 +198,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -201,7 +212,8 @@
       "variables": [],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -225,7 +237,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -249,7 +262,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -268,7 +282,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -287,7 +302,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -306,7 +322,8 @@
       ],
       "platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -318,7 +335,8 @@
       },
       "variables": [],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -335,9 +353,10 @@
           "value": "#000"
         }
       ],
-      "platforms": [
+"platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -355,7 +374,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -366,9 +386,10 @@
         "value": "#FFFFFFFF"
       },
       "variables": [],
-      "platforms": [
+"platforms": [
         "android",
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -391,7 +412,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -414,7 +436,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -432,7 +455,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -450,7 +474,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -468,7 +493,8 @@
         }
       ],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     },
     {
@@ -480,7 +506,8 @@
       },
       "variables": [],
       "platforms": [
-        "web"
+        "web",
+        "ios"
       ]
     }
   ]

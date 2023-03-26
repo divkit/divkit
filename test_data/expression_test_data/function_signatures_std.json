@@ -197,7 +197,7 @@
           }
       ],
       "result_type": "integer",
-      "platforms": [ "android", "web" ]
+      "platforms": [ "android", "web", "ios" ]
     },
     {
       "name": "getNumberValue(string, number) number",
@@ -214,7 +214,7 @@
           }
       ],
       "result_type": "number",
-      "platforms": [ "android", "web" ]
+      "platforms": [ "android", "web", "ios" ]
     },
     {
       "name": "getStringValue(string, string) string",
@@ -231,7 +231,7 @@
           }
       ],
       "result_type": "string",
-      "platforms": [ "android", "web" ]
+      "platforms": [ "android", "web", "ios" ]
     },
     {
       "name": "getUrlValue(string, url) url",
@@ -248,7 +248,7 @@
           }
       ],
       "result_type": "url",
-      "platforms": ["web"]
+      "platforms": ["web", "ios"]
     },
     {
       "name": "getUrlValue(string, string) url",
@@ -265,7 +265,7 @@
           }
       ],
       "result_type": "url",
-      "platforms": ["web"]
+      "platforms": ["web", "ios"]
     },
     {
       "name": "getColorValue(string, color) color",
@@ -282,7 +282,7 @@
           }
       ],
       "result_type": "color",
-      "platforms": [ "android", "web" ]
+      "platforms": [ "android", "web", "ios" ]
     },
     {
       "name": "getColorValue(string, string) color",
@@ -299,7 +299,7 @@
           }
       ],
       "result_type": "color",
-      "platforms": [ "android", "web" ]
+      "platforms": [ "android", "web", "ios" ]
     },
     {
       "name": "getBooleanValue(string, boolean) boolean",
@@ -316,7 +316,7 @@
           }
       ],
       "result_type": "boolean",
-      "platforms": [ "android", "web" ]
+      "platforms": [ "android", "web", "ios" ]
     }
   ]
 }
