@@ -983,6 +983,10 @@
     "en": "Name of text storage variable.",
     "ru": "Название переменной для хранения текста."
   },
+  "div_input_raw_text_variable": {
+    "en": "Name of raw value storage variable.",
+    "ru": "Название переменной для хранения необработанного значения."
+  },
   "div_keyboard_input": {
     "en": "Keyboard input method.",
     "ru": "Способ ввода с клавиатуры."

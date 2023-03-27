@@ -56,6 +56,10 @@
           "$ref": "div-variable-name.json",
           "$description": "translations.json#/div_input_text_variable"
         },
+        "raw_text_variable": {
+          "$ref": "div-variable-name.json",
+          "$description": "translations.json#/div_input_raw_text_variable"
+        },
         "line_height": {
           "$ref": "common.json#/non_negative_integer",
           "$description": "translations.json#/div_input_line_height"
