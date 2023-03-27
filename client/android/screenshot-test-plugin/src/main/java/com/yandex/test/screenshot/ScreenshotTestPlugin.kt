@@ -57,6 +57,7 @@ class ScreenshotTestPlugin : Plugin<Project> {
                 if (screenshotTests.enableComparison) {
                     task.finalizedBy(CompareScreenshotsTask.NAME)
                 }
+                task.finalizedBy(ValidateTestResultsTask.NAME)
             }
         }
 

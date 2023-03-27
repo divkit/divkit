@@ -51,7 +51,6 @@ open class CompareScreenshotsTask : DefaultTask() {
     private fun loadExplicitScreenshotMatchMap() {
         try {
             referenceOverrides.load()
-            referenceOverrides.deleteReferenceFile()
         } catch (e: IOException) {
             throw GradleException("Failed to read references file!", e)
         }

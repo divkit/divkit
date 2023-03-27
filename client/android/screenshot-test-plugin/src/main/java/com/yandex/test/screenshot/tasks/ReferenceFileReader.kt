@@ -36,12 +36,6 @@ class ReferenceFileReader(fileDir: File) {
     fun resolveReferencePath(relativePath: String): String? {
         return references[relativePath]
     }
-
-    fun deleteReferenceFile() {
-        if (referencesFile.exists()) {
-            referencesFile.delete()
-        }
-    }
 }
 
 private data class FileReference(
