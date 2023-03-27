@@ -198,6 +198,7 @@
 		8CB960E828883B9A00D16E47 /* FunctionSignaturesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */; };
 		8CD1521028CF217B0061128B /* ExpressionResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */; };
 		8CDC72E928AA522F008F1925 /* template_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8CDC72E828AA522F008F1925 /* template_test_data */; };
+		8CE6934F29D1A70E001FC8BA /* ArrayOfEnums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE6934E29D1A70E001FC8BA /* ArrayOfEnums.swift */; };
 		8CF1296128B0018E00351F65 /* UrlInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296028B0018E00351F65 /* UrlInputView.swift */; };
 		8CF1296328B0021F00351F65 /* UserPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296228B0021F00351F65 /* UserPreferences.swift */; };
 		8CF1296528B0036F00351F65 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CF1296428B0036F00351F65 /* Themes.swift */; };
@@ -440,6 +441,7 @@
 		8CB960E728883B9A00D16E47 /* FunctionSignaturesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionSignaturesTests.swift; sourceTree = "<group>"; };
 		8CD1520F28CF217B0061128B /* ExpressionResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressionResolverTests.swift; sourceTree = "<group>"; };
 		8CDC72E828AA522F008F1925 /* template_test_data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = template_test_data; path = ../../../test_data/template_test_data; sourceTree = "<group>"; };
+		8CE6934E29D1A70E001FC8BA /* ArrayOfEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayOfEnums.swift; sourceTree = "<group>"; };
 		8CF1296028B0018E00351F65 /* UrlInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UrlInputView.swift; sourceTree = "<group>"; };
 		8CF1296228B0021F00351F65 /* UserPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPreferences.swift; sourceTree = "<group>"; };
 		8CF1296428B0036F00351F65 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
@@ -672,6 +674,7 @@
 				8CDC72E828AA522F008F1925 /* template_test_data */,
 				8C1CF661286B5A3A0016D0A1 /* generated_sources */,
 				8C1CF643286B58A70016D0A1 /* generator_config.json */,
+				8CE6934E29D1A70E001FC8BA /* ArrayOfEnums.swift */,
 				8C1CF64A286B58A70016D0A1 /* ArrayOfNestedItemsTests.swift */,
 				8C1CF645286B58A70016D0A1 /* ArrayTests.swift */,
 				8C1CF640286B58A70016D0A1 /* ArrayWithTransformTests.swift */,
@@ -1521,6 +1524,7 @@
 				8C1CF65B286B58A70016D0A1 /* StrictArrayTests.swift in Sources */,
 				8C1CF691286B5A3B0016D0A1 /* Entity.swift in Sources */,
 				8C1CF659286B58A70016D0A1 /* Expected.swift in Sources */,
+				8CE6934F29D1A70E001FC8BA /* ArrayOfEnums.swift in Sources */,
 				8C1CF69D286B5A3B0016D0A1 /* EntityTemplate.swift in Sources */,
 				8C1CF69E286B5A3B0016D0A1 /* EntityWithOptionalComplexProperty.swift in Sources */,
 				8C1CF699286B5A3B0016D0A1 /* EntityWithComplexPropertyWithDefaultValueTemplate.swift in Sources */,

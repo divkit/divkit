@@ -60,6 +60,37 @@ public func deserialize<T: ValidSerializationValue, U>(
 }
 
 @inlinable
+public func deserialize<T: ValidSerializationValue>(
+  _ value: Any,
+  validator: AnyArrayValueValidator<T>? = nil
+) -> DeserializationResult<[T]> {
+  deserialize(value, transform: { $0 } as ((T) -> T?), validator: validator)
+}
+
+@inlinable
+public func deserialize<T: RawRepresentable>(
+  _ value: Any,
+  validator: AnyArrayValueValidator<T>? = nil
+) -> DeserializationResult<[T]> where T.RawValue: ValidSerializationValue {
+  deserialize(value, transform: T.init, validator: validator)
+}
+
+@inlinable
+public func deserialize<T: ValidSerializationValue, U>(
+  _ value: Any,
+  transform: (T) -> U?,
+  validator: AnyArrayValueValidator<U>? = nil
+) -> DeserializationResult<[U]> {
+  let transformWithResult: (T) -> DeserializationResult<U> = {
+    guard let transformed = transform($0) else {
+      return .failure(NonEmptyArray(.invalidValue(result: nil, value: value)))
+    }
+    return .success(transformed)
+  }
+  return deserialize(value, transform: transformWithResult, validator: validator)
+}
+
+@inlinable
 public func deserialize<T: ValidSerializationValue, U>(
   _ value: Any,
   transform: (T) -> DeserializationResult<U>,
