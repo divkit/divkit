@@ -154,13 +154,15 @@ class Div2View private constructor(
         if (oldRuntime != newRuntime) {
             oldRuntime?.clearBinding()
         }
+    }
 
+    private fun attachVariableTriggers() {
         if (bindOnAttachEnabled) {
             setActiveBindingRunnable = SingleTimeOnAttachCallback(this) {
-                newRuntime.onAttachedToWindow(this)
+                _expressionsRuntime?.onAttachedToWindow(this)
             }
         } else {
-            newRuntime.onAttachedToWindow(this)
+            _expressionsRuntime?.onAttachedToWindow(this)
         }
     }
 
@@ -293,6 +295,7 @@ class Div2View private constructor(
             divData = newDivData
             div2Component.patchManager.removePatch(dataTag)
             divDataChangedObservers.forEach { it.onDivPatchApplied(newDivData) }
+            attachVariableTriggers()
             return true
         }
         return false
@@ -307,6 +310,8 @@ class Div2View private constructor(
         divData = data
 
         val result = switchToDivData(oldData, data)
+
+        attachVariableTriggers()
 
         if (bindOnAttachEnabled && oldData == null) {
             histogramReporter?.onBindingPaused()
@@ -832,6 +837,7 @@ class Div2View private constructor(
             if (isAutoanimations) {
                 div2Component.divStateChangeListener.onDivAnimatedStateChanged(this)
             }
+            attachVariableTriggers()
             histogramReporter?.onRebindingFinished()
         } catch (error: Exception) {
             updateNow(newData, dataTag)
