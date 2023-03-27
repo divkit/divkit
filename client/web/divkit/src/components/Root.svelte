@@ -153,23 +153,6 @@
     const awaitingGlobalVariables = new Map<string, Writable<any>>();
     let timersController: TimersController | null = null;
 
-    /** @deprecated */
-    export function setVariable(name: string, value: VariableValue): void {
-        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-            const varInstance = variables.get(name);
-            if (varInstance) {
-                varInstance.setValue(value);
-            }
-        }
-    }
-
-    /** @deprecated */
-    export function getVariable(name: string): VariableValue | undefined {
-        const varInstance = variables.get(name);
-
-        return varInstance?.getValue();
-    }
-
     function getVariableInstance(name: string, type: VariableType): Variable | undefined {
         const variable = variables.get(name);
 

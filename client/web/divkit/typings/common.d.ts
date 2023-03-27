@@ -140,10 +140,6 @@ export type ErrorCallback = (details: {
 export interface DivkitInstance {
     $destroy(): void;
     execAction(action: Action | VisibilityAction): void;
-    /** @deprecated */
-    getVariable(name: string): string | number | undefined;
-    /** @deprecated */
-    setVariable(name: string, value: string | number): void;
     setTheme(theme: Theme): void;
 }
 
