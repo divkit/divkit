@@ -1,3 +1,22 @@
+## 23.7.0
+
+# Android Client:
+Additions:
+* Added cache for expressions
+
+Fixes:
+* Fixed concurrent modification exception in div storage
+* Fixed IndexOutOfBoundsException in DivGallery
+* Fixed declaration of new local variables
+* Fixed scroll view for demo-app
+
+# iOS Client:
+* Added overflow parameter support in actions for DivTabs
+* Allowed zero duration
+
+# Web Client:
+* Removed missing template field warning
+
 ## 23.6.0
 
 # Android Client:

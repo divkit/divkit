@@ -1,3 +1,9 @@
+## 23.7.0 (March 27, 2023)
+
+Fixes and changes:
+* Removed missing template field warning
+
+
 ## 23.6.0 (March 20, 2023)
 
 Additions:
