@@ -3,7 +3,6 @@ package com.yandex.div.core.view2.divs
 import android.widget.ImageView
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.images.BitmapSource
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
@@ -16,6 +15,7 @@ import com.yandex.div.core.view2.divs.widgets.DivImageView
 import com.yandex.div.core.view2.divs.widgets.applyFilters
 import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.AspectImageView
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver

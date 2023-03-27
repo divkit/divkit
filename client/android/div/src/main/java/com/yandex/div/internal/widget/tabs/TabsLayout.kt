@@ -13,12 +13,12 @@ import androidx.core.view.children
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.divs.tabs.DivTabsAdapter
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderDrawer
 import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.view2.divs.widgets.drawClipped
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder
 import com.yandex.div2.DivTabs

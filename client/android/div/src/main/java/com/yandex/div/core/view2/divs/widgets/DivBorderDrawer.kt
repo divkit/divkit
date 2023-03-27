@@ -16,7 +16,6 @@ import androidx.core.graphics.withSave
 import androidx.core.graphics.withTranslation
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.util.getCornerRadii
 import com.yandex.div.core.view2.ShadowCache
 import com.yandex.div.core.view2.divs.dpToPx
@@ -24,6 +23,7 @@ import com.yandex.div.core.view2.divs.dpToPxF
 import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.toPx
 import com.yandex.div.internal.KLog
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.util.dpToPx
 import com.yandex.div.internal.widget.isInTransientHierarchy
 import com.yandex.div.json.expressions.ExpressionResolver

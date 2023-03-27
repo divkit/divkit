@@ -6,6 +6,7 @@ import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.images.DivImagePriority
 import com.yandex.div.core.images.LoadReference
+import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBackground

@@ -23,6 +23,7 @@ import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
+import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.TabsLayout
 import com.yandex.div.json.expressions.ExpressionResolver

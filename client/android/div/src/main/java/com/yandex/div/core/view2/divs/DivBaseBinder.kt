@@ -10,7 +10,6 @@ import androidx.transition.TransitionManager
 import androidx.transition.Visibility
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.extension.DivExtensionController
 import com.yandex.div.core.tooltip.DivTooltipController
 import com.yandex.div.core.util.expressionSubscriber
@@ -22,6 +21,7 @@ import com.yandex.div.core.view2.animations.allowsTransitionsOnVisibilityChange
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.internal.KAssert
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAction

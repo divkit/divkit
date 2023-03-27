@@ -19,7 +19,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.children
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.doOnPreDraw
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.expression.suppressExpressionErrors
 import com.yandex.div.core.font.DivTypefaceProvider
 import com.yandex.div.core.view2.Div2View
@@ -28,6 +27,7 @@ import com.yandex.div.core.view2.divs.widgets.DivBorderSupports
 import com.yandex.div.core.widget.AspectView
 import com.yandex.div.core.widget.DivLayoutParams
 import com.yandex.div.internal.Log
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.CircleDrawable
 import com.yandex.div.internal.drawable.RoundedRectDrawable
 import com.yandex.div.internal.drawable.ScalingDrawable

@@ -10,7 +10,7 @@ import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageDownloadCallback
 import com.yandex.div.core.images.LoadReference
 import com.yandex.div.core.view2.DivImagePreloader
-import com.yandex.div.core.view2.DivVisitor
+import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer

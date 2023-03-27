@@ -2,8 +2,8 @@ package com.yandex.div.core.view2.divs
 
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.downloader.DivPatchCache
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.Div2View
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div2.Div
 import com.yandex.div2.DivVisibility
 

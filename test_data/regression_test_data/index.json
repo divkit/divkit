@@ -1643,6 +1643,7 @@
     {
       "title": "SizeProvider extension",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [
@@ -1657,6 +1658,7 @@
     {
       "title": "SizeProvider extension (recursive)",
       "platforms": [
+        "android",
         "ios"
       ],
       "tags": [

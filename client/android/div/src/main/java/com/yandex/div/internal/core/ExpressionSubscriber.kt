@@ -1,9 +1,9 @@
-package com.yandex.div.core.expression
+package com.yandex.div.internal.core
 
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.view2.Releasable
 
-internal interface ExpressionSubscriber : Releasable {
+interface ExpressionSubscriber : Releasable {
 
     val subscriptions: MutableList<Disposable>
 

@@ -2,19 +2,17 @@ package com.yandex.div.core.view2.divs.widgets
 
 import android.content.Context
 import android.graphics.Canvas
-import android.text.Spannable
 import android.text.Spanned
 import android.util.AttributeSet
 import androidx.core.graphics.withTranslation
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.util.text.DivTextRangesBackgroundHelper
-import com.yandex.div.core.view2.divs.DivBackgroundSpan
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.AdaptiveMaxLines
 import com.yandex.div.core.widget.invalidateAfter
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.widget.SuperLineHeightTextView
 import com.yandex.div.internal.widget.TransientView

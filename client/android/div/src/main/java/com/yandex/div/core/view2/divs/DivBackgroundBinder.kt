@@ -15,11 +15,11 @@ import com.yandex.div.R
 import com.yandex.div.core.DivIdLoggingImageDownloadCallback
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.images.CachedBitmap
 import com.yandex.div.core.images.DivImageLoader
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.divs.widgets.applyFilters
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.drawable.LinearGradientDrawable
 import com.yandex.div.internal.drawable.NinePatchDrawable
 import com.yandex.div.internal.drawable.RadialGradientDrawable

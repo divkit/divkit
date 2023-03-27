@@ -6,11 +6,11 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.ViewPager2Wrapper
 import com.yandex.div.core.widget.invalidateAfter
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.OnInterceptTouchEventListener
 import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div.internal.widget.TransientView

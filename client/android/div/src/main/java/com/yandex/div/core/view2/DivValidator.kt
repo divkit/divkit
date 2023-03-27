@@ -2,6 +2,7 @@ package com.yandex.div.core.view2
 
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
+import com.yandex.div.internal.core.DivVisitor
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivContainer

@@ -11,7 +11,6 @@ import com.yandex.div.core.Div2Logger
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.dagger.Names
 import com.yandex.div.core.downloader.DivPatchCache
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.font.DivTypefaceType
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.expressionSubscriber
@@ -29,7 +28,7 @@ import com.yandex.div.core.view2.divs.applyPaddings
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.spToPx
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
-import com.yandex.div.json.expressions.Expression
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.util.UiThreadHandler
 import com.yandex.div.internal.viewpool.ViewPool
 import com.yandex.div.internal.widget.tabs.BaseDivTabbedCardUi
@@ -42,6 +41,7 @@ import com.yandex.div.internal.widget.tabs.TabTextStyleProvider
 import com.yandex.div.internal.widget.tabs.TabTitlesLayoutView
 import com.yandex.div.internal.widget.tabs.TabView
 import com.yandex.div.internal.widget.tabs.TabsLayout
+import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivEdgeInsets
 import com.yandex.div2.DivFontWeight

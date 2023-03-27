@@ -3,10 +3,10 @@ package com.yandex.div.core.view2.divs.widgets
 import android.content.Context
 import android.graphics.Canvas
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.widget.invalidateAfter
 import com.yandex.div.core.widget.wraplayout.WrapLayout
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.internal.widget.TransientView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivBorder

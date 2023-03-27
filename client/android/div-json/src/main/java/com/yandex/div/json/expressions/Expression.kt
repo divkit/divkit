@@ -1,8 +1,6 @@
 package com.yandex.div.json.expressions
 
-import com.yandex.div.core.CompositeDisposable
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.plusAssign
 import com.yandex.div.evaluable.Evaluable
 import com.yandex.div.evaluable.EvaluableException
 import com.yandex.div.internal.parser.Converter
@@ -116,7 +114,7 @@ abstract class Expression<T : Any> {
 
         override fun observe(resolver: ExpressionResolver, callback: (T) -> Unit): Disposable {
             val variablesName = try {
-                getEvaluable().variables
+                getVariablesName()
             } catch (e: Exception) {
                 logError(resolveFailed(expressionKey, rawExpression, e), resolver)
                 return Disposable.NULL
@@ -128,6 +126,8 @@ abstract class Expression<T : Any> {
                 callback(evaluate(resolver))
             }
         }
+
+        fun getVariablesName(): List<String> = getEvaluable().variables
 
         private fun tryResolveOrUseLast(resolver: ExpressionResolver): T {
             try {

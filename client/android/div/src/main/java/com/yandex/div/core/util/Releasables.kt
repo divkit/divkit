@@ -6,8 +6,8 @@ import android.view.View
 import androidx.collection.SparseArrayCompat
 import com.yandex.div.R
 import com.yandex.div.core.Disposable
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.view2.Releasable
+import com.yandex.div.internal.core.ExpressionSubscriber
 
 internal val View.releasableList: Iterable<Releasable>?
     get() = (getTag(R.id.div_releasable_list) as? SparseArrayCompat<Releasable>)?.toIterable()

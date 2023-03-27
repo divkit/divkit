@@ -8,7 +8,6 @@ import androidx.core.view.children
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.util.canBeReused
 import com.yandex.div.core.util.expressionSubscriber
@@ -27,6 +26,7 @@ import com.yandex.div.core.view2.errors.ErrorCollector
 import com.yandex.div.core.view2.errors.ErrorCollectors
 import com.yandex.div.core.widget.ShowSeparatorsMode
 import com.yandex.div.core.widget.wraplayout.WrapDirection
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivBase

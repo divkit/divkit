@@ -1,4 +1,4 @@
-package com.yandex.div.core.view2
+package com.yandex.div.internal.core
 
 import com.yandex.div.internal.Assert
 import com.yandex.div.json.expressions.ExpressionResolver
@@ -19,7 +19,7 @@ import com.yandex.div2.DivState
 import com.yandex.div2.DivTabs
 import com.yandex.div2.DivText
 
-internal abstract class DivVisitor<T> {
+abstract class DivVisitor<T> {
 
     protected fun visit(div: Div, resolver: ExpressionResolver): T {
         return when (div) {

@@ -6,13 +6,13 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.downloader.DivPatchCache
 import com.yandex.div.core.downloader.DivPatchManager
-import com.yandex.div.core.expression.ExpressionSubscriber
 import com.yandex.div.core.state.DivStatePath
 import com.yandex.div.core.view2.Div2View
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.DivViewBinder
 import com.yandex.div.core.view2.divs.widgets.DivGridLayout
 import com.yandex.div.core.widget.DivLayoutParams
+import com.yandex.div.internal.core.ExpressionSubscriber
 import com.yandex.div.json.expressions.Expression
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.DivAlignmentHorizontal
