@@ -25,6 +25,7 @@ class DivItemChangeActionHandlerTest {
     }
     private val view = mock<DivViewFacade> {
         on { view } doReturn targetView
+        on { expressionResolver } doReturn mock()
     }
     private val divItemsView = mock<DivViewWithItems> {
         on { currentItem } doReturn CURRENT_ITEM

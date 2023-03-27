@@ -17,7 +17,6 @@ internal abstract class DivViewVisitor {
     open fun visit(view: DivPagerView) {}
     open fun visit(view: DivRecyclerView) {}
     open fun visit(view: DivSeparatorView) {}
-    open fun visit(view: DivSnappyRecyclerView) {}
     open fun visit(view: DivStateLayout) {}
     open fun visit(view: TabsLayout) {}
     open fun visit(view: DivSliderView) {}
@@ -47,10 +46,6 @@ internal fun DivViewVisitor.visitViewTree(view: View) {
             view.visitChild(this::visitViewTree)
         }
         is DivRecyclerView -> {
-            visit(view)
-            view.visitChild(this::visitViewTree)
-        }
-        is DivSnappyRecyclerView -> {
             visit(view)
             view.visitChild(this::visitViewTree)
         }

@@ -44,8 +44,6 @@ internal class ReleaseViewVisitor @Inject constructor(
 
     override fun visit(view: DivSeparatorView) = releaseInternal(view, view.div)
 
-    override fun visit(view: DivSnappyRecyclerView) = releaseInternal(view, view.div)
-
     override fun visit(view: DivStateLayout) = releaseInternal(view, view.divState)
 
     override fun visit(view: DivSliderView) = releaseInternal(view, view.div)

@@ -20,7 +20,6 @@ import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
-import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
 import com.yandex.div.internal.core.DivVisitor
@@ -32,7 +31,6 @@ import com.yandex.div2.DivContainer
 import com.yandex.div2.DivContainer.Orientation
 import com.yandex.div2.DivCustom
 import com.yandex.div2.DivGallery
-import com.yandex.div2.DivGallery.ScrollMode.PAGING
 import com.yandex.div2.DivGifImage
 import com.yandex.div2.DivGrid
 import com.yandex.div2.DivImage
@@ -63,8 +61,7 @@ internal class DivViewCreator @Inject constructor(
         viewPool.register(TAG_LINEAR_CONTAINER, { DivLinearLayout(context) }, 12)
         viewPool.register(TAG_WRAP_CONTAINER, { DivWrapLayout(context) }, 4)
         viewPool.register(TAG_GRID, { DivGridLayout(context) }, 4)
-        viewPool.register(TAG_GALLERY, { DivRecyclerView(context) }, 4)
-        viewPool.register(TAG_SNAPPY_GALLERY, { DivSnappyRecyclerView(context) }, 2)
+        viewPool.register(TAG_GALLERY, { DivRecyclerView(context) }, 6)
         viewPool.register(TAG_PAGER, { DivPagerView(context) }, 2)
         viewPool.register(TAG_TABS, { TabsLayout(context) }, 2)
         viewPool.register(TAG_STATE, { DivStateLayout(context) }, 4)
@@ -111,13 +108,7 @@ internal class DivViewCreator @Inject constructor(
         return view
     }
 
-    override fun visit(data: DivGallery, resolver: ExpressionResolver): View {
-        return if (PAGING == data.scrollMode.evaluate(resolver)) {
-            viewPool.obtain(TAG_SNAPPY_GALLERY)
-        } else {
-            viewPool.obtain(TAG_GALLERY)
-        }
-    }
+    override fun visit(data: DivGallery, resolver: ExpressionResolver): View = viewPool.obtain(TAG_GALLERY)
 
     override fun visit(data: DivPager, resolver: ExpressionResolver): View = viewPool.obtain(TAG_PAGER)
 
@@ -143,7 +134,6 @@ internal class DivViewCreator @Inject constructor(
         const val TAG_WRAP_CONTAINER = "DIV2.WRAP_CONTAINER_VIEW"
         const val TAG_GRID = "DIV2.GRID_VIEW"
         const val TAG_GALLERY = "DIV2.GALLERY_VIEW"
-        const val TAG_SNAPPY_GALLERY = "DIV2.SNAPPY_GALLERY_VIEW"
         const val TAG_PAGER = "DIV2.PAGER_VIEW"
         const val TAG_TABS = "DIV2.TAB_VIEW"
         const val TAG_STATE = "DIV2.STATE"

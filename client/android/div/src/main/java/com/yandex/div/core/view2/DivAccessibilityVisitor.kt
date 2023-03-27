@@ -13,7 +13,6 @@ import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
-import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
 import com.yandex.div.core.view2.divs.widgets.DivWrapLayout
@@ -47,8 +46,6 @@ internal class DivAccessibilityVisitor(
     override fun visit(view: DivRecyclerView) = updateAccessibilityMode(view, view.div)
 
     override fun visit(view: DivSeparatorView) = updateAccessibilityMode(view, view.div)
-
-    override fun visit(view: DivSnappyRecyclerView) = updateAccessibilityMode(view, view.div)
 
     override fun visit(view: DivStateLayout) = updateAccessibilityMode(view, view.divState)
 

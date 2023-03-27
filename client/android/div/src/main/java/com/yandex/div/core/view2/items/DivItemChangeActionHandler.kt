@@ -37,7 +37,7 @@ internal object DivItemChangeActionHandler {
         }
         val targetView = view.view.findViewWithTag<View>(id) ?: return false
         val authority = uri.authority
-        val viewWithItems = DivViewWithItems.create(targetView) { direction(authority) } ?: return false
+        val viewWithItems = DivViewWithItems.create(targetView, view.expressionResolver) { direction(authority) } ?: return false
         // TODO(MORDAANDROID-663): Enable navigation for PagingGallery
         if (!isItemNavigationSupported(viewWithItems)) {
             return false

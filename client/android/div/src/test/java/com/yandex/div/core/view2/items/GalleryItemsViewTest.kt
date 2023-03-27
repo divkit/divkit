@@ -4,9 +4,10 @@ import android.content.Context
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
+import com.yandex.div.core.asExpression
 import com.yandex.div.core.view2.disableAssertions
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
+import com.yandex.div2.DivGallery
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -31,9 +32,10 @@ class GalleryItemsViewTest {
     }
     private val recyclerView = mock<DivRecyclerView> {
         on { layoutManager } doReturn layoutManager
+        on { div } doReturn createDivGallery(DivGallery.ScrollMode.DEFAULT)
     }
 
-    private val underTest = createUnderTest<DivRecyclerView>()
+    private val underTest = createUnderTest()
 
     @Test
     fun `get current item on direction next and has completely visible item in horizontal`() {
@@ -79,7 +81,7 @@ class GalleryItemsViewTest {
 
     @Test
     fun `get current item on direction previous with completely visible items when cannot scroll horizontally`() {
-        val underTest = createUnderTest<DivRecyclerView>(direction = Direction.PREVIOUS)
+        val underTest = createUnderTest(direction = Direction.PREVIOUS)
         whenCanScrollHorizontally(canScroll = false)
         whenever(layoutManager.findFirstCompletelyVisibleItemPosition()).thenReturn(5)
 
@@ -106,7 +108,7 @@ class GalleryItemsViewTest {
 
     @Test
     fun `get current item on direction previous with completely visible items when cannot scroll vertically`() {
-        val underTest = createUnderTest<DivRecyclerView>(direction = Direction.PREVIOUS)
+        val underTest = createUnderTest(direction = Direction.PREVIOUS)
         whenCanScrollVertically(canScroll = false)
         whenever(layoutManager.findFirstCompletelyVisibleItemPosition()).thenReturn(5)
 
@@ -134,7 +136,7 @@ class GalleryItemsViewTest {
 
     @Test
     fun `get current item on direction previous and has completely visible item`() {
-        val underTest = createUnderTest<DivRecyclerView>(direction = Direction.PREVIOUS)
+        val underTest = createUnderTest(direction = Direction.PREVIOUS)
         whenever(layoutManager.findFirstCompletelyVisibleItemPosition()).thenReturn(5)
 
         Assert.assertEquals(5, underTest.currentItem)
@@ -142,7 +144,7 @@ class GalleryItemsViewTest {
 
     @Test
     fun `get current item on direction previous and no completely visible item`() {
-        val underTest = createUnderTest<DivRecyclerView>(direction = Direction.PREVIOUS)
+        val underTest = createUnderTest(direction = Direction.PREVIOUS)
         whenever(layoutManager.findFirstCompletelyVisibleItemPosition()).thenReturn(RecyclerView.NO_POSITION)
         whenever(layoutManager.findLastVisibleItemPosition()).thenReturn(4)
 
@@ -151,7 +153,7 @@ class GalleryItemsViewTest {
 
     @Test
     fun `set current item on snapping recycler view`() {
-        val view = mock<DivSnappyRecyclerView>()
+        val view = mock<DivRecyclerView> { on { div } doReturn createDivGallery(DivGallery.ScrollMode.PAGING) }
         whenever(view.layoutManager).thenReturn(layoutManager)
         val underTest = createUnderTest(drv = view)
 
@@ -185,10 +187,13 @@ class GalleryItemsViewTest {
         whenever(recyclerView.canScrollVertically(1)).thenReturn(canScroll)
     }
 
-    private inline fun <reified T : RecyclerView> createUnderTest(
-        drv: T = recyclerView as T,
+    private fun createUnderTest(
+        drv: DivRecyclerView = recyclerView,
         direction: Direction = Direction.NEXT
-    ) = DivViewWithItems.create(drv) { direction }!!
+    ) = DivViewWithItems.create(drv, mock()) { direction }!!
+
+    private fun createDivGallery(scrollMode: DivGallery.ScrollMode): DivGallery =
+        DivGallery(scrollMode = scrollMode.asExpression(), items = emptyList())
 
     @Implements(LinearSmoothScroller::class)
     class ShadowSmoothScroller {

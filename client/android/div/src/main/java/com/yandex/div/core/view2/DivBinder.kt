@@ -3,7 +3,6 @@ package com.yandex.div.core.view2
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.MainThread
-import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.dagger.DivScope
 import com.yandex.div.core.expression.suppressExpressionErrors
@@ -32,6 +31,7 @@ import com.yandex.div.core.view2.divs.widgets.DivInputView
 import com.yandex.div.core.view2.divs.widgets.DivLineHeightTextView
 import com.yandex.div.core.view2.divs.widgets.DivPagerIndicatorView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivSeparatorView
 import com.yandex.div.core.view2.divs.widgets.DivSliderView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
@@ -138,7 +138,7 @@ internal class DivBinder @Inject constructor(
     }
 
     private fun bindGallery(view: View, data: DivGallery, divView: Div2View, path: DivStatePath) {
-        galleryBinder.bindView(view as RecyclerView, data, divView, path)
+        galleryBinder.bindView(view as DivRecyclerView, data, divView, path)
     }
 
     private fun bindPager(view: View, data: DivPager, divView: Div2View, path: DivStatePath) {

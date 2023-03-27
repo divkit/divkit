@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivPagerView
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import com.yandex.div.internal.KAssert
 import com.yandex.div.internal.widget.tabs.TabsLayout
+import com.yandex.div.json.expressions.ExpressionResolver
+import com.yandex.div2.DivGallery
 
 /**
  * Abstract view having items.
@@ -30,7 +31,7 @@ internal sealed class DivViewWithItems {
      * Implementation of [DivViewWithItems] specific for div gallery with `scroll_mode` "paging"
      */
     internal class PagingGallery(
-        private val view: DivSnappyRecyclerView,
+        private val view: DivRecyclerView,
         private val direction: Direction
     ) : DivViewWithItems() {
         override var currentItem: Int
@@ -90,10 +91,14 @@ internal sealed class DivViewWithItems {
         @set:VisibleForTesting(otherwise = VisibleForTesting.NONE)
         internal var viewForTests: DivViewWithItems? = null
 
-        internal inline fun create(view: View, direction: () -> Direction): DivViewWithItems? {
+        internal inline fun create(view: View, resolver: ExpressionResolver, direction: () -> Direction): DivViewWithItems? {
             return viewForTests ?: when (view) {
-                is DivSnappyRecyclerView -> PagingGallery(view, direction())
-                is DivRecyclerView -> Gallery(view, direction())
+                is DivRecyclerView -> {
+                    when (view.div!!.scrollMode.evaluate(resolver)) {
+                        DivGallery.ScrollMode.DEFAULT -> Gallery(view, direction())
+                        DivGallery.ScrollMode.PAGING -> PagingGallery(view, direction())
+                    }
+                }
                 is DivPagerView -> Pager(view)
                 is TabsLayout -> Tabs(view)
                 else -> null

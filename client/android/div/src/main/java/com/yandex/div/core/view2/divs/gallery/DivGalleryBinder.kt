@@ -23,10 +23,10 @@ import com.yandex.div.core.view2.DivViewCreator
 import com.yandex.div.core.view2.animations.DivComparator
 import com.yandex.div.core.view2.divs.DivBaseBinder
 import com.yandex.div.core.view2.divs.DivPatchableAdapter
+import com.yandex.div.core.view2.divs.PagerSnapStartHelper
 import com.yandex.div.core.view2.divs.ReleasingViewPool
 import com.yandex.div.core.view2.divs.dpToPx
 import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
-import com.yandex.div.core.view2.divs.widgets.DivSnappyRecyclerView
 import com.yandex.div.core.view2.divs.widgets.DivStateLayout
 import com.yandex.div.core.view2.divs.widgets.DivViewVisitor
 import com.yandex.div.core.view2.divs.widgets.ParentScrollRestrictor
@@ -34,9 +34,7 @@ import com.yandex.div.core.view2.divs.widgets.ReleaseUtils.releaseAndRemoveChild
 import com.yandex.div.core.view2.divs.widgets.visitViewTree
 import com.yandex.div.core.widget.DivViewWrapper
 import com.yandex.div.internal.util.dpToPx
-import com.yandex.div.internal.widget.OnInterceptTouchEventListenerHost
 import com.yandex.div.internal.widget.PaddingItemDecoration
-import com.yandex.div.internal.widget.SnappyRecyclerView
 import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
@@ -51,11 +49,11 @@ internal class DivGalleryBinder @Inject constructor(
     private val viewCreator: DivViewCreator,
     private val divBinder: Provider<DivBinder>,
     private val divPatchCache: DivPatchCache,
-) : DivViewBinder<DivGallery, RecyclerView> {
+) : DivViewBinder<DivGallery, DivRecyclerView> {
 
     @SuppressLint("ClickableViewAccessibility")
-    override fun bindView(view: RecyclerView, div: DivGallery, divView: Div2View, path: DivStatePath) {
-        val oldDiv = (view as? DivRecyclerView)?.div ?: (view as? DivSnappyRecyclerView)?.div
+    override fun bindView(view: DivRecyclerView, div: DivGallery, divView: Div2View, path: DivStatePath) {
+        val oldDiv = (view as? DivRecyclerView)?.div
         if (div == oldDiv) {
             val adapter = view.adapter as GalleryAdapter
             adapter.applyPatch(divPatchCache)
@@ -78,6 +76,7 @@ internal class DivGalleryBinder @Inject constructor(
             updateDecorations(view, div, divView, resolver)
         }
         expressionSubscriber.addSubscription(div.orientation.observe(resolver, reusableObserver))
+        expressionSubscriber.addSubscription(div.scrollMode.observe(resolver, reusableObserver))
         expressionSubscriber.addSubscription(div.itemSpacing.observe(resolver, reusableObserver))
         expressionSubscriber.addSubscription(div.restrictParentScroll.observe(resolver, reusableObserver))
         div.columnCount?.let {
@@ -94,11 +93,7 @@ internal class DivGalleryBinder @Inject constructor(
             { itemView: View, div: Div -> bindStates(itemView, listOf(div), divView) }
         view.adapter =
             GalleryAdapter(div.items, divView, divBinder.get(), viewCreator, itemStateBinder, path)
-        if (view is DivRecyclerView) {
-            view.div = div
-        } else if (view is DivSnappyRecyclerView) {
-            view.div = div
-        }
+        view.div = div
 
         updateDecorations(view, div, divView, resolver)
     }
@@ -145,7 +140,7 @@ internal class DivGalleryBinder @Inject constructor(
     }
 
     private fun updateDecorations(
-        view: RecyclerView,
+        view: DivRecyclerView,
         div: DivGallery,
         divView: Div2View,
         resolver: ExpressionResolver,
@@ -156,10 +151,6 @@ internal class DivGalleryBinder @Inject constructor(
             RecyclerView.HORIZONTAL
         } else {
             RecyclerView.VERTICAL
-        }
-
-        if (view is DivSnappyRecyclerView) {
-            view.orientation = orientation
         }
 
         val columnCount = div.columnCount?.evaluate(resolver) ?: 1
@@ -182,8 +173,16 @@ internal class DivGalleryBinder @Inject constructor(
                 )
         )
 
-        if (view is SnappyRecyclerView) {
-            view.itemSpacing = dpToPx(div.itemSpacing.evaluate(resolver))
+        when (div.scrollMode.evaluate(resolver)) {
+            DivGallery.ScrollMode.DEFAULT -> {
+                view.pagerSnapStartHelper?.attachToRecyclerView(null)
+            }
+            DivGallery.ScrollMode.PAGING -> {
+                val helper = view.pagerSnapStartHelper ?: PagerSnapStartHelper().also { view.pagerSnapStartHelper = it }
+
+                helper.attachToRecyclerView(view)
+                helper.itemSpacing = dpToPx(div.itemSpacing.evaluate(resolver))
+            }
         }
 
         val layoutManager = if (columnCount == 1) {
@@ -203,19 +202,16 @@ internal class DivGalleryBinder @Inject constructor(
             view.addOnScrollListener(UpdateStateScrollListener(id, state, layoutManager))
         }
         view.addOnScrollListener(ScrollListener(divView, view, layoutManager, div))
-        if (view is OnInterceptTouchEventListenerHost) {
-            view.onInterceptTouchEventListener =
-                if (div.restrictParentScroll.evaluate(resolver)) {
-                    ParentScrollRestrictor(
-                        divOrientation.toRestrictorDirection()
-                    )
-                } else {
-                    null
-                }
+        view.onInterceptTouchEventListener = if (div.restrictParentScroll.evaluate(resolver)) {
+            ParentScrollRestrictor(
+                divOrientation.toRestrictorDirection()
+            )
+        } else {
+            null
         }
     }
 
-    private fun RecyclerView.scrollToPositionInternal(position: Int, offset: Int? = null) {
+    private fun DivRecyclerView.scrollToPositionInternal(position: Int, offset: Int? = null) {
         val layoutManager = layoutManager as? DivGalleryItemHelper
         when {
             offset == null && position == 0 -> {
@@ -230,12 +226,12 @@ internal class DivGalleryBinder @Inject constructor(
         }
     }
 
-    private fun RecyclerView.setItemDecoration(decoration: RecyclerView.ItemDecoration) {
+    private fun DivRecyclerView.setItemDecoration(decoration: RecyclerView.ItemDecoration) {
         removeItemDecorations()
         addItemDecoration(decoration)
     }
 
-    private fun RecyclerView.removeItemDecorations() {
+    private fun DivRecyclerView.removeItemDecorations() {
         for (i in itemDecorationCount - 1 downTo 0) {
             removeItemDecorationAt(i)
         }
@@ -243,7 +239,7 @@ internal class DivGalleryBinder @Inject constructor(
 
     private class ScrollListener(
         private val divView: Div2View,
-        private val recycler: RecyclerView,
+        private val recycler: DivRecyclerView,
         private val galleryItemHelper: DivGalleryItemHelper,
         private val galleryDiv: DivGallery,
     ) : RecyclerView.OnScrollListener() {

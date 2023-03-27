@@ -8,6 +8,7 @@ import com.yandex.div.core.Disposable
 import com.yandex.div.core.annotations.Mockable
 import com.yandex.div.core.view2.Releasable
 import com.yandex.div.core.view2.backbutton.BackHandlingRecyclerView
+import com.yandex.div.core.view2.divs.PagerSnapStartHelper
 import com.yandex.div.core.view2.divs.drawChildrenShadows
 import com.yandex.div.core.view2.divs.updateBorderDrawer
 import com.yandex.div.core.widget.invalidateAfter
@@ -40,6 +41,8 @@ internal class DivRecyclerView  @JvmOverloads constructor(
 
     var div: DivGallery? = null
     override var onInterceptTouchEventListener: OnInterceptTouchEventListener? = null
+
+    var pagerSnapStartHelper: PagerSnapStartHelper? = null
 
     override val subscriptions = mutableListOf<Disposable>()
 

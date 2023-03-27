@@ -6,9 +6,9 @@ import com.yandex.div.core.state.GalleryState
 import com.yandex.div.core.view2.DivBinder
 import com.yandex.div.core.view2.divs.gallery.DivGalleryBinder
 import com.yandex.div.core.view2.divs.gallery.DivLinearLayoutManager
+import com.yandex.div.core.view2.divs.widgets.DivRecyclerView
 import com.yandex.div.data.DivParsingEnvironment
 import com.yandex.div.json.ParsingErrorLogger
-import com.yandex.div.json.expressions.ExpressionResolver
 import com.yandex.div2.Div
 import com.yandex.div2.DivGallery
 import org.junit.Assert
@@ -43,7 +43,7 @@ class DivGalleryBinderTest : DivBinderTest() {
 
     private val div = div()
     private val divGallery = divGallery(div)
-    private val recyclerView = recyclerView(div).apply {
+    private val recyclerView = divRecyclerView(div).apply {
         layoutParams = defaultLayoutParams()
     }
 
@@ -101,7 +101,7 @@ class DivGalleryBinderTest : DivBinderTest() {
 
     private fun divGallery(div: Div) = div.value() as DivGallery
 
-    private fun recyclerView(div: Div) = spy(viewCreator.create(div, ExpressionResolver.EMPTY) as RecyclerView)
+    private fun divRecyclerView(div: Div) = spy(viewCreator.create(div, mock()) as DivRecyclerView)
 
     private fun RecyclerView.LayoutManager?.shadow(): ShadowDivLinearLayoutManager {
         return Shadow.extract(this) as ShadowDivLinearLayoutManager
