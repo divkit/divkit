@@ -1,15 +1,12 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text elements with borders with shadow",
   "platforms": [
     "android",
     "ios",
     "web"
   ],
-  "templates": {},
   "card": {
-    "log_id": "text",
-    "type": "state",
-    "div_id": "context_menu",
+    "log_id": "snapshot_test_card",
     "states": [
       {
         "state_id": 0,
@@ -25,12 +22,6 @@
             {
               "type": "text",
               "text": "Variant 1",
-              "width": {
-                "type": "match_parent"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "margins": {
                 "left": 16,
                 "top": 16,
@@ -82,12 +73,6 @@
             {
               "type": "text",
               "text": "Variant 2",
-              "width": {
-                "type": "match_parent"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "margins": {
                 "left": 16,
                 "top": 16,
@@ -139,12 +124,6 @@
             {
               "type": "text",
               "text": "Variant 3",
-              "width": {
-                "type": "match_parent"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "margins": {
                 "left": 16,
                 "top": 16,
@@ -196,12 +175,6 @@
             {
               "type": "text",
               "text": "Variant 4",
-              "width": {
-                "type": "match_parent"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "margins": {
                 "left": 16,
                 "top": 16,
@@ -249,12 +222,6 @@
             {
               "type": "text",
               "text": "Variant 5",
-              "width": {
-                "type": "match_parent"
-              },
-              "height": {
-                "type": "wrap_content"
-              },
               "margins": {
                 "left": 16,
                 "top": 16,

@@ -1,11 +1,10 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text with line_height lesser than font_size",
   "platforms": [
     "android",
     "ios",
     "web"
   ],
-  "templates": {},
   "card": {
     "log_id": "snapshot_test_card",
     "states": [
@@ -21,4 +20,3 @@
     ]
   }
 }
-

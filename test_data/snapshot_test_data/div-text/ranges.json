@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text with ranges",
   "platforms": [
     "android",
     "ios",
@@ -266,6 +266,5 @@
         }
       }
     ]
-  },
-  "templates": {}
+  }
 }

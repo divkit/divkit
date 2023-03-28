@@ -22,8 +22,7 @@
     }
   },
   "card": {
-    "type": "div2",
-    "log_id": "snapshot_test_card",
+    "log_id": "test_card",
     "states": [
       {
         "state_id": 0,

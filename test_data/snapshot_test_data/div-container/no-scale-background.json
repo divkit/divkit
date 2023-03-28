@@ -5,33 +5,31 @@
     "ios",
     "web"
   ],
-    "templates": {},
-    "card": {
-        "type": "div2",
-        "log_id": "test",
-        "states": [
+  "card": {
+    "log_id": "test",
+    "states": [
+      {
+        "state_id": 0,
+        "div": {
+          "type": "text",
+          "text": "300x300",
+          "width": {
+            "type": "fixed",
+            "value": 300
+          },
+          "height": {
+            "type": "fixed",
+            "value": 300
+          },
+          "background": [
             {
-                "state_id": 0,
-                "div": {
-                    "type": "text",
-                    "text": "300x300",
-                    "width": {
-                        "type": "fixed",
-                        "value": 300
-                    },
-                    "height": {
-                        "type": "fixed",
-                        "value": 300
-                    },
-                    "background": [
-                        {
-                            "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
-                            "type": "image",
-                            "scale": "no_scale"
-                        }
-                    ]
-                }
+              "image_url": "https://alicekit.s3.yandex.net/images_for_divs/chess.png",
+              "type": "image",
+              "scale": "no_scale"
             }
-        ]
-    }
+          ]
+        }
+      }
+    ]
+  }
 }

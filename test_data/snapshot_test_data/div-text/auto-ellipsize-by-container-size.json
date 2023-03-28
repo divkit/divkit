@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text element with auto_ellipsize in small container is trimmed with ellipsis",
   "platforms": [
     "android",
     "ios",
@@ -44,8 +44,7 @@
     }
   },
   "card": {
-    "type": "div2",
-    "log_id": "auto-ellipsize-with-big-max-lines",
+    "log_id": "snapshot_test_card",
     "states": [
       {
         "state_id": 0,
@@ -59,7 +58,7 @@
             {
               "type": "label",
               "text": "Carroll began writing the manuscript of the story the next day, although that earliest version is lost. The girls and Carroll took another boat trip a month later, when he elaborated the plot to the story of Alice, and in November he began working on the manuscript in earnest.",
-              "auto_ellipsize": 1,
+              "auto_ellipsize": true,
               "max_lines": 6
             }
           ]

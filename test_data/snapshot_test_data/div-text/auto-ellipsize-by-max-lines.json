@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text element with auto_ellipsize and max_lines is trimmed with ellipsis",
   "platforms": [
     "android",
     "ios",
@@ -44,8 +44,7 @@
     }
   },
   "card": {
-    "type": "div2",
-    "log_id": "auto-ellipsize-with-small-max-lines",
+    "log_id": "snapshot_test_card",
     "states": [
       {
         "state_id": 0,

@@ -1,12 +1,11 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text with image with tint_color",
   "platforms": [
     "android",
     "ios",
     "web"
   ],
   "card": {
-    "type": "div2",
     "log_id": "snapshot_test_card",
     "states": [
       {

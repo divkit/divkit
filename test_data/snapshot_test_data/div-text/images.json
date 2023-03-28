@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text with images",
   "platforms": [
     "android",
     "ios",
@@ -288,7 +288,9 @@
       "description": "image is in the first line of multiline text",
       "type": "text",
       "text": "line1\nline2\nline3",
-      "width": { "type": "wrap_content" },
+      "width": {
+        "type": "wrap_content"
+      },
       "images": [
         {
           "$start": "image_position",
@@ -307,7 +309,9 @@
     "image_between_two_zeros": {
       "type": "text",
       "text": "00",
-      "width": { "type": "wrap_content" },
+      "width": {
+        "type": "wrap_content"
+      },
       "images": [
         {
           "start": 1,

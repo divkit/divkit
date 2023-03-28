@@ -1,11 +1,10 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text ranges with line_height and top_offset",
   "platforms": [
     "android",
     "ios",
     "web"
   ],
-  "templates": {},
   "card": {
     "log_id": "snapshot_test_card",
     "states": [

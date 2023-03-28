@@ -1,10 +1,18 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text elements with basic properties",
   "platforms": [
     "android",
     "ios",
     "web"
   ],
+  "templates": {
+    "wrap_content_text": {
+      "type": "text",
+      "width": {
+        "type": "wrap_content"
+      }
+    }
+  },
   "card": {
     "log_id": "snapshot_test_card",
     "states": [
@@ -74,11 +82,5 @@
         }
       }
     ]
-  },
-  "templates": {
-    "wrap_content_text": {
-      "type": "text",
-      "width": { "type": "wrap_content" }
-    }
   }
 }

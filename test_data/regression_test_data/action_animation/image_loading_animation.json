@@ -24,8 +24,7 @@
     }
   },
   "card": {
-    "type": "div2",
-    "log_id": "tests",
+    "log_id": "test_card",
     "states": [
       {
         "state_id": 1,

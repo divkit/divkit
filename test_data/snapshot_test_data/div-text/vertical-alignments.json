@@ -1,5 +1,5 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text elements with different text_alignment_vertical",
   "platforms": [
     "android",
     "ios",
@@ -66,4 +66,3 @@
     }
   }
 }
-

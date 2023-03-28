@@ -1,13 +1,12 @@
 {
-  "description": "TODO: https://nda.ya.ru/t/MMvpmt855oXgre",
+  "description": "Text with visibility=invisible",
   "platforms": [
     "android",
     "ios",
     "web"
   ],
-  "templates": {},
   "card": {
-    "log_id": "test/body",
+    "log_id": "snapshot_test_card",
     "states": [
       {
         "state_id": 0,
