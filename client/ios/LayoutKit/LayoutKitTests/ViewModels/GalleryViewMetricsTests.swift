@@ -1,7 +1,7 @@
 import XCTest
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
 
 final class GalleryViewMetricsTests: XCTestCase {

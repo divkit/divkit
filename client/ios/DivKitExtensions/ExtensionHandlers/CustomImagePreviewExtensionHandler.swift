@@ -1,6 +1,6 @@
 import Foundation
 
-import Base
+import BasePublic
 import DivKit
 import LayoutKit
 

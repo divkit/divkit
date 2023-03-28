@@ -1,7 +1,7 @@
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
 
 typealias ImageBlockTestModels = BlockTestsModels.Image
@@ -80,7 +80,7 @@ enum BlockTestsModels {
 
   enum Image {
     static let imageSize = CGSize(width: 80, height: 60)
-    static let image = BaseTiny.Image.imageWithSolidColor(.black, size: imageSize)!
+    static let image = BaseTinyPublic.Image.imageWithSolidColor(.black, size: imageSize)!
   }
 
   enum SwitchableContainer {

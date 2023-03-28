@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import LayoutKitInterface
 
 enum DivActionIntent {

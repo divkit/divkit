@@ -2,9 +2,9 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import Base
-import BaseUI
-import CommonCore
+import BasePublic
+import BaseUIPublic
+import CommonCorePublic
 
 extension ContainerBlock {
   public static func makeBlockView() -> BlockView { ContainerBlockView() }

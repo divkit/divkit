@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension DebugInfoBlock {
   public static func makeBlockView() -> BlockView {

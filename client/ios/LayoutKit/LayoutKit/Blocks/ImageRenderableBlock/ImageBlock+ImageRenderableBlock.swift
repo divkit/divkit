@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUI
+import BaseUIPublic
 
 extension ImageBlock: ImageRenderableBlock {
   public func drawInRect(_ rect: CGRect, context: CGContext) {

@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 #if os(iOS)
 public protocol RenderingDelegate: AnyObject {

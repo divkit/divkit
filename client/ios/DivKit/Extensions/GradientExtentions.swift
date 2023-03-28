@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import Base
-import BaseUI
+import BasePublic
+import BaseUIPublic
 
 extension Gradient.Linear {
   init(colors: [Color], angle: Int) {

@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import Serialization
 
 extension Expression where T == Bool {

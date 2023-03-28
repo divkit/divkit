@@ -1,4 +1,4 @@
-import Base
+import BasePublic
 import Serialization
 
 public typealias DivError = CustomStringConvertible

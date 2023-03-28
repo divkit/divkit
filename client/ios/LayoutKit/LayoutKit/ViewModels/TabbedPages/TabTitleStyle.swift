@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 public struct TabTitleStyle: Equatable {
   public static let defaultTypo = Typo(size: .capsS, weight: .semibold).with(height: .capsS)

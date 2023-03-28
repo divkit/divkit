@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public protocol CollectionCellModel: UIViewRenderable, AccessibilityContaining {
   var reuseID: String { get }

@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 final class LaidOutBlock<T: BlockWithLayout>: Block {
   public let block: T

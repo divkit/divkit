@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 typealias Scale = (x: CGFloat, y: CGFloat)
 

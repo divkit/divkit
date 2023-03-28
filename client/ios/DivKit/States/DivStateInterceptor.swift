@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 public protocol DivStateInterceptor {
   var id: String { get }

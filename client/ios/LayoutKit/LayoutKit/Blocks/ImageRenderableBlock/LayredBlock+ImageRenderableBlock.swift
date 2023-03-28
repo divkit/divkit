@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 extension LayeredBlock: ImageRenderableBlock {
   public func drawInRect(_ rect: CGRect, context: CGContext) {

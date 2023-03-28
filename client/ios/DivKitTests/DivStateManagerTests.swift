@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class DivStateManagerTests: XCTestCase {
   private let stateManager = DivStateManager()

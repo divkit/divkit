@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import LayoutKitInterface
 
 public struct UILink: Equatable {

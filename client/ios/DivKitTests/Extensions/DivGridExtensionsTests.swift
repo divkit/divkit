@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 import DivKit
 
 final class DivGridExtensionsTests: XCTestCase {

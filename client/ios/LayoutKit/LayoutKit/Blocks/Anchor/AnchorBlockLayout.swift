@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 extension AnchorBlock.Layout {
   init(

@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class FunctionSignaturesTests: XCTestCase {
   override class var defaultTestSuite: XCTestSuite {

@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import LayoutKit
 
 public final class DivActionURLHandler {

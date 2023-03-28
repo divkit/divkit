@@ -1,7 +1,7 @@
 import XCTest
 
-import CommonCore
-import Networking
+import CommonCorePublic
+import NetworkingPublic
 
 final class MordaProductionTests: DivKitSnapshotTestCase {
   override func setUp() {

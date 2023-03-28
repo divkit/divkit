@@ -1,9 +1,9 @@
 import CoreGraphics
 
-import Base
-import BaseUI
+import BasePublic
+import BaseUIPublic
 import LayoutKit
-import Networking
+import NetworkingPublic
 
 extension DivBase {
   func applyBaseProperties(

@@ -1,7 +1,7 @@
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
 
 final class BlockWithFixedWrapContent: BlockWithTraits {
@@ -49,7 +49,7 @@ extension BlockWithFixedWrapContent {
   func configureBlockView(
     _: LayoutKit.BlockView,
     observer _: LayoutKit.ElementStateObserver?,
-    overscrollDelegate _: Base.ScrollDelegate?,
+    overscrollDelegate _: BasePublic.ScrollDelegate?,
     renderingDelegate _: LayoutKit.RenderingDelegate?
   ) {}
 
@@ -67,7 +67,7 @@ extension BlockWithFixedWrapContent {
     false
   }
 
-  func getImageHolders() -> [Base.ImageHolder] {
+  func getImageHolders() -> [BasePublic.ImageHolder] {
     []
   }
 }

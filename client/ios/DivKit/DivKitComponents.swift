@@ -1,9 +1,9 @@
 import Foundation
 
-import Base
-import BaseUI
+import BasePublic
+import BaseUIPublic
 import LayoutKit
-import Networking
+import NetworkingPublic
 import Serialization
 
 public final class DivKitComponents {
@@ -30,7 +30,7 @@ public final class DivKitComponents {
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
     extensionHandlers: [DivExtensionHandler] = [],
     flagsInfo: DivFlagsInfo = .default,
-    fontSpecifiers: FontSpecifiers = BaseUI.fontSpecifiers,
+    fontSpecifiers: FontSpecifiers = BaseUIPublic.fontSpecifiers,
     imageHolderFactory: ImageHolderFactory? = nil,
     patchProvider: DivPatchProvider? = nil,
     requestPerformer: URLRequestPerforming? = nil,

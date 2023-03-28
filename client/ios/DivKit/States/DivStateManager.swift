@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 public class DivStateManager {
   public struct Item: Equatable {

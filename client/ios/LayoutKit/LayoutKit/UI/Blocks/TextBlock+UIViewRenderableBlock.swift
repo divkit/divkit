@@ -1,8 +1,8 @@
 import Foundation
 import UIKit
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKitInterface
 
 extension TextBlock {

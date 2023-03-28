@@ -1,6 +1,6 @@
 import SwiftUI
 
-import CommonCore
+import CommonCorePublic
 
 struct ScannerView: UIViewControllerRepresentable {
   private let disposePool = AutodisposePool()

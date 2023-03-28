@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import LayoutKitInterface
 
 public final class GalleryBlock: BlockWithTraits {

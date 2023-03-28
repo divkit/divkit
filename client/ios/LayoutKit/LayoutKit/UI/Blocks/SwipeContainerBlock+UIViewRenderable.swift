@@ -4,7 +4,7 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 import LayoutKitInterface
 
 extension SwipeContainerBlock {

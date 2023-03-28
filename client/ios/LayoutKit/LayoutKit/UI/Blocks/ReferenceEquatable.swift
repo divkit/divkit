@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 protocol ReferenceEquatable: Equatable {
   var source: Variable<AnyObject?> { get }

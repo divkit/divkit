@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 struct IndicatorStateAnimator {
   let configuration: PageIndicatorConfiguration

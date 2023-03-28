@@ -1,7 +1,7 @@
 import Foundation
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 public final class TestTimer: TimerType {
   public let timeInterval: TimeInterval

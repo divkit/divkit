@@ -1,8 +1,8 @@
 import SwiftUI
 import UIKit
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import DivKit
 import LayoutKit
 

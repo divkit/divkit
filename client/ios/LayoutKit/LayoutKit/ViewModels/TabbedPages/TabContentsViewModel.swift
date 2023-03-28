@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import Base
+import BasePublic
 import LayoutKitInterface
 
 public struct TabContentsViewModel: Equatable {

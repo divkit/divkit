@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public protocol UIViewRenderable {
   static func makeBlockView() -> BlockView

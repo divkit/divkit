@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import BaseUI
+import BaseUIPublic
 import LayoutKit
 
 final class ErrorListView: UIView {

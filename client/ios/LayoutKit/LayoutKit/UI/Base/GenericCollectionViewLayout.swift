@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public final class GenericCollectionViewLayout: UICollectionViewLayout {
   public var layout: GenericCollectionLayout? {

@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 public struct ChangeBoundsTransition: Equatable {
   public let duration: Duration

@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 import LayoutKitInterface
 
 public final class GridBlock: BlockWithTraits, BlockWithLayout {

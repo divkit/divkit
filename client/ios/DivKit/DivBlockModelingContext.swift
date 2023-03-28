@@ -1,9 +1,9 @@
 import CoreGraphics
 
-import Base
-import BaseUI
+import BasePublic
+import BaseUIPublic
 import LayoutKit
-import Networking
+import NetworkingPublic
 import Serialization
 
 public struct DivBlockModelingContext {
@@ -42,7 +42,7 @@ public struct DivBlockModelingContext {
     imageHolderFactory: ImageHolderFactory,
     highPriorityImageHolderFactory: ImageHolderFactory? = nil,
     divCustomBlockFactory: DivCustomBlockFactory = EmptyDivCustomBlockFactory(),
-    fontSpecifiers: FontSpecifiers = BaseUI.fontSpecifiers,
+    fontSpecifiers: FontSpecifiers = BaseUIPublic.fontSpecifiers,
     flagsInfo: DivFlagsInfo = .default,
     extensionHandlers: [DivExtensionHandler] = [],
     stateInterceptors: [DivStateInterceptor] = [],

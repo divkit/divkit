@@ -2,7 +2,7 @@ import AVFoundation
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension VideoBlock {
   public static func makeBlockView() -> BlockView {

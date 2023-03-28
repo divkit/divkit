@@ -1,7 +1,7 @@
 import AVFoundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 final class MetadataCaptureSession: NSObject, AVCaptureMetadataOutputObjectsDelegate {
   private let captureSession = AVCaptureSession()

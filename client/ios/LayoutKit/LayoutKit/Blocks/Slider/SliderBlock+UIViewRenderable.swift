@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 extension SliderBlock: UIViewRenderable {
   public static func makeBlockView() -> BlockView {

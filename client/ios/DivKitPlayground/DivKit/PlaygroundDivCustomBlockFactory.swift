@@ -1,7 +1,7 @@
 import Foundation
 
-import Base
-import BaseUI
+import BasePublic
+import BaseUIPublic
 import DivKit
 import LayoutKit
 

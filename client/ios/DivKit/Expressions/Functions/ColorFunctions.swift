@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 enum ColorFunctions: CaseIterable {
   enum Error {

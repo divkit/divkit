@@ -1,6 +1,6 @@
 import XCTest
 @testable import DivKit
-import Base
+import BasePublic
 
 final class RunLoopCardUpdateAggregatorTests: XCTestCase {
   private var mainThreadBlock: Action?

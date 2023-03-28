@@ -1,7 +1,7 @@
 import CoreGraphics
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 extension ContainerBlock {
   public func modifying(

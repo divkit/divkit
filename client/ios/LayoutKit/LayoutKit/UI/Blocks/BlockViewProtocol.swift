@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public protocol BlockViewProtocol: AnyObject, VisibleBoundsTracking,
   EffectiveBackgroundColorProviding {}

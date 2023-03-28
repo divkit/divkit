@@ -1,5 +1,5 @@
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 public struct BackgroundImage {
   let imageHolder: ImageHolder

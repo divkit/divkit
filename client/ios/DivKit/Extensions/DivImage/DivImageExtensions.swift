@@ -1,9 +1,9 @@
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
-import Networking
+import NetworkingPublic
 
 extension DivImage: DivBlockModeling, DivImageProtocol {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

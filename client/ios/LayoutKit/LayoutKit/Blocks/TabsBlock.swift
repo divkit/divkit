@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public final class TabsBlock: BlockWithTraits {
   public enum Error: NonEmptyString, BlockError {

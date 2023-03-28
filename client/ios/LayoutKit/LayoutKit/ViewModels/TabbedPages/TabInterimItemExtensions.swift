@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 extension Array where Element == CGFloat {
   func interim(at index: CGFloat) -> CGFloat {

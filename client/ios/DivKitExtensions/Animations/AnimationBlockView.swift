@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 import LayoutKit
 
 final class AnimationBlockView: BlockView {

@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 struct ConstrainedBlockSize {
   var size: CGFloat

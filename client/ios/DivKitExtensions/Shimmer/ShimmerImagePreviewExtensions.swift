@@ -3,7 +3,7 @@ import UIKit
 
 import DivKit
 import LayoutKit
-import Base
+import BasePublic
 
 public final class ShimmerImagePreviewExtension: DivExtensionHandler {
   public let id: String = extensionID

@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension LaidOutBlock where T: BlockWithLayout {
   static func makeBlockView() -> BlockView {

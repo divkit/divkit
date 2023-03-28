@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 extension ImageBlock {
   public func makeCopy(with imageHolder: ImageHolder) -> ImageBlock {

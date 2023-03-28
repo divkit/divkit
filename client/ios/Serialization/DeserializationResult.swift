@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 @frozen
 public indirect enum DeserializationResult<T> {

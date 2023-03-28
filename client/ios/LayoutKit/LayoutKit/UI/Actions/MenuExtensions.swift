@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import BaseUI
+import BaseUIPublic
 import LayoutKitInterface
 
 extension Menu {

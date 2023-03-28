@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 enum DatetimeFunctions: String, CaseIterable {
   enum Error {

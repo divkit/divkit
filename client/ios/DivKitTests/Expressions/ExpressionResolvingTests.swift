@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class ExpressionResolvingTests: XCTestCase {
   private var testCase: ExpressionTestCase!

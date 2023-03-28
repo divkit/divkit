@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 public struct ResizableBlockMeasure {
   public enum Measure {

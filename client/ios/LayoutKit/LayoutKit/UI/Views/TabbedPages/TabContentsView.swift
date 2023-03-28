@@ -1,7 +1,7 @@
 import UIKit
 
-import Base
-import CommonCore
+import BasePublic
+import CommonCorePublic
 import LayoutKitInterface
 
 internal class TabContentsView: BlockView {
@@ -54,7 +54,7 @@ internal class TabContentsView: BlockView {
   private var layout: TabContentsViewLayout! {
     didSet {
       collectionViewLayout.layout = layout.map {
-        var contentSize = Base.contentSize(for: $0.pageFrames)
+        var contentSize = BasePublic.contentSize(for: $0.pageFrames)
         if bounds.width > 0 {
           contentSize.width = contentSize.width.ceiled(toStep: bounds.width)
         }

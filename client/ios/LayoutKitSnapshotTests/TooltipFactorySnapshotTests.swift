@@ -1,7 +1,7 @@
 import CoreGraphics
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 import LayoutKit
 
 final class TooltipFactorySnapshotTests: XCTestCase {

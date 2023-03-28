@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 import LayoutKitInterface
 
 extension PagerBlock {

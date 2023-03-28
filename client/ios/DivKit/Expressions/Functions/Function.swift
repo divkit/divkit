@@ -1,6 +1,6 @@
 import Foundation
 
-import Base
+import BasePublic
 
 protocol Function {
   var arity: CalcExpression.Arity { get }

@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 final class TabListView: UIView {
   private let collectionView: UICollectionView

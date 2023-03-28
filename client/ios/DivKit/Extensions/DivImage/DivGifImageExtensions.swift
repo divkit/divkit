@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import LayoutKit
 
 extension DivGifImage: DivBlockModeling, DivImageProtocol {

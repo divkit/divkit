@@ -1,6 +1,6 @@
 import Foundation
-import BaseTiny
-import Base
+import BaseTinyPublic
+import BasePublic
 
 final class RunLoopCardUpdateAggregator {
   private var enabled: Bool = true

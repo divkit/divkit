@@ -2,8 +2,8 @@
 
 import XCTest
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 final class TabListSelectionDataSourceImplTests: XCTestCase {
   private var tabListSelectionDataSource: TabListSelectionDataSourceImpl!

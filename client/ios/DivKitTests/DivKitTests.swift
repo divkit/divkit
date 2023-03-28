@@ -1,9 +1,9 @@
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 import DivKit
 import LayoutKit
-import Networking
+import NetworkingPublic
 import Serialization
 import TemplatesSupport
 

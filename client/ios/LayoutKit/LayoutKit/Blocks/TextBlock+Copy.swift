@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 extension TextBlock {
   public convenience init?(copyingAttributesFrom block: TextBlock, text: String) {

@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import Base
+import BasePublic
 
 public struct GenericCollectionLayout {
   public let frames: [CGRect]
@@ -15,7 +15,7 @@ public struct GenericCollectionLayout {
   public init(frames: [CGRect], pageSize: CGSize) {
     self.frames = frames
 
-    self.contentSize = modified(Base.contentSize(for: frames)) {
+    self.contentSize = modified(BasePublic.contentSize(for: frames)) {
       if pageSize.width > 0 {
         $0.width = $0.width.ceiled(toStep: pageSize.width)
       }

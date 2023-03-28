@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import LayoutKitInterface
 
 public enum LongTapActions: Equatable {

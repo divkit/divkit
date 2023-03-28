@@ -1,4 +1,4 @@
-import BaseUI
+import BaseUIPublic
 
 public protocol AccessibilityContaining {
   var accessibilityElement: AccessibilityElement? { get }

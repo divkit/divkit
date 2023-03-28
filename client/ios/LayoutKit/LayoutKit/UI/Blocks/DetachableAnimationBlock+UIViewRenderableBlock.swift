@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension DetachableAnimationBlock {
   public static func makeBlockView() -> BlockView {

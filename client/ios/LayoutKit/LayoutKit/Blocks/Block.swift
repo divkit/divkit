@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 #if os(iOS)
 public typealias BlockRenderingImpl = UIViewRenderable

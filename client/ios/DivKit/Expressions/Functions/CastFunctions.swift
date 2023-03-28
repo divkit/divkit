@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 enum CastFunctions: String, CaseIterable {
   case toBoolean

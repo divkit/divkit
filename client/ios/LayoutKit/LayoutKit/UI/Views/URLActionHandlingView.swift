@@ -1,6 +1,6 @@
 import UIKit
 
-import Base
+import BasePublic
 
 public final class URLActionHandlingView: UIView, UIActionEventPerforming {
   private let handler: UrlOpener

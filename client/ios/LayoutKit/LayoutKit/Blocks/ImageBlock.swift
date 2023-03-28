@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 public final class ImageBlock: ImageBaseBlock {
   public let imageHolder: ImageHolder

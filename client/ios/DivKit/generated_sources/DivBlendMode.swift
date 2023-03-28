@@ -1,6 +1,6 @@
 // Generated code. Do not modify.
 
-import CommonCore
+import CommonCorePublic
 import Foundation
 import Serialization
 import TemplatesSupport

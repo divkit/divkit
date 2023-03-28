@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public typealias ExpressionValueValidator<T> = (T) -> Bool
 

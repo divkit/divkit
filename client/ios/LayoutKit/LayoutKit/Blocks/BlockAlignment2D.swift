@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 public struct BlockAlignment2D: Equatable {
   public let horizontal: Alignment

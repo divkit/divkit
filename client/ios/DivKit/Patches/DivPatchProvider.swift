@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public protocol DivPatchProvider {
   func getPatch(

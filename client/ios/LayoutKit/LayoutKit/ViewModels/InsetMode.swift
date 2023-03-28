@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 public enum InsetMode: Equatable {
   public struct Resizable: Equatable {

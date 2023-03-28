@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 public protocol SizeForwardingBlock: Block {
   var sizeProvider: Block { get }

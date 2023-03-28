@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 import Serialization
 
 public typealias TemplateToType = [String: String]

@@ -33,7 +33,7 @@
 
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 protocol ConstantsProvider {
   func getValue(_ name: String) -> Any?

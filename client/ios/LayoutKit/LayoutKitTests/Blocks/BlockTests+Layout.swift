@@ -2,8 +2,8 @@
 
 import XCTest
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 final class BlockTests_Layout: XCTestCase {
   func test_IntrinsicWidthOfTextBlock_EqualsTextWidth() {

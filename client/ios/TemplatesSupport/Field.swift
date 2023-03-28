@@ -1,6 +1,6 @@
 import CoreFoundation
 
-import CommonCore
+import CommonCorePublic
 import Serialization
 
 @frozen

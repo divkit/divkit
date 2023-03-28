@@ -1,4 +1,4 @@
-import BaseTiny
+import BaseTinyPublic
 import Foundation
 
 fileprivate typealias GetOrDefaultWithTransform<U, T> = (String, U) throws -> T

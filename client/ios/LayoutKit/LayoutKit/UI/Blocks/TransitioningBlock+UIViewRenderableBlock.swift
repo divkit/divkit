@@ -2,8 +2,8 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import Base
-import CommonCore
+import BasePublic
+import CommonCorePublic
 
 extension TransitioningBlock {
   public static func makeBlockView() -> BlockView {

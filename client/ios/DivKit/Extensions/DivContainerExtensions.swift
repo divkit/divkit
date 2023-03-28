@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 import LayoutKit
 
 extension DivContainer: DivBlockModeling {

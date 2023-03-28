@@ -1,7 +1,7 @@
 import UIKit
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 final class VisibilityTrackingScrollView: UIScrollView, VisibleBoundsTrackingContainer {
   private var previousVisibleBounds = CGRect.zero

@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 final class ScannerViewController: UIViewController {
   private let captureSession: Lazy<MetadataCaptureSession>

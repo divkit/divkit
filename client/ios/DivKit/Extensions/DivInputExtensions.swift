@@ -2,8 +2,8 @@ import CoreFoundation
 import CoreGraphics
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
 
 extension DivInput: DivBlockModeling {

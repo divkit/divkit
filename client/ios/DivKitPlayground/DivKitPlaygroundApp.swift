@@ -1,6 +1,6 @@
 import SwiftUI
 
-import BaseUI
+import BaseUIPublic
 import DivKit
 
 @main

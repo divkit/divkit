@@ -1,4 +1,4 @@
-import BaseUI
+import BaseUIPublic
 
 extension DivFontWeight {
   var fontWeight: FontWeight {

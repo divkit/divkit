@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 public struct BlockTooltip: Equatable {
   public enum Position: String, CaseIterable {

@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-import BaseTiny
+import BaseTinyPublic
 
 import Serialization
 

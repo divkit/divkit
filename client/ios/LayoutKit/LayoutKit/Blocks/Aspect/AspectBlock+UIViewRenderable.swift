@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 extension AspectBlock {
   public static func makeBlockView() -> BlockView {

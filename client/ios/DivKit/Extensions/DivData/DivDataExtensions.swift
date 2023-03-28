@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 import LayoutKit
 import Serialization
 import TemplatesSupport

@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class VisibilityActionPerformerTests: XCTestCase {
   private let requiredVisibilityDuration = TimeInterval(10)

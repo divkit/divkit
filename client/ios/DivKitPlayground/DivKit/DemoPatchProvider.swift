@@ -1,8 +1,8 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import DivKit
-import Networking
+import NetworkingPublic
 
 struct DemoPatchProvider: DivPatchProvider {
   private let downloader: DivPatchDownloader

@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public final class BoxShadowView: UIView {
   public var shadowColor: Color {

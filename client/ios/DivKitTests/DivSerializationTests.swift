@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class DivSerializationTests: XCTestCase {
   func test_Serialize_Type() {

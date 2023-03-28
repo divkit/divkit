@@ -1,7 +1,7 @@
 import CoreGraphics
 import UIKit
 
-import BaseUI
+import BaseUIPublic
 
 final class FontProvider: FontSpecifying {
   func font(weight: FontWeight, size: CGFloat) -> UIFont {

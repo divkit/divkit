@@ -2,8 +2,8 @@
 
 import XCTest
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 extension ContainerBlockLayout {
   fileprivate init(

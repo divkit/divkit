@@ -1,9 +1,9 @@
 import CoreGraphics
 import Foundation
 
-import Base
-import BaseUI
-import CommonCore
+import BasePublic
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKitInterface
 
 public final class SwitchBlock: Block {

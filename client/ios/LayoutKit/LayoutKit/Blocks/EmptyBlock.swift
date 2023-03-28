@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public final class EmptyBlock: BlockWithTraits {
   public let widthTrait: LayoutTrait

@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 extension LayeredBlock {
   func makeChildrenFrames(size: CGSize) -> [CGRect] {

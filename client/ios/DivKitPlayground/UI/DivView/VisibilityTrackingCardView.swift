@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 final class VisibilityTrackingCardView: UIView, VisibleBoundsTrackingContainer {
   var blockView: VisibleBoundsTrackingView? {

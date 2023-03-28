@@ -3,7 +3,7 @@
 import Foundation
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class TabInterimItemExtensionsTests: XCTestCase {
   func test_InterimElementChangesProportionallyToIndex() {

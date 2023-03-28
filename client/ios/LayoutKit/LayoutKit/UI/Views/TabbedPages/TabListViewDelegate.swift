@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 import LayoutKitInterface
 
 final class TabListViewDelegate: NSObject, UICollectionViewDelegateFlowLayout {

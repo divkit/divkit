@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 final class TabListSelectionDataSourceImpl: TabListSelectionDataSource {
   private let listModel: TabListViewModel

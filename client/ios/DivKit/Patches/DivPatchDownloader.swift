@@ -1,6 +1,6 @@
 import Foundation
 
-import Networking
+import NetworkingPublic
 
 public class DivPatchDownloader: DivPatchProvider {
   private let requestPerformer: URLRequestPerforming

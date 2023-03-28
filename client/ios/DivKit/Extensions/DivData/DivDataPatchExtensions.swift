@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 extension DivData {
   public func applyPatch(_ patch: DivPatch) -> DivData {

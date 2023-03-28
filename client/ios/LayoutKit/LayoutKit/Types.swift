@@ -1,5 +1,5 @@
 import Foundation
 
-import Base
+import BasePublic
 
-public typealias EdgeInsets = Base.EdgeInsets
+public typealias EdgeInsets = BasePublic.EdgeInsets

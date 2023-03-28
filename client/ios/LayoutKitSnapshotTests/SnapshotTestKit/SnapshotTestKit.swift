@@ -3,7 +3,7 @@ import Foundation
 import UIKit
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 public enum TestMode {
   case record

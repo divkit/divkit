@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 public final class LayeredBlock: BlockWithTraits, BlockWithLayout {
   typealias Layout = [CGRect]

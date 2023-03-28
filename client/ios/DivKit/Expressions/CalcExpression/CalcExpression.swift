@@ -33,7 +33,7 @@
 
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 /// Immutable wrapper for a parsed expression
 /// Reusing the same CalcExpression instance for multiple evaluations is more efficient

@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension GenericViewBlock {
   public static func makeBlockView() -> BlockView {

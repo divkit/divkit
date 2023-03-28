@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import Base
-import CommonCore
+import BasePublic
+import CommonCorePublic
 import LayoutKit
 
 final class LottieAnimationBlock: SizeForwardingBlock {

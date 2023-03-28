@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKitInterface
 
 extension Block {

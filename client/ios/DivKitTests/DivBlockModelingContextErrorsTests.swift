@@ -2,7 +2,7 @@
 
 import XCTest
 
-import Networking
+import NetworkingPublic
 
 final class DivBlockModelingContextErrorsTests: XCTestCase {
   func test_WhenHasNoExtensionHandler_ThrowsError() throws {

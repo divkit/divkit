@@ -1,6 +1,6 @@
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 import LayoutKit
 
 final class PagerBlockTests: XCTestCase {

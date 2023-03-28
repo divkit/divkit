@@ -1,6 +1,6 @@
 import Foundation
 
-import Base
+import BasePublic
 
 final class DivTimerController {
   typealias RunActions = ([DivAction]) -> Void

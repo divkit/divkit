@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension ScrollableContentPager: ScrollDelegate {
   public func onWillBeginDragging(_ scrollView: ScrollView) {

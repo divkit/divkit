@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public enum TabError: NonEmptyString, BlockError {
   case missingChildren

@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import BaseUI
+import BaseUIPublic
 
 extension Block {
   public func addingAccessibilityID(_ id: @autoclosure () -> String?) -> Block {

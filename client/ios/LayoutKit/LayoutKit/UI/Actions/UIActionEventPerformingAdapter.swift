@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public final class UIActionEventPerformingAdapter<HandledType>: UIActionEventPerforming {
   public typealias Transform = (UIActionEvent) -> HandledType?

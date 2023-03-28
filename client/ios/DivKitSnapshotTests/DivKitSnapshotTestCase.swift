@@ -1,10 +1,10 @@
 import XCTest
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import DivKit
 import LayoutKit
-import Networking
+import NetworkingPublic
 
 let testCardId = "test_card_id"
 let testDivCardId = DivCardID(rawValue: testCardId)

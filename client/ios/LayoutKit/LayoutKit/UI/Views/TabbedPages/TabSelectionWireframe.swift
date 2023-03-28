@@ -1,6 +1,6 @@
 import UIKit
 
-import Base
+import BasePublic
 import LayoutKitInterface
 
 final class TabSelectionWireframe {

@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 public final class GradientBlock: BlockWithTraits {
   public let gradient: Gradient

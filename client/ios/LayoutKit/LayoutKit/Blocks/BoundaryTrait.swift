@@ -1,7 +1,7 @@
 import CoreGraphics
 import QuartzCore
 
-import CommonCore
+import CommonCorePublic
 
 public enum BoundaryTrait: Equatable {
   case noClip

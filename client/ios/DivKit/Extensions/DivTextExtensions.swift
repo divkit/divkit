@@ -2,10 +2,10 @@ import CoreFoundation
 import CoreGraphics
 import Foundation
 
-import Base
-import BaseUI
+import BasePublic
+import BaseUIPublic
 import LayoutKit
-import Networking
+import NetworkingPublic
 
 extension DivText: DivBlockModeling {
   public func makeBlock(context: DivBlockModelingContext) throws -> Block {

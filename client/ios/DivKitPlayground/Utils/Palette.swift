@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 import DivKit
 
 struct Palette {

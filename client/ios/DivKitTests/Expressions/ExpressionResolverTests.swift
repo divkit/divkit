@@ -2,7 +2,7 @@ import XCTest
 
 @testable import DivKit
 
-import CommonCore
+import CommonCorePublic
 
 final class ExpressionResolverTests: XCTestCase {
   private let expressionResolver = ExpressionResolver(

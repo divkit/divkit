@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public final class TabViewModel: Equatable {
   public let listModel: TabListViewModel

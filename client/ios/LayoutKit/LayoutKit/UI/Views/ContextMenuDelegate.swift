@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 final class ContextMenuDelegate: NSObject, UIContextMenuInteractionDelegate {
   private let contextMenu: ContextMenu

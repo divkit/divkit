@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 extension ContainerBlock.LayoutDirection: CustomDebugStringConvertible {
   public var debugDescription: String {

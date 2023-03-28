@@ -1,7 +1,7 @@
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
 
 public protocol DivExtensionHandler: AccessibilityContaining {

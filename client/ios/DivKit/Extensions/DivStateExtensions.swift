@@ -2,7 +2,7 @@ import CoreFoundation
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import LayoutKit
 
 extension DivState: DivBlockModeling {

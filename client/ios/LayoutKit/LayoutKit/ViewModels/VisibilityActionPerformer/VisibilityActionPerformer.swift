@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 final class VisibilityActionPerformer {
   private var visibilityTimer: TimerType?

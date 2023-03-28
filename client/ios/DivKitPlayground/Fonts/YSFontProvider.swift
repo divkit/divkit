@@ -1,7 +1,7 @@
 import CoreGraphics
 import UIKit
 
-import BaseUI
+import BaseUIPublic
 
 final class YSFontProvider: FontSpecifying {
   static let mediumFontName = "YSText-Medium"

@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 public final class StateBlock: WrapperBlock, LayoutCachingDefaultImpl {
   public let child: Block

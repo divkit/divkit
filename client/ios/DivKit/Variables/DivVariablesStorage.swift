@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public enum DivVariableNameTag {}
 public typealias DivVariableName = Tagged<DivVariableNameTag, String>

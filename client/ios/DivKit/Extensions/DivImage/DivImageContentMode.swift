@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 protocol DivImageContentMode {
   func resolveScale(_ expressionResolver: ExpressionResolver) -> DivImageScale

@@ -1,9 +1,9 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 import DivKit
 import DivKitExtensions
-import Networking
+import NetworkingPublic
 
 enum AppComponents {
   static func makeDivKitComponents(

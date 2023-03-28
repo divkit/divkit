@@ -1,7 +1,7 @@
 import Foundation
 
-import Base
-import CommonCore
+import BasePublic
+import CommonCorePublic
 import LayoutKitInterface
 
 public struct ContextMenu: Equatable {

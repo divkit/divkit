@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class DivDataPatchExtensionsTests: XCTestCase {
   func test_WhenNoSuitableChanges_DoesNothing() throws {

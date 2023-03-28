@@ -1,5 +1,5 @@
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 extension TextFieldBlock: CustomDebugStringConvertible {
   public var debugDescription: String {

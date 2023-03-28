@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import Base
-import BaseUI
+import BasePublic
+import BaseUIPublic
 
 struct TabContentsViewLayout: Equatable {
   let pageFrames: [CGRect]

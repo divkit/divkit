@@ -1,4 +1,4 @@
-import BaseTiny
+import BaseTinyPublic
 
 @frozen
 public enum CommonHandler {

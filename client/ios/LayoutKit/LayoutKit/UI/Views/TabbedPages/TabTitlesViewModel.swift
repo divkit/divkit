@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 struct TabTitlesViewModel {
   let items: [TabTitleViewModel]

@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 import Serialization
 
 public protocol TemplateValue {

@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class Array_UIViewRenderableTests: XCTestCase {
   func test_BlocksOrderDefinesViewsOrder() {

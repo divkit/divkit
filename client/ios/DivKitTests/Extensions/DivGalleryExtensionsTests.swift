@@ -2,7 +2,7 @@
 
 import XCTest
 
-import BaseUI
+import BaseUIPublic
 import LayoutKit
 
 final class DivGalleryExtensionsTests: XCTestCase {

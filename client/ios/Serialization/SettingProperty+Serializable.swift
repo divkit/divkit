@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 extension SettingProperty where T: Serializable & Deserializable {
   @usableFromInline

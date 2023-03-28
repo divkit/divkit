@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public final class TabbedPagesView: BlockView, VisibleBoundsTrackingContainer {
   private var selectionWireframe: TabSelectionWireframe?

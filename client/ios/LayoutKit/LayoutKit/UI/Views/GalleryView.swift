@@ -1,7 +1,7 @@
 import UIKit
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKitInterface
 
 private typealias CellType = GenericCollectionViewCell

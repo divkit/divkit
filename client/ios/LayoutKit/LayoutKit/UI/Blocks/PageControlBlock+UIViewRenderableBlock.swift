@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension PageControlBlock {
   public static func makeBlockView() -> BlockView { PageControlBlockView() }

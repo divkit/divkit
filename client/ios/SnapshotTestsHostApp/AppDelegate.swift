@@ -1,6 +1,6 @@
 import UIKit
 
-import BaseUI
+import BaseUIPublic
 
 @UIApplicationMain
 final class AppDelegate: NSObject, UIApplicationDelegate {

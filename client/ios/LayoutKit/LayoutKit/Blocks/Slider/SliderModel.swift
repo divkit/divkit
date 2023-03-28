@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public struct SliderModel: Equatable {
   public struct ThumbModel: Equatable {

@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 final class SliderView: BlockView, VisibleBoundsTrackingLeaf {
   private var sliderModel: SliderModel = .empty

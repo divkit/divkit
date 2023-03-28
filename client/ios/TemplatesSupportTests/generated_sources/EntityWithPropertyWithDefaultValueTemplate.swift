@@ -2,7 +2,7 @@
 
 @testable import DivKit
 
-import CommonCore
+import CommonCorePublic
 import Foundation
 import Serialization
 import TemplatesSupport

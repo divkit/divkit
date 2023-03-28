@@ -1,8 +1,8 @@
 import CoreGraphics
 import XCTest
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKit
 
 final class AnchorBlockTests: XCTestCase {

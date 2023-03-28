@@ -1,6 +1,6 @@
 import Foundation
 
-import BaseTiny
+import BaseTinyPublic
 
 public struct UIElementPath: CustomStringConvertible, Hashable, ExpressibleByStringLiteral,
   Codable {

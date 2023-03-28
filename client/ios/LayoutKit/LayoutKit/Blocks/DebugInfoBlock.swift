@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public final class DebugInfoBlock: WrapperBlock, LayoutCachingDefaultImpl {
   public static let showOverlayURL = URL(string: "debugInfo://show")!

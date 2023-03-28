@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import Base
+import BasePublic
 import LayoutKitInterface
 
 public struct VisibilityAction {

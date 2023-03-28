@@ -3,8 +3,8 @@
 
 import XCTest
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 final class DivDataExtensionsTests: XCTestCase {
   func test_WhenStateIsNil_TakesFirstState() throws {

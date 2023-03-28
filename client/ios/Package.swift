@@ -8,7 +8,7 @@ let package = Package(
     .iOS(.v11),
   ],
   products: [
-    .library(name: "BaseUI", targets: ["BaseUI"]),
+    .library(name: "BaseUIPublic", targets: ["BaseUIPublic"]),
     .library(name: "DivKit", targets: ["DivKit"]),
     .library(name: "DivKitExtensions", targets: ["DivKitExtensions"]),
     .library(name: "LayoutKit", targets: ["LayoutKit"]),
@@ -17,12 +17,12 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "Base",
+      name: "BasePublic",
       dependencies: [
-        "BaseTiny",
-        "BaseUI",
+        "BaseTinyPublic",
+        "BaseUIPublic",
       ],
-      path: "Core/Base",
+      path: "Core/BasePublic",
       swiftSettings: [
         .unsafeFlags(
           [
@@ -34,8 +34,8 @@ let package = Package(
     ),
 
     .target(
-      name: "BaseTiny",
-      path: "Core/BaseTiny",
+      name: "BaseTinyPublic",
+      path: "Core/BaseTinyPublic",
       swiftSettings: [
         .unsafeFlags(
           [
@@ -47,11 +47,11 @@ let package = Package(
     ),
 
     .target(
-      name: "BaseUI",
+      name: "BaseUIPublic",
       dependencies: [
-        "BaseTiny",
+        "BaseTinyPublic",
       ],
-      path: "Core/BaseUI",
+      path: "Core/BaseUIPublic",
       swiftSettings: [
         .unsafeFlags(
           [
@@ -63,11 +63,11 @@ let package = Package(
     ),
 
     .target(
-      name: "CommonCore",
+      name: "CommonCorePublic",
       dependencies: [
-        "Base",
+        "BasePublic",
       ],
-      path: "Core/CommonCore",
+      path: "Core/CommonCorePublic",
       swiftSettings: [
         .unsafeFlags(
           [
@@ -79,11 +79,11 @@ let package = Package(
     ),
 
     .target(
-      name: "Networking",
+      name: "NetworkingPublic",
       dependencies: [
-        "Base",
+        "BasePublic",
       ],
-      path: "Core/Networking",
+      path: "Core/NetworkingPublic",
       swiftSettings: [
         .unsafeFlags(
           [
@@ -97,9 +97,9 @@ let package = Package(
     .target(
       name: "DivKit",
       dependencies: [
-        "CommonCore",
+        "CommonCorePublic",
         "LayoutKit",
-        "Networking",
+        "NetworkingPublic",
         "Serialization",
         "TemplatesSupport",
       ],
@@ -138,7 +138,7 @@ let package = Package(
     .target(
       name: "LayoutKit",
       dependencies: [
-        "CommonCore",
+        "CommonCorePublic",
         "LayoutKitInterface",
       ],
       path: "LayoutKit/LayoutKit",
@@ -156,7 +156,7 @@ let package = Package(
     .target(
       name: "LayoutKitInterface",
       dependencies: [
-        "Base",
+        "BasePublic",
       ],
       path: "LayoutKit/Interface",
       swiftSettings: [
@@ -173,7 +173,7 @@ let package = Package(
     .target(
       name: "Serialization",
       dependencies: [
-        "CommonCore",
+        "CommonCorePublic",
       ],
       path: "Serialization",
       swiftSettings: [
@@ -190,7 +190,7 @@ let package = Package(
     .target(
       name: "TemplatesSupport",
       dependencies: [
-        "CommonCore",
+        "CommonCorePublic",
         "Serialization",
       ],
       path: "TemplatesSupport",

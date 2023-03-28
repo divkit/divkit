@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension MaskedBlock: UIViewRenderable {
   public static func makeBlockView() -> BlockView { MaskedBlockView() }

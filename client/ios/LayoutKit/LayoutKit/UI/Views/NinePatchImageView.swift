@@ -1,7 +1,7 @@
 import UIKit
 
-import Base
-import CommonCore
+import BasePublic
+import CommonCorePublic
 
 public final class NinePatchImageView: UIView, RemoteImageViewContentProtocol {
   private var image: UIImage?

@@ -1,9 +1,9 @@
-import Base
+import BasePublic
 import DivKit
 import Foundation
 import LayoutKit
 import Network
-import Networking
+import NetworkingPublic
 
 public final class LottieExtensionHandler: DivExtensionHandler {
   public let id = "lottie"

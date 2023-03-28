@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 extension BlockTooltip {
   public func calculateFrame(targeting targetRect: CGRect) -> CGRect {

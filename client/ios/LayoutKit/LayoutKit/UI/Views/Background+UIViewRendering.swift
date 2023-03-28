@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension Background: UIViewRenderable {
   public static func makeBlockView() -> BlockView {

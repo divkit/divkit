@@ -1,7 +1,7 @@
 import CoreFoundation
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 // MARK: Utils
 

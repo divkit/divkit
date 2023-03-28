@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension TabsBlock {
   public static func makeBlockView() -> BlockView {

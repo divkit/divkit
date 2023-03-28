@@ -1,7 +1,7 @@
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension AnimatableImageBlock {
   public static func makeBlockView() -> BlockView { AnimatableImageContainer(frame: .zero) }

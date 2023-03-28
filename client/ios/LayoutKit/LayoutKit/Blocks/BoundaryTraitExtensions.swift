@@ -1,6 +1,6 @@
 import QuartzCore
 
-import CommonCore
+import CommonCorePublic
 
 typealias BoundaryInfo = (radius: CGFloat, corners: CACornerMask, layer: CALayer?)
 

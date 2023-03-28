@@ -30,6 +30,7 @@
 		896381852987C9D50064DDD4 /* RenderingTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 896381842987C9D50064DDD4 /* RenderingTime.swift */; };
 		89D02B1428C891890041EC18 /* RadioButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1328C891890041EC18 /* RadioButtonsView.swift */; };
 		89D02B1A28C8EBC40041EC18 /* Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89D02B1928C8EBC40041EC18 /* Palette.swift */; };
+		89FE120129B60CF5009AA1B8 /* BaseUIPublic in Frameworks */ = {isa = PBXBuildFile; productRef = 89FE120029B60CF5009AA1B8 /* BaseUIPublic */; };
 		8C0149982873297900BA5402 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0149972873297900BA5402 /* DivKit */; };
 		8C01499A2873297D00BA5402 /* DivKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8C0149992873297D00BA5402 /* DivKit */; };
 		8C01499C287329D000BA5402 /* unit_test_data in Resources */ = {isa = PBXBuildFile; fileRef = 8C01499B287329D000BA5402 /* unit_test_data */; };
@@ -172,7 +173,6 @@
 		8C7EE1D128B777AE008A48E6 /* YSText-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CD28B777AE008A48E6 /* YSText-Medium.ttf */; };
 		8C7EE1D228B777AE008A48E6 /* YSText-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8C7EE1CE28B777AE008A48E6 /* YSText-Regular.ttf */; };
 		8C7EE1D628B7786E008A48E6 /* YSFontProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7EE1D528B7786E008A48E6 /* YSFontProvider.swift */; };
-		8C81DF9F28AE51D2009B17D2 /* BaseUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8C81DF9E28AE51D2009B17D2 /* BaseUI */; };
 		8C88636128AB802C00D04928 /* ReferenceSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C88636028AB802C00D04928 /* ReferenceSet.swift */; };
 		8C8C6D8728CA2E5600DC16F4 /* SimplePropertiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C8C6D8628CA2E5600DC16F4 /* SimplePropertiesTests.swift */; };
 		8C9284DA288ACCE400BEA1FA /* Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C9284CF288ACCE400BEA1FA /* Diff.swift */; };
@@ -530,7 +530,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C81DF9F28AE51D2009B17D2 /* BaseUI in Frameworks */,
+				89FE120129B60CF5009AA1B8 /* BaseUIPublic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1301,7 +1301,7 @@
 			);
 			name = SnapshotTestsHostApp;
 			packageProductDependencies = (
-				8C81DF9E28AE51D2009B17D2 /* BaseUI */,
+				89FE120029B60CF5009AA1B8 /* BaseUIPublic */,
 			);
 			productName = SnapshotTestsHostApp;
 			productReference = 8C9284F7288ADEEA00BEA1FA /* SnapshotTestsHostApp.app */;
@@ -2159,6 +2159,10 @@
 			package = 76AD26802935F1B30088A360 /* XCRemoteSwiftPackageReference "rive-ios" */;
 			productName = RiveRuntime;
 		};
+		89FE120029B60CF5009AA1B8 /* BaseUIPublic */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = BaseUIPublic;
+		};
 		8C01498F2873296000BA5402 /* DivKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = DivKit;
@@ -2208,10 +2212,6 @@
 			productName = LayoutKit;
 		};
 		8C81DF9C28AE51CE009B17D2 /* BaseUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = BaseUI;
-		};
-		8C81DF9E28AE51D2009B17D2 /* BaseUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = BaseUI;
 		};

@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension AnchorBlock {
   public static func makeBlockView() -> BlockView {

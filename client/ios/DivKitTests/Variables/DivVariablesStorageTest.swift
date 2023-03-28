@@ -2,7 +2,7 @@
 
 import XCTest
 
-import CommonCore
+import CommonCorePublic
 
 final class DivVariablesStorageTest: XCTestCase {
   private let storage = DivVariablesStorage()

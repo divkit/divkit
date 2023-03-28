@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public protocol TooltipEventPerforming {
   func perform(tooltipEvent event: TooltipEvent, from sender: AnyObject)

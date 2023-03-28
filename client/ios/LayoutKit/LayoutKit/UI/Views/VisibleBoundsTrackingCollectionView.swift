@@ -1,7 +1,7 @@
 import UIKit
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 public final class VisibleBoundsTrackingCollectionView: NoContentTouchDelaysCollectionView,
   VisibleBoundsTrackingContainer {

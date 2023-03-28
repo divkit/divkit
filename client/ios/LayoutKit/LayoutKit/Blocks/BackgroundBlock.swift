@@ -1,7 +1,7 @@
 import CoreGraphics
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 public final class BackgroundBlock: BlockWithLayout, WrapperBlock {
   typealias Layout = CGRect

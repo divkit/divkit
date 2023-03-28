@@ -1,7 +1,7 @@
 import Foundation
 
-import BaseTiny
-import BaseUI
+import BaseTinyPublic
+import BaseUIPublic
 
 public struct UserInterfaceAction: Equatable, Codable {
   @frozen

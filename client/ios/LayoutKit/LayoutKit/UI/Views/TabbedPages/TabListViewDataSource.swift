@@ -1,6 +1,6 @@
 import UIKit
 
-import BaseUI
+import BaseUIPublic
 
 final class TabListViewDataSource: NSObject, UICollectionViewDataSource {
   private let tabs: [TabTitleViewModel]

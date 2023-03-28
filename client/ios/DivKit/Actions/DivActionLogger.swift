@@ -1,7 +1,7 @@
 import Foundation
 
-import Base
-import Networking
+import BasePublic
+import NetworkingPublic
 import Serialization
 
 public protocol DivActionLogger {

@@ -1,7 +1,7 @@
 import Foundation
 
-import Base
-import Networking
+import BasePublic
+import NetworkingPublic
 
 public final class RemoteAnimationHolder: AnimationHolder {
   public enum AnimationType {

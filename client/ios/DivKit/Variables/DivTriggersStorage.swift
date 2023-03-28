@@ -1,6 +1,6 @@
 import Foundation
 
-import Base
+import BasePublic
 import LayoutKit
 
 public typealias DivCardsTriggers = [DivCardID: [DivTrigger]]

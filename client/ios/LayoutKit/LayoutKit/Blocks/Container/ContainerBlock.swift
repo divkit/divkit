@@ -1,8 +1,8 @@
 import CoreGraphics
 import Foundation
 
-import BaseUI
-import CommonCore
+import BaseUIPublic
+import CommonCorePublic
 
 public final class ContainerBlock: BlockWithLayout {
   typealias Layout = ContainerBlockLayout

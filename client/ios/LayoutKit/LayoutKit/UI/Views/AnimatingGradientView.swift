@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public final class AnimatingGradientView: UIView {
   private let gradientView: LinearGradientView

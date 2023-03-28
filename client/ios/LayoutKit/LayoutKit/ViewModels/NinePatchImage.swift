@@ -1,4 +1,4 @@
-import CommonCore
+import CommonCorePublic
 
 public struct NinePatchImage {
   let imageHolder: ImageHolder

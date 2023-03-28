@@ -1,10 +1,10 @@
 import Foundation
 
-import Base
+import BasePublic
 import DivKit
 import DivKitExtensions
 import LayoutKit
-import Networking
+import NetworkingPublic
 import RiveRuntime
 
 final class RiveAnimationFactory: DivCustomBlockFactory {

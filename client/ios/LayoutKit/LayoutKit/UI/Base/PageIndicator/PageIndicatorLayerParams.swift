@@ -1,6 +1,6 @@
 import CoreGraphics
 
-import CommonCore
+import CommonCorePublic
 
 struct PageIndicatorLayerParams {
   let itemWidth: CGFloat

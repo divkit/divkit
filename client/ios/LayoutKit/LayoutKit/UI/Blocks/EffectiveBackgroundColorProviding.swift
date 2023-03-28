@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 public protocol EffectiveBackgroundColorProviding {
   var effectiveBackgroundColor: UIColor? { get }

@@ -1,8 +1,8 @@
 import UIKit
 
-import Base
-import BaseUI
-import CommonCore
+import BasePublic
+import BaseUIPublic
+import CommonCorePublic
 import LayoutKitInterface
 
 #if INTERNAL_BUILD

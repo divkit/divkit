@@ -1,6 +1,6 @@
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension StateBlock {
   public static func makeBlockView() -> BlockView {

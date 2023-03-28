@@ -1,6 +1,6 @@
 import Foundation
 
-import CommonCore
+import CommonCorePublic
 
 struct ListenPayload: Encodable {
   struct Message: Encodable {

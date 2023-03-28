@@ -2,7 +2,7 @@ import CoreGraphics
 import Foundation
 import UIKit
 
-import CommonCore
+import CommonCorePublic
 
 extension UIView {
   func perform(

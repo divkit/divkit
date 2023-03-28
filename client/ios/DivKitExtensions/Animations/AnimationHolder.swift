@@ -1,6 +1,6 @@
 import Foundation
 
-import Base
+import BasePublic
 import LayoutKit
 
 public protocol AnimationHolder: AnyObject, CustomDebugStringConvertible {
