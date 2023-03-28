@@ -93,12 +93,7 @@
         "$ref": "div-timer.json"
       },
       "minItems": 1,
-      "$description": "translations.json#/div_data_timers",
-      "platforms": [
-        "web",
-        "ios",
-        "android"
-      ]
+      "$description": "translations.json#/div_data_timers"
     }
   },
   "required": [
